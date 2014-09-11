@@ -18,7 +18,6 @@ layout: default
 Introduction {#Introduction}
 =======================
 
-
 Spatial microsimulation is statistical technique for combining
 individual-level datasets with geographical data and analysing the
 resulting *spatial microdata*.
@@ -117,7 +116,7 @@ spatial microsimulation.
 
 ## Why spatial microsimulation with R?
 
-```{r}
+```{r, echo=FALSE}
 # expressing oneself.^[This video introduces the idea of
 # expressing oneself in [R](http://youtu.be/wki0BqlztCo)].
 ```
@@ -307,117 +306,117 @@ The structure is as follows:
 
 \clearpage
 
-# What is spatial microsimulation?
-
-Spatial microsimulation, as used in this book, can be defined as a
-statistical technique for allocating individuals from a survey dataset
-to administrative zones, based on shared variables between the areal and
-individual level data.
-
-However, as with many new and infrequently used phrases, this
-understanding is not shared by everyone. The meaning of spatial
-microsimulation varies depending on context and who you ask: to an
-economist, for example, spatial microsimulation is likely to imply
-modelling some kind of temporal process such as how individual agents in
-different areas respond to changes in prices or policies. To a transport
-planner, the term may imply simulating the precise movements of vehicles on
-the transport network. To your next door neighbour it may mean you have
-started speaking gobbledygook! Hence the need to define our terminology.
-
-Terminology
------------
-
-Delving a little into the etymology and history of the term reveals the
-reasons behind this duplicity of meaning and highlights the importance
-of terminology. Only in very few contexts will one be understood when
-one says “I use *spatial microsimulation*” in everyday life. Usually it
-is important to add context. Below are a few hypothetical situations and
-suggestions of how one could respond to them.
-
--   When talking to a colleague, a transport modeller: “spatial
-    microsimulation, also known as population synthesis...”
-
--   Speaking to agent based modellers: “we use spatial microsimulation
-    to simulate the characteristics of geo-referenced agents...”
-
--   Communicating with undergraduates who are unlikely to have come
-    across the term or its analogies. “I do spatial microsimulation, a
-    way of generating individual-level data for small areas...”
-
--   Chatting casually in the pub or coffee shop: “I’m using a technique
-    called spatial microsimulation to model people...”.
-
-The above examples illustrate that there is great potential for
-confusion and shows that care needs to be taken to tailor the words used
-depending on the target audience. All this links back to the importance
-of transparency and reproducibility of method discussed in .
-
-Faced with uncomprehending stares when describing the method, some may
-be tempted to ‘blind them with science’, relying on
-sophisticated-sounding jargon, for example by saying: “we use simulated
-annealing in our integerised spatial microsimulation model”. Such
-wording obscures meaning (how many people in the room will understand
-‘integerised’, let alone ‘simulated annealing’) and makes the process
-sound inaccessible. Although much jargon is used in the spatial
-microsimulation literature in this book, care must be taken to ensure
-that people understand what you are saying.
-
-This raises the question, why use the term spatial microsimulation at
-all, if it is understood by so few people? The answer to this is that
-spatial microsimulation, defined clearly at the outset and used
-correctly, can usefully describe a technique that would otherwise need
-many more words on each use. Try replacing ‘spatial microsimulation’
-with ‘a statistical technique to allocate individuals from a survey
-dataset to administrative zones based on shared variables between the
-areal and individual level data’ each time it appears in this book and
-the advantages of a simple term should become clear. ‘Population
-synthesis’ is perhaps a more accurate term but, transport modelling
-aside, the literature already uses ‘spatial microsimulation’. Rather
-than create more complexity with *another* piece of jargon, it is best
-to continue with the term favoured by the the majority of practitioners.
-
-Why has this situation, in which practitioners of a statistical method
-must tread carefully to avoid confusing their audience, come about?
-First it’s worth stating that the problem is by no means unique to this
-field: imagine the difficulties that Bayesian statisticians must
-encounter when speaking of prior and posterior probability distributions
-to an uninitiated audience. Let alone describing Gibb’s sampling. To
-more precisely answer the question, and gain an insight into the origins
-of the definition provided at the outset of this chapter, we consider
-the beginnings and evolution of the term in written work.
-
-The etymology of spatial microsimulation
-----------------------------------------
-
-Spatial microsimulation as an approach to modelling {#sbroader}
----------------------------------------------------
-
-What spatial microsimulation is not
------------------------------------
-
-**Spatial microsimulation is not strictly spatial**
-
-The most surprising feature of spatial microsimulation, as used in the
-literature, is that *the method is not trictly *spatial*. The only
-reason why the methodology has developed this name (as opposed to 'small
-area population synthesis', for example) is that practitioners tend
-to use administrative zones, which represent geographical areas, as the
-grouping variable. However, any mutually exclusive grouping variable,
-such as age band or number of bedrooms in your house, could
-be used. Likewise, geographical location can be used as a *constraint variable*.
-In most spatial microsimulation models, *the spatial variable is a mutually
-exclusive grouping, interchangeable with any such group*. "Spatial" is thus
-1st on the list of things that spatial microsimulation is not.
-
-To be more precise, spatial microsimulation is not *inherently spatial*.
-Spatial attributes such as the geographic coordinates of home and work
-locations can easily be added to the spatial microdata after they have been
-generated, and the use of geographical variables as the grouping variable is
-critical here. 
-
-**Spatial microsimulation is not agent-based modelling (ABM).**
-
-
+```{r, echo=FALSE}
+# # What is spatial microsimulation?
+# 
+# Spatial microsimulation, as used in this book, is
+# statistical technique for allocating individuals from a survey dataset
+# to administrative zones based on shared variables between the areal and
+# individual level data.
+# 
+# However, as with many new and infrequently used phrases, this
+# understanding is not shared by everyone. The meaning of spatial
+# microsimulation varies depending on context: to an
+# economist spatial microsimulation is likely to imply
+# modelling temporal processes such as how individual agents 
+# respond to changes in prices or policies. To a transport
+# planner, the term implies simulating the precise movements of vehicles on
+# the transport network. To your next door neighbour it may mean you have
+# started speaking gobbledygook! Hence the need to define our terminology.
+# 
+# Terminology
+# -----------
+# 
+# Delving a little into the etymology and history of the term reveals the
+# reasons behind this duplicity of meaning and highlights the importance
+# of terminology. Only in very few contexts will one be understood when
+# one says “I use *spatial microsimulation*” in everyday life. Usually it
+# is important to add context. Below are a few hypothetical situations and
+# suggestions of how one could respond to them.
+# 
+# -   When talking to a colleague, a transport modeller: “spatial
+#     microsimulation, also known as population synthesis...”
+# 
+# -   Speaking to agent based modellers: “we use spatial microsimulation
+#     to simulate the characteristics of geo-referenced agents...”
+# 
+# -   Communicating with undergraduates who are unlikely to have come
+#     across the term or its analogies. “I do spatial microsimulation, a
+#     way of generating individual-level data for small areas...”
+# 
+# -   Chatting casually in the pub or coffee shop: “I’m using a technique
+#     called spatial microsimulation to model people...”.
+# 
+# The above examples illustrate that there is great potential for
+# confusion and shows that care needs to be taken to tailor the words used
+# depending on the target audience. All this links back to the importance
+# of transparency and reproducibility of method discussed in .
+# 
+# Faced with uncomprehending stares when describing the method, some may
+# be tempted to ‘blind them with science’, relying on
+# sophisticated-sounding jargon, for example by saying: “we use simulated
+# annealing in our integerised spatial microsimulation model”. Such
+# wording obscures meaning (how many people in the room will understand
+# ‘integerised’, let alone ‘simulated annealing’) and makes the process
+# sound inaccessible. Although much jargon is used in the spatial
+# microsimulation literature in this book, care must be taken to ensure
+# that people understand what you are saying.
+# 
+# This raises the question, why use the term spatial microsimulation at
+# all, if it is understood by so few people? The answer to this is that
+# spatial microsimulation, defined clearly at the outset and used
+# correctly, can usefully describe a technique that would otherwise need
+# many more words on each use. Try replacing ‘spatial microsimulation’
+# with ‘a statistical technique to allocate individuals from a survey
+# dataset to administrative zones based on shared variables between the
+# areal and individual level data’ each time it appears in this book and
+# the advantages of a simple term should become clear. ‘Population
+# synthesis’ is perhaps a more accurate term but, transport modelling
+# aside, the literature already uses ‘spatial microsimulation’. Rather
+# than create more complexity with *another* piece of jargon, it is best
+# to continue with the term favoured by the the majority of practitioners.
+# 
+# Why has this situation, in which practitioners of a statistical method
+# must tread carefully to avoid confusing their audience, come about?
+# First it’s worth stating that the problem is by no means unique to this
+# field: imagine the difficulties that Bayesian statisticians must
+# encounter when speaking of prior and posterior probability distributions
+# to an uninitiated audience. Let alone describing Gibb’s sampling. To
+# more precisely answer the question, and gain an insight into the origins
+# of the definition provided at the outset of this chapter, we consider
+# the beginnings and evolution of the term in written work.
+# 
+# The etymology of spatial microsimulation
+# ----------------------------------------
+# 
+# Spatial microsimulation as an approach to modelling {#sbroader}
+# ---------------------------------------------------
+# 
+# What spatial microsimulation is not
+# -----------------------------------
+# 
+# **Spatial microsimulation is not strictly spatial**
+# 
+# The most surprising feature of spatial microsimulation, as used in the
+# literature, is that *the method is not trictly *spatial*. The only
+# reason why the methodology has developed this name (as opposed to 'small
+# area population synthesis', for example) is that practitioners tend
+# to use administrative zones, which represent geographical areas, as the
+# grouping variable. However, any mutually exclusive grouping variable,
+# such as age band or number of bedrooms in your house, could
+# be used. Likewise, geographical location can be used as a *constraint variable*.
+# In most spatial microsimulation models, *the spatial variable is a mutually
+# exclusive grouping, interchangeable with any such group*. "Spatial" is thus
+# 1st on the list of things that spatial microsimulation is not.
+# 
+# To be more precise, spatial microsimulation is not *inherently spatial*.
+# Spatial attributes such as the geographic coordinates of home and work
+# locations can easily be added to the spatial microdata after they have been
+# generated, and the use of geographical variables as the grouping variable is
+# critical here. 
+# 
+# **Spatial microsimulation is not agent-based modelling (ABM).**
+```
 
 ## An illustrative example from SimpleWorld
 
@@ -588,7 +587,7 @@ only 2 young people and 4 males in zone 2. A special
 feature of the weight matrix above is that each of the column
 sums is equal to the total population in each zone.
 We will discover how the weight matrices are generated in
-[chapter4](#Basics).
+the section '[Spatial microsimulation with R](#Basics)'.
 
 Another output from spatial microsimulation, that can
 be generated from the above weight matrix or by other approaches
@@ -647,7 +646,7 @@ represented by our simulated spatial microdata? This question is equally applica
 to larger simulations. These issues are important and will be tackled
 in [section validation](#svalidation).
 
-```{r}
+```{r, echo=FALSE}
 # Applications of spatial microsimulation - to be completed!
 
 ## Updating cross-tabulated census data
