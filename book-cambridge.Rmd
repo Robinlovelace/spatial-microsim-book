@@ -52,6 +52,7 @@ In fact, spatial microsimulation means different things
 to different people.
 In the social sciences, spatial microsimulation
 has two main meanings, as a technique or an approach:
+
 1. A *technique* for generating spatial microdata --- individuals allocated to
 zones.
 2. An *approach* to modelling based on
@@ -61,38 +62,34 @@ Throughout this book we will see spatial microsimulation as both
 technique and as a broader approach, generally moving from the former
 to the latter perspective as the chapters progress.
 
-Another issue tackled in this book is reproducibility.
-Most findings in the reports and papers in the field cannot easily be
-replicated by their readers. In today’s age of fast Internet connections, open
-access datasets and free software, there is little excuse for this. Non-reproducibility is damaging: if your methods are hidden, how can others
-benefit from them? If your analysis cannot be independently verified,
-how can others take the results seriously? They cannot. This book encourages
-good practice in reproducibility^[TODO: add table from Peng (2006)
-on the criteria for reproducible research] by
+Another issue tackled in this book is reproducibility:
+most findings in field cannot easily be
+replicated. In today’s age of fast Internet connections, open
+access datasets and free software, there is little excuse for this.
+This issue is not unique to the method and is in fact widespread in academia
+to leading to calls such as that by Sergio Rey for an 'Open Regional Science'
+([Rey, 2014](http://link.springer.com/10.1007/s00168-014-0611-7)).
+
+This book encourages
+reproducibility by
 providing the tools for its readers to
 actually *do* spatial microsimulation, on realistic
-data for plausible purposes.
+data for plausible purposes. In addition, all the findings presented
+in this book can be reproduced, using code and data on the books
+GitHub repository:
+[github.com/Robinlovelace/spatial-microsim-book](https://github.com/Robinlovelace/spatial-microsim-book).
 
-To understand the importance of reproducibility, consider two more
-questions. If a small community of researchers hold the majority of the
-know-how and computer code needed to perform spatial microsimulation,
-how can it grow and spread to other applications? If the results of most
-spatial microsimulation research are not reproducible, how can policy
-makers and society at large be expected to trust them?
-
-This final point is critical not only to spatial microsimulation but the
-disciplines to which it contributes. Reproducibility is a prerequisite
+Why spend time and effort on reproducibility? The first answer is that
+reproducibility actually saves time in the long-run, by ensuring more
+readable code and allowing your results to be easily re-run at a later data.
+The second reason is more profound. Reproducibility is a prerequisite
 of falsifiability and falsifiability is the backbone of science
 (Popper, 1959).
 By producing non-reproducible research, researchers
 risk damaging not only their own integrity, but the scientific
 credibility of the disciplines in which they work. These philosophical
 antecedents inform the book’s practical nature. The aim is simple: to
-provide an accessible yet deep foundation in spatial microsimulation.
-This involves both *understanding* and *implementation* of the
-technique. From research into
-'experiential learning', 
-it has been found that doing something is often the best way towards understanding.
+provide a foundation in spatial microsimulation.
 
 ```{r, echo=FALSE}
 # http://en.wikipedia.org/wiki/Experiential_learning
@@ -100,19 +97,18 @@ it has been found that doing something is often the best way towards understandi
 # [2011](http://www.manning.com/kabacoff/)
 ```
 
-
-This book demonstrates that spatial microsimulation
-need not be an abstract process that one simply reads about.
-It is a living, evolving set of techniques, methods and code, not
-a prescriptive formula for arriving at the 'right' answer.
-In other words, spatial microsimulation is an art, practiced by a growing number
-of people worldwide. It is hoped that this book contributes to the community that
-uses spatial microsimulation and that it encourages collaboration, innovation
-and rigour. Above all, the book aims to make spatial microsimulation accessible, a
-practical tool used by anyone with the know-how. As Kabakoff
-(2011 p. xxii) put it regarding R,
-"the best way to learn is to experiment". The same applies to
-spatial microsimulation.
+This book presents spatial microsimulation
+is a living, evolving set of techniques rather
+than a prescriptive formula for arriving at the 'right' answer.
+This approach that spatial microsimulation largely defined by its user-community,
+made up of growing number
+of people worldwide. It is hoped that this book contributes to this community
+and that it encourages collaboration, innovation
+and rigour. Above all it is hoped that the book
+opens the possibilities of spatial microsimulation to more people, with
+a practical approach that encourages playing with the data and code.
+As Kabakoff (2011 p. xxii) put it regarding R,
+"the best way to learn is to experiment". 
 
 ## Why spatial microsimulation with R?
 
@@ -126,61 +122,78 @@ efficiency, reproducibility and ease of expressing oneself.
 Nearly 3 decades ago 
 [Hölm (1987, p. 153)](http://www.jstor.org/stable/10.2307/490448)
 observed that "little attention is paid to the choice of programming
-language used" for microsimulation.
-This appears to be as true now as it was then: software
-is rarely discussed in spatial microsimulation papers.
-Yet the decision of which software to use will have a lasting
-impact on your research, what you can and cannot do with your code
-and opportunities for collaboration.
+language used" for microsimulation and
+this appears to be as true now as it was then: software
+is rarely discussed in papers on the subject.
+Yet the software used has a lasting
+impact, including what can and cannot be done
+and opportunities for collaboration. This section explains the choice of R.
 
-In my own research, for example, a conscious decision was made early on to use
-R. This had subsequent knock-on impacts on
-the features, analysis and even design of my simulations.
-There are hundreds computer programming languages and many of these
-are general purpose and 'Turing complete', meaning they could, with
-sufficient effort, perform spatial microsimulation (or any other
-numerical operation). So why choose R?
+```{r, echo=FALSE}
+# In my own research, for example, a conscious decision was made early on to use
+# R. This had subsequent knock-on impacts on
+# the features, analysis and even design of my simulations.
+# There are hundreds computer programming languages and many of these
+# are general purpose and 'Turing complete', meaning they could, with
+# sufficient effort, perform spatial microsimulation (or any other
+# numerical operation). So why choose R?
+```
 
-There are many factors that should influence the selection of a
-suitable language, the most important of which include flexibility,
-speed of processing and, most importantly for research, ease and speed of writing,
-adapting and communicating code. R excels in each of these areas
-(with the possible exception of speed, a problem that can be overcome
-by judicious use of add-on packages to the base R installation).
+There are many factors that should influence software selection including
+cost, maturity, features, flexibility and
+speed. Perhaps most important for busy researchers is
+ease and speed of writing,
+adapting and communicating code. R excels in each of these areas.
 
-R is a high level language for statistical computing compared with
-general purpose languages such as C and Python.
-This means that instead
+```{r, echo=FALSE}
+# ^[Speed
+# of execution is an arguable exception, an issue that can be tackled
+# by vectorisation (see [Appendix A](#apR)) and judicious use of add-on *R packages*.]
+```
+
+R is a low-level language compared with programs such as Microsoft
+Excel and SPSS, which have been used for spatial microsimulation in the
+past. 
+R offers the researcher great flexibility in designing workflows,
+analysis stages and even writing one's own functions.
+
+On the other hand, R is *high level* compared with
+general purpose languages such as C and Python:
+instead
 of having to write code to perform statistical operations
-from scratch, a pre-made function probably already exists. To calculate
+from scratch, a pre-made function probably already exists in R. To calculate
 the mean value of any variable `x` in pure Python, for example,
 one would need to type 20 characters: `float(sum(x))/len(x)`.^[The
 `float` function is needed in case whole numbers are used. This
 can be reduced to 13 characters with the excellent **NumPy** package:
 `import numpy; x = [1,3,9]; numpy.mean(x)` would generate the
 desired result. The R equivalent is `x = c(1,3,9); mean(x)`.]
-
 In pure R 7 characters are sufficient: `mean(x)`.
-One may argue that saving a few keystrokes while writing
-code is not a priority, and this may be true, but it is certain
-that the time savings of being concise can be vast.
+
+```{r, echo=FALSE}
+# One may argue that saving a few keystrokes while writing
+# code is not a priority but it is certain
+# that the time savings of being concise can be vast.
+```
+
 The example of calculating the mean in R and Python
 illustrates a wider point:
 R was *designed* to work with statistical data, so many functions
 in the default R installation (e.g. `lm()`, to create a
-linear regression model) perform statistical analysis.
+linear regression model) perform statistical analysis 'out of the box'.
 In agent-based modelling the statistical analysis of results
 often occupies more researcher time than running the model
 itself 
 ([Theile and Grimm, 2012](http://www.sciencedirect.com/science/article/pii/S1364815210000514));
-[Theile, 2014](http://www.jstatsoft.org/v58/i02/paper)). The same applies to
-spatial microsimulation, necesitating statistical software such as R.
+[Theile, 2014](http://www.jstatsoft.org/v58/i02/paper)) and the same applies to
+spatial microsimulation, making R an ideal choice.
 
-R has an active and  growing user community. As a result there are
+Finally, R has an active and  growing user community. As a result there are
 thousands of packages that extend R's capabilities by providing new functions
-to the user. The **ipfp** package, for example,
+to the user and more functionality is being added all the time.
+The **ipfp** package which was published in summer 2014, for example,
 can greatly reduce the computational time taken for a key element of spatial
-microsimulation process, as we shall see in [ipfp section](#ipfp).
+microsimulation process, as we shall see in *[Reweighting with ipfp](#ipfp)*.
 
 ```{r, echo=FALSE}
 # For speed-critical applications,
@@ -208,24 +221,60 @@ microsimulation process, as we shall see in [ipfp section](#ipfp).
 #     findings anywhere in the world, without the worry of infringing copyright
 #     licences. In work funded by the public, this also has a large benefit
 #     in terms of education and the democratisation of research.
-  ```
+```
 
 Learning the R language
 -----------------------
 
 Having learned a little about *why* R is a good tool for the job, it is
-time to think about *how* R should be used. The most useful high-level advice I
-received on the subject is to think of R not as a series of isolated
-commands, but as an interconnected *language*, in the fullest sense of
-the word, like Spanish: frequent
-practice, persistence and experimentation are needed for deep learning.
+worth considering at this stage *how* R should be used.
+It is useful to think of R not as a series of isolated
+commands, but as an interconnected *language*.
+As with learning like Spanish or Chinese frequent
+practice, persistence and experimentation will ensure deep learning.
 
-Indeed, R can be seen as two separate components:
+The most useful practical advice I can give is to organise your workflow.
+Each project should have its own self-contained folder containing all
+that is needed to replicate the analysis. This could include the
+raw (unchanged) input data, a folder containing R code for analysis,
+a folder for graphical outputs and a folder for data output.
+To avoid clutter, it is sensible to arrange this content into
+folders: 
+
+```
+|-- book.Rmd
+|-- data
+|-- figures
+|-- output
+|-- R
+|   |-- load.R
+|   `-- parallel-ipfp.R
+`-- spatial-microsim-book.Rproj
+```
+
+The example directory structure above is taken from an early version of this book.
+It contains the document for the write-up (`book.Rmd` --- this could equally
+be a `.docx` or `.tex` file) and RStudio's `.Rproj` file in the *source directory*.
+The rest of the entities are folders: one for the input data, one for figures generated,
+one for data outputs and one for R scripts. The R scripts should have meaningful
+names and contain only code that works and is commented (an additional backup
+directory could be used to store experimental code). Because projects using spatial
+microdata tend to be complex, imposing order over your workflow will yield dividends
+in the long run: you reap what you sow!
+
+In terms of writing R,
+is helpful to remember that R can be seen as two separate components:
 the *interpreter* is what sends instructions to the computers processor.
 The R *language* provides a way of expressing oneself and
-explaining ideas to other human beings. Critical to its role as a
+explaining ideas to other human beings
+([Wickham, 2014](http://www.crcpress.com/product/isbn/9781466586963)).
+Critical to its role as a
 language is R’s unique *syntax*, which allows relatively
 complex numerical ideas to be described with a small number of keystrokes.
+If you are a new R user it is therefore worth spending some time learning
+the R language. To this end
+[Appendix A](#apR) provides a primer on R from the perspective
+of spatial microsimulation.
 
 ```{r, echo=FALSE}
 # Consider the following expression in the language of mathematics:
@@ -260,8 +309,6 @@ complex numerical ideas to be described with a small number of keystrokes.
 # language in which they are implemented.
 ```
 
-
-
 Typographic conventions
 -----------------------
 
@@ -280,13 +327,13 @@ sqrt(x) # find the square route
  - Output from the *R console* is preceded by the `##` symbol, as illustrated above.
  - Comments are preceded by a single `#` symbol to explain specific lines.
  
- There are many ways to write R code that will generate the same results.
- However, to ensure clarity and consistency the style guide in
- [Hadley Wickham](http://r-pkgs.had.co.nz/style.html)'s *Advanced R*
- book ([Wickham, 2014](http://www.crcpress.com/product/isbn/9781466586963))
- is followed throughout.
- Consistent style and plentiful
- comments will ensure code readable by yourself and others for decades to come.
+There are many ways to write R code that will generate the same results.
+However, to ensure clarity and consistency, a single style, advocated in
+[Hadley Wickham](http://r-pkgs.had.co.nz/style.html)'s *Advanced R*
+book ([Wickham, 2014](http://www.crcpress.com/product/isbn/9781466586963)),
+is followed throughout.
+Consistent style and plentiful
+comments will make your code readable by yourself and others for decades to come.
 
 An overview of the coursebook
 -----------------------
@@ -303,6 +350,19 @@ can be left via email to r.lovelace@leeds.ac.uk or via the project's GitHub page
 
 The structure is as follows:
 
+- A 'no nonsense' and  reproducible explanation of spatial microsimulation with
+[SimpleWorld](#SimpleWorld).
+- The basics of spatial microsimulation in R, introducing the main functions
+and techniques that are used to generate spatial microdata
+- [CakeMap](#CakeMap), a larger and more involved example using real data
+- [Next steps](#NextSteps), an introduction to the subsequent steps that can
+be taken after the spatial microdataset has been generated.
+
+The majority of this material is new and will contribute to a textbook
+on spatial microsimulation. Please contact r.lovelace@leeds.ac.uk with
+any feedback about the book. Alternatively, if you have a GitHub account,
+feel free to report any issues online and contribute directly to the project
+by editing this documents source code: [github.com/Robinlovelace/spatial-microsim-book/blob/master/book-cambridge.Rmd](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/book-cambridge.Rmd).
 
 \clearpage
 
@@ -418,22 +478,20 @@ The structure is as follows:
 # **Spatial microsimulation is not agent-based modelling (ABM).**
 ```
 
-## An illustrative example from SimpleWorld
+# An illustrated example from SimpleWorld {#SimpleWorld}
 
-To see the link between the abstract methology introduced later in the book ---
-in [basics-chapter](#Basics) --- and the various real-world applications
-explored in this chapter, let's take a look at a simple example of the
-kind of situation where spatial microsimulation is needed.
-This book is primarily methodological, so hopefully
-this example will help bridge the gap between method
-and application and whet the reader's appetite for learning how to
-perform spatial microsimulation using R.
+To see the link between the methology introduced
+*[later in the book](#Basics)*
+and the various real-world applications, let's take a look at a simple example of the
+kind of situation where spatial microsimulation is useful,
+to help bridge the gap between method
+and application.
 
 We'll use an imaginary world called SimpleWorld,
 consiting of only 3 zones that cover the entirety of
-the SimpleWorld sphere (exluding the poles; see Figure xx below). 
+the SimpleWorld sphere ([Figure 1](fsimple1)). 
 
-```{r, SimpleWorld-globe, echo=FALSE}
+```{r fsimple1, fig.cap="The SimpleWorld sphere", echo=FALSE} 
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
 library(sp)
@@ -469,8 +527,7 @@ in each zone, 1 to 3, respectively. From the SimpleWorld Census, we know
 how many young (under 49 space years old) and old (over 50)
 residents live in each
 zone, as well their genders: male and female.
-This information is displayed in the tables below,
-and is plotted on the Mercator maps below.
+This information is displayed in the tables below.
 
 |zone   | 0-49 yrs| 50 + yrs|
 |:--|-----:|-----:|
@@ -507,26 +564,26 @@ pol1$Name <- paste("Zone", 1:3, sep = " ")
 pol1$xpos <- seq(-120, 120, length.out = 3)
 pol1$ypos <- 0
 
-ggplot(pol1) + 
-  geom_polygon(aes(long, lat, group, fill = p_young)) +
-  geom_path(aes(long, lat, group, fill = p_young)) +
-  geom_text(aes(xpos, ypos, label = Name)) +
-  theme_bw() +
-  scale_fill_continuous(low = "black", high = "white", limits = c(0, 100),
-    name = "% Young") +
-  coord_map() 
-
-ggplot(pol1) + 
-  geom_polygon(aes(long, lat, group, fill = p_male)) +
-  geom_path(aes(long, lat, group, fill = p_male)) +
-  geom_text(aes(xpos, ypos, label = Name)) +
-  theme_bw() +
-  scale_fill_continuous(low = "black", high = "white", limits = c(0, 100),
-    name = "% Male") +
-  coord_map() 
+# ggplot(pol1) + 
+#   geom_polygon(aes(long, lat, group, fill = p_young)) +
+#   geom_path(aes(long, lat, group, fill = p_young)) +
+#   geom_text(aes(xpos, ypos, label = Name)) +
+#   theme_bw() +
+#   scale_fill_continuous(low = "black", high = "white", limits = c(0, 100),
+#     name = "% Young") +
+#   coord_map() 
+# 
+# ggplot(pol1) + 
+#   geom_polygon(aes(long, lat, group, fill = p_male)) +
+#   geom_path(aes(long, lat, group, fill = p_male)) +
+#   geom_text(aes(xpos, ypos, label = Name)) +
+#   theme_bw() +
+#   scale_fill_continuous(low = "black", high = "white", limits = c(0, 100),
+#     name = "% Male") +
+#   coord_map() 
 ```
 
-Next imagine a more detailed dataset about 5 of SmallWorlds'
+Next, imagine a more detailed dataset about 5 of SmallWorld's
 inhabitants, recorded from a survey. This is in a different
 form from the aggregate-level data presented in the above tables.
 This *microdata* survey contains one row per individual, in contrast
@@ -556,7 +613,8 @@ ind <- read.csv("data/SimpleWorld/ind-full.csv")
 Note that although the microdataset contains additional information
 about the inhabitants of SmallWorld, it lacks geographical information
 about where each inhabitant lives or even which zone they are from.
-Spatial microsimulation tackles this problem, by allocating individuals from
+This is typical of individual-level survey data.
+Spatial microsimulation tackles this issue by allocating individuals from
 a non-geographical dataset to geographical zones in another.
 
 The procedures we will learn to use in this book do this by allocating
@@ -564,6 +622,18 @@ The procedures we will learn to use in this book do this by allocating
 individual-zone combination, the more representative that individual is of that
 zone. This information can be represented as a *weight matrix*, such as the one
 shown below.
+
+```{r, echo=FALSE, eval=FALSE}
+cat_age <- model.matrix(~ ind$age - 1)
+cat_sex <- model.matrix(~ ind$sex - 1)[, c(2, 1)]
+ind_cat <- cbind(cat_age, cat_sex) # combine flat representations of the data
+ind$age <- cut(ind$age, breaks = c(0, 49, 120), labels = c("a0_49", "a50+"))
+weights <- matrix(data = NA, nrow = nrow(ind), ncol = nrow(cons))
+cons <- apply(cons, 2, as.numeric)
+library(ipfp) # load the ipfp library after: install.packages("ipfp")
+apply(cons, MARGIN = 1, FUN =  function(x) ipfp(x, t(ind_cat), x0 = rep(1,nrow(ind))))
+```
+
 
 | Individual| Zone 1  | Zone 2  | Zone 3  |
 |---:|--------:|--------:|--------:|
@@ -574,14 +644,15 @@ shown below.
 |   5|    4.456|    1.450|    5.450|
 
 The highest value (5.450) is located,
-to use R's notation, in cell [5,3], the 5th row and 3rd column in the matrix. This means
+to use R's notation, in cell `weights[5,3]`,
+the 5th row and 3rd column in the matrix `weights`. This means
 that individual number 5
 is considered to be highly representative of Zone 3,
 given the input data in SimpleWorld.
 This makes sense because there are many (7) young people
 and many (8) females in Zone 3, relative to the input microdataset
 (which contains only 1 young female). The lowest value (0.550)
-is found in cell [3,2]. Again this makes sense: individual
+is found in cell `[3,2]`. Again this makes sense: individual
 3 from the microdataset is a young male yet there are
 only 2 young people and 4 males in zone 2. A special
 feature of the weight matrix above is that each of the column
@@ -589,9 +660,8 @@ sums is equal to the total population in each zone.
 We will discover how the weight matrices are generated in
 the section '[Spatial microsimulation with R](#Basics)'.
 
-Another output from spatial microsimulation, that can
-be generated from the above weight matrix or by other approaches
-is *spatial microdataset*.
+A more useful output from spatial microsimulation
+is what we refer to as *spatial microdata*.
 This is dataset that contains a single row per individual (as with the
 input microdata) but also an additional variable indicating where each
 individual lives. The challenge is to ensure that the spatial microdataset
@@ -626,17 +696,23 @@ during the course of this book.
 # Add section link here!
 ```
 
-
-```{r, echo=FALSE}
-for(i in nrow(cons)){
-  
-}
-```
-
 But how are these outputs *useful*?
 
-The above example should also flag in the reader's mind some limitations
-of the methodology advocated in this book: spatial microsimulation will only
+Even though the datasets are tiny in SimpleWorld, we have already generated
+some useful output. We can estimate, for example, the average income
+in each zone. Furthermore, we could create an estimate of the *distribution*
+of income in each area. Although these estimates are unlikely to be very
+accurate due to the paucity of data, the methods could be very useful
+if performed on larger datasets from the RealWorld (planet Earth).
+Finally, the spatial microdata presented in the above table can be used
+as an input into an agent-based model (ABM). Assuming the inhabitants of
+SimpleWorld are more predictable than those of RealWorld, the outputs from
+such a model could be very useful indeed, for example for predicting
+future outcomes of current patterns of behaviour.
+
+In addition to clarifying the advantages of spatial microsimulation,
+the above example also flags some limitations
+of the methodology: spatial microsimulation will only
 yield useful results if the input microdataset is representative of the population
 as a whole, and for each region. If the relationship between age sex is markedly different
 in one zone compared with what we assume to be the global averages of the input data,
