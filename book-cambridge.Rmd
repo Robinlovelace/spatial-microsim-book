@@ -239,7 +239,7 @@ that is needed to replicate the analysis. This could include the
 raw (unchanged) input data, a folder containing R code for analysis,
 a folder for graphical outputs and a folder for data output.
 To avoid clutter, it is sensible to arrange this content into
-folders: 
+folders (thanks to Colin Gillespie for this tip): 
 
 ```
 |-- book.Rmd
@@ -258,18 +258,13 @@ be a `.docx` or `.tex` file) and RStudio's `.Rproj` file in the *source director
 The rest of the entities are folders: one for the input data, one for figures generated,
 one for data outputs and one for R scripts. The R scripts should have meaningful
 names and contain only code that works and is commented (an additional backup
-directory could be used to store experimental code). Because projects using spatial
-microdata tend to be complex, imposing order over your workflow will yield dividends
-in the long run: you reap what you sow!
+directory could be used to store experimental code). There is no need to
+be prescriptive in following this structure. However, projects using spatial
+microdata tend to be complex, so imposing order over your workflow early will
+likely yield dividends in the long run: you reap what you sow!
 
-In terms of writing R,
-is helpful to remember that R can be seen as two separate components:
-the *interpreter* is what sends instructions to the computers processor.
-The R *language* provides a way of expressing oneself and
-explaining ideas to other human beings
-([Wickham, 2014](http://www.crcpress.com/product/isbn/9781466586963)).
-Critical to its role as a
-language is R’s unique *syntax*, which allows relatively
+The same applies to learning the R language.
+Fluency allows
 complex numerical ideas to be described with a small number of keystrokes.
 If you are a new R user it is therefore worth spending some time learning
 the R language. To this end
@@ -303,7 +298,7 @@ of spatial microsimulation.
 # 'jump in the deep end' by living abroad, so learning R through the course
 # of this book is certainly an option. However, a deep understanding of R
 # will greatly assist understanding the practical elements of the book which
-# begin in earnest in [Chapter 4](#Basics). Therefore an introductory
+# begin in earnest in [Chapter 4](#DataPrep). Therefore an introductory
 # tutorial is provided in [Appendix 1](#apR) which will allow this book
 # to focus primarily on the methods of spatial microsimulation and not the
 # language in which they are implemented.
@@ -481,7 +476,7 @@ by editing this documents source code: [github.com/Robinlovelace/spatial-microsi
 # An illustrated example from SimpleWorld {#SimpleWorld}
 
 To see the link between the methology introduced
-*[later in the book](#Basics)*
+*[later in the book](#Smsim1)*
 and the various real-world applications, let's take a look at a simple example of the
 kind of situation where spatial microsimulation is useful,
 to help bridge the gap between method
@@ -658,7 +653,7 @@ only 2 young people and 4 males in zone 2. A special
 feature of the weight matrix above is that each of the column
 sums is equal to the total population in each zone.
 We will discover how the weight matrices are generated in
-the section '[Spatial microsimulation with R](#Basics)'.
+[a subsequent section](#Smsim1)'.
 
 A more useful output from spatial microsimulation
 is what we refer to as *spatial microdata*.
@@ -740,7 +735,7 @@ in [section validation](#svalidation).
 
 \clearpage
 
-# Spatial microsimulation with R: the basics {#Basics}
+# Preparing input data {#DataPrep}
 
 ```{r, echo=FALSE}
 # With the foundations built in the previous chapters now (hopefully) firmly in-place,
@@ -748,28 +743,32 @@ in [section validation](#svalidation).
 # This is designed to form the foundation of a spatial microsimulation course.
 ```
 
-In this chapter we progress from an understanding of the theory and applications
-actually undertake a spatial microsimulation.
-The example is small and simple, but
-the same principles used here will apply to larger and more complex projects.
-It is worth spending time to master these basics: subsequent steps
-will be much easier.
 
-The aim of this chapter is to provide a deep insight into how to use R
+
+The aim of this chapter is to guide you through all the
+steps of spatial microsimulation in R
 for spatial microsimulation.
 The easiest way to access the data used in this chapter
 (and the data for all other chapters), the easiest way is to
 download and unzip the book's GitHub repository.
 From there, you will want to run R from the project's root directory.
 
+```{r, echo=FALSE}
+# This next chapter is where people get their hands dirty for the first time -
+# could be the beginning of part 2 if the book's divided into parts. 
+```
 
-## The input data
+## Preparing input data 
+
+This chapter focuses on the input datasets needed for spatial microsimulation.
+Correctly loading, manipulating and assessing these datasets
+will be critical to the performance of your models and the ease of modifying
+them to include new inputs. This chapter also
+provides the basis for chapter we perform spatial microsimulation.
 
 As with most spatial microsimulation models, this example consists of a
 non-geographical individual-level dataset and a series of geographical
-zones. This section focuses on the data:
-loading, manipulating and assessing the R objects that will
-eventually be used as inputs in the spatial microsimulation model run.
+zones. 
 
 To ease reproducibility of the analysis, it is recommended that the
 process begins with a copy of the *raw* input dataset on one's hard disc.
@@ -814,37 +813,23 @@ both aggregate and individual-level tables contain age and sex, so they can
 by combined. Let us proceed to load some data saved on our hard disc into
 R's *environment*, where it is available in RAM.
 
-## Loading and subsetting the individual-level data
+## Loading input data {#Loading} 
 
-The individual-level data is simply a text file in this
-case, that can be loaded by the following command.
+Real-world individual-level data may be provided in a variety of formats
+but ultimately needs to be loaded into R as a *data frame* object.
+
+In this case the dataset is loaded from a `.csv` file:
 
 ```{r}
 # Load the individual-level data
 ind <- read.csv("data/SimpleWorld/ind.csv") 
+class(ind) # verify the data type of the object
 ind # print the individual-level data
 ```
 
-In the above code a `data.frame` was loaded and
-assigned to object called `ind`. As shown when it is called, `ind` consists
-of 5 rows, each of which represents a single individual.
-The 3 column variables are: a unique person identification number (`id`),
-`age` and the gender of each individual, represented by `sex`.
-It is worth stage it is worth exploring the data a little more, using R's
-powerful and concise square bracket (`[...]`) notation:
-see [the Appendix on subsetting](#subsetting) for more on this.
-
-Although `ind` is small and simple, all individual-level datasets tend
-to have a similar structure, it will behave in the same way as a much
-larger dataset.
-It is common, for example,
-to take a subset of an individual-level dataset that
-corresponds to the *population base* of the aggregate constraints,
-for example all individuals between the ages of 16 and 74 *and* in
-full-time education, so it is important to have a strong understanding
-of subsetting in R before proceeding.
-
+```{r, echo=FALSE}
 ### Loading and checking aggregate-level data
+```
 
 Constraint data are usually made available one variable at a time,
 so these are read in one file at a time:
@@ -897,7 +882,33 @@ rowSums(con_sex)
 rowSums(con_age) == rowSums(con_sex)
 ```
 
+The results of the previous operations are encouraging. The total population
+is the same for each constraint overall and for each area (row) for both constraints.
+If the total populations between constraint variables do not match (e.g. because
+the sample population is different) this is problematic.
+Appropriate steps to normalise
+the errant constraint variables are described in
+[the CakeMap chapter](#CakeMap).
 
+## Subsetting to remove excess information
+
+In the above code, `data.frame` objects containing precisely
+the information required for the next stage were loaded.
+More often, superfluous information will need to be removed from the data
+and subets taken. It is worth removing superfluous
+variables earl, to avoid over-complicating and slowing-down the analysis.
+If `ind` had 100 variables of which only the 1st, 3rd and 4th were of interest, for example,
+the following command could be used to update the object, retaining only the relevant
+variables: `ind <- ind[, c(1, 3, 4)]`. Alternatively, `ind$age <- NULL` removes
+the age variable.
+
+Although `ind` is small and simple it will behave in the same way as a much
+larger dataset, providing opportunities for testing subetting syntax in R.
+It is common, for example,
+to take a subset of the working *population base*: those
+aged 16 and 74 in
+full-time employment. Methods for doing this are provided in the
+[the Appendix on subsetting](#subsetting).
 
 ## Re-cateorising individual-level variables
 
@@ -933,7 +944,6 @@ can cause problems later down the line.
 ```{r}
 names(cons)
 ```
-
 
 ## Matching individual and aggregate level data names
 
@@ -985,7 +995,8 @@ we 'flatten' the individual-level dataset - meaning that we increase its width
 and reduce its height (number of rows) to one. This is a two-stage process. First,
 `model.matrix()` is used to expand each variable into the number of columns as there
 are categories in each. Second, `colSums()` is used to take the sum of each
-column.^[As we shall see in xxx, only the former of these is needed if we use the
+column.^[As we shall see in [a subsequent section](#ipfp),
+only the former of these is needed if we use the
 **ipfp** package for re-weighting the data, but both are presented to enable
 a better understanding of how IPF works.]
 
@@ -1037,7 +1048,29 @@ The purpose of the *reweighting* procedure in spatial microsimulation is
 to minimise this difference (as measured in TAE above)
 by adding high weights to the most representative individuals.
 
-## Reweighting using IPF in R
+# Spatial microsimulation in R {#Smsim1}
+
+In this chapter we progress from loading and preparing the input data to
+running a spatial microsimulation model.
+The SimpleWorld data, loaded in the previous chapter,
+is used. Being small and simple, the example enables understanding
+the process on a 'human scale' and allows experimentation
+without the worry of overloading your computer.
+However, the methods apply eqally to larger and more complex projects.
+Therefore practicing the basic principles and methods of spatial microsimulation
+in R is the focus of this chapter.
+Time spent mastering these basics will make subsequent steps
+much easier.
+
+```{r, echo=FALSE}
+# How representative each individual is of each zone is determined by their
+# *weight* for that zone. If we have `nrow(cons)` zones and `nrow(ind)`
+# individuals (3 and 5, respectively, in SimpleWorld) we will create
+# 15 weights. Real world datasets (e.g. that presented in chapter xxx)
+# could contain 10,000 individuals
+# to be allocated to 500 zones, resulting in an unwieldy 5 million element
+# weight matrix but we'll stick with the SmallWorld dataset here for simplicity.
+```
 
 How representative each individual is of each zone is determined by their
 *weight* for that zone. If we have `nrow(cons)` zones and `nrow(ind)`
@@ -1047,7 +1080,25 @@ with numbers calculated through the IPF procedure:
 
 ```{r}
 weights <- matrix(data = NA, nrow = nrow(ind), ncol = nrow(cons))
+dim(weights) # the dimension of the weight matrix: 5 rows by 3 columns
 ```
+
+## IPF in R {#IpfinR}
+
+One of the simplest ways to allocate the individual-level data loaded in
+the previous chapter to the three zones of SimpleWorld is using iterative
+proportional fitting (IPF). IPF is an established technique with a long history.
+Interested readers are directed towards Lovelace and Ballas
+([2012](http://www.sciencedirect.com/science/article/pii/S0198971513000240))
+and Pritchard and Miller
+([2012](http://link.springer.com/article/10.1007%2Fs11116-011-9367-4))
+for recent work in this area, which
+contain links to the theory and method underlying the method.
+
+```{r, echo=FALSE}
+# Possibly more on IPF here. For now, press on
+```
+
 
 
 ## Reweighting with **ipfp** {#ipfp}
@@ -1062,10 +1113,6 @@ in the C language, as illustrated below on the same dataset:
 library(ipfp) # load the ipfp library after: install.packages("ipfp")
 cons <- apply(cons, 2, as.numeric) # convert matrix to numeric data type
 ipfp(cons[1,], t(ind_cat), x0 = rep(1,nrow(ind))) # run IPF
-```
-
-```{r, echo=FALSE, eval=FALSE}
-ipfp(cons[1,], t(ind_cat), x0 = rep(1,nrow(ind)), verbose = T) # run IPF
 ```
 
 It is impressive that the entire IPF process which took dozens of lines of
@@ -1083,23 +1130,37 @@ in ipfp, as illustrated below (only the first line of R output is shown):
 ipfp(cons[1,], t(ind_cat), rep(1, nrow(ind)), maxit = 20, verbose = T)
 ```
 
-`## iteration 0:  0.141421`
+```
+## iteration 0:   0.141421
+## iteration 1:	  0.00367328
+```
 
-`## iteration 1:	0.00367328`
+Notice also that a *transposed* (via the `t()` function) version of the individual-level
+data (`ind_cat`) is used in `ipfp`
+to represent the individual-level data, instead of the
+`ind_agg` object used in the pure R version. To save having to transpose
+`ind_cat` every time `ipfp` is called, save the transposed version:
 
-Notice also that with `ipfp` the categorical `0,1` version of the individual-level
-data is transposed to represent the individual-level data instead of the
-`ind_agg` object used previously.
+```{r}
+ind_catt <- t(ind_cat)
+```
 
+Another object that can be saved prior to running `ipfp` on all zones
+(the rows of `cons`) is `rep(1, nrow(ind))`, simply a series of ones.
+We will call this object `x0` as it's argument name representing
+the starting point of the weight estimates in `ipfp`:
 
+```{r}
+x0 <- rep(1, nrow(ind))
+```
 
-To extend this process to all 6 zones we can wrap the line beginning
+To extend this process to all three zones we can wrap the line beginning
 `ipfp(...)` inside a `for` loop, saving the results each time into the
 weight variable we created earlier:
 
 ```{r}
 for(i in 1:ncol(weights)){
-  weights[,i] <- ipfp(cons[i,], t(ind_cat), x0 = rep(1, nrow(ind)))
+  weights[,i] <- ipfp(cons[i,], ind_catt, x0, maxit = 20)
 }
 ```
 
@@ -1108,7 +1169,7 @@ potentially less clear), however, it is best use R's internal
 `for` loop via the `apply` function:
 
 ```{r}
-weights <- apply(cons, MARGIN = 1, FUN =  function(x) ipfp(x, t(ind_cat), x0 = rep(1,nrow(ind))))
+weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, 20))
 ```
 
 Note that this function generates the same result as the `for` loop
@@ -1226,7 +1287,9 @@ spatial microsimulation.
 R's design is built on the idea that "everything is an object and everything
 that happens is a function". It is a *vectorised*,
 *object orientated* and *functional* 
-programming language (Wickham, 2015). This means that
+programming language
+([Wickham, 2014](http://www.crcpress.com/product/isbn/9781466586963)).
+This means that
 R understands vector algebra, all data accessible to
 R resides in a number of named objects and that a function must
 be used to modify any object. We will look at each of these in some code below.
@@ -1311,7 +1374,7 @@ a huge amount of time in the long run.
 ## Subsetting in R {#subsetting}
 
 R has powerful, concise and (over time) intuitive methods for taking
-subsets of data. Using the SimpleWorld example we loaded in [C4](#Basics),
+subsets of data. Using the SimpleWorld example we loaded in *[Data preparation](#DataPrep)*,
 let's explore the `ind` object in more detail, to see how we can select
 the parts of an object we are most interested in. As before, we need
 to load the data:
@@ -1388,7 +1451,9 @@ highly recommended:
 is the foundational introductory R manual, written by the
 software's core developers. It is terse and covers some advanced topics, but
 provides an unbeatable introduction to R's behaviour as a language.
-- *Advanced R* (Wickham, 2015) is a book that delves into the heart
+- *Advanced R* 
+([Wickham, 2014](http://www.crcpress.com/product/isbn/9781466586963))
+delves into the heart
 of the R language. It contains many advanced topics, but the introductory
 chapters are straightforward. Browsing some of the pages on
 [Advanced R's website](http://adv-r.had.co.nz/) and
