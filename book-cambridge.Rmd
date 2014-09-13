@@ -5,6 +5,7 @@ output:
     fig_caption: yes
     number_sections: yes
     toc: yes
+  word_document: default
 layout: default
 ---
 
@@ -33,24 +34,21 @@ due largely to its
 practical utility in an era of 'evidence-based policy'
 but is also driven by changes in the wider
 research environment inside and outside of academia. Continuous
-improvements in computers, advances in the availability and capabilities
-of software for handling data, and the 'open data' movement all mean it is now
-easier than ever to simulate the populations of small administrative areas
-at the individual-level, almost anywhere in the world.
+improvements in computers, software
+and data size, quality and accessibility mean spatial microsimulation is more accessible
+than ever. It is now possible to
+simulate the populations of small administrative areas
+at the individual-level almost anywhere in the world. This opens new
+possibilities for a range of applications, not least policy evaluation.
 
-Still, the term is shrouded by an unnecessary mystery. This is
+Still, the meaning of spatial microsimulation is still largely unknown. This is
 partly because the technique is inherently difficult to understand
-and partly, I argue, due to researchers themselves.
+and partly due to researchers themselves. 
 Some of the literature that uses the term 
-is ambiguous, inconsistent, not reproducible and baffling
-for the newcomer.
-Some writing on the subject adds to
-the confusion by treating spatial microsimulation
-as a magical black box or by not defining terms.
-
-In fact, spatial microsimulation means different things
-to different people.
-In the social sciences, spatial microsimulation
+is ambiguous, inconsistent about the methods involved.
+The situation is worsened by work that treats spatial microsimulation
+as a magical black box or that does not define terms.
+This ambiguity is partly because spatial microsimulation
 has two main meanings, as a technique or an approach:
 
 1. A *technique* for generating spatial microdata --- individuals allocated to
@@ -70,13 +68,12 @@ This issue is not unique to the method and is in fact widespread in academia
 to leading to calls such as that by Sergio Rey for an 'Open Regional Science'
 ([Rey, 2014](http://link.springer.com/10.1007/s00168-014-0611-7)).
 
-This book encourages
-reproducibility by
+This book encourages reproducibility by
 providing the tools for its readers to
-actually *do* spatial microsimulation, on realistic
-data for plausible purposes. In addition, all the findings presented
-in this book can be reproduced, using code and data on the books
-GitHub repository:
+actually *do* spatial microsimulation on realistic
+data. All the findings presented
+in this book can be reproduced using code and data in the book's
+Github repository:
 [github.com/Robinlovelace/spatial-microsim-book](https://github.com/Robinlovelace/spatial-microsim-book).
 
 Why spend time and effort on reproducibility? The first answer is that
@@ -85,13 +82,11 @@ readable code and allowing your results to be easily re-run at a later data.
 The second reason is more profound. Reproducibility is a prerequisite
 of falsifiability and falsifiability is the backbone of science
 (Popper, 1959).
-By producing non-reproducible research, researchers
-risk damaging not only their own integrity, but the scientific
-credibility of the disciplines in which they work. These philosophical
-antecedents inform the book’s practical nature. The aim is simple: to
-provide a foundation in spatial microsimulation.
+The results on non-reproducible research cannot be verified, reducing scientific
+credibility. These observations inform the book’s practical nature.
 
 ```{r, echo=FALSE}
+# The aim is simple: to provide a foundation in spatial microsimulation.
 # http://en.wikipedia.org/wiki/Experiential_learning
 # Poper's link also here
 # [2011](http://www.manning.com/kabacoff/)
@@ -102,10 +97,11 @@ is a living, evolving set of techniques rather
 than a prescriptive formula for arriving at the 'right' answer.
 This approach that spatial microsimulation largely defined by its user-community,
 made up of growing number
-of people worldwide. It is hoped that this book contributes to this community
-and that it encourages collaboration, innovation
-and rigour. Above all it is hoped that the book
-opens the possibilities of spatial microsimulation to more people, with
+of people worldwide. In terms of reproducibility,
+this book aims to contribute to the community by
+encouraging collaboration, innovation
+and rigour. The book also aims to
+open the possibilities of spatial microsimulation to more people, with
 a practical approach that encourages playing with the data and code.
 As Kabakoff (2011 p. xxii) put it regarding R,
 "the best way to learn is to experiment". 
@@ -122,14 +118,14 @@ efficiency, reproducibility and ease of expressing oneself.
 Nearly 3 decades ago 
 [Hölm (1987, p. 153)](http://www.jstor.org/stable/10.2307/490448)
 observed that "little attention is paid to the choice of programming
-language used" for microsimulation and
-this appears to be as true now as it was then: software
-is rarely discussed in papers on the subject.
-Yet the software used has a lasting
-impact, including what can and cannot be done
-and opportunities for collaboration. This section explains the choice of R.
+language used" for microsimulation. This appears to be as true now as it was
+then; software is rarely discussed in papers on the subject.
+
 
 ```{r, echo=FALSE}
+# Yet the software used has a lasting
+# impact, including what can and cannot be done
+# and opportunities for collaboration.  explains the choice of R.
 # In my own research, for example, a conscious decision was made early on to use
 # R. This had subsequent knock-on impacts on
 # the features, analysis and even design of my simulations.
@@ -158,12 +154,12 @@ R offers the researcher great flexibility in designing workflows,
 analysis stages and even writing one's own functions.
 
 On the other hand, R is *high level* compared with
-general purpose languages such as C and Python:
-instead
-of having to write code to perform statistical operations
-from scratch, a pre-made function probably already exists in R. To calculate
-the mean value of any variable `x` in pure Python, for example,
-one would need to type 20 characters: `float(sum(x))/len(x)`.^[The
+general purpose languages such as C and Python.
+Instead
+of writing code to perform statistical operations
+'from scratch', R users generally use pre-made functions. To calculate
+the mean value of variable `x`, for example,
+one would need to type 20 characters in Python: `float(sum(x))/len(x)`.^[The
 `float` function is needed in case whole numbers are used. This
 can be reduced to 13 characters with the excellent **NumPy** package:
 `import numpy; x = [1,3,9]; numpy.mean(x)` would generate the
@@ -190,8 +186,8 @@ spatial microsimulation, making R an ideal choice.
 
 Finally, R has an active and  growing user community. As a result there are
 thousands of packages that extend R's capabilities by providing new functions
-to the user and more functionality is being added all the time.
-The **ipfp** package which was published in summer 2014, for example,
+to the user and improvements are being added all the time.
+The **ipfp** package, for example, was published in the summer of 2014 and
 can greatly reduce the computational time taken for a key element of spatial
 microsimulation process, as we shall see in *[Reweighting with ipfp](#ipfp)*.
 
@@ -310,10 +306,10 @@ Typographic conventions
 The following typographic conventions are followed to make the practical
 examples easier to follow:
 
-- In-line code is povided in `monospace` font to show it's something the
+- In-line code is provided in `monospace` font to show it's something the
 computer understands.
 - Larger blocks of codes, referred to as *listings*, are provided on separate lines
-and have coloured *syntax highlighting* to distingish between values, names and functions:
+and have coloured *syntax highlighting* to distinguish between values, names and functions:
 
 ```{r}
 x <- c(1, 2, 5, 10) # create a vector
@@ -336,7 +332,7 @@ An overview of the coursebook
 This coursebook builds on the tutorial
 *Introducing spatial microsimulation with R: a practical*
 (Lovelace, 2014) with improved code and explanation.
-The booklet is a precurser to a book
+The booklet is a precursor to a book
 CRC Press's
 [R Series](http://www.crcpress.com/browse/series/crctherser)
 which will be published in summer 2015. Therefore any comments
@@ -475,7 +471,7 @@ by editing this documents source code: [github.com/Robinlovelace/spatial-microsi
 
 # An illustrated example from SimpleWorld {#SimpleWorld}
 
-To see the link between the methology introduced
+To see the link between the methodology introduced
 *[later in the book](#Smsim1)*
 and the various real-world applications, let's take a look at a simple example of the
 kind of situation where spatial microsimulation is useful,
@@ -483,7 +479,7 @@ to help bridge the gap between method
 and application.
 
 We'll use an imaginary world called SimpleWorld,
-consiting of only 3 zones that cover the entirety of
+consisting of only 3 zones that cover the entirety of
 the SimpleWorld sphere ([Figure 1](fsimple1)). 
 
 ```{r fsimple1, fig.cap="The SimpleWorld sphere", echo=FALSE} 
@@ -744,44 +740,48 @@ in [section validation](#svalidation).
 ```
 
 
-
-The aim of this chapter is to guide you through all the
-steps of spatial microsimulation in R
-for spatial microsimulation.
-The easiest way to access the data used in this chapter
-(and the data for all other chapters), the easiest way is to
-download and unzip the book's GitHub repository.
-From there, you will want to run R from the project's root directory.
-
 ```{r, echo=FALSE}
 # This next chapter is where people get their hands dirty for the first time -
 # could be the beginning of part 2 if the book's divided into parts. 
 ```
 
-## Preparing input data 
-
 This chapter focuses on the input datasets needed for spatial microsimulation.
 Correctly loading, manipulating and assessing these datasets
 will be critical to the performance of your models and the ease of modifying
-them to include new inputs. This chapter also
+them to include new inputs.
+Fortunately R is an accomplished tool for data cleaning
+([Kabacoff, 2011](http://www.manning.com/kabacoff/)), as we shall see.
+This chapter also
 provides the basis for chapter we perform spatial microsimulation.
 
 As with most spatial microsimulation models, this example consists of a
 non-geographical individual-level dataset and a series of geographical
-zones. 
+zones. The data used in this chapter
+(and the data for all other chapters) can be
+downloaded from the book's GitHub repository
+(). From this page, click on the 'Download ZIP' button to the right of the
+page and extract the folder into a sensible place on your computer,
+such as the Desktop.
+From there, you will want to run R from the project's root directory:
+open the folder in a file browser and double click on 'spatial-microsim-book.Rproj'.
+This should cause RStudio to be opened at this location, with all the input
+data files easily accessible to R through *relative filepaths*.
 
-To ease reproducibility of the analysis, it is recommended that the
-process begins with a copy of the *raw* input dataset on one's hard disc.
+To ease reproducibility of the analysis when working with real data,
+it is recommended that the
+process begins with a copy of the *raw* dataset on one's hard disc.
 Rather than modifying this file, modified ('cleaned') versions should be
 saved as separate files. This ensures that after any mistakes,
 one can always recover information that otherwise could have been lost and
-makes the project fully reproducible.
-
-It sounds trivial, but the *precise* origin of the input data
-should be described. Comments in code that loads the data (and resulting publications),
-allows you or others to recall the raw information.
+makes the project fully reproducible. In this chapter, however,
+a relatively clean and very tiny dataset from SimpleWorld is used.
+We will see in [Chapter 5](#CakeMap) how to deal with larger and more messy data.
+Here the focus is on the principles.
 
 ```{r, echo=FALSE}
+# It sounds trivial, but the *precise* origin of the input data
+# should be described. Comments in code that loads the data (and resulting publications),
+# allows you or others to recall the raw information. # going on a little -> rm
 # Show directory structure plot from Gillespie here
 ```
 
@@ -789,11 +789,11 @@ The process
 of loading, checking and preparing the input datasets for spatial microsimulation
 is generally a linear process, encapsulating the following stages:
 
-1. Load orginal data 
+1. Load original data 
 2. Remove excess information
 3. Re-categorise individual-level data
-4. 'Flatten' individual-level data 
-5. Set variable and value names
+4. Set variable and value names
+5. 'Flatten' individual-level data 
 
 'Stripping down' the datasets so that they
 only contain the bare essential information will enable you to focus solely
@@ -895,7 +895,7 @@ the errant constraint variables are described in
 In the above code, `data.frame` objects containing precisely
 the information required for the next stage were loaded.
 More often, superfluous information will need to be removed from the data
-and subets taken. It is worth removing superfluous
+and subsets taken. It is worth removing superfluous
 variables earl, to avoid over-complicating and slowing-down the analysis.
 If `ind` had 100 variables of which only the 1st, 3rd and 4th were of interest, for example,
 the following command could be used to update the object, retaining only the relevant
@@ -903,7 +903,7 @@ variables: `ind <- ind[, c(1, 3, 4)]`. Alternatively, `ind$age <- NULL` removes
 the age variable.
 
 Although `ind` is small and simple it will behave in the same way as a much
-larger dataset, providing opportunities for testing subetting syntax in R.
+larger dataset, providing opportunities for testing subsetting syntax in R.
 It is common, for example,
 to take a subset of the working *population base*: those
 aged 16 and 74 in
@@ -1056,7 +1056,7 @@ The SimpleWorld data, loaded in the previous chapter,
 is used. Being small and simple, the example enables understanding
 the process on a 'human scale' and allows experimentation
 without the worry of overloading your computer.
-However, the methods apply eqally to larger and more complex projects.
+However, the methods apply equally to larger and more complex projects.
 Therefore practicing the basic principles and methods of spatial microsimulation
 in R is the focus of this chapter.
 Time spent mastering these basics will make subsequent steps
@@ -1115,7 +1115,7 @@ cons <- apply(cons, 2, as.numeric) # convert matrix to numeric data type
 ipfp(cons[1,], t(ind_cat), x0 = rep(1,nrow(ind))) # run IPF
 ```
 
-It is impressive that the entire IPF process which took dozens of lines of
+It is impressive that the entire IPF process, which took dozens of lines of
 code in pure R has been condensed into two lines of code: one to
 convert the input constraint dataset to `numeric`^[The integer data type fails
 because C requires `numeric` data to be converted into its *floating point*
@@ -1124,7 +1124,7 @@ and one to perform the IPF operation itself. Note also that although
 we did not specify how many iterations to run, the above command
 ran the default of `maxit = 1000` iterations, despite convergence happening after
 10 iterations. This can be seen by specifying the `maxit` and `verbose` arguments
-in ipfp, as illustrated below (only the first line of R output is shown):
+in `ipfp`, as illustrated below (only the first line of R output is shown):
 
 ```{r, eval=FALSE}
 ipfp(cons[1,], t(ind_cat), rep(1, nrow(ind)), maxit = 20, verbose = T)
@@ -1138,11 +1138,11 @@ ipfp(cons[1,], t(ind_cat), rep(1, nrow(ind)), maxit = 20, verbose = T)
 Notice also that a *transposed* (via the `t()` function) version of the individual-level
 data (`ind_cat`) is used in `ipfp`
 to represent the individual-level data, instead of the
-`ind_agg` object used in the pure R version. To save having to transpose
+`ind_agg` object used in the pure R version. To prevent having to transpose
 `ind_cat` every time `ipfp` is called, save the transposed version:
 
 ```{r}
-ind_catt <- t(ind_cat)
+ind_catt <- t(ind_cat) # save transposed version of ind_cat
 ```
 
 Another object that can be saved prior to running `ipfp` on all zones
@@ -1151,7 +1151,7 @@ We will call this object `x0` as it's argument name representing
 the starting point of the weight estimates in `ipfp`:
 
 ```{r}
-x0 <- rep(1, nrow(ind))
+x0 <- rep(1, nrow(ind)) # save the initial vector
 ```
 
 To extend this process to all three zones we can wrap the line beginning
@@ -1164,44 +1164,36 @@ for(i in 1:ncol(weights)){
 }
 ```
 
-To make this process even faster and more concise (although
-potentially less clear), however, it is best use R's internal
-`for` loop via the `apply` function:
+To make this process even more concise (albeit
+less clear to R beginners), we can use R's internal
+`for` loop: `apply`:
 
 ```{r}
 weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, 20))
 ```
 
-Note that this function generates the same result as the `for` loop
-solution. What is happening here is that we are iterating through
-each row (hence `MARGIN = 1`: `MARGIN = 2` would signify column-wise iteration)
-of the `cons` object. For each row of data (internally represented by `x`)
-we applying the `ipfp` function. 
-
+In the above code R iterates through each row
+(hence the second argument `MARGIN` being `1`: `MARGIN = 2`
+would signify column-wise iteration).
+Thus `ipfp` is applied to each zone in turn. 
+The speed savings of writing the function
+with different configurations are benchmarked in
+'parallel-ipfp.R' in the 'R' folder of the book project directory.
+This shows that reducing the maximum iterations of `ipfp` from
+the default 1000 to 20 has the greatest performance benefit.^[These
+tests also show that any speed gains from using `apply` instead of `for` are negligible, so
+whether to use `for` or `apply` can be decided by personal preference.]
+To make the code run faster on large datasets, a parallel version of
+`apply` called `parApply` can be used. This is also
+tested in 'parallel-ipfp.R'.
 
 ```{r, echo=FALSE, eval=FALSE}
-# Tests of the speed of the for solution vs the apply solution
-ipfp_for <- function(){
-  for(i in 1:ncol(weights)){
-  weights[,i] <- ipfp(cons[i,], t(ind_cat), x0 = rep(1, nrow(ind)))
-}
-}
-
-ipfp_apply <- function(){
-  weights <- apply(cons, MARGIN = 1, FUN =  function(x) ipfp(as.numeric(x), t(ind_cat), x0 = rep(1,nrow(ind))))
-}
-
-library(microbenchmark)
-microbenchmark(ipfp_for, ipfp_apply)
-
-# From initial tests on the simple dataset,
-# it seems that any speed gains from the `apply` solution are negligible, so
-# whether to use `for` or `apply` should depend on personal preference.
 # Also discuss what happens when you get a huge dataset, from Stephen's dataset
 ```
 
-
 ## Combinatorial optimisation
+
+
 
 ## Integerisation
 
@@ -1215,30 +1207,45 @@ and its implementation in R. However, we have yet to see how the method can
 be applied *in the wild*, on *real* datasets.
 
 "This spatial microsimulation technique seems useful, but how can I use
-these methods on *my* data?" This is a question many readers will be asking at this
-stage. The purpose of this chapter is to answer the question, as specifically
-as possible, to enable the information and code provided in this book to be
-translated directly into new research in the reader's own field. 
-
-The chapter is based on a hypothetical use of spatial microsimulation:
-to estimate cake consumption in different parts of a city...
+these methods on *my* data?" The purpose of this chapter is to answer this question
+using a real dataset. 
+The chapter is based on a hypothetical use of spatial microsimulation
+to arrive at an important result:
+estimated cake consumption in different parts of Leeds, UK.
+The example is deliberately rather
+absurd to make it more memorable and is
+presented in a generalisable way, easing the transfer
+of the method to new datasets.
 
 ## Preparing the input data
 
-Often spatial microsimulation methodology is presented in a way that suggests
+Often spatial microsimulation is presented in a way that suggests
 the data arrived in a near perfect state, ready to be inserted directly into
 a spatial microsimulation model. This is rarely the case. Usually, one must
 spend time translating the data into a suitable format, re-coding categorical
 variables and column names, binning continuous variables and subsetting from
-the microdataset. All of this can easily take as long as the analysis stage,
-so it is important to think carefully about strategies for data cleaning
-before undertaking a complex project ([Wickham, 2014](http://vita.had.co.nz/papers/tidy-data.html)). Fortunately R is an accomplished tool for data cleaning
-([Kabacoff, 2011](http://www.manning.com/kabacoff/)). To learn about the data
+the microdataset. In a typical project, data preparation
+can and should take as long as the analysis stage
+([Wickham, 2014](http://vita.had.co.nz/papers/tidy-data.html)).
+This section therefore builds on
+[Chapter 3](#DataPrep) to illustrate strategies for data cleaning
+on a complex project. To learn about the data
 cleaning steps that may be useful to your data, we start from the beginning
 in this section, with a real (anonymised) dataset that was downloaded from
 the internet.
 
 ## Performing IPF on CakeMap data
+
+In the CakeMap example we use only the `ipfp` reweighting strategy
+as it is more concise, generalisable and faster than
+[IPF in pure R](#IpfinR). On a modern laptop, the `ipfp` method
+was found to be *almost 40 times faster* than the 'IPFinR' method.
+These tests can be run using the `microbenchmark()` commands found towards
+the end of 'CakeMap.R'.^[The second of these benchmarks depends
+on the old `smsim-course`, the repository of which needs to
+be downloaded (from
+[github.com/Robinlovelace/smsim-course](https://github.com/Robinlovelace/smsim-course))
+and saved to the user's computer.]
 
 ## Integerisation
 
@@ -1442,7 +1449,7 @@ for "TRUE" and "FALSE" respectively.]
 ### Further R resources {#further}
 
 The above tutorial should provide a sufficient grounding in R
-for begginers to understand the practical examples in the book.
+for beginners to understand the practical examples in the book.
 However, R is a deep language and there is much else to learn that will
 be of benefit to your modelling skills. The following resources are
 highly recommended:

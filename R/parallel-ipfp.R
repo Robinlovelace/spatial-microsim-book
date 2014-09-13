@@ -15,22 +15,55 @@ cat_sex <- model.matrix(~ ind$sex - 1)[, c(2, 1)]
 
 library(ipfp) # load the ipfp library after: install.packages("ipfp")
 cons <- apply(cons, 2, as.numeric) # convert matrix to numeric data type
-cons <- cons[sample(3, size = 1000, replace = T),]
+cons <- cons[sample(3, size = 500, replace = T),]
 
 weights <- matrix(data = NA, nrow = nrow(ind), ncol = nrow(cons))
 
-ind_ctt <- t(ind_cat)
+ind_catt <- t(ind_cat)
 x0 <- rep(1, nrow(ind))
 
-f1 <- function(){
-  for(i in 1:nrow(cons)){
-    weights[,i] <- ipfp(cons[i,], ind_ctt, x0)
+# Tests of the speed of the for solution vs the apply solution
+ipfp_for <- function(){
+  for(i in 1:ncol(weights)){
+    weights[,i] <- ipfp(cons[i,], t(ind_cat), x0 = rep(1, nrow(ind)))
   }
 }
 
-f2 <- function(){
-  weights_apply <- apply(cons, 1, function(x) ipfp(x, ind_ctt, x0))
+ipfp_apply <- function(){
+  weights <- apply(cons, MARGIN = 1, FUN =  function(x) ipfp(as.numeric(x), t(ind_cat), x0 = rep(1,nrow(ind))))
 }
+
+ipfp_for20 <- function(){
+  for(i in 1:ncol(weights)){
+    weights[,i] <- ipfp(cons[i,], t(ind_cat), x0 = rep(1, nrow(ind)), maxit = 20)
+  }
+}
+
+ipfp_apply20 <- function(){
+  weights <- apply(cons, MARGIN = 1, FUN =  function(x) ipfp(as.numeric(x), t(ind_cat), x0 = rep(1,nrow(ind)), maxit = 20))
+}
+
+ipfp_foric <- function(){
+  for(i in 1:ncol(weights)){
+    weights[,i] <- ipfp(cons[i,], ind_catt, x0 = rep(1, nrow(ind)))
+  }
+}
+
+ipfp_applyic <- function(){
+  weights <- apply(cons, MARGIN = 1, FUN = function(x) ipfp(as.numeric(x), ind_catt, x0 = rep(1,nrow(ind))))
+}
+
+ipfp_for20icx <- function(){
+  for(i in 1:ncol(weights)){
+    weights[,i] <- ipfp(cons[i,], ind_catt, x0, maxit = 20)
+  }
+}
+
+ipfp_apply20icx <- function(){
+  weights <- apply(cons, MARGIN = 1, FUN =  function(x) ipfp(as.numeric(x), ind_catt, x0 , maxit = 20))
+}
+library(microbenchmark)
+microbenchmark(ipfp_for(), ipfp_apply(), ipfp_for20(), ipfp_apply20(), ipfp_foric(), ipfp_applyic(), ipfp_for20icx(), ipfp_apply20icx(), times = 5)
 
 library(parallel)
 detectCores() # how many cores on the system?
@@ -41,6 +74,6 @@ f3 <- function(cl){
 }
 
 library(microbenchmark)
-microbenchmark(f1(), f2(), f3(cl), times = 20 )
+microbenchmark(ipfp_for, ipfp_apply, ipfp_for20, ipfp_apply20, ipfp_foric, ipfp_applyic, ipfp_for20icx, ipfp_apply20icx(), f3(cl), times = 3 )
 
 stopCluster(cl) # stop the cluster
