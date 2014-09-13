@@ -35,7 +35,7 @@ practical utility in an era of 'evidence-based policy'
 but is also driven by changes in the wider
 research environment inside and outside of academia. Continuous
 improvements in computers, software
-and data size, quality and accessibility mean spatial microsimulation is more accessible
+and data availability mean spatial microsimulation is more accessible
 than ever. It is now possible to
 simulate the populations of small administrative areas
 at the individual-level almost anywhere in the world. This opens new
@@ -45,7 +45,7 @@ Still, the meaning of spatial microsimulation is still largely unknown. This is
 partly because the technique is inherently difficult to understand
 and partly due to researchers themselves. 
 Some of the literature that uses the term 
-is ambiguous, inconsistent about the methods involved.
+is ambiguous and inconsistent about the method.
 The situation is worsened by work that treats spatial microsimulation
 as a magical black box or that does not define terms.
 This ambiguity is partly because spatial microsimulation
@@ -106,6 +106,8 @@ a practical approach that encourages playing with the data and code.
 As Kabakoff (2011 p. xxii) put it regarding R,
 "the best way to learn is to experiment". 
 
+\clearpage
+
 ## Why spatial microsimulation with R?
 
 ```{r, echo=FALSE}
@@ -120,7 +122,11 @@ Nearly 3 decades ago
 observed that "little attention is paid to the choice of programming
 language used" for microsimulation. This appears to be as true now as it was
 then; software is rarely discussed in papers on the subject.
-
+There are many factors that should influence software selection including
+cost, maturity, features, flexibility and
+speed. Perhaps most important for busy researchers is
+ease and speed of writing,
+adapting and communicating code. R excels in each of these areas.
 
 ```{r, echo=FALSE}
 # Yet the software used has a lasting
@@ -133,15 +139,6 @@ then; software is rarely discussed in papers on the subject.
 # are general purpose and 'Turing complete', meaning they could, with
 # sufficient effort, perform spatial microsimulation (or any other
 # numerical operation). So why choose R?
-```
-
-There are many factors that should influence software selection including
-cost, maturity, features, flexibility and
-speed. Perhaps most important for busy researchers is
-ease and speed of writing,
-adapting and communicating code. R excels in each of these areas.
-
-```{r, echo=FALSE}
 # ^[Speed
 # of execution is an arguable exception, an issue that can be tackled
 # by vectorisation (see [Appendix A](#apR)) and judicious use of add-on *R packages*.]
@@ -152,7 +149,6 @@ Excel and SPSS, which have been used for spatial microsimulation in the
 past. 
 R offers the researcher great flexibility in designing workflows,
 analysis stages and even writing one's own functions.
-
 On the other hand, R is *high level* compared with
 general purpose languages such as C and Python.
 Instead
@@ -341,11 +337,13 @@ can be left via email to r.lovelace@leeds.ac.uk or via the project's GitHub page
 
 The structure is as follows:
 
-- A 'no nonsense' and  reproducible explanation of spatial microsimulation with
-[SimpleWorld](#SimpleWorld).
-- The basics of spatial microsimulation in R, introducing the main functions
-and techniques that are used to generate spatial microdata
-- [CakeMap](#CakeMap), a larger and more involved example using real data
+- [SimpleWorld](#SimpleWorld), a 'no nonsense' and reproducible
+explanation of spatial microsimulation with reference to an imaginary planet.
+- [Data preparation](#DataPrep), dedicated to the boring but vital task
+of loading and 'cleaning' the input data, ready for spatial microsmulation.
+- [Spatial microsimulation in R](#Smsim1), which introduces the main functions
+and techniques that are used to generate spatial microdata.
+- [CakeMap](#CakeMap), a larger and more involved example using real data.
 - [Next steps](#NextSteps), an introduction to the subsequent steps that can
 be taken after the spatial microdataset has been generated.
 
@@ -469,7 +467,7 @@ by editing this documents source code: [github.com/Robinlovelace/spatial-microsi
 # **Spatial microsimulation is not agent-based modelling (ABM).**
 ```
 
-# An illustrated example from SimpleWorld {#SimpleWorld}
+# SimpleWorld {#SimpleWorld}
 
 To see the link between the methodology introduced
 *[later in the book](#Smsim1)*
@@ -482,7 +480,7 @@ We'll use an imaginary world called SimpleWorld,
 consisting of only 3 zones that cover the entirety of
 the SimpleWorld sphere ([Figure 1](fsimple1)). 
 
-```{r fsimple1, fig.cap="The SimpleWorld sphere", echo=FALSE} 
+```{r fsimple1, fig.cap="The SimpleWorld sphere", echo=FALSE, message=FALSE} 
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
 library(sp)
@@ -1221,18 +1219,22 @@ of the method to new datasets.
 
 Often spatial microsimulation is presented in a way that suggests
 the data arrived in a near perfect state, ready to be inserted directly into
-a spatial microsimulation model. This is rarely the case. Usually, one must
+the model. This is rarely the case in practice. Usually, one must
 spend time translating the data into a suitable format, re-coding categorical
 variables and column names, binning continuous variables and subsetting from
 the microdataset. In a typical project, data preparation
 can and should take as long as the analysis stage
 ([Wickham, 2014](http://vita.had.co.nz/papers/tidy-data.html)).
-This section therefore builds on
+This section builds on
 [Chapter 3](#DataPrep) to illustrate strategies for data cleaning
 on a complex project. To learn about the data
 cleaning steps that may be useful to your data, we start from the beginning
 in this section, with a real (anonymised) dataset that was downloaded from
 the internet.
+
+```{r, echo=FALSE}
+# A little long-winded - cut down?
+```
 
 ## Performing IPF on CakeMap data
 
@@ -1247,7 +1249,12 @@ be downloaded (from
 [github.com/Robinlovelace/smsim-course](https://github.com/Robinlovelace/smsim-course))
 and saved to the user's computer.]
 
+As before, the output of the process is a matrix object entitled `weights`.
+Other than 
+
 ## Integerisation
+
+
 
 ## Validation {#svalidation}
 
