@@ -93,11 +93,14 @@ credibility. These observations inform the book’s practical nature.
 ```
 
 This book presents spatial microsimulation
-is a living, evolving set of techniques rather
+as a living, evolving set of techniques rather
 than a prescriptive formula for arriving at the 'right' answer.
+<!-- The following doesn't make sense. In the meantime I've changed it but it
+might not be what you want to say:
 This approach that spatial microsimulation largely defined by its user-community,
-made up of growing number
-of people worldwide. In terms of reproducibility,
+made up of growing number of people worldwide. -->
+Spatial microsimulation is largely defined by its user-community,
+made up of growing number of people worldwide. In terms of reproducibility,
 this book aims to contribute to the community by
 encouraging collaboration, innovation
 and rigour. The book also aims to
@@ -117,7 +120,7 @@ As Kabakoff (2011 p. xxii) put it regarding R,
 
 Software decisions have a major impact on flexibility,
 efficiency, reproducibility and ease of expressing oneself.
-Nearly 3 decades ago 
+Nearly three decades ago 
 [Hölm (1987, p. 153)](http://www.jstor.org/stable/10.2307/490448)
 observed that "little attention is paid to the choice of programming
 language used" for microsimulation. This appears to be as true now as it was
@@ -160,7 +163,7 @@ one would need to type 20 characters in Python: `float(sum(x))/len(x)`.^[The
 can be reduced to 13 characters with the excellent **NumPy** package:
 `import numpy; x = [1,3,9]; numpy.mean(x)` would generate the
 desired result. The R equivalent is `x = c(1,3,9); mean(x)`.]
-In pure R 7 characters are sufficient: `mean(x)`.
+In pure R, seven characters are sufficient: `mean(x)`.
 
 ```{r, echo=FALSE}
 # One may argue that saving a few keystrokes while writing
@@ -222,7 +225,7 @@ Having learned a little about *why* R is a good tool for the job, it is
 worth considering at this stage *how* R should be used.
 It is useful to think of R not as a series of isolated
 commands, but as an interconnected *language*.
-As with learning like Spanish or Chinese frequent
+As with learning Spanish or Chinese, frequent
 practice, persistence and experimentation will ensure deep learning.
 
 The most useful practical advice I can give is to organise your workflow.
@@ -309,7 +312,7 @@ and have coloured *syntax highlighting* to distinguish between values, names and
 
 ```{r}
 x <- c(1, 2, 5, 10) # create a vector
-sqrt(x) # find the square route
+sqrt(x) # find the square root of x
 ```
  - Output from the *R console* is preceded by the `##` symbol, as illustrated above.
  - Comments are preceded by a single `#` symbol to explain specific lines.
@@ -572,7 +575,7 @@ pol1$ypos <- 0
 #   coord_map() 
 ```
 
-Next, imagine a more detailed dataset about 5 of SmallWorld's
+Next, imagine a more detailed dataset about 5 of SimpleWorld's
 inhabitants, recorded from a survey. This is in a different
 form from the aggregate-level data presented in the above tables.
 This *microdata* survey contains one row per individual, in contrast
@@ -600,7 +603,7 @@ ind <- read.csv("data/SimpleWorld/ind-full.csv")
 |  5|  49|f   |   2473|
 
 Note that although the microdataset contains additional information
-about the inhabitants of SmallWorld, it lacks geographical information
+about the inhabitants of SimpleWorld, it lacks geographical information
 about where each inhabitant lives or even which zone they are from.
 This is typical of individual-level survey data.
 Spatial microsimulation tackles this issue by allocating individuals from
@@ -657,7 +660,7 @@ individual lives. The challenge is to ensure that the spatial microdataset
 is as representative as possible of the aggregate constraints, while only
 sampling from a realistic baseline population. A feasible combination of
 individuals sampled from the microdata that represent zone 2 is presented
-in table xx below; the complete spatial microdataset allocates
+in the table below; the complete spatial microdataset allocates
 whole individuals to each zone, resulting in a more or less realistic
 insight into the inhabitants of SimpleWorld and for the purposes of
 modelling. 
@@ -703,13 +706,8 @@ In addition to clarifying the advantages of spatial microsimulation,
 the above example also flags some limitations
 of the methodology: spatial microsimulation will only
 yield useful results if the input microdataset is representative of the population
-as a whole, and for each region. If the relationship between age sex is markedly different
-in one zone compared with what we assume to be the global averages of the input data,
-for example, our estimates could be way-out. Using such a small sample, one could
-rightly argue, how could the diversity of 33 inhabitants of SimpleWorld be
-represented by our simulated spatial microdata? This question is equally applicable
-to larger simulations. These issues are important and will be tackled
-in [section validation](#svalidation).
+as a whole, and for each region. If the relationship between age and sex is 
+markedly different in one zone compared with what we assume to be the global averages of the input data, for example, our estimates could be way-out. Using such a small sample, one could rightly argue, how could the diversity of 33 inhabitants of SimpleWorld be represented by our simulated spatial microdata? This question is equally applicable to larger simulations. These issues are important and will be tackled in [section validation](#svalidation).
 
 ```{r, echo=FALSE}
 # Applications of spatial microsimulation - to be completed!
@@ -750,16 +748,14 @@ them to include new inputs.
 Fortunately R is an accomplished tool for data cleaning
 ([Kabacoff, 2011](http://www.manning.com/kabacoff/)), as we shall see.
 This chapter also
-provides the basis for chapter we perform spatial microsimulation.
+provides the basis for the chapter in which we perform spatial microsimulation.
 
 As with most spatial microsimulation models, this example consists of a
 non-geographical individual-level dataset and a series of geographical
 zones. The data used in this chapter
 (and the data for all other chapters) can be
 downloaded from the book's GitHub repository
-(). From this page, click on the 'Download ZIP' button to the right of the
-page and extract the folder into a sensible place on your computer,
-such as the Desktop.
+[github.com/Robinlovelace/spatial-microsim-book](https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the 'Download ZIP' button to the right of the page and extract the folder into a sensible place on your computer, such as the Desktop (unless you are confident 'forking' the project).
 From there, you will want to run R from the project's root directory:
 open the folder in a file browser and double click on 'spatial-microsim-book.Rproj'.
 This should cause RStudio to be opened at this location, with all the input
@@ -796,8 +792,8 @@ is generally a linear process, encapsulating the following stages:
 'Stripping down' the datasets so that they
 only contain the bare essential information will enable you to focus solely
 on the data that you are interested in. This is not covered in this chapter
-because the input datasets are already extremely bare and because the
-process should be obvious.
+because the input datasets are already extremely bare.<!-- and because the
+process should be obvious.-->
 
 We start with the individual-level
 dataset for a reason: this dataset is often more problematic
@@ -1067,7 +1063,7 @@ much easier.
 # 15 weights. Real world datasets (e.g. that presented in chapter xxx)
 # could contain 10,000 individuals
 # to be allocated to 500 zones, resulting in an unwieldy 5 million element
-# weight matrix but we'll stick with the SmallWorld dataset here for simplicity.
+# weight matrix but we'll stick with the SimpleWorld dataset here for simplicity.
 ```
 
 How representative each individual is of each zone is determined by their
@@ -1326,11 +1322,11 @@ In Python, for example, this is the answer we get:^[We can
 get the right answer in Python, by typing the following:
 `import numpy; a=numpy.array([1,2,3]); b=numpy.array([9,8,6]); a+b`.]
 
-```{r, engine='python', eval=FALSE}
+<!-- ```{r, engine='python', eval=FALSE}
 a = [1,2,3]
 b = [9,8,6]
 print(a + b)
-```
+``` -->
 
 `## [1, 2, 3, 9, 8, 6]`
 
