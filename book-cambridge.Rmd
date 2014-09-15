@@ -93,11 +93,14 @@ credibility. These observations inform the book’s practical nature.
 ```
 
 This book presents spatial microsimulation
-is a living, evolving set of techniques rather
+as a living, evolving set of techniques rather
 than a prescriptive formula for arriving at the 'right' answer.
+<!-- The following doesn't make sense. In the meantime I've changed it but it
+might not be what you want to say:
 This approach that spatial microsimulation largely defined by its user-community,
-made up of growing number
-of people worldwide. In terms of reproducibility,
+made up of growing number of people worldwide. -->
+Spatial microsimulation is largely defined by its user-community,
+made up of growing number of people worldwide. In terms of reproducibility,
 this book aims to contribute to the community by
 encouraging collaboration, innovation
 and rigour. The book also aims to
@@ -117,7 +120,7 @@ As Kabakoff (2011 p. xxii) put it regarding R,
 
 Software decisions have a major impact on flexibility,
 efficiency, reproducibility and ease of expressing oneself.
-Nearly 3 decades ago 
+Nearly three decades ago 
 [Hölm (1987, p. 153)](http://www.jstor.org/stable/10.2307/490448)
 observed that "little attention is paid to the choice of programming
 language used" for microsimulation. This appears to be as true now as it was
@@ -222,7 +225,7 @@ Having learned a little about *why* R is a good tool for the job, it is
 worth considering at this stage *how* R should be used.
 It is useful to think of R not as a series of isolated
 commands, but as an interconnected *language*.
-As with learning like Spanish or Chinese frequent
+As with learning Spanish or Chinese, frequent
 practice, persistence and experimentation will ensure deep learning.
 
 The most useful practical advice I can give is to organise your workflow.
@@ -309,7 +312,7 @@ and have coloured *syntax highlighting* to distinguish between values, names and
 
 ```{r}
 x <- c(1, 2, 5, 10) # create a vector
-sqrt(x) # find the square root
+sqrt(x) # find the square root of x
 ```
  - Output from the *R console* is preceded by the `##` symbol, as illustrated above.
  - Comments are preceded by a single `#` symbol to explain specific lines.
