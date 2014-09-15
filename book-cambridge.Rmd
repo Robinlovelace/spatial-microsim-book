@@ -932,7 +932,7 @@ we can do this by adding another argument to the `cut` function:
 (ind$age <- cut(ind$age, breaks = c(0, 49, 120), labels = c("a0_49", "a50+")))
 ```
 
-Users should be ware that `cut` results in a vector of class *factor*, which
+Users should be aware that `cut` results in a vector of class *factor*, which
 can cause problems later down the line.
 
 ```{r}
@@ -942,7 +942,7 @@ names(cons)
 ## Matching individual and aggregate level data names
 
 Before combining the newly recategorised individual-level data with the
-aggregate constraints, it is useful to for the category labels to match up.
+aggregate constraints, it is useful for the category labels to match up.
 This may seem trivial, but will save time in the long run. Here is the problem:
 
 ```{r}
