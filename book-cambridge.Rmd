@@ -260,7 +260,7 @@ Fluency allows
 complex numerical ideas to be described with a small number of keystrokes.
 If you are a new R user it is therefore worth spending some time learning
 the R language. To this end
-[Appendix A](#apR) provides a primer on R from the perspective
+[the Appendix](#apR) provides a primer on R from the perspective
 of spatial microsimulation.
 
 ```{r, echo=FALSE}
@@ -309,7 +309,7 @@ and have coloured *syntax highlighting* to distinguish between values, names and
 
 ```{r}
 x <- c(1, 2, 5, 10) # create a vector
-sqrt(x) # find the square route
+sqrt(x) # find the square root
 ```
  - Output from the *R console* is preceded by the `##` symbol, as illustrated above.
  - Comments are preceded by a single `#` symbol to explain specific lines.
