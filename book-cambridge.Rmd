@@ -13,7 +13,6 @@ layout: default
 # This is an early draft of a book on spatial microsimulation, for teaching in Cambridge
 ```
 
-
 \clearpage
 
 Introduction {#Introduction}
@@ -95,13 +94,9 @@ credibility. These observations inform the book’s practical nature.
 This book presents spatial microsimulation
 as a living, evolving set of techniques rather
 than a prescriptive formula for arriving at the 'right' answer.
-<!-- The following doesn't make sense. In the meantime I've changed it but it
-might not be what you want to say:
-This approach that spatial microsimulation largely defined by its user-community,
-made up of growing number of people worldwide. -->
 Spatial microsimulation is largely defined by its user-community,
-made up of growing number of people worldwide. In terms of reproducibility,
-this book aims to contribute to the community by
+made up of growing number of people worldwide.
+This book aims to contribute to the community by
 encouraging collaboration, innovation
 and rigour. The book also aims to
 open the possibilities of spatial microsimulation to more people, with
@@ -513,7 +508,7 @@ ggplot(pol1) + geom_path(aes(long, lat, group, fill = group)) +
   theme_space_map
 ```
 
-This is a small world, 
+This is a SimpleWorld, 
 containing 12, 10 and 11 individuals of its alien inhabitants
 in each zone, 1 to 3, respectively. From the SimpleWorld Census, we know
 how many young (under 49 space years old) and old (over 50)
@@ -521,12 +516,15 @@ residents live in each
 zone, as well their genders: male and female.
 This information is displayed in the tables below.
 
+Table: Geographically aggregated count data on age in SimpleWorld.
+
 |zone   | 0-49 yrs| 50 + yrs|
 |:--|-----:|-----:|
 |1  |     8|     4|
 |2  |     2|     8|
 |3  |     7|     4|
 
+Table: Count data on sex in SimpleWorld.
 
 |Zone   |  m|  f|
 |:--|--:|--:|
@@ -594,6 +592,8 @@ ind <- read.csv("data/SimpleWorld/ind-full.csv")
 # kable(ind)
 ```
 
+Table: Individual-level survey data from SimpleData.
+
 | id| age|sex | income|
 |--:|---:|:---|------:|
 |  1|  59|m   |   2868|
@@ -626,6 +626,8 @@ library(ipfp) # load the ipfp library after: install.packages("ipfp")
 apply(cons, MARGIN = 1, FUN =  function(x) ipfp(x, t(ind_cat), x0 = rep(1,nrow(ind))))
 ```
 
+Table: Weight matrix reflecting how representative each individual from the survey
+(rows) is relative to each zone (columns) in SimpleWorld.
 
 | Individual| Zone 1  | Zone 2  | Zone 3  |
 |---:|--------:|--------:|--------:|
@@ -654,16 +656,18 @@ We will discover how the weight matrices are generated in
 
 A more useful output from spatial microsimulation
 is what we refer to as *spatial microdata*.
-This is dataset that contains a single row per individual (as with the
+This dataset contains a single row per individual (as with the
 input microdata) but also an additional variable indicating where each
 individual lives. The challenge is to ensure that the spatial microdataset
-is as representative as possible of the aggregate constraints, while only
+is as representative as possible of the aggregate constraints, whilst
 sampling from a realistic baseline population. A feasible combination of
 individuals sampled from the microdata that represent zone 2 is presented
-in table xx below; the complete spatial microdataset allocates
-whole individuals to each zone, resulting in a more or less realistic
-insight into the inhabitants of SimpleWorld and for the purposes of
-modelling. 
+in the table below. The complete spatial microdataset contains
+a number of individuals for each zone, resulting in a more or less realistic
+insight into the inhabitants of SimpleWorld that will be useful for modelling,
+policy evaluation and other applications. 
+
+Table: Synthetic spatial microdata from SimpleWorld.
 
 | id| age|sex | zone|
 |--:|---:|:---|----:|
@@ -678,7 +682,8 @@ modelling.
 |  4|  73|f   |    2|
 |  5|  49|f   |    2|
 
-The table is a reasonable approximation of the inhabitants of zone 1:
+
+The table is a reasonable approximation of the inhabitants of zone 2:
 older females dominate in both the aggregate (which contains 8 older people
 and 6 females) and the simulated spatial microdata (which contains 8 older people
 and 7 females). We will learn how to create such *integerised* datasets
@@ -706,7 +711,8 @@ In addition to clarifying the advantages of spatial microsimulation,
 the above example also flags some limitations
 of the methodology: spatial microsimulation will only
 yield useful results if the input microdataset is representative of the population
-as a whole, and for each region. If the relationship between age sex is markedly different
+as a whole, and for each region. If the relationship between age and
+sex is markedly different
 in one zone compared with what we assume to be the global averages of the input data,
 for example, our estimates could be way-out. Using such a small sample, one could
 rightly argue, how could the diversity of 33 inhabitants of SimpleWorld be
@@ -750,17 +756,17 @@ This chapter focuses on the input datasets needed for spatial microsimulation.
 Correctly loading, manipulating and assessing these datasets
 will be critical to the performance of your models and the ease of modifying
 them to include new inputs.
-Fortunately R is an accomplished tool for data cleaning
-([Kabacoff, 2011](http://www.manning.com/kabacoff/)), as we shall see.
-This chapter also
-provides the basis for chapter we perform spatial microsimulation.
+Fortunately R is an accomplished tool for performing these tasks, as we shall see.
+The next chapter builds on the data we load here to
+run a spatial microsimulation model.
 
 As with most spatial microsimulation models, this example consists of a
 non-geographical individual-level dataset and a series of geographical
 zones. The data used in this chapter
 (and the data for all other chapters) can be
 downloaded from the book's GitHub repository
-(). From this page, click on the 'Download ZIP' button to the right of the
+([github.com/Robinlovelace/spatial-microsim-book](https://github.com/Robinlovelace/spatial-microsim-book)).
+From this page, click on the 'Download ZIP' button to the right of the
 page and extract the folder into a sensible place on your computer,
 such as the Desktop.
 From there, you will want to run R from the project's root directory:
@@ -806,10 +812,10 @@ We start with the individual-level
 dataset for a reason: this dataset is often more problematic
 to format than the constraint variables, so it is worth becoming
 acquainted with it at the outset. Of course, it is possible that
-the data you have are not suitable for spatial microsimulation because
-they lack sufficient constraint variables with shared categories in both
-individual and aggregate level tables. We assume that you have already checked
-this. The checking process for the datasets used in this chapter is simple:
+the datasets you have are not suitable for spatial microsimulation because
+they lack sufficient constraint variables that are shared with
+individual representative individual-level data. We assume that you have already
+checked this. The checking process for the datasets used in this chapter is simple:
 both aggregate and individual-level tables contain age and sex, so they can
 by combined. Let us proceed to load some data saved on our hard disc into
 R's *environment*, where it is available in RAM.
@@ -832,7 +838,7 @@ ind # print the individual-level data
 ### Loading and checking aggregate-level data
 ```
 
-Constraint data are usually made available one variable at a time,
+Constraint datasets are usually made available one variable at a time,
 so these are read in one file at a time:
 
 ```{r}
@@ -841,15 +847,15 @@ con_sex <- read.csv("data/SimpleWorld/sex.csv")
 ```
 
 We have loaded the aggregate constraints. As with the individual level data,
-is worth inspecting each object to
-ensure that they make sense before continuing. Taking a look at `age_con`,
+it is worth inspecting each object to
+ensure that they make sense before continuing. Taking a look at `con_age`,
 we can see that this data set consists of 2 variables for 3 zones:
 
 ```{r}
 con_age
 ```
 
-This tells us that there 12, 10 and 11 individuals in zones 1, 2 and 3,
+This tells us that there are 12, 10 and 11 individuals in zones 1, 2 and 3,
 respectively, with different proportions of young and old people. Zone
 2, for example, is heavily dominated by older people: there are 8 people over
 50 whilst there are only 2 young people (under 49) in the zone.
@@ -871,7 +877,7 @@ that the total populations are equal for both sets of variables.
 Ideally both the *total* study area populations and *row totals*
 should match. If the *row totals* match, this is a very good sign
 that not only confirms that the zones are listed in the same order,
-but also that each variable is sampling from the same *population base*
+but also that each variable is sampling from the same *population base*.
 These tests are conducted in the following lines of code:
 
 ```{r}
@@ -897,7 +903,7 @@ In the above code, `data.frame` objects containing precisely
 the information required for the next stage were loaded.
 More often, superfluous information will need to be removed from the data
 and subsets taken. It is worth removing superfluous
-variables earl, to avoid over-complicating and slowing-down the analysis.
+variables early, to avoid over-complicating and slowing-down the analysis.
 If `ind` had 100 variables of which only the 1st, 3rd and 4th were of interest, for example,
 the following command could be used to update the object, retaining only the relevant
 variables: `ind <- ind[, c(1, 3, 4)]`. Alternatively, `ind$age <- NULL` removes
@@ -909,7 +915,7 @@ It is common, for example,
 to take a subset of the working *population base*: those
 aged 16 and 74 in
 full-time employment. Methods for doing this are provided in the
-[the Appendix on subsetting](#subsetting).
+[Appendix on subsetting](#subsetting).
 
 ## Re-cateorising individual-level variables
 
@@ -939,7 +945,7 @@ we can do this by adding another argument to the `cut` function:
 (ind$age <- cut(ind$age, breaks = c(0, 49, 120), labels = c("a0_49", "a50+")))
 ```
 
-Users should be ware that `cut` results in a vector of class *factor*, which
+Users should be aware that `cut` results in a vector of class *factor*, which
 can cause problems later down the line.
 
 ```{r}
@@ -949,7 +955,7 @@ names(cons)
 ## Matching individual and aggregate level data names
 
 Before combining the newly recategorised individual-level data with the
-aggregate constraints, it is useful to for the category labels to match up.
+aggregate constraints, it is useful for the category labels to match up.
 This may seem trivial, but will save time in the long run. Here is the problem:
 
 ```{r}
@@ -988,14 +994,29 @@ dim(cons)
 ```
 
 The above code confirms this: we have one individual-level dataset comprising 5
-individuals and 3 variables (2 of which are constraint variables) and one
-aggregate-level constraint table comprising 6 zones for which we have counts
-for 4 categories across 2 variables. Clearly we need to change the dimensions
-of at least one object before they can be quantitatively compared. To do this
-we 'flatten' the individual-level dataset - meaning that we increase its width
-and reduce its height (number of rows) to one. This is a two-stage process. First,
-`model.matrix()` is used to expand each variable into the number of columns as there
-are categories in each. Second, `colSums()` is used to take the sum of each
+individuals with 3 variables (2 of which are constraint variables) and one
+aggregate-level constraint table called `cons`.
+To re-cap, the constraints represent 3 zones
+with count data for 4 categories across 2 variables.
+
+The dimensions
+of at least one of these objects must change
+before they can be easily compared. To do this
+we 'flatten' the individual-level dataset;
+this means increasing its width
+to match the the constraint data.
+This is a two-stage process. First,
+`model.matrix()` is used to expand each variable into the number of columns as there are categories in each and assign. 
+[Knoblauch and Maloney (2012)](http://www.springer.com/statistics/computational+statistics/book/978-1-4614-4474-9) provide a lengthier description of this
+which is available [online for free](http://www.springer.com/statistics/computational+statistics/book/978-1-4614-4474-9).
+
+
+This process, which can also be described as when
+"each categorical (or factor)
+variable is expanded into columns of indicator variables with one column allocated
+to each level"
+
+Second, `colSums()` is used to take the sum of each
 column.^[As we shall see in [a subsequent section](#ipfp),
 only the former of these is needed if we use the
 **ipfp** package for re-weighting the data, but both are presented to enable
@@ -1007,11 +1028,11 @@ cat_sex <- model.matrix(~ ind$sex - 1)[, c(2, 1)]
 (ind_cat <- cbind(cat_age, cat_sex)) # combine flat representations of the data
 ```
 
-Note that second call to `model.matrix` is suffixed with `[, c(2, 1)]`.
-This is to swap the order of the columns: the column variables are produced
-from `model.matrix` is alphabetic, whereas the order in which the variables
-have been saved in the constraints object `cons` is `male` then `female`.
-Such subtleties can be hard to notice yet completely change one's results
+Note that the second call to `model.matrix` is suffixed with `[, c(2, 1)]`.
+This is to swap the order of the columns: the column variables produced
+by `model.matrix` are in alphabetic order
+whereas in the constraint object `cons`, `male` is to the left of `female`.
+Such subtleties can be hard to notice yet may change the results
 so be warned: the output from `model.matrix` will not always be compatible
 with the constraint variables.
 
@@ -1051,17 +1072,15 @@ by adding high weights to the most representative individuals.
 
 # Spatial microsimulation in R {#Smsim1}
 
-In this chapter we progress from loading and preparing the input data to
-running a spatial microsimulation model.
-The SimpleWorld data, loaded in the previous chapter,
-is used. Being small and simple, the example enables understanding
-the process on a 'human scale' and allows experimentation
-without the worry of overloading your computer.
-However, the methods apply equally to larger and more complex projects.
-Therefore practicing the basic principles and methods of spatial microsimulation
-in R is the focus of this chapter.
-Time spent mastering these basics will make subsequent steps
-much easier.
+In this chapter we progress from preparing the input data: 
+now it's time to run a spatial microsimulation model.
+The three SimpleWorld datasets, loaded in the previous chapter,
+are used. Being small and simple, the example enables understanding
+the process on a 'human scale' and facilitates experimentation
+without overloading your computer.
+The methods apply equally to larger and more complex projects
+so practicing the basic principles and methods presented here
+will make subsequent steps much easier.
 
 ```{r, echo=FALSE}
 # How representative each individual is of each zone is determined by their
@@ -1086,29 +1105,29 @@ dim(weights) # the dimension of the weight matrix: 5 rows by 3 columns
 
 ## IPF in R {#IpfinR}
 
-One of the simplest ways to allocate the individual-level data loaded in
-the previous chapter to the three zones of SimpleWorld is using iterative
-proportional fitting (IPF). IPF is an established technique with a long history.
-Interested readers are directed towards Lovelace and Ballas
-([2012](http://www.sciencedirect.com/science/article/pii/S0198971513000240))
-and Pritchard and Miller
-([2012](http://link.springer.com/article/10.1007%2Fs11116-011-9367-4))
-for recent work in this area, which
-contain links to the theory and method underlying the method.
+The most established *deterministic* method
+to allocate individuals to zones
+is using iterative proportional fitting (IPF).
+In this section we will *reweight* the individual-level data loaded in
+the previous chapter to the three zones of SimpleWorld. IPF is mature,
+fast and has a long history.
+Interested readers are directed towards recent papers (e.g. Lovelace and Ballas
+[2012](http://www.sciencedirect.com/science/article/pii/S0198971513000240);
+Pritchard and Miller
+[2012](http://link.springer.com/article/10.1007%2Fs11116-011-9367-4))
+for more detail on the method and its underlying theory.
 
 ```{r, echo=FALSE}
 # Possibly more on IPF here. For now, press on
 ```
 
-
-
 ## Reweighting with **ipfp** {#ipfp}
 
 It is possible to perform IPF
 much faster and with less code than illustrated above using the
-**ipfp** R package. The `ipfp` command that
-implements the IPF algorithm
-in the C language, as illustrated below on the same dataset:
+**ipfp** R package. The `ipfp` function runs the IPF algorithm
+in the C language, taking aggregate constraints, individual level
+data and and an initial weight vector (`x0`) as inputs:
 
 ```{r}
 library(ipfp) # load the ipfp library after: install.packages("ipfp")
@@ -1430,7 +1449,7 @@ ind$age # data.frame column name notation I
 ```
 
 It is also possible to subset cells by both rows and columns simultaneously.
-Let us select query the gender of the 4th individual, as an example
+Let's query the gender of the 4th individual, as an example
 (pay attention to the relative location of the comma inside the square brackets):
 
 ```{r}
