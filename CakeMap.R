@@ -47,13 +47,12 @@ for (i in 1:nrow(cons)){ # convert con1 weights back into aggregates
 ind_agg[1,1:15] - cons[1,1:15] # should be zero for final column - last constraint
 cor(as.numeric(ind_agg), as.numeric(cons)) # fit between contraints and estimate
 
-# now integerise if integer results are required (uncomment one of the lines below)
-# source("data/cakeMap/pp-integerise.R") # creates integer output (intall) and cakes
-# source("data/cakeMap/TRS-integerise.R") # the TRS strategy
+# now integerise if integer results are required
 
 # Benchmarking
-microbenchmark(source("CakeMap.R"), times = 1) # 2.05 s
-# How long does this operation take in pure R?
-old <- setwd("~/repos/smsim-course/")
-microbenchmark(source("cMap.R"), times = 1) # 76.72 s
-setwd(old)
+# library(microbenchmark)
+# microbenchmark(source("CakeMap.R"), times = 1) # 2.05 s
+# # How long does this operation take in pure R?
+# old <- setwd("~/repos/smsim-course/")
+# microbenchmark(source("cMap.R"), times = 1) # 76.72 s
+# setwd(old)

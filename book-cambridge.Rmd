@@ -1094,6 +1094,8 @@ The purpose of the *reweighting* procedure in spatial microsimulation is
 to minimise this difference (as measured in TAE above)
 by adding high weights to the most representative individuals.
 
+\clearpage
+
 # Spatial microsimulation in R {#Smsim1}
 
 In this chapter we progress from preparing the input data: 
@@ -1410,10 +1412,13 @@ successfully modelled the inhabitants of a fictional planet, including income!
 ints_df[ints_df$zone == 2, ]
 ```
 
+\clearpage
+
 # CakeMap: spatial microsimulation in the wild {#CakeMap}
 
 By now we have developed a good understanding of what spatial microsimulation
-is, its applications and how it works, in terms of the underlying theory
+is, its applications and how it works. We have seen
+a little of both its underlying theory
 and its implementation in R. However, we have yet to see how the method can
 be applied *in the wild*, on *real* datasets.
 
@@ -1449,55 +1454,246 @@ the internet.
 # A little long-winded - cut down?
 ```
 
+The most difficult input dataset to deal with is the age/sex
+constraint data. The steps used to clean it are saved in
+'process-age.R', in the `data/CakeMap/` folder. Note that files to
+load and reformat the other datasets are also present in this
+folder, such 'process-age.R', 'process-nssec.R' and 'process-car.R'.
+Take a look through [this file](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/data/CakeMap/process-age.R)
+and try to work out what is going on.
+
+The end result of 'process-age.R' is a 'clean' .csv
+file, ready to be loaded and used as the input into our spatial
+microsimulation model. Note that the last line of
+'process-age.R' is `write.csv(con1, "con1.csv", row.names = F)`.
+This is the first constraint that we load into R to reweight the
+individual-level data in the next section.
+
+The input data generated through this process of data preparation are named
+'con1.csv' to 'con3.csv'. For simplicity, all these were merged
+(by '[load-all.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/data/CakeMap/load-all.R)')
+into a single
+dataset called 'cons.csv'. All the input data for this section
+are thus loaded with only two lines of code:
+
+```{r}
+ind <- read.csv("data/CakeMap/ind.csv")
+cons <- read.csv("data/CakeMap/cons.csv")
+```
+
+Take a look at these input data using the techniques learned in the previous
+section. To test your understanding, try to answer the following questions:
+
+- What are the constraint variables?
+- How many individuals are in the survey microdataset?
+- How many zones will we generate spatial microdata for?
+
+For bonus points that will test your R skills as well as your practical knowledge
+of spatial microsimulation, try constructing queries in R that will automatically
+answer these questions.
+
+It is vital to understand the input datasets before trying to model them, so
+take some time exploring the input. Only when satisfied with your understanding of
+the datasets (a pen and paper can help here, as well as R!) is it time
+to move on to generate the spatial microdata using IPF.
+
 ## Performing IPF on CakeMap data
 
-In the CakeMap example we use only the `ipfp` reweighting strategy
-as it is more concise, generalisable and faster than
-[IPF in pure R](#IpfinR). On a modern laptop, the `ipfp` method
-was found to be *almost 40 times faster* than the 'IPFinR' method.
-These tests can be run using the `microbenchmark()` commands found towards
-the end of 'CakeMap.R'.^[The second of these benchmarks depends
-on the old `smsim-course`, the repository of which needs to
-be downloaded (from
-[github.com/Robinlovelace/smsim-course](https://github.com/Robinlovelace/smsim-course))
-and saved to the user's computer.]
+The `ipfp` reweighting strategy is concise, generalisable and
+computationally efficient. On a modern laptop, the `ipfp` method
+was found to be *almost 40 times faster* than the 'IPFinR' method
+(mentioned in section 4.1) over 20 iterations,
+completing in 2 seconds instead of over 1 minute.
+This is a huge time saving!^[These
+tests can be run using the `microbenchmark()` commands found towards
+the end of the 'CakeMap.R' file, is located
+in the [source directory](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/CakeMap.R) of the project. The second of these benchmarks depends
+on files from `smsim-course`, the repository of which can
+be downloaded from
+[github.com/Robinlovelace/smsim-course](https://github.com/Robinlovelace/smsim-course).]
 
-As before, the output of the process is a matrix object entitled `weights`.
-Other than 
+After some preparatory steps, described in chapter 4 and implemented in the
+first half of 'CakeMap.R', the IPF stage is run using the following command:
+
+```{r, eval=FALSE}
+weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, 20))
+```
+
+```{r, echo=FALSE}
+source("CakeMap.R")
+```
 
 ## Integerisation
 
-## Validation {#svalidation}
+As before, weights of the IPF procedure are fractional, so must be
+*integerised* to create whole individuals. The code presented in
+chapter 4 requires little modification to do this: it is your task to
+convert the weight matrix generated by the above lines of code into
+a spatial microdataset called, as before, `ints_df`.
+
+What is the size of this new object?
+Clearly, this data takes up much RAM on the computer, as can be seen by
+asking `object.size(intall.df)`. Try comparing this result with the
+size of the original survey dataset 'ind'. Keeping an eye on
+these parameters will ensure that the model does not generate
+datasets too large to handle - a process that can easily happen.
+Next we move on to a vital consideration in
+spatial microsimulation models such as CakeMap: validation.
+
+## Model checking and validation {#svalidation}
+
+To make an analogy with food safety standards, openness about mistakes is
+conducive to high standards. Transparency in model
+verification is desirable for similar reasons. The two main strategies are:
+
+1. comparing the model results with knowledge of how it *should*
+perform {a-priori} (model checking), and
+1. comparison between the model
+results and empirical data (validation).
+
+The total absolute error
+(TAE), is a commonly used measure of the fit between two aggregate-level
+datasets and which is defined by the following formula:
+
+$$ TAE = \sum\limits_{ij}|U_{ij} - T_{ij}| $$
+
+Standardised Total Error is a related measure: $SAE = TAE/P$
+where $P$ is the total population of the study area.
+Thus TAE is sensitive to the number of people
+within the model. SAE is not.
+
+Beyond typos or simple conceptual errors in model code, more fundamental
+questions should be asked of spatial microsimulation models. The validity
+of the assumptions on which they are built and the confidence one should have
+in the results are important. For this we need external datasets.
+Validation is therefore a tricky topic, something not covered
+here but which is discussed in Edwards et al. (2009). For
+more on this and  for (an albeit unreliable) comparison
+between estimated cake consumption and external income estimates.
 
 ## Visualisations
 
+Visualisation is an important part of communicating quantitative
+data, especially so when the datasets are large and complex so not
+conducive to description with tables or words.
+
+Because we have generated spatial data, it is useful to create 
+a map of the results, to see how it varies from place to place.
+The code used to do this found in 'CakeMapPlot.R'. A vital function within
+this script is the `inner_join` function.
+Assuming **dplyr** is loaded --- with `library(plyr)` --- one can read
+more about join by entering `?inner_join` in R.
+
+
+```{r, eval=FALSE}
+wardsF <- inner_join(wardsF, wards@data, by = "id")
+```
+
+The above line of code by default selects all the data
+contained in the first object (`wardsF`) and adds to it new variables
+from the second object based on the linking variable.
+Also in that script file you will encounter the function
+`fortify`, the purpose of which is to convert the spatial data object into a
+data frame.
+The final map result of `CakeMapPlot.R' is illustrated below.
+
+![](figures/CakeMap.png)
+
+**CakeMap results, visualised**
+
 ## Analysis and interpretation
 
-```{r, echo=FALSE}
-# # Spatial microdata in agent-based models
-# 
-# In some ways, we can see spatial microsimulation as a precursor to, or early
-# form of, agent-based models (ABMs). Agent-based modelling depends on 1) a number of
-# discrete agents, 2) with different characteristics, 3) interacting. With the
-# spatial microsimulation model created in the last chapter we have 2 of these
-# 3 elements of an ABMs: if your aim is to use spatial microdata as an input into
-# agent based models, you're half way there!
-# 
-# Therefore, rather than starting from scratch, this chapter will build on the
-# results of the previous chapter to demonstrate how the output of spatial
-# microsimulation can be used directly as an input into ABMs.
-# 
-# ## Visualising the agents in other software packages (QGIS and NetLogo)
-# 
-# ## Loading spatial microdata into RNetLogo
-# 
-# NetLogo is an mature and widely used toolkit for agent-based models written in Java.
-# The recently published **RNetLogo** package provides an interface between
-# R and NetLogo, allowing for model runs to be set-up and run directly from
-# within R ([Thiele, 2014](http://www.jstatsoft.org/v58/i02/paper)). Because
-# "..."
+Once a spatial microdataset has been generated that we are happy with,
+we will probably want to analyse it further.
+This means exploring it --- its main features,
+variability and links with other datasets. To illustrate this process we will
+load an additional dataset and compare it with the
+estimates of cake consumption per person  generated in the previous
+section at the ward level.  
 
+The hypothesis we would like to test is that
+cake consumption is linked to deprivation:
+More deprived people will eat unheathily and
+cake is a relatively cheap 'comfort food'.
+Assuming our simulated data is correct
+---  a questionable assumption but lets roll with
+it for now --- we can explore this at the ward level thanks to a 
+[dataset](http://www.neighbourhood.statistics.gov.uk/dissemination/instanceSelection.do?JSAllowed=true&Function=&%24ph=61&CurrentPageId=61&step=2&datasetFamilyId=266&instanceSelection=121427&Next.x=22&Next.y=13&nsjs=true&nsck=false&nssvg=false&nswid=1920) on 
+modelled income from neighbourhood statistics. The following
+code is taken from the 'CakeMapPlot.R' script.
+
+Because the income dataset was produced for old ward boundaries (they were slightly
+modified for the 2011 census), we cannot merge with the spatial dataset based on the
+new zone codes. Instead we rely on the name of the wards. The code below provides a
+snapshot of these names and demonstrates how they can be joined using
+`inner_join`.
+
+```{r, eval=FALSE}
+wards@data <- join(wards@data, imd)
+summary(imd$NAME %in% wards$NAME)
+##       Mode   FALSE    TRUE    NA's 
+##    logical      55      71       0 
 ```
+
+
+The above code first joins the two datasets together and then checks the result by
+seeing how many matches names there are.
+In practice the fit between old names and new
+names is quite poor: only 71 out of 124. In a
+proper analysis we would have to solve this
+problem (e.g. via the command `pmatch`, which stands for partial match).
+For the purposes of this exercise we will simply plot income against
+simulated cake consumption to gain a feeling what
+it tells us about the relationship between cake consumption and wealth.
+
+![](figures/incomeCake.png)
+
+**Scatterplot** illustrating the
+relationship between modelled average ward income and
+ simulated number of cakes eaten per person per week.
+
+The question raised by this finding is: why? 
+Not why is cake consumption higher in wealthy areas (this has not
+been established) but: why has the model resulted in this correlation?
+To explore this question we need to go back and look at the individual
+level data. The most relevant constraint variable for income was class.
+When we look at the relationship between social class and cake consumption
+in the Dental Health Survey, we find that there is indeed a link:
+individuals in the highest three classes (1.1, 1.2, 2) have an average
+cake intake of 3.9 cakes per week whereas the three lowest classes have
+an average intake of 3.7. This is a relatively modest difference but,
+when averaging over large areas, it helps explain the result.
+
+As a bonus exercise, explore
+the class dependence of cake consumption in the Dental Health Survey.
+
+\clearpage
+
+# Spatial microdata in agent-based models
+
+In some ways, we can see spatial microsimulation as a precursor to, or early
+form of, agent-based models (ABMs). Agent-based modelling depends on 1) a number of
+discrete agents, 2) with different characteristics, 3) interacting. With the
+spatial microsimulation model created in the last chapter we have 2 of these
+3 elements of an ABMs: if your aim is to use spatial microdata as an input into
+agent based models, you're half way there!
+
+We do not have space in this tutorial to describe the transition from
+the spatial microdata we have generated into a full ABM. Suffice to
+mention some of the tools that will be useful for the job.
+
+NetLogo is an mature and widely used toolkit for
+agent-based models written in Java.
+The recently published **RNetLogo** package provides an interface between
+R and NetLogo, allowing for model runs to be set-up and run directly from
+within R ([Thiele, 2014](http://www.jstatsoft.org/v58/i02/paper)). Because
+much of the time taken for agent based modelling is focussed on analysis,
+running NetLogo from within R, where the results can be saved, is
+an eminently sensible choice.
+
+Watch this space for more on this!
+
+https://github.com/Robinlovelace/spatial-microsim-book
 
 # Appendix: Getting up-to-speed with R {#apR}
 
@@ -1690,4 +1886,34 @@ administrative zone data which often form the building blocks of spatial microsi
 models in R.
 
 There are alternatives to R and in the next section we will consider a few of these.
+
+\clearpage
+
+# References
+
+Beezer, R. A. (2008). A first course in linear algebra. Puget Sound: Congruent Press.
+
+Edwards, K. L., Clarke, G. P., Thomas, J., & Forman, D. (2010). Internal and External Validation of Spatial Microsimulation Models: Small Area Estimates of Adult Obesity. Applied Spatial Analysis and Policy, 4(4), 281–300. doi:10.1007/s12061-010-9056-2
+
+Feinerer, I. (2013). Introduction to the tm Package Text Mining in R. Comprehensive R Archive Network, 1–8.
+
+Harland, K. (2013). Microsimulation model user guide: flexible modelling framework (No. 0613). Leeds. Retrieved from http://eprints.ncrm.ac.uk/3177/
+Knoblauch, K., & Maloney, L. T. (2012). Modeling psychophysical data in R (Vol. 32). Springer.
+
+Lovelace, R., & Ballas, D. (2013). “Truncate, replicate, sample”: A method for creating integer weights for spatial microsimulation. Computers, Environment and Urban Systems, 41, 1–11. doi:10.1016/j.compenvurbsys.2013.03.004
+
+Lovelace, R., & Cheshire, J. (2014). Introduction to visualising spatial data in R. National Centre for Research Methods, 14(03). Retrieved from http://eprints.ncrm.ac.uk/3295/
+
+Meyer, D., Hornik, K., & Feinerer, I. (2008). Text mining infrastructure in R. Journal of Statistical Software, 25(5). Retrieved from http://epub.wu.ac.at/3978/
+
+Pritchard, D. R., & Miller, E. J. (2012). Advances in population synthesis: fitting many attributes per agent and fitting to household and person margins simultaneously. Transportation, 39(3), 685–704. doi:10.1007/s11116-011-9367-4
+
+Rey, S. J. (2014). Open regional science. The Annals of Regional Science, 52(3), 825–837. doi:10.1007/s00168-014-0611-7
+
+Thiele, J. (2014). R Marries NetLogo: Introduction to the RNetLogo Package. Journal of Statistical, 58(2), 1–41. Retrieved from http://www.jstatsoft.org/v58/i02/paper
+
+Venables, W. W. N., Smith, D. M. D. M., Team, R. D. C., & others. (2014). An introduction to R, 1. Retrieved from http://folk.uio.no/bernde/pub/Statistics.pdf
+Wickham, H. (2014). Advanced R. Retrieved from http://www.crcpress.com/product/isbn/9781466586963
+
+Xie, Y. (2013). Animation: an R package for creating animations and demonstrating statistical methods. Journal of Statistical Software, 53(1), 1–27.
 
