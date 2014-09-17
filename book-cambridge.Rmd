@@ -1348,11 +1348,11 @@ In Python, for example, this is the answer we get:^[We can
 get the right answer in Python, by typing the following:
 `import numpy; a=numpy.array([1,2,3]); b=numpy.array([9,8,6]); a+b`.]
 
-```{r, engine='python', eval=FALSE}
+<!--```{r, engine='python', eval=FALSE}
 a = [1,2,3]
 b = [9,8,6]
 print(a + b)
-```
+```-->
 
 `## [1, 2, 3, 9, 8, 6]`
 
