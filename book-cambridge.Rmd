@@ -1189,7 +1189,7 @@ less clear to R beginners), we can use R's internal
 `for` loop: `apply`:
 
 ```{r}
-weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, 20))
+weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
 ```
 
 In the above code R iterates through each row
