@@ -1501,4 +1501,3 @@ administrative zone data which often form the building blocks of spatial microsi
 models in R.
 
 There are alternatives to R and in the next section we will consider a few of these.
-
