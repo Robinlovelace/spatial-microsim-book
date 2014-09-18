@@ -1,6 +1,7 @@
 ---
 title: "Spatial microsimulation with R"
 output:
+  word_document: default
   pdf_document:
     fig_caption: yes
     includes:
@@ -1274,9 +1275,9 @@ The following example illustrates how the process,
 when seen as a function called $int$ would work
 on a vector of 3 weights:
 
-$$w_1 = (0.333, 0.667, 3)
+$$w_1 = (0.333, 0.667, 3)$$
 
-int(w_1) = (2, 3, 3, 3)$$
+$$int(w_1) = (2, 3, 3, 3)$$
 
 This result was obtained by calculating the sum of the weights (4, which
 represents the total population of the zone) and sampling from these
@@ -1313,21 +1314,25 @@ int_pp(x = c(1.333, 1.333, 1.333))
 ```
 
 The first result was the same as that obtained through intuition; the second
-result selected one of each individual, plus a clone of individual 3.
-It is important to emphasise that the result need not work out like this:
+result represented individual 1 being clones three times, plus one instance of individual 2. This is
+not intuitive: one would expect at least one of each individual given that they all
+have the same weight.
+
+It is important to emphasise that the results will change each time
+the code is run, because `sample` is a probabilistic (its output depends on a random number generator):
 changing the the value inside the brackets proceeding `set.seed`
-results in many other combinations of individuals being selected. This happens
-because the method relies on *pseudo random numbers* to select values
+results in many other combinations of individuals being selected --- test this out in your code.
+This happens because the method relies on *pseudo random numbers* to select values
 probabilistically and `set.seed` specifies where the random number sequence
 should begin, ensuring repeatability. An issue with the
-*proportional probabilities* strategy is that completely unrepresentative
+*proportional probabilities* (PP) strategy is that completely unrepresentative
 combinations of individuals have a non-zero probability of being sampled:
 the method will output $(1, 1, 1, 1)$ once in every 21 thousand
 runs for $w_1$ and once every $81$ runs for $w_2$, the same probability
 as for all other 81 ($3^4$) permutations.
 
 To overcome this issue Lovelace and Ballas (2012) developed a method
-which ensured that any individual with a weight above 1 would be sampled
+which ensures that any individual with a weight above 1 would be sampled
 at least, making the result $(1, 1, 1, 1)$ impossible in both cases.
 This method is *truncate, replicate, sample* (TRS) integerisations:
 

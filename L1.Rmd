@@ -101,4 +101,6 @@ Aims:
 
 # Demonstration of GitHub
 
+# Working through Chapter 3
+
 
