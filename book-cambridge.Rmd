@@ -1189,7 +1189,7 @@ less clear to R beginners), we can use R's internal
 `for` loop: `apply`:
 
 ```{r}
-weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
+weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, 20))
 ```
 
 In the above code R iterates through each row
@@ -1348,11 +1348,11 @@ In Python, for example, this is the answer we get:^[We can
 get the right answer in Python, by typing the following:
 `import numpy; a=numpy.array([1,2,3]); b=numpy.array([9,8,6]); a+b`.]
 
-<!--```{r, engine='python', eval=FALSE}
+```{r, engine='python', eval=FALSE}
 a = [1,2,3]
 b = [9,8,6]
 print(a + b)
-```-->
+```
 
 `## [1, 2, 3, 9, 8, 6]`
 
@@ -1501,3 +1501,4 @@ administrative zone data which often form the building blocks of spatial microsi
 models in R.
 
 There are alternatives to R and in the next section we will consider a few of these.
+
