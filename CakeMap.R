@@ -41,8 +41,10 @@ cons <- apply(cons, 2, as.numeric)
 ind_catt <- t(ind_cat)
 # set up initial vector as a load of 1s
 x0 <- rep(1, nrow(ind))
-# you can use x0 as a way to specify the original weights
+# you can use x0 as a way to start from the original survey weights
 # as it just has to be a numeric initial vector (length ncol)
+# this might be useful if you have a small number of constraints but
+# if you have many the effect of the IPF will tend to drown them out
 
 weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, 20))
 
@@ -70,5 +72,4 @@ ind_final <- cbind(ind,weights)
 View(ind_final)
 # so now we have a weight for each individual for each zone and from here on we can do 
 # a range of weighted statistics or collapse to tables by zone etc etc
-# would be a good idea at this point to rename the zone columns to their actual
-# geography of course.
+# Would be a good idea at this point to rename the zone columns to their actual geography.
