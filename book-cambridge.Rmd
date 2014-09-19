@@ -1020,8 +1020,7 @@ aggregate-level constraint table called `cons`.
 To re-cap, the constraints represent 3 zones
 with count data for 4 categories across 2 variables.
 
-The dimensions
-of at least one of these objects must change
+The dimensions of at least one of these objects must change
 before they can be easily compared. To do this
 we 'flatten' the individual-level dataset;
 this means increasing its width
@@ -1031,8 +1030,7 @@ This is a two-stage process. First,
 [Knoblauch and Maloney (2012)](http://www.springer.com/statistics/computational+statistics/book/978-1-4614-4474-9) provide a lengthier description of this
 which is available [online for free](http://www.springer.com/statistics/computational+statistics/book/978-1-4614-4474-9).
 
-Second, `colSums()` is used to take the sum of each
-column.^[As we shall see in [a subsequent section](#ipfp),
+Second, `colSums()` is used to take the sum of each column.^[As we shall see in [a subsequent section](#ipfp),
 only the former of these is needed if we use the
 **ipfp** package for re-weighting the data, but both are presented to enable
 a better understanding of how IPF works.]
