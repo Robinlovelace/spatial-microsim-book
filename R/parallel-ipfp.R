@@ -68,9 +68,14 @@ microbenchmark(ipfp_for(), ipfp_apply(), ipfp_for20(), ipfp_apply20(), ipfp_fori
 library(parallel)
 detectCores() # how many cores on the system?
 cl <- makeCluster(getOption("cl.cores", 4)) # make the cluster
-clusterExport(cl,c("ipfp","ind_ctt", "x0")) # packages and objects to cluster
+clusterExport(cl,c("ipfp","ind_catt", "x0")) # packages and objects to cluster
+
+
+
+ind_catt <- t(ind_cat)
+
 f3 <- function(cl){
-  weights_apply <- parApply(cl = cl, cons, 1, function(x) ipfp(x, ind_ctt, x0))
+  weights_apply <- parApply(cl = cl, cons, 1, function(x) ipfp(x, ind_catt, x0))
 }
 
 library(microbenchmark)

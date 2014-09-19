@@ -103,4 +103,18 @@ Aims:
 
 # Working through Chapter 3
 
+## Day 2
+
+- Parallel processing in R for fast/Big applications
+- Exploring the results of spatial microsimulation
+
+Refreshments: 11:00
+
+- Discussion of limitations and underlying assumptions of spatial microsimulation
+- Applying the methods to your own data
+
+# Parallel processing in R for fast/big microsimulation
+
+# Exploring the results of spatial microsimulation
+
 

@@ -46,6 +46,37 @@ cor(as.numeric(ind_agg), as.numeric(cons)) # fit between contraints and estimate
 
 # Integerise if integer results are required...
 
+int_trs <- function(x){
+  truncated <- which(x >= 1)
+  replicated <- rep(truncated, floor(x[truncated]))
+  r <- x - floor(x)
+  def <- round(sum(x)) - length(replicated) # the deficit population
+  if(def == 0){
+    out <- replicated
+  } else {
+    out <- c(replicated, sample(length(x), size = def, prob = r, replace = F))
+  }
+  out
+}
+
+apply(X = weights, MARGIN = 1, FUN = int_trs)
+int_trs(x)
+
+ints <- unlist(apply(weights, 2, int_trs)) # generate integerised result
+ints_df <- data.frame(id = ints, zone = rep(1:nrow(cons), colSums(weights)))
+
+join
+ints_df <- inner_join(ints_df, ind)
+class(ints_df$NSSEC8)
+ints_df$NSSEC8_num <- as.numeric(ints_df$NSSEC8)
+ints_df$NSSEC8_num[ ints_df$NSSEC8_num > 10] <- NA
+sd_nssec <- aggregate(ints_df$NSSEC8_num, by = list(ints_df$zone), FUN = sd, na.rm = TRUE)
+which.max(sd_nssec$x)
+
+
+summary(ints_df)
+nrow(ints_df)
+
 # Benchmarking
 # library(microbenchmark)
 # microbenchmark(source("CakeMap.R"), times = 1) # 2.05 s

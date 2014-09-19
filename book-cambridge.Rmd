@@ -173,13 +173,12 @@ adapting and communicating the analysis. R excels in each of these areas.
 R is a *low-level* language compared with statistical programs
 based on a strong graphical user interface (GUI) such as Microsoft
 Excel and SPSS. 
-R offers great flexibility in the design of
-analysis and modelling, easily allowing
-the creation of custom functions.
+R offers great flexibility for
+analysing and modelling data and enables easy
+creation of user-defined functions.
 On the other hand, R is *high-level* compared with
 general purpose languages such as C and Python.
-Instead
-of writing code to perform statistical operations
+Instead of writing code to perform statistical operations
 'from scratch', R users generally use pre-made functions. To calculate
 the mean value of variable `x`, for example,
 one would need to type 20 characters in Python: `float(sum(x))/len(x)`.^[The
@@ -741,7 +740,7 @@ for example, our estimates could be way-out. Using such a small sample, one coul
 rightly argue, how could the diversity of 33 inhabitants of SimpleWorld be
 represented by our simulated spatial microdata? This question is equally applicable
 to larger simulations. These issues are important and will be tackled
-in [section validation](#svalidation).
+in a subsequent [section on validation](#svalidation).
 
 ```{r, echo=FALSE}
 # Applications of spatial microsimulation - to be completed!
@@ -1063,16 +1062,18 @@ ind_agg <- colSums(ind_cat) # save the result
 
 The sum of both age and sex variables is 5 
 (the total number of individuals): it worked! 
-Looking at `ind_agg`, it is also clear that it has the same dimension as
-each row in `cons`, the aggregate-level data. We can check this by inspecting
-each object (e.g. via `View (ind_agg)`), although a more rigorous test is to see
+Looking at `ind_agg`, it is also clear that the object has the same 'width',
+or number of columns,
+`cons`. This means that the individual-level data can now be compared with
+the aggregate-level data. We can check this by inspecting
+each object (e.g. via `View(ind_agg)`). A more rigorous test is to see
 if `ind_agg` can be combined with `ind_agg`, using `rbind`:
 
 ```{r}
-rbind(cons[1,], ind_agg)
+rbind(cons[1,], ind_agg) # test compatibility between ind_agg and cons objects
 ```
 
-If no error message is displayed, the answer is yes.
+If no error message is displayed on you computer, the answer is yes.
 This shows us a direct comparison between the number of people in each
 category of the constraint variables in zone and and in the individual level
 dataset overall. Clearly, the fit is not very good, with only 5 individuals

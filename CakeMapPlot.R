@@ -1,8 +1,8 @@
-# script for plotting the output of cMap
-# must be run after cMap.R and TRS-integerisation.R
+# Script for plotting the output of cMap
+# Must be run after cMap.R and TRS-integerisation.R
 
-# load the prerequisite packages - you may need to install these 
-# e.g install.packages("ggplot2")
+# Load the prerequisite packages - you may need to install these 
+# E.g install.packages("ggplot2")
 x <- c("dplyr", "rgeos", "rgdal", "ggmap")
 lapply(x, library, character.only = T)
 
