@@ -3,6 +3,8 @@
 #### https://github.com/Robinlovelace/spatial-microsim-book
 ############################################
 
+# Additions from Ben Anderson (@dataknut)
+
 # Loading the data: Ensure R is in the right working directory 
 ind <- read.csv("data/CakeMap/ind.csv")
 cons <- read.csv("data/CakeMap/cons.csv")
@@ -37,22 +39,37 @@ ind_agg[1:5,1:10] # look at what we've created - n. individuals replicated throu
 library(ipfp)
 cons <- apply(cons, 2, as.numeric)
 ind_catt <- t(ind_cat)
+# set up initial vector as a load of 1s
 x0 <- rep(1, nrow(ind))
+# you can use x0 as a way to start from the original survey weights
+# as it just has to be a numeric initial vector (length ncol)
+# this might be useful if you have a small number of constraints but
+# if you have many the effect of the IPF will tend to drown them out
+
 weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, 20))
 
-### Convert back to aggregates
+### Convert back to aggregates for testing
 for (i in 1:nrow(cons)){ # convert con1 weights back into aggregates
   ind_agg[i,]   <- colSums(ind_cat * weights[,i])}
+
 # test results for first row (not necessary for model)
+# you could iterate over this to test each zone
 ind_agg[1,1:15] - cons[1,1:15] # should be zero for final column - last constraint
+# which should remind us that IPF works to an order - so the last constraint is
+# fitted perfectly. This might matter if you think other constraints should be fitted perfectly...
 cor(as.numeric(ind_agg), as.numeric(cons)) # fit between contraints and estimate
 
-# now integerise if integer results are required
+# at this point RL wants to integrise to create a spatial microdataset of whole 'units'
+# But we don't have to - for many applications we may want to keep all the survey units (people or households)
+# with their fractional weights to avoid losing information. It also helps if we're interested in distributional
+# statistics for each area.
 
-# Benchmarking
-# library(microbenchmark)
-# microbenchmark(source("CakeMap.R"), times = 1) # 2.05 s
-# # How long does this operation take in pure R?
-# old <- setwd("~/repos/smsim-course/")
-# microbenchmark(source("cMap.R"), times = 1) # 76.72 s
-# setwd(old)
+# to do this simply join the weights matrix back on to the original individual data
+# we have to assume R has kept them in the correct order!
+
+# just do a column bind
+ind_final <- cbind(ind,weights)
+View(ind_final)
+# so now we have a weight for each individual for each zone and from here on we can do 
+# a range of weighted statistics or collapse to tables by zone etc etc
+# Would be a good idea at this point to rename the zone columns to their actual geography.
