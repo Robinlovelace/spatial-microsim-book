@@ -114,7 +114,7 @@ names(geonames_df)[1] <- "zone_name"
 
 final_micro_geo <- inner_join(geonames_df,final_micro, by = "zone")
 
-# so now we have our final long form synthetic fractional weights microdata file
+# so now we have our final long form synthetic fractional weights microdata table
 # with n * z rows where n = nrow(ind) and z = nrow(cons).
 # This is in contrast to the integerised version where we would have the 
 # sum of npop(zi) where npop(zi) is the population for each zone
@@ -141,7 +141,7 @@ aggregate(final_micro_geo$NSSEC8n, by= list(final_micro_geo$zone), FUN = weighte
 # so for now, let's save the file out and do the stats in STATA!!
 write.csv(final_micro_geo, file = "final_micro_fractional_cakes_geo.csv", na = ".")
 
-# now read the summary of cakes by zone back in
+# now read the summary of cakes by zone (created in STATA) back in
 cakes_by_zone <- read.csv("cakes_geo.csv")
 
 # and do the R mapping thing...
