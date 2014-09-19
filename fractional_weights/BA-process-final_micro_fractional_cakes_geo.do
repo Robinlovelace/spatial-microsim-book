@@ -3,7 +3,7 @@
 
 * change this to your path!
 local where "/Users/ben/Documents/Work/Papers and Conferences/spatial-microsim-r-course"
-local path "`where'/spatial-microsim-book-fork-git" 
+local path "`where'/spatial-microsim-book-git/fractional_weights" 
 
 insheet using "`path'/final_micro_fractional_cakes_geo.csv", clear
 
