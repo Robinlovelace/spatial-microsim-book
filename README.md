@@ -11,7 +11,7 @@ as a pdf from
 Anyone can contribute to this book. Click [here](https://github.com/Robinlovelace/spatial-microsim-book/edit/master/book-cambridge.Rmd) to contribute.
 
 Working directory of code, sample data and content of a book on 'spatial microsimulation' to be published by CRC Press.
->>>>>>> upstream/master
+
 
 Introduction to Using Git(hub)
 ==============================
