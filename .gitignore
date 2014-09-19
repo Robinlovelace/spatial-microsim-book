@@ -1,3 +1,4 @@
+*.orig
 *.docx
 *.html
 .Rproj.user

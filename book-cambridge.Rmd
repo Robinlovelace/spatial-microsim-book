@@ -1,11 +1,9 @@
 ---
 title: "Spatial microsimulation with R"
 output:
-  word_document: default
   pdf_document:
     fig_caption: yes
     includes:
-      in_header: bookstyle.sty
     number_sections: yes
     toc: yes
 layout: default
