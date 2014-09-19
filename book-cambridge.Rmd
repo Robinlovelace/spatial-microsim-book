@@ -1008,8 +1008,7 @@ cons[1:2, ] # display the constraints for the first two zones
 We have made steps towards combining the individual and aggregate datasets and
 now only need to deal with 2 objects (`ind` and `cons`) which now share
 category and variable names.
-However, these datasets cannot possibly be compared because they are of different
-dimensions:
+However, these datasets cannot possibly be compared because they are of different dimensions:
 
 ```{r}
 dim(ind)
@@ -1032,17 +1031,7 @@ This is a two-stage process. First,
 [Knoblauch and Maloney (2012)](http://www.springer.com/statistics/computational+statistics/book/978-1-4614-4474-9) provide a lengthier description of this
 which is available [online for free](http://www.springer.com/statistics/computational+statistics/book/978-1-4614-4474-9).
 
-
-Second, `colSums()` is used to take the sum of each individuals and 3 variables (2 of which are constraint variables) and one
-aggregate-level constraint table comprising 6 zones for which we have counts
-for 4 categories across 2 variables. Clearly we need to change the dimensions
-of at least one object before they can be quantitatively compared. To do this
-we 'flatten' the individual-level dataset - meaning that we increase its width
-and reduce its height (number of rows) to one. This is a two-stage process. First,
-`model.matrix()` is used to expand each variable into the number of columns as there
-are categories in each. Second, `colSums()` is used to take the sum of each
->>>>>>> fe21e7bea2227259f021bb3d1e543544edf630a8
-column.^[As we shall see in [a subsequent section](#ipfp),
+Second, `colSums()` is used to take the sum of each column.^[As we shall see in [a subsequent section](#ipfp),
 only the former of these is needed if we use the
 **ipfp** package for re-weighting the data, but both are presented to enable
 a better understanding of how IPF works.]
@@ -1134,16 +1123,6 @@ dim(weights) # the dimension of the weight matrix: 5 rows by 3 columns
 
 ## IPF in R {#IpfinR}
 
-One of the simplest ways to allocate the individual-level data loaded in
-the previous chapter to the three zones of SimpleWorld is using iterative
-proportional fitting (IPF). IPF is an established technique with a long history.
-Interested readers are directed towards Lovelace and Ballas
-([2012](http://www.sciencedirect.com/science/article/pii/S0198971513000240))
-and Pritchard and Miller
-([2012](http://link.springer.com/article/10.1007%2Fs11116-011-9367-4))
-for recent work in this area, which
-contain links to the theory and method underlying the method.
-
 The most established *deterministic* method
 to allocate individuals to zones
 is iterative proportional fitting (IPF).
@@ -1164,21 +1143,9 @@ Pritchard and Miller
 [2012](http://link.springer.com/article/10.1007%2Fs11116-011-9367-4))
 for more detail on the method and its underlying theory.
 
-One of the simplest ways to allocate the individual-level data loaded in
-the previous chapter to the three zones of SimpleWorld is using iterative
-proportional fitting (IPF). IPF is an established technique with a long history.
-Interested readers are directed towards Lovelace and Ballas
-([2012](http://www.sciencedirect.com/science/article/pii/S0198971513000240))
-and Pritchard and Miller
-([2012](http://link.springer.com/article/10.1007%2Fs11116-011-9367-4))
-for recent work in this area, which
-contain links to the theory and method underlying the method.
-
 ```{r, echo=FALSE}
 # Possibly more on IPF here. For now, press on
 ```
-
-
 
 ## Reweighting with **ipfp** {#ipfp}
 
@@ -1190,7 +1157,7 @@ data and and an initial weight vector (`x0`) as inputs:
 ```{r}
 library(ipfp) # load the ipfp library after: install.packages("ipfp")
 cons <- apply(cons, 2, as.numeric) # convert matrix to numeric data type
-ipfp(cons[1,], t(ind_cat), x0 = rep(1,nrow(ind))) # run IPF
+ipfp(cons[1,], t(ind_cat), x0 = rep(1, nrow(ind))) # run IPF
 ```
 
 It is impressive that the entire IPF process, which takes dozens of lines of
@@ -1247,7 +1214,7 @@ less clear to R beginners), we can use R's internal
 `for` loop: `apply`:
 
 ```{r}
-weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, 20))
+weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
 ```
 
 In the above code R iterates through each row
@@ -1545,7 +1512,7 @@ After some preparatory steps, described in chapter 4 and implemented in the
 first half of 'CakeMap.R', the IPF stage is run using the following command:
 
 ```{r, eval=FALSE}
-weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, 20))
+weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
 ```
 
 ```{r, echo=FALSE}
