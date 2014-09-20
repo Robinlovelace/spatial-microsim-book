@@ -23,3 +23,11 @@ int_trs <- function(x){
   }
   out
 }
+
+# Total absolute error
+tae <- function(observed, simulated){
+  obs_vec <- as.numeric(observed)
+  sim_vec <- as.numeric(simulated)
+  sum(abs(obs_vec - sim_vec))
+}
+

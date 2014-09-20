@@ -1498,18 +1498,51 @@ conducive to high standards. Transparency in model verification is desirable for
 similar reasons. The two main strategies are:
 
 1. comparing the model results with knowledge of how it *should*
-perform {a-priori} (model checking), and
-1. comparison between the model
-results and empirical data (validation).
+perform a-priori (model checking), and
+2. comparison between the model results and empirical data (validation).
 
-The total absolute error (TAE), is a commonly used measure of the fit between
-two aggregate-level datasets and which is defined by the following formula:
+Pearson's coefficient of correlation ($r$) provides a fast and simple insight
+into the fit between the simulated data and the constraints. In most cases
+$r$ values greater than 0.9 should be sought in spatial microsimulation and
+in many cases $r$ values exceeding 0.99 are possible, even after integerisation.
+As a very basic test, let's observe the correlation between the constraint table
+cells and the corresponding simulated cell values:
+
+```{r}
+cor(as.numeric(cons), as.numeric(ind_agg))
+```
+
+The total absolute error (TAE) is another commonly used measure of fit
+which is the total sum of differences between the two datasets.
+TAE is defined by the following formula and
+R function, which can be used to measure the fit between any two
+vectors or matrices of equal dimensions:^[Data frames will not
+work in this function and must be converted to matrices with `as.matrix`.]
 
 $$ TAE = \sum\limits_{ij}|U_{ij} - T_{ij}| $$
 
-Standardised Total Error is a related measure: $SAE = TAE/P$ where $P$ is the
-total population of the study area.  Thus TAE is sensitive to the number of
-people within the model. SAE is not.
+```{r}
+tae <- function(observed, simulated){
+  obs_vec <- as.numeric(observed)
+  sim_vec <- as.numeric(simulated)
+  sum(abs(obs_vec - sim_vec))
+}
+```
+
+Standardised absolute error (SAE) is a related measure: $SAE = TAE/P$ where $P$ is the
+total population of the study area (`tae(obs, sim)/sum(con1)` in R).  While
+TAE is sensitive to the number of people within the model, SAE is not.
+
+Pearson's *r*, TAE and SAE are just the simplest of a wide variety of
+*goodness of fit* measures for comparing two datasets. The differences
+between different measures are quite subtle and are discussed in detail in
+Voas and Williamson ([2001](http://dx.doi.org/10.1080/13615930120086078)).
+It is important to note that all such measures, that compare aggregate
+count datasets, are *not* sufficient to ensure that the results of
+spatial microsimulation are reliable: they are methods of *internal validation*
+which simply show that the individual-level dataset has been
+been reweighted to fit with a handful of constraint variables: i.e. that the
+process has work under on its own terms.
 
 Beyond typos or simple conceptual errors in model code, more fundamental
 questions should be asked of spatial microsimulation models. The validity of the
