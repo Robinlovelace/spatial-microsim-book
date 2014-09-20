@@ -3,6 +3,8 @@
 #### https://github.com/Robinlovelace/spatial-microsim-book
 ############################################
 
+library(dplyr) # load dplyr package for joining datasets
+
 # Loading the data: Ensure R is in the right working directory 
 ind <- read.csv("data/CakeMap/ind.csv")
 cons <- read.csv("data/CakeMap/cons.csv")
@@ -44,38 +46,8 @@ ind_agg <- t(apply(weights, 2, function(x) colSums(x * ind_cat)))
 ind_agg[1,1:15] - cons[1,1:15] # should be zero or close to zero
 cor(as.numeric(ind_agg), as.numeric(cons)) # fit between contraints and estimate
 
-# Integerise if integer results are required...
-
-int_trs <- function(x){
-  truncated <- which(x >= 1)
-  replicated <- rep(truncated, floor(x[truncated]))
-  r <- x - floor(x)
-  def <- round(sum(x)) - length(replicated) # the deficit population
-  if(def == 0){
-    out <- replicated
-  } else {
-    out <- c(replicated, sample(length(x), size = def, prob = r, replace = F))
-  }
-  out
-}
-
-apply(X = weights, MARGIN = 1, FUN = int_trs)
-int_trs(x)
-
-ints <- unlist(apply(weights, 2, int_trs)) # generate integerised result
-ints_df <- data.frame(id = ints, zone = rep(1:nrow(cons), colSums(weights)))
-
-join
-ints_df <- inner_join(ints_df, ind)
-class(ints_df$NSSEC8)
-ints_df$NSSEC8_num <- as.numeric(ints_df$NSSEC8)
-ints_df$NSSEC8_num[ ints_df$NSSEC8_num > 10] <- NA
-sd_nssec <- aggregate(ints_df$NSSEC8_num, by = list(ints_df$zone), FUN = sd, na.rm = TRUE)
-which.max(sd_nssec$x)
-
-
-summary(ints_df)
-nrow(ints_df)
+# Integerise if integer results are required - open R/CakeMapInt.R to see how
+# source("R/CakeMapInts.R")
 
 # Benchmarking
 # library(microbenchmark)
