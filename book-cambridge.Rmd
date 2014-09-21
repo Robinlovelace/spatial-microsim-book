@@ -219,11 +219,22 @@ Learning the R language
 
 Having learned a little about *why* R is a good tool for the job, it is worth
 considering at this stage *how* R should be used.  It is useful to think of R
-not as a series of isolated commands, but as an interconnected *language*.  As
+not as a series of isolated commands, but as an interconnected *language*
+and this book teaches spatial microsimulation in the language of R.
+Of course, English is more appropriate than R for *explaining* rather than
+merely describing the method and the language of mathematics is appropriate
+for describing quantitative relationships conceptually. However,
+because the practical components of this book are implemented in R, you will gain
+more from it if you are fluent in R. To this end the book aims to improve your
+R skills as well as your ability to perform spatial microsimulation, especially
+in the earlier practical chapters. Some prior knowledge of R will make
+reading this book easier, but R novices should be able to follow the worked
+examples, with reference to appropriate supplementary material
+(see [Further R Resources](#further) in the Appendix). As
 with learning Spanish or Chinese, frequent practice, persistence and
 experimentation will ensure deep learning.
 
-The most useful practical advice I can give is to organise your workflow.  Each
+A more practical piece of advice is to organise your workflow.  Each
 project should have its own self-contained folder containing all that is needed
 to replicate the analysis, except perhaps large input datasets. This could
 include the raw (unchanged) input data, a folder containing R code for analysis,
@@ -509,12 +520,15 @@ residents live in each
 zone, as well their genders: male and female.
 This information is displayed in the tables below.
 
+Table: Aggregate-level age counts for SimpleWorld.
+
 |zone   | 0-49 yrs| 50 + yrs|
 |:--|-----:|-----:|
 |1  |     8|     4|
 |2  |     2|     8|
 |3  |     7|     4|
 
+Table: Aggregate sex counts for SimpleWorld.
 
 |Zone   |  m|  f|
 |:--|--:|--:|
@@ -582,6 +596,8 @@ ind <- read.csv("data/SimpleWorld/ind-full.csv")
 # kable(ind)
 ```
 
+Table: Individual-level survey data from SimpleWorld.
+
 | id| age|sex | income|
 |--:|---:|:---|------:|
 |  1|  59|m   |   2868|
@@ -614,6 +630,8 @@ library(ipfp) # load the ipfp library after: install.packages("ipfp")
 apply(cons, MARGIN = 1, FUN =  function(x) ipfp(x, t(ind_cat), x0 = rep(1,nrow(ind))))
 ```
 
+Table: A 'weight matrix' linking the microdata (rows) to the zones (columns)
+of SimpleWorld.
 
 | Individual| Zone 1  | Zone 2  | Zone 3  |
 |---:|--------:|--------:|--------:|
@@ -641,35 +659,41 @@ A more useful output from spatial microsimulation is what we refer to as
 each individual lives. The challenge is to ensure that the spatial microdataset
 is as representative as possible of the aggregate constraints, while only
 sampling from a realistic baseline population. A feasible combination of
-individuals sampled from the microdata that represent zone 2 is presented in
-table xx below; the complete spatial microdataset allocates whole individuals to
+individuals sampled from the microdata that represent zone 2 is presented in the
+table below; the complete spatial microdataset allocates whole individuals to
 each zone, resulting in a more or less realistic insight into the inhabitants of
-SimpleWorld and for the purposes of modelling. 
+SimpleWorld and for the purposes of modelling. We will create this
+table at the end of [Chapter 4](#Smsim1).
 
-| id| age|sex | zone|
-|--:|---:|:---|----:|
-|  1|  59|m   |    2|
-|  2|  54|m   |    2|
-|  4|  73|f   |    2|
-|  4|  73|f   |    2|
-|  4|  73|f   |    2|
-|  4|  73|f   |    2|
-|  5|  49|f   |    2|
-|  3|  35|m   |    2|
-|  4|  73|f   |    2|
-|  2|  54|m   |    2|
+| id| zone| age|sex | income|
+|--:|----:|---:|:---|------:|
+|  1|    2|  59|m   |   2868|
+|  2|    2|  54|m   |   2474|
+|  4|    2|  73|f   |   3152|
+|  4|    2|  73|f   |   3152|
+|  4|    2|  73|f   |   3152|
+|  4|    2|  73|f   |   3152|
+|  5|    2|  49|f   |   2473|
+|  4|    2|  73|f   |   3152|
+|  5|    2|  49|f   |   2473|
+|  2|    2|  54|m   |   2474|
 
-The table is a reasonable approximation of the inhabitants of zone 1: older
+Table: Spatial microdata generated for SimpleWorld zone 2.
+
+The table is a reasonable approximation of the inhabitants of zone 2: older
 females dominate in both the aggregate (which contains 8 older people and 6
 females) and the simulated spatial microdata (which contains 8 older people and
-6 females). We will learn how to create such *integerised* datasets during the
-course of this book.
+6 females). Note that in addition the constraint variables, we also have
+an estimate the income distribution in SimpleWorld's second zone.
+
+Towards the end of [chapter 4](#Smsim1) we will learn how to generate
+this table from first principles. The remainder of this section
+considers how the outputs of spatial microsimulation, in the context of
+SimpleWorld, can be useful before progressing to the practicalities.
 
 ```{r, echo=FALSE}
 # Add section link here!
 ```
-
-But how are these outputs *useful*?
 
 Even though the datasets are tiny in SimpleWorld, we have already generated some
 useful output. We can estimate, for example, the average income in each zone.
@@ -1152,19 +1176,21 @@ for(i in 1:ncol(weights)){
 }
 ```
 
-To make this process even more concise (albeit
+The above code uses `i` to iterate through the constraints, one row (zone) at
+a time, saving the output vector of weights for the individuals into columns
+of the weight matrix. To make this process even more concise (albeit
 less clear to R beginners), we can use R's internal
-`for` loop: `apply`:
+`for` loop, `apply`:
 
 ```{r}
 weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
 ```
 
 In the above code R iterates through each row
-(hence the second argument `MARGIN` being `1`: `MARGIN = 2`
+(hence the second argument `MARGIN` being `1`, `MARGIN = 2`
 would signify column-wise iteration).
-Thus `ipfp` is applied to each zone in turn. 
-The speed savings of writing the function
+Thus `ipfp` is applied to each zone in turn, as with the `for` loop implementation. 
+The speed savings of writing the function 
 with different configurations are benchmarked in
 'parallel-ipfp.R' in the 'R' folder of the book project directory.
 This shows that reducing the maximum iterations of `ipfp` from
@@ -1350,6 +1376,12 @@ the inhabitants of a fictional planet, including income!
 ints_df[ints_df$zone == 2, ]
 ```
 
+```{r, echo=FALSE}
+# library(knitr)
+# kable(ints_df[ints_df$zone == 2,], row.names = FALSE)
+```
+
+
 \clearpage
 
 # CakeMap: spatial microsimulation in the wild {#CakeMap}
@@ -1357,15 +1389,15 @@ ints_df[ints_df$zone == 2, ]
 By now we have developed a good understanding of what spatial microsimulation
 is, its applications and how it works. We have seen a little of both its
 underlying theory and its implementation in R. However, we have yet to see how
-the method can be applied *in the wild*, on *real* datasets.
+the method can be applied 'in the wild', on real datasets.
 
 "This spatial microsimulation technique seems useful, but how can I use these
-methods on *my* data?" The purpose of this chapter is to answer this question
+methods on my data?" The purpose of this chapter is to answer this question
 using a real dataset.  The chapter is based on a hypothetical use of spatial
 microsimulation to arrive at an important result: estimated cake consumption in
-different parts of Leeds, UK.  The example is deliberately rather absurd to make
-it more memorable and is presented in a generalisable way, easing the transfer
-of the method to new datasets.
+different parts of Leeds, UK. The example is deliberately rather absurd: to make
+it more memorable. The steps are presented in a generalisable way
+and are applicable to most datasets.
 
 The input microdataset is a randomised ('jumbled') subset of the
 [2009 Dental Health Survey](http://data.gov.uk/dataset/adult_dental_health_survey),
@@ -1392,13 +1424,18 @@ individual and aggregate level data match perfectly from the outset and this
 is the first problem we must overcome before running a spatial microsimulation
 model of cake consumption in Leeds.
 
+The code needed to run the main part of the example is contained within
+'[CakeMap.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/CakeMap.R)'.
+Note that this script makes frequent reference to files contained
+in the folder 'data/CakeMap', where input data and processing scripts
+for the project are stored.
+
 ## Preparing the input data
 
 Often spatial microsimulation is presented in a way that suggests the data
 arrived in a near perfect state, ready to be inserted directly into the model.
-This is rarely the case, as mentioned:
-usually, one must spend time translating
-the data into a suitable format, re-coding categorical variables and column
+This is rarely the case: usually, one must spend time 
+loading the data into R, re-coding categorical variables and column
 names, binning continuous variables and subsetting from the microdataset. In a
 typical project, data preparation can take as long as the analysis
 stage ([Wickham, 2014](http://vita.had.co.nz/papers/tidy-data.html)).  This
@@ -1407,25 +1444,47 @@ cleaning on a complex project. To learn about the data cleaning steps that may
 be useful to your data, we start from the beginning in this section, with a real
 (anonymised) dataset that was downloaded from the internet.
 
+The raw constraint variables for CakeMap were downloaded from
+the Infuse website (\href{http://infuse.mimas.ac.uk/}{infuse.mimas.ac.uk/}).
+These, logically enough, are stored in the 'cakeMap/data/' directory
+as .csv files and contain the word 'raw' in the filename
+to identify the original data. The file 'age-sex-raw.csv', for example is the raw
+age and sex data that was downloaded. As the screenshot in
+Figure 3 illustrates, these datasets are rather verbose and
+require preprocessing. The resulting 'clean' constraints are saved in files such as
+'con1.csv', which stands for 'constraint 1'.
+
+![Example of raw aggregate-level input data for CakeMap aggregate data, downloaded from
+[infuse.mimas.ac.uk/](http://infuse.mimas.ac.uk/)](figures/raw-data-screenshot.jpeg)
+
 ```{r, echo=FALSE}
 # A little long-winded - cut down?
 ```
 
+To ensure reproducibility in the process of converting the raw data into
+a form ready for spatial microsimulation, all of the steps have been saved.
+Take a look at the R script files 'process-age.R', 'process-nssec.R' and
+'process-car.R'. The contents of these scripts should provide an insight
+into methods for data preparation in R. Wickham
+([2014b](http://vita.had.co.nz/papers/tidy-data.html)) provides a more
+general introduction to data reformatting.
 The most difficult input dataset to deal with is the age/sex constraint data.
 The steps used to clean it are saved in 'process-age.R', in the `data/CakeMap/`
-folder. Note that files to load and reformat the other datasets are also present
-in this folder, such 'process-age.R', 'process-nssec.R' and 'process-car.R'.
-Take a look through [this
+folder. Take a look through [this
 file](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/data/CakeMap/process-age.R)
-and try to work out what is going on.
+and try to work out what is going on: the critical stage is grouping single year
+age bands into larger groups such as 16--24.
+
+```{r, echo=FALSE}
+# TODO: add more here...
+```
 
 The end result of 'process-age.R' is a 'clean' .csv file, ready to be loaded and
 used as the input into our spatial microsimulation model. Note that the last
 line of 'process-age.R' is `write.csv(con1, "con1.csv", row.names = F)`.  This
 is the first constraint that we load into R to reweight the individual-level
 data in the next section.
-
-The input data generated through this process of data preparation are named
+The outputs from these data preparation steps are named
 'con1.csv' to 'con3.csv'. For simplicity, all these were merged (by
 '[load-all.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/data/CakeMap/load-all.R)')
 into a single dataset called 'cons.csv'. All the input data for this section are
@@ -1448,32 +1507,44 @@ of spatial microsimulation, try constructing queries in R that will automaticall
 answer these questions.
 
 It is vital to understand the input datasets before trying to model them, so
-take some time exploring the input. Only when satisfied with your understanding
-of the datasets (a pen and paper can help here, as well as R!) is it time to
-move on to generate the spatial microdata using IPF.
+take some time exploring the input. Only when these
+datasets make sense (a pen and paper can help here, as well as R!) is it time to
+generate the spatial microdata.
 
 ## Performing IPF on CakeMap data
 
 The `ipfp` reweighting strategy is concise, generalisable and computationally
 efficient. On a modern laptop, the `ipfp` method was found to be *almost 40
-times faster* than the 'IPFinR' method (mentioned in section 4.1) over 20
-iterations, completing in 2 seconds instead of over 1 minute.  This is a huge
-time saving!^[These tests can be run using the `microbenchmark()` commands found
-towards the end of the 'CakeMap.R' file, is located in the [source
-directory](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/CakeMap.R)
-of the project. The second of these benchmarks depends on files from
-`smsim-course`, the repository of which can be downloaded from
+times faster* than the 'IPFinR' method (section 4.1;
+[Lovelace, 2014](http://eprints.ncrm.ac.uk/3348/)) over 20
+iterations on the CakeMap data,
+completing in 2 seconds instead of over 1 minute.  This is a huge
+time saving!^[These tests were conducted
+using the `microbenchmark()` commands found
+towards the end of the 'CakeMap.R' file.
+The second of these benchmarks depends on files from
+`smsim-course` (Lovelace, 2014), the repository of which can be downloaded from
 [github.com/Robinlovelace/smsim-course](https://github.com/Robinlovelace/smsim-course).]
 
-After some preparatory steps, described in chapter 4 and implemented in the
-first half of 'CakeMap.R', the IPF stage is run using the following command:
+Thanks to the preparatory steps described above,
+the IPF stage can be run on a single line. After the datasets are loaded in
+the first half of 'CakeMap.R', the following code creates the weight matrix:
 
 ```{r, echo=FALSE}
-source("CakeMap.R")
+source("R/CakeMap.R")
 ```
 
 ```{r, eval=FALSE}
 weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
+```
+
+As with the SimpleWorld example, the correlation between the
+constraint table and the aggregated results of the spatial microsimulation
+can be checked to ensure that the reweighting process has worked correctly.
+This demonstrates that the process has worked with an *r* value above 0.99:
+
+```{r}
+cor(as.numeric(cons), as.numeric(ind_agg))
 ```
 
 ## Integerisation
@@ -1482,13 +1553,55 @@ As before, weights of the IPF procedure are fractional, so must be *integerised*
 to create whole individuals. The code presented in chapter 4 requires little
 modification to do this: it is your task to convert the weight matrix generated
 by the above lines of code into a spatial microdataset called, as before,
-`ints_df`.
+`ints_df` (hint: the `int_trs` function in 'R/functions.R' file will help).
+The spatial microdata generated in 'R/CakeMapInts.R' contain the same information
+as the individual-level dataset, but with the addition of the 'zone' variable,
+which specifies which zone each individual inhabits.
 
-What is the size of this new object?  Clearly, this data takes up much RAM on
-the computer, as can be seen by asking `object.size(intall.df)`. Try comparing
+The spatial microdata is thus *multilevel* data, operating at one level on
+the level of individuals and at another at the level of zones. To generate
+summary statistics about the individuals in each zone, functions must be
+run on the data, one zone (group) at a time. `aggregate` provides one
+way of doing this. After converting the 'NSSEC' socio-economic class varible
+into a suitable numeric variable, `aggregate` can be used to identify the
+variability in social class in each zone, using the `by =` argument to
+specify how the results are grouped depending on the zone each individual inhabits:
+
+```{r, echo=TRUE, message=FALSE}
+source("R/CakeMapInts.R")
+```
+
+```{r, eval=FALSE}
+aggregate(ints_df$NSSEC, by = list(ints_df$zone), sd, na.rm = TRUE)
+```
+
+```
+##    Group.1        x
+## 1         1 1.970570
+## 2         2 2.027638
+## 3         3 2.019839
+```
+
+In the above code the third argument refers to the function to be applied to the
+input data. The fourth argument is simply an argument of this function, in this
+case instructing the standard deviation function (`sd`) to ignore all `NA` values.
+An alternative way to perform this operation, which is faster and more
+concise, is using `tapply`:
+
+```{r, eval=FALSE}
+tapply(ints_df$NSSEC, ints_df$zone, sd, na.rm = TRUE)
+```
+
+Note that operations on `ints_df` can take a few seconds to complete.
+This is because the object is large, taking up much RAM on
+the computer. This can be seen by asking `object.size(ints_df)` or
+`nrow(ints_df)`. The latter shows we have created a spatial microdataset
+of 1.6 million individuals! Try comparing
 this result with the size of the original survey dataset 'ind'. Keeping an eye
-on these parameters will ensure that the model does not generate datasets too
-large to handle - a process that can easily happen.  Next we move on to a vital
+on such parameters will ensure that the model does not generate datasets too
+large to handle.
+
+Next we move on to a vital
 consideration in spatial microsimulation models such as CakeMap: validation.
 
 ## Model checking and validation {#svalidation}
@@ -1824,26 +1937,37 @@ the following: `ind[c(F, T, F)]`! Here, `T` and `F` are shorthand for "TRUE" and
 The above tutorial should provide a sufficient grounding in R for beginners to
 understand the practical examples in the book.  However, R is a deep language
 and there is much else to learn that will be of benefit to your modelling
-skills. The following resources are highly recommended:
+skills. There are many books excellent and tutorials that teach the fundamentals
+of R for a variety of applications.
+The following resources, in ascending order of difficulty,
+are highly recommended:
 
+- *Introduction to visualising spatial data in R* (Lovelace and Cheshire, 2014)
+provides an introductory tutorial on handling spatial data in R, including the
+administrative zone data which often form the building blocks of spatial microsimulation
+models in R.
+- *Introduction to scientific programming and simulation using R*
+(Jones et al., [2014](http://www.crcpress.com/product/isbn/9781466569997)) is an
+accessible and highly practical course that will form a solid foundation
+for a range of modelling applications, including spatial microsimulation.
 - *An Introduction to R* (Venables et al., 2014)
 is the foundational introductory R manual, written by the
-software's core developers. It is terse and covers some advanced topics, but
-provides an unbeatable introduction to R's behaviour as a language.
+software's core developers and is available online for free.
+It is terse and covers some advanced topics, but
+provides a useful reference on the fundamentals of R as a language.
 - *Advanced R* 
 ([Wickham, 2014](http://www.crcpress.com/product/isbn/9781466586963))
 delves into the heart
 of the R language. It contains many advanced topics, but the introductory
 chapters are straightforward. Browsing some of the pages on
 [Advanced R's website](http://adv-r.had.co.nz/) and
-trying to answer the questions that open each chapter is an excellent
-way of testing and improving one's understanding of R.
-- *Introduction to visualising spatial data in R* (Lovelace and Cheshire, 2014)
-provides an introductory tutorial on handling spatial data in R, including the
-administrative zone data which often form the building blocks of spatial microsimulation
-models in R.
+trying to answer the questions that open each chapter
+provides a taster of the book and an excellent
+way of testing and improving one's understanding of the R language.
 
-There are alternatives to R and in the next section we will consider a few of these.
+```{r}
+# There are alternatives to R and in the next section we will consider a few of these.
+```
 
 \clearpage
 
