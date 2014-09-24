@@ -1,4 +1,10 @@
+figures/msim-schema.png
+spatial-microsim-book*
+backup-code/
 figures/CakeMap.png
+frontmatter/
+*.tex
+*.aux
 *.orig
 *.docx
 *.html
@@ -13,6 +19,4 @@ figures/CakeMap.png
 .RData
 *.gz
 ggmap*
-_site/
 .Rproj.user
-R/simpleworld.R

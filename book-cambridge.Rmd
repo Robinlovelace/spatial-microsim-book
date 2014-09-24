@@ -3,7 +3,8 @@ title: "Spatial microsimulation with R"
 output:
   pdf_document:
     fig_caption: yes
-    includes:
+    includes: null
+    keep_tex: yes
     number_sections: yes
     toc: yes
 layout: default
@@ -11,13 +12,10 @@ layout: default
 
 ```{r, echo=FALSE}
 # This is an early draft of a book on spatial microsimulation, for teaching in Cambridge
+# Introduction {#Introduction}
 ```
 
-
-\clearpage
-
-Introduction {#Introduction}
-=======================
+# Introduction
 
 Spatial microsimulation is statistical technique for combining individual-level
 datasets with geographical data and analysing the resulting *spatial microdata*.
@@ -31,7 +29,7 @@ hammering out the details of how society could operate in a post carbon world
 There is growing interest in spatial microsimulation. This is due largely to its
 practical utility in an era of 'evidence-based policy' but is also driven by
 changes in the wider research environment inside and outside of academia.
-Continuous improvements in computers, software and data availability mean
+Continued improvements in computers, software and data availability mean
 spatial microsimulation is more accessible than ever. It is now possible to
 simulate the populations of small administrative areas at the individual-level
 almost anywhere in the world. This opens new possibilities for a range of
@@ -44,7 +42,8 @@ are unclear or inconsistent about what the method entails.  Worse is work that
 treats spatial microsimulation as a magical black box. This book is about
 demystifying spatial microsimulation.
 
-Spatial microsimulation can be understood either as a technique or an approach:
+Spatial
+microsimulation can be understood either as a technique or an approach:
 
 1. A *technique* for generating spatial microdata --- individuals allocated to
 zones (see Figure 1).
@@ -66,25 +65,28 @@ Another issue tackled in this book is reproducibility.  Most findings in the
 field cannot easily be replicated, meaning there is no way of independently
 checking the results.  In today’s age of fast Internet connections, open access
 datasets and free software, there is little excuse for this.  The issue is not
-unique to the spatial microsimulation: it is widespread in academia, leading to
-calls such as that by Sergio Rey for an 'Open Regional Science' ([Rey,
-2014](http://link.springer.com/10.1007/s00168-014-0611-7)).  Likewise, this book
-calls for 'Open Spatial Microsimulation'.
+unique to the field of
+spatial microsimulation: it is widespread in academia, leading to
+calls for an 'Open Regional Science' (Rey,
+2014) and similar proposals in other research areas
+(Ince et al., 2012; Peng et al., 2006). This book
+calls for a more open approach in the field of spatial microsimulation.
 
-Reproducibility is encouraged throughout via provision of the tools for readers
+Reproducibility is encouraged throughout via provision of code for readers
 to actually *do* spatial microsimulation. Small yet realistic datasets are
-provided to run the methods on own computer.  All the findings presented in this
+provided to run the methods on your own computer.  All the findings presented in this
 book can therefore be reproduced using code and data in the book's Github
 repository:
-[github.com/Robinlovelace/spatial-microsim-book](https://github.com/Robinlovelace/spatial-microsim-book).
+github.com/Robinlovelace/spatial-microsim-book.
 
-Why spend time and effort on reproducibility? The first answer is that
-reproducibility actually saves time in the long-run, by ensuring more readable
-code and allowing your results to be easily re-run at a later data.  The second
-reason is more profound. Reproducibility is a prerequisite of falsifiability and
-falsifiability is the backbone of science (Popper, 1959).  The results on
+Why spend time and effort on reproducibility? The first answer pragmatic:
+reproducibility can actually save time in the long-run, by ensuring more readable
+code; reproducibility can increase the re-usability and impact of
+research, allowing methods to be re-run or modified at a later data.  The second
+reason is more profound: reproducibility is a prerequisite of falsifiability and
+falsifiability is the backbone of science (Popper, 1959).  The results of
 non-reproducible research cannot be verified, reducing scientific credibility.
-These observations inform the book’s practical nature.
+These philosophical observations inform the book’s practical nature.
 
 ```{r, echo=FALSE}
 # Why spend time and effort on reproducibility? The first answer is that
@@ -104,33 +106,37 @@ These observations inform the book’s practical nature.
 This book presents spatial microsimulation as a living, evolving set of
 techniques rather than a prescriptive formula for arriving at the 'right'
 answer.  Spatial microsimulation is largely defined by its user-community, made
-up of growing number of people worldwide. In terms of reproducibility, this book
-aims to contribute to the community by encouraging collaboration, innovation and
-rigour. The book aims to make spatial microsimulation accessible to more people,
-with a practical approach that encourages playing with the data and code.  As
+up of a growing number of people worldwide. This book
+aims to contribute to the community by encouraging collaboration, innovation and rigour. It also encourages playing with the methods and
+'getting your hands dirty' with the code. As
 Kabakoff (2011 p. xxii) put it regarding R, "the best way to learn is to
 experiment". 
 
 ## Why spatial microsimulation with R?
 
 ```{r, echo=FALSE}
+# The book aims to make spatial microsimulation accessible to more people,
+# with a practical approach that encourages playing with the data and code.
 # expressing oneself.^[This video introduces the idea of
 # expressing oneself in [R](http://youtu.be/wki0BqlztCo)].
+# [Hölm (1987, p.
+# 153)](http://www.jstor.org/stable/10.2307/490448)
 ```
 
 Software decisions have a major impact on flexibility, efficiency and
-reproducibility of research.  Nearly three decades ago [Hölm (1987, p.
-153)](http://www.jstor.org/stable/10.2307/490448) observed that "little
+reproducibility of research.  Nearly three decades ago
+Hölm (1987, p. 153) observed that "little
 attention is paid to the choice of programming language used" for
 microsimulation. This appears to be as true now as it was then; software is
 rarely discussed in papers on the subject and there are few mature spatial
-microsimulation packages.^[The [Flexible Modelling Framework
-(FMF)](https://github.com/MassAtLeeds/FMF) is a notable exception written in
-Java that can perform various modelling tasks.] There are many factors
-additional that should influence software selection including cost, maturity,
-features and speed of execution. Perhaps most important for busy researchers is
-ease and speed of writing, adapting and communicating the analysis. R excels in
-each of these areas.
+microsimulation packages.^[The Flexible Modelling Framework
+(FMF) (https://github.com/MassAtLeeds/FMF) is a notable exception written in
+Java that can perform various modelling tasks.] 
+Factors that should influence software selection including cost, maturity,
+features and performance. Perhaps most important for busy researchers is
+ease and speed of learning,
+writing, adapting and communicating the analysis. R excels in
+each of these areas, hence the choice of R.
 
 ```{r, echo=FALSE}
 # Yet the software used has a lasting
@@ -151,7 +157,9 @@ each of these areas.
 R is a *low-level* language compared with statistical programs based on a strong
 graphical user interface (GUI) such as Microsoft Excel and SPSS.  R offers great
 flexibility for analysing and modelling data and enables easy creation of
-user-defined functions.  On the other hand, R is *high-level* compared with
+user-defined functions. These are all desirable attributes of
+software for undertaking spatial microsimulation.
+On the other hand, R is *high-level* compared with
 general purpose languages such as C and Python.  Instead of writing code to
 perform statistical operations 'from scratch', R users generally use pre-made
 functions. To calculate the mean value of variable `x`, for example, one would
@@ -159,7 +167,9 @@ need to type 20 characters in Python: `float(sum(x))/len(x)`.^[The `float`
 function is needed in case whole numbers are used. This can be reduced to 13
 characters with the excellent **NumPy** package: `import numpy; x = [1,3,9];
 numpy.mean(x)` would generate the desired result. The R equivalent is `x =
-c(1,3,9); mean(x)`.] In pure R 7 characters are sufficient: `mean(x)`.
+c(1,3,9); mean(x)`.] In pure R 7 characters are sufficient: `mean(x)`. This
+terseness and range of pre-made functions is useful for ease of
+reading and writing spatial microsimulation models and analysing the results.
 
 ```{r, echo=FALSE}
 # One may argue that saving a few keystrokes while writing
@@ -167,23 +177,25 @@ c(1,3,9); mean(x)`.] In pure R 7 characters are sufficient: `mean(x)`.
 # that the time savings of being concise can be vast.
 ```
 
-The example of calculating the mean in R and Python illustrates a wider point: R
+The example of calculating the mean in R and Python
+may be trite but illustrates a wider point: R
 was *designed* to work with statistical data, so many functions in the default R
 installation (e.g. `lm()`, to create a linear regression model) perform
 statistical analysis 'out of the box'.  In agent-based modelling, the
 statistical analysis of results often occupies more time than running the model
-itself ([Theile, 2014](http://www.jstatsoft.org/v58/i02/paper)).  The same
+itself (Theile, 2014).  The same
 applies to spatial microsimulation, making R an ideal choice due to its
 statistical anlysis capabilities.
 
 Finally, R has an active and  growing user community. As a result there are
-thousands of packages that extend R's capabilities by providing new functions
-to the user and improvements are being added all the time.
-The **ipfp** package, for example, was published in the summer of 2014 and
+thousands of packages that extend R's capabilities by providing new functions.
+Improvements are being added all the time.
+The **ipfp** package, for example,
 can greatly reduce the computational time taken for a key element of spatial
-microsimulation process, as we shall see in *[Reweighting with ipfp](#ipfp)*.
+microsimulation process, as we shall see in *Reweighting with ipfp* (Section \ref{ipfp}).
 Further information about why R is a good choice for spatial microsimulation
-is provided in the [Appendix](#apR). The next section describes approaches
+is provided in the Appendix, a tutorial introduction to R for spatial
+microsimulation applications. The next section describes approaches
 to learning R in general terms.
 
 ```{r, echo=FALSE}
@@ -219,10 +231,12 @@ Learning the R language
 
 Having learned a little about *why* R is a good tool for the job, it is worth
 considering at this stage *how* R should be used.  It is useful to think of R
-not as a series of isolated commands, but as an interconnected *language*
-and this book teaches spatial microsimulation in the language of R.
+not as a series of isolated commands, but as an interconnected *language*.
+The code is used not only for the computer to crunch numbers,
+but also to communicate ideas, from one person to another.
+In other words, this book teaches spatial microsimulation in the language of R.
 Of course, English is more appropriate than R for *explaining* rather than
-merely describing the method and the language of mathematics is appropriate
+merely describing the method and the language of mathematics is ideal
 for describing quantitative relationships conceptually. However,
 because the practical components of this book are implemented in R, you will gain
 more from it if you are fluent in R. To this end the book aims to improve your
@@ -230,17 +244,18 @@ R skills as well as your ability to perform spatial microsimulation, especially
 in the earlier practical chapters. Some prior knowledge of R will make
 reading this book easier, but R novices should be able to follow the worked
 examples, with reference to appropriate supplementary material
-(see [Further R Resources](#further) in the Appendix). As
+(see Section \ref{further}). As
 with learning Spanish or Chinese, frequent practice, persistence and
 experimentation will ensure deep learning.
 
 A more practical piece of advice is to organise your workflow.  Each
 project should have its own self-contained folder containing all that is needed
 to replicate the analysis, except perhaps large input datasets. This could
-include the raw (unchanged) input data, a folder containing R code for analysis,
-a folder for graphical outputs and a folder for data output.  To avoid clutter,
-it is sensible to arrange this content into folders (thanks to Colin Gillespie
-for this tip): 
+include the raw (unchanged) input data^[Raw data should be kept safely on an
+external hard disk or a server if it is large or sensitive.], R code for analysis,
+the graphical outputs and files containing data outputs.  To avoid clutter,
+it is sensible to arrange this content into folders, as illustrated below
+(thanks to Colin Gillespie for this tip): 
 
 ```
 |-- book.Rmd
@@ -267,7 +282,7 @@ will likely yield dividends in the long run.
 The same applies to learning the R language.  Fluency allows complex numerical
 ideas to be described with a small number of keystrokes.  If you are a new R
 user it is therefore worth spending some time learning the R language. To this
-end [the Appendix](#apR) provides a primer on R from the perspective of spatial
+end the Appendix provides a primer on R from the perspective of spatial
 microsimulation.
 
 ```{r, echo=FALSE}
@@ -320,169 +335,229 @@ sqrt(x) # find the square root of x
 ```
  - Output from the *R console* is preceded by the `##` symbol, as illustrated above.
  - Comments are preceded by a single `#` symbol to explain specific lines.
+ - Often, reference will be made to files contained within the book's project
+ folder. The notation used to refer to the location of these files follows
+ the way we refer to files and folders on Linux computers. Thus 'R/CakeMap.R'
+ refers to a file titled 'CakeMap.R', within the 'R' directory of the project's
+ folder. 
  
 There are many ways to write R code that will generate the same results.
-However, to ensure clarity and consistency, a single style, advocated in [Hadley
-Wickham](http://r-pkgs.had.co.nz/style.html)'s *Advanced R* book ([Wickham,
-2014](http://www.crcpress.com/product/isbn/9781466586963)), is followed
+However, to ensure clarity and consistency, a single style, advocated in Hadley
+Wickham's *Advanced R* book (http://r-pkgs.had.co.nz/style.html), is followed
 throughout.  Consistent style and plentiful comments will make your code
 readable by yourself and others for decades to come.
 
-An overview of the coursebook
+An overview of the book
 -----------------------
 
-This coursebook builds on the tutorial *Introducing spatial microsimulation with
-R: a practical* (Lovelace, 2014) with improved code and explanation.  The
-booklet is a precursor to a book in CRC Press's [R
-Series](http://www.crcpress.com/browse/series/crctherser) which will be
-published in summer 2015. Therefore any comments on the code, explanation or
+This book will be published in CRC Press's R
+in summer 2015. Any comments on the code, explanation or
 contents will be gratefully received.^[Feedback can be left via email to
-r.lovelace@leeds.ac.uk or via the project's GitHub page:
-[github.com/Robinlovelace/spatial-microsim-book](github.com/Robinlovelace/spatial-microsim-book).]
+r.lovelace@leeds.ac.uk or via the project's GitHub page
+(http://github.com/Robinlovelace/spatial-microsim-book).
 
 The structure is as follows:
 
-- [SimpleWorld](#SimpleWorld), a 'no nonsense' and reproducible
+- *SimpleWorld*, a 'no nonsense' and reproducible
 explanation of spatial microsimulation with reference to an imaginary planet.
-- [Data preparation](#DataPrep), dedicated to the boring but vital task
+- Data preparation, dedicated to the boring but vital task
 of loading and 'cleaning' the input data, ready for spatial microsmulation.
-- [Spatial microsimulation in R](#Smsim1), which introduces the main functions
+- *Preparing input data*, an introduction to reformatting individual
+and aggregate-level data ready for spatial microsimulation.
+- *Spatial microsimulation in R*, which introduces the main functions
 and techniques that are used to generate spatial microdata.
-- [CakeMap](#CakeMap), a larger and more involved example using real data.
-- [Next steps](#NextSteps), an introduction to the subsequent steps that can
-be taken after the spatial microdataset has been generated.
+- *CakeMap: spatial microsimulation in the wild* is a larger
+and more involved example using real data.
+- *Spatial microdata in agent-based models* describes how the output
+from spatial microsimulation can be used as an input into more complex models
+(in progress).
+- *Additional tools and techniques* introduces to further methods
+and applications, including description of R packages for spatial
+microsimulation (in progress).
 
 The majority of this material is new and will contribute to a textbook
 on spatial microsimulation. Please contact r.lovelace@leeds.ac.uk with
 any feedback about the book. Alternatively, if you have a GitHub account,
 feel free to report any issues online and contribute directly to the project
-by editing this documents source code: [github.com/Robinlovelace/spatial-microsim-book/blob/master/book-cambridge.Rmd](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/book-cambridge.Rmd).
+by editing this document's source code (https://github.com/Robinlovelace/spatial-microsim-book/blob/master/book-cambridge.Rmd).
 
 \clearpage
 
-```{r, echo=FALSE}
-# # What is spatial microsimulation?
-# 
-# Spatial microsimulation, as used in this book, is
-# statistical technique for allocating individuals from a survey dataset
-# to administrative zones based on shared variables between the areal and
-# individual level data.
-# 
-# However, as with many new and infrequently used phrases, this
-# understanding is not shared by everyone. The meaning of spatial
-# microsimulation varies depending on context: to an
-# economist spatial microsimulation is likely to imply
-# modelling temporal processes such as how individual agents 
-# respond to changes in prices or policies. To a transport
-# planner, the term implies simulating the precise movements of vehicles on
-# the transport network. To your next door neighbour it may mean you have
-# started speaking gobbledygook! Hence the need to define our terminology.
-# 
-# Terminology
-# -----------
-# 
-# Delving a little into the etymology and history of the term reveals the
-# reasons behind this duplicity of meaning and highlights the importance
-# of terminology. Only in very few contexts will one be understood when
-# one says “I use *spatial microsimulation*” in everyday life. Usually it
-# is important to add context. Below are a few hypothetical situations and
-# suggestions of how one could respond to them.
-# 
-# -   When talking to a colleague, a transport modeller: “spatial
-#     microsimulation, also known as population synthesis...”
-# 
-# -   Speaking to agent based modellers: “we use spatial microsimulation
-#     to simulate the characteristics of geo-referenced agents...”
-# 
-# -   Communicating with undergraduates who are unlikely to have come
-#     across the term or its analogies. “I do spatial microsimulation, a
-#     way of generating individual-level data for small areas...”
-# 
-# -   Chatting casually in the pub or coffee shop: “I’m using a technique
-#     called spatial microsimulation to model people...”.
-# 
-# The above examples illustrate that there is great potential for
-# confusion and shows that care needs to be taken to tailor the words used
-# depending on the target audience. All this links back to the importance
-# of transparency and reproducibility of method discussed in .
-# 
-# Faced with uncomprehending stares when describing the method, some may
-# be tempted to ‘blind them with science’, relying on
-# sophisticated-sounding jargon, for example by saying: “we use simulated
-# annealing in our integerised spatial microsimulation model”. Such
-# wording obscures meaning (how many people in the room will understand
-# ‘integerised’, let alone ‘simulated annealing’) and makes the process
-# sound inaccessible. Although much jargon is used in the spatial
-# microsimulation literature in this book, care must be taken to ensure
-# that people understand what you are saying.
-# 
-# This raises the question, why use the term spatial microsimulation at
-# all, if it is understood by so few people? The answer to this is that
-# spatial microsimulation, defined clearly at the outset and used
-# correctly, can usefully describe a technique that would otherwise need
-# many more words on each use. Try replacing ‘spatial microsimulation’
-# with ‘a statistical technique to allocate individuals from a survey
-# dataset to administrative zones based on shared variables between the
-# areal and individual level data’ each time it appears in this book and
-# the advantages of a simple term should become clear. ‘Population
-# synthesis’ is perhaps a more accurate term but, transport modelling
-# aside, the literature already uses ‘spatial microsimulation’. Rather
-# than create more complexity with *another* piece of jargon, it is best
-# to continue with the term favoured by the the majority of practitioners.
-# 
-# Why has this situation, in which practitioners of a statistical method
-# must tread carefully to avoid confusing their audience, come about?
-# First it’s worth stating that the problem is by no means unique to this
-# field: imagine the difficulties that Bayesian statisticians must
-# encounter when speaking of prior and posterior probability distributions
-# to an uninitiated audience. Let alone describing Gibb’s sampling. To
-# more precisely answer the question, and gain an insight into the origins
-# of the definition provided at the outset of this chapter, we consider
-# the beginnings and evolution of the term in written work.
-# 
-# The etymology of spatial microsimulation
-# ----------------------------------------
-# 
-# Spatial microsimulation as an approach to modelling {#sbroader}
-# ---------------------------------------------------
-# 
-# What spatial microsimulation is not
-# -----------------------------------
-# 
-# **Spatial microsimulation is not strictly spatial**
-# 
-# The most surprising feature of spatial microsimulation, as used in the
-# literature, is that *the method is not trictly *spatial*. The only
-# reason why the methodology has developed this name (as opposed to 'small
-# area population synthesis', for example) is that practitioners tend
-# to use administrative zones, which represent geographical areas, as the
-# grouping variable. However, any mutually exclusive grouping variable,
-# such as age band or number of bedrooms in your house, could
-# be used. Likewise, geographical location can be used as a *constraint variable*.
-# In most spatial microsimulation models, *the spatial variable is a mutually
-# exclusive grouping, interchangeable with any such group*. "Spatial" is thus
-# 1st on the list of things that spatial microsimulation is not.
-# 
-# To be more precise, spatial microsimulation is not *inherently spatial*.
-# Spatial attributes such as the geographic coordinates of home and work
-# locations can easily be added to the spatial microdata after they have been
-# generated, and the use of geographical variables as the grouping variable is
-# critical here. 
-# 
-# **Spatial microsimulation is not agent-based modelling (ABM).**
-```
+# What is spatial microsimulation?
+
+Spatial microsimulation, as used in this book, can be defined as a
+statistical technique for allocating individuals from a survey dataset
+to administrative zones, based on shared variables between the areal and
+individual level data.
+
+However, as with many new and infrequently used phrases, this
+understanding is not shared by everyone. The meaning of spatial
+microsimulation varies depending on context and who you ask: to an
+economist, for example, spatial microsimulation is likely to imply
+modelling some kind of temporal process such as how individual agents in
+different areas respond to changes in prices or policies. To a transport
+planner, the term may imply simulating the precise movements of vehicles on
+the transport network. To your next door neighbour it may mean you have
+started speaking gobbledygook! Hence the need to consider what spatial
+microsimulation is, and what it is not, at the outset.
+
+## Terminology
+
+Delving a little into the etymology and history of the term reveals the
+reasons behind this duplicity of meaning and highlights the importance
+of terminology. Rarely will you be understood saying
+“I use *spatial microsimulation*” in everyday life. Usually it
+is important to add context. Below are a few hypothetical situations and
+suggested responses.
+
+-   When talking to a colleague, a transport modeller: “spatial
+    microsimulation, also known as population synthesis...”
+
+-   Speaking to agent based modellers: “we use spatial microsimulation
+    to simulate the characteristics of geo-referenced agents...”
+
+-   Communicating with undergraduates who are unlikely to have come
+    across the term or its analogies. “I do spatial microsimulation, a
+    way of generating individual-level data for small areas...”
+
+-   Chatting casually in the pub or coffee shop: “I’m using a technique
+    called spatial microsimulation to model people...”.
+
+The above examples illustrate potential for
+confusion: care needs to be taken to use terminology each audience understands. The transport modeller, for example, may
+already know that the term 'population synthesis' means creating an individual-level
+dataset of real areas, whereas more basic terms need to be used when communicating
+the method to policy makers. All this links back to the importance
+of transparency and reproducibility of method discussed in the previous chapter:
+avoid implying spatial microsimulation is something it is not.
+
+Faced with uncomprehending stares when describing the method, some may
+be tempted to ‘blind them with science’, relying on
+sophisticated-sounding jargon, for example by saying: “we use simulated
+annealing in our integerised spatial microsimulation model”. Such
+wording obscures meaning (how many people in the room will understand
+‘integerised’, let alone ‘simulated annealing’) and makes the process
+inaccessible. Although much jargon is used in the spatial
+microsimulation literature and in this book, care must be taken to ensure
+that people understand what you are saying.
+
+This raises the question, why use the term spatial microsimulation at
+all, if it is understood by so few people? The answer to this is that
+spatial microsimulation, defined clearly at the outset and used
+correctly, can concisely describe a technique that would otherwise need
+many more words on each use. Try replacing ‘spatial microsimulation’
+with ‘a statistical technique to allocate individuals from a survey
+dataset to administrative zones’ each time it appears in this book and
+the advantages of a simple term should become clear! ‘Population
+synthesis’ is perhaps a more accurate term but, transport modelling
+aside, the literature already uses ‘spatial microsimulation’. Rather
+than create more complexity with *another* piece of jargon, we proceed
+with the term favoured by the the majority of practitioners.
+
+Why has this situation, in which practitioners of a statistical method
+must tread carefully to avoid confusing their audience, come about?
+First it’s worth stating that the problem is by no means unique to this
+field: imagine the difficulties that Bayesian statisticians must
+encounter when speaking of prior and posterior probability distributions
+to an uninitiated audience. Let alone describing Gibb’s sampling.
+
+To avoid confusion regarding the terminology used in this book,
+a glossary defining much of the jargon relating to spatial microsimulation
+is provided at the end. For now, to
+help answer what spatial microsimulation is we will look at 
+its applications and then at what it is not.
+
+Applications
+----------------------------------------
+
+What spatial microsimulation is not
+-----------------------------------
+
+**Spatial microsimulation is not strictly spatial**
+
+The most surprising feature of spatial microsimulation, as used in the
+literature, is that the method is not strictly *spatial*. The only
+reason why the method has developed this name (as opposed to 'small
+area population synthesis', for example) is that practitioners tend
+to use administrative zones, which represent geographical areas, as the
+grouping variable. However, any mutually exclusive grouping variable,
+such as age band or number of bedrooms in your house, could
+be used. Likewise, geographical location can be used as a *constraint variable*.
+In most spatial microsimulation models, the spatial variable is a mutually
+exclusive grouping, interchangeable with any such group. Of course, the spatial
+microdata, maps and analysis that result from spatial microsimulation are spatial,
+it's just that there is nothing inherently spatial about the method used to
+generate the spatial microdata.
+
+To be more precise, spatial microsimulation is not *inherently spatial*.
+Spatial attributes such as the geographic coordinates of the zones
+to which individuals have been allocated and home and work
+locations can easily be added to the spatial microdata after they have been
+generated. It is the use of geographical variables as the grouping variable that is
+critical here and which distinguishes spatial microsimulation from other types
+of microsimulation.
+
+**Spatial microsimulation is not agent-based modelling (ABM).**
+
+**Spatial microsimulation does not generate new data**
+
+During spatial microsimulation, apparently new individuals are created and
+placed into zones. It would be tempting to think that new datasets are somehow
+being created. This is not the case: the 'new' individuals are simply repeats
+of individuals we already knew about from the individual-level data, albeit
+in a different order and in different combinations. If the population of the
+study area is greater than the sample size of the input data, many individuals
+will have to be 'cloned'. Thus we are not increasing the diversity of the dataset,
+simply changing its aggregate-level characteristics.
+
+## Assumptions {#assumptions}
+
+As with any simulation technique, spatial microsimulation is based on
+assumptions, some of which are unlikely to hold in all cases. This
+does not preclude spatial microsimulation in cases where the assumptions
+do not hold: "It is far better to foresee even without
+certainty than not to foresee at all", as Henri Poincaré put it
+(Barthélemy, 2014).
+It is vital, however, that users of spatial microsimulation and
+'consumers' of the resulting research understand that the results of spatial
+microsimulation are not *real* but a best estimate of the population in a
+given area. The danger is that if the assumptions are not understood, incorrect
+conclusions will result. It is therefore the duty of researchers using spatial
+microsimulation (and other techniques) to clearly state the assumptions on which
+the results depend on and the extent to which these assumptions can be expected
+to hold in practice. Roughly speaking there are four main assumptions underlying
+all spatial microsimulation models:
+
+1. The individual-level microdata are representative of the study area.
+2. The target variable is dependent on the constraint variables and their
+interactions in a way that is relatively constant over space and time.
+3. The relationships between the constraint variables are not spatialy dependent.
+4. The input microdataset and constraints are sufficiently rich and detailed
+to reproduce the full diversity of individuals and areas in the study region.
+
+Obviously the real world is complex and many processes are spatially dependent,
+invalidating assumptions 2 and 3. The extent to which the relationships between
+variables in the model can be deemed to be constant from place to place is often
+unknown, although there are ways of checking the spatial dependency of
+relationships between multiply variables, not least Geographically Weighted Regression
+(GWR). In any case, these limitations should be discussed at the outset of spatial
+microsimulation research, with reference to the input data. To see how spatial
+microsimulation simplifies the real world, the next chapter describes
+a hypothetical scenario where 33 inhabitants of an imaginary land
+are simulated and allocated to three zones
+based on a microdataset of only 5 individuals and two constraint variables.
 
 # SimpleWorld {#SimpleWorld}
 
-To see the link between the methodology introduced *[later in the
-book](#Smsim1)* and the various real-world applications, let's take a look at a
+To see the link between the methodology introduced later in the
+book (see Chapter \ref{Smsim1}) and the various real-world applications, let's take a look at a
 simple example of the kind of situation where spatial microsimulation is useful,
 to help bridge the gap between method and application.
 
 We'll use an imaginary world called SimpleWorld, consisting of only 3 zones that
-cover the entirety of the SimpleWorld sphere ([Figure 2](fsimple1)). 
+cover the entirety of the SimpleWorld sphere (Figure 2). 
 
-```{r fsimple1, fig.cap="The SimpleWorld sphere", echo=FALSE, message=FALSE} 
+```{r  fig.cap="The SimpleWorld sphere", echo=FALSE, message=FALSE}
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
 library(sp)
@@ -512,9 +587,12 @@ ggplot(pol1) + geom_path(aes(long, lat, group, fill = group)) +
   theme_space_map
 ```
 
+## SimpleWorld data
+
 This is a small world, 
 containing 12, 10 and 11 individuals of its alien inhabitants
-in each zone, 1 to 3, respectively. From the SimpleWorld Census, we know
+in each zones 1 to 3, respectively: a planetary population of 33.
+From the SimpleWorld Census, we know
 how many young (under 49 space years old) and old (over 50)
 residents live in each
 zone, as well their genders: male and female.
@@ -613,6 +691,8 @@ individual-level survey data.  Spatial microsimulation tackles this issue by
 allocating individuals from a non-geographical dataset to geographical zones in
 another.
 
+## A weight matrix
+
 The procedures we will learn to use in this book do this by allocating *weights*
 to each individual for each zone. The higher the weight for a particular
 individual-zone combination, the more representative that individual is of that
@@ -651,7 +731,9 @@ found in cell `[3,2]`. Again this makes sense: individual 3 from the
 microdataset is a young male yet there are only 2 young people and 4 males in
 zone 2. A special feature of the weight matrix above is that each of the column
 sums is equal to the total population in each zone.  We will discover how the
-weight matrices are generated in [a subsequent section](#Smsim1).
+weight matrices are generated in Section \ref{Smsim1}.
+
+## Spatial microdata
 
 A more useful output from spatial microsimulation is what we refer to as
 *spatial microdata*.  This is dataset that contains a single row per individual
@@ -663,7 +745,7 @@ individuals sampled from the microdata that represent zone 2 is presented in the
 table below; the complete spatial microdataset allocates whole individuals to
 each zone, resulting in a more or less realistic insight into the inhabitants of
 SimpleWorld and for the purposes of modelling. We will create this
-table at the end of [Chapter 4](#Smsim1).
+table at the end of Chapter 4.
 
 | id| zone| age|sex | income|
 |--:|----:|---:|:---|------:|
@@ -686,7 +768,7 @@ females) and the simulated spatial microdata (which contains 8 older people and
 6 females). Note that in addition the constraint variables, we also have
 an estimate the income distribution in SimpleWorld's second zone.
 
-Towards the end of [chapter 4](#Smsim1) we will learn how to generate
+Towards the end of Chapter 4 we will learn how to generate
 this table from first principles. The remainder of this section
 considers how the outputs of spatial microsimulation, in the context of
 SimpleWorld, can be useful before progressing to the practicalities.
@@ -694,6 +776,8 @@ SimpleWorld, can be useful before progressing to the practicalities.
 ```{r, echo=FALSE}
 # Add section link here!
 ```
+
+## SimpleWorld in context
 
 Even though the datasets are tiny in SimpleWorld, we have already generated some
 useful output. We can estimate, for example, the average income in each zone.
@@ -715,8 +799,8 @@ global averages of the input data, for example, our estimates could be way-out.
 Using such a small sample, one could rightly argue, how could the diversity of
 33 inhabitants of SimpleWorld be represented by our simulated spatial microdata?
 This question is equally applicable to larger simulations. These issues are
-important and will be tackled in a subsequent [section on
-validation](#svalidation).
+important and will be tackled in a subsequent Section (\ref{svalidation}) on
+validation.
 
 ```{r, echo=FALSE}
 # Applications of spatial microsimulation - to be completed!
@@ -753,14 +837,14 @@ validation](#svalidation).
 This chapter focuses on the input datasets needed for spatial microsimulation.
 Correctly loading, manipulating and assessing these datasets will be critical to
 the performance of your models and the ease of modifying them to include new
-inputs.  Fortunately R is an accomplished tool for data cleaning ([Kabacoff,
-2011](http://www.manning.com/kabacoff/)), as we shall see.  This chapter also
+inputs.  Fortunately R is an accomplished tool for data cleaning (Kabacoff,
+2011) (http://www.manning.com/kabacoff/), as we shall see.  This chapter also
 provides the basis for chapter we perform spatial microsimulation.
 
 As with most spatial microsimulation models, this example consists of a
 non-geographical individual-level dataset and a series of geographical zones.
 The data used in this chapter (and the data for all other chapters) can be
-downloaded from the book's GitHub repository (). From this page, click on the
+downloaded from the book's GitHub repository (https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
 'Download ZIP' button to the right of the page and extract the folder into a
 sensible place on your computer, such as the Desktop.  From there, you will want
 to run R from the project's root directory: open the folder in a file browser
@@ -774,8 +858,8 @@ hard disc.  Rather than modifying this file, modified ('cleaned') versions
 should be saved as separate files. This ensures that after any mistakes, one can
 always recover information that otherwise could have been lost and makes the
 project fully reproducible. In this chapter, however, a relatively clean and
-very tiny dataset from SimpleWorld is used.  We will see in [Chapter
-5](#CakeMap) how to deal with larger and more messy data.  Here the focus is on
+very tiny dataset from SimpleWorld is used.  We will see in Chapter
+\ref{CakeMap} how to deal with larger and more messy data.  Here the focus is on
 the principles.
 
 ```{r, echo=FALSE}
@@ -883,7 +967,7 @@ the same for each constraint overall and for each area (row) for both
 constraints.  If the total populations between constraint variables do not match
 (e.g. because the sample population is different) this is problematic.
 Appropriate steps to normalise the errant constraint variables are described in
-[the CakeMap chapter](#CakeMap).
+the CakeMap Chapter (\ref{CakeMap}).
 
 ## Subsetting to remove excess information
 
@@ -900,7 +984,7 @@ Although `ind` is small and simple it will behave in the same way as a much
 larger dataset, providing opportunities for testing subsetting syntax in R.  It
 is common, for example, to take a subset of the working *population base*: those
 aged 16 and 74 in full-time employment. Methods for doing this are provided in
-the [the Appendix on subsetting](#subsetting).
+Section \ref{subsetting}.
 
 ## Re-cateorising individual-level variables
 
@@ -914,7 +998,7 @@ type `integer` whereas the latter is composed of discrete bins: 0 to 49 and 50+.
 We can categories the variable into these bins using `cut()`:^[The combination
 of curved and square brackets in the output may seem strange but this is in fact
 an International Standard - see
-[wikipedia.org/wiki/ISO_31-11](http://en.wikipedia.org/wiki/ISO_31-11) for more
+http://en.wikipedia.org/wiki/ISO_31-11 for more
 information.]
 
 ```{r}
@@ -990,10 +1074,10 @@ this means increasing its width
 to match the the constraint data.
 This is a two-stage process. First,
 `model.matrix()` is used to expand each variable into the number of columns as there are categories in each and assign. 
-[Knoblauch and Maloney (2012)](http://www.springer.com/statistics/computational+statistics/book/978-1-4614-4474-9) provide a lengthier description of this
-which is available [online for free](http://www.springer.com/statistics/computational+statistics/book/978-1-4614-4474-9).
+Knoblauch and Maloney (2012) provide a lengthier description of this
+which is available online, for free.
 
-Second, `colSums()` is used to take the sum of each column.^[As we shall see in [a subsequent section](#ipfp),
+Second, `colSums()` is used to take the sum of each column.^[As we shall see in Section \ref{ipfp},
 only the former of these is needed if we use the
 **ipfp** package for re-weighting the data, but both are presented to enable
 a better understanding of how IPF works.]
@@ -1092,7 +1176,7 @@ is iterative proportional fitting (IPF). IPF involves calculating a series of
 weights that represent how representative each individual is of each zone.
 This is *reweighting*. The IPF algorithm can be written in
 R from scratch, as illustrated in Lovelace (2014), and as implemented in the
-[smsim-course GitHub repository]().
+smsim-course GitHub repository (https://github.com/Robinlovelace/spatial-microsim-book).
 The code in this file, and the accomanying text, saves the weight
 matrix after every constraint for each iteration. While this makes the
 code relatively slow, it is useful for diagnosing issues with the reweighting
@@ -1104,10 +1188,10 @@ Regardless of which implementation of used,
 IPF can be used to allocate the individual-level data loaded in
 the previous chapter to the three zones of SimpleWorld. IPF is mature,
 fast and has a long history.
-Interested readers are directed towards recent papers (e.g. Lovelace and Ballas
-[2012](http://www.sciencedirect.com/science/article/pii/S0198971513000240);
-Pritchard and Miller
-[2012](http://link.springer.com/article/10.1007%2Fs11116-011-9367-4))
+Interested readers are directed towards recent papers (e.g. Lovelace and Ballas,
+2012;
+Pritchard and Miller,
+2012)
 for more detail on the method and its underlying theory.
 
 ```{r, echo=FALSE}
@@ -1216,7 +1300,7 @@ speed benefits of using the deterministic IPF algorithm shrink as the size of
 the survey dataset increases.
 
 We will not cover combinatorial optimisation. Harland
-([2013](http://eprints.ncrm.ac.uk/3177/)) provides a practical tutorial
+(2013) provides a practical tutorial
 introducing the subject based on the Flexible Modelling Framework (FMF)
 Java program. It is possible to generate spatial microdata using IPF, however,
 using a technique we refer to imaginatively as integerisation.
@@ -1400,7 +1484,7 @@ it more memorable. The steps are presented in a generalisable way
 and are applicable to most datasets.
 
 The input microdataset is a randomised ('jumbled') subset of the
-[2009 Dental Health Survey](http://data.gov.uk/dataset/adult_dental_health_survey),
+2009 Dental Health Survey (http://data.gov.uk/dataset/adult_dental_health_survey),
 covering England, Northern Ireland and Wales. The five variables assigned to each
 of the 916 individuals are as follows:
 
@@ -1425,7 +1509,7 @@ is the first problem we must overcome before running a spatial microsimulation
 model of cake consumption in Leeds.
 
 The code needed to run the main part of the example is contained within
-'[CakeMap.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/CakeMap.R)'.
+'CakeMap.R'.
 Note that this script makes frequent reference to files contained
 in the folder 'data/CakeMap', where input data and processing scripts
 for the project are stored.
@@ -1438,14 +1522,13 @@ This is rarely the case: usually, one must spend time
 loading the data into R, re-coding categorical variables and column
 names, binning continuous variables and subsetting from the microdataset. In a
 typical project, data preparation can take as long as the analysis
-stage ([Wickham, 2014](http://vita.had.co.nz/papers/tidy-data.html)).  This
-section builds on [Chapter 3](#DataPrep) to illustrate strategies for data
+stage.  This section builds on Chapter 3 to illustrate strategies for data
 cleaning on a complex project. To learn about the data cleaning steps that may
 be useful to your data, we start from the beginning in this section, with a real
 (anonymised) dataset that was downloaded from the internet.
 
 The raw constraint variables for CakeMap were downloaded from
-the Infuse website (\href{http://infuse.mimas.ac.uk/}{infuse.mimas.ac.uk/}).
+the Infuse website (http://infuse.mimas.ac.uk/).
 These, logically enough, are stored in the 'cakeMap/data/' directory
 as .csv files and contain the word 'raw' in the filename
 to identify the original data. The file 'age-sex-raw.csv', for example is the raw
@@ -1455,10 +1538,13 @@ require preprocessing. The resulting 'clean' constraints are saved in files such
 'con1.csv', which stands for 'constraint 1'.
 
 ![Example of raw aggregate-level input data for CakeMap aggregate data, downloaded from
-[infuse.mimas.ac.uk/](http://infuse.mimas.ac.uk/)](figures/raw-data-screenshot.jpeg)
+http://infuse.mimas.ac.uk/.](figures/raw-data-screenshot.jpeg)
 
 ```{r, echo=FALSE}
 # A little long-winded - cut down?
+# stage ([Wickham, 2014](http://vita.had.co.nz/papers/tidy-data.html)).  This
+# section builds on [Chapter 3](#DataPrep) to illustrate strategies for data
+# ([2014b](http://vita.had.co.nz/papers/tidy-data.html)) provides a more
 ```
 
 To ensure reproducibility in the process of converting the raw data into
@@ -1466,12 +1552,12 @@ a form ready for spatial microsimulation, all of the steps have been saved.
 Take a look at the R script files 'process-age.R', 'process-nssec.R' and
 'process-car.R'. The contents of these scripts should provide an insight
 into methods for data preparation in R. Wickham
-([2014b](http://vita.had.co.nz/papers/tidy-data.html)) provides a more
+(2014b) provides a more
 general introduction to data reformatting.
 The most difficult input dataset to deal with is the age/sex constraint data.
 The steps used to clean it are saved in 'process-age.R', in the `data/CakeMap/`
-folder. Take a look through [this
-file](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/data/CakeMap/process-age.R)
+folder. Take a look through this
+file
 and try to work out what is going on: the critical stage is grouping single year
 age bands into larger groups such as 16--24.
 
@@ -1486,7 +1572,7 @@ is the first constraint that we load into R to reweight the individual-level
 data in the next section.
 The outputs from these data preparation steps are named
 'con1.csv' to 'con3.csv'. For simplicity, all these were merged (by
-'[load-all.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/data/CakeMap/load-all.R)')
+'load-all.R')
 into a single dataset called 'cons.csv'. All the input data for this section are
 thus loaded with only two lines of code:
 
@@ -1516,7 +1602,7 @@ generate the spatial microdata.
 The `ipfp` reweighting strategy is concise, generalisable and computationally
 efficient. On a modern laptop, the `ipfp` method was found to be *almost 40
 times faster* than the 'IPFinR' method (section 4.1;
-[Lovelace, 2014](http://eprints.ncrm.ac.uk/3348/)) over 20
+Lovelace, 2014) over 20
 iterations on the CakeMap data,
 completing in 2 seconds instead of over 1 minute.  This is a huge
 time saving!^[These tests were conducted
@@ -1524,7 +1610,7 @@ using the `microbenchmark()` commands found
 towards the end of the 'CakeMap.R' file.
 The second of these benchmarks depends on files from
 `smsim-course` (Lovelace, 2014), the repository of which can be downloaded from
-[github.com/Robinlovelace/smsim-course](https://github.com/Robinlovelace/smsim-course).]
+(https://github.com/Robinlovelace/smsim-course).
 
 Thanks to the preparatory steps described above,
 the IPF stage can be run on a single line. After the datasets are loaded in
@@ -1649,7 +1735,7 @@ TAE is sensitive to the number of people within the model, SAE is not.
 Pearson's *r*, TAE and SAE are just the simplest of a wide variety of
 *goodness of fit* measures for comparing two datasets. The differences
 between different measures are quite subtle and are discussed in detail in
-Voas and Williamson ([2001](http://dx.doi.org/10.1080/13615930120086078)).
+Voas and Williamson (2001).
 It is important to note that all such measures, that compare aggregate
 count datasets, are *not* sufficient to ensure that the results of
 spatial microsimulation are reliable: they are methods of *internal validation*
@@ -1706,7 +1792,7 @@ deprivation: More deprived people will eat unheathily and cake is a relatively
 cheap 'comfort food'.  Assuming our simulated data is correct ---  a
 questionable assumption but lets roll with it for now --- we can explore this at
 the ward level thanks to a
-[dataset](http://www.neighbourhood.statistics.gov.uk/dissemination/instanceSelection.do?JSAllowed=true&Function=&%24ph=61&CurrentPageId=61&step=2&datasetFamilyId=266&instanceSelection=121427&Next.x=22&Next.y=13&nsjs=true&nsck=false&nssvg=false&nswid=1920)
+dataset (http://www.neighbourhood.statistics.gov.uk)
 on modelled income from neighbourhood statistics. The following code is taken
 from the 'CakeMapPlot.R' script.
 
@@ -1755,31 +1841,76 @@ Dental Health Survey.
 
 # Spatial microdata in agent-based models
 
-In some ways, we can see spatial microsimulation as a precursor to, or early
-form of, agent-based models (ABMs). Agent-based modelling depends on 1) a number
-of discrete agents, 2) with different characteristics, 3) interacting. With the
-spatial microsimulation model created in the last chapter we have 2 of these 3
-elements of an ABMs: if your aim is to use spatial microdata as an input into
-agent based models, you're half way there!
+This Chapter is work in progress.
 
-We do not have space in this tutorial to describe the transition from the
-spatial microdata we have generated into a full ABM. Suffice to mention some of
-the tools that will be useful for the job.
+```{r, echo=FALSE}
+# In some ways, we can see spatial microsimulation as a precursor to, or early
+# form of, agent-based models (ABMs). Agent-based modelling depends on 1) a number
+# of discrete agents, 2) with different characteristics, 3) interacting. With the
+# spatial microsimulation model created in the last chapter we have 2 of these 3
+# elements of an ABMs: if your aim is to use spatial microdata as an input into
+# agent based models, you're half way there!
+# 
+# We do not have space in this tutorial to describe the transition from the
+# spatial microdata we have generated into a full ABM. Suffice to mention some of
+# the tools that will be useful for the job.
+# 
+# NetLogo is an mature and widely used toolkit for agent-based models written in
+# Java.  The recently published **RNetLogo** package provides an interface between
+# R and NetLogo, allowing for model runs to be set-up and run directly from within
+# R ([Thiele, 2014](http://www.jstatsoft.org/v58/i02/paper)). Because much of the
+# time taken for agent based modelling is focussed on analysis, running NetLogo
+# from within R, where the results can be saved, is an eminently sensible choice.
+# 
+# Watch this space for more on this!
+# 
+# https://github.com/Robinlovelace/spatial-microsim-book
+```
 
-NetLogo is an mature and widely used toolkit for agent-based models written in
-Java.  The recently published **RNetLogo** package provides an interface between
-R and NetLogo, allowing for model runs to be set-up and run directly from within
-R ([Thiele, 2014](http://www.jstatsoft.org/v58/i02/paper)). Because much of the
-time taken for agent based modelling is focussed on analysis, running NetLogo
-from within R, where the results can be saved, is an eminently sensible choice.
 
-Watch this space for more on this!
+# Additional tools and techniques
 
-https://github.com/Robinlovelace/spatial-microsim-book
+This Chapter is work in progress.
+
+```{r, echo=FALSE}
+# ## R packages for spatial microsimulation
+# 
+# All the code chunks presented so far, with the exception of **ggplot2** commands
+# run in R's **base** package. This was a deliberate choice for robustness of
+# code and minimising installation dependencies over the advantages of using
+# more complex packages. There are often dozens of ways of doing one thing
+# in R, potentially via a handful of packages. The way that will work
+# on the maximum number of machines is often preferable, unless there is a
+# clear performance advantage to using additional packages. An additional reason
+# to use contributed packages sparingly (excepting the `r-recommended` packages
+# endorsed by the R core team --- see http://cran.r-project.org/bin/linux/debian/README
+# for details) is that the behaviour of package functions may change unexpectedly,
+# whereas core R functions are likely to remain stable over many decades to come.
+# 
+# With this caveat out of the way, let's begin our tour of the packages of most
+# potential use to spatial microsimulation.
+# 
+# ### **plyr** and **dplyr**
+# 
+# ### **reshape 2**
+# 
+# ### **multilevel**
+# 
+# ### **RNetLogo**
+
+## The Flexible Modelling Framework (FMF)
+
+## Allocation of home-work locations
+
+## A spatial interaction model with individual agents
+
+## Advanced applications in agent-based modelling
+```
+
 
 # Appendix: Getting up-to-speed with R {#apR}
 
-As mentioned in [Chapter 1](#Introduction), R is a general purpose programming
+As mentioned in Chapter 1, R is a general purpose programming
 language focussed on data analysis and modelling.  This small tutorial aims to
 teach the basics of R, from the perspective of spatial microsimulation research.
 It should also be useful to people with existing R skills, to re-affirm their
@@ -1787,8 +1918,7 @@ knowledge base and see how it is applicable to spatial microsimulation.
 
 R's design is built on the idea that "everything is an object and everything
 that happens is a function". It is a *vectorised*, *object orientated* and
-*functional* programming language ([Wickham,
-2014](http://www.crcpress.com/product/isbn/9781466586963)).  This means that R
+*functional* programming language (Wickham, 2014).  This means that R
 understands vector algebra, all data accessible to R resides in a number of
 named objects and that a function must be used to modify any object. We will
 look at each of these in some code below.
@@ -1870,8 +2000,8 @@ time in the long run.
 ## Subsetting in R {#subsetting}
 
 R has powerful, concise and (over time) intuitive methods for taking subsets of
-data. Using the SimpleWorld example we loaded in *[Data
-preparation](#DataPrep)*, let's explore the `ind` object in more detail, to see
+data. Using the SimpleWorld example we loaded in *Data preparation*,
+let's explore the `ind` object in more detail, to see
 how we can select the parts of an object we are most interested in. As before,
 we need to load the data:
 
@@ -1932,7 +2062,7 @@ and `FALSE` values.^[Thus, yet another way to invoke the 2nd column of `ind` is
 the following: `ind[c(F, T, F)]`! Here, `T` and `F` are shorthand for "TRUE" and
 "FALSE" respectively.] 
 
-### Further R resources {#further}
+## Further R resources {#further}
 
 The above tutorial should provide a sufficient grounding in R for beginners to
 understand the practical examples in the book.  However, R is a deep language
@@ -1947,7 +2077,7 @@ provides an introductory tutorial on handling spatial data in R, including the
 administrative zone data which often form the building blocks of spatial microsimulation
 models in R.
 - *Introduction to scientific programming and simulation using R*
-(Jones et al., [2014](http://www.crcpress.com/product/isbn/9781466569997)) is an
+(Jones et al., 2014) is an
 accessible and highly practical course that will form a solid foundation
 for a range of modelling applications, including spatial microsimulation.
 - *An Introduction to R* (Venables et al., 2014)
@@ -1956,11 +2086,11 @@ software's core developers and is available online for free.
 It is terse and covers some advanced topics, but
 provides a useful reference on the fundamentals of R as a language.
 - *Advanced R* 
-([Wickham, 2014](http://www.crcpress.com/product/isbn/9781466586963))
+(Wickham, 2014) (http://www.crcpress.com/product/isbn/9781466586963)
 delves into the heart
 of the R language. It contains many advanced topics, but the introductory
 chapters are straightforward. Browsing some of the pages on
-[Advanced R's website](http://adv-r.had.co.nz/) and
+Advanced R's website (http://adv-r.had.co.nz/) and
 trying to answer the questions that open each chapter
 provides a taster of the book and an excellent
 way of testing and improving one's understanding of the R language.
@@ -1969,7 +2099,31 @@ way of testing and improving one's understanding of the R language.
 # There are alternatives to R and in the next section we will consider a few of these.
 ```
 
-\clearpage
+# Glossary
+
+This is work in progress.
+
+```{r, echo=FALSE}
+# Any words that are highlighted in the main text can go in here
+
+# **Population base** 
+# 
+# This term is roughly equivalent to the 'target population',
+# used by statisticians to describe the population about whom they wish to
+# draw conclusions based on a 'sample population'.
+# The sample population, is the group of individuals who
+# we have individual-level data for.
+# 
+# The **population base** is the
+# complete set of individuals represented by the aggregate-level data in the
+# constraint tables. A common example is the variable "Hours worked":
+# only people aged 16 to 74 are generally thought of as working, so, if there is
+# no `NA` (no answer) category, the population base is not the same as the total
+# population of an area. A common problem faced by people using spatial microsimulation
+# methods is incompatibility between aggregate constraints that use different population
+# bases.
+```
+
 
 # References
 
@@ -1998,4 +2152,5 @@ Venables, W. W. N., Smith, D. M. D. M., Team, R. D. C., & others. (2014). An int
 Wickham, H. (2014). Advanced R. Retrieved from http://www.crcpress.com/product/isbn/9781466586963
 
 Xie, Y. (2013). Animation: an R package for creating animations and demonstrating statistical methods. Journal of Statistical Software, 53(1), 1–27.
+
 
