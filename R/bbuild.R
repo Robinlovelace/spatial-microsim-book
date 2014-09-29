@@ -4,7 +4,7 @@ b <- readLines("book-cambridge.tex") # read in tex file
 bgn <- grep("Introduction", b)[1]
 b <- b[bgn:(length(b) - 2)]
 b <- gsub("\\\\section\\{", "\\\\chapter\\{", x = b)
-b <- gsub("\\\\subsection\\{", "\\\\section\\{", x = b)
+b <- gsub("subsection\\{", "section\\{", x = b)
 
 # Take a subset of b (to test where fails occur)
 # b <- b[1:400]

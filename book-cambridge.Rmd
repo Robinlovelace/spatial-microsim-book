@@ -14,16 +14,20 @@ layout: default
 # This is an early draft of a book on spatial microsimulation, for teaching in Cambridge
 # Introduction {#Introduction}
 ```
+\clearpage 
 
 # Introduction
 
-Spatial microsimulation is statistical technique for combining individual-level
-datasets with geographical data and analysing the resulting *spatial microdata*.
-The term is little known outside the fields of human geography and regional
-science. Yet the underlying methods have the potential to be useful in a wide
-range of applications. Spatial microsimulation, as taught in this book, can be
-of use to local housing administrators, transport planners and researchers
-hammering out the details of how society could operate in a post carbon world
+Spatial microsimulation is a statistical technique for combining individual and
+geographical data. The resulting *spatial microdata* are useful in many
+situations where individual-level and geographically specific
+processes are in operation, enabling modelling and analysis on multiple levels.
+Spatial microsimulation can also be seen as an approach to better understand
+the world. The term
+is little known outside the fields of human geography and regional
+science yet its methods have the potential to be useful in a wide
+range of applications including housing, transport and
+sustainable urban planning to prepare for a post carbon world
 --- after we stop burning fossil fuels.
 
 There is growing interest in spatial microsimulation. This is due largely to its
@@ -350,11 +354,12 @@ readable by yourself and others for decades to come.
 An overview of the book
 -----------------------
 
-This book will be published in CRC Press's R
-in summer 2015. Any comments on the code, explanation or
-contents will be gratefully received.^[Feedback can be left via email to
+This document is a working draft of a book to be published in CRC Press's R
+Series in summer 2015. Any comments, relating to code, content or
+clarity of explanation will be gratefully
+received.^[Feedback can be left via email to
 r.lovelace@leeds.ac.uk or via the project's GitHub page
-(http://github.com/Robinlovelace/spatial-microsim-book).
+(http://github.com/Robinlovelace/spatial-microsim-book)].
 
 The structure is as follows:
 
@@ -375,22 +380,15 @@ from spatial microsimulation can be used as an input into more complex models
 and applications, including description of R packages for spatial
 microsimulation (in progress).
 
-The majority of this material is new and will contribute to a textbook
-on spatial microsimulation. Please contact r.lovelace@leeds.ac.uk with
-any feedback about the book. Alternatively, if you have a GitHub account,
-feel free to report any issues online and contribute directly to the project
-by editing this document's source code (https://github.com/Robinlovelace/spatial-microsim-book/blob/master/book-cambridge.Rmd).
-
 \clearpage
 
 # What is spatial microsimulation?
 
-Spatial microsimulation, as used in this book, can be defined as a
+Spatial microsimulation is a
 statistical technique for allocating individuals from a survey dataset
 to administrative zones, based on shared variables between the areal and
 individual level data.
-
-However, as with many new and infrequently used phrases, this
+As with many new and infrequently used phrases, this
 understanding is not shared by everyone. The meaning of spatial
 microsimulation varies depending on context and who you ask: to an
 economist, for example, spatial microsimulation is likely to imply
@@ -470,13 +468,33 @@ its applications and then at what it is not.
 Applications
 ----------------------------------------
 
+Spatial microsimulation has a wide variety of applications and there
+are many areas where the technique has been used.
+Some of the main areas of application have
+been health, economic policy evaluation and transport. Rather than attempt
+to provide a comprehensive account of the range of current and possible
+applications, this section describes a single study in each area to exemplify
+how spatial microsimulation is used.
+
+### Health applications
+
+An excellent example of the potential practical utility of spatial microsimulation
+is a study by Tomintz et al. (2008), which estimated the rate of smoking at the
+small area level. Smoking is a classic 'target variable' in spatial microsimulation:
+it is reported in a number of individual-level surveys but there is surprisingly
+little information about
+
+### Economic policy evaluation
+
+### Transport
+
 What spatial microsimulation is not
 -----------------------------------
 
 **Spatial microsimulation is not strictly spatial**
 
-The most surprising feature of spatial microsimulation, as used in the
-literature, is that the method is not strictly *spatial*. The only
+The most surprising feature of spatial microsimulation
+is that the method is not strictly *spatial*. The only
 reason why the method has developed this name (as opposed to 'small
 area population synthesis', for example) is that practitioners tend
 to use administrative zones, which represent geographical areas, as the
@@ -498,6 +516,20 @@ critical here and which distinguishes spatial microsimulation from other types
 of microsimulation.
 
 **Spatial microsimulation is not agent-based modelling (ABM).**
+
+Spatial microsimulation does involve the creation and analysis of individuals,
+but it does not imply any interaction between these individuals. For this, an
+agent-based model (ABM) is needed. It would be easy to assume that because
+the method contains the word 'simulation', it includes modelling of individual
+behaviours over time and space. This is not the case.
+
+Spatial microsimulation as an approach to modelling involves what-if scenarios,
+the allocation of individuals to specific zones and, in some cases, a time
+step to represent the individuals' evolution over time. Agent based modelling,
+by contrast imply some kind of interaction between the individual units.
+Spatial microsimulation is closely linked to ABM, however. As described in
+Chapter \ref{ABM}, the outputs of spatial microsimulation form an excellent
+basis for ABMs.
 
 **Spatial microsimulation does not generate new data**
 
@@ -1839,7 +1871,7 @@ Dental Health Survey.
 
 \clearpage
 
-# Spatial microdata in agent-based models
+# Spatial microdata in agent-based models #ABM
 
 This Chapter is work in progress.
 

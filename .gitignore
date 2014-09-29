@@ -20,3 +20,4 @@ frontmatter/
 *.gz
 ggmap*
 .Rproj.user
+*.cls

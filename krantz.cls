@@ -573,6 +573,9 @@
     \clearpage
   \fi
   \@mainmatterfalse}
+  
+    \def\pnumberline#1{\hb@xt@\@tempdima{#1\hfil}}
+
 \newcommand\part{\make@cornermarks%
   \if@openright
     \cleardoublepage
@@ -592,7 +595,7 @@
 \def\@part[#1]#2{%
     \ifnum \c@secnumdepth >-2\relax
       \refstepcounter{part}%
-      \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+      \addcontentsline{toc}{part}{\pnumberline{\thepart}#1}%
     \else
       \addcontentsline{toc}{part}{#1}%
     \fi
@@ -648,11 +651,12 @@
                       \gdef\chapterauthor{\@ca}%
   \gdef\endchapterauthors{\end@cas}%
                     \@afterindentfalse
-%                    \secdef\@chapter\@schapter
-                     \@ifstar{\@schapter}{\@trplarg{\@chapter}}}
+                    \secdef\@chapter\@schapter
+%                     \@ifstar{\@schapter}{\@trplarg{\@chapter}}
+                     }
 
 
-\def\@chapter[#1][#2]#3{%
+\def\@chapter[#1]#2{%
   \ifnum\c@secnumdepth>\m@ne
     \if@mainmatter
       \refstepcounter{chapter}%
@@ -667,12 +671,14 @@
   \addtocontents{lof}{\protect\addvspace{10\p@}}%
   \addtocontents{lot}{\protect\addvspace{10\p@}}%
   \if@twocolumn
-    \@topnewpage[\@makechapterhead{#3}]%
+    \@topnewpage[\@makechapterhead{#2}]%
   \else
-    \@makechapterhead{#3}%
+    \@makechapterhead{#2}%
     \@afterheading\fi
   \if@ChapterTOCs\if@filesw\immediate\openout\@chaptoc\thechapter.toc\fi\fi
 }
+
+
 \def\@makechapterhead#1{%
   {\parindent \z@ \raggedright \baselineskip \z@ \lineskip \z@ \parskip \z@
     \vbox{
@@ -701,8 +707,8 @@
                    \@topnewpage[\@makeschapterhead{#1}]%
                  \else
                    \@makeschapterhead{#1}%
-                   \addcontentsline{toc}{fm}{#1}
-                   \chaptermark{#1}
+%                   \addcontentsline{toc}{fm}{#1}
+                   \markboth{#1}{#1}
                    \@afterheading
                  \fi}
                  
@@ -717,69 +723,69 @@
     \vskip 41\p@}}%
   \def\theequation{\thechapter.\arabic{equation}}}
 
-\def\@startsection#1#2#3#4#5#6{%
-  \if@noskipsec\leavevmode\fi
-  \par
-  \@tempskipa #4\relax
-  \@afterindenttrue
-  \ifdim \@tempskipa <\z@
-    \@tempskipa -\@tempskipa \@afterindentfalse
-  \fi
-  \if@nobreak
-    \everypar{}%
-  \else
-    \addpenalty\@secpenalty\addvspace\@tempskipa
-  \fi
-  \@ifstar
-    {\@ssect{#1}{#3}{#4}{#5}{#6}}%
-    {\@trplarg{\@sect{#1}{#2}{#3}{#4}{#5}{#6}}}}
-\def\@ssect#1#2#3#4#5#6{%
-  \@tempskipa #4\relax
-  \ifdim \@tempskipa>\z@
-    \begingroup
-      #5{%
-        \@hangfrom{\hskip #2}%
-          \interlinepenalty \@M #6\@@par}%
-    \endgroup
-    \csname #1mark\endcsname{#6}%
-  \else
-    \def\@svsechd{#5{\hskip #2\relax #6}\csname #1mark\endcsname{#6}}%
-  \fi
-  \@xsect{#4}}
-\def\@sect#1#2#3#4#5#6[#7][#8]#9{%
-  \ifnum #2>\c@secnumdepth
-    \let\@svsec\@empty
-  \else
-    \refstepcounter{#1}%
-\protected@edef\@svsec{\@seccntformat{#1}\relax}%
-  \fi
-  \@tempskipa #5\relax
-  \ifdim \@tempskipa>\z@
-    \begingroup
-      #6{%
-\@hangfrom{\hskip #3\relax\@svsec}\interlinepenalty \@M %
-          #9\@@par}%
-    \endgroup
-    \csname #1mark\endcsname{%
-      #8}%
-    \addcontentsline{toc}{#1}{%
-      \ifnum #2>\c@secnumdepth \else
-        \protect\numberline{\csname the#1\endcsname}%
-      \fi
-      #7}%
-  \else
-    \def\@svsechd{%
-      #6{\hskip #3\relax
-      \@svsec #9}%
-      \csname #1mark\endcsname{%
-        #8}%
-      \addcontentsline{toc}{#1}{%
-        \ifnum #2>\c@secnumdepth \else
-          \protect\numberline{\csname the#1\endcsname}%
-        \fi
-        #7}}%
-  \fi
-  \@xsect{#5}}
+%%%\def\@startsection#1#2#3#4#5#6{%
+%%%  \if@noskipsec\leavevmode\fi
+%%%  \par
+%%%  \@tempskipa #4\relax
+%%%  \@afterindenttrue
+%%%  \ifdim \@tempskipa <\z@
+%%%    \@tempskipa -\@tempskipa \@afterindentfalse
+%%%  \fi
+%%%  \if@nobreak
+%%%    \everypar{}%
+%%%  \else
+%%%    \addpenalty\@secpenalty\addvspace\@tempskipa
+%%%  \fi
+%%%  \@ifstar
+%%%    {\@ssect{#1}{#3}{#4}{#5}{#6}}%
+%%%    {\@trplarg{\@sect{#1}{#2}{#3}{#4}{#5}{#6}}}}
+%%%\def\@ssect#1#2#3#4#5#6{%
+%%%  \@tempskipa #4\relax
+%%%  \ifdim \@tempskipa>\z@
+%%%    \begingroup
+%%%      #5{%
+%%%        \@hangfrom{\hskip #2}%
+%%%          \interlinepenalty \@M #6\@@par}%
+%%%    \endgroup
+%%%    \csname #1mark\endcsname{#6}%
+%%%  \else
+%%%    \def\@svsechd{#5{\hskip #2\relax #6}\csname #1mark\endcsname{#6}}%
+%%%  \fi
+%%%  \@xsect{#4}}
+%%%\def\@sect#1#2#3#4#5#6[#7][#8]#9{%
+%%%  \ifnum #2>\c@secnumdepth
+%%%    \let\@svsec\@empty
+%%%  \else
+%%%    \refstepcounter{#1}%
+%%%\protected@edef\@svsec{\@seccntformat{#1}\relax}%
+%%%  \fi
+%%%  \@tempskipa #5\relax
+%%%  \ifdim \@tempskipa>\z@
+%%%    \begingroup
+%%%      #6{%
+%%%\@hangfrom{\hskip #3\relax\@svsec}\interlinepenalty \@M %
+%%%          #9\@@par}%
+%%%    \endgroup
+%%%    \csname #1mark\endcsname{%
+%%%      #8}%
+%%%    \addcontentsline{toc}{#1}{%
+%%%      \ifnum #2>\c@secnumdepth \else
+%%%        \protect\numberline{\csname the#1\endcsname}%
+%%%      \fi
+%%%      #7}%
+%%%  \else
+%%%    \def\@svsechd{%
+%%%      #6{\hskip #3\relax
+%%%      \@svsec #9}%
+%%%      \csname #1mark\endcsname{%
+%%%        #8}%
+%%%      \addcontentsline{toc}{#1}{%
+%%%        \ifnum #2>\c@secnumdepth \else
+%%%          \protect\numberline{\csname the#1\endcsname}%
+%%%        \fi
+%%%        #7}}%
+%%%  \fi
+%%%  \@xsect{#5}}
 
 
 %%Change mydotted also
@@ -1055,7 +1061,7 @@
 \def\draw@part#1#2{%
   \addpenalty{-\@highpenalty}%
   \vskip1em plus\p@
-  \@tempdima1.5em
+  \@tempdima2.5em
   \begingroup
     \parindent\z@\rightskip\@pnumwidth
     \parfillskip-\rightskip
