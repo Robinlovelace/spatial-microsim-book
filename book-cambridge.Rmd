@@ -127,7 +127,7 @@ experiment".
 # 153)](http://www.jstor.org/stable/10.2307/490448)
 ```
 
-Software decisions have a major impact on flexibility, efficiency and
+Software decisions have a major impact on the flexibility, efficiency and
 reproducibility of research.  Nearly three decades ago
 Hölm (1987, p. 153) observed that "little
 attention is paid to the choice of programming language used" for
@@ -137,7 +137,7 @@ microsimulation packages.^[The Flexible Modelling Framework
 (FMF) (https://github.com/MassAtLeeds/FMF) is a notable exception written in
 Java that can perform various modelling tasks.] 
 Factors that should influence software selection including cost, maturity,
-features and performance. Perhaps most important for busy researchers is
+features and performance. Perhaps most important for busy researchers are the
 ease and speed of learning,
 writing, adapting and communicating the analysis. R excels in
 each of these areas, hence the choice of R.
@@ -171,7 +171,7 @@ need to type 20 characters in Python: `float(sum(x))/len(x)`.^[The `float`
 function is needed in case whole numbers are used. This can be reduced to 13
 characters with the excellent **NumPy** package: `import numpy; x = [1,3,9];
 numpy.mean(x)` would generate the desired result. The R equivalent is `x =
-c(1,3,9); mean(x)`.] In pure R 7 characters are sufficient: `mean(x)`. This
+c(1,3,9); mean(x)`.] In pure R just 7 characters are sufficient: `mean(x)`. This
 terseness and range of pre-made functions is useful for ease of
 reading and writing spatial microsimulation models and analysing the results.
 
@@ -330,7 +330,7 @@ examples easier to follow:
 
 - In-line code is provided in `monospace` font to show it's something the
 computer understands.
-- Larger blocks of codes, referred to as *listings*, are provided on separate lines
+- Larger blocks of code, referred to as *listings*, are provided on separate lines
 and have coloured *syntax highlighting* to distinguish between values, names and functions:
 
 ```{r}
@@ -348,7 +348,7 @@ sqrt(x) # find the square root of x
 There are many ways to write R code that will generate the same results.
 However, to ensure clarity and consistency, a single style, advocated in Hadley
 Wickham's *Advanced R* book (http://r-pkgs.had.co.nz/style.html), is followed
-throughout.  Consistent style and plentiful comments will make your code
+throughout this coursebook.  Consistent style and plentiful comments will make your code
 readable by yourself and others for decades to come.
 
 An overview of the book
@@ -376,8 +376,8 @@ and more involved example using real data.
 - *Spatial microdata in agent-based models* describes how the output
 from spatial microsimulation can be used as an input into more complex models
 (in progress).
-- *Additional tools and techniques* introduces to further methods
-and applications, including description of R packages for spatial
+- *Additional tools and techniques* introduces further methods
+and applications, including a description of R packages for spatial
 microsimulation (in progress).
 
 \clearpage
@@ -583,8 +583,7 @@ based on a microdataset of only 5 individuals and two constraint variables.
 
 To see the link between the methodology introduced later in the
 book (see Chapter \ref{Smsim1}) and the various real-world applications, let's take a look at a
-simple example of the kind of situation where spatial microsimulation is useful,
-to help bridge the gap between method and application.
+simple example of the kind of situation where spatial microsimulation is useful.
 
 We'll use an imaginary world called SimpleWorld, consisting of only 3 zones that
 cover the entirety of the SimpleWorld sphere (Figure 2). 
@@ -623,7 +622,7 @@ ggplot(pol1) + geom_path(aes(long, lat, group, fill = group)) +
 
 This is a small world, 
 containing 12, 10 and 11 individuals of its alien inhabitants
-in each zones 1 to 3, respectively: a planetary population of 33.
+in zones 1 to 3, respectively: a planetary population of 33.
 From the SimpleWorld Census, we know
 how many young (under 49 space years old) and old (over 50)
 residents live in each
@@ -693,8 +692,7 @@ form from the aggregate-level data presented in the above tables.
 This *microdata* survey contains one row per individual, in contrast
 to the *aggregate constraints*, which have one row per zone.
 This individual level data includes exact age
-(not just the crude and unflattering categories
-of "young" and "old"), as well as income:
+(as opposed to the broad categories used in the zone data), as well as income:
 
 ```{r, echo=FALSE}
 # ind <- read.csv("data/SimpleWorld/ind.csv")
@@ -827,7 +825,7 @@ example also flags some limitations of the methodology: spatial microsimulation
 will only yield useful results if the input microdataset is representative of
 the population as a whole, and for each region. If the relationship between age
 sex is markedly different in one zone compared with what we assume to be the
-global averages of the input data, for example, our estimates could be way-out.
+global averages of the input data, for example, our estimates could be way out.
 Using such a small sample, one could rightly argue, how could the diversity of
 33 inhabitants of SimpleWorld be represented by our simulated spatial microdata?
 This question is equally applicable to larger simulations. These issues are
@@ -925,7 +923,7 @@ aggregate level tables. We assume that you have already checked this. The
 checking process for the datasets used in this chapter is simple: both aggregate
 and individual-level tables contain age and sex, so they can by combined. Let us
 proceed to load some data saved on our hard disc into R's *environment*, where
-it is available in RAM.
+it is available in memory.
 
 ## Loading input data {#Loading} 
 
@@ -969,7 +967,7 @@ there are only 2 young people (under 49) in the zone.
 
 Even at this stage there is a potential for errors to be introduced.  A classic
 mistake with areal data is that the order in which zones are loaded changes from
-one table to the next. The constraint data should come with some kind of *zone
+one table to the next. The constraint data should therefore come with some kind of *zone
 id*, an identifying code that will eventually allow the attribute data to be
 combined with polygon shapes in GIS software.
 
@@ -997,7 +995,7 @@ rowSums(con_age) == rowSums(con_sex)
 The results of the previous operations are encouraging. The total population is
 the same for each constraint overall and for each area (row) for both
 constraints.  If the total populations between constraint variables do not match
-(e.g. because the sample population is different) this is problematic.
+(e.g. because the population bases are different) this is problematic.
 Appropriate steps to normalise the errant constraint variables are described in
 the CakeMap Chapter (\ref{CakeMap}).
 
@@ -1007,8 +1005,8 @@ In the above code, `data.frame` objects containing precisely the information
 required for the next stage were loaded.  More often, superfluous information
 will need to be removed from the data and subsets taken. It is worth removing
 superfluous variables earl, to avoid over-complicating and slowing-down the
-analysis.  If `ind` had 100 variables of which only the 1st, 3rd and 4th were of
-interest, for example, the following command could be used to update the object,
+analysis.  For example, if `ind` had 100 variables of which only the 1st, 3rd and 4th were of
+interest (in that they match the constraint variables), the following command could be used to update the object,
 retaining only the relevant variables: `ind <- ind[, c(1, 3, 4)]`.
 Alternatively, `ind$age <- NULL` removes the age variable.
 
@@ -1022,7 +1020,7 @@ Section \ref{subsetting}.
 
 Before transforming the individual-level dataset `ind` into a form that can be
 compared with the aggregate-level constraints, we must ensure that each dataset
-contains the same information. It is more challenging to re-categorise
+contains the same information. It can be more challenging to re-categorise
 individual-level variables than to re-name or combine aggregate-level variables,
 so the former should usually be set first.  An obvious difference between the
 individual and aggregate versions of the `age` variable is that the former is of
@@ -1094,9 +1092,8 @@ dim(cons)
 ```
 
 The above code confirms this: we have one individual-level dataset comprising 5
-individuals with 3 variables (2 of which are constraint variables) and one
-aggregate-level constraint table called `cons`.
-To re-cap, the constraints represent 3 zones
+individuals with 3 variables (2 of which are constraint variables and the other an ID) and one
+aggregate-level constraint table called `cons`, representing 3 zones
 with count data for 4 categories across 2 variables.
 
 The dimensions of at least one of these objects must change
@@ -1193,7 +1190,7 @@ much easier.
 How representative each individual is of each zone is determined by their
 *weight* for that zone. If we have `nrow(cons)` zones and `nrow(ind)`
 individuals (3 and 5, respectively, in SimpleWorld) we will create
-15 weights. Let us create an empty weight matrix, ready to be filled
+15 weights. To start, we create an empty weight matrix, ready to be filled
 with numbers calculated through the IPF procedure:
 
 ```{r}
@@ -1274,8 +1271,8 @@ ind_catt <- t(ind_cat) # save transposed version of ind_cat
 ```
 
 Another object that can be saved prior to running `ipfp` on all zones
-(the rows of `cons`) is `rep(1, nrow(ind))`, simply a series of ones.
-We will call this object `x0` as it's argument name representing
+(the rows of `cons`) is `rep(1, nrow(ind))`, simply a series of ones - one for each individual.
+We will call this object `x0` as its argument name representing
 the starting point of the weight estimates in `ipfp`:
 
 ```{r}
@@ -1299,7 +1296,7 @@ less clear to R beginners), we can use R's internal
 `for` loop, `apply`:
 
 ```{r}
-weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
+weights <- apply(cons, MARGIN=1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
 ```
 
 In the above code R iterates through each row
@@ -1323,18 +1320,18 @@ tested in 'parallel-ipfp.R'.
 
 ## Combinatorial optimisation
 
-Combinatorial optimisation is an alternite to IPF for allocating individuals
+Combinatorial optimisation is an alternative to IPF for allocating individuals
 to zones. This strategy is *probabilistic*
 and results in integer weights, as opposed to the fractional weights
 generated by IPF. Combinatorial optimisation is likely to be more appropriate
 for applications where input individual microdatasets are very large:
-speed benefits of using the deterministic IPF algorithm shrink as the size of
+the speed benefits of using the deterministic IPF algorithm shrink as the size of
 the survey dataset increases.
 
 We will not cover combinatorial optimisation. Harland
 (2013) provides a practical tutorial
 introducing the subject based on the Flexible Modelling Framework (FMF)
-Java program. It is possible to generate spatial microdata using IPF, however,
+Java program. It is possible to generate integer spatial microdata using IPF, however,
 using a technique we refer to imaginatively as integerisation.
 This is the topic of the next section.
 
@@ -1408,9 +1405,9 @@ once every $81$ runs for $w_2$, the same probability as for all other 81 ($3^4$)
 permutations.
 
 To overcome this issue Lovelace and Ballas (2012) developed a method which
-ensures that any individual with a weight above 1 would be sampled at least,
+ensures that any individual with a weight above 1 would be sampled at least once,
 making the result $(1, 1, 1, 1)$ impossible in both cases.  This method is
-*truncate, replicate, sample* (TRS) integerisations:
+*truncate, replicate, sample* (TRS) integerisation:
 
 ```{r}
 int_trs <- function(x){
@@ -1441,7 +1438,7 @@ higher. Thus we use the TRS methodology, implemented through the function
 `int_trs`, for integerising the weights generated by IPF throughout the majority
 of this book.
 
-To gain an insight into the importance of integerisation, let's use TRS to
+Let's use TRS to
 generate spatial microdata for SimpleWorld.  Remember, we already have generated
 the weight matrix `weights`.  The only challenge is to save the vector of
 sampled individual id numbers, alongside the zone number, into a single object
