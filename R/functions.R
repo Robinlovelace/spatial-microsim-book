@@ -31,3 +31,14 @@ tae <- function(observed, simulated){
   sum(abs(obs_vec - sim_vec))
 }
 
+# Number of times each unique matrix row appears
+umat_count <- function(x) {
+  xp <- apply(x, 1, paste0, collapse = "") # "pasted" version of constraints
+  freq <- table(xp) # frequency of occurence of each individual
+  xu <- unique(x) # save only unique individuals
+  rns <- as.integer(row.names(xu)) # save the row names of unique values of ind
+  xpu <- xp[rns]
+  o <- order(xpu, decreasing = TRUE) # the order of the output (to rectify table)
+  cbind(xu, data.frame(ind_num = freq[o], rns = rns)) # output
+}
+

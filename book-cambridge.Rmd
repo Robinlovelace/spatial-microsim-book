@@ -10,10 +10,6 @@ output:
 layout: default
 ---
 
-```{r, echo=FALSE}
-# This is an early draft of a book on spatial microsimulation, for teaching in Cambridge
-# Introduction {#Introduction}
-```
 \clearpage 
 
 # Introduction
@@ -1258,9 +1254,17 @@ in `ipfp`, as illustrated below (only the first line of R output is shown):
 ipfp(cons[1,], t(ind_cat), rep(1, nrow(ind)), maxit = 20, verbose = T)
 ```
 
+```{r, echo}
+ipfp(cons[1,], t(ind_cat), rep(1, nrow(ind)), maxit = 20, verbose = T)[[1]][c(1:3, 9, 10, 11),]
+```
+
 ```
 ## iteration 0:   0.141421
 ## iteration 1:	  0.00367328
+## iteration 2:  9.54727e-05
+## ...
+## iteration 9:  4.96507e-16
+## iteration 10:	4.96507e-16
 ```
 
 Notice also that a *transposed* (via the `t()` function) version of the individual-level
@@ -1274,7 +1278,7 @@ ind_catt <- t(ind_cat) # save transposed version of ind_cat
 ```
 
 Another object that can be saved prior to running `ipfp` on all zones
-(the rows of `cons`) is `rep(1, nrow(ind))`, simply a series of ones.
+(the rows of `cons`) is `rep(1, nrow(ind))`. This simply a series of ones.
 We will call this object `x0` as it's argument name representing
 the starting point of the weight estimates in `ipfp`:
 
@@ -1284,11 +1288,13 @@ x0 <- rep(1, nrow(ind)) # save the initial vector
 
 To extend this process to all three zones we can wrap the line beginning
 `ipfp(...)` inside a `for` loop, saving the results each time into the
-weight variable we created earlier:
+weight variable we created earlier. (The reason for setting `maxit` to 3
+and creating the object `weights_3` will become clear in the next section).
 
 ```{r}
+weights_maxit_3 <- weights # create a copy of the weights object
 for(i in 1:ncol(weights)){
-  weights[,i] <- ipfp(cons[i,], ind_catt, x0, maxit = 20)
+  weights_maxit_3[,i] <- ipfp(cons[i,], ind_catt, x0, maxit = 3)
 }
 ```
 
@@ -1320,6 +1326,46 @@ tested in 'parallel-ipfp.R'.
 ```{r, echo=FALSE, eval=FALSE}
 # Also discuss what happens when you get a huge dataset, from Stephen's dataset
 ```
+
+It is important to check that the weights obtained from IPF make sense.
+To do this, we multiply the weights of each individual by rows of
+the `ind_cat` matrix, for each zone. Again, this can be done using
+a for loop, but the apply method is more concise:
+
+```{r}
+ind_agg <- t(apply(weights, 2, FUN = function(x) colSums(x * ind_cat)))
+```
+
+As a preliminary test of fit,
+it makes sense to check a sample of the aggregated weighted data
+(`ind_agg`) against the same sample of the constraints.
+Let's look at the first two zones (rows) for the first
+three constraints:
+
+```{r}
+ind_agg[1:2, 1:3]
+cons[1:2, 1:3]
+```
+
+This is a good result: the constraints perfectly match the results
+generated using ipf, at least for the sample. To check that this
+is due to the `ipfp` algorithm improving the weights with each iteration,
+let us analyse the aggregate results generated from the alternative
+set of weights, generated with only 3 iterations of IPF:
+
+```{r}
+t(apply(weights_maxit_3, 2, FUN = function(x) colSums(x * ind_cat)))[1:2, 1:3]
+```
+
+Clearly the final weights after 3 iterations of IPF represent the constraint
+variables well, but do not match perfectly. This shows the importance of
+considering number of iterations in the reweighting stage --- too many iterations
+can be wasteful, too few may result in poor results. To reiterate,
+20 iterations of IPF should be sufficient in most cases for the results
+to converge towards their final level of fit. 
+More sophisticated ways of evaluating model fit are
+presented in Section \ref{svalidation}.
+
 
 ## Combinatorial optimisation
 
