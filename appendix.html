@@ -62,7 +62,7 @@
           <h1 id="apR">Appendix: Getting up-to-speed with R</h1>
 <p>As mentioned in Chapter 1, R is a general purpose programming language focussed on data analysis and modelling. This small tutorial aims to teach the basics of R, from the perspective of spatial microsimulation research. It should also be useful to people with existing R skills, to re-affirm their knowledge base and see how it is applicable to spatial microsimulation.</p>
 <p>R’s design is built on the idea that “everything is an object and everything that happens is a function”. It is a <em>vectorised</em>, <em>object orientated</em> and <em>functional</em> programming language (Wickham, 2014). This means that R understands vector algebra, all data accessible to R resides in a number of named objects and that a function must be used to modify any object. We will look at each of these in some code below.</p>
-<h2>R understands vector algebra</h2>
+<h2 id="vector-alg">R understands vector algebra</h2>
 <p>A vector is simply an ordered list of numbers (Beezer, 2008). Imagine two vectors, each consisting of 3 elements:</p>
 <p><br /><span class="math"><em>a</em> = (1, 2, 3); <em>b</em> = (9, 8, 6)</span><br /></p>
 <p>To say that R understands vector algebra is to say that it knows how to handle vectors in the same way a mathematician does:</p>
@@ -78,7 +78,7 @@ b &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">9</sp
 a +<span class="st"> </span>b
 <span class="co">#&gt; [1] 10 10  9</span></code></pre>
 <p>This conciseness is clearly very useful in spatial microsimulation, as numeric variables of the same length are common (e.g. the attributes of individuals in a zone) and can be acted on with a minimum of effort.</p>
-<h2>R is object orientated</h2>
+<h2>R is object orientated {R-object}</h2>
 <p>In R, everything that exists is an object with a name and a class. This is useful, because R’s functions know automatically how to behave differently on different objects depending on their class.</p>
 <p>To illustrate the point, let’s create two objects, each with a different class and see how the function <code>summarise</code> behaves differently, depending on the type. This behavior is <em>polymorphism</em> (Matloff, 2011):</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a character and a vector object</span>
