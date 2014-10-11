@@ -22,3 +22,4 @@ ggmap*
 *.cls
 *unnamed*
 book/
+_site/
