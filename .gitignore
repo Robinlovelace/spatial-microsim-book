@@ -7,6 +7,7 @@ frontmatter/
 *.aux
 *.orig
 *.docx
+
 .Rproj.user
 *.pdf
 .history

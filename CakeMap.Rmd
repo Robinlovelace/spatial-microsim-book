@@ -49,7 +49,7 @@ Note that this script makes frequent reference to files contained
 in the folder 'data/CakeMap', where input data and processing scripts
 for the project are stored.
 
-## Preparing the input data
+## Preparing the input data {#CakePrep}
 
 Often spatial microsimulation is presented in a way that suggests the data
 arrived in a near perfect state, ready to be inserted directly into the model.
@@ -132,7 +132,7 @@ take some time exploring the input. Only when these
 datasets make sense (a pen and paper can help here, as well as R!) is it time to
 generate the spatial microdata.
 
-## Performing IPF on CakeMap data
+## Performing IPF on CakeMap data {CakeIPF}
 
 The `ipfp` reweighting strategy is concise, generalisable and computationally
 efficient. On a modern laptop, the `ipfp` method was found to be *almost 40
@@ -169,7 +169,7 @@ This demonstrates that the process has worked with an *r* value above 0.99:
 cor(as.numeric(cons), as.numeric(ind_agg))
 ```
 
-## Integerisation
+## Integerisation {CakeINT}
 
 As before, weights of the IPF procedure are fractional, so must be *integerised*
 to create whole individuals. The code presented in chapter 4 requires little
@@ -288,7 +288,7 @@ therefore a tricky topic, something not covered here but which is discussed in
 Edwards et al. (2009). For more on this and  for (an albeit unreliable)
 comparison between estimated cake consumption and external income estimates.
 
-## Visualisations
+## Visualisations {#CakeVis}
 
 Visualisation is an important part of communicating quantitative
 data, especially so when the datasets are large and complex so not
@@ -317,7 +317,7 @@ img <- readPNG("figures/CakeMap-lores.png")
 grid.raster(img)
 ```
 
-## Analysis and interpretation
+## Analysis and interpretation {#CakeAnalysis}
 
 Once a spatial microdataset has been generated that we are happy with, we will
 probably want to analyse it further.  This means exploring it --- its main

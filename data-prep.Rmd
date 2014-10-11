@@ -169,7 +169,7 @@ constraints.  If the total populations between constraint variables do not match
 Appropriate steps to normalise the errant constraint variables are described in
 the CakeMap Chapter (\ref{CakeMap}).
 
-## Subsetting to remove excess information
+## Subsetting to remove excess information {#subsetting-prep}
 
 In the above code, `data.frame` objects containing precisely the information
 required for the next stage were loaded.  More often, superfluous information
@@ -186,7 +186,7 @@ is common, for example, to take a subset of the working *population base*: those
 aged 16 and 74 in full-time employment. Methods for doing this are provided in
 Section \ref{subsetting}.
 
-## Re-cateorising individual-level variables
+## Re-cateorising individual-level variables {#re-categorise}
 
 Before transforming the individual-level dataset `ind` into a form that can be
 compared with the aggregate-level constraints, we must ensure that each dataset
@@ -218,7 +218,7 @@ we can do this by adding another argument to the `cut` function:
 Users should be ware that `cut` results in a vector of class *factor*, which
 can cause problems later down the line.
 
-## Matching individual and aggregate level data names
+## Matching individual and aggregate level data names {#matching}
 
 Before combining the newly recategorised individual-level data with the
 aggregate constraints, it is useful to for the category labels to match up.
@@ -246,7 +246,7 @@ cons <- cbind(con_age, con_sex)
 cons[1:2, ] # display the constraints for the first two zones
 ```
 
-## 'Flattening' the individual level data
+## 'Flattening' the individual level data {#flattening}
 
 We have made steps towards combining the individual and aggregate datasets and
 now only need to deal with 2 objects (`ind` and `cons`) which now share

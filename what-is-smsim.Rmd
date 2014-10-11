@@ -3,7 +3,7 @@ title: "What is spatial microsimulation?"
 layout: default
 ---
 
-# What is spatial microsimulation?
+# What is spatial microsimulation? {#what-is}
 
 Spatial microsimulation is a
 statistical technique for allocating individuals from a survey dataset
@@ -20,7 +20,7 @@ the transport network. To your next door neighbour it may mean you have
 started speaking gobbledygook! Hence the need to consider what spatial
 microsimulation is, and what it is not, at the outset.
 
-## Terminology
+## Terminology {#terminology}
 
 Delving a little into the etymology and history of the term reveals the
 reasons behind this duplicity of meaning and highlights the importance
@@ -86,8 +86,7 @@ is provided at the end. For now, to
 help answer what spatial microsimulation is we will look at 
 its applications and then at what it is not.
 
-Applications
-----------------------------------------
+## Applications {#applications}
 
 Spatial microsimulation has a wide variety of applications and there
 are many areas where the technique has been used.
@@ -109,8 +108,7 @@ little information about
 
 ### Transport
 
-What spatial microsimulation is not
------------------------------------
+## What spatial microsimulation is not {#is-not}
 
 **Spatial microsimulation is not strictly spatial**
 
