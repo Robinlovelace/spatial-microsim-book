@@ -1,0 +1,331 @@
+---
+title: "Preparing input data"
+layout: default
+---
+
+# Preparing input data {#DataPrep}
+
+```{r, echo=FALSE}
+# Applications of spatial microsimulation - to be completed!
+
+## Updating cross-tabulated census data
+
+## Economic forecasting
+
+## Small area estimation
+
+## Transport modelling
+
+## Dynamic spatial microsimulation
+
+## An input into agent based models
+```
+
+
+```{r, echo=FALSE}
+# With the foundations built in the previous chapters now (hopefully) firmly in-place,
+# we progress in this chapter to actually *run* a spatial microsimulation model
+# This is designed to form the foundation of a spatial microsimulation course.
+```
+
+
+```{r, echo=FALSE}
+# This next chapter is where people get their hands dirty for the first time -
+# could be the beginning of part 2 if the book's divided into parts. 
+```
+
+This chapter focuses on the input datasets needed for spatial microsimulation.
+Correctly loading, manipulating and assessing these datasets will be critical to
+the performance of your models and the ease of modifying them to include new
+inputs.  Fortunately R is an accomplished tool for data cleaning (Kabacoff,
+2011) (http://www.manning.com/kabacoff/), as we shall see.  This chapter also
+provides the basis for chapter we perform spatial microsimulation.
+
+As with most spatial microsimulation models, this example consists of a
+non-geographical individual-level dataset and a series of geographical zones.
+The data used in this chapter (and the data for all other chapters) can be
+downloaded from the book's GitHub repository (https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
+'Download ZIP' button to the right of the page and extract the folder into a
+sensible place on your computer, such as the Desktop.  From there, you will want
+to run R from the project's root directory: open the folder in a file browser
+and double click on 'spatial-microsim-book.Rproj'.  This should cause RStudio to
+be opened at this location, with all the input data files easily accessible to R
+through *relative file paths*.
+
+To ease reproducibility of the analysis when working with real data, it is
+recommended that the process begins with a copy of the *raw* dataset on one's
+hard disc.  Rather than modifying this file, modified ('cleaned') versions
+should be saved as separate files. This ensures that after any mistakes, one can
+always recover information that otherwise could have been lost and makes the
+project fully reproducible. In this chapter, however, a relatively clean and
+very tiny dataset from SimpleWorld is used.  We will see in Chapter
+\ref{CakeMap} how to deal with larger and more messy data.  Here the focus is on
+the principles.
+
+```{r, echo=FALSE}
+# It sounds trivial, but the *precise* origin of the input data
+# should be described. Comments in code that loads the data (and resulting publications),
+# allows you or others to recall the raw information. # going on a little -> rm
+# Show directory structure plot from Gillespie here
+```
+
+The process of loading, checking and preparing the input datasets for spatial
+microsimulation is generally a linear process, encapsulating the following
+stages:
+
+1. Load original data 
+2. Remove excess information
+3. Re-categorise individual-level data
+4. Set variable and value names
+5. 'Flatten' individual-level data 
+
+'Stripping down' the datasets so that they only contain the bare essential
+information will enable you to focus solely on the data that you are interested
+in. This is not covered in this chapter because the input datasets are already
+extremely bare and because the process should be obvious.
+
+We start with the individual-level dataset for a reason: this dataset is often
+more problematic to format than the constraint variables, so it is worth
+becoming acquainted with it at the outset. Of course, it is possible that the
+data you have are not suitable for spatial microsimulation because they lack
+sufficient constraint variables with shared categories in both individual and
+aggregate level tables. We assume that you have already checked this. The
+checking process for the datasets used in this chapter is simple: both aggregate
+and individual-level tables contain age and sex, so they can by combined. Let us
+proceed to load some data saved on our hard disc into R's *environment*, where
+it is available in memory.
+
+## Loading input data {#Loading} 
+
+Real-world individual-level data may be provided in a variety of formats
+but ultimately needs to be loaded into R as a *data frame* object.
+
+In this case the dataset is loaded from a `.csv` file:
+
+```{r}
+# Load the individual-level data
+ind <- read.csv("data/SimpleWorld/ind.csv") 
+class(ind) # verify the data type of the object
+ind # print the individual-level data
+```
+
+```{r, echo=FALSE}
+### Loading and checking aggregate-level data
+```
+
+Constraint data are usually made available one variable at a time,
+so these are read in one file at a time:
+
+```{r}
+con_age <- read.csv("data/SimpleWorld/age.csv")
+con_sex <- read.csv("data/SimpleWorld/sex.csv")
+```
+
+We have loaded the aggregate constraints. As with the individual level data, is
+worth inspecting each object to ensure that they make sense before continuing.
+Taking a look at `age_con`, we can see that this data set consists of 2
+variables for 3 zones:
+
+```{r}
+con_age
+```
+
+This tells us that there 12, 10 and 11 individuals in zones 1, 2 and 3,
+respectively, with different proportions of young and old people. Zone 2, for
+example, is heavily dominated by older people: there are 8 people over 50 whilst
+there are only 2 young people (under 49) in the zone.
+
+Even at this stage there is a potential for errors to be introduced.  A classic
+mistake with areal data is that the order in which zones are loaded changes from
+one table to the next. The constraint data should therefore come with some kind of *zone
+id*, an identifying code that will eventually allow the attribute data to be
+combined with polygon shapes in GIS software.
+
+```{r, echo=FALSE}
+# Make the constraint data contain an 'id' column, possibly scrambled 
+```
+
+If we're sure that the row numbers match between the age and sex tables (we are
+sure in this case), the next important test is to check that the total
+populations are equal for both sets of variables.  Ideally both the *total*
+study area populations and *row totals* should match. If the *row totals* match,
+this is a very good sign that not only confirms that the zones are listed in the
+same order, but also that each variable is sampling from the same *population
+base*. These tests are conducted in the following lines of code:
+
+```{r}
+sum(con_age)
+sum(con_sex) 
+
+rowSums(con_age)
+rowSums(con_sex)
+rowSums(con_age) == rowSums(con_sex)
+```
+
+The results of the previous operations are encouraging. The total population is
+the same for each constraint overall and for each area (row) for both
+constraints.  If the total populations between constraint variables do not match
+(e.g. because the population bases are different) this is problematic.
+Appropriate steps to normalise the errant constraint variables are described in
+the CakeMap Chapter (\ref{CakeMap}).
+
+## Subsetting to remove excess information
+
+In the above code, `data.frame` objects containing precisely the information
+required for the next stage were loaded.  More often, superfluous information
+will need to be removed from the data and subsets taken. It is worth removing
+superfluous variables earl, to avoid over-complicating and slowing-down the
+analysis.  For example, if `ind` had 100 variables of which only the 1st, 3rd and 4th were of
+interest (in that they match the constraint variables), the following command could be used to update the object. Only the relevant variables corresponding to
+columns (1, 3 and 4 in this case) are retained: `ind <- ind[, c(1, 3, 4)]`.
+Alternatively, `ind$age <- NULL` removes the age variable.
+
+Although `ind` is small and simple it will behave in the same way as a much
+larger dataset, providing opportunities for testing subsetting syntax in R.  It
+is common, for example, to take a subset of the working *population base*: those
+aged 16 and 74 in full-time employment. Methods for doing this are provided in
+Section \ref{subsetting}.
+
+## Re-cateorising individual-level variables
+
+Before transforming the individual-level dataset `ind` into a form that can be
+compared with the aggregate-level constraints, we must ensure that each dataset
+contains the same information. It can be more challenging to re-categorise
+individual-level variables than to re-name or combine aggregate-level variables,
+so the former should usually be set first.  An obvious difference between the
+individual and aggregate versions of the `age` variable is that the former is of
+type `integer` whereas the latter is composed of discrete bins: 0 to 49 and 50+.
+We can categories the variable into these bins using `cut()`:^[The combination
+of curved and square brackets in the output may seem strange but this is in fact
+an International Standard - see
+http://en.wikipedia.org/wiki/ISO_31-11 for more
+information.]
+
+```{r}
+# Test binning the age variable
+cut(ind$age, breaks = c(0, 49, 120))
+```
+
+If we wanted to change these category labels to something more readable,
+we can do this by adding another argument to the `cut` function:
+
+```{r}
+# Convert age into a categorical variable with user-chosen labels
+(ind$age <- cut(ind$age, breaks = c(0, 49, 120),
+  labels = c("a0_49", "a50+")))
+```
+
+Users should be ware that `cut` results in a vector of class *factor*, which
+can cause problems later down the line.
+
+## Matching individual and aggregate level data names
+
+Before combining the newly recategorised individual-level data with the
+aggregate constraints, it is useful to for the category labels to match up.
+This may seem trivial, but will save time in the long run. Here is the problem:
+
+```{r}
+levels(ind$age)
+names(con_age)
+```
+
+Note that the names are subtly different. To solve this issue, we can
+simply change the names of the constraint variable, assuming they
+are in the correct order:
+
+```{r}
+names(con_age) <- levels(ind$age) # rename aggregate variables
+```
+
+With both the age and sex constraint variable names now matching the
+category labels of the individual-level data, we can proceed to create a
+single constraint object we label `cons`. We do this with `cbind()`:
+
+```{r}
+cons <- cbind(con_age, con_sex)
+cons[1:2, ] # display the constraints for the first two zones
+```
+
+## 'Flattening' the individual level data
+
+We have made steps towards combining the individual and aggregate datasets and
+now only need to deal with 2 objects (`ind` and `cons`) which now share
+category and variable names.
+However, these datasets cannot possibly be compared because they are of different dimensions:
+
+```{r}
+dim(ind)
+dim(cons)
+```
+
+The above code confirms this: we have one individual-level dataset comprising 5
+individuals with 3 variables (2 of which are constraint variables and the other an ID) and one
+aggregate-level constraint table called `cons`, representing 3 zones
+with count data for 4 categories across 2 variables.
+
+The dimensions of at least one of these objects must change
+before they can be easily compared. To do this
+we 'flatten' the individual-level dataset;
+this means increasing its width
+to match the constraint data.
+This is a two-stage process. First,
+`model.matrix()` is used to expand each variable into the number of columns as there are categories in each and assign. 
+Knoblauch and Maloney (2012) provide a lengthier description of this
+which is available online, for free.
+
+Second, `colSums()` is used to take the sum of each column.^[As we shall see in Section \ref{ipfp},
+only the former of these is needed if we use the
+**ipfp** package for re-weighting the data, but both are presented to enable
+a better understanding of how IPF works.]
+
+```{r}
+cat_age <- model.matrix(~ ind$age - 1)
+cat_sex <- model.matrix(~ ind$sex - 1)[, c(2, 1)]
+
+ # Combine age and sex category columns into single data frame
+(ind_cat <- cbind(cat_age, cat_sex)) # brackets -> print result
+```
+
+Note that second call to `model.matrix` is suffixed with `[, c(2, 1)]`.
+This is to swap the order of the columns: the column variables are produced
+from `model.matrix` is alphabetic, whereas the order in which the variables
+have been saved in the constraints object `cons` is `male` then `female`.
+Such subtleties can be hard to notice yet completely change one's results
+so be warned: the output from `model.matrix` will not always be compatible
+with the constraint variables.
+
+To check that the code worked properly,
+let's count the number of individuals
+represented in the new `ind_cat` variable, using `colSums`:
+
+```{r}
+colSums(ind_cat) # view the aggregated version of ind
+ind_agg <- colSums(ind_cat) # save the result
+```
+
+The sum of both age and sex variables is 5 
+(the total number of individuals): it worked! 
+Looking at `ind_agg`, it is also clear that the object has the same 'width',
+or number of columns,
+`cons`. This means that the individual-level data can now be compared with
+the aggregate-level data. We can check this by inspecting
+each object (e.g. via `View(ind_agg)`). A more rigorous test is to see
+if `ind_agg` can be combined with `ind_agg`, using `rbind`:
+
+```{r}
+rbind(cons[1,], ind_agg) # test compatibility of ind_agg and cons
+```
+
+If no error message is displayed on you computer, the answer is yes.
+This shows us a direct comparison between the number of people in each
+category of the constraint variables in zone and and in the individual level
+dataset overall. Clearly, the fit is not very good, with only 5 individuals
+in total existing in `ind_agg` (the total for each constraint) and 12
+in zone 1. We can measure the size of this difference using measures of
+*goodnes of fit*. A simple measure is total absolute error (TAE), calculated in this
+case as `sum(abs(cons[1,] - ind_agg))`: the sum of the positive differences
+between cell values in the individual and aggregate level data.
+
+The purpose of the *reweighting* procedure in spatial microsimulation is
+to minimise this difference (as measured in TAE above)
+by adding high weights to the most representative individuals.

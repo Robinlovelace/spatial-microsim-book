@@ -1,0 +1,18 @@
+introduction.Rmd:
+
+
+
+Style.rmd: style
+Subsetting.rmd:
+- subsetting
+- data-types
+- matrix-subsetting
+- df-subsetting
+- subsetting-operators
+- simplify-preserve
+- subassignment
+- applications
+- lookup-tables
+- matching-merging
+- subsetting-answers
+Vocabulary.rmd: vocabulary

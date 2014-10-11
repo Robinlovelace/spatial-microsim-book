@@ -16,7 +16,7 @@ layout: default
 ```
 \clearpage 
 
-# Introduction
+# Introduction {#introduction}
 
 Spatial microsimulation is a statistical technique for combining individual and
 geographical data. The resulting *spatial microdata* are useful in many
@@ -120,7 +120,7 @@ aims to contribute to the community by encouraging collaboration, innovation and
 Kabakoff (2011 p. xxii) put it regarding R, "the best way to learn is to
 experiment". 
 
-## Why spatial microsimulation with R?
+## Why spatial microsimulation with R? {#whyR}
 
 ```{r, echo=FALSE}
 # The book aims to make spatial microsimulation accessible to more people,
@@ -234,8 +234,7 @@ to learning R in general terms.
 #     in terms of education and the democratisation of research.
 ```
 
-Learning the R language
------------------------
+## Learning the R language {#learningR}
 
 Having learned a little about *why* R is a good tool for the job, it is worth
 considering at this stage *how* R should be used.  It is useful to think of R
@@ -326,8 +325,7 @@ microsimulation.
 # language in which they are implemented.
 ```
 
-Typographic conventions
------------------------
+## Typographic conventions {#typographic}
 
 The following typographic conventions are followed to make the practical
 examples easier to follow:
@@ -355,8 +353,7 @@ Wickham's *Advanced R* book (http://r-pkgs.had.co.nz/style.html), is followed
 throughout this book.  Consistent style and plentiful comments will make your code
 readable by yourself and others for decades to come.
 
-An overview of the book
------------------------
+## An overview of the book {#overview}
 
 This document is a working draft of a book to be published in CRC Press's R
 Series in summer 2015. Any comments, relating to code, content or
@@ -383,8 +380,6 @@ from spatial microsimulation can be used as an input into more complex models
 - *Additional tools and techniques* introduces further methods
 and applications, including a description of R packages for spatial
 microsimulation (in progress).
-
-\clearpage
 
 # What is spatial microsimulation?
 
@@ -1057,10 +1052,6 @@ we can do this by adding another argument to the `cut` function:
 Users should be ware that `cut` results in a vector of class *factor*, which
 can cause problems later down the line.
 
-```{r}
-names(cons)
-```
-
 ## Matching individual and aggregate level data names
 
 Before combining the newly recategorised individual-level data with the
@@ -1197,6 +1188,7 @@ much easier.
 # could contain 10,000 individuals
 # to be allocated to 500 zones, resulting in an unwieldy 5 million element
 # weight matrix but we'll stick with the SimpleWorld dataset here for simplicity.
+load("cache-data-prep.RData")
 ```
 
 How representative each individual is of each zone is determined by their
@@ -1269,7 +1261,7 @@ ipfp(cons[1,], t(ind_cat), rep(1, nrow(ind)), maxit = 20, v = T)
 
 ```
 ## iteration 0:   0.141421
-## iteration 1:	  0.00367328
+## iteration 1:    0.00367328
 ## iteration 2:  9.54727e-05
 ## ...
 ## iteration 9:  4.96507e-16
@@ -1770,9 +1762,6 @@ ints_df[ints_df$zone == 2, ]
 # kable(ints_df[ints_df$zone == 2,], row.names = FALSE)
 ```
 
-
-\clearpage
-
 # CakeMap: spatial microsimulation in the wild {#CakeMap}
 
 By now we have developed a good understanding of what spatial microsimulation
@@ -2081,6 +2070,8 @@ the linking variable.  Also in that script file you will encounter the function
 data frame.  The final map result of `CakeMapPlot.R' is illustrated below.
 
 ```{r, fig.cap="CakeMap results: estimated average cake consumption in Leeds", fig.width=5, fig.height=4, echo=FALSE}
+library(png)
+library(grid)
 img <- readPNG("figures/CakeMap-lores.png")
 grid.raster(img)
 ```
@@ -2144,7 +2135,6 @@ As a bonus exercise, explore the class dependence of cake consumption in the
 Dental Health Survey.
 
 \clearpage
-
 # Spatial microdata in agent-based models {#ABM}
 
 This Chapter is work in progress.
@@ -2172,7 +2162,6 @@ This Chapter is work in progress.
 # 
 # https://github.com/Robinlovelace/spatial-microsim-book
 ```
-
 
 # Additional tools and techniques
 
@@ -2212,7 +2201,6 @@ This Chapter is work in progress.
 
 ## Advanced applications in agent-based modelling
 ```
-
 
 # Appendix: Getting up-to-speed with R {#apR}
 
@@ -2430,7 +2418,6 @@ This is work in progress.
 # bases.
 ```
 
-
 # References
 
 Beezer, R. A. (2008). A first course in linear algebra. Puget Sound: Congruent Press.
@@ -2458,5 +2445,3 @@ Venables, W. W. N., Smith, D. M. D. M., Team, R. D. C., & others. (2014). An int
 Wickham, H. (2014). Advanced R. Retrieved from http://www.crcpress.com/product/isbn/9781466586963
 
 Xie, Y. (2013). Animation: an R package for creating animations and demonstrating statistical methods. Journal of Statistical Software, 53(1), 1–27.
-
-

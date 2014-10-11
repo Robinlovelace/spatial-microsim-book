@@ -21,3 +21,6 @@ frontmatter/
 ggmap*
 .Rproj.user
 *.cls
+*unnamed*
+book/
+_site/
