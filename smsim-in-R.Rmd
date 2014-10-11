@@ -209,7 +209,7 @@ to converge towards their final level of fit.
 More sophisticated ways of evaluating model fit are
 presented in Section \ref{svalidation}.
 
-## Alternative reweighting algorithms
+## Alternative reweighting algorithms {#alternative-reweighting}
 
 As described in the Introduction, IPF is just one strategy for obtaining
 a spatial microdataset. However, researchers (myself included) have tended to

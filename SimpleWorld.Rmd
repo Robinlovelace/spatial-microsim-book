@@ -42,7 +42,7 @@ ggplot(pol1) + geom_path(aes(long, lat, group, fill = group)) +
   theme_space_map
 ```
 
-## SimpleWorld data
+## SimpleWorld data {#SimpleWorldData}
 
 This is a small world, 
 containing 12, 10 and 11 individuals of its alien inhabitants
@@ -147,7 +147,7 @@ individual-level survey data.  Spatial microsimulation tackles this issue by
 allocating individuals from a non-geographical dataset to geographical zones in
 another.
 
-## A weight matrix
+## A weight matrix {#weight-matrix}
 
 The procedures we will learn to use in this book do this by allocating *weights*
 to each individual for each zone. The higher the weight for a particular
@@ -189,7 +189,7 @@ zone 2. A special feature of the weight matrix above is that each of the column
 sums is equal to the total population in each zone.  We will discover how the
 weight matrices are generated in Section \ref{Smsim1}.
 
-## Spatial microdata
+## Spatial microdata {#spatial-microdata}
 
 A more useful output from spatial microsimulation is what we refer to as
 *spatial microdata*.  This is dataset that contains a single row per individual
@@ -234,7 +234,7 @@ SimpleWorld, can be useful before progressing to the practicalities.
 # Add section link here!
 ```
 
-## SimpleWorld in context
+## SimpleWorld in context {#SimpleWorldContext}
 
 Even though the datasets are tiny in SimpleWorld, we have already generated some
 useful output. We can estimate, for example, the average income in each zone.

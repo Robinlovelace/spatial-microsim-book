@@ -18,7 +18,7 @@ understands vector algebra, all data accessible to R resides in a number of
 named objects and that a function must be used to modify any object. We will
 look at each of these in some code below.
 
-## R understands vector algebra
+## R understands vector algebra {#vector-alg}
 
 A vector is simply an ordered list of numbers (Beezer, 2008).
 Imagine two vectors, each consisting of 3 elements:
@@ -56,7 +56,7 @@ This conciseness is clearly very useful in spatial microsimulation, as numeric
 variables of the same length are common (e.g. the attributes of individuals in a
 zone) and can be acted on with a minimum of effort.
 
-## R is object orientated
+## R is object orientated {R-object}
 
 In R, everything that exists is an object with a name and a class. This is
 useful, because R's functions know automatically how to behave differently on
@@ -90,7 +90,6 @@ names beginning with a number or containing operator symbols such as `-`, `^`
 and brackets. It is good practice to think about what the purpose of an object
 is before naming it: using clear and concise names can save you a huge amount of
 time in the long run.
-
 
 ## Subsetting in R {#subsetting}
 
