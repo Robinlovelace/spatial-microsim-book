@@ -1,5 +1,5 @@
 # code to build the book
-b <- readLines("book-cambridge.tex") # read in tex file
+b <- readLines("book.tex") # read in tex file
 
 bgn <- grep("Introduction", b)[1]
 b <- b[bgn:(length(b) - 2)]

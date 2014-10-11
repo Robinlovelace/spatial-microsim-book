@@ -1,0 +1,195 @@
+---
+title: "Appendix"
+layout: default
+---
+
+# Appendix: Getting up-to-speed with R {#apR}
+
+As mentioned in Chapter 1, R is a general purpose programming
+language focussed on data analysis and modelling.  This small tutorial aims to
+teach the basics of R, from the perspective of spatial microsimulation research.
+It should also be useful to people with existing R skills, to re-affirm their
+knowledge base and see how it is applicable to spatial microsimulation.
+
+R's design is built on the idea that "everything is an object and everything
+that happens is a function". It is a *vectorised*, *object orientated* and
+*functional* programming language (Wickham, 2014).  This means that R
+understands vector algebra, all data accessible to R resides in a number of
+named objects and that a function must be used to modify any object. We will
+look at each of these in some code below.
+
+## R understands vector algebra
+
+A vector is simply an ordered list of numbers (Beezer, 2008).
+Imagine two vectors, each consisting of 3 elements:
+
+$$a = (1,2,3); b = (9,8,6) $$
+
+To say that R understands vector algebra is to say that it knows how to
+handle vectors in the same way a mathematician does: 
+
+$$a + b = (a_1 + b_1, a_2 + b_2, c_3 + c_3  ) = (10,10,9) $$
+
+This may not seem remarkable, but it is. Most programming
+languages are not vectorised, so they would see $a + b$ differently.
+In Python, for example, this is the answer we get:^[We can
+get the right answer in Python, by typing the following:
+`import numpy; a=numpy.array([1,2,3]); b=numpy.array([9,8,6]); a+b`.]
+
+```{r, engine='python', eval=FALSE}
+a = [1,2,3]
+b = [9,8,6]
+print(a + b)
+```
+
+`## [1, 2, 3, 9, 8, 6]`
+
+In R, the operation *just works*, intuitively:
+
+```{r}
+a <- c(1, 2, 3)
+b <- c(9, 8, 6)
+a + b
+```
+
+This conciseness is clearly very useful in spatial microsimulation, as numeric
+variables of the same length are common (e.g. the attributes of individuals in a
+zone) and can be acted on with a minimum of effort.
+
+## R is object orientated
+
+In R, everything that exists is an object with a name and a class. This is
+useful, because R's functions know automatically how to behave differently on
+different objects depending on their class.
+
+To illustrate the point, let's create two objects, each with a different class
+and see how the function `summarise` behaves differently, depending on the type.
+This behavior is *polymorphism* (Matloff, 2011):
+
+```{r}
+# Create a character and a vector object
+char_obj <- c("red", "blue", "red", "green")
+num_obj <- c(1, 4, 2, 532.1)
+
+# Summary of each object
+summary(char_obj)
+summary(num_obj)
+
+# Summary of a factor object
+fac_obj <- factor(char_obj)
+summary(fac_obj)
+```
+
+In the example above, the output from `summary` for the numeric object `num_obj`
+was very different from that of the character vector `char_obj`. Note that
+although the same information was contained in `fac_obj` (a factor), the output
+from `summary` changes again.
+
+Note that objects can be called almost anything in R with the exceptions of
+names beginning with a number or containing operator symbols such as `-`, `^`
+and brackets. It is good practice to think about what the purpose of an object
+is before naming it: using clear and concise names can save you a huge amount of
+time in the long run.
+
+
+## Subsetting in R {#subsetting}
+
+R has powerful, concise and (over time) intuitive methods for taking subsets of
+data. Using the SimpleWorld example we loaded in *Data preparation*,
+let's explore the `ind` object in more detail, to see
+how we can select the parts of an object we are most interested in. As before,
+we need to load the data:
+
+```{r}
+ind <- read.csv("data/SimpleWorld/ind.csv") 
+```
+
+Now, it is easy from within R to call a single individual (e.g. individual 3)
+using the square bracket notation:
+
+```{r}
+ind[3,]
+```
+
+The above example takes a subset of `ind` all elements present on the 3rd row:
+for a 2 dimensional table, anything to the left of the comma refers to rows and
+anything to the right refers to columns. Note that `ind[2:3,]` and
+`ind[c(3,5),]` also take subsets of the `ind` object: the square brackets can
+take *vector* inputs as well as single numbers.
+
+We can also subset by columns: the second dimension. Confusingly, this can be
+done in four ways, because `ind` is an R `data.frame`^[This can be ascertained
+by typing `class(ind)`. It is useful to know the class of different R objects,
+so make good use of the `class()` function.] and a data frame can behave
+simultaneously as a list, a matrix and a data frame (only the results of the
+first are shown):
+
+```{r}
+ind$age # data.frame column name notation I
+# ind[, 2] # matrix notation
+# ind["age"] # column name notation II
+# ind[[2]] # list notation
+# ind[2] # numeric data frame notation
+```
+
+It is also possible to subset cells by both rows and columns simultaneously.
+Let us select query the gender of the 4th individual, as an example
+(pay attention to the relative location of the comma inside the square brackets):
+
+```{r}
+ind[4, 3] # The attribute of the 4th individual in column 3
+```
+
+A commonly used trick in R that helps with the analysis of individual-level data
+is to subset a data frame based on one or more of its variables. Let's subset
+first all females in our dataset and then all females over 50:
+
+```{r}
+ind[ind$sex == "f", ]
+ind[ind$sex == "f" & ind$age > 50, ]
+```
+
+In the above code, R uses relational operators of equality (`==`) and inequality
+(`>`) which can be used in combination using the `&` symbol. This works because,
+as well as integer numbers, one can also place *boolean* variables into square
+brackets: `ind$sex == "f"` returns a binary vector consisting solely of `TRUE`
+and `FALSE` values.^[Thus, yet another way to invoke the 2nd column of `ind` is
+the following: `ind[c(F, T, F)]`! Here, `T` and `F` are shorthand for "TRUE" and
+"FALSE" respectively.] 
+
+## Further R resources {#further}
+
+The above tutorial should provide a sufficient grounding in R for beginners to
+understand the practical examples in the book.  However, R is a deep language
+and there is much else to learn that will be of benefit to your modelling
+skills. There are many books excellent and tutorials that teach the fundamentals
+of R for a variety of applications.
+The following resources, in ascending order of difficulty,
+are highly recommended:
+
+- *Introduction to visualising spatial data in R* (Lovelace and Cheshire, 2014)
+provides an introductory tutorial on handling spatial data in R, including the
+administrative zone data which often form the building blocks of spatial microsimulation
+models in R.
+- *Introduction to scientific programming and simulation using R*
+(Jones et al., 2014) is an
+accessible and highly practical course that will form a solid foundation
+for a range of modelling applications, including spatial microsimulation.
+- *An Introduction to R* (Venables et al., 2014)
+is the foundational introductory R manual, written by the
+software's core developers and is available online for free.
+It is terse and covers some advanced topics, but
+provides a useful reference on the fundamentals of R as a language.
+- *Advanced R* 
+(Wickham, 2014) (http://www.crcpress.com/product/isbn/9781466586963)
+delves into the heart
+of the R language. It contains many advanced topics, but the introductory
+chapters are straightforward. Browsing some of the pages on
+Advanced R's website (http://adv-r.had.co.nz/) and
+trying to answer the questions that open each chapter
+provides a taster of the book and an excellent
+way of testing and improving one's understanding of the R language.
+
+```{r}
+# There are alternatives to R and in the next section we will consider a few of these.
+```
