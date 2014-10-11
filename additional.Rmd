@@ -1,0 +1,43 @@
+---
+title: "Additional tools and techniques"
+layout: default
+---
+
+# Additional tools and techniques
+
+This Chapter is work in progress.
+
+```{r, echo=FALSE}
+# ## R packages for spatial microsimulation
+# 
+# All the code chunks presented so far, with the exception of **ggplot2** commands
+# run in R's **base** package. This was a deliberate choice for robustness of
+# code and minimising installation dependencies over the advantages of using
+# more complex packages. There are often dozens of ways of doing one thing
+# in R, potentially via a handful of packages. The way that will work
+# on the maximum number of machines is often preferable, unless there is a
+# clear performance advantage to using additional packages. An additional reason
+# to use contributed packages sparingly (excepting the `r-recommended` packages
+# endorsed by the R core team --- see http://cran.r-project.org/bin/linux/debian/README
+# for details) is that the behaviour of package functions may change unexpectedly,
+# whereas core R functions are likely to remain stable over many decades to come.
+# 
+# With this caveat out of the way, let's begin our tour of the packages of most
+# potential use to spatial microsimulation.
+# 
+# ### **plyr** and **dplyr**
+# 
+# ### **reshape 2**
+# 
+# ### **multilevel**
+# 
+# ### **RNetLogo**
+
+## The Flexible Modelling Framework (FMF)
+
+## Allocation of home-work locations
+
+## A spatial interaction model with individual agents
+
+## Advanced applications in agent-based modelling
+```

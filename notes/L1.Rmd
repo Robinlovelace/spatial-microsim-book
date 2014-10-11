@@ -1,0 +1,120 @@
+---
+title: "Spatial Microsimulation with R: Lecture 1"
+author: "Robin Lovelace"
+date: "09/17/2014"
+output: ioslides_presentation
+---
+
+## Spatial Microsimulation with R
+
+Aims:
+
+1. To provide a solid understanding of the method and applications
+2. To teach its implementation in R in general terms
+3. To provide guidance on next steps
+
+## Introduction
+
+- Housekeeping
+- About the course and its teachers
+- Lectures and practicals
+- Getting help
+
+## This morning's agenda
+
+**9:30 - 11:00**
+
+- Lecture: what is spatial microsimulation?
+- Getting used to working with RStudio (and GitHub)
+- Demonstration of what we'll be working on 
+- Loading the input data (Chapter 3)
+  
+*Refreshments: 11 - 11:15*
+
+**11:15 - 1:00**
+
+- Working through Chapter 3 and 4
+- Performance
+- (Parallel processing in R)
+
+## This afternoon
+
+**1:30 - 2:45**
+
+- Finishing up and questions about SimpleWorld
+- Lecture: Introduction to spatial microsimulation in the wild
+- Cleaning messy input data for spatial microsimulation (Chapter 5)
+
+**3 - 4:30**
+
+- Performing IPF on CakeMap Data (5.2)
+- Description and demonstration of integerisation (5.3)
+- Re-cap and questions on key concepts
+
+## Tomorrow
+
+**9:30 - 11**
+
+- Demonstration analysis of CakeMap data
+- Model checking and validation
+
+**11:15 - 1:30**
+
+- Visualisations
+- Lecture: next steps
+- Applying the methods to your data
+
+
+## The course materials
+
+- Major update of course materials from May
+- New improved code is much faster
+- And easier to write
+- Booklet -> Book
+
+## What is spatial microsimulation?
+
+1. A method
+2. An approach
+
+## Applications
+
+- Wide variety of potential applications
+- So far main applications have been in health, poverty mapping and transport
+- What do you want to use spatial microsimulation for?
+- Tomintz et al. (2008). The geography of smoking in Leeds: estimating individual smoking rates and the implications for the location of stop smoking services. Area, 40(3), 341–353. 
+- Gleeson (2014)
+- My research
+
+
+## R
+
+- Powerful *command-line interface*
+- Fast - if you know how
+- Steep learning curve but lots of help available
+
+## A demonstration of R and RStudio
+
+- Creating, modifying and subsetting datasets
+- Functions
+- Features of RStudio
+
+# Demonstration of GitHub
+
+# Working through Chapter 3
+
+## Day 2
+
+- Parallel processing in R for fast/Big applications
+- Exploring the results of spatial microsimulation
+
+Refreshments: 11:00
+
+- Discussion of limitations and underlying assumptions of spatial microsimulation
+- Applying the methods to your own data
+
+# Parallel processing in R for fast/big microsimulation
+
+# Exploring the results of spatial microsimulation
+
+

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Introduction &middot; Spatial Microsimulation with R.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="www/bootstrap.min.css" rel="stylesheet">
+    <link href="www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Table of contents<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu pull-right" role="menu">
+              <li><a href="introduction.html">Introduction</a></li>
+<li><a href="what-is-smsim.html">What is spatial microsimulation?</a></li>
+<li><a href="SimpleWorld.html">SimpleWorld</a></li>
+<li><a href="data-prep.html">Preparing input data</a></li>
+<li><a href="smsim-in-R.html">Spatial microsimulation in R</a></li>
+<li><a href="CakeMap.html">CakeMap</a></li>
+<li><a href="smsim-for-abm.html">Spatial microsimulation for agent-based models</a></li>
+<li><a href="additional.html">Additional tools and techniques</a></li>
+<li><a href="appendix.html">Appendix</a></li>
+<li><a href="glossary.html">Glossary</a></li>
+<li><a href="references.html">References</a></li>
+
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="muted"><a href="/">Spatial Microsimulation with R</a> <small>by Robin Lovelace</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+        <div class="well">
+          Comming soon as a physical book</a>.
+        </div>
+
+        <h4>Contents</h4>
+          <ul class="list-unstyled" id="toc"></ul>
+
+          <hr>
+          <p><a href="/contribute.html">How to contribute</a></p>
+
+          <p><a class="btn btn-primary" href="https://github.com/spatial-microsim-book/edit/master/introduction.Rmd">Edit this page</a></p>
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <p></p>
+<h1 id="introduction">Introduction</h1>
+<p>Spatial microsimulation is a statistical technique for combining individual and geographical data. The resulting <em>spatial microdata</em> are useful in many situations where individual-level and geographically specific processes are in operation, enabling modelling and analysis on multiple levels. Spatial microsimulation can also be seen as an approach to better understand the world. The term is little known outside the fields of human geography and regional science yet its methods have the potential to be useful in a wide range of applications. Spatial microsimulation has great potential for informing public policy for social benefit in housing, transport and sustainable urban planning to prepare for a post carbon world — after we stop burning fossil fuels.</p>
+<p>There is growing interest in spatial microsimulation. This is due largely to its practical utility in an era of ‘evidence-based policy’ but is also driven by changes in the wider research environment inside and outside of academia. Continued improvements in computers, software and data availability mean spatial microsimulation is more accessible than ever. It is now possible to simulate the populations of small administrative areas at the individual-level almost anywhere in the world. This opens new possibilities for a range of applications, not least policy evaluation.</p>
+<p>Still, the meaning of spatial microsimulation is ambiguous for many. This is partly because the technique is inherently difficult to understand and partly due to researchers themselves: some uses of the term in the academic literature are unclear or inconsistent about what the method entails. Worse is work that treats spatial microsimulation as a magical black box. This book is about demystifying spatial microsimulation.</p>
+<p>Spatial microsimulation can be understood either as a technique or an approach:</p>
+<ol style="list-style-type: decimal">
+<li>A <em>technique</em> for generating spatial microdata — individuals allocated to zones (see Figure 1).</li>
+<li>An <em>approach</em> to modelling based on spatial microdata, simulated or real.</li>
+</ol>
+<p><img src="figures/unnamed-chunk-2.png" title="Schematic of the spatial microsimulation technique" alt="Schematic of the spatial microsimulation technique" width="384" /></p>
+<p>Throughout this book we will see spatial microsimulation in both senses of the term, generally moving from the former to the latter perspective as the chapters progress.</p>
+<p>Another issue tackled in this book is reproducibility. Most findings in the field cannot easily be replicated, meaning there is no way of independently checking the results. In today’s age of fast Internet connections, open access datasets and free software, there is little excuse for this. The issue is not unique to the field of spatial microsimulation. Opaque methods, impossible to replicate, are widespread in academia, leading to calls for an ‘Open Regional Science’ (Rey, 2014). Similar proposals made in other research areas seem to be gaining traction (Ince et al., 2012; Peng et al., 2006). This book encourages such a shift towards transparency in the field of spatial microsimulation.</p>
+<p>Reproducibility is encouraged throughout via provision of code for readers to actually <em>do</em> spatial microsimulation. Small yet realistic datasets are provided to run the methods on your own computer. All the findings presented in this book can therefore be reproduced using code and data in the book’s Github repository: github.com/Robinlovelace/spatial-microsim-book.</p>
+<p>Why spend time and effort on reproducibility? The first answer pragmatic: reproducibility can actually save time in the long-run, by ensuring more readable code; reproducibility can increase the re-usability and impact of research, allowing methods to be re-run or modified at a later data. The second reason is more profound: reproducibility is a prerequisite of falsifiability and falsifiability is the backbone of science (Popper, 1959). The results of non-reproducible research cannot be verified, reducing scientific credibility. These philosophical observations inform the book’s practical nature.</p>
+<p>This book presents spatial microsimulation as a living, evolving set of techniques rather than a prescriptive formula for arriving at the ‘right’ answer. Spatial microsimulation is largely defined by its user-community, made up of a growing number of people worldwide. This book aims to contribute to the community by encouraging collaboration, innovation and rigour. It also encourages playing with the methods and ‘getting your hands dirty’ with the code. As Kabakoff (2011 p. xxii) put it regarding R, “the best way to learn is to experiment”.</p>
+<h2 id="whyR">Why spatial microsimulation with R?</h2>
+<p>Software decisions have a major impact on the flexibility, efficiency and reproducibility of research. Nearly three decades ago Hölm (1987, p. 153) observed that “little attention is paid to the choice of programming language used” for microsimulation. This appears to be as true now as it was then. Software is rarely discussed in papers on the subject and there are few mature spatial microsimulation packages.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> Factors that should influence software selection including cost, maturity, features and performance. Perhaps most important for busy researchers are the ease and speed of learning, writing, adapting and communicating the analysis. R excels in each of these areas, hence the choice of R.</p>
+<p>R is a <em>low-level</em> language compared with statistical programs based on a strong graphical user interface (GUI) such as Microsoft Excel and SPSS. R offers great flexibility for analysing and modelling data and enables easy creation of user-defined functions. These are all desirable attributes of software for undertaking spatial microsimulation. On the other hand, R is <em>high-level</em> compared with general purpose languages such as C and Python. Instead of writing code to perform statistical operations ‘from scratch’, R users generally use pre-made functions. To calculate the mean value of variable <code>x</code>, for example, one would need to type 20 characters in Python: <code>float(sum(x))/len(x)</code>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> In pure R just 7 characters are sufficient: <code>mean(x)</code>. This terseness and range of pre-made functions is useful for ease of reading and writing spatial microsimulation models and analysing the results.</p>
+<p>The example of calculating the mean in R and Python may be trite but illustrates a wider point: R was <em>designed</em> to work with statistical data, so many functions in the default R installation (e.g. <code>lm()</code>, to create a linear regression model) perform statistical analysis ‘out of the box’. In agent-based modelling, the statistical analysis of results often occupies more time than running the model itself (Theile, 2014). The same applies to spatial microsimulation, making R an ideal choice due to its statistical analysis capabilities.</p>
+<p>Finally, R has an active and growing user community. As a result there are thousands of packages that extend R’s capabilities by providing new functions. Improvements are being added all the time. The <strong>ipfp</strong> package, for example, can greatly reduce the computational time taken for a key element of spatial microsimulation process, as we shall see in <em>Reweighting with ipfp</em> (Section ). Further information about why R is a good choice for spatial microsimulation is provided in the Appendix, a tutorial introduction to R for spatial microsimulation applications. The next section describes approaches to learning R in general terms.</p>
+<h2 id="learningR">Learning the R language</h2>
+<p>Having learned a little about <em>why</em> R is a good tool for the job, it is worth considering at this stage <em>how</em> R should be used. It is useful to think of R not as a series of isolated commands, but as an interconnected <em>language</em>. The code is used not only for the computer to crunch numbers, but also to communicate ideas, from one person to another. In other words, this book teaches spatial microsimulation in the language of R. Of course, English is more appropriate than R for <em>explaining</em> rather than merely describing the method and the language of mathematics is ideal for describing quantitative relationships conceptually. However, because the practical components of this book are implemented in R, you will gain more from it if you are fluent in R. To this end the book aims to improve your R skills as well as your ability to perform spatial microsimulation, especially in the earlier practical chapters. Some prior knowledge of R will make reading this book easier, but R novices should be able to follow the worked examples, with reference to appropriate supplementary material (see Section ). As with learning Spanish or Chinese, frequent practice, persistence and experimentation will ensure deep learning.</p>
+<p>A more practical piece of advice is to organise your workflow. Each project should have its own self-contained folder containing all that is needed to replicate the analysis, except perhaps large input datasets. This could include the raw (unchanged) input data<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a>, R code for analysis, the graphical outputs and files containing data outputs. To avoid clutter, it is sensible to arrange this content into folders, as illustrated below (thanks to Colin Gillespie for this tip):</p>
+<pre><code>|-- book.Rmd
+|-- data
+|-- figures
+|-- output
+|-- R
+|   |-- load.R
+|   `-- parallel-ipfp.R
+`-- spatial-microsim-book.Rproj</code></pre>
+<p>The example directory structure above is taken from an early version of this book. It contains the document for the write-up (<code>book.Rmd</code> — this could equally be a <code>.docx</code> or <code>.tex</code> file) and RStudio’s <code>.Rproj</code> file in the <em>source directory</em>. The rest of the entities are folders: one for the input data, one for figures generated, one for data outputs and one for R scripts. The R scripts should have meaningful names and contain only code that works and is commented. An additional backup directory could be used to store experimental code. There is no need to be prescriptive in following this structure, but projects using spatial microdata tend to be complex, so imposing order over your workflow early will likely yield dividends in the long run.</p>
+<p>The same applies to learning the R language. Fluency allows complex numerical ideas to be described with a few keystrokes. If you are a new R user it is therefore worth spending some time learning the R language. To this end the Appendix provides a primer on R from the perspective of spatial microsimulation.</p>
+<h2 id="typographic">Typographic conventions</h2>
+<p>The following typographic conventions are followed to make the practical examples easier to follow:</p>
+<ul>
+<li>In-line code is provided in <code>monospace</code> font to show it’s something the computer understands.</li>
+<li>Larger blocks of code, referred to as <em>listings</em>, are provided on separate lines and have coloured <em>syntax highlighting</em> to distinguish between values, names and functions:</li>
+</ul>
+<pre class="sourceCode r"><code class="sourceCode r">x &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">10</span>) <span class="co"># create a vector</span>
+<span class="kw">sqrt</span>(x) <span class="co"># find the square root of x</span>
+<span class="co">#&gt; [1] 1.000 1.414 2.236 3.162</span></code></pre>
+<ul>
+<li>Output from the <em>R console</em> is preceded by the <code>##</code> symbol, as illustrated above.</li>
+<li>Comments are preceded by a single <code>#</code> symbol to explain specific lines.</li>
+<li>Often, reference will be made to files contained within the book’s project folder. The notation used to refer to the location of these files follows the way we refer to files and folders on Linux computers. Thus ‘R/CakeMap.R’ refers to a file titled ‘CakeMap.R’, within the ‘R’ directory of the project’s folder.</li>
+</ul>
+<p>There are many ways to write R code that will generate the same results. However, to ensure clarity and consistency, a single style, advocated in Hadley Wickham’s <em>Advanced R</em> book (<a href="http://r-pkgs.had.co.nz/style.html">http://r-pkgs.had.co.nz/style.html</a>), is followed throughout this book. Consistent style and plentiful comments will make your code readable by yourself and others for decades to come.</p>
+<h2 id="overview">An overview of the book</h2>
+<p>This document is a working draft of a book to be published in CRC Press’s R Series in summer 2015. Any comments, relating to code, content or clarity of explanation will be gratefully received.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a></p>
+<p>The structure is as follows:</p>
+<ul>
+<li><em>SimpleWorld</em>, a ‘no nonsense’ and reproducible explanation of spatial microsimulation with reference to an imaginary planet.</li>
+<li>Data preparation, dedicated to the boring but vital task of loading and ‘cleaning’ the input data, ready for spatial microsmulation.</li>
+<li><em>Preparing input data</em>, an introduction to reformatting individual and aggregate-level data ready for spatial microsimulation.</li>
+<li><em>Spatial microsimulation in R</em>, which introduces the main functions and techniques that are used to generate spatial microdata.</li>
+<li><em>CakeMap: spatial microsimulation in the wild</em> is a larger and more involved example using real data.</li>
+<li><em>Spatial microdata in agent-based models</em> describes how the output from spatial microsimulation can be used as an input into more complex models (in progress).</li>
+<li><em>Additional tools and techniques</em> introduces further methods and applications, including a description of R packages for spatial microsimulation (in progress).</li>
+</ul>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>The Flexible Modelling Framework (FMF) (<a href="https://github.com/MassAtLeeds/FMF">https://github.com/MassAtLeeds/FMF</a>) is a notable exception written in Java that can perform various modelling tasks.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>The <code>float</code> function is needed in case whole numbers are used. This can be reduced to 13 characters with the excellent <strong>NumPy</strong> package: <code>import numpy; x = [1,3,9]; numpy.mean(x)</code> would generate the desired result. The R equivalent is <code>x = c(1,3,9); mean(x)</code>.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Raw data should be kept safely on an external hard disk or a server if it is large or sensitive.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>Feedback can be left via email to <a href="mailto:r.lovelace@leeds.ac.uk">r.lovelace@leeds.ac.uk</a> or via the project’s GitHub page (<a href="http://github.com/Robinlovelace/spatial-microsim-book">http://github.com/Robinlovelace/spatial-microsim-book</a>).<a href="#fnref4">↩</a></p></li>
+</ol>
+</div>
+
+        </div>
+      </div>
+
+      <div class="footer">
+        <hr>
+        <p>&copy; Site design: Hadley Wickham. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/robinlovelace/spatial-microsim-book/">github</a>.
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="www/bootstrap.min.js"></script>
+  <script src="www/toc.js"></script>
+  </body>
+</html>
