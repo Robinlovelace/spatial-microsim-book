@@ -200,7 +200,7 @@ thousands of packages that extend R's capabilities by providing new functions.
 Improvements are being added all the time.
 The **ipfp** package, for example,
 can greatly reduce the computational time taken for a key element of spatial
-microsimulation process, as we shall see in *Reweighting with ipfp* (Section \ref{ipfp}).
+microsimulation process, as we shall see in *Reweighting with ipfp* (\ref{ipfp}).
 Further information about why R is a good choice for spatial microsimulation
 is provided in the Appendix, a tutorial introduction to R for spatial
 microsimulation applications. The next section describes approaches
@@ -380,7 +380,6 @@ from spatial microsimulation can be used as an input into more complex models
 - *Additional tools and techniques* introduces further methods
 and applications, including a description of R packages for spatial
 microsimulation (in progress).
-
 # What is spatial microsimulation?
 
 Spatial microsimulation is a
@@ -465,30 +464,6 @@ help answer what spatial microsimulation is we will look at
 its applications and then at what it is not.
 
 Applications
-----------------------------------------
-
-Spatial microsimulation has a wide variety of applications and there
-are many areas where the technique has been used.
-Some of the main areas of application have
-been health, economic policy evaluation and transport. Rather than attempt
-to provide a comprehensive account of the range of current and possible
-applications, this section describes a single study in each area to exemplify
-how spatial microsimulation is used.
-
-### Health applications
-
-An excellent example of the potential practical utility of spatial microsimulation
-is a study by Tomintz et al. (2008), which estimated the rate of smoking at the
-small area level. Smoking is a classic 'target variable' in spatial microsimulation:
-it is reported in a number of individual-level surveys but there is surprisingly
-little information about
-
-### Economic policy evaluation
-
-### Transport
-
-What spatial microsimulation is not
------------------------------------
 
 **Spatial microsimulation is not strictly spatial**
 
@@ -580,6 +555,7 @@ a hypothetical scenario where 33 inhabitants of an imaginary land
 are simulated and allocated to three zones
 based on a microdataset of only 5 individuals and two constraint variables.
 
+
 # SimpleWorld {#SimpleWorld}
 
 To see the link between the methodology introduced later in the
@@ -589,7 +565,7 @@ simple example of the kind of situation where spatial microsimulation is useful.
 We'll use an imaginary world called SimpleWorld, consisting of only 3 zones that
 cover the entirety of the SimpleWorld sphere (Figure 2). 
 
-```{r  fig.cap="The SimpleWorld sphere", echo=FALSE, message=FALSE}
+```{r simpleworld,  fig.cap="The SimpleWorld sphere", echo=FALSE, message=FALSE}
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
 library(sp)
@@ -619,7 +595,7 @@ ggplot(pol1) + geom_path(aes(long, lat, group, fill = group)) +
   theme_space_map
 ```
 
-## SimpleWorld data
+## SimpleWorld data {#SimpleWorldData}
 
 This is a small world, 
 containing 12, 10 and 11 individuals of its alien inhabitants
@@ -724,7 +700,7 @@ individual-level survey data.  Spatial microsimulation tackles this issue by
 allocating individuals from a non-geographical dataset to geographical zones in
 another.
 
-## A weight matrix
+## A weight matrix {#weight-matrix}
 
 The procedures we will learn to use in this book do this by allocating *weights*
 to each individual for each zone. The higher the weight for a particular
@@ -766,7 +742,7 @@ zone 2. A special feature of the weight matrix above is that each of the column
 sums is equal to the total population in each zone.  We will discover how the
 weight matrices are generated in Section \ref{Smsim1}.
 
-## Spatial microdata
+## Spatial microdata {#spatial-microdata}
 
 A more useful output from spatial microsimulation is what we refer to as
 *spatial microdata*.  This is dataset that contains a single row per individual
@@ -811,7 +787,7 @@ SimpleWorld, can be useful before progressing to the practicalities.
 # Add section link here!
 ```
 
-## SimpleWorld in context
+## SimpleWorld in context {#SimpleWorldContext}
 
 Even though the datasets are tiny in SimpleWorld, we have already generated some
 useful output. We can estimate, for example, the average income in each zone.
@@ -836,6 +812,8 @@ This question is equally applicable to larger simulations. These issues are
 important and will be tackled in a subsequent Section (\ref{svalidation}) on
 validation.
 
+# Preparing input data {#DataPrep}
+
 ```{r, echo=FALSE}
 # Applications of spatial microsimulation - to be completed!
 
@@ -852,9 +830,6 @@ validation.
 ## An input into agent based models
 ```
 
-\clearpage
-
-# Preparing input data {#DataPrep}
 
 ```{r, echo=FALSE}
 # With the foundations built in the previous chapters now (hopefully) firmly in-place,
@@ -872,8 +847,13 @@ This chapter focuses on the input datasets needed for spatial microsimulation.
 Correctly loading, manipulating and assessing these datasets will be critical to
 the performance of your models and the ease of modifying them to include new
 inputs.  Fortunately R is an accomplished tool for data cleaning (Kabacoff,
-2011) (http://www.manning.com/kabacoff/), as we shall see.  This chapter also
-provides the basis for chapter we perform spatial microsimulation.
+2011) (http://www.manning.com/kabacoff/), as we shall see. This chapter also
+provides the basis for chapter \ref{Smsim1}, in which we
+undertake spatial microsimulation on the data loaded here.
+
+```{r, echo=FALSE}
+## Accessing the input data
+```
 
 As with most spatial microsimulation models, this example consists of a
 non-geographical individual-level dataset and a series of geographical zones.
@@ -1003,7 +983,7 @@ constraints.  If the total populations between constraint variables do not match
 Appropriate steps to normalise the errant constraint variables are described in
 the CakeMap Chapter (\ref{CakeMap}).
 
-## Subsetting to remove excess information
+## Subsetting to remove excess information {#subsetting-prep}
 
 In the above code, `data.frame` objects containing precisely the information
 required for the next stage were loaded.  More often, superfluous information
@@ -1020,7 +1000,7 @@ is common, for example, to take a subset of the working *population base*: those
 aged 16 and 74 in full-time employment. Methods for doing this are provided in
 Section \ref{subsetting}.
 
-## Re-cateorising individual-level variables
+## Re-cateorising individual-level variables {#re-categorise}
 
 Before transforming the individual-level dataset `ind` into a form that can be
 compared with the aggregate-level constraints, we must ensure that each dataset
@@ -1052,7 +1032,7 @@ we can do this by adding another argument to the `cut` function:
 Users should be ware that `cut` results in a vector of class *factor*, which
 can cause problems later down the line.
 
-## Matching individual and aggregate level data names
+## Matching individual and aggregate level data names {#matching}
 
 Before combining the newly recategorised individual-level data with the
 aggregate constraints, it is useful to for the category labels to match up.
@@ -1080,7 +1060,7 @@ cons <- cbind(con_age, con_sex)
 cons[1:2, ] # display the constraints for the first two zones
 ```
 
-## 'Flattening' the individual level data
+## 'Flattening' the individual level data {#flattening}
 
 We have made steps towards combining the individual and aggregate datasets and
 now only need to deal with 2 objects (`ind` and `cons`) which now share
@@ -1163,8 +1143,6 @@ between cell values in the individual and aggregate level data.
 The purpose of the *reweighting* procedure in spatial microsimulation is
 to minimise this difference (as measured in TAE above)
 by adding high weights to the most representative individuals.
-
-\clearpage
 
 # Spatial microsimulation in R {#Smsim1}
 
@@ -1372,7 +1350,7 @@ to converge towards their final level of fit.
 More sophisticated ways of evaluating model fit are
 presented in Section \ref{svalidation}.
 
-## Alternative reweighting algorithms
+## Alternative reweighting algorithms {#alternative-reweighting}
 
 As described in the Introduction, IPF is just one strategy for obtaining
 a spatial microdataset. However, researchers (myself included) have tended to
@@ -1762,25 +1740,90 @@ ints_df[ints_df$zone == 2, ]
 # kable(ints_df[ints_df$zone == 2,], row.names = FALSE)
 ```
 
-# CakeMap: spatial microsimulation in the wild {#CakeMap}
+# Spatial microsimulation in the wild {#CakeMap}
 
 By now we have developed a good understanding of what spatial microsimulation
-is, its applications and how it works. We have seen a little of both its
-underlying theory and its implementation in R. However, we have yet to see how
-the method can be applied 'in the wild', on real datasets.
+is, its applications and how it works. We have seen something of its
+underlying theory and its implementation in R. But how can
+the method can be applied 'in the wild', on real datasets?
 
-"This spatial microsimulation technique seems useful, but how can I use these
-methods on my data?" The purpose of this chapter is to answer this question
-using a real dataset.  The chapter is based on a hypothetical use of spatial
-microsimulation to arrive at an important result: estimated cake consumption in
-different parts of Leeds, UK. The example is deliberately rather absurd: to make
-it more memorable. The steps are presented in a generalisable way
-and are applicable to most datasets.
+The purpose of this chapter is to answer this question
+using real data to estimate cake consumption in
+different parts of Leeds, UK. The example is deliberately rather absurd to make
+it more memorable. The steps are presented in a generalisable way, to be
+applicable to a wide range of datasets.
 
 The input microdataset is a randomised ('jumbled') subset of the
-2009 Dental Health Survey (http://data.gov.uk/dataset/adult_dental_health_survey),
-covering England, Northern Ireland and Wales. The five variables assigned to each
-of the 916 individuals are as follows:
+2009 [Dental Health Survey](http://data.gov.uk/dataset/adult_dental_health_survey),
+(DHS) which covers England, Northern Ireland and Wales. xx variables are available
+in the DHS including xx, xx and xxx. In terms of constraint variables, we are more
+limited: the Census is the only survey that provides count data at the small area
+level. From this 'domain' of available input data, with the non-geographical
+individual-level DHS on one side --- the *microdata* --- and the geographically
+aggregated categorical count data from the census --- the *constraint tables* ---
+we must first decide which variables should be used to link the two. We must
+select the 'linking variables', otherwise know as constraint variables.
+
+## Selection of constraint variables
+
+The selection of linking variables should not be arbitrary pre-ordained
+by preconceptions. The decision of which constraints to use to
+allocate individuals to zones should be context dependent:
+if the research is on social exclusion, for example,
+many variables could potentially be of interest, ranging from car ownership
+and house tenancy though to age, gender and religion.
+Often constraint variables must be decided not based on what would
+would be ideal, but what datasets are available. The selection criteria
+will vary from one project to the next, but there are some overriding
+principles that apply to most projects:
+
+1. **More the merrier**: each additional constraint used for
+will further differentiate the spatial microdata from the input microdata.
+If gender is the only constraint used, for example, the spatial microdata will
+simply be a repetition of the input microdata but with small differences in
+the gender ratio from one zone to the next. If five constraints are used
+(e.g. age, gender, car ownership, tenancy and religion), the differences
+between the spatial microdata from one zone to the next will be much more
+pronounced and probably useful.
+
+2. **Relevance to the target variable**: often spatial microsimulation is
+used to generate local estimates of variables about which little geographically
+disaggregated information is available. Income is a common example: we have
+much information about income distributions, but little information about how
+average values (let alone the distribution) of income varies from one small area
+to the next. In this case income is the target variable. Therefore constraints
+must be selected which are closely related to income for the output to resemble
+reality. This is analogous to multiple regression (which can also be used
+to estimate average income at the local level), where the correct
+*explanatory variables* (i.e. constraint variables in spatial microsimulation)
+must be selected to effectively predict the *dependent variable*. As with
+regression models, there are techniques which can be used to identify the most
+suitable constraint variables for a given target variable.
+
+```{r, echo=FALSE}
+# TODO: See section x
+# may need to spell-out what constraint categories are for below
+```
+
+3. **Simplicity**: this criterion to some extent contradicts the first. Sometimes
+more constraints do not result in better spatial microdata and problems associated
+with 'over-fitting' can emerge. Spatial microsimulation models based on many
+tens of constraint categories will take longer to run and require more time
+to develop and modify. In addition, the chances of an error being
+introduced during every phase of the project is increased with each additional
+constraint. The extent to which increasing the number of constraint categories
+improves the results of spatial microsimulation, either with additional
+variables or by using cross-tabulated constraints (e.g. age/sex)
+instead of single-variable constraints, has yet to be explored. It is therefore
+difficult to provide general rules of thumb regarding simplicity other than
+'do not overcomplicate the model with excessive constraint variables and
+constraints'.
+
+To exemplify these principles, let us consider the constraint variables available
+in the CakeMap datasets. Clearly only variables available both in the individual-level and 
+aggreate datasets can be chosen from. Five variables assigned to each
+of the 916 individuals are available from the individual-level data,
+about which data is also available from the census:
 
 - 'Car': The number of working cars in the person's household.
 - 'Sex' and 'ageband4': Gender and age group, in two separate variables. 
@@ -1808,7 +1851,7 @@ Note that this script makes frequent reference to files contained
 in the folder 'data/CakeMap', where input data and processing scripts
 for the project are stored.
 
-## Preparing the input data
+## Preparing the input data {#CakePrep}
 
 Often spatial microsimulation is presented in a way that suggests the data
 arrived in a near perfect state, ready to be inserted directly into the model.
@@ -1891,7 +1934,7 @@ take some time exploring the input. Only when these
 datasets make sense (a pen and paper can help here, as well as R!) is it time to
 generate the spatial microdata.
 
-## Performing IPF on CakeMap data
+## Performing IPF on CakeMap data {CakeIPF}
 
 The `ipfp` reweighting strategy is concise, generalisable and computationally
 efficient. On a modern laptop, the `ipfp` method was found to be *almost 40
@@ -1928,7 +1971,7 @@ This demonstrates that the process has worked with an *r* value above 0.99:
 cor(as.numeric(cons), as.numeric(ind_agg))
 ```
 
-## Integerisation
+## Integerisation {CakeINT}
 
 As before, weights of the IPF procedure are fractional, so must be *integerised*
 to create whole individuals. The code presented in chapter 4 requires little
@@ -2047,7 +2090,7 @@ therefore a tricky topic, something not covered here but which is discussed in
 Edwards et al. (2009). For more on this and  for (an albeit unreliable)
 comparison between estimated cake consumption and external income estimates.
 
-## Visualisations
+## Visualisations {#CakeVis}
 
 Visualisation is an important part of communicating quantitative
 data, especially so when the datasets are large and complex so not
@@ -2076,7 +2119,7 @@ img <- readPNG("figures/CakeMap-lores.png")
 grid.raster(img)
 ```
 
-## Analysis and interpretation
+## Analysis and interpretation {#CakeAnalysis}
 
 Once a spatial microdataset has been generated that we are happy with, we will
 probably want to analyse it further.  This means exploring it --- its main
@@ -2217,7 +2260,7 @@ understands vector algebra, all data accessible to R resides in a number of
 named objects and that a function must be used to modify any object. We will
 look at each of these in some code below.
 
-## R understands vector algebra
+## R understands vector algebra {#vector-alg}
 
 A vector is simply an ordered list of numbers (Beezer, 2008).
 Imagine two vectors, each consisting of 3 elements:
@@ -2255,7 +2298,7 @@ This conciseness is clearly very useful in spatial microsimulation, as numeric
 variables of the same length are common (e.g. the attributes of individuals in a
 zone) and can be acted on with a minimum of effort.
 
-## R is object orientated
+## R is object orientated {R-object}
 
 In R, everything that exists is an object with a name and a class. This is
 useful, because R's functions know automatically how to behave differently on
@@ -2289,7 +2332,6 @@ names beginning with a number or containing operator symbols such as `-`, `^`
 and brackets. It is good practice to think about what the purpose of an object
 is before naming it: using clear and concise names can save you a huge amount of
 time in the long run.
-
 
 ## Subsetting in R {#subsetting}
 

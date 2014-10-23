@@ -38,8 +38,13 @@ This chapter focuses on the input datasets needed for spatial microsimulation.
 Correctly loading, manipulating and assessing these datasets will be critical to
 the performance of your models and the ease of modifying them to include new
 inputs.  Fortunately R is an accomplished tool for data cleaning (Kabacoff,
-2011) (http://www.manning.com/kabacoff/), as we shall see.  This chapter also
-provides the basis for chapter we perform spatial microsimulation.
+2011) (http://www.manning.com/kabacoff/), as we shall see. This chapter also
+provides the basis for chapter \ref{Smsim1}, in which we
+undertake spatial microsimulation on the data loaded here.
+
+```{r, echo=FALSE}
+## Accessing the input data
+```
 
 As with most spatial microsimulation models, this example consists of a
 non-geographical individual-level dataset and a series of geographical zones.

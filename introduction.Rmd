@@ -193,7 +193,7 @@ thousands of packages that extend R's capabilities by providing new functions.
 Improvements are being added all the time.
 The **ipfp** package, for example,
 can greatly reduce the computational time taken for a key element of spatial
-microsimulation process, as we shall see in *Reweighting with ipfp* (Section \ref{ipfp}).
+microsimulation process, as we shall see in *Reweighting with ipfp* (\ref{ipfp}).
 Further information about why R is a good choice for spatial microsimulation
 is provided in the Appendix, a tutorial introduction to R for spatial
 microsimulation applications. The next section describes approaches

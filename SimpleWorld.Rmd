@@ -12,7 +12,7 @@ simple example of the kind of situation where spatial microsimulation is useful.
 We'll use an imaginary world called SimpleWorld, consisting of only 3 zones that
 cover the entirety of the SimpleWorld sphere (Figure 2). 
 
-```{r  fig.cap="The SimpleWorld sphere", echo=FALSE, message=FALSE}
+```{r simpleworld,  fig.cap="The SimpleWorld sphere", echo=FALSE, message=FALSE}
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
 library(sp)

@@ -3,25 +3,90 @@ title: "CakeMap"
 layout: default
 ---
 
-# CakeMap: spatial microsimulation in the wild {#CakeMap}
+# Spatial microsimulation in the wild {#CakeMap}
 
 By now we have developed a good understanding of what spatial microsimulation
-is, its applications and how it works. We have seen a little of both its
-underlying theory and its implementation in R. However, we have yet to see how
-the method can be applied 'in the wild', on real datasets.
+is, its applications and how it works. We have seen something of its
+underlying theory and its implementation in R. But how can
+the method can be applied 'in the wild', on real datasets?
 
-"This spatial microsimulation technique seems useful, but how can I use these
-methods on my data?" The purpose of this chapter is to answer this question
-using a real dataset.  The chapter is based on a hypothetical use of spatial
-microsimulation to arrive at an important result: estimated cake consumption in
-different parts of Leeds, UK. The example is deliberately rather absurd: to make
-it more memorable. The steps are presented in a generalisable way
-and are applicable to most datasets.
+The purpose of this chapter is to answer this question
+using real data to estimate cake consumption in
+different parts of Leeds, UK. The example is deliberately rather absurd to make
+it more memorable. The steps are presented in a generalisable way, to be
+applicable to a wide range of datasets.
 
 The input microdataset is a randomised ('jumbled') subset of the
-2009 Dental Health Survey (http://data.gov.uk/dataset/adult_dental_health_survey),
-covering England, Northern Ireland and Wales. The five variables assigned to each
-of the 916 individuals are as follows:
+2009 [Dental Health Survey](http://data.gov.uk/dataset/adult_dental_health_survey),
+(DHS) which covers England, Northern Ireland and Wales. xx variables are available
+in the DHS including xx, xx and xxx. In terms of constraint variables, we are more
+limited: the Census is the only survey that provides count data at the small area
+level. From this 'domain' of available input data, with the non-geographical
+individual-level DHS on one side --- the *microdata* --- and the geographically
+aggregated categorical count data from the census --- the *constraint tables* ---
+we must first decide which variables should be used to link the two. We must
+select the 'linking variables', otherwise know as constraint variables.
+
+## Selection of constraint variables
+
+The selection of linking variables should not be arbitrary pre-ordained
+by preconceptions. The decision of which constraints to use to
+allocate individuals to zones should be context dependent:
+if the research is on social exclusion, for example,
+many variables could potentially be of interest, ranging from car ownership
+and house tenancy though to age, gender and religion.
+Often constraint variables must be decided not based on what would
+would be ideal, but what datasets are available. The selection criteria
+will vary from one project to the next, but there are some overriding
+principles that apply to most projects:
+
+1. **More the merrier**: each additional constraint used for
+will further differentiate the spatial microdata from the input microdata.
+If gender is the only constraint used, for example, the spatial microdata will
+simply be a repetition of the input microdata but with small differences in
+the gender ratio from one zone to the next. If five constraints are used
+(e.g. age, gender, car ownership, tenancy and religion), the differences
+between the spatial microdata from one zone to the next will be much more
+pronounced and probably useful.
+
+2. **Relevance to the target variable**: often spatial microsimulation is
+used to generate local estimates of variables about which little geographically
+disaggregated information is available. Income is a common example: we have
+much information about income distributions, but little information about how
+average values (let alone the distribution) of income varies from one small area
+to the next. In this case income is the target variable. Therefore constraints
+must be selected which are closely related to income for the output to resemble
+reality. This is analogous to multiple regression (which can also be used
+to estimate average income at the local level), where the correct
+*explanatory variables* (i.e. constraint variables in spatial microsimulation)
+must be selected to effectively predict the *dependent variable*. As with
+regression models, there are techniques which can be used to identify the most
+suitable constraint variables for a given target variable.
+
+```{r, echo=FALSE}
+# TODO: See section x
+# may need to spell-out what constraint categories are for below
+```
+
+3. **Simplicity**: this criterion to some extent contradicts the first. Sometimes
+more constraints do not result in better spatial microdata and problems associated
+with 'over-fitting' can emerge. Spatial microsimulation models based on many
+tens of constraint categories will take longer to run and require more time
+to develop and modify. In addition, the chances of an error being
+introduced during every phase of the project is increased with each additional
+constraint. The extent to which increasing the number of constraint categories
+improves the results of spatial microsimulation, either with additional
+variables or by using cross-tabulated constraints (e.g. age/sex)
+instead of single-variable constraints, has yet to be explored. It is therefore
+difficult to provide general rules of thumb regarding simplicity other than
+'do not overcomplicate the model with excessive constraint variables and
+constraints'.
+
+To exemplify these principles, let us consider the constraint variables available
+in the CakeMap datasets. Clearly only variables available both in the individual-level and 
+aggreate datasets can be chosen from. Five variables assigned to each
+of the 916 individuals are available from the individual-level data,
+about which data is also available from the census:
 
 - 'Car': The number of working cars in the person's household.
 - 'Sex' and 'ageband4': Gender and age group, in two separate variables. 

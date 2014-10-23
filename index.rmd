@@ -5,7 +5,10 @@ title: "Welcome"
 
 Welcome to the website of *Spatial Microsimulation with R*, a book about modelling individual-level data within administrative zones. The aim is to provide an introduction to the topic, with practical examples implemented in the powerful statistical software R.
 
-This book is in preparation for publication in CRC Press's [R series](http://www.crcpress.com/browse/series/crctherser).  This wiki serves as a place to take an early peak at some of the topics covered and allows instant access to updates.
+This book is in preparation for publication in CRC Press's [R series](http://www.crcpress.com/browse/series/crctherser). This wiki serves as a place explore the topics covered and allows instant access to updates. It also allows anyone
+with a [GitHub account](https://github.com/join) to contribute.
+
+For people wanting the entire book in one document, an [up-to-date pdf document is available at the following permalink:](https://www.dropbox.com/s/gaf9dnm26uoxy4i/book.pdf?dl=0). If you have any questions or feedback, please get in touch via email: r.lovelace@leeds.ac.uk .
 
 The contents of the book are as follows:
 
