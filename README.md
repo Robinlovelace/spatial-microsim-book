@@ -6,7 +6,8 @@ This is the website of a book to be published by CRC Press's
 
 The current working draft can be viewed online on
 [the book's homepage](http://robinlovelace.net/spatial-microsim-book/).
-Anyone can contribute to this book [here](https://github.com/Robinlovelace/spatial-microsim-book/edit/master/book-cambridge.Rmd).
+Anyone can contribute to this book
+[here](https://github.com/Robinlovelace/spatial-microsim-book).
 
 Merges to this branch should only be one way: `master -> gh-pages`:
 
