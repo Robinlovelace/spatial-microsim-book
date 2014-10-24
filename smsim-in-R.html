@@ -73,7 +73,7 @@
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ipfp) <span class="co"># load ipfp library after install.packages(&quot;ipfp&quot;)</span>
 cons &lt;-<span class="st"> </span><span class="kw">apply</span>(cons, <span class="dv">2</span>, as.numeric) <span class="co"># to 1d numeric data type</span>
 <span class="kw">ipfp</span>(cons[<span class="dv">1</span>,], <span class="kw">t</span>(ind_cat), <span class="dt">x0 =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(ind))) <span class="co"># run IPF</span>
-<span class="co">#&gt; [1] 1.228 1.228 3.544 1.544 4.456</span></code></pre>
+<span class="co">#&gt; [1] 1.227998 1.227998 3.544004 1.544004 4.455996</span></code></pre>
 <p>It is impressive that the entire IPF process, which takes dozens of lines of code in pure R can been condensed into two lines: one to convert the input constraint dataset to <code>numeric</code><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> and one to perform the IPF operation itself. Note also that although we did not specify how many iterations to run, the above command ran the default of <code>maxit = 1000</code> iterations, despite convergence happening after 10 iterations. This can be seen by specifying the <code>maxit</code> and <code>verbose</code> arguments (the latter of which can be referred to lazily as <code>v</code>) in <code>ipfp</code>, as illustrated below (only the first line of R output is shown):</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ipfp</span>(cons[<span class="dv">1</span>,], <span class="kw">t</span>(ind_cat), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(ind)), <span class="dt">maxit =</span> <span class="dv">20</span>, <span class="dt">v =</span> T)</code></pre>
 <pre><code>## iteration 0:   0.141421
@@ -114,9 +114,9 @@ cons
 ind_agg[] &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(weights_maxit_2, <span class="dt">MARGIN =</span> <span class="dv">2</span>, 
   <span class="dt">FUN =</span> function(x) <span class="kw">colSums</span>(x *<span class="st"> </span>ind_cat)))
 ind_agg[<span class="dv">1</span>:<span class="dv">2</span>, <span class="dv">1</span>:<span class="dv">3</span>]
-<span class="co">#&gt;      a0_49  a50+ m</span>
-<span class="co">#&gt; [1,] 8.003 3.997 6</span>
-<span class="co">#&gt; [2,] 2.004 7.996 4</span></code></pre>
+<span class="co">#&gt;         a0_49     a50+ m</span>
+<span class="co">#&gt; [1,] 8.002597 3.997403 6</span>
+<span class="co">#&gt; [2,] 2.004397 7.995603 4</span></code></pre>
 <p>Clearly the final weights after 3 iterations of IPF represent the constraint variables well, but do not match perfectly except in the second constraint. This shows the importance of considering number of iterations in the reweighting stage — too many iterations can be wasteful, too few may result in poor results. To reiterate, 20 iterations of IPF should be sufficient in most cases for the results to converge towards their final level of fit. More sophisticated ways of evaluating model fit are presented in Section .</p>
 <h2 id="alternative-reweighting">Alternative reweighting algorithms</h2>
 <p>As described in the Introduction, IPF is just one strategy for obtaining a spatial microdataset. However, researchers (myself included) have tended to select one method that they are comfortable and stick with that for their models. This is understandable because setting-up the method is usually time consuming: most researchers rightly focus on applying the methods to the real world rather than fretting about the details. On the other hand, if alternative methods work better for a particular application, resistance to change can result in poor model fit. In the case of very large datasets, spatial microsimulation may not be possible unless certain methods, optimised to deal with large datasets, are used. Above all, there is no consensus about which methods are ‘best’ for different applications, so it is worth experimenting to identify which method is most suitable for each application.</p>

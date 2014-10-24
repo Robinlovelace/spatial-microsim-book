@@ -101,6 +101,17 @@ little information about
 
 ### Economic policy evaluation
 
+Microsimulation was originally developed for economic policy evaluation and it
+is still one of most common applications. 'Social impact evaluation', where the
+impact of policy changes on different income and socio-demographic groups is
+explored, is a classic example of applied microsimulation research. Frequently
+these simulations are undertaken by government financial or welfare departments
+for entire countries and focus on overall shifts in the population rather than
+spatial variability in the impacts. EUROMOD...
+
+- EUROMOD
+- Income decile graph
+
 ### Transport
 
 ## What spatial microsimulation is not {#is-not}
@@ -188,7 +199,9 @@ variables can be deemed to be constant over space is often
 unknown. However, there there are ways of
 checking the spatial dependency of
 relationships between multiply variables, not least Geographically Weighted Regression
-(GWR). In any case, these limitations should be discussed at the outset of spatial
+(GWR). 
+
+These limitations should be discussed at the outset of spatial
 microsimulation research, with reference to the input data. To see how spatial
 microsimulation simplifies the real world, the next chapter describes
 a hypothetical scenario where 33 inhabitants of an imaginary land
