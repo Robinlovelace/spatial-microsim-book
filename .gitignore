@@ -23,3 +23,4 @@ ggmap*
 *.cls
 book/
 _site/
+temp.*
