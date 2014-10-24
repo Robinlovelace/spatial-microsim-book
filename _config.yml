@@ -1,5 +1,0 @@
-name: Spatial Microsimulation with R
-markdown: redcarpet
-highlighter: pygments
-
-exclude: ["pandoc", "reviews", "CONTRIBUTING.md", "README.md", "book", "extras"]
