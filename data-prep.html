@@ -46,7 +46,7 @@
       <div class="row">
         <div class="col-sm-3" id="nav">
         <div class="well">
-          Comming soon as a physical book</a>.
+          Available soon as a physical book</a>.
         </div>
 
         <h4>Contents</h4>
@@ -60,7 +60,7 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="DataPrep">Preparing input data</h1>
-<p>This chapter focuses on the input datasets needed for spatial microsimulation. Correctly loading, manipulating and assessing these datasets will be critical to the performance of your models and the ease of modifying them to include new inputs. Fortunately R is an accomplished tool for data cleaning (Kabacoff, 2011) (<a href="http://www.manning.com/kabacoff/">http://www.manning.com/kabacoff/</a>), as we shall see. This chapter also provides the basis for chapter we perform spatial microsimulation.</p>
+<p>This chapter focuses on the input datasets needed for spatial microsimulation. Correctly loading, manipulating and assessing these datasets will be critical to the performance of your models and the ease of modifying them to include new inputs. Fortunately R is an accomplished tool for data cleaning (Kabacoff, 2011) (<a href="http://www.manning.com/kabacoff/">http://www.manning.com/kabacoff/</a>), as we shall see. This chapter also provides the basis for chapter , in which we undertake spatial microsimulation on the data loaded here.</p>
 <p>As with most spatial microsimulation models, this example consists of a non-geographical individual-level dataset and a series of geographical zones. The data used in this chapter (and the data for all other chapters) can be downloaded from the book’s GitHub repository (<a href="https://github.com/Robinlovelace/spatial-microsim-book">https://github.com/Robinlovelace/spatial-microsim-book</a>). From this page, click on the ‘Download ZIP’ button to the right of the page and extract the folder into a sensible place on your computer, such as the Desktop. From there, you will want to run R from the project’s root directory: open the folder in a file browser and double click on ‘spatial-microsim-book.Rproj’. This should cause RStudio to be opened at this location, with all the input data files easily accessible to R through <em>relative file paths</em>.</p>
 <p>To ease reproducibility of the analysis when working with real data, it is recommended that the process begins with a copy of the <em>raw</em> dataset on one’s hard disc. Rather than modifying this file, modified (‘cleaned’) versions should be saved as separate files. This ensures that after any mistakes, one can always recover information that otherwise could have been lost and makes the project fully reproducible. In this chapter, however, a relatively clean and very tiny dataset from SimpleWorld is used. We will see in Chapter  how to deal with larger and more messy data. Here the focus is on the principles.</p>
 <p>The process of loading, checking and preparing the input datasets for spatial microsimulation is generally a linear process, encapsulating the following stages:</p>

@@ -193,7 +193,9 @@ variables can be deemed to be constant over space is often
 unknown. However, there there are ways of
 checking the spatial dependency of
 relationships between multiply variables, not least Geographically Weighted Regression
-(GWR). In any case, these limitations should be discussed at the outset of spatial
+(GWR). 
+
+These limitations should be discussed at the outset of spatial
 microsimulation research, with reference to the input data. To see how spatial
 microsimulation simplifies the real world, the next chapter describes
 a hypothetical scenario where 33 inhabitants of an imaginary land
