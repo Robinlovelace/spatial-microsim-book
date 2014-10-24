@@ -106,6 +106,17 @@ little information about
 
 ### Economic policy evaluation
 
+Microsimulation was originally developed for economic policy evaluation and it
+is still one of most common applications. 'Social impact evaluation', where the
+impact of policy changes on different income and socio-demographic groups is
+explored, is a classic example of applied microsimulation research. Frequently
+these simulations are undertaken by government financial or welfare departments
+for entire countries and focus on overall shifts in the population rather than
+spatial variability in the impacts. EUROMOD...
+
+- EUROMOD
+- Income decile graph
+
 ### Transport
 
 ## What spatial microsimulation is not {#is-not}
