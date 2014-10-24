@@ -25,3 +25,8 @@ system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
 for(i in tt){
   system(paste('rm', i))
 }
+
+# For website build
+system("rm -v *.html")
+system("cp -v _site/*.html .") # copy site dir to local - not needed
+system("cp -v frontmatter/index.html .")
