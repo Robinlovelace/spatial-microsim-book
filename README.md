@@ -1,4 +1,4 @@
-Spatial microsimulation with R - CRC Press book project
+Spatial microsimulation with R book project
 =====================
 
 This is the directory of code, sample data and content of a book on
@@ -11,6 +11,18 @@ Anyone can contribute to this book [here](https://github.com/Robinlovelace/spati
 
 Any questions about the book? Want to review an early version?
 Please contact me on rob00x-at-gmail.com.
+
+**Building the website**
+
+Merges to the gh-pages website branch should only be one way: `master -> gh-pages`:
+
+```
+# from within the master branch:
+cp -v *.Rmd /tmp/ # copy all .Rmd files to temp folder
+git checkout gh-pages # switch to website branch
+mv /tmp/*.Rmd . # move copied files
+rm book.* # remove book files
+```
 
 For more information about GitHub, please see the below introduction:
 
