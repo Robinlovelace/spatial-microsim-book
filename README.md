@@ -1,4 +1,4 @@
-spatial-microsim-book
+Spatial microsimulation with R - CRC Press book project
 =====================
 
 This is the directory of code, sample data and content of a book on
@@ -7,7 +7,7 @@ This is the directory of code, sample data and content of a book on
 
 The current working draft can be viewed online on
 [the book's homepage](http://robinlovelace.net/spatial-microsim-book/).
-Anyone can contribute to this book [here](https://github.com/Robinlovelace/spatial-microsim-book/edit/master/book-cambridge.Rmd).
+Anyone can contribute to this book [here](https://github.com/Robinlovelace/spatial-microsim-book).
 
 Any questions about the book? Want to review an early version?
 Please contact me on rob00x-at-gmail.com.

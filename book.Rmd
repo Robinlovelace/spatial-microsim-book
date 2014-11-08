@@ -7,6 +7,7 @@ output:
     keep_tex: yes
     number_sections: yes
     toc: yes
+bibliography: ~/Documents/smr.bib 
 layout: default
 ---
 
@@ -380,7 +381,8 @@ from spatial microsimulation can be used as an input into more complex models
 - *Additional tools and techniques* introduces further methods
 and applications, including a description of R packages for spatial
 microsimulation (in progress).
-# What is spatial microsimulation?
+
+# What is spatial microsimulation? {#what-is}
 
 Spatial microsimulation is a
 statistical technique for allocating individuals from a survey dataset
@@ -397,7 +399,7 @@ the transport network. To your next door neighbour it may mean you have
 started speaking gobbledygook! Hence the need to consider what spatial
 microsimulation is, and what it is not, at the outset.
 
-## Terminology
+## Terminology {#terminology}
 
 Delving a little into the etymology and history of the term reveals the
 reasons behind this duplicity of meaning and highlights the importance
@@ -463,7 +465,40 @@ is provided at the end. For now, to
 help answer what spatial microsimulation is we will look at 
 its applications and then at what it is not.
 
-Applications
+## Applications {#applications}
+
+Spatial microsimulation has a wide variety of applications and there
+are many areas where the technique has been used.
+Some of the main areas of application have
+been health, economic policy evaluation and transport. Rather than attempt
+to provide a comprehensive account of the range of current and possible
+applications, this section describes a single study in each area to exemplify
+how spatial microsimulation is used.
+
+### Health applications
+
+An excellent example of the potential practical utility of spatial microsimulation
+is a study by Tomintz et al. (2008), which estimated the rate of smoking at the
+small area level. Smoking is a classic 'target variable' in spatial microsimulation:
+it is reported in a number of individual-level surveys but there is surprisingly
+little information about
+
+### Economic policy evaluation
+
+Microsimulation was originally developed for economic policy evaluation and it
+is still one of most common applications. 'Social impact evaluation', where the
+impact of policy changes on different income and socio-demographic groups is
+explored, is a classic example of applied microsimulation research. Frequently
+these simulations are undertaken by government financial or welfare departments
+for entire countries and focus on overall shifts in the population rather than
+spatial variability in the impacts. EUROMOD...
+
+- EUROMOD
+- Income decile graph
+
+### Transport
+
+## What spatial microsimulation is not {#is-not}
 
 **Spatial microsimulation is not strictly spatial**
 
@@ -548,13 +583,14 @@ variables can be deemed to be constant over space is often
 unknown. However, there there are ways of
 checking the spatial dependency of
 relationships between multiply variables, not least Geographically Weighted Regression
-(GWR). In any case, these limitations should be discussed at the outset of spatial
+(GWR). 
+
+These limitations should be discussed at the outset of spatial
 microsimulation research, with reference to the input data. To see how spatial
 microsimulation simplifies the real world, the next chapter describes
 a hypothetical scenario where 33 inhabitants of an imaginary land
 are simulated and allocated to three zones
 based on a microdataset of only 5 individuals and two constraint variables.
-
 
 # SimpleWorld {#SimpleWorld}
 
@@ -2178,28 +2214,53 @@ As a bonus exercise, explore the class dependence of cake consumption in the
 Dental Health Survey.
 
 \clearpage
+
 # Spatial microdata in agent-based models {#ABM}
 
-This Chapter is work in progress.
+Spatial microsimulation can be seen as a precursor to, or early
+form of, agent-based models (ABMs). Agent-based modelling depends on 1) a number
+of discrete agents, 2) with different characteristics, 3) interacting. With the
+spatial microsimulation model created in the previous chapters we
+already have two thirds of the necessary ingredients
+of an ABMs: if your aim is to use spatial microdata as an input into
+agent based models, you're more than half way there!
+
+We do not have space in this book to describe the transition from the
+spatial microdata we have generated into a full ABM. Suffice to mention some of
+the tools that will be useful for the job.
+
+[NetLogo](https://ccl.northwestern.edu/netlogo/) is a
+mature and widely used toolkit for agent-based models written in
+Java.  The recently published **RNetLogo** package provides an interface between
+R and NetLogo, allowing for model runs to be set-up and run directly from within
+R ([Thiele, 2014](http://www.jstatsoft.org/v58/i02/paper)). Crucially,
+this allows the outputs of agent based models to be loaded directly into
+your R environment. Using R to run a separate programme may seem overly complicated
+("why not simply run the model in NetLogo?" is a valid question) for
+very simply models and for setting-up and testing the 
+ABM it is recommended to use NetLogo directly, with its
+intuitive graphical interface.
+
+```{r,echo=FALSE}
+# TODO: Batty reference below on abm design
+```
+
+
+For many ABM applications, however, the R interface is useful. This is because
+AMB's are inherently unpredictable due to their 'bottom up' design.
+Thus we generally want to study many model runs before drawing conclusions
+about how the overall system operates, let alone real world implications.
+Because much of the
+time taken for agent based modelling is consumed on this sensitivity/parameter space
+analysis, running NetLogo
+from within R makes sense
+
+[@Thiele2014]
+
+([Thiele et al., 2014](https://ideas.repec.org/a/jas/jasssj/2013-150-2.html)). 
 
 ```{r, echo=FALSE}
-# In some ways, we can see spatial microsimulation as a precursor to, or early
-# form of, agent-based models (ABMs). Agent-based modelling depends on 1) a number
-# of discrete agents, 2) with different characteristics, 3) interacting. With the
-# spatial microsimulation model created in the last chapter we have 2 of these 3
-# elements of an ABMs: if your aim is to use spatial microdata as an input into
-# agent based models, you're half way there!
-# 
-# We do not have space in this tutorial to describe the transition from the
-# spatial microdata we have generated into a full ABM. Suffice to mention some of
-# the tools that will be useful for the job.
-# 
-# NetLogo is an mature and widely used toolkit for agent-based models written in
-# Java.  The recently published **RNetLogo** package provides an interface between
-# R and NetLogo, allowing for model runs to be set-up and run directly from within
-# R ([Thiele, 2014](http://www.jstatsoft.org/v58/i02/paper)). Because much of the
-# time taken for agent based modelling is focussed on analysis, running NetLogo
-# from within R, where the results can be saved, is an eminently sensible choice.
+
 # 
 # Watch this space for more on this!
 # 
@@ -2333,6 +2394,7 @@ and brackets. It is good practice to think about what the purpose of an object
 is before naming it: using clear and concise names can save you a huge amount of
 time in the long run.
 
+
 ## Subsetting in R {#subsetting}
 
 R has powerful, concise and (over time) intuitive methods for taking subsets of
@@ -2462,14 +2524,27 @@ This is work in progress.
 
 # References
 
+Barthélemy, J. (2014). A parallelized micro-simulation platform for population and mobility behaviour-Application to Belgium. University de Namur.
+
 Beezer, R. A. (2008). A first course in linear algebra. Puget Sound: Congruent Press.
+
+Boyd, S., & Vandenberghe, L. (2009). Convex optimization. Cambridge university press.
 
 Edwards, K. L., Clarke, G. P., Thomas, J., & Forman, D. (2010). Internal and External Validation of Spatial Microsimulation Models: Small Area Estimates of Adult Obesity. Applied Spatial Analysis and Policy, 4(4), 281–300. doi:10.1007/s12061-010-9056-2
 
 Feinerer, I. (2013). Introduction to the tm Package Text Mining in R. Comprehensive R Archive Network, 1–8.
 
-Harland, K. (2013). Microsimulation model user guide: flexible modelling framework (No. 0613). Leeds. Retrieved from http://eprints.ncrm.ac.uk/3177/
+Harland, K. (2013a). Microsimulation Model User Guide (Flexible Modelling Framework). National Centre for Research Methods, 1306(06). doi:http://eprints.ncrm.ac.uk/3177/2/microsimulation_model.pdf
+
+Harland, K. (2013b). Microsimulation model user guide: flexible modelling framework (No. 0613). Leeds. Retrieved from http://eprints.ncrm.ac.uk/3177/
+
+Ince, D. C., Hatton, L., & Graham-Cumming, J. (2012). The case for open computer programs. Nature, 482(7386), 485–8. doi:10.1038/nature10836
+
+Jones, O., Maillardet, R., & Robinson, A. (2014). Introduction to scientific programming and simulation using R (2nd ed.). Chapman and Hall/CRC.
+
 Knoblauch, K., & Maloney, L. T. (2012). Modeling psychophysical data in R (Vol. 32). Springer.
+
+Lovelace, R. (2014). Introducing spatial microsimulation with R: a practical. National Centre for Research Methods, 08(14). Retrieved from http://eprints.ncrm.ac.uk/3348/
 
 Lovelace, R., & Ballas, D. (2013). “Truncate, replicate, sample”: A method for creating integer weights for spatial microsimulation. Computers, Environment and Urban Systems, 41, 1–11. doi:10.1016/j.compenvurbsys.2013.03.004
 
@@ -2477,13 +2552,26 @@ Lovelace, R., & Cheshire, J. (2014). Introduction to visualising spatial data in
 
 Meyer, D., Hornik, K., & Feinerer, I. (2008). Text mining infrastructure in R. Journal of Statistical Software, 25(5). Retrieved from http://epub.wu.ac.at/3978/
 
+Peng, R. D., Dominici, F., & Zeger, S. L. (2006). Reproducible epidemiologic research. American Journal of Epidemiology, 163(9), 783–9. doi:10.1093/aje/kwj093
+
 Pritchard, D. R., & Miller, E. J. (2012). Advances in population synthesis: fitting many attributes per agent and fitting to household and person margins simultaneously. Transportation, 39(3), 685–704. doi:10.1007/s11116-011-9367-4
 
 Rey, S. J. (2014). Open regional science. The Annals of Regional Science, 52(3), 825–837. doi:10.1007/s00168-014-0611-7
 
 Thiele, J. (2014). R Marries NetLogo: Introduction to the RNetLogo Package. Journal of Statistical, 58(2), 1–41. Retrieved from http://www.jstatsoft.org/v58/i02/paper
 
+Thiele, J., Kurth, W., & Grimm, V. (2014). Facilitating Parameter Estimation and Sensitivity Analysis of Agent-Based Models: A Cookbook Using NetLogo and’R'. Journal of Artificial Societies and …, 17(11). Retrieved from https://ideas.repec.org/a/jas/jasssj/2013-150-2.html
+
+Tomintz, M. N. M. N. N., Clarke, G. P., & Rigby, J. E. J. E. E. (2008). The geography of smoking in Leeds: estimating individual smoking rates and the implications for the location of stop smoking services. Area, 40(3), 341–353. Retrieved from http://onlinelibrary.wiley.com/doi/10.1111/j.1475-4762.2008.00837.x/full
+
 Venables, W. W. N., Smith, D. M. D. M., Team, R. D. C., & others. (2014). An introduction to R, 1. Retrieved from http://folk.uio.no/bernde/pub/Statistics.pdf
-Wickham, H. (2014). Advanced R. Retrieved from http://www.crcpress.com/product/isbn/9781466586963
+
+Voas, D., & Williamson, P. (2001). Evaluating Goodness-of-Fit Measures for Synthetic Microdata. Geographical and Environmental Modelling, 5(2), 177–200. doi:10.1080/13615930120086078
+
+Wickham, H. (2014a). Advanced R. CRC Press. Retrieved from http://www.crcpress.com/product/isbn/9781466586963
+
+Wickham, H. (2014b). Tidy data. The Journal of Statistical Software, 14(5). Retrieved from http://vita.had.co.nz/papers/tidy-data.html
 
 Xie, Y. (2013). Animation: an R package for creating animations and demonstrating statistical methods. Journal of Statistical Software, 53(1), 1–27.
+
+Zubizarreta, J. R. (2012). Using mixed integer programming for matching in an observational study of kidney failure after surgery. Journal of the American Statistical Association, 107(500), 1360–1371.
