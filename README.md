@@ -12,7 +12,7 @@ Anyone can contribute to this book
 Merges to this branch should only be one way: `master -> gh-pages`:
 
 ```
-# from within gh-pages
+# from the master branch:
 cp -v *.Rmd /tmp/ # copy all .Rmd files to temp folder
 git checkout gh-pages # switch to website branch
 mv /tmp/*.Rmd . # move copied files
