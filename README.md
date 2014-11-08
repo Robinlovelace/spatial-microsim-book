@@ -21,6 +21,6 @@ rm book.* # remove book files
 
 To compile this website, simply clone it and run the final lines
 of bbuild.R, followed by 
-`jekyll-build`. All .Rmd files should be kept on the master branch.
+`jekyll build`. All .Rmd files should be kept on the master branch.
 
 

@@ -60,7 +60,12 @@
 
         <div id="content" class="col-sm-8 pull-right">
           <h1 id="ABM">Spatial microdata in agent-based models</h1>
-<p>This Chapter is work in progress.</p>
+<p>Spatial microsimulation can be seen as a precursor to, or early form of, agent-based models (ABMs). Agent-based modelling depends on 1) a number of discrete agents, 2) with different characteristics, 3) interacting. With the spatial microsimulation model created in the previous chapters we already have two thirds of the necessary ingredients of an ABMs: if your aim is to use spatial microdata as an input into agent based models, you’re more than half way there!</p>
+<p>We do not have space in this book to describe the transition from the spatial microdata we have generated into a full ABM. Suffice to mention some of the tools that will be useful for the job.</p>
+<p><a href="https://ccl.northwestern.edu/netlogo/">NetLogo</a> is a mature and widely used toolkit for agent-based models written in Java. The recently published <strong>RNetLogo</strong> package provides an interface between R and NetLogo, allowing for model runs to be set-up and run directly from within R (<a href="http://www.jstatsoft.org/v58/i02/paper">Thiele, 2014</a>). Crucially, this allows the outputs of agent based models to be loaded directly into your R environment. Using R to run a separate programme may seem overly complicated (“why not simply run the model in NetLogo?” is a valid question) for very simply models and for setting-up and testing the ABM it is recommended to use NetLogo directly, with its intuitive graphical interface.</p>
+<p>For many ABM applications, however, the R interface is useful. This is because AMB’s are inherently unpredictable due to their ‘bottom up’ design. Thus we generally want to study many model runs before drawing conclusions about how the overall system operates, let alone real world implications. Because much of the time taken for agent based modelling is consumed on this sensitivity/parameter space analysis, running NetLogo from within R makes sense</p>
+<p><span class="citation">[@Thiele2014]</span></p>
+<p>(<a href="https://ideas.repec.org/a/jas/jasssj/2013-150-2.html">Thiele et al., 2014</a>).</p>
 
         </div>
       </div>
