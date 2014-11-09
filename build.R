@@ -22,6 +22,7 @@ render("book.Rmd", output_format = "pdf_document")
 
 source("R/bbuild.R")
 system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
+system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
 
 # tidy up the mess
 tt <- list.files(pattern = "*.aux|*.toc|*.log|*.lot|*.gz|*.idx|*.ilg|*.ind|*.ggmap", )

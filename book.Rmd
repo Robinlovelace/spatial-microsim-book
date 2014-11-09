@@ -12,12 +12,11 @@ layout: default
 ---
 
 ```{r, echo=FALSE}
-# This is an early draft of a book on spatial microsimulation, for teaching in Cambridge
+# This is an early draft of a book on spatial microsimulation, for teaching purposes
 # Introduction {#Introduction}
 ```
-\clearpage 
 
-# Introduction {#introduction}
+# Introduction
 
 Spatial microsimulation is a statistical technique for combining individual and
 geographical data. The resulting *spatial microdata* are useful in many
@@ -75,9 +74,8 @@ datasets and free software, there is little excuse for this.  The issue is not
 unique to the field of
 spatial microsimulation. Opaque methods, impossible to replicate,
 are widespread in academia, leading to
-calls for an 'Open Regional Science' (Rey,
-2014). Similar proposals made in other research areas seem to be gaining
-traction (Ince et al., 2012; Peng et al., 2006). This book
+calls for an 'Open Regional Science' [@Rey2014] . Similar proposals made in other research areas are gaining
+traction [@Ince2012; @Peng2006; and most recently, @McNutt2014]. This book
 encourages such a shift towards transparency
 in the field of spatial microsimulation.
 
@@ -85,15 +83,14 @@ Reproducibility is encouraged throughout via provision of code for readers
 to actually *do* spatial microsimulation. Small yet realistic datasets are
 provided to run the methods on your own computer.  All the findings presented in this
 book can therefore be reproduced using code and data in the book's Github
-repository:
-github.com/Robinlovelace/spatial-microsim-book.
+[repository](https://github.com/Robinlovelace/spatial-microsim-book).
 
 Why spend time and effort on reproducibility? The first answer pragmatic:
 reproducibility can actually save time in the long-run, by ensuring more readable
 code; reproducibility can increase the re-usability and impact of
 research, allowing methods to be re-run or modified at a later data.  The second
 reason is more profound: reproducibility is a prerequisite of falsifiability and
-falsifiability is the backbone of science (Popper, 1959).  The results of
+falsifiability is the backbone of science [Popper1959].  The results of
 non-reproducible research cannot be verified, reducing scientific credibility.
 These philosophical observations inform the book’s practical nature.
 
@@ -118,7 +115,7 @@ answer.  Spatial microsimulation is largely defined by its user-community, made
 up of a growing number of people worldwide. This book
 aims to contribute to the community by encouraging collaboration, innovation and rigour. It also encourages playing with the methods and
 'getting your hands dirty' with the code. As
-Kabakoff (2011 p. xxii) put it regarding R, "the best way to learn is to
+@Kabakoff [p. xxii] put it regarding R, "the best way to learn is to
 experiment". 
 
 ## Why spatial microsimulation with R? {#whyR}
@@ -134,12 +131,12 @@ experiment".
 
 Software decisions have a major impact on the flexibility, efficiency and
 reproducibility of research.  Nearly three decades ago
-Hölm (1987, p. 153) observed that "little
+@Holm1987 [p. 153] observed that "little
 attention is paid to the choice of programming language used" for
 microsimulation. This appears to be as true now as it was then. Software is
 rarely discussed in papers on the subject and there are few mature spatial
 microsimulation packages.^[The Flexible Modelling Framework
-(FMF) (https://github.com/MassAtLeeds/FMF) is a notable exception written in
+([FMF](https://github.com/MassAtLeeds/FMF)) is a notable exception written in
 Java that can perform various modelling tasks.] 
 Factors that should influence software selection including cost, maturity,
 features and performance. Perhaps most important for busy researchers are the
@@ -192,7 +189,7 @@ was *designed* to work with statistical data, so many functions in the default R
 installation (e.g. `lm()`, to create a linear regression model) perform
 statistical analysis 'out of the box'.  In agent-based modelling, the
 statistical analysis of results often occupies more time than running the model
-itself (Theile, 2014).  The same
+itself [@thiele2014r].  The same
 applies to spatial microsimulation, making R an ideal choice due to its
 statistical analysis capabilities.
 
@@ -201,7 +198,8 @@ thousands of packages that extend R's capabilities by providing new functions.
 Improvements are being added all the time.
 The **ipfp** package, for example,
 can greatly reduce the computational time taken for a key element of spatial
-microsimulation process, as we shall see in *Reweighting with ipfp* (\ref{ipfp}).
+microsimulation process, as we shall see in Chapter 5 in
+*Reweighting with ipfp* ([](#ipfp)).
 Further information about why R is a good choice for spatial microsimulation
 is provided in the Appendix, a tutorial introduction to R for spatial
 microsimulation applications. The next section describes approaches
@@ -252,7 +250,7 @@ R skills as well as your ability to perform spatial microsimulation, especially
 in the earlier practical chapters. Some prior knowledge of R will make
 reading this book easier, but R novices should be able to follow the worked
 examples, with reference to appropriate supplementary material
-(see Section \ref{further}). As
+(see the references listed in the Appendix [](#further)). As
 with learning Spanish or Chinese, frequent practice, persistence and
 experimentation will ensure deep learning.
 
@@ -349,9 +347,11 @@ sqrt(x) # find the square root of x
  folder. 
  
 There are many ways to write R code that will generate the same results.
-However, to ensure clarity and consistency, a single style, advocated in Hadley
-Wickham's *Advanced R* book (http://r-pkgs.had.co.nz/style.html), is followed
-throughout this book.  Consistent style and plentiful comments will make your code
+However, to ensure clarity and consistency, a single style, advocated in
+a [chapter](http://r-pkgs.had.co.nz/style.html) in Hadley
+Wickham's *Advanced R*, is followed
+throughout [@wickham2014adv]. 
+Consistent style and plentiful comments will make your code
 readable by yourself and others for decades to come.
 
 ## An overview of the book {#overview}
@@ -376,11 +376,12 @@ and techniques that are used to generate spatial microdata.
 - *CakeMap: spatial microsimulation in the wild* is a larger
 and more involved example using real data.
 - *Spatial microdata in agent-based models* describes how the output
-from spatial microsimulation can be used as an input into more complex models
-(in progress).
+from spatial microsimulation can be used as an input into more complex models.
 - *Additional tools and techniques* introduces further methods
 and applications, including a description of R packages for spatial
-microsimulation (in progress).
+microsimulation.
+
+
 
 # What is spatial microsimulation? {#what-is}
 
@@ -592,14 +593,14 @@ a hypothetical scenario where 33 inhabitants of an imaginary land
 are simulated and allocated to three zones
 based on a microdataset of only 5 individuals and two constraint variables.
 
-# SimpleWorld {#SimpleWorld}
+# SimpleWorld
 
 To see the link between the methodology introduced later in the
-book (see Chapter \ref{Smsim1}) and the various real-world applications, let's take a look at a
+book (see Chapter 5) and the various real-world applications, let's take a look at a
 simple example of the kind of situation where spatial microsimulation is useful.
 
 We'll use an imaginary world called SimpleWorld, consisting of only 3 zones that
-cover the entirety of the SimpleWorld sphere (Figure 2). 
+cover the entirety of the SimpleWorld sphere. 
 
 ```{r simpleworld,  fig.cap="The SimpleWorld sphere", echo=FALSE, message=FALSE}
 # Code to create SimpleWorld
@@ -776,7 +777,7 @@ found in cell `[3,2]`. Again this makes sense: individual 3 from the
 microdataset is a young male yet there are only 2 young people and 4 males in
 zone 2. A special feature of the weight matrix above is that each of the column
 sums is equal to the total population in each zone.  We will discover how the
-weight matrices are generated in Section \ref{Smsim1}.
+weight matrices are generated in Chapter 5.
 
 ## Spatial microdata {#spatial-microdata}
 
@@ -882,25 +883,31 @@ validation.
 This chapter focuses on the input datasets needed for spatial microsimulation.
 Correctly loading, manipulating and assessing these datasets will be critical to
 the performance of your models and the ease of modifying them to include new
-inputs.  Fortunately R is an accomplished tool for data cleaning (Kabacoff,
-2011) (http://www.manning.com/kabacoff/), as we shall see. This chapter also
-provides the basis for chapter \ref{Smsim1}, in which we
-undertake spatial microsimulation on the data loaded here.
+inputs.  Fortunately R is an accomplished tool for data reformatting,
+as we shall see. The data objects loaded in the following steps also
+provide the basis for Chapter 5, in which we
+undertake spatial microsimulation.
 
 ```{r, echo=FALSE}
 ## Accessing the input data
 ```
 
-As with most spatial microsimulation models, this example consists of a
-non-geographical individual-level dataset and a series of geographical zones.
-The data used in this chapter (and the data for all other chapters) can be
-downloaded from the book's GitHub repository (https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
-'Download ZIP' button to the right of the page and extract the folder into a
+As with most spatial microsimulation models, the input consists of
+microdata --- a non-geographical individual-level dataset --- and the
+constraint table which represents a series of geographical zones.
+The data used in this Chapter and throughout the book can be
+downloaded from the book's [GitHub repository](https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
+'Download ZIP' button to the right and extract the folder into a
 sensible place on your computer, such as the Desktop.  From there, you will want
 to run R from the project's root directory: open the folder in a file browser
-and double click on 'spatial-microsim-book.Rproj'.  This should cause RStudio to
+and double click on `spatial-microsim-book.Rproj`.  This should cause RStudio to
 be opened at this location, with all the input data files easily accessible to R
 through *relative file paths*.
+
+```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded", echo=FALSE, message=FALSE}
+grid.raster(readPNG("figures/studio-basic.png"))
+```
+
 
 To ease reproducibility of the analysis when working with real data, it is
 recommended that the process begins with a copy of the *raw* dataset on one's
@@ -1034,7 +1041,7 @@ Although `ind` is small and simple it will behave in the same way as a much
 larger dataset, providing opportunities for testing subsetting syntax in R.  It
 is common, for example, to take a subset of the working *population base*: those
 aged 16 and 74 in full-time employment. Methods for doing this are provided in
-Section \ref{subsetting}.
+the Appendix ([](#subsetting)).
 
 ## Re-cateorising individual-level variables {#re-categorise}
 
@@ -1045,11 +1052,15 @@ individual-level variables than to re-name or combine aggregate-level variables,
 so the former should usually be set first.  An obvious difference between the
 individual and aggregate versions of the `age` variable is that the former is of
 type `integer` whereas the latter is composed of discrete bins: 0 to 49 and 50+.
-We can categories the variable into these bins using `cut()`:^[The combination
-of curved and square brackets in the output may seem strange but this is in fact
-an International Standard - see
-http://en.wikipedia.org/wiki/ISO_31-11 for more
-information.]
+We can categories the variable into these bins using 
+`cut()`:^[The
+combination of curved and square brackets in the output from the `cut` function
+may seem strange but this is
+an International Standard: curved brackets mean 'excluding' and square brackets
+mean 'including'. The output `(49, 120]`, for example, means 'from
+49 (excluding 49, but including 49.001) to 120 (including the exact value 120)'.
+See http://en.wikipedia.org/wiki/ISO_31-11 for more
+on international standards on mathematical notation.]
 
 ```{r}
 # Test binning the age variable
@@ -1180,7 +1191,8 @@ The purpose of the *reweighting* procedure in spatial microsimulation is
 to minimise this difference (as measured in TAE above)
 by adding high weights to the most representative individuals.
 
-# Spatial microsimulation in R {#Smsim1}
+
+# Spatial microsimulation in R
 
 In this chapter we progress from loading and preparing the input data to
 running a spatial microsimulation model.
@@ -2253,11 +2265,7 @@ about how the overall system operates, let alone real world implications.
 Because much of the
 time taken for agent based modelling is consumed on this sensitivity/parameter space
 analysis, running NetLogo
-from within R makes sense
-
-[@Thiele2014]
-
-([Thiele et al., 2014](https://ideas.repec.org/a/jas/jasssj/2013-150-2.html)). 
+from within R makes sense ([Thiele et al., 2014](https://ideas.repec.org/a/jas/jasssj/2013-150-2.html)). 
 
 ```{r, echo=FALSE}
 
@@ -2522,56 +2530,4 @@ This is work in progress.
 # bases.
 ```
 
-# References
-
-Barthélemy, J. (2014). A parallelized micro-simulation platform for population and mobility behaviour-Application to Belgium. University de Namur.
-
-Beezer, R. A. (2008). A first course in linear algebra. Puget Sound: Congruent Press.
-
-Boyd, S., & Vandenberghe, L. (2009). Convex optimization. Cambridge university press.
-
-Edwards, K. L., Clarke, G. P., Thomas, J., & Forman, D. (2010). Internal and External Validation of Spatial Microsimulation Models: Small Area Estimates of Adult Obesity. Applied Spatial Analysis and Policy, 4(4), 281–300. doi:10.1007/s12061-010-9056-2
-
-Feinerer, I. (2013). Introduction to the tm Package Text Mining in R. Comprehensive R Archive Network, 1–8.
-
-Harland, K. (2013a). Microsimulation Model User Guide (Flexible Modelling Framework). National Centre for Research Methods, 1306(06). doi:http://eprints.ncrm.ac.uk/3177/2/microsimulation_model.pdf
-
-Harland, K. (2013b). Microsimulation model user guide: flexible modelling framework (No. 0613). Leeds. Retrieved from http://eprints.ncrm.ac.uk/3177/
-
-Ince, D. C., Hatton, L., & Graham-Cumming, J. (2012). The case for open computer programs. Nature, 482(7386), 485–8. doi:10.1038/nature10836
-
-Jones, O., Maillardet, R., & Robinson, A. (2014). Introduction to scientific programming and simulation using R (2nd ed.). Chapman and Hall/CRC.
-
-Knoblauch, K., & Maloney, L. T. (2012). Modeling psychophysical data in R (Vol. 32). Springer.
-
-Lovelace, R. (2014). Introducing spatial microsimulation with R: a practical. National Centre for Research Methods, 08(14). Retrieved from http://eprints.ncrm.ac.uk/3348/
-
-Lovelace, R., & Ballas, D. (2013). “Truncate, replicate, sample”: A method for creating integer weights for spatial microsimulation. Computers, Environment and Urban Systems, 41, 1–11. doi:10.1016/j.compenvurbsys.2013.03.004
-
-Lovelace, R., & Cheshire, J. (2014). Introduction to visualising spatial data in R. National Centre for Research Methods, 14(03). Retrieved from http://eprints.ncrm.ac.uk/3295/
-
-Meyer, D., Hornik, K., & Feinerer, I. (2008). Text mining infrastructure in R. Journal of Statistical Software, 25(5). Retrieved from http://epub.wu.ac.at/3978/
-
-Peng, R. D., Dominici, F., & Zeger, S. L. (2006). Reproducible epidemiologic research. American Journal of Epidemiology, 163(9), 783–9. doi:10.1093/aje/kwj093
-
-Pritchard, D. R., & Miller, E. J. (2012). Advances in population synthesis: fitting many attributes per agent and fitting to household and person margins simultaneously. Transportation, 39(3), 685–704. doi:10.1007/s11116-011-9367-4
-
-Rey, S. J. (2014). Open regional science. The Annals of Regional Science, 52(3), 825–837. doi:10.1007/s00168-014-0611-7
-
-Thiele, J. (2014). R Marries NetLogo: Introduction to the RNetLogo Package. Journal of Statistical, 58(2), 1–41. Retrieved from http://www.jstatsoft.org/v58/i02/paper
-
-Thiele, J., Kurth, W., & Grimm, V. (2014). Facilitating Parameter Estimation and Sensitivity Analysis of Agent-Based Models: A Cookbook Using NetLogo and’R'. Journal of Artificial Societies and …, 17(11). Retrieved from https://ideas.repec.org/a/jas/jasssj/2013-150-2.html
-
-Tomintz, M. N. M. N. N., Clarke, G. P., & Rigby, J. E. J. E. E. (2008). The geography of smoking in Leeds: estimating individual smoking rates and the implications for the location of stop smoking services. Area, 40(3), 341–353. Retrieved from http://onlinelibrary.wiley.com/doi/10.1111/j.1475-4762.2008.00837.x/full
-
-Venables, W. W. N., Smith, D. M. D. M., Team, R. D. C., & others. (2014). An introduction to R, 1. Retrieved from http://folk.uio.no/bernde/pub/Statistics.pdf
-
-Voas, D., & Williamson, P. (2001). Evaluating Goodness-of-Fit Measures for Synthetic Microdata. Geographical and Environmental Modelling, 5(2), 177–200. doi:10.1080/13615930120086078
-
-Wickham, H. (2014a). Advanced R. CRC Press. Retrieved from http://www.crcpress.com/product/isbn/9781466586963
-
-Wickham, H. (2014b). Tidy data. The Journal of Statistical Software, 14(5). Retrieved from http://vita.had.co.nz/papers/tidy-data.html
-
-Xie, Y. (2013). Animation: an R package for creating animations and demonstrating statistical methods. Journal of Statistical Software, 53(1), 1–27.
-
-Zubizarreta, J. R. (2012). Using mixed integer programming for matching in an observational study of kidney failure after surgery. Journal of the American Statistical Association, 107(500), 1360–1371.
+# Bibliography

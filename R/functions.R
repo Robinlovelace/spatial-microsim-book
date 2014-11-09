@@ -96,6 +96,8 @@ Rmd_bind_mod <- function(dir = ".",
     text <- readLines(cfiles[i])
     hspan <- grep("---", text)
     text <- text[-c(hspan[1]:hspan[2])]
+    refs <- grepl("# References", text) # Remove references section from each chapter
+    text <- text[!refs]
     write(text, sep = "\n", file = "book.Rmd", append = T)
   }
   #     render("book.Rmd", output_format = "pdf_document")

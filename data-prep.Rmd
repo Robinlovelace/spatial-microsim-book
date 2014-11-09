@@ -37,25 +37,31 @@ layout: default
 This chapter focuses on the input datasets needed for spatial microsimulation.
 Correctly loading, manipulating and assessing these datasets will be critical to
 the performance of your models and the ease of modifying them to include new
-inputs.  Fortunately R is an accomplished tool for data cleaning (Kabacoff,
-2011) (http://www.manning.com/kabacoff/), as we shall see. This chapter also
-provides the basis for chapter \ref{Smsim1}, in which we
-undertake spatial microsimulation on the data loaded here.
+inputs.  Fortunately R is an accomplished tool for data reformatting,
+as we shall see. The data objects loaded in the following steps also
+provide the basis for Chapter 5, in which we
+undertake spatial microsimulation.
 
 ```{r, echo=FALSE}
 ## Accessing the input data
 ```
 
-As with most spatial microsimulation models, this example consists of a
-non-geographical individual-level dataset and a series of geographical zones.
-The data used in this chapter (and the data for all other chapters) can be
-downloaded from the book's GitHub repository (https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
-'Download ZIP' button to the right of the page and extract the folder into a
+As with most spatial microsimulation models, the input consists of
+microdata --- a non-geographical individual-level dataset --- and the
+constraint table which represents a series of geographical zones.
+The data used in this Chapter and throughout the book can be
+downloaded from the book's [GitHub repository](https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
+'Download ZIP' button to the right and extract the folder into a
 sensible place on your computer, such as the Desktop.  From there, you will want
 to run R from the project's root directory: open the folder in a file browser
-and double click on 'spatial-microsim-book.Rproj'.  This should cause RStudio to
+and double click on `spatial-microsim-book.Rproj`.  This should cause RStudio to
 be opened at this location, with all the input data files easily accessible to R
 through *relative file paths*.
+
+```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded", echo=FALSE, message=FALSE}
+grid.raster(readPNG("figures/studio-basic.png"))
+```
+
 
 To ease reproducibility of the analysis when working with real data, it is
 recommended that the process begins with a copy of the *raw* dataset on one's
@@ -189,7 +195,7 @@ Although `ind` is small and simple it will behave in the same way as a much
 larger dataset, providing opportunities for testing subsetting syntax in R.  It
 is common, for example, to take a subset of the working *population base*: those
 aged 16 and 74 in full-time employment. Methods for doing this are provided in
-Section \ref{subsetting}.
+the Appendix ([](#subsetting)).
 
 ## Re-cateorising individual-level variables {#re-categorise}
 
@@ -200,11 +206,15 @@ individual-level variables than to re-name or combine aggregate-level variables,
 so the former should usually be set first.  An obvious difference between the
 individual and aggregate versions of the `age` variable is that the former is of
 type `integer` whereas the latter is composed of discrete bins: 0 to 49 and 50+.
-We can categories the variable into these bins using `cut()`:^[The combination
-of curved and square brackets in the output may seem strange but this is in fact
-an International Standard - see
-http://en.wikipedia.org/wiki/ISO_31-11 for more
-information.]
+We can categories the variable into these bins using 
+`cut()`:^[The
+combination of curved and square brackets in the output from the `cut` function
+may seem strange but this is
+an International Standard: curved brackets mean 'excluding' and square brackets
+mean 'including'. The output `(49, 120]`, for example, means 'from
+49 (excluding 49, but including 49.001) to 120 (including the exact value 120)'.
+See http://en.wikipedia.org/wiki/ISO_31-11 for more
+on international standards on mathematical notation.]
 
 ```{r}
 # Test binning the age variable
@@ -334,3 +344,5 @@ between cell values in the individual and aggregate level data.
 The purpose of the *reweighting* procedure in spatial microsimulation is
 to minimise this difference (as measured in TAE above)
 by adding high weights to the most representative individuals.
+
+# References

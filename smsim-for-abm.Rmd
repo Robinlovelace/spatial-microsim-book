@@ -41,11 +41,7 @@ about how the overall system operates, let alone real world implications.
 Because much of the
 time taken for agent based modelling is consumed on this sensitivity/parameter space
 analysis, running NetLogo
-from within R makes sense
-
-[@Thiele2014]
-
-([Thiele et al., 2014](https://ideas.repec.org/a/jas/jasssj/2013-150-2.html)). 
+from within R makes sense ([Thiele et al., 2014](https://ideas.repec.org/a/jas/jasssj/2013-150-2.html)). 
 
 ```{r, echo=FALSE}
 
