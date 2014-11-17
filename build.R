@@ -1,3 +1,7 @@
+# TODO for the book project overall
+# Individual chapters on eprints
+# implement regex to make bibliography happen in CRC press style
+
 book_header = readLines(textConnection('---
 title: "Spatial microsimulation with R"
 output:
@@ -32,3 +36,16 @@ for(i in tt){
 }
 
 # For website build see gh-pages version
+
+# # # regex with R - convert book ready for regexxing
+# d <- readLines("introduction.Rmd")
+# sel <- grep("@", d)
+# s <- d[sel]
+# gsub(".+?(?=a)", replacement = "", s, perl = T) # test of greedy matching
+# 
+# # select quotes
+# 
+# s <- grep(" @", d)
+# s <- grep("\\ @|\\[@", d)
+# d[s]
+

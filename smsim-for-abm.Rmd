@@ -20,8 +20,9 @@ the tools that will be useful for the job.
 [NetLogo](https://ccl.northwestern.edu/netlogo/) is a
 mature and widely used toolkit for agent-based models written in
 Java.  The recently published **RNetLogo** package provides an interface between
-R and NetLogo, allowing for model runs to be set-up and run directly from within
-R ([Thiele, 2014](http://www.jstatsoft.org/v58/i02/paper)). Crucially,
+R and NetLogo, allowing for model runs to be set-up and run directly from within R
+[@Thiele2014].
+Crucially,
 this allows the outputs of agent based models to be loaded directly into
 your R environment. Using R to run a separate programme may seem overly complicated
 ("why not simply run the model in NetLogo?" is a valid question) for
@@ -41,7 +42,9 @@ about how the overall system operates, let alone real world implications.
 Because much of the
 time taken for agent based modelling is consumed on this sensitivity/parameter space
 analysis, running NetLogo
-from within R makes sense ([Thiele et al., 2014](https://ideas.repec.org/a/jas/jasssj/2013-150-2.html)). 
+from within R makes sense, as R excells in these areas whereas NetLogo
+and other agent-based modelling programs do not
+[@Thiele2014]. 
 
 ```{r, echo=FALSE}
 

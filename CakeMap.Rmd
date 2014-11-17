@@ -394,8 +394,8 @@ The hypothesis we would like to test is that cake consumption is linked to
 deprivation: More deprived people will eat unheathily and cake is a relatively
 cheap 'comfort food'.  Assuming our simulated data is correct ---  a
 questionable assumption but lets roll with it for now --- we can explore this at
-the ward level thanks to a
-dataset (http://www.neighbourhood.statistics.gov.uk)
+the ward level thanks to an official
+[dataset](http://www.neighbourhood.statistics.gov.uk)
 on modelled income from neighbourhood statistics. The following code is taken
 from the 'CakeMapPlot.R' script.
 
@@ -421,10 +421,11 @@ for partial match).  For the purposes of this exercise we will simply plot
 income against simulated cake consumption to gain a feeling what it tells us
 about the relationship between cake consumption and wealth.
 
-![](figures/incomeCake.png)
-
-**Scatterplot** illustrating the relationship between modelled average ward
-income and simulated number of cakes eaten per person per week.
+```{r, fig.cap="The relationship between cake consumption and income according to the synthetic microdata", fig.width=5, fig.height=4, echo=FALSE}
+grid.raster(readPNG("figures/incomeCake.png"))
+# **Scatterplot** illustrating the relationship between modelled average ward
+# income and simulated number of cakes eaten per person per week.
+```
 
 The question raised by this finding is: why?  Not why is cake consumption higher
 in wealthy areas (this has not been established) but: why has the model resulted
