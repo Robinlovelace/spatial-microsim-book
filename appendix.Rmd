@@ -56,7 +56,7 @@ This conciseness is clearly very useful in spatial microsimulation, as numeric
 variables of the same length are common (e.g. the attributes of individuals in a
 zone) and can be acted on with a minimum of effort.
 
-## R is object orientated {R-object}
+## R is object orientated {#R-object}
 
 In R, everything that exists is an object with a name and a class. This is
 useful, because R's functions know automatically how to behave differently on

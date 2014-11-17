@@ -8,6 +8,7 @@ output:
     number_sections: yes
     toc: yes
 bibliography: ~/Documents/smr.bib 
+csl: ~/Dropbox/Templates/citation-styles/elsevier-harvard.csl
 layout: default
 ---
 
@@ -115,7 +116,7 @@ answer.  Spatial microsimulation is largely defined by its user-community, made
 up of a growing number of people worldwide. This book
 aims to contribute to the community by encouraging collaboration, innovation and rigour. It also encourages playing with the methods and
 'getting your hands dirty' with the code. As
-@Kabakoff [p. xxii] put it regarding R, "the best way to learn is to
+@kabacoff2011r [p. xxii] put it regarding R, "the best way to learn is to
 experiment". 
 
 ## Why spatial microsimulation with R? {#whyR}
@@ -1982,7 +1983,7 @@ take some time exploring the input. Only when these
 datasets make sense (a pen and paper can help here, as well as R!) is it time to
 generate the spatial microdata.
 
-## Performing IPF on CakeMap data {CakeIPF}
+## Performing IPF on CakeMap data {#CakeIPF}
 
 The `ipfp` reweighting strategy is concise, generalisable and computationally
 efficient. On a modern laptop, the `ipfp` method was found to be *almost 40
@@ -2019,7 +2020,7 @@ This demonstrates that the process has worked with an *r* value above 0.99:
 cor(as.numeric(cons), as.numeric(ind_agg))
 ```
 
-## Integerisation {CakeINT}
+## Integerisation {#CakeINT}
 
 As before, weights of the IPF procedure are fractional, so must be *integerised*
 to create whole individuals. The code presented in chapter 4 requires little
@@ -2367,7 +2368,7 @@ This conciseness is clearly very useful in spatial microsimulation, as numeric
 variables of the same length are common (e.g. the attributes of individuals in a
 zone) and can be acted on with a minimum of effort.
 
-## R is object orientated {R-object}
+## R is object orientated {#R-object}
 
 In R, everything that exists is an object with a name and a class. This is
 useful, because R's functions know automatically how to behave differently on

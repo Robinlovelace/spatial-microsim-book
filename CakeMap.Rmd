@@ -197,7 +197,7 @@ take some time exploring the input. Only when these
 datasets make sense (a pen and paper can help here, as well as R!) is it time to
 generate the spatial microdata.
 
-## Performing IPF on CakeMap data {CakeIPF}
+## Performing IPF on CakeMap data {#CakeIPF}
 
 The `ipfp` reweighting strategy is concise, generalisable and computationally
 efficient. On a modern laptop, the `ipfp` method was found to be *almost 40
@@ -234,7 +234,7 @@ This demonstrates that the process has worked with an *r* value above 0.99:
 cor(as.numeric(cons), as.numeric(ind_agg))
 ```
 
-## Integerisation {CakeINT}
+## Integerisation {#CakeINT}
 
 As before, weights of the IPF procedure are fractional, so must be *integerised*
 to create whole individuals. The code presented in chapter 4 requires little
