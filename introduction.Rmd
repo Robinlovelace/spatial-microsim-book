@@ -7,6 +7,8 @@ bibliography: ~/Documents/smr.bib
 ```{r, echo=FALSE}
 # This is an early draft of a book on spatial microsimulation, for teaching purposes
 # Introduction {#Introduction}
+library(png)
+library(grid)
 ```
 
 # Introduction
@@ -50,8 +52,6 @@ zones (see Figure 1).
 spatial microdata, simulated or real.
 
 ```{r, fig.cap="Schematic of the spatial microsimulation technique", fig.width=4, fig.height=4, echo=FALSE}
-library(png)
-library(grid)
 img <- readPNG("figures/msim-schema-lowres.png")
 grid.raster(img)
 ```
