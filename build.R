@@ -37,6 +37,9 @@ for(i in tt){
 
 # For website build see gh-pages version
 
+# Files to move to gh-pages branch
+system("cp -v *.Rmd /tmp/")
+
 # # # regex with R - convert book ready for regexxing
 # d <- readLines("introduction.Rmd")
 # sel <- grep("@", d)
