@@ -89,7 +89,8 @@ Rmd_bind_mod <- function(dir = ".",
   }
   cfiles <- list.files(pattern = "*.Rmd$", )
   cfiles <- cfiles[-grep("book", cfiles)]
-  cfiles <- cfiles[c(6, 11, 8, 4, 10, 3, 9, 1, 2, 5, 7)] # chapter order
+#   cfiles <- cfiles[c(6, 11, 8, 4, 10, 3, 9, 1, 2, 5, 7)] # chapter order
+ cfiles <- cfiles[c(6, 12, 8, 4, 10, 3, 11, 9, 1, 2, 5, 7)] # chapter order
   write(book_header, file = "book.Rmd", )
   ttext <- NULL
   for(i in 1:length(cfiles)){

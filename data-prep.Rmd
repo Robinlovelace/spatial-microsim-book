@@ -6,6 +6,8 @@ layout: default
 # Preparing input data {#DataPrep}
 
 ```{r, echo=FALSE}
+library(png)
+library(grid)
 # Applications of spatial microsimulation - to be completed!
 
 ## Updating cross-tabulated census data
@@ -195,7 +197,9 @@ Although `ind` is small and simple it will behave in the same way as a much
 larger dataset, providing opportunities for testing subsetting syntax in R.  It
 is common, for example, to take a subset of the working *population base*: those
 aged 16 and 74 in full-time employment. Methods for doing this are provided in
-the Appendix ([](#subsetting)).
+the Appendix (
+[](#subsetting)
+).
 
 ## Re-cateorising individual-level variables {#re-categorise}
 

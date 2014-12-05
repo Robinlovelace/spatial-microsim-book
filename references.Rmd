@@ -4,3 +4,136 @@ layout: default
 ---
 
 # Bibliography
+
+Barthélemy, J. (2014). A parallelized micro-simulation platform for population and mobility behaviour-Application to Belgium. University de Namur.
+
+
+
+Beezer, R. A. (2008). A first course in linear algebra. Puget Sound: Congruent Press.
+
+
+
+Boyd, S., & Vandenberghe, L. (2009). Convex optimization. Cambridge university press.
+
+
+
+Clarke, M., & Holm, E. (1987). Microsimulation methods in spatial analysis and planning. Geografiska Annaler. Series B. Human Geography, 69(2), 145–164. Retrieved from http://www.jstor.org/stable/10.2307/490448
+
+
+
+De Agostini, P., Hills, J., & Sutherland, H. (2014). Were we really all in it together? The distributional effects of the UK Coalition government’s tax-benefit policy changes. Retrieved from http://sticerd.lse.ac.uk/dps/case/spcc/wp10.pdf
+
+
+
+Edwards, K., & Clarke, G. (2013). SimObesity: Combinatorial Optimisation (Deterministic) Model. Spatial Microsimulation: A Reference Guide for Users, 69–85. doi:10.1007/978-94-007-4623-7
+
+
+
+Edwards, K. L., Clarke, G. P., Thomas, J., & Forman, D. (2010). Internal and External Validation of Spatial Microsimulation Models: Small Area Estimates of Adult Obesity. Applied Spatial Analysis and Policy, 4(4), 281–300. doi:10.1007/s12061-010-9056-2
+
+
+
+Feinerer, I. (2013). Introduction to the tm Package Text Mining in R. Comprehensive R Archive Network, 1–8.
+
+
+
+Harland, K. (2013a). Microsimulation Model User Guide (Flexible Modelling Framework). National Centre for Research Methods, 1306(06). doi:http://eprints.ncrm.ac.uk/3177/2/microsimulation_model.pdf
+
+
+
+Harland, K. (2013b). Microsimulation model user guide: flexible modelling framework (No. 0613). Leeds. Retrieved from http://eprints.ncrm.ac.uk/3177/
+
+
+
+Ince, D. C., Hatton, L., & Graham-Cumming, J. (2012). The case for open computer programs. Nature, 482(7386), 485–8. doi:10.1038/nature10836
+
+
+
+Jones, O., Maillardet, R., & Robinson, A. (2014). Introduction to scientific programming and simulation using R (2nd ed.). Chapman and Hall/CRC.
+
+
+
+Kabacoff, R. (2011). R in Action. Manning Publications Co.
+
+
+
+Knoblauch, K., & Maloney, L. T. (2012). Modeling psychophysical data in R (Vol. 32). Springer.
+
+
+
+Lovelace, R. (2014). Introducing spatial microsimulation with R: a practical. National Centre for Research Methods, 08(14). Retrieved from http://eprints.ncrm.ac.uk/3348/
+
+
+
+Lovelace, R., & Ballas, D. (2013). “Truncate, replicate, sample”: A method for creating integer weights for spatial microsimulation. Computers, Environment and Urban Systems, 41, 1–11. doi:10.1016/j.compenvurbsys.2013.03.004
+
+
+
+Lovelace, R., & Cheshire, J. (2014). Introduction to visualising spatial data in R. National Centre for Research Methods Working Papers, 14(03). Retrieved from https://github.com/Robinlovelace/Creating-maps-in-R
+
+
+
+McNutt, M. (2014). Journals unite for reproducibility. Science, 346(6210), 679. doi:10.1126/science.aaa1724
+
+
+
+Meyer, D., Hornik, K., & Feinerer, I. (2008). Text mining infrastructure in R. Journal of Statistical Software, 25(5). Retrieved from http://epub.wu.ac.at/3978/
+
+
+
+Peng, R. D., Dominici, F., & Zeger, S. L. (2006). Reproducible epidemiologic research. American Journal of Epidemiology, 163(9), 783–9. doi:10.1093/aje/kwj093
+
+
+
+Popper, K. R. (1959). The Logic of scientific discovery: Karl R. Popper (p. 480). Hutchinson. Retrieved from http://books.google.com/books?id=MdvaSAAACAAJ&pgis=1
+
+
+
+Pritchard, D. R., & Miller, E. J. (2012). Advances in population synthesis: fitting many attributes per agent and fitting to household and person margins simultaneously. Transportation, 39(3), 685–704. doi:10.1007/s11116-011-9367-4
+
+
+
+Rey, S. J. (2014). Open regional science. The Annals of Regional Science, 52(3), 825–837. doi:10.1007/s00168-014-0611-7
+
+
+
+Sutherland, H., & Figari, F. (2013). EUROMOD: the European Union tax-benefit microsimulation model. International Journal of Microsimulation, 6(1), 4–26.
+
+
+
+Thiele, J. (2014). R Marries NetLogo: Introduction to the RNetLogo Package. Journal of Statistical, 58(2), 1–41. Retrieved from http://www.jstatsoft.org/v58/i02/paper
+
+
+
+Thiele, J., Kurth, W., & Grimm, V. (2014). Facilitating Parameter Estimation and Sensitivity Analysis of Agent-Based Models: A Cookbook Using NetLogo and’R'. Journal of Artificial Societies and …, 17(11). Retrieved from https://ideas.repec.org/a/jas/jasssj/2013-150-2.html
+
+
+
+Tomintz, M. N. M. N. N., Clarke, G. P., & Rigby, J. E. J. E. E. (2008). The geography of smoking in Leeds: estimating individual smoking rates and the implications for the location of stop smoking services. Area, 40(3), 341–353. Retrieved from http://onlinelibrary.wiley.com/doi/10.1111/j.1475-4762.2008.00837.x/full
+
+
+
+Venables, W. W. N., Smith, D. M. D. M., Team, R. D. C., & others. (2014). An introduction to R, 1. Retrieved from http://folk.uio.no/bernde/pub/Statistics.pdf
+
+
+
+Voas, D., & Williamson, P. (2001). Evaluating Goodness-of-Fit Measures for Synthetic Microdata. Geographical and Environmental Modelling, 5(2), 177–200. doi:10.1080/13615930120086078
+
+
+
+Wickham, H. (2014a). Advanced R. CRC Press. Retrieved from http://www.crcpress.com/product/isbn/9781466586963
+
+
+
+Wickham, H. (2014b). Tidy data. The Journal of Statistical Software, 14(5). Retrieved from http://www.jstatsoft.org/v59/i10
+
+
+
+Xie, Y. (2013). Animation: an R package for creating animations and demonstrating statistical methods. Journal of Statistical Software, 53(1), 1–27.
+
+
+
+Zubizarreta, J. R. (2012). Using mixed integer programming for matching in an observational study of kidney failure after surgery. Journal of the American Statistical Association, 107(500), 1360–1371.
+
+
+

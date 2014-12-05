@@ -1,0 +1,140 @@
+---
+title: "Visualising and analysing spatial microdata"
+layout: default
+---
+
+```{r, echo=FALSE}
+# This is an early draft of a book on spatial microsimulation, for teaching purposes
+# Introduction {#Introduction}
+library(png)
+library(grid)
+```
+
+# Visualising and analysing spatial microdata
+
+There is clearly a huge amount of information contained in
+spatial microdata. The results created in the CakeMap
+example operate at multiple levels, making their analysis
+and visualisation problematic. It is challenging enough to
+represent a continuous distribution of incomes on in a single
+graphic, for example. Trying to do so for every one of hundreds
+of geographical zones is almost impossible using standard
+methods of visualisation in GIS. Morever, extracting important
+summary statistics is also tricky from spatial microdata
+because there are simply so many combinations of rows, zones and
+variables to choose from.
+
+This chapter tackles each of these issues. It is the first
+chapter in the book so far that is departs from the starting
+point of having access to spatial microdata. The methods
+are equally applicable to synthetic spatial microdata as
+for real microdata. With the open data movement, it is possible
+that governments realise that the benefits of releasing more
+geocoded individual-level data are likely to far outweigh any
+potenial privacy issues (especially in an age of smartphones
+which can track our every move). If and when such datasets
+become available, all previous work to generate synthetic spatial
+microdata will not be in vain: it will serve as a useful
+test case against which multi-level models can be tested. In
+addition, by demonstrating the benefits of synthetic spatial
+microdata for evidence-based policy, spatial microsimulation
+research is could put pressure on governments to release more
+individual-level information in a way that would not
+comprimise security, ethics or morality.
+
+This chapter starts simply, with a basic description of how to
+visualise geographic data in R using the **ggmap** package. 
+Based on the spatial microdata generated from the CakeMap
+example, we will progress to see how to convert long
+spatial microdatasets into graphical outputs. The final
+stages focus on analysis and interpretation of 
+spatial microdata. 
+
+## Visualisations {#CakeVis}
+
+Visualisation is an important part of communicating quantitative
+data, especially so when the datasets are large and complex so not
+conducive to description with tables or words.
+
+Because we have generated spatial data, it is useful to create a map of the
+results, to see how it varies from place to place.  The code used to do this
+found in 'CakeMapPlot.R'. A vital function within this script is the
+`inner_join` function, which depends on the **dplyr** package.
+
+
+```{r, eval=FALSE}
+wardsF <- inner_join(wardsF, wards@data, by = "id")
+```
+
+The above line of code by default selects all the data contained in the first
+object (`wardsF`) and adds to it new variables from the second object based on
+the linking variable.  Also in that script file you will encounter the function
+`fortify`, the purpose of which is to convert the spatial data object into a
+data frame.  The final map result of `CakeMapPlot.R' is illustrated below.
+
+```{r, fig.cap="CakeMap results: estimated average cake consumption in Leeds", fig.width=5, fig.height=4, echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("figures/CakeMap-lores.png")
+grid.raster(img)
+```
+
+## Analysis of spatial microdata {#CakeAnalysis}
+
+Once a spatial microdataset has been generated that we are happy with, we will
+probably want to analyse it further.  This means exploring it --- its main
+features, variability and links with other datasets. To illustrate this process
+we will load an additional dataset and compare it with the estimates of cake
+consumption per person  generated in the previous section at the ward level.  
+
+The hypothesis we would like to test is that cake consumption is linked to
+deprivation: More deprived people will eat unheathily and cake is a relatively
+cheap 'comfort food'.  Assuming our simulated data is correct ---  a
+questionable assumption but lets roll with it for now --- we can explore this at
+the ward level thanks to an official
+[dataset](http://www.neighbourhood.statistics.gov.uk)
+on modelled income from neighbourhood statistics. The following code is taken
+from the 'CakeMapPlot.R' script.
+
+Because the income dataset was produced for old ward boundaries (they were
+slightly modified for the 2011 census), we cannot merge with the spatial dataset
+based on the new zone codes. Instead we rely on the name of the wards. The code
+below provides a snapshot of these names and demonstrates how they can be joined
+using `inner_join`.
+
+```{r, eval=FALSE}
+wards@data <- inner_join(wards@data, imd)
+summary(imd$NAME %in% wards$NAME)
+##       Mode   FALSE    TRUE    NA's 
+##    logical      55      71       0 
+```
+
+
+The above code first joins the two datasets together and then checks the result
+by seeing how many matches names there are.  In practice the fit between old
+names and new names is quite poor: only 71 out of 124. In a proper analysis we
+would have to solve this problem (e.g. via the command `pmatch`, which stands
+for partial match).  For the purposes of this exercise we will simply plot
+income against simulated cake consumption to gain a feeling what it tells us
+about the relationship between cake consumption and wealth.
+
+```{r, fig.cap="The relationship between cake consumption and income according to the synthetic microdata", fig.width=5, fig.height=4, echo=FALSE}
+grid.raster(readPNG("figures/incomeCake.png"))
+# **Scatterplot** illustrating the relationship between modelled average ward
+# income and simulated number of cakes eaten per person per week.
+```
+
+The question raised by this finding is: why?  Not why is cake consumption higher
+in wealthy areas (this has not been established) but: why has the model resulted
+in this correlation?  To explore this question we need to go back and look at
+the individual level data. The most relevant constraint variable for income was
+class.  When we look at the relationship between social class and cake
+consumption in the Dental Health Survey, we find that there is indeed a link:
+individuals in the highest three classes (1.1, 1.2, 2) have an average cake
+intake of 3.9 cakes per week whereas the three lowest classes have an average
+intake of 3.7. This is a relatively modest difference but, when averaging over
+large areas, it helps explain the result.
+
+As a bonus exercise, explore the class dependence of cake consumption in the Dental Health Survey.
+
+## Interpretation of results

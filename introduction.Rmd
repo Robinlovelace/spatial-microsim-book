@@ -68,13 +68,18 @@ unique to the field of
 spatial microsimulation. Opaque methods, impossible to replicate,
 are widespread in academia, leading to
 calls for an 'Open Regional Science'
-[@Rey2014].
+(Rey 2014).
 Similar proposals made in other research areas are gaining
-traction
-[@Ince2012; @Peng2006; and most recently, @McNutt2014].
+traction (Ince et al. 2012; Peng et al. 2006; McNutt 2014).
 This book
 encourages such a shift towards transparency
 in the field of spatial microsimulation.
+
+```{r, echo=FALSE}
+# [@Rey2014]
+# [@Ince2012; @Peng2006; and most recently, @McNutt2014]
+```
+
 
 Reproducibility is encouraged throughout via provision of code for readers
 to actually *do* spatial microsimulation. Small yet realistic datasets are
@@ -87,11 +92,12 @@ reproducibility can actually save time in the long-run, by ensuring more readabl
 code; reproducibility can increase the re-usability and impact of
 research, allowing methods to be re-run or modified at a later data.  The second
 reason is more profound: reproducibility is a prerequisite of falsifiability and
-falsifiability is the backbone of science [@Popper1959].  The results of
+falsifiability is the backbone of science (Popper 1959).  The results of
 non-reproducible research cannot be verified, reducing scientific credibility.
 These philosophical observations inform the book’s practical nature.
 
 ```{r, echo=FALSE}
+# [@Popper1959]
 # Why spend time and effort on reproducibility? The first answer is that
 # reproducibility actually saves time in the long-run, by ensuring more
 # readable code and allowing your results to be easily re-run at a later data.
@@ -112,7 +118,7 @@ answer.  Spatial microsimulation is largely defined by its user-community, made
 up of a growing number of people worldwide. This book
 aims to contribute to the community by encouraging collaboration, innovation and rigour. It also encourages playing with the methods and
 'getting your hands dirty' with the code. As
-@Kabakoff
+(Kabakoff 2011)
 put it regarding R, "the best way to learn is to
 experiment". 
 
@@ -127,11 +133,12 @@ experiment".
 # [Hölm (1987, p.
 # 153)](http://www.jstor.org/stable/10.2307/490448)
 # @Holm1987 [p. 153]
+# @Holm1987
 ```
 
 Software decisions have a major impact on the flexibility, efficiency and
 reproducibility of research.  Nearly three decades ago
-@Holm1987
+Clarke and Hölm (1987)
 observed that "little
 attention is paid to the choice of programming language used" for
 microsimulation. This appears to be as true now as it was then. Software is
@@ -143,7 +150,7 @@ Factors that should influence software selection including cost, maturity,
 features and performance. Perhaps most important for busy researchers are the
 ease and speed of learning,
 writing, adapting and communicating the analysis. R excels in
-each of these areas, hence the choice of R.
+each of these areas.
 
 ```{r, echo=FALSE}
 # Yet the software used has a lasting
@@ -191,10 +198,12 @@ installation (e.g. `lm()`, to create a linear regression model) perform
 statistical analysis 'out of the box'.  In agent-based modelling, the
 statistical analysis of results often occupies more time than running the model
 itself
-[@thiele2014r].
+(Thiele 2014).
 The same
 applies to spatial microsimulation, making R an ideal choice due to its
 statistical analysis capabilities.
+
+
 
 Finally, R has an active and  growing user community. As a result there are
 thousands of packages that extend R's capabilities by providing new functions.
@@ -202,7 +211,14 @@ Improvements are being added all the time.
 The **ipfp** package, for example,
 can greatly reduce the computational time taken for a key element of spatial
 microsimulation process, as we shall see in Chapter 5 in
-*Reweighting with ipfp* ([](#ipfp)).
+*Reweighting with ipfp*
+([](#ipfp))
+.
+
+```{r, echo=FALSE}
+# *Reweighting with ipfp* ([](#ipfp)). # causing error in jekyll
+```
+
 Further information about why R is a good choice for spatial microsimulation
 is provided in the Appendix, a tutorial introduction to R for spatial
 microsimulation applications. The next section describes approaches
@@ -253,7 +269,10 @@ R skills as well as your ability to perform spatial microsimulation, especially
 in the earlier practical chapters. Some prior knowledge of R will make
 reading this book easier, but R novices should be able to follow the worked
 examples, with reference to appropriate supplementary material
-(see the references listed in the Appendix [](#further)). As
+. See the references listed in the Appendix
+(
+[](#further)
+). As
 with learning Spanish or Chinese, frequent practice, persistence and
 experimentation will ensure deep learning.
 
@@ -354,9 +373,14 @@ However, to ensure clarity and consistency, a single style, advocated in
 a [chapter](http://r-pkgs.had.co.nz/style.html) in Hadley
 Wickham's *Advanced R*, is followed
 throughout
-[@wickham2014adv]. 
+(Wickham 2014a). 
 Consistent style and plentiful comments will make your code
 readable by yourself and others for decades to come.
+
+```{r, echo=FALSE}
+# [@wickham2014adv].
+```
+
 
 ## An overview of the book {#overview}
 

@@ -85,8 +85,8 @@ pol$p_young <- pol$a0.49 / (pol$a.50. + pol$a0.49) * 100
 pol$p_male <- pol$m / (pol$f + pol$m) * 100
 
 pol$id <- c("x1", "x2", "x3")
-library(plyr)
-pol1 <- join(pol1, pol@data)
+library(dplyr)
+pol1 <- inner_join(pol1, pol@data)
 pol1$Name <- paste("Zone", 1:3, sep = " ")
 pol1$xpos <- seq(-120, 120, length.out = 3)
 pol1$ypos <- 0
