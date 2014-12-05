@@ -7,7 +7,7 @@ output:
     keep_tex: yes
     number_sections: yes
     toc: yes
-bibliography: ~/Documents/smr.bib 
+bibliography: ~/Documents/smr.bib
 layout: default
 ---
 
@@ -539,16 +539,39 @@ to tackle physical inactivity, to maximise the benefits of public health funds.
 
 ### Economic policy evaluation
 
-Microsimulation was originally developed for economic policy evaluation and it
+Microsimulation was originally developed for economic policy evaluation and it   
 is still one of most common applications. 'Social impact evaluation', where the
 impact of policy changes on different income and socio-demographic groups is
 explored, is a classic example of applied microsimulation research. Frequently
-these simulations are undertaken by government financial or welfare departments
+these simulations are undertaken by governmental departments
 for entire countries and focus on overall shifts in the population rather than
-spatial variability in the impacts. EUROMOD...
+spatial variability in the impacts. The EU funded EUROMOD project
+and software package of the same name is
+is the largest of these 
+initiatives. The EUROMOD software is used by government analysts and
+research agencies in many countries to estimate the distributional impacts
+of policy reforms. In a recent example,
+EUROMOD was used to assess
+effects of austerity on different income groups in the UK [@de2014were].
+The finding that recent policies have been highly regressive (Figure 2.1)
+shows that
+microsimulation can provide a new evidence base in policy relevant areas.
 
-- EUROMOD
-- Income decile graph
+```{r vingtile, fig.cap="A typical output from a microsimulation model for economic policy evaluation, from De Agostini et al. (2014). Each vertical bar represents the relative gains or losses of each income 'vingtile' (there are 20 equally sized groups, by income, in the model) and the black line shows that the austerity budget has been most detrimental to low income groups and most beneficial to the upper-middle classes.", fig.width=4, fig.height=4, echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("figures/vingtile.png")
+grid.raster(img)
+```
+
+Spatial microsimulation uses very similar techniques as those employed by
+EUROMOD and other economic microsimulation models, including probability-weighted random sampling of individual-level
+data and aggregate-level scenario development. The majority of microsimulation
+research for economic policy evaluation does not
+disagreggate the impacts over space, however. The estimation of variability
+at the *local level* is what differentiates spatial microsimulation models
+from economic microsimulation models, although the underlying methods are
+very similar.
 
 ### Transport
 
