@@ -94,23 +94,88 @@ how spatial microsimulation is used.
 ### Health applications
 
 An excellent example of the potential practical utility of spatial microsimulation
-is a study by Tomintz et al. (2008), which estimated the rate of smoking at the
-small area level. Smoking is a classic 'target variable' in spatial microsimulation:
+is a study
+which estimated the rate of smoking at the
+small area level in the city of Leeds UK
+[@Tomintz2008].
+Smoking is a classic 'target variable' in spatial microsimulation:
 it is reported in a number of individual-level surveys but there is surprisingly
-little information about
+little information about how smoking rates vary from place to place.
+Thus it is difficult to where to locate services that depend on the rate of smoking.
+The synthetic spatial microdata could thus be used to help identify new clinics
+to help people stop smoking. (Alternatively, the spatial microdata could be used
+by a tobacco chain to help decide where to invest in a new shop, highlighting
+the potential misuse of the technique by unscrupulous analysts.) @Tomintz2008
+found that actual anti-smoking clinics were not located optimally. Furthermore,
+the results pointed to optimal locations for new clinics, potentially improving
+the cost-effectiveness of public health campaigns.
+
+This research has since been 'scaled-up' to estimate smoking rates across the whole
+of Austria. The [simSALUD](http://www.simsalud.org/) portal provides users with
+access to the resulting spatial microdata and an on-line interface to allow
+for the selection of constraint variables and other options to customise the
+model for the specific purposes. This portal-based system and the provision
+of synthetic spatial microdata to researchers illustrates one possible direction that
+spatial microsimulation research could go in, where the synthetic data produced from
+a large model is the main output of the research, to be used by others for a variety of
+applications.
+
+The example of smoking demonstrates the increase spatial resolution
+that spatial microsimulation can bring to bear on under-studied areas in public
+health. Where the prevalence of unhealthy activities is closely related 
+to socio-demographic variables, a synthetic microdataset can lead to decision
+making tools that would be difficult to implement with non-spatial surveys alone.
+**Simobesity** is another research project and spatial microsimulation software tool that
+estimates the prevalence of obesity at the local levels depending on demographic
+constraint variables
+[@Edwards2013].
+Recent evidence has emerged on the impact of
+car-dependent urban environments on inactive lifestyles and resulting poor health
+(these areas have been labelled 'obesogenic'). In this context, there is
+great potential for combining socio-demographic and environmental-geographic
+variables in a spatial microsimulation model. Using the same principles as the
+@Tomintz2008 paper, the outputs of such a model could help target local interventions
+to tackle physical inactivity, to maximise the benefits of public health funds.
+
+```{r, echo=FALSE}
+# TODO: link the reader here to a chapter where smsim models are linked to geo-data
+```
 
 ### Economic policy evaluation
 
-Microsimulation was originally developed for economic policy evaluation and it
+Microsimulation was originally developed for economic policy evaluation and it   
 is still one of most common applications. 'Social impact evaluation', where the
 impact of policy changes on different income and socio-demographic groups is
 explored, is a classic example of applied microsimulation research. Frequently
-these simulations are undertaken by government financial or welfare departments
+these simulations are undertaken by governmental departments
 for entire countries and focus on overall shifts in the population rather than
-spatial variability in the impacts. EUROMOD...
+spatial variability in the impacts. The EU funded EUROMOD project
+and software package of the same name is
+is the largest of these 
+initiatives. The EUROMOD software is used by government analysts and
+research agencies in many countries to estimate the distributional impacts
+of policy reforms. In a recent example,
+EUROMOD was used to assess
+effects of austerity on different income groups in the UK [@de2014were].
+The finding that recent policies have been highly regressive (Figure 2.1)
+shows that
+microsimulation can provide a new evidence base in policy relevant areas.
 
-- EUROMOD
-- Income decile graph
+```{r vingtile, fig.cap="A typical output from a microsimulation model for economic policy evaluation, from De Agostini et al. (2014). Each vertical bar represents the relative gains or losses of each income 'vingtile' (there are 20 equally sized groups, by income, in the model) and the black line shows that the austerity budget has been most detrimental to low income groups and most beneficial to the upper-middle classes.", fig.width=4, fig.height=4, echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("figures/vingtile.png")
+grid.raster(img)
+```
+
+Spatial microsimulation uses very similar techniques as those employed by
+EUROMOD and other economic microsimulation models, including probability-weighted random sampling of individual-level
+data and aggregate-level scenario development [@sutherland2013euromod]. The majority of microsimulation
+research for economic policy evaluation does not
+disagreggate the impacts over space, however. The estimation of variability
+at the *local level* is what differentiates spatial microsimulation models
+from economic microsimulation models, although the underlying methods are
+very similar.
 
 ### Transport
 
@@ -175,7 +240,13 @@ assumptions, some of which are unlikely to hold in all cases. This
 does not preclude spatial microsimulation in cases where the assumptions
 do not hold: "It is far better to foresee even without
 certainty than not to foresee at all", as Henri Poincaré put it
-(Barthélemy, 2014).
+[@barthelemy2014parallelized].
+
+```{r, echo=FALSE}
+# (Barthélemy, 2014).
+```
+
+
 It is vital, however, that users of spatial microsimulation and
 'consumers' of the resulting research understand that the results of spatial
 microsimulation are not *real* but a best estimate of the population in a
