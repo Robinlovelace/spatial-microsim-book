@@ -36,7 +36,7 @@ system("cp -v frontmatter/index.html .")
 
 file.remove("temp.html")
 system("mv -v _site/*.html .") # copy site dir to local
-system("rm *.Rmd")
+# system("rm *.Rmd") # remove .Rmd files - or just don't add them
 
 
 # then push directly to the internet
