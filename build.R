@@ -2,6 +2,7 @@
 # Individual chapters on eprints
 # Create another worked example, of variability in inequality -> paper
 # implement regex to make bibliography happen in CRC press style
+# add urls to all the references and packages
 
 
 book_header = readLines(textConnection('---
@@ -40,7 +41,16 @@ for(i in tt){
 # For website build see gh-pages version
 
 # Files to move to gh-pages branch
-system("cp -v *.Rmd /tmp/")
+file.remove("book.Rmd")
+
+# Remove latex-specific document links for website
+cfiles <- list.files("/tmp", pattern = "*.Rmd", full.names = T)
+for(i in cfiles){
+  text <- readLines(i)
+  sel <- grepl("\\(\\#", text)
+  text <- text[!sel]
+  writeLines(text, con = i)
+}
 
 # # # regex with R - convert book ready for regexxing
 # d <- readLines("introduction.Rmd")

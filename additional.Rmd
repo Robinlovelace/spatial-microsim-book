@@ -3,7 +3,7 @@ title: "Additional tools and techniques"
 layout: default
 ---
 
-# Additional tools and techniques
+# Additional tools and techniques {#additional}
 
 ```{r, echo=FALSE}
 

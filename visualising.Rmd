@@ -10,7 +10,7 @@ library(png)
 library(grid)
 ```
 
-# Visualising and analysing spatial microdata
+# Visualising and analysing spatial microdata {#vis}
 
 There is clearly a huge amount of information contained in
 spatial microdata. The results created in the CakeMap

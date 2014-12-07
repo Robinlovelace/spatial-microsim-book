@@ -101,10 +101,10 @@ $$
 
 Chi-squared is a commonly used test of the fit between absolute counts of categorical variables. It has the advantage of providing a *p value*, which represents the chances of obtaining a fit between observed and simulated values through chance alone. It is primarily used to test for relationships between categorical variables (e.g. socio-economic class and smoking) but has been used frequently in the spatial microsimulation literature (Voas and Williamson 2001; Wu et al. 2008).
 
-The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values (Agrest 2007):
+The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values (Agresti 2007):
 
 $$
-\chi^2= \frac{sim_{ij} - obs_{ij})^2}{obs_{ij}}
+\chi^2= \frac{(sim_{ij} - obs_{ij})^2}{obs_{ij}}
 $$
 
 The *chi-squared* test is the probability of obtaining the calculated $\chi^2$ value given the number of *degrees of freedom* (representing the number of categories) in the test.

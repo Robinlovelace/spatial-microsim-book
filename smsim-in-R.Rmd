@@ -3,7 +3,7 @@ title: "Spatial microsimulation in R"
 layout: default
 ---
 
-# Spatial microsimulation in R
+# Spatial microsimulation in R {#smsimr}
 
 In this chapter we progress from loading and preparing the input data to
 running a spatial microsimulation model.

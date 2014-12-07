@@ -3,7 +3,7 @@ title: "SimpleWorld"
 layout: default
 ---
 
-# SimpleWorld
+# SimpleWorld {#SimpleWorld}
 
 To see the link between the methodology introduced later in the
 book (see Chapter 5) and the various real-world applications, let's take a look at a

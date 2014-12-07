@@ -3,7 +3,7 @@ title: "Preparing input data"
 layout: default
 ---
 
-# Preparing input data {#DataPrep}
+# Data preparation {#data-prep}
 
 ```{r, echo=FALSE}
 library(png)
