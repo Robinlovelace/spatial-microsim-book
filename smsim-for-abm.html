@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Spatial microsimulation for agent-based models &middot; Spatial Microsimulation with R.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="www/bootstrap.min.css" rel="stylesheet">
+    <link href="www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Table of contents<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu pull-right" role="menu">
+              <li><a href="introduction.html">Introduction</a></li>
+<li><a href="what-is-smsim.html">What is spatial microsimulation?</a></li>
+<li><a href="SimpleWorld.html">SimpleWorld</a></li>
+<li><a href="data-prep.html">Preparing input data</a></li>
+<li><a href="smsim-in-R.html">Spatial microsimulation in R</a></li>
+<li><a href="CakeMap.html">CakeMap</a></li>
+<li><a href="validation.html">Model checking and evaluation</a></li>
+<li><a href="visualising.html">Visualising spatial microdata</a></li>
+<li><a href="smsim-for-abm.html">Spatial microsimulation for agent-based models</a></li>
+<li><a href="additional.html">Additional tools and techniques</a></li>
+<li><a href="appendix.html">Appendix</a></li>
+<li><a href="glossary.html">Glossary</a></li>
+<li><a href="references.html">References</a></li>
+
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="muted"><a href="http://robinlovelace.net/spatial-microsim-book/">Spatial Microsimulation with R</a> <small>by Robin Lovelace</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+        <div class="well">
+          Available soon as a physical book</a>.
+        </div>
+
+        <h4>Contents</h4>
+          <ul class="list-unstyled" id="toc"></ul>
+
+          <hr>
+          <!--<p><a href="/contribute.html">How to contribute</a></p>-->
+
+          <p><a class="btn btn-primary" href="https://github.com/RobinLovelace/spatial-microsim-book/edit/master/smsim-for-abm.Rmd">Edit this page</a></p>
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="ABM">Spatial microdata in agent-based models</h1>
+<p>Spatial microsimulation can be seen as a precursor to, or early form of, agent-based models (ABMs). Agent-based modelling depends on 1) a number of discrete agents, 2) with different characteristics, 3) interacting. With the spatial microsimulation model created in the previous chapters we already have two thirds of the necessary ingredients of an ABMs: if your aim is to use spatial microdata as an input into agent based models, you’re more than half way there!</p>
+<p>We do not have space in this book to describe the transition from the spatial microdata we have generated into a full ABM. Suffice to mention some of the tools that will be useful for the job.</p>
+<p><a href="https://ccl.northwestern.edu/netlogo/">NetLogo</a> is a mature and widely used toolkit for agent-based models written in Java. The recently published <strong>RNetLogo</strong> package provides an interface between R and NetLogo, allowing for model runs to be set-up and run directly from within R (Theile et al. 2014). Crucially, this allows the outputs of agent based models to be loaded directly into your R environment. Using R to run a separate programme may seem overly complicated (“why not simply run the model in NetLogo?” is a valid question) for very simply models and for setting-up and testing the ABM it is recommended to use NetLogo directly, with its intuitive graphical interface.</p>
+<p>For many ABM applications, however, the R interface is useful. This is because AMB’s are inherently unpredictable due to their ‘bottom up’ design. Thus we generally want to study many model runs before drawing conclusions about how the overall system operates, let alone real world implications. Because much of the time taken for agent based modelling is consumed on this sensitivity/parameter space analysis, running NetLogo from within R makes sense, as R excells in these areas whereas NetLogo and other agent-based modelling programs do not <span class="citation">[@Thiele2014]</span>.</p>
+
+        </div>
+      </div>
+
+      <div class="footer">
+        <hr>
+        <p>&copy; Site design: Hadley Wickham. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/robinlovelace/spatial-microsim-book/">github</a>.
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="www/bootstrap.min.js"></script>
+  <script src="www/toc.js"></script>
+  </body>
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Visualising spatial microdata &middot; Spatial Microsimulation with R.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="www/bootstrap.min.css" rel="stylesheet">
+    <link href="www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Table of contents<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu pull-right" role="menu">
+              <li><a href="introduction.html">Introduction</a></li>
+<li><a href="what-is-smsim.html">What is spatial microsimulation?</a></li>
+<li><a href="SimpleWorld.html">SimpleWorld</a></li>
+<li><a href="data-prep.html">Preparing input data</a></li>
+<li><a href="smsim-in-R.html">Spatial microsimulation in R</a></li>
+<li><a href="CakeMap.html">CakeMap</a></li>
+<li><a href="validation.html">Model checking and evaluation</a></li>
+<li><a href="visualising.html">Visualising spatial microdata</a></li>
+<li><a href="smsim-for-abm.html">Spatial microsimulation for agent-based models</a></li>
+<li><a href="additional.html">Additional tools and techniques</a></li>
+<li><a href="appendix.html">Appendix</a></li>
+<li><a href="glossary.html">Glossary</a></li>
+<li><a href="references.html">References</a></li>
+
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="muted"><a href="http://robinlovelace.net/spatial-microsim-book/">Spatial Microsimulation with R</a> <small>by Robin Lovelace</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+        <div class="well">
+          Available soon as a physical book</a>.
+        </div>
+
+        <h4>Contents</h4>
+          <ul class="list-unstyled" id="toc"></ul>
+
+          <hr>
+          <!--<p><a href="/contribute.html">How to contribute</a></p>-->
+
+          <p><a class="btn btn-primary" href="https://github.com/RobinLovelace/spatial-microsim-book/edit/master/visualising.Rmd">Edit this page</a></p>
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="vis">Visualising and analysing spatial microdata</h1>
+<p>There is clearly a huge amount of information contained in spatial microdata. The results created in the CakeMap example operate at multiple levels, making their analysis and visualisation problematic. It is challenging enough to represent a continuous distribution of incomes on in a single graphic, for example. Trying to do so for every one of hundreds of geographical zones is almost impossible using standard methods of visualisation in GIS. Morever, extracting important summary statistics is also tricky from spatial microdata because there are simply so many combinations of rows, zones and variables to choose from.</p>
+<p>This chapter tackles each of these issues. It is the first chapter in the book so far that is departs from the starting point of having access to spatial microdata. The methods are equally applicable to synthetic spatial microdata as for real microdata. With the open data movement, it is possible that governments realise that the benefits of releasing more geocoded individual-level data are likely to far outweigh any potenial privacy issues (especially in an age of smartphones which can track our every move). If and when such datasets become available, all previous work to generate synthetic spatial microdata will not be in vain: it will serve as a useful test case against which multi-level models can be tested. In addition, by demonstrating the benefits of synthetic spatial microdata for evidence-based policy, spatial microsimulation research is could put pressure on governments to release more individual-level information in a way that would not comprimise security, ethics or morality.</p>
+<p>This chapter starts simply, with a basic description of how to visualise geographic data in R using the <strong>ggmap</strong> package. Based on the spatial microdata generated from the CakeMap example, we will progress to see how to convert long spatial microdatasets into graphical outputs. The final stages focus on analysis and interpretation of spatial microdata.</p>
+<h2 id="CakeVis">Visualisations</h2>
+<p>Visualisation is an important part of communicating quantitative data, especially so when the datasets are large and complex so not conducive to description with tables or words.</p>
+<p>Because we have generated spatial data, it is useful to create a map of the results, to see how it varies from place to place. The code used to do this found in ‘CakeMapPlot.R’. A vital function within this script is the <code>inner_join</code> function, which depends on the <strong>dplyr</strong> package.</p>
+<pre class="sourceCode r"><code class="sourceCode r">wardsF &lt;-<span class="st"> </span><span class="kw">inner_join</span>(wardsF, wards@data, <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>)</code></pre>
+<p>The above line of code by default selects all the data contained in the first object (<code>wardsF</code>) and adds to it new variables from the second object based on the linking variable. Also in that script file you will encounter the function <code>fortify</code>, the purpose of which is to convert the spatial data object into a data frame. The final map result of `CakeMapPlot.R’ is illustrated below.</p>
+<p><img src="figures/unnamed-chunk-3-1.png" title="CakeMap results: estimated average cake consumption in Leeds" alt="CakeMap results: estimated average cake consumption in Leeds" width="480" /></p>
+<h2 id="CakeAnalysis">Analysis of spatial microdata</h2>
+<p>Once a spatial microdataset has been generated that we are happy with, we will probably want to analyse it further. This means exploring it — its main features, variability and links with other datasets. To illustrate this process we will load an additional dataset and compare it with the estimates of cake consumption per person generated in the previous section at the ward level.</p>
+<p>The hypothesis we would like to test is that cake consumption is linked to deprivation: More deprived people will eat unheathily and cake is a relatively cheap ‘comfort food’. Assuming our simulated data is correct — a questionable assumption but lets roll with it for now — we can explore this at the ward level thanks to an official <a href="http://www.neighbourhood.statistics.gov.uk">dataset</a> on modelled income from neighbourhood statistics. The following code is taken from the ‘CakeMapPlot.R’ script.</p>
+<p>Because the income dataset was produced for old ward boundaries (they were slightly modified for the 2011 census), we cannot merge with the spatial dataset based on the new zone codes. Instead we rely on the name of the wards. The code below provides a snapshot of these names and demonstrates how they can be joined using <code>inner_join</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">wards@data &lt;-<span class="st"> </span><span class="kw">inner_join</span>(wards@data, imd)
+<span class="kw">summary</span>(imd$NAME %in%<span class="st"> </span>wards$NAME)
+##       Mode   FALSE    TRUE    NA&#39;s 
+##    logical      55      71       0 </code></pre>
+<p>The above code first joins the two datasets together and then checks the result by seeing how many matches names there are. In practice the fit between old names and new names is quite poor: only 71 out of 124. In a proper analysis we would have to solve this problem (e.g. via the command <code>pmatch</code>, which stands for partial match). For the purposes of this exercise we will simply plot income against simulated cake consumption to gain a feeling what it tells us about the relationship between cake consumption and wealth.</p>
+<p><img src="figures/unnamed-chunk-5-1.png" title="The relationship between cake consumption and income according to the synthetic microdata" alt="The relationship between cake consumption and income according to the synthetic microdata" width="480" /></p>
+<p>The question raised by this finding is: why? Not why is cake consumption higher in wealthy areas (this has not been established) but: why has the model resulted in this correlation? To explore this question we need to go back and look at the individual level data. The most relevant constraint variable for income was class. When we look at the relationship between social class and cake consumption in the Dental Health Survey, we find that there is indeed a link: individuals in the highest three classes (1.1, 1.2, 2) have an average cake intake of 3.9 cakes per week whereas the three lowest classes have an average intake of 3.7. This is a relatively modest difference but, when averaging over large areas, it helps explain the result.</p>
+<p>As a bonus exercise, explore the class dependence of cake consumption in the Dental Health Survey.</p>
+<h2>Interpretation of results</h2>
+
+        </div>
+      </div>
+
+      <div class="footer">
+        <hr>
+        <p>&copy; Site design: Hadley Wickham. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/robinlovelace/spatial-microsim-book/">github</a>.
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="www/bootstrap.min.js"></script>
+  <script src="www/toc.js"></script>
+  </body>
+</html>

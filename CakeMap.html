@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>CakeMap &middot; Spatial Microsimulation with R.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="www/bootstrap.min.css" rel="stylesheet">
+    <link href="www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Table of contents<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu pull-right" role="menu">
+              <li><a href="introduction.html">Introduction</a></li>
+<li><a href="what-is-smsim.html">What is spatial microsimulation?</a></li>
+<li><a href="SimpleWorld.html">SimpleWorld</a></li>
+<li><a href="data-prep.html">Preparing input data</a></li>
+<li><a href="smsim-in-R.html">Spatial microsimulation in R</a></li>
+<li><a href="CakeMap.html">CakeMap</a></li>
+<li><a href="validation.html">Model checking and evaluation</a></li>
+<li><a href="visualising.html">Visualising spatial microdata</a></li>
+<li><a href="smsim-for-abm.html">Spatial microsimulation for agent-based models</a></li>
+<li><a href="additional.html">Additional tools and techniques</a></li>
+<li><a href="appendix.html">Appendix</a></li>
+<li><a href="glossary.html">Glossary</a></li>
+<li><a href="references.html">References</a></li>
+
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="muted"><a href="http://robinlovelace.net/spatial-microsim-book/">Spatial Microsimulation with R</a> <small>by Robin Lovelace</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+        <div class="well">
+          Available soon as a physical book</a>.
+        </div>
+
+        <h4>Contents</h4>
+          <ul class="list-unstyled" id="toc"></ul>
+
+          <hr>
+          <!--<p><a href="/contribute.html">How to contribute</a></p>-->
+
+          <p><a class="btn btn-primary" href="https://github.com/RobinLovelace/spatial-microsim-book/edit/master/CakeMap.Rmd">Edit this page</a></p>
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="CakeMap">Spatial microsimulation in the wild</h1>
+<p>By now we have developed a good understanding of what spatial microsimulation is, its applications and how it works. We have seen something of its underlying theory and its implementation in R. But how can the method can be applied ‘in the wild’, on real datasets?</p>
+<p>The purpose of this chapter is to answer this question using real data to estimate cake consumption in different parts of Leeds, UK. The example is deliberately rather absurd to make it more memorable. The steps are presented in a generalisable way, to be applicable to a wide range of datasets.</p>
+<p>The input microdataset is a randomised (‘jumbled’) subset of the 2009 <a href="http://data.gov.uk/dataset/adult_dental_health_survey">Dental Health Survey</a>, (DHS) which covers England, Northern Ireland and Wales. 1173 variables are available in the DHS, many of which are potentially interesting target variables not available at the local level. These include weekly income, plaque buildup, and oral health behaviours. Potential linking variables include socio-economic classification, and dozens of variables related to oral health.</p>
+<p>In terms of constraint variables, we are more limited: the Census is the only survey that provides count data at the small area level in the UK. Thus the ‘domain’ of available input data, related to our research question involves two sources:</p>
+<ol style="list-style-type: decimal">
+<li>Non-geographical individual-level survey, DHS — the <em>microdata</em>.</li>
+<li>Geographically aggregated categorical count data from the census — the <em>constraint tables</em>.</li>
+</ol>
+<p>As discussed in Chapter must first decide which variables should be used to link the two. We must select the constraints from available linking variables.</p>
+<h2>Selection of constraint variables</h2>
+<p>The selection of linking variables should not be arbitrary pre-ordained by preconceptions. The decision of which constraints to use to allocate individuals to zones should be context dependent: if the research is on social exclusion, for example, many variables could potentially be of interest, ranging from car ownership and house tenancy though to age, gender and religion. Often constraint variables must be decided not based on what would would be ideal, but what datasets are available. The selection criteria will vary from one project to the next, but there are some overriding principles that apply to most projects:</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>More the merrier</strong>: each additional constraint used for will further differentiate the spatial microdata from the input microdata. If gender is the only constraint used, for example, the spatial microdata will simply be a repetition of the input microdata but with small differences in the gender ratio from one zone to the next. If five constraints are used (e.g. age, gender, car ownership, tenancy and religion), the differences between the spatial microdata from one zone to the next will be much more pronounced and probably useful.</p></li>
+<li><p><strong>Relevance to the target variable</strong>: often spatial microsimulation is used to generate local estimates of variables about which little geographically disaggregated information is available. Income is a common example: we have much information about income distributions, but little information about how average values (let alone the distribution) of income varies from one small area to the next. In this case income is the target variable. Therefore constraints must be selected which are closely related to income for the output to resemble reality. This is analogous to multiple regression (which can also be used to estimate average income at the local level), where the correct <em>explanatory variables</em> (i.e. constraint variables in spatial microsimulation) must be selected to effectively predict the <em>dependent variable</em>. As with regression models, there are techniques which can be used to identify the most suitable constraint variables for a given target variable.</p></li>
+<li><p><strong>Simplicity</strong>: this criterion to some extent contradicts the first. Sometimes more constraints do not result in better spatial microdata and problems associated with ‘over-fitting’ can emerge. Spatial microsimulation models based on many tens of constraint categories will take longer to run and require more time to develop and modify. In addition, the chances of an error being introduced during every phase of the project is increased with each additional constraint. The extent to which increasing the number of constraint categories improves the results of spatial microsimulation, either with additional variables or by using cross-tabulated constraints (e.g. age/sex) instead of single-variable constraints, has yet to be explored. It is therefore difficult to provide general rules of thumb regarding simplicity other than ‘do not overcomplicate the model with excessive constraint variables and constraints’.</p></li>
+</ol>
+<p>To exemplify these principles, let us consider the constraint variables available in the CakeMap datasets. Clearly only variables available both in the individual-level and aggreate datasets can be chosen from. Five variables assigned to each of the 916 individuals are available from the individual-level data, about which data is also available from the census:</p>
+<ul>
+<li>‘Car’: The number of working cars in the person’s household.</li>
+<li>‘Sex’ and ‘ageband4’: Gender and age group, in two separate variables. Age is divided into 6 groups ranging from ‘16–24’ to ‘65–74’.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></li>
+<li>‘NSSEC’: National Statistics Socio-economic Classification: an categorical variable classifying the individual’s work into one of 10 groups including ‘97’, which means ‘no answer’ (<code>NA</code>).</li>
+<li>‘NCakes’: the target variable, reported number of times that the respondent consumes cake each week.</li>
+</ul>
+<p>All of these variables, except for ‘NCakes’, have a corresponding constraint variable to be loaded for the 124 Wards that constitute the Leeds Local Authority in the UK. In real datasets it is rarely the case that the categories of the individual and aggregate level data match perfectly from the outset and this is the first problem we must overcome before running a spatial microsimulation model of cake consumption in Leeds.</p>
+<p>The code needed to run the main part of the example is contained within ‘CakeMap.R’. Note that this script makes frequent reference to files contained in the folder ‘data/CakeMap’, where input data and processing scripts for the project are stored.</p>
+<h2 id="CakePrep">Preparing the input data</h2>
+<p>Often spatial microsimulation is presented in a way that suggests the data arrived in a near perfect state, ready to be inserted directly into the model. This is rarely the case: usually, one must spend time loading the data into R, re-coding categorical variables and column names, binning continuous variables and subsetting from the microdataset. In a typical project, data preparation can take as long as the analysis stage. This section builds on Chapter 3 to illustrate strategies for data cleaning on a complex project. To learn about the data cleaning steps that may be useful to your data, we start from the beginning in this section, with a real (anonymised) dataset that was downloaded from the internet.</p>
+<p>The raw constraint variables for CakeMap were downloaded from the Infuse website (<a href="http://infuse.mimas.ac.uk/">http://infuse.mimas.ac.uk/</a>). These, logically enough, are stored in the ‘cakeMap/data/’ directory as .csv files and contain the word ‘raw’ in the file name to identify the original data. The file ‘age-sex-raw.csv’, for example is the raw age and sex data that was downloaded. As the screenshot in Figure 3 illustrates, these datasets are rather verbose and require pre-processing. The resulting ‘clean’ constraints are saved in files such as ‘con1.csv’, which stands for ‘constraint 1’.</p>
+<p><img src="figures/raw-data-screenshot.jpeg" alt="Example of raw aggregate-level input data for CakeMap aggregate data, downloaded from http://infuse.mimas.ac.uk/." /></p>
+<p>To ensure reproducibility in the process of converting the raw data into a form ready for spatial microsimulation, all of the steps have been saved. Take a look at the R script files ‘process-age.R’, ‘process-nssec.R’ and ‘process-car.R’. The contents of these scripts should provide an insight into methods for data preparation in R. Wickham (2014b) provides a more general introduction to data reformatting. The most difficult input dataset to deal with is the age/sex constraint data. The steps used to clean it are saved in ‘process-age.R’, in the <code>data/CakeMap/</code> folder. Take a look through this file and try to work out what is going on: the critical stage is grouping single year age bands into larger groups such as 16–24.</p>
+<p>The end result of ‘process-age.R’ is a ‘clean’ .csv file, ready to be loaded and used as the input into our spatial microsimulation model. Note that the last line of ‘process-age.R’ is <code>write.csv(con1, &quot;con1.csv&quot;, row.names = F)</code>. This is the first constraint that we load into R to reweight the individual-level data in the next section. The outputs from these data preparation steps are named ‘con1.csv’ to ‘con3.csv’. For simplicity, all these were merged (by ‘load-all.R’) into a single dataset called ‘cons.csv’. All the input data for this section are thus loaded with only two lines of code:</p>
+<pre class="sourceCode r"><code class="sourceCode r">ind &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/CakeMap/ind.csv&quot;</span>)
+cons &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/CakeMap/cons.csv&quot;</span>)</code></pre>
+<p>Take a look at these input data using the techniques learned in the previous section. To test your understanding, try to answer the following questions:</p>
+<ul>
+<li>What are the constraint variables?</li>
+<li>How many individuals are in the survey microdataset?</li>
+<li>How many zones will we generate spatial microdata for?</li>
+</ul>
+<p>For bonus points that will test your R skills as well as your practical knowledge of spatial microsimulation, try constructing queries in R that will automatically answer these questions.</p>
+<p>It is vital to understand the input datasets before trying to model them, so take some time exploring the input. Only when these datasets make sense (a pen and paper can help here, as well as R!) is it time to generate the spatial microdata.</p>
+<h2 id="CakeIPF">Performing IPF on CakeMap data</h2>
+<p>The <code>ipfp</code> reweighting strategy is concise, generalisable and computationally efficient. On a modern laptop, the <code>ipfp</code> method was found to be <em>almost 40 times faster</em> than the ‘IPFinR’ method (section 4.1; Lovelace, 2014) over 20 iterations on the CakeMap data, completing in 2 seconds instead of over 1 minute. This is a huge time saving!^[These tests were conducted using the <code>microbenchmark()</code> commands found towards the end of the ‘CakeMap.R’ file. The second of these benchmarks depends on files from <code>smsim-course</code> (Lovelace, 2014), the repository of which can be downloaded from (<a href="https://github.com/Robinlovelace/smsim-course">https://github.com/Robinlovelace/smsim-course</a>).</p>
+<p>Thanks to the preparatory steps described above, the IPF stage can be run on a single line. After the datasets are loaded in the first half of ‘CakeMap.R’, the following code creates the weight matrix:</p>
+<pre><code>#&gt; 
+#&gt; Attaching package: &#39;dplyr&#39;
+#&gt; 
+#&gt; The following object is masked from &#39;package:stats&#39;:
+#&gt; 
+#&gt;     filter
+#&gt; 
+#&gt; The following objects are masked from &#39;package:base&#39;:
+#&gt; 
+#&gt;     intersect, setdiff, setequal, union</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">apply</span>(cons, <span class="dv">1</span>, function(x)
+  <span class="kw">ipfp</span>(x, ind_catt, x0, <span class="dt">maxit =</span> <span class="dv">20</span>))</code></pre>
+<p>As with the SimpleWorld example, the correlation between the constraint table and the aggregated results of the spatial microsimulation can be checked to ensure that the reweighting process has worked correctly. This demonstrates that the process has worked with an <em>r</em> value above 0.99:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(<span class="kw">as.numeric</span>(cons), <span class="kw">as.numeric</span>(ind_agg))
+<span class="co">#&gt; [1] 0.9968529</span></code></pre>
+<h2 id="CakeINT">Integerisation</h2>
+<p>As before, weights of the IPF procedure are fractional, so must be <em>integerised</em> to create whole individuals. The code presented in chapter 4 requires little modification to do this: it is your task to convert the weight matrix generated by the above lines of code into a spatial microdataset called, as before, <code>ints_df</code> (hint: the <code>int_trs</code> function in ‘R/functions.R’ file will help). The spatial microdata generated in ‘R/CakeMapInts.R’ contain the same information as the individual-level dataset, but with the addition of the ‘zone’ variable, which specifies which zone each individual inhabits.</p>
+<p>The spatial microdata is thus <em>multilevel</em> data, operating at one level on the level of individuals and at another at the level of zones. To generate summary statistics about the individuals in each zone, functions must be run on the data, one zone (group) at a time. <code>aggregate</code> provides one way of doing this. After converting the ‘NSSEC’ socio-economic class variable into a suitable numeric variable, <code>aggregate</code> can be used to identify the variability in social class in each zone, using the <code>by =</code> argument to specify how the results are grouped depending on the zone each individual inhabits:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;R/CakeMapInts.R&quot;</span>)</code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(ints_df$NSSEC, <span class="dt">by =</span> <span class="kw">list</span>(ints_df$zone), sd,
+  <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre>
+<pre><code>##    Group.1        x
+## 1         1 1.970570
+## 2         2 2.027638
+## 3         3 2.019839</code></pre>
+<p>In the above code the third argument refers to the function to be applied to the input data. The fourth argument is simply an argument of this function, in this case instructing the standard deviation function (<code>sd</code>) to ignore all <code>NA</code> values. An alternative way to perform this operation, which is faster and more concise, is using <code>tapply</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tapply</span>(ints_df$NSSEC, ints_df$zone, sd, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre>
+<p>Note that operations on <code>ints_df</code> can take a few seconds to complete. This is because the object is large, taking up much RAM on the computer. This can be seen by asking <code>object.size(ints_df)</code> or <code>nrow(ints_df)</code>. The latter shows we have created a spatial microdataset of 1.6 million individuals! Try comparing this result with the size of the original survey dataset ‘ind’. Keeping an eye on such parameters will ensure that the model does not generate datasets too large to handle.</p>
+<p>Next we move on to a vital consideration in spatial microsimulation models such as CakeMap: model checking and validation.</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>R tip: This information can be seen, once the dataset is loaded, by entering <code>unique(ind$ageband4)</code> or, to see the counts in each category, <code>summary(ind$ageband4)</code>. Because the variable is of type <code>factor</code>, <code>levels(ind$ageband4)</code> will also provide this information.<a href="#fnref1">↩</a></p></li>
+</ol>
+</div>
+
+        </div>
+      </div>
+
+      <div class="footer">
+        <hr>
+        <p>&copy; Site design: Hadley Wickham. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/robinlovelace/spatial-microsim-book/">github</a>.
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="www/bootstrap.min.js"></script>
+  <script src="www/toc.js"></script>
+  </body>
+</html>
