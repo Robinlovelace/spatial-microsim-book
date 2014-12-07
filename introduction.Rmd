@@ -389,30 +389,39 @@ The books contains the following chapter, which progress in a
 logical order:
 
 - *What is spatial microsimulation?*
+([](#what-is))
 introduces the concepts and applications of spatial 
 microsimulation not only as a narrow methodology
 but as an *approach* to understanding real-world phenomena.
 - *SimpleWorld* 
+([](#vis))
 is a simple and reproducible
 explanation of spatial microsimulation method with reference to an imaginary planet.
 - *Data preparation*
+([](#data-prep))
 is dedicated to the boring but vital task
 of loading and 'cleaning' the input data, ready for spatial microsmulation.
 - *Spatial microsimulation in R*
+([](#smsimr))
 introduces the main functions
 and techniques that are used to generate spatial microdata building on the previous chapters.
 - *Spatial microsimulation in the wild*
+([](#CakeMap))
 is a larger
 and more involved example using real data. In this chapter
 you will estimate geographical variation in cake consumption.
 - *Model checking and evaluation*
+([](#svalidation))
 tackles the understudied but crucially important questions of 'is the model working?' and 'do the results coincide with reality?'. Here you will learn appropriate tests and checks to verify spatial microsimulation outputs and think about its underlying assumptions.
 - *Visualising and analysing spatial microdata*
+([](#vis))
 is dedicated to displaying the complex data generated through spatial microsimulation in a concise, compelling and beautiful way.
 - *Spatial microdata in agent-based models*
+([](#ABM))
 describes how the output
 from spatial microsimulation can be used as an input into more complex models.
 - *Additional tools and techniques*
+([](#additional))
 introduces further methods
 and applications, including a description of R packages for spatial
 microsimulation.

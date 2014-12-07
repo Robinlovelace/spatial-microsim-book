@@ -157,8 +157,8 @@ http://infuse.mimas.ac.uk/.](figures/raw-data-screenshot.jpeg)
 # A little long-winded - cut down?
 # stage ([Wickham, 2014](http://vita.had.co.nz/papers/tidy-data.html)).  This
 # section builds on
-[Chapter 3](#DataPrep)
-  to illustrate strategies for data
+# [Chapter 3](#DataPrep)
+#   to illustrate strategies for data
 # ([2014b](http://vita.had.co.nz/papers/tidy-data.html)) provides a more
 ```
 
