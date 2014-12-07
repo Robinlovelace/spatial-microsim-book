@@ -307,4 +307,9 @@ large to handle.
 Next we move on to a vital
 consideration in spatial microsimulation models such as CakeMap: model checking and validation.
 
+```{r, echo=FALSE}
+save.image("cache-CakeMap.RData")
+```
+
+
 

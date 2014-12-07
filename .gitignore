@@ -25,3 +25,4 @@ book/
 _site/
 temp.*
 book.Rmd
+cache*

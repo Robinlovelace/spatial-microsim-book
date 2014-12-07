@@ -165,7 +165,6 @@ each of these areas.
 # numerical operation). So why choose R?
 # ^[Speed
 # of execution is an arguable exception, an issue that can be tackled
-# by vectorisation (see [Appendix A](#apR)) and judicious use of add-on *R packages*.]
 ```
 
 R is a *low-level* language compared with statistical programs based on a strong
@@ -212,11 +211,9 @@ The **ipfp** package, for example,
 can greatly reduce the computational time taken for a key element of spatial
 microsimulation process, as we shall see in Chapter 5 in
 *Reweighting with ipfp*
-([](#ipfp))
 .
 
 ```{r, echo=FALSE}
-# *Reweighting with ipfp* ([](#ipfp)). # causing error in jekyll
 ```
 
 Further information about why R is a good choice for spatial microsimulation
@@ -271,7 +268,6 @@ reading this book easier, but R novices should be able to follow the worked
 examples, with reference to appropriate supplementary material
 . See the references listed in the Appendix
 (
-[](#further)
 ). As
 with learning Spanish or Chinese, frequent practice, persistence and
 experimentation will ensure deep learning.
@@ -340,8 +336,6 @@ microsimulation.
 # 'jump in the deep end' by living abroad, so learning R through the course
 # of this book is certainly an option. However, a deep understanding of R
 # will greatly assist understanding the practical elements of the book which
-# begin in earnest in [Chapter 4](#DataPrep). Therefore an introductory
-# tutorial is provided in [Appendix 1](#apR) which will allow this book
 # to focus primarily on the methods of spatial microsimulation and not the
 # language in which they are implemented.
 ```
@@ -395,39 +389,30 @@ The books contains the following chapter, which progress in a
 logical order:
 
 - *What is spatial microsimulation?*
-([](#what-is))
 introduces the concepts and applications of spatial 
 microsimulation not only as a narrow methodology
 but as an *approach* to understanding real-world phenomena.
 - *SimpleWorld* 
-([](#SimpleWorld))
 is a simple and reproducible
 explanation of spatial microsimulation method with reference to an imaginary planet.
 - *Data preparation*
-([](#data-prep))
 is dedicated to the boring but vital task
 of loading and 'cleaning' the input data, ready for spatial microsmulation.
 - *Spatial microsimulation in R*
-([](#smsimr))
 introduces the main functions
 and techniques that are used to generate spatial microdata building on the previous chapters.
 - *Spatial microsimulation in the wild*
-([](#CakeMap))
 is a larger
 and more involved example using real data. In this chapter
 you will estimate geographical variation in cake consumption.
 - *Model checking and evaluation*
-([](#svalidation))
 tackles the understudied but crucially important questions of 'is the model working?' and 'do the results coincide with reality?'. Here you will learn appropriate tests and checks to verify spatial microsimulation outputs and think about its underlying assumptions.
 - *Visualising and analysing spatial microdata*
-([](#vis))
 is dedicated to displaying the complex data generated through spatial microsimulation in a concise, compelling and beautiful way.
 - *Spatial microdata in agent-based models*
-([](#ABM))
 describes how the output
 from spatial microsimulation can be used as an input into more complex models.
 - *Additional tools and techniques*
-([](#additional))
 introduces further methods
 and applications, including a description of R packages for spatial
 microsimulation.

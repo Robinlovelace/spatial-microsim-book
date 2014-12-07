@@ -3,6 +3,11 @@ title: "CakeMap"
 layout: default
 ---
 
+```{r, echo=FALSE}
+load("cache-CakeMap.RData")
+```
+
+
 # Model checking and evaluation {#svalidation}
 
 To make an analogy with food safety standards, openness about mistakes is
