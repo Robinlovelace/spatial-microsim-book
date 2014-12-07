@@ -1073,40 +1073,267 @@ should be saved as separate files. This ensures that after any mistakes, one can
 always recover information that otherwise could have been lost and makes the
 project fully reproducible. In this chapter, however, a relatively clean and
 very tiny dataset from SimpleWorld is used.  We will see in Chapter
-\ref{CakeMap} how to deal with larger and more messy data.  Here the focus is on
-the principles.
+\ref{CakeMap} how to deal with larger and more messy data.  Here the focus is on the principles.
 
 ```{r, echo=FALSE}
 # It sounds trivial, but the *precise* origin of the input data
 # should be described. Comments in code that loads the data (and resulting publications),
 # allows you or others to recall the raw information. # going on a little -> rm
 # Show directory structure plot from Gillespie here
+# 2. Remove excess information
 ```
 
 The process of loading, checking and preparing the input datasets for spatial
 microsimulation is generally a linear process, encapsulating the following
 stages:
 
-1. Load original data 
-2. Remove excess information
+1. Decide on the constraint and target variables
+2. Loading the data 
 3. Re-categorise individual-level data
 4. Set variable and value names
 5. 'Flatten' individual-level data 
 
 'Stripping down' the datasets so that they only contain the bare essential
-information will enable you to focus solely on the data that you are interested
-in. This is not covered in this chapter because the input datasets are already
-extremely bare and because the process should be obvious.
+information will enable focus on the information that really matters. The input datasets in the example used for this chapter
+are already bare, but in real world surveys there may be literally hundreds of variables clogging up the analysis and your mind.
+It is good practice to to remove
+excess data at the outset. Provided you have a good workflow,
+keeping all original data files unmodified for future
+reference, it will be easy to go back and add extra variables
+at a later stage. Following Occam's razor
+which favors simple solutions (Blumer et al. 1987),
+it is often best to start with a minimum
+of data and add complexity subsequently
+rather than vice versa.
 
-We start with the individual-level dataset for a reason: this dataset is often
-more problematic to format than the constraint variables, so it is worth
-becoming acquainted with it at the outset. Of course, it is possible that the
-data you have are not suitable for spatial microsimulation because they lack
-sufficient constraint variables with shared categories in both individual and
-aggregate level tables. We assume that you have already checked this. The
+```{r, echo=FALSE}
+# Reference for occam's razor!
+```
+
+Spatial microsimulation is the result of combining
+individual and aggregate-level data, and both must
+be given equal consideration when designing a modelling
+strategy. The critical data constraint in many cases will
+be the number of *linking variables*. Linking variables
+are variables shared between the individual and aggregate level
+datasets and can therefore be used to *constrain* the
+weights allocated to the individuals for each zone.
+If there are no shared variables between the aggregate and
+individual-level data, you cannot do spatial microsimulation.
+If there are only a few shared variables (e.g. age, sex,
+employment status), your options are limited. Increasingly,
+however, there are many linking variables to chose from
+as questionnaires become broader and more available. In this
+case the choice of constraints becomes important: which and
+how many to use,
+their order and their relationship to the target variable
+should all be considered at the outset when choosing the
+input data and constraints.
+
+## Selecting target and constraint variables {#Selecting}
+
+The geographically aggregated data should be the
+first consideration when deciding on the
+input data. This is because the geographical data
+is essential for making the model spatial: without
+good geographical data, there is no way to
+allocate the individuals to different geographical zones.
+
+The first critical consideration for the constraint data
+is coverage: ideally close to 100% of each zone's total
+population should be included in the counts. Also, the
+survey must have been completed equally by residents in
+every geographical zone under consideration. It is important
+to recognise that many geographically aggregated datasets
+may be unsuitable for spatial microsimulation due to sample
+size: geographical information based on a small sample of
+a zone's populatin is not a good basis for
+spatial microsimulation.
+
+To take one example,
+estimates of the *proportion* of people who do not
+get sufficient sleep in the Australian
+state of Victoria, from the 2011 VicHealth Indicators
+[Survey](http://data.aurin.org.au/dataset?q=sleep),
+is not a suitable constraint variable.
+**Constraint variables must be integer counts**,
+not percentages, and must contain sufficient
+categories for each variable. The sleep dataset
+meets neither of these criteria. It is based on
+a small sample of individuals (on average 300 per
+geographic zone, less than 1% of the total population).
+Also it is a binary variable, dividing people into
+'adequate' and 'inadequate' sleep categories. Instead,
+geographical datasets from the 2011 Census should be
+used. These may contain fewer variables, but they will
+provide counts for different categories and have almost
+100% coverage of the population.
+
+To continue with the Australian example, imagine we are
+interested only in Census data at the SA2 level,
+the second smallest unit for the release of Census data.
+A browse of the available datasets on an
+[online portal](http://data.aurin.org.au/dataset?q=2011-08+SA2)
+reveals that information is available on a wide range of
+topics, including industry of employment, education level
+and total personal weekly income (divided into 10 bands from
+$1 - $199 to $2000+). Which of these dozens of variables do we
+select of the analysis? It depends on the research question and
+the target variable or variables of interest.
+
+If we are interested in geographic variability in economic
+inequality, for example, the income data would first on the
+list to select. Additional variables would likely include
+level of education, type of employment and age, to discover
+the wider context of the problem. If the research question
+related to energy and sustainability, to take another example,
+variables related to distance travelled to work and housing
+would be of greater relevance. In each of these examples
+the *target variable* determines the selection of constraints.
+The target variable is the thing that we would like spatial
+microdata on, as illustrated by the following two research
+questions.
+
+How does income inequality vary from place to place?
+To answer this question it is not sufficient to have
+aggregate-level statistics (e.g. average household income).
+So income per person must be simulated for each zone, using
+spatial microsimulation. Sampling from a national population
+provides a more realistic distribution than simply assuming
+every person of a given income band earns a certain amount:
+this is clearly not the case as income distributions are
+not flat (they tend to have positive skew). 
+
+How does energy use vary over geographical space?
+This question is more complicated as there is no single
+variable on 'energy use' that is collected by statistical
+agencies at the aggregate, let alone individual, level.
+Rather, energy use is a *composite target variable* that
+is composed of energy use in transport, household heating
+and cooling and other things. For each type of energy use,
+the question must eventually be simplified to coincide with
+survey questions that are actually asked in Census surveys
+(e.g. 'where do you work?', from which distance travelled
+to work may be ascertained). Such considerations should guide
+the selection of aggregate level (generally Census-based)
+geographic count data. Of course, available datasets
+vary greatly from country to country so selection of
+appropriate datasets is highly context dependent.
+
+A parallel stage is to consider the individual-level datasets
+that are available. Again, if there are dataset
+
+The following considerations should inform the selection of
+individual-level microdata:
+
+- Linking variables: are there enough
+variables in the individual-level data that are
+also present in the geographically aggregated constraints?
+Even when many linking variables are available, it is
+important to determine the fit between the categories in each.
+If age is reported in five year bands in the aggregate-level
+data, but only in 20 year bands in the individual-level data,
+for example,
+this could be problematic if the research question is highly
+aged dependent.
+- Representiveness: is the sample population representative of the areas under investigation?
+- Sample size and diversity: the input dataset must be sufficiently large and diverse to mitigate the *empty cell* problem.
+- Target variables: are these, or proxies for them, included in the dataset?
+
+In addition to these essential characteristics of the
+individual-level dataset, there are qualities that are desirable but not  required. These include:
+
+- Continuity of the survey: will the survey be repeated on
+a regular basis into the future? If so, the analysis can form
+the basis of ongoing work to track change over time, perhaps
+as part of a *dynamic microsimulation model*.
+- Geographic variables: although it is the purpose of spatial
+microsimulation to allocate geographic variables to
+individual-level data, it is still useful to have some
+geographic information. In many national UK surveys, for
+example, the region (the coarsest geographical level)
+of the respondent is reported. This information can be useful in
+identifying the extent to which the difference between the
+geographic extent of the survey and microsimulation study area
+affects the results. This is an understudied area of knowledge
+where more work is needed.
+
+In terms of the *number* of constraints that is appropriate
+there is no 'magic number' that is correct in every case.
+It is also important to note that the number of variables
+is not a particularly good measure of how well constrained
+the data will be. The total number of *categories* used to
+constrain the weights is in fact more important.
+
+For example, a model constrained by two variables,
+age and income bands,
+each containing 10 categories (20 constraint categories
+in total) will be better constrained
+than a model constrained by 5 binary variables such as
+male/female, young/old etc. That is not to say that the
+former set of constraints is *better* (as emphasised above,
+that depends on the research question), simply that the
+weights will be more finely constrained.
+
+A special type of
+constraint variable is **cross-tabulated** categories.
+This involves subdividing the categories in one variable
+by the categories of another. Cross tabulated
+constraint variables are best seen as a single variable.
+If there are 5 age categories and 2 sex categories, this
+can be seen as a single constraint variable (age/sex)
+with 10 categories. Clearly in terms of retaining
+detailed local information (e.g. all young males moving out
+of a zone), cross-tabulated variables are preferable.
+This raises the question? what happens when a single
+variable (e.g age) is used in multiple cross-tabulated
+constraints (e.g. age/sex and age/income). In this case
+IPF can still be used, but the result may not converge
+to a single answer because the gender distribution may
+be disrupted by the age/income constraint. Further work
+is needed to test this but from theory we can be sure:
+a three way cross-tabulated constraint (age/sex/income)
+would be ideal in this case.
+
+Even when measuring constraint variables by categories rather
+than the cruder measure of number variables, there is still
+no concensus about the optimal amount. 
+Norman (1999) advocates
+including the ``maximum amount of
+information in the constraints'', implying that
+the more constraint categories the merrier.
+Harland (2012)
+warns that over-constraining the model can cause
+problems. In any case, there is a clear link between
+the quality and quantity of constraint variables used
+in the model and the fidelity of the output microdata.
+
+```{r, echo=FALSE}
+# TODO: link to the location of a discussion of the empty cell problem
+```
+
+After suitable constraint variables have been chosen ---
+and remember that the constraints can be changed at a later
+stage to improve the model or for testing ---
+the next stage is to load the data.
+Following the SimpleWorld example, we
+load the individual-level dataset first. This
+is because individual-level data from surveys
+is often
+more difficult
+to format. Individual-level datasets are often larger
+and more complex than the constraint data, which
+are simply integer counts of different categories.
+Of course, it is possible that the
+data you have are not suitable for
+spatial microsimulation because they lack linking variables.
+We assume that you have already checked this. The
 checking process for the datasets used in this chapter is simple: both aggregate
-and individual-level tables contain age and sex, so they can by combined. Let us
-proceed to load some data saved on our hard disc into R's *environment*, where
+and individual-level tables contain age (in continuous form
+in the microdata, as two categories in the aggregate data)
+and sex, so they can by combined. 
+Loading the data involves transfering information from a
+local hard disc into R's *environment*, where
 it is available in memory.
 
 ## Loading input data {#Loading} 
@@ -1962,14 +2189,27 @@ applicable to a wide range of datasets.
 
 The input microdataset is a randomised ('jumbled') subset of the
 2009 [Dental Health Survey](http://data.gov.uk/dataset/adult_dental_health_survey),
-(DHS) which covers England, Northern Ireland and Wales. xx variables are available
-in the DHS including xx, xx and xxx. In terms of constraint variables, we are more
-limited: the Census is the only survey that provides count data at the small area
-level. From this 'domain' of available input data, with the non-geographical
-individual-level DHS on one side --- the *microdata* --- and the geographically
-aggregated categorical count data from the census --- the *constraint tables* ---
-we must first decide which variables should be used to link the two. We must
-select the 'linking variables', otherwise know as constraint variables.
+(DHS) which covers England, Northern Ireland and Wales. 1173 variables are available
+in the DHS, many of which are potentially interesting
+target variables not available at the local level.
+These include weekly income, plaque buildup, and
+oral health behaviours.
+Potential linking variables include socio-economic
+classification, and dozens of variables related to oral health.
+
+In terms of constraint variables, we are more
+limited: the Census is the only survey that provides
+count data at the small area
+level in the UK. Thus the 'domain' of available input data,
+related to our research question involves two sources:
+
+1. Non-geographical
+individual-level survey, DHS --- the *microdata*.
+2. Geographically
+aggregated categorical count data from the census --- the *constraint tables*.
+
+As discussed in Chapter  must first decide which variables should be used to link the two. We must
+select the constraints from available linking variables.
 
 ## Selection of constraint variables
 
@@ -2234,37 +2474,163 @@ on such parameters will ensure that the model does not generate datasets too
 large to handle.
 
 Next we move on to a vital
-consideration in spatial microsimulation models such as CakeMap: validation.
+consideration in spatial microsimulation models such as CakeMap: model checking and validation.
 
-## Model checking and validation {#svalidation}
+
+
+# Model checking and evaluation {#svalidation}
 
 To make an analogy with food safety standards, openness about mistakes is
-conducive to high standards. Transparency in model verification is desirable for
-similar reasons. The two main strategies are:
+conducive to high standards (Powell et al. 2011). Transparency in model evaluation --- the process of deciding whether the model has worked and identifying *how good* the results are --- is desirable for
+similar reasons. Openness of code and method is advocated throughout this book and should become second nature to people using open source software. This Chapter is about specific methods to check and evaluate that the outputs of spatial microsimulation models 1) make sense and 2) coincide with external reality. The two main strategies are:
 
-1. comparing the model results with knowledge of how it *should*
-perform a-priori (model checking), and
-2. comparison between the model results and empirical data (validation).
+1. Comparing the model results with knowledge of how it *should*
+perform a-priori (model checking or internal validation). This level of model checking always takes place at the aggregate level of the constraint variables.
+2. Comparing model results and with empirical data external to the microsimulation (external validation or 'ground truthing'). This approach to verification can take place on either the individual level (if real geo-coded survey data are available) or more
+commonly at the aggregate level.
 
-Pearson's coefficient of correlation ($r$) provides a fast and simple insight
-into the fit between the simulated data and the constraints. In most cases
+Internal validation is the most common form model evaluation. In many cases internal validation is the *only* test of the model's output, because of data limitations. Often a motivation for using spatial microsimulation is lack of geographical data on a specific variable (as with the CakeMap example in the previous chapter). Therefore there is often a paucity of external information against which the model's output can be tested. Continuing with the CakeMap example, there is no other readily available data on the geographic distribution of cake consumption, so we could conclude that external validation is impossible. (In fact new and unconventional sources of data such as number of confectionery shops, consumer surveys and even social media could be used to provide 'sanity checks' on the results. Sometimes you may need to be creative to find data for external validation.)
+
+This Chapter explains how to undertake routine checks on the procedure, how to identify outlying variables and zones which are simply not performing well and how to undertake external validation. Even in cases where there is a paucity of data on the target variable, as with cake consumption, there is usually at least some test of the model's performance against external data that can be undertaken. Sometimes this involves creating a new target variable, purely for the purposes of validation.
+
+## Internal validation
+
+Internal validation is the process of comparing the model's output against data that is internal to the model itself. In practice this means converting the the synthetic spatial microdata into a form that is commensurate with the constraint variables and comparing the two geographically aggregated datasets: the observed vs simulated values. Every spatial microsimulation will have access to the data neede for this comparison. Internal validation should therefore be seen as **the bare minimum** in terms of model evaluation, to be conducted as a standard procedure on all spatial microsimulation runs. When authors refer to this procedure, that should be a routine part of the modelling process, as 'model validation' they are being misleading. Internal validation tells us simply that the results are internally consistent and should always be conducted.
+
+Because internal validation is so widely used in the literature
+there are a number of established measures of internal fit that have been used. Yet there is little consistency in the measures that are used. This makes it difficult to assess which models are performing best across different studies, a major problem in spatial microsimulation research: if one study reports only *r* values, whereas another reports only *TAE* (each measure will be described shortly), there is no way to assess which is performing better. There is a need for more consistency is reporting of internal validation. Hopefully this Chapter, which provides descriptions of each of the commonly used and recommended measures of *goodness-of-fit* as well as guidance on which to use --- is a step in the right direction.
+
+### Pearson's *r*
+
+Pearson's coefficient of correlation ($r$) is the simplest and most commonly used measure of aggregate-level model fit for internal validation. *r* is popular because it provides a fast and simple insight
+into the fit between the simulated data and the constraints at an aggregate level. In most cases
 $r$ values greater than 0.9 should be sought in spatial microsimulation and
 in many cases $r$ values exceeding 0.99 are possible, even after integerisation.
-As a very basic test, let's observe the correlation between the constraint table
-cells and the corresponding simulated cell values:
+
+Beyond simple correlation (*r*), other metrics of model fit exist. We will look at some commonly used measures and define them
+mathematically before defining them in R and, in the subsequent section, implementing them to evaluate the CakeMap spatial microsimulation model.
+
+- Total absolute error (TAE), simply the sum of absolute (positive) differences between the observed and final counts in each of the categories for every zone.
+- Standardised absolute error (SAE), the TAE divided by the total observed population.
+- Mean absolute error (MAE), TAE divided by *n*, the number of observations.
+- Root mean squared error (RMSE), the square root of the sum of all errors. This metric emphasises the relative importance of a few large errors over the buildup of many small errors.
+- Chi-squared, a test that the predicted and observed values for categorical values match.
+
+### Absolute error measures
+
+TAE and SAE are crude yet effective measures of overall
+model fit. TAE has the additional advantage of
+being very easily understood as simply the sum of errors:
+
+$$
+e_{ij} = obs_{ij} - sim_{ij}
+$$
+
+$$
+TAE = \sum\limits_{ij} | e_{ij} |
+$$
+
+where $e$ is error, $obs$ and $sim$ are the observed and simulated values for each constraint category ($j$) and each area ($i$), respectively.
+Note the vertical lines $|$ means we take the absolute value of
+the error. This means that an error of -5 has the same impact
+as an error of +5.
+
+```{r, echo=FALSE}
+# : $|-1| = 1$ and $|1| = 1$.
+```
+
+SAE is the TAE divided by the total
+population of the study area. TAE is
+sensitive to the number of people
+within the model, while SAE is not.
+
+$$
+SAE = TAE / pop
+$$
+
+Mean absolute error (MAE) is the same as SAE, except the denominator is the *number* of observations that are being compared (the number of categories in the constraints multiplied by the number of zones under investigation).
+
+$$
+MAE = TAE / n
+$$
+
+Before seeing how these metrics can easily be implemented in code, we will define the other metrics defined in the above bullet points. Of the three 'absolute error' measures, I would recommend reporting SAE, as it scales with the population of the study area.
+
+### Root mean squared error
+
+RMSE is similar to the absolute erro metrics, but uses the *sum of squares* of the error. Recent work in geoscience has suggested that RMSE is preferable to absolute measures of error when the errors approximate a normal distribution (Chai and Draxler 2014).
+Errors in spatial microsimulation tend to have a normal-ish distribution, with many very small errors around the mean of zero and comparatively few larger error. RMSE is defined as follows:
+
+$$
+RMSE = \sqrt{frac{i}{n} \sum_i e^2_i}
+$$
+
+```{r, echo=FALSE}
+# As with TAE, there is also a standardised version of RMSE (), normalised root mean error squared (NRMSE). This is calculated by dividing RMSE by the range of the observed values:
+# $$
+# NRMSE = frac{RMSE}{max(obs) - min(obs)} 
+# $$
+```
+
+### Chi-squared
+
+Chi-squared is a commonly used test of the fit between absolute counts of categorical variables. It has the advantage of providing a *p value*, which represents the chances of obtaining a fit between observed and simulated values through chance alone. It is primarily used to test for relationships between categorical variables (e.g. socio-economic class and smoking) but has been used frequently in the spatial microsimulation literature (Voas and Williamson 2001; Wu et al. 2008).
+
+The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values (Agrest 2007):
+
+$$
+\chi^2= \frac{sim_{ij} - obs_{ij})^2}{obs_{ij}}
+$$
+
+The *chi-squared* test is the probability of obtaining the calculated $\chi^2$ value given the number of *degrees of freedom* (representing the number of categories) in the test.
+
+An advantage of chi-squared is that it can take matrices or vectors as inputs. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate-level data for the test (Agresti 2007).
+
+### Which test to use?
+
+The aforementioned tests are just some of the most commonly
+used and most useful *goodness of fit* measures for internal validation in spatial microsimulation. The differences
+between different measures are quite subtle.
+Voas and Williamson (2001) investigated the matter more
+than 10 years ago and found no consensus
+on the measures that are appropriate for different situations.
+10 years later and we are no nearer consensus.
+
+It is important to note that all such measures, that compare aggregate
+count datasets, are *not* sufficient to ensure that the results of
+spatial microsimulation are reliable: they are methods of *internal validation*
+which simply show that the individual-level dataset has been
+been reweighted to fit with a handful of constraint variables: i.e. that the
+process has work under on its own terms.
+
+My view is that all the measures
+outlined above are useful and rough analogous (a perfect fit
+will mean that measures of error evaluate to zero
+and that $r = 1$). However, some are better than others.
+Based on the discussion in Chai and Draxler (2014), I would recommend using *r* as a 'quick and dirty' test of fit and reporting *RMSE*, as it is a standard test used across the sciences. *RMSE* is robust to the number of observations and, using *NRMSE*, to the average size of zones also. Chi-squared also a good option as it is very mature, provides *p values* and is well known. However, chi-squared is a more complex measure of fit and does not perform well when the table contains cells with less than 5 observations, as will be common in spatial microsimulation models of small areas and many constraint categories.
+
+I recommend reporting more than one metric, while focussing
+on measures that you and your colleagues
+understand well. Comparing the results
+with one or more alternative measures will add robustness.
+However, a more important
+issue is external validation: how well our individual-level
+results correspond with the real world.
+
+### Internal validation of CakeMap
+
+Following the 'learning by doing' ethic, let us now
+implement what we have learned about internal validation. As a very basic test, we will calculate the correlation between the constraint table
+cells and the corresponding simulated cell values for the CakeMap example:^[Data frames will not
+work in this function and must be converted to matrices with `as.numeric`.]
 
 ```{r}
 cor(as.numeric(cons), as.numeric(ind_agg))
 ```
 
-The total absolute error (TAE) is another commonly used measure of fit
-which is the total sum of differences between the two datasets.
-TAE is defined by the following formula and
-R function, which can be used to measure the fit between any two
-vectors or matrices of equal dimensions:^[Data frames will not
-work in this function and must be converted to matrices with `as.matrix`.]
+We have just calculated our first goodness-of-fit measure for a spatial microsimulation model and the results are encoraging: the high correlation suggests that the model is working: it has internal consistency and could be described as 'internally valid'.
 
-$$ TAE = \sum\limits_{ij}|U_{ij} - T_{ij}| $$
+Total absolute error (TAE) is easily defined as a function in R:
 
 ```{r}
 tae <- function(observed, simulated){
@@ -2275,29 +2641,40 @@ tae <- function(observed, simulated){
 ```
 
 Standardised absolute error (SAE) is a related measure: $SAE = TAE/P$ where $P$ is the
-total population of the study area (`tae(obs, sim)/sum(con1)` in R).  While
+total population of the study area (`tae(obs, sim)/sum(con1)` in R).
+While
 TAE is sensitive to the number of people within the model, SAE is not.
 
-Pearson's *r*, TAE and SAE are just the simplest of a wide variety of
-*goodness of fit* measures for comparing two datasets. The differences
-between different measures are quite subtle and are discussed in detail in
-Voas and Williamson (2001).
-It is important to note that all such measures, that compare aggregate
-count datasets, are *not* sufficient to ensure that the results of
-spatial microsimulation are reliable: they are methods of *internal validation*
-which simply show that the individual-level dataset has been
-been reweighted to fit with a handful of constraint variables: i.e. that the
-process has work under on its own terms.
+```{r, echo=FALSE}
+# Not that we divide by the population in the constraints which is really the total population of the study area multiplied by the number of constraints. This is because with each additional constraint there are more opportunities for error so the 
+```
+
+## External validation
 
 Beyond typos or simple conceptual errors in model code, more fundamental
 questions should be asked of spatial microsimulation models. The validity of the
 assumptions on which they are built and the confidence one should have in the
 results are important. For this we need external datasets.  Validation is
 therefore a tricky topic, something not covered here but which is discussed in
-Edwards et al. (2009). For more on this and  for (an albeit unreliable)
+Edwards et al. (2010). For more on this and  for (an albeit unreliable)
 comparison between estimated cake consumption and external income estimates.
 
-\clearpage
+## Individual-level external validation
+
+Geocoded survey data or 'real spatial microdata' is the
+'gold standard' when it comes to official data. It is
+a scarce resource, but may become increasingly available. In cases where even a small representative sample of the population is available for a small geographic area, this can be used as a basis for individual-level validation. 
+
+## Evaluating the CakeMap model
+
+In practice the term 'validation' is misleading as it can
+imply that the model is in some way 'valid'. 
+A model is only as good as its underlying assumptions,
+which may involve some degree of subjectivity.
+I therefore advocate talking about this phase as 'evaluation'
+or simply 'model checking' if all we are doing is internal
+validation.
+
 
 ```{r, echo=FALSE}
 # This is an early draft of a book on spatial microsimulation, for teaching purposes
@@ -2453,7 +2830,7 @@ the tools that will be useful for the job.
 mature and widely used toolkit for agent-based models written in
 Java.  The recently published **RNetLogo** package provides an interface between
 R and NetLogo, allowing for model runs to be set-up and run directly from within R
-[@Thiele2014].
+(Theile et al. 2014).
 Crucially,
 this allows the outputs of agent based models to be loaded directly into
 your R environment. Using R to run a separate programme may seem overly complicated
@@ -2488,42 +2865,49 @@ and other agent-based modelling programs do not
 
 # Additional tools and techniques
 
-This Chapter is work in progress.
-
 ```{r, echo=FALSE}
-# ## R packages for spatial microsimulation
-# 
-# All the code chunks presented so far, with the exception of **ggplot2** commands
-# run in R's **base** package. This was a deliberate choice for robustness of
-# code and minimising installation dependencies over the advantages of using
-# more complex packages. There are often dozens of ways of doing one thing
-# in R, potentially via a handful of packages. The way that will work
-# on the maximum number of machines is often preferable, unless there is a
-# clear performance advantage to using additional packages. An additional reason
-# to use contributed packages sparingly (excepting the `r-recommended` packages
-# endorsed by the R core team --- see http://cran.r-project.org/bin/linux/debian/README
-# for details) is that the behaviour of package functions may change unexpectedly,
-# whereas core R functions are likely to remain stable over many decades to come.
-# 
-# With this caveat out of the way, let's begin our tour of the packages of most
-# potential use to spatial microsimulation.
-# 
-# ### **plyr** and **dplyr**
-# 
-# ### **reshape 2**
-# 
-# ### **multilevel**
-# 
-# ### **RNetLogo**
+
+```
+
+## R packages for spatial microsimulation
+
+Most of the code presented so far --- 
+with the exception of plotting commands based on **ggplot2**,
+data manipulation tools from **dplyr** and some packages offering
+niche functionality such as **ipfp** and **RNetLogo** --- has been implemented in R's base functions.
+This is deliberate: base R offers robustness of
+code and minimisation of installation dependencies.
+There are often dozens of ways of doing one thing
+in R, and a bewildering number of packages offering to help.
+The way that will be understood by the greatest number
+of people and work on the maximum number of computers
+is often preferable, however, unless there is a
+clear advantage to using additional packages. 
+The behaviour of contributed packages
+(excepting the `r-recommended` [packages](see http://cran.r-project.org/bin/linux/debian/README))
+may change unexpectedly,
+whereas core R functions are likely to remain stable over many decades to come.
+
+With this caveat in mind, let's begin our tour of
+some contributed R that are of use for
+spatial microsimulation.
+
+### **GREGWT**
+
+### **sms**
+
+### **multilevel**
 
 ## The Flexible Modelling Framework (FMF)
 
 ## Allocation of home-work locations
 
-## A spatial interaction model with individual agents
+## Spatial interaction modelling
 
+```{r}
 ## Advanced applications in agent-based modelling
 ```
+
 
 # Appendix: Getting up-to-speed with R {#apR}
 
@@ -2712,7 +3096,7 @@ trying to answer the questions that open each chapter
 provides a taster of the book and an excellent
 way of testing and improving one's understanding of the R language.
 
-```{r}
+```{r, echo=F}
 # There are alternatives to R and in the next section we will consider a few of these.
 ```
 
@@ -2743,135 +3127,76 @@ This is work in progress.
 
 # Bibliography
 
+Agresti, A. (2007). An introduction to categorical data analysis (p. 372). Wiley-Interscience.
+
 Barthélemy, J. (2014). A parallelized micro-simulation platform for population and mobility behaviour-Application to Belgium. University de Namur.
-
-
 
 Beezer, R. A. (2008). A first course in linear algebra. Puget Sound: Congruent Press.
 
-
+Blumer, A., Ehrenfeucht, A., Haussler, D., & Warmuth, M. K. (1987). Occam’s razor. Information Processing Letters, 24(6), 377–380.
 
 Boyd, S., & Vandenberghe, L. (2009). Convex optimization. Cambridge university press.
 
-
+Chai, T., & Draxler, R. R. R. (2014). Root mean square error (RMSE) or mean absolute error (MAE)? – Arguments against avoiding RMSE in the literature. Geoscientific Model Development, 7(3), 1247–1250. doi:10.5194/gmd-7-1247-2014
 
 Clarke, M., & Holm, E. (1987). Microsimulation methods in spatial analysis and planning. Geografiska Annaler. Series B. Human Geography, 69(2), 145–164. Retrieved from http://www.jstor.org/stable/10.2307/490448
 
-
-
 De Agostini, P., Hills, J., & Sutherland, H. (2014). Were we really all in it together? The distributional effects of the UK Coalition government’s tax-benefit policy changes. Retrieved from http://sticerd.lse.ac.uk/dps/case/spcc/wp10.pdf
-
-
 
 Edwards, K., & Clarke, G. (2013). SimObesity: Combinatorial Optimisation (Deterministic) Model. Spatial Microsimulation: A Reference Guide for Users, 69–85. doi:10.1007/978-94-007-4623-7
 
-
-
 Edwards, K. L., Clarke, G. P., Thomas, J., & Forman, D. (2010). Internal and External Validation of Spatial Microsimulation Models: Small Area Estimates of Adult Obesity. Applied Spatial Analysis and Policy, 4(4), 281–300. doi:10.1007/s12061-010-9056-2
 
+Harland, K. (2013). Microsimulation model user guide: flexible modelling framework (No. 0613). National Centre for Research Methods (Vol. 1306). Leeds: NCRM. doi:http://eprints.ncrm.ac.uk/3177/2/microsimulation_model.pdf
 
-
-Feinerer, I. (2013). Introduction to the tm Package Text Mining in R. Comprehensive R Archive Network, 1–8.
-
-
-
-Harland, K. (2013a). Microsimulation Model User Guide (Flexible Modelling Framework). National Centre for Research Methods, 1306(06). doi:http://eprints.ncrm.ac.uk/3177/2/microsimulation_model.pdf
-
-
-
-Harland, K. (2013b). Microsimulation model user guide: flexible modelling framework (No. 0613). Leeds. Retrieved from http://eprints.ncrm.ac.uk/3177/
-
-
+Harland, K., Heppenstall, A., Smith, D., & Birkin, M. (2012). Creating Realistic Synthetic Populations at Varying Spatial Scales: A Comparative Critique of Population Synthesis Techniques. Journal of Artificial Societies and Social Simulation, 15(1), 1. Retrieved from http://jasss.soc.surrey.ac.uk/15/1/1.html
 
 Ince, D. C., Hatton, L., & Graham-Cumming, J. (2012). The case for open computer programs. Nature, 482(7386), 485–8. doi:10.1038/nature10836
 
-
-
 Jones, O., Maillardet, R., & Robinson, A. (2014). Introduction to scientific programming and simulation using R (2nd ed.). Chapman and Hall/CRC.
-
-
 
 Kabacoff, R. (2011). R in Action. Manning Publications Co.
 
-
-
 Knoblauch, K., & Maloney, L. T. (2012). Modeling psychophysical data in R (Vol. 32). Springer.
-
-
 
 Lovelace, R. (2014). Introducing spatial microsimulation with R: a practical. National Centre for Research Methods, 08(14). Retrieved from http://eprints.ncrm.ac.uk/3348/
 
-
-
 Lovelace, R., & Ballas, D. (2013). “Truncate, replicate, sample”: A method for creating integer weights for spatial microsimulation. Computers, Environment and Urban Systems, 41, 1–11. doi:10.1016/j.compenvurbsys.2013.03.004
-
-
 
 Lovelace, R., & Cheshire, J. (2014). Introduction to visualising spatial data in R. National Centre for Research Methods Working Papers, 14(03). Retrieved from https://github.com/Robinlovelace/Creating-maps-in-R
 
-
+Lucas, K. (2012). Transport and social exclusion: Where are we now? Transport Policy, 20, 105–113. doi:10.1016/j.tranpol.2012.01.013
 
 McNutt, M. (2014). Journals unite for reproducibility. Science, 346(6210), 679. doi:10.1126/science.aaa1724
 
+Müller, K., & Axhausen, K. (2010). Population synthesis for microsimulation: State of the art. Population (English Edition). Retrieved from http://www.strc.ch/conferences/2010/Mueller.pdf
 
-
-Meyer, D., Hornik, K., & Feinerer, I. (2008). Text mining infrastructure in R. Journal of Statistical Software, 25(5). Retrieved from http://epub.wu.ac.at/3978/
-
-
+Norman, P. (1999). Putting Iterative Proportional Fitting (IPF) on the Researcher’s Desk. Retrieved from http://eprints.whiterose.ac.uk/5029/1/99-3.pdf
 
 Peng, R. D., Dominici, F., & Zeger, S. L. (2006). Reproducible epidemiologic research. American Journal of Epidemiology, 163(9), 783–9. doi:10.1093/aje/kwj093
 
-
-
 Popper, K. R. (1959). The Logic of scientific discovery: Karl R. Popper (p. 480). Hutchinson. Retrieved from http://books.google.com/books?id=MdvaSAAACAAJ&pgis=1
 
-
+Powell, D. a., Jacob, C. J., & Chapman, B. J. (2011). Enhancing food safety culture to reduce rates of foodborne illness. Food Control, 22(6), 817–822. doi:10.1016/j.foodcont.2010.12.009
 
 Pritchard, D. R., & Miller, E. J. (2012). Advances in population synthesis: fitting many attributes per agent and fitting to household and person margins simultaneously. Transportation, 39(3), 685–704. doi:10.1007/s11116-011-9367-4
 
-
-
 Rey, S. J. (2014). Open regional science. The Annals of Regional Science, 52(3), 825–837. doi:10.1007/s00168-014-0611-7
-
-
 
 Sutherland, H., & Figari, F. (2013). EUROMOD: the European Union tax-benefit microsimulation model. International Journal of Microsimulation, 6(1), 4–26.
 
-
-
 Thiele, J. (2014). R Marries NetLogo: Introduction to the RNetLogo Package. Journal of Statistical, 58(2), 1–41. Retrieved from http://www.jstatsoft.org/v58/i02/paper
-
-
 
 Thiele, J., Kurth, W., & Grimm, V. (2014). Facilitating Parameter Estimation and Sensitivity Analysis of Agent-Based Models: A Cookbook Using NetLogo and’R'. Journal of Artificial Societies and …, 17(11). Retrieved from https://ideas.repec.org/a/jas/jasssj/2013-150-2.html
 
-
-
 Tomintz, M. N. M. N. N., Clarke, G. P., & Rigby, J. E. J. E. E. (2008). The geography of smoking in Leeds: estimating individual smoking rates and the implications for the location of stop smoking services. Area, 40(3), 341–353. Retrieved from http://onlinelibrary.wiley.com/doi/10.1111/j.1475-4762.2008.00837.x/full
 
-
-
-Venables, W. W. N., Smith, D. M. D. M., Team, R. D. C., & others. (2014). An introduction to R, 1. Retrieved from http://folk.uio.no/bernde/pub/Statistics.pdf
-
-
+Venables, W. W. N., Smith, D. M. D. M., Team, R. D. C., & Others. (2014). An introduction to R, 1. Retrieved from http://folk.uio.no/bernde/pub/Statistics.pdf http://cran.ma.imperial.ac.uk/doc/manuals/r-devel/R-intro.pdf
 
 Voas, D., & Williamson, P. (2001). Evaluating Goodness-of-Fit Measures for Synthetic Microdata. Geographical and Environmental Modelling, 5(2), 177–200. doi:10.1080/13615930120086078
 
-
-
 Wickham, H. (2014a). Advanced R. CRC Press. Retrieved from http://www.crcpress.com/product/isbn/9781466586963
-
-
 
 Wickham, H. (2014b). Tidy data. The Journal of Statistical Software, 14(5). Retrieved from http://www.jstatsoft.org/v59/i10
 
-
-
-Xie, Y. (2013). Animation: an R package for creating animations and demonstrating statistical methods. Journal of Statistical Software, 53(1), 1–27.
-
-
-
 Zubizarreta, J. R. (2012). Using mixed integer programming for matching in an observational study of kidney failure after surgery. Journal of the American Statistical Association, 107(500), 1360–1371.
-
-
-

@@ -1,6 +1,8 @@
 # TODO for the book project overall
 # Individual chapters on eprints
+# Create another worked example, of variability in inequality -> paper
 # implement regex to make bibliography happen in CRC press style
+
 
 book_header = readLines(textConnection('---
 title: "Spatial microsimulation with R"

@@ -81,6 +81,8 @@ Rmd_bind <- function(dir = ".",
   setwd(old)
 }
 
+chap_ord <- c(6, 13, 8, 4, 10, 3, 11, 12, 9, 1, 2, 5, 7)
+
 Rmd_bind_mod <- function(dir = ".",
   book_header = readLines(textConnection("---\ntitle: 'Title'\n---"))){
   old <- setwd(dir)
@@ -89,8 +91,7 @@ Rmd_bind_mod <- function(dir = ".",
   }
   cfiles <- list.files(pattern = "*.Rmd$", )
   cfiles <- cfiles[-grep("book", cfiles)]
-#   cfiles <- cfiles[c(6, 11, 8, 4, 10, 3, 9, 1, 2, 5, 7)] # chapter order
- cfiles <- cfiles[c(6, 12, 8, 4, 10, 3, 11, 9, 1, 2, 5, 7)] # chapter order
+ cfiles <- cfiles[chap_ord] # chapter order
   write(book_header, file = "book.Rmd", )
   ttext <- NULL
   for(i in 1:length(cfiles)){

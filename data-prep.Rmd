@@ -72,40 +72,267 @@ should be saved as separate files. This ensures that after any mistakes, one can
 always recover information that otherwise could have been lost and makes the
 project fully reproducible. In this chapter, however, a relatively clean and
 very tiny dataset from SimpleWorld is used.  We will see in Chapter
-\ref{CakeMap} how to deal with larger and more messy data.  Here the focus is on
-the principles.
+\ref{CakeMap} how to deal with larger and more messy data.  Here the focus is on the principles.
 
 ```{r, echo=FALSE}
 # It sounds trivial, but the *precise* origin of the input data
 # should be described. Comments in code that loads the data (and resulting publications),
 # allows you or others to recall the raw information. # going on a little -> rm
 # Show directory structure plot from Gillespie here
+# 2. Remove excess information
 ```
 
 The process of loading, checking and preparing the input datasets for spatial
 microsimulation is generally a linear process, encapsulating the following
 stages:
 
-1. Load original data 
-2. Remove excess information
+1. Decide on the constraint and target variables
+2. Loading the data 
 3. Re-categorise individual-level data
 4. Set variable and value names
 5. 'Flatten' individual-level data 
 
 'Stripping down' the datasets so that they only contain the bare essential
-information will enable you to focus solely on the data that you are interested
-in. This is not covered in this chapter because the input datasets are already
-extremely bare and because the process should be obvious.
+information will enable focus on the information that really matters. The input datasets in the example used for this chapter
+are already bare, but in real world surveys there may be literally hundreds of variables clogging up the analysis and your mind.
+It is good practice to to remove
+excess data at the outset. Provided you have a good workflow,
+keeping all original data files unmodified for future
+reference, it will be easy to go back and add extra variables
+at a later stage. Following Occam's razor
+which favors simple solutions (Blumer et al. 1987),
+it is often best to start with a minimum
+of data and add complexity subsequently
+rather than vice versa.
 
-We start with the individual-level dataset for a reason: this dataset is often
-more problematic to format than the constraint variables, so it is worth
-becoming acquainted with it at the outset. Of course, it is possible that the
-data you have are not suitable for spatial microsimulation because they lack
-sufficient constraint variables with shared categories in both individual and
-aggregate level tables. We assume that you have already checked this. The
+```{r, echo=FALSE}
+# Reference for occam's razor!
+```
+
+Spatial microsimulation is the result of combining
+individual and aggregate-level data, and both must
+be given equal consideration when designing a modelling
+strategy. The critical data constraint in many cases will
+be the number of *linking variables*. Linking variables
+are variables shared between the individual and aggregate level
+datasets and can therefore be used to *constrain* the
+weights allocated to the individuals for each zone.
+If there are no shared variables between the aggregate and
+individual-level data, you cannot do spatial microsimulation.
+If there are only a few shared variables (e.g. age, sex,
+employment status), your options are limited. Increasingly,
+however, there are many linking variables to chose from
+as questionnaires become broader and more available. In this
+case the choice of constraints becomes important: which and
+how many to use,
+their order and their relationship to the target variable
+should all be considered at the outset when choosing the
+input data and constraints.
+
+## Selecting target and constraint variables {#Selecting}
+
+The geographically aggregated data should be the
+first consideration when deciding on the
+input data. This is because the geographical data
+is essential for making the model spatial: without
+good geographical data, there is no way to
+allocate the individuals to different geographical zones.
+
+The first critical consideration for the constraint data
+is coverage: ideally close to 100% of each zone's total
+population should be included in the counts. Also, the
+survey must have been completed equally by residents in
+every geographical zone under consideration. It is important
+to recognise that many geographically aggregated datasets
+may be unsuitable for spatial microsimulation due to sample
+size: geographical information based on a small sample of
+a zone's populatin is not a good basis for
+spatial microsimulation.
+
+To take one example,
+estimates of the *proportion* of people who do not
+get sufficient sleep in the Australian
+state of Victoria, from the 2011 VicHealth Indicators
+[Survey](http://data.aurin.org.au/dataset?q=sleep),
+is not a suitable constraint variable.
+**Constraint variables must be integer counts**,
+not percentages, and must contain sufficient
+categories for each variable. The sleep dataset
+meets neither of these criteria. It is based on
+a small sample of individuals (on average 300 per
+geographic zone, less than 1% of the total population).
+Also it is a binary variable, dividing people into
+'adequate' and 'inadequate' sleep categories. Instead,
+geographical datasets from the 2011 Census should be
+used. These may contain fewer variables, but they will
+provide counts for different categories and have almost
+100% coverage of the population.
+
+To continue with the Australian example, imagine we are
+interested only in Census data at the SA2 level,
+the second smallest unit for the release of Census data.
+A browse of the available datasets on an
+[online portal](http://data.aurin.org.au/dataset?q=2011-08+SA2)
+reveals that information is available on a wide range of
+topics, including industry of employment, education level
+and total personal weekly income (divided into 10 bands from
+$1 - $199 to $2000+). Which of these dozens of variables do we
+select of the analysis? It depends on the research question and
+the target variable or variables of interest.
+
+If we are interested in geographic variability in economic
+inequality, for example, the income data would first on the
+list to select. Additional variables would likely include
+level of education, type of employment and age, to discover
+the wider context of the problem. If the research question
+related to energy and sustainability, to take another example,
+variables related to distance travelled to work and housing
+would be of greater relevance. In each of these examples
+the *target variable* determines the selection of constraints.
+The target variable is the thing that we would like spatial
+microdata on, as illustrated by the following two research
+questions.
+
+How does income inequality vary from place to place?
+To answer this question it is not sufficient to have
+aggregate-level statistics (e.g. average household income).
+So income per person must be simulated for each zone, using
+spatial microsimulation. Sampling from a national population
+provides a more realistic distribution than simply assuming
+every person of a given income band earns a certain amount:
+this is clearly not the case as income distributions are
+not flat (they tend to have positive skew). 
+
+How does energy use vary over geographical space?
+This question is more complicated as there is no single
+variable on 'energy use' that is collected by statistical
+agencies at the aggregate, let alone individual, level.
+Rather, energy use is a *composite target variable* that
+is composed of energy use in transport, household heating
+and cooling and other things. For each type of energy use,
+the question must eventually be simplified to coincide with
+survey questions that are actually asked in Census surveys
+(e.g. 'where do you work?', from which distance travelled
+to work may be ascertained). Such considerations should guide
+the selection of aggregate level (generally Census-based)
+geographic count data. Of course, available datasets
+vary greatly from country to country so selection of
+appropriate datasets is highly context dependent.
+
+A parallel stage is to consider the individual-level datasets
+that are available. Again, if there are dataset
+
+The following considerations should inform the selection of
+individual-level microdata:
+
+- Linking variables: are there enough
+variables in the individual-level data that are
+also present in the geographically aggregated constraints?
+Even when many linking variables are available, it is
+important to determine the fit between the categories in each.
+If age is reported in five year bands in the aggregate-level
+data, but only in 20 year bands in the individual-level data,
+for example,
+this could be problematic if the research question is highly
+aged dependent.
+- Representiveness: is the sample population representative of the areas under investigation?
+- Sample size and diversity: the input dataset must be sufficiently large and diverse to mitigate the *empty cell* problem.
+- Target variables: are these, or proxies for them, included in the dataset?
+
+In addition to these essential characteristics of the
+individual-level dataset, there are qualities that are desirable but not  required. These include:
+
+- Continuity of the survey: will the survey be repeated on
+a regular basis into the future? If so, the analysis can form
+the basis of ongoing work to track change over time, perhaps
+as part of a *dynamic microsimulation model*.
+- Geographic variables: although it is the purpose of spatial
+microsimulation to allocate geographic variables to
+individual-level data, it is still useful to have some
+geographic information. In many national UK surveys, for
+example, the region (the coarsest geographical level)
+of the respondent is reported. This information can be useful in
+identifying the extent to which the difference between the
+geographic extent of the survey and microsimulation study area
+affects the results. This is an understudied area of knowledge
+where more work is needed.
+
+In terms of the *number* of constraints that is appropriate
+there is no 'magic number' that is correct in every case.
+It is also important to note that the number of variables
+is not a particularly good measure of how well constrained
+the data will be. The total number of *categories* used to
+constrain the weights is in fact more important.
+
+For example, a model constrained by two variables,
+age and income bands,
+each containing 10 categories (20 constraint categories
+in total) will be better constrained
+than a model constrained by 5 binary variables such as
+male/female, young/old etc. That is not to say that the
+former set of constraints is *better* (as emphasised above,
+that depends on the research question), simply that the
+weights will be more finely constrained.
+
+A special type of
+constraint variable is **cross-tabulated** categories.
+This involves subdividing the categories in one variable
+by the categories of another. Cross tabulated
+constraint variables are best seen as a single variable.
+If there are 5 age categories and 2 sex categories, this
+can be seen as a single constraint variable (age/sex)
+with 10 categories. Clearly in terms of retaining
+detailed local information (e.g. all young males moving out
+of a zone), cross-tabulated variables are preferable.
+This raises the question? what happens when a single
+variable (e.g age) is used in multiple cross-tabulated
+constraints (e.g. age/sex and age/income). In this case
+IPF can still be used, but the result may not converge
+to a single answer because the gender distribution may
+be disrupted by the age/income constraint. Further work
+is needed to test this but from theory we can be sure:
+a three way cross-tabulated constraint (age/sex/income)
+would be ideal in this case.
+
+Even when measuring constraint variables by categories rather
+than the cruder measure of number variables, there is still
+no concensus about the optimal amount. 
+Norman (1999) advocates
+including the ``maximum amount of
+information in the constraints'', implying that
+the more constraint categories the merrier.
+Harland (2012)
+warns that over-constraining the model can cause
+problems. In any case, there is a clear link between
+the quality and quantity of constraint variables used
+in the model and the fidelity of the output microdata.
+
+```{r, echo=FALSE}
+# TODO: link to the location of a discussion of the empty cell problem
+```
+
+After suitable constraint variables have been chosen ---
+and remember that the constraints can be changed at a later
+stage to improve the model or for testing ---
+the next stage is to load the data.
+Following the SimpleWorld example, we
+load the individual-level dataset first. This
+is because individual-level data from surveys
+is often
+more difficult
+to format. Individual-level datasets are often larger
+and more complex than the constraint data, which
+are simply integer counts of different categories.
+Of course, it is possible that the
+data you have are not suitable for
+spatial microsimulation because they lack linking variables.
+We assume that you have already checked this. The
 checking process for the datasets used in this chapter is simple: both aggregate
-and individual-level tables contain age and sex, so they can by combined. Let us
-proceed to load some data saved on our hard disc into R's *environment*, where
+and individual-level tables contain age (in continuous form
+in the microdata, as two categories in the aggregate data)
+and sex, so they can by combined. 
+Loading the data involves transfering information from a
+local hard disc into R's *environment*, where
 it is available in memory.
 
 ## Loading input data {#Loading} 

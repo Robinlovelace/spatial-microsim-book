@@ -190,6 +190,6 @@ trying to answer the questions that open each chapter
 provides a taster of the book and an excellent
 way of testing and improving one's understanding of the R language.
 
-```{r}
+```{r, echo=F}
 # There are alternatives to R and in the next section we will consider a few of these.
 ```

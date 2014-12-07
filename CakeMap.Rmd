@@ -18,14 +18,27 @@ applicable to a wide range of datasets.
 
 The input microdataset is a randomised ('jumbled') subset of the
 2009 [Dental Health Survey](http://data.gov.uk/dataset/adult_dental_health_survey),
-(DHS) which covers England, Northern Ireland and Wales. xx variables are available
-in the DHS including xx, xx and xxx. In terms of constraint variables, we are more
-limited: the Census is the only survey that provides count data at the small area
-level. From this 'domain' of available input data, with the non-geographical
-individual-level DHS on one side --- the *microdata* --- and the geographically
-aggregated categorical count data from the census --- the *constraint tables* ---
-we must first decide which variables should be used to link the two. We must
-select the 'linking variables', otherwise know as constraint variables.
+(DHS) which covers England, Northern Ireland and Wales. 1173 variables are available
+in the DHS, many of which are potentially interesting
+target variables not available at the local level.
+These include weekly income, plaque buildup, and
+oral health behaviours.
+Potential linking variables include socio-economic
+classification, and dozens of variables related to oral health.
+
+In terms of constraint variables, we are more
+limited: the Census is the only survey that provides
+count data at the small area
+level in the UK. Thus the 'domain' of available input data,
+related to our research question involves two sources:
+
+1. Non-geographical
+individual-level survey, DHS --- the *microdata*.
+2. Geographically
+aggregated categorical count data from the census --- the *constraint tables*.
+
+As discussed in Chapter  must first decide which variables should be used to link the two. We must
+select the constraints from available linking variables.
 
 ## Selection of constraint variables
 
@@ -290,67 +303,6 @@ on such parameters will ensure that the model does not generate datasets too
 large to handle.
 
 Next we move on to a vital
-consideration in spatial microsimulation models such as CakeMap: validation.
+consideration in spatial microsimulation models such as CakeMap: model checking and validation.
 
-## Model checking and validation {#svalidation}
 
-To make an analogy with food safety standards, openness about mistakes is
-conducive to high standards. Transparency in model verification is desirable for
-similar reasons. The two main strategies are:
-
-1. comparing the model results with knowledge of how it *should*
-perform a-priori (model checking), and
-2. comparison between the model results and empirical data (validation).
-
-Pearson's coefficient of correlation ($r$) provides a fast and simple insight
-into the fit between the simulated data and the constraints. In most cases
-$r$ values greater than 0.9 should be sought in spatial microsimulation and
-in many cases $r$ values exceeding 0.99 are possible, even after integerisation.
-As a very basic test, let's observe the correlation between the constraint table
-cells and the corresponding simulated cell values:
-
-```{r}
-cor(as.numeric(cons), as.numeric(ind_agg))
-```
-
-The total absolute error (TAE) is another commonly used measure of fit
-which is the total sum of differences between the two datasets.
-TAE is defined by the following formula and
-R function, which can be used to measure the fit between any two
-vectors or matrices of equal dimensions:^[Data frames will not
-work in this function and must be converted to matrices with `as.matrix`.]
-
-$$ TAE = \sum\limits_{ij}|U_{ij} - T_{ij}| $$
-
-```{r}
-tae <- function(observed, simulated){
-  obs_vec <- as.numeric(observed)
-  sim_vec <- as.numeric(simulated)
-  sum(abs(obs_vec - sim_vec))
-}
-```
-
-Standardised absolute error (SAE) is a related measure: $SAE = TAE/P$ where $P$ is the
-total population of the study area (`tae(obs, sim)/sum(con1)` in R).  While
-TAE is sensitive to the number of people within the model, SAE is not.
-
-Pearson's *r*, TAE and SAE are just the simplest of a wide variety of
-*goodness of fit* measures for comparing two datasets. The differences
-between different measures are quite subtle and are discussed in detail in
-Voas and Williamson (2001).
-It is important to note that all such measures, that compare aggregate
-count datasets, are *not* sufficient to ensure that the results of
-spatial microsimulation are reliable: they are methods of *internal validation*
-which simply show that the individual-level dataset has been
-been reweighted to fit with a handful of constraint variables: i.e. that the
-process has work under on its own terms.
-
-Beyond typos or simple conceptual errors in model code, more fundamental
-questions should be asked of spatial microsimulation models. The validity of the
-assumptions on which they are built and the confidence one should have in the
-results are important. For this we need external datasets.  Validation is
-therefore a tricky topic, something not covered here but which is discussed in
-Edwards et al. (2009). For more on this and  for (an albeit unreliable)
-comparison between estimated cake consumption and external income estimates.
-
-\clearpage
