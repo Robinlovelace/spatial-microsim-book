@@ -30,6 +30,13 @@ for(i in tt){
 system("cp -v /tmp/*.Rmd .") # move copied files
 system("rm book.*") # remove book files")
 system("rm -v *.html")
-# system("cp -v _site/*.html .") # copy site dir to local - not needed
+
 system("cp -v frontmatter/index.html .")
 # then type 'jekyll build' or 'jekyll serve' in bash
+
+file.remove("temp.html")
+system("mv -v _site/*.html .") # copy site dir to local
+system("rm *.Rmd")
+
+
+# then push directly to the internet
