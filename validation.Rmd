@@ -1,0 +1,202 @@
+---
+title: "CakeMap"
+layout: default
+---
+
+# Model checking and evaluation {#svalidation}
+
+To make an analogy with food safety standards, openness about mistakes is
+conducive to high standards (Powell et al. 2011). Transparency in model evaluation --- the process of deciding whether the model has worked and identifying *how good* the results are --- is desirable for
+similar reasons. Openness of code and method is advocated throughout this book and should become second nature to people using open source software. This Chapter is about specific methods to check and evaluate that the outputs of spatial microsimulation models 1) make sense and 2) coincide with external reality. The two main strategies are:
+
+1. Comparing the model results with knowledge of how it *should*
+perform a-priori (model checking or internal validation). This level of model checking always takes place at the aggregate level of the constraint variables.
+2. Comparing model results and with empirical data external to the microsimulation (external validation or 'ground truthing'). This approach to verification can take place on either the individual level (if real geo-coded survey data are available) or more
+commonly at the aggregate level.
+
+Internal validation is the most common form model evaluation. In many cases internal validation is the *only* test of the model's output, because of data limitations. Often a motivation for using spatial microsimulation is lack of geographical data on a specific variable (as with the CakeMap example in the previous chapter). Therefore there is often a paucity of external information against which the model's output can be tested. Continuing with the CakeMap example, there is no other readily available data on the geographic distribution of cake consumption, so we could conclude that external validation is impossible. (In fact new and unconventional sources of data such as number of confectionery shops, consumer surveys and even social media could be used to provide 'sanity checks' on the results. Sometimes you may need to be creative to find data for external validation.)
+
+This Chapter explains how to undertake routine checks on the procedure, how to identify outlying variables and zones which are simply not performing well and how to undertake external validation. Even in cases where there is a paucity of data on the target variable, as with cake consumption, there is usually at least some test of the model's performance against external data that can be undertaken. Sometimes this involves creating a new target variable, purely for the purposes of validation.
+
+## Internal validation
+
+Internal validation is the process of comparing the model's output against data that is internal to the model itself. In practice this means converting the the synthetic spatial microdata into a form that is commensurate with the constraint variables and comparing the two geographically aggregated datasets: the observed vs simulated values. Every spatial microsimulation will have access to the data neede for this comparison. Internal validation should therefore be seen as **the bare minimum** in terms of model evaluation, to be conducted as a standard procedure on all spatial microsimulation runs. When authors refer to this procedure, that should be a routine part of the modelling process, as 'model validation' they are being misleading. Internal validation tells us simply that the results are internally consistent and should always be conducted.
+
+Because internal validation is so widely used in the literature
+there are a number of established measures of internal fit that have been used. Yet there is little consistency in the measures that are used. This makes it difficult to assess which models are performing best across different studies, a major problem in spatial microsimulation research: if one study reports only *r* values, whereas another reports only *TAE* (each measure will be described shortly), there is no way to assess which is performing better. There is a need for more consistency is reporting of internal validation. Hopefully this Chapter, which provides descriptions of each of the commonly used and recommended measures of *goodness-of-fit* as well as guidance on which to use --- is a step in the right direction.
+
+### Pearson's *r*
+
+Pearson's coefficient of correlation ($r$) is the simplest and most commonly used measure of aggregate-level model fit for internal validation. *r* is popular because it provides a fast and simple insight
+into the fit between the simulated data and the constraints at an aggregate level. In most cases
+$r$ values greater than 0.9 should be sought in spatial microsimulation and
+in many cases $r$ values exceeding 0.99 are possible, even after integerisation.
+
+Beyond simple correlation (*r*), other metrics of model fit exist. We will look at some commonly used measures and define them
+mathematically before defining them in R and, in the subsequent section, implementing them to evaluate the CakeMap spatial microsimulation model.
+
+- Total absolute error (TAE), simply the sum of absolute (positive) differences between the observed and final counts in each of the categories for every zone.
+- Standardised absolute error (SAE), the TAE divided by the total observed population.
+- Mean absolute error (MAE), TAE divided by *n*, the number of observations.
+- Root mean squared error (RMSE), the square root of the sum of all errors. This metric emphasises the relative importance of a few large errors over the buildup of many small errors.
+- Chi-squared, a test that the predicted and observed values for categorical values match.
+
+### Absolute error measures
+
+TAE and SAE are crude yet effective measures of overall
+model fit. TAE has the additional advantage of
+being very easily understood as simply the sum of errors:
+
+$$
+e_{ij} = obs_{ij} - sim_{ij}
+$$
+
+$$
+TAE = \sum\limits_{ij} | e_{ij} |
+$$
+
+where $e$ is error, $obs$ and $sim$ are the observed and simulated values for each constraint category ($j$) and each area ($i$), respectively.
+Note the vertical lines $|$ means we take the absolute value of
+the error. This means that an error of -5 has the same impact
+as an error of +5.
+
+```{r, echo=FALSE}
+# : $|-1| = 1$ and $|1| = 1$.
+```
+
+SAE is the TAE divided by the total
+population of the study area. TAE is
+sensitive to the number of people
+within the model, while SAE is not.
+
+$$
+SAE = TAE / pop
+$$
+
+Mean absolute error (MAE) is the same as SAE, except the denominator is the *number* of observations that are being compared (the number of categories in the constraints multiplied by the number of zones under investigation).
+
+$$
+MAE = TAE / n
+$$
+
+Before seeing how these metrics can easily be implemented in code, we will define the other metrics defined in the above bullet points. Of the three 'absolute error' measures, I would recommend reporting SAE, as it scales with the population of the study area.
+
+### Root mean squared error
+
+RMSE is similar to the absolute erro metrics, but uses the *sum of squares* of the error. Recent work in geoscience has suggested that RMSE is preferable to absolute measures of error when the errors approximate a normal distribution (Chai and Draxler 2014).
+Errors in spatial microsimulation tend to have a normal-ish distribution, with many very small errors around the mean of zero and comparatively few larger error. RMSE is defined as follows:
+
+$$
+RMSE = \sqrt{frac{i}{n} \sum_i e^2_i}
+$$
+
+```{r, echo=FALSE}
+# As with TAE, there is also a standardised version of RMSE (), normalised root mean error squared (NRMSE). This is calculated by dividing RMSE by the range of the observed values:
+# $$
+# NRMSE = frac{RMSE}{max(obs) - min(obs)} 
+# $$
+```
+
+### Chi-squared
+
+Chi-squared is a commonly used test of the fit between absolute counts of categorical variables. It has the advantage of providing a *p value*, which represents the chances of obtaining a fit between observed and simulated values through chance alone. It is primarily used to test for relationships between categorical variables (e.g. socio-economic class and smoking) but has been used frequently in the spatial microsimulation literature (Voas and Williamson 2001; Wu et al. 2008).
+
+The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values (Agrest 2007):
+
+$$
+\chi^2= \frac{sim_{ij} - obs_{ij})^2}{obs_{ij}}
+$$
+
+The *chi-squared* test is the probability of obtaining the calculated $\chi^2$ value given the number of *degrees of freedom* (representing the number of categories) in the test.
+
+An advantage of chi-squared is that it can take matrices or vectors as inputs. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate-level data for the test (Agresti 2007).
+
+### Which test to use?
+
+The aforementioned tests are just some of the most commonly
+used and most useful *goodness of fit* measures for internal validation in spatial microsimulation. The differences
+between different measures are quite subtle.
+Voas and Williamson (2001) investigated the matter more
+than 10 years ago and found no consensus
+on the measures that are appropriate for different situations.
+10 years later and we are no nearer consensus.
+
+It is important to note that all such measures, that compare aggregate
+count datasets, are *not* sufficient to ensure that the results of
+spatial microsimulation are reliable: they are methods of *internal validation*
+which simply show that the individual-level dataset has been
+been reweighted to fit with a handful of constraint variables: i.e. that the
+process has work under on its own terms.
+
+My view is that all the measures
+outlined above are useful and rough analogous (a perfect fit
+will mean that measures of error evaluate to zero
+and that $r = 1$). However, some are better than others.
+Based on the discussion in Chai and Draxler (2014), I would recommend using *r* as a 'quick and dirty' test of fit and reporting *RMSE*, as it is a standard test used across the sciences. *RMSE* is robust to the number of observations and, using *NRMSE*, to the average size of zones also. Chi-squared also a good option as it is very mature, provides *p values* and is well known. However, chi-squared is a more complex measure of fit and does not perform well when the table contains cells with less than 5 observations, as will be common in spatial microsimulation models of small areas and many constraint categories.
+
+I recommend reporting more than one metric, while focussing
+on measures that you and your colleagues
+understand well. Comparing the results
+with one or more alternative measures will add robustness.
+However, a more important
+issue is external validation: how well our individual-level
+results correspond with the real world.
+
+### Internal validation of CakeMap
+
+Following the 'learning by doing' ethic, let us now
+implement what we have learned about internal validation. As a very basic test, we will calculate the correlation between the constraint table
+cells and the corresponding simulated cell values for the CakeMap example:^[Data frames will not
+work in this function and must be converted to matrices with `as.numeric`.]
+
+```{r}
+cor(as.numeric(cons), as.numeric(ind_agg))
+```
+
+We have just calculated our first goodness-of-fit measure for a spatial microsimulation model and the results are encoraging: the high correlation suggests that the model is working: it has internal consistency and could be described as 'internally valid'.
+
+Total absolute error (TAE) is easily defined as a function in R:
+
+```{r}
+tae <- function(observed, simulated){
+  obs_vec <- as.numeric(observed)
+  sim_vec <- as.numeric(simulated)
+  sum(abs(obs_vec - sim_vec))
+}
+```
+
+Standardised absolute error (SAE) is a related measure: $SAE = TAE/P$ where $P$ is the
+total population of the study area (`tae(obs, sim)/sum(con1)` in R).
+While
+TAE is sensitive to the number of people within the model, SAE is not.
+
+```{r, echo=FALSE}
+# Not that we divide by the population in the constraints which is really the total population of the study area multiplied by the number of constraints. This is because with each additional constraint there are more opportunities for error so the 
+```
+
+## External validation
+
+Beyond typos or simple conceptual errors in model code, more fundamental
+questions should be asked of spatial microsimulation models. The validity of the
+assumptions on which they are built and the confidence one should have in the
+results are important. For this we need external datasets.  Validation is
+therefore a tricky topic, something not covered here but which is discussed in
+Edwards et al. (2010). For more on this and  for (an albeit unreliable)
+comparison between estimated cake consumption and external income estimates.
+
+## Individual-level external validation
+
+Geocoded survey data or 'real spatial microdata' is the
+'gold standard' when it comes to official data. It is
+a scarce resource, but may become increasingly available. In cases where even a small representative sample of the population is available for a small geographic area, this can be used as a basis for individual-level validation. 
+
+## Evaluating the CakeMap model
+
+In practice the term 'validation' is misleading as it can
+imply that the model is in some way 'valid'. 
+A model is only as good as its underlying assumptions,
+which may involve some degree of subjectivity.
+I therefore advocate talking about this phase as 'evaluation'
+or simply 'model checking' if all we are doing is internal
+validation.
+
