@@ -1,6 +1,7 @@
 ---
 title: "Introduction"
 layout: default
+output: word_document
 bibliography: ~/Documents/smr.bib
 ---
 
