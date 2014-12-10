@@ -14,19 +14,14 @@ library(grid)
 
 # Introduction
 
-In a beautiful world where scientists could access to all databases and all possible information, 
-for example about individuals, their characteristics, their habits, their movements and everything, 
-we could study a wide range of aspects of the real world, the life, ... However, 
-in most of the cases, reseachers have to analyse entities, but they have no precise 
-data about it. How could we predict the evolution of a part of the population
-if we do not know who are these people and their specific characteristics.
-
-Spatial microsimulation give us an idea, a statistical approximation, of the data we need to start 
-a lot of research in many fields. This topic will always be needed, because we could 
-never know and observe the state and characteristics of everything at each time.
+Imagine a world where you could access to all possible information, 
+for example about individuals, their characteristics, their habits, their movements. Privacy issues aside, this information would clearly be of use for many applications.
+In reality reseachers must work with information that is incomplete, lacking spatial or temporal resolution or missing key attributes.
+Spatial microsimulation provides a statistical approximation of
+higher resolution individual-level data that can provide a basis for work in many fields. 
 
 Spatial microsimulation is a statistical technique for combining individual and
-geographical data, but also census and sample data. The resulting *spatial microdata* are useful in many
+geographical data, typically from aggregated Census results and surveys from a sample of the population. The resulting *spatial microdata* are useful in many
 situations where individual-level and geographically specific
 processes are in operation, enabling modelling and analysis on multiple levels.
 Spatial microsimulation can also be seen as an approach to better understand
@@ -225,17 +220,10 @@ The **ipfp** package, for example,
 can greatly reduce the computational time taken for a key element of spatial
 microsimulation process, as we shall see in Chapter 5 in
 *Reweighting with ipfp*. This is an advantage of R, but we have to be careful, 
-because R being opensource, everybody can write a new package. So, we have to check
-the quality of a used package before to use it as a "black box".
+because R being opensource, everybody can write a new package. This means we means it is important to check
+the quality of a used package before trusting it as a "black box".
 
-R is a powefull statistical language and its interface "RStudio" really helps new users
-to become familar with this language. 
-
-```{r, echo=FALSE}
-```
-
-
-
+R is a powefull statistical language and its interface "RStudio" helps new users to become familar with this language. 
 Further information about why R is a good choice for spatial microsimulation
 is provided in the Appendix, a tutorial introduction to R for spatial
 microsimulation applications. The next section describes approaches
