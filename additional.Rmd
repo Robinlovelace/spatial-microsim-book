@@ -42,7 +42,35 @@ spatial microsimulation.
 
 ## Allocation of home-work locations
 
+A question that arises after spatial microdata have been allocated to
+geographical zones is: where exactly in the zone do the people inhabit?
+For some applications this may not matter but for others, such as disaster
+management (see Smith et al. 2014 and the work of Kazumasa Hanaoka of Tohoku University for more on this)
+or transport planning, estimating the precise location of an individual, to the
+building-level, is important.
+
+```{r, echo=FALSE}
+# TODO: add reference for above
+```
+
+In this section we will see how spatial microdata can be allocated first
+to 'urban areas' (to prevent people being placed in the sea, for example)
+and then to individual buildings based on freely available Open Street Map
+data. This process also makes sense from the perspective of visualisation:
+the typical choropleth map outputs of spatial microsimulation models
+over-represent low density rural areas and under-represent dense
+urban areas in terms of visual 'real-estate'. Plotting attributes only
+in the buildings where they occur can help overcome this issue.
+
+```{r, echo=FALSE}
+# TODO: add figure from O'Brien's online map
+```
+
 ## Spatial interaction modelling
+
+In this example we will demonstrate a method for
+evaluating the distributional impact of a new pathway
+in an urban setting. 
 
 ```{r}
 ## Advanced applications in agent-based modelling

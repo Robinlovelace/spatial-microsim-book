@@ -4,6 +4,12 @@
 # implement regex to make bibliography happen in CRC press style
 # add urls to all the references and packages
 
+# view the order chapters will be knitted (see R/book-functions.R)
+chap_ord <- c(6, 13, 8, 4, 10, 3, 11, 12, 9, 1, 2, 5, 7)
+cfiles <- list.files(pattern = "*.Rmd$", )
+cfiles <- cfiles[chap_ord] # chapter order
+cfiles
+
 book_header = readLines(textConnection('---
 title: "Spatial microsimulation with R"
 output:
