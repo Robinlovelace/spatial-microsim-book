@@ -4,12 +4,12 @@
 # implement regex to make bibliography happen in CRC press style
 # add urls to all the references and packages
 
-
 book_header = readLines(textConnection('---
 title: "Spatial microsimulation with R"
 output:
 \ \ pdf_document:
 \ \ \ \ fig_caption: yes
+\ \ \ \ highlight: monochrome
 \ \ \ \ includes: null
 \ \ \ \ keep_tex: yes
 \ \ \ \ number_sections: yes
@@ -18,7 +18,7 @@ bibliography: ~/Documents/smr.bib
 layout: default
 ---'))
 
-source("R/functions.R")
+source("R/book-functions.R")
 # file.remove("book.Rmd")
 Rmd_bind_mod(book_header = book_header)
 

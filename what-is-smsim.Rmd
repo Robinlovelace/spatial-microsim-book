@@ -177,10 +177,11 @@ The finding that recent policies have been highly regressive (Figure 2.1)
 shows that
 microsimulation can provide a new evidence base in policy relevant areas.
 
-```{r vingtile, fig.cap="A typical output from a microsimulation model for economic policy evaluation, from De Agostini et al. (2014). Each vertical bar represents the relative gains or losses of each income 'vingtile' (there are 20 equally sized groups, by income, in the model) and the black line shows that the austerity budget has been most detrimental to low income groups and most beneficial to the upper-middle classes.", fig.width=4, fig.height=4, echo=FALSE}
+```{r vingtile, fig.cap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.", fig.width=5, fig.height=5, echo=FALSE}
+# A typical output from a microsimulation model for economic policy evaluation, from De Agostini et al. (2014). Each vertical bar represents the relative gains or losses of each income 'vingtile' (there are 20 equally sized groups, by income, in the model) and the black line shows that the austerity budget has been most detrimental to low income groups and most beneficial to the upper-middle classes.
 library(png)
 library(grid)
-img <- readPNG("figures/vingtile.png")
+img <- readPNG("figures/austerity.png")
 grid.raster(img)
 ```
 
@@ -227,11 +228,12 @@ illustrates the potential for the output of
 spatial microsimulation to be used as an input into agent-based
 models (ABM).
 
-```{r transgeo, fig.cap="An illustration of spatial microdata in transport modelling. 20 people are illustrated on the map as travelling to a range of destinations, specified based on probability-weighted sampling from origin-destination tables (Lovelace et al. 2014).", fig.width=4, fig.height=4, echo=FALSE}
-library(png)
-library(grid)
-img <- readPNG("figures/jtg.png")
-grid.raster(img)
+```{r, echo=FALSE}
+# r transgeo, fig.cap="An illustration of spatial microdata in transport modelling. 20 people are illustrated on the map as travelling to a range of destinations, specified based on probability-weighted sampling from origin-destination tables (Lovelace et al. 2014).", fig.width=4, fig.height=4, echo=FALSE}
+# library(png)
+# library(grid)
+# img <- readPNG("figures/jtg.png")
+# grid.raster(img)
 ```
 
 ## What spatial microsimulation is not {#is-not}

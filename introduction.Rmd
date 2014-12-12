@@ -220,7 +220,7 @@ The **ipfp** package, for example,
 can greatly reduce the computational time taken for a key element of spatial
 microsimulation process, as we shall see in Chapter 5 in
 *Reweighting with ipfp*. This is an advantage of R, but we have to be careful, 
-because R being opensource, everybody can write a new package. This means we means it is important to check
+because R is open source, anyone can write a new package. This means we means it is important to check
 the quality of a used package before trusting it as a "black box".
 
 R is a powefull statistical language and its interface "RStudio" helps new users to become familar with this language. 

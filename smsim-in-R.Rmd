@@ -194,7 +194,7 @@ let us analyse the aggregate results generated from the alternative
 set of weights, generated with only 3 iterations of IPF:
 
 ```{r}
-# Re-allocate the values of ind_agg (not column names - note '[]')
+# Update ind_agg values, keeping col names (note '[]')
 ind_agg[] <- t(apply(weights_maxit_2, MARGIN = 2, 
   FUN = function(x) colSums(x * ind_cat)))
 ind_agg[1:2, 1:3]
@@ -408,25 +408,23 @@ This ensures only integer results for
 a genetic algorithm to select parameters are selected:
 
 ```{r, eval=FALSE}
+# Set min and maximum values of constraints with 'Domains'
+m <- matrix(c(0, 100), ncol = 2)[rep(1, nrow(indu)),]
 set.seed(2014)
-genoud(nvars = nrow(indu), fn = fun, ind_num = indu, con = cons[1,],
-  control = list(maxit = 1000), data.type.int = TRUE,
-  
-  # Set min and maximum values of constraints with 'Domains'
-  D = matrix(c(rep(0, nrow(indu)),rep(100, nrow(indu))), ncol = 2))
+genoud(nrow(indu), fn = fun, ind_num = indu, con = cons[1,],
+  control = list(maxit = 1000), data.type.int = TRUE, D = m)
 ```
 
 This rather long command, implemented in 'optim-tests-SimpleWorld.R',
 results in weights for the unique individuals 1 to 4 of 1, 4, 2 and 4 respectively.
 This means that a total population of 11 individuals is simulated for the zone,
-composed of 1 instance of individual 1 and 'clones' of the others.
-Given that the command takes 5 seconds to generate
-weights for only 4 unique individuals, and the fact that there are in fact
-12 not 11 individuals in zone 1 in SimpleWorld, this implementation of `genoud`
+composed of 1 instance of individual 1 and 'clone' of the others.
+The command takes 5 seconds to generate
+an incorrect result, so this implementation of `genoud`
 is clearly not production ready.
-`genoud` is used here to provide a practical demonstration of the possibilities of
-combinatorial optimisation in R, an area that has great potential to advance
-in the future.
+`genoud` is used here only
+to provide a practical demonstration of the possibilities of
+combinatorial optimisation using existing R packages.
 
 For combinatorial optimisation algorithms designed for spatial microsimulation
 we must, for now, look for programs outside the R 'ecosystem'.

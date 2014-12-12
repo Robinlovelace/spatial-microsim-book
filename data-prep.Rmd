@@ -456,12 +456,12 @@ If we wanted to change these category labels to something more readable,
 we can do this by adding another argument to the `cut` function:
 
 ```{r}
-# Convert age into a categorical variable with user-chosen labels
+# Convert age into a categorical variable
 (ind$age <- cut(ind$age, breaks = c(0, 49, 120),
-  labels = c("a0_49", "a50+")))
+  labels = c("a0_49", "a50+"))) 
 ```
 
-Users should be ware that `cut` results in a vector of class *factor*, which
+Users should beware that `cut` results in a vector of class *factor*, which
 can cause problems later down the line.
 
 ## Matching individual and aggregate level data names {#matching}
