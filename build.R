@@ -20,53 +20,54 @@ output:
 \ \ \ \ keep_tex: yes
 \ \ \ \ number_sections: yes
 \ \ \ \ toc: yes
-bibliography: ~/Documents/smr.bib 
 layout: default
 ---'))
 
 source("R/book-functions.R")
 # file.remove("book.Rmd")
-Rmd_bind_mod(book_header = book_header)
+# Rmd_bind(book_header = book_header) 
+Rmd_bind_mod(book_header = book_header, chap_ord = chap_ord)
 
 library(knitr)
 library(rmarkdown)
 
+# Build the book:
 render("book.Rmd", output_format = "pdf_document")
 
-source("R/bbuild.R")
-system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
-system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
-
-# tidy up the mess
-tt <- list.files(pattern = "*.aux|*.toc|*.log|*.lot|*.gz|*.idx|*.ilg|*.ind|*.ggmap", )
-
-for(i in tt){
-  system(paste('rm', i))
-}
-
-# For website build see gh-pages version
-
-# Files to move to gh-pages branch
-file.remove("book.Rmd")
-
-# Remove latex-specific document links for website
-cfiles <- list.files("/tmp", pattern = "*.Rmd", full.names = T)
-for(i in cfiles){
-  text <- readLines(i)
-  sel <- grepl("\\(\\#", text)
-  text <- text[!sel]
-  writeLines(text, con = i)
-}
-
-# # # regex with R - convert book ready for regexxing
-# d <- readLines("introduction.Rmd")
-# sel <- grep("@", d)
-# s <- d[sel]
-# gsub(".+?(?=a)", replacement = "", s, perl = T) # test of greedy matching
+# source("R/bbuild.R")
+# system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
+# system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
 # 
-# # select quotes
+# # tidy up the mess
+# tt <- list.files(pattern = "*.aux|*.toc|*.log|*.lot|*.gz|*.idx|*.ilg|*.ind|*.ggmap", )
 # 
-# s <- grep(" @", d)
-# s <- grep("\\ @|\\[@", d)
-# d[s]
+# for(i in tt){
+#   system(paste('rm', i))
+# }
+# 
+# # For website build see gh-pages version
+# 
+# # Files to move to gh-pages branch
+# file.remove("book.Rmd")
+# 
+# # Remove latex-specific document links for website
+# cfiles <- list.files("/tmp", pattern = "*.Rmd", full.names = T)
+# for(i in cfiles){
+#   text <- readLines(i)
+#   sel <- grepl("\\(\\#", text)
+#   text <- text[!sel]
+#   writeLines(text, con = i)
+# }
+# 
+# # # # regex with R - convert book ready for regexxing
+# # d <- readLines("introduction.Rmd")
+# # sel <- grep("@", d)
+# # s <- d[sel]
+# # gsub(".+?(?=a)", replacement = "", s, perl = T) # test of greedy matching
+# # 
+# # # select quotes
+# # 
+# # s <- grep(" @", d)
+# # s <- grep("\\ @|\\[@", d)
+# # d[s]
 
