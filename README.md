@@ -20,7 +20,7 @@ To compile the book you will first need to download this repository. Do this by 
 git clone https://github.com/Robinlovelace/spatial-microsim-book.git
 ```
 
-Then navigate into the downloaded folder and open the `spatial-microsim-book.Rproj` RStudio project file. The `[build.R]()` file should contain everything you need to build the book, although you'll need to have installed a number of packages. These can be installed with the following command:
+Then navigate into the downloaded folder and open the `spatial-microsim-book.Rproj` RStudio project file. The [build.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/build.R) file should contain everything you need to build the book, although you'll need to have installed a number of packages. These can be installed with the following command:
 
 ```
 install.packages("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp") 
@@ -38,6 +38,6 @@ mv /tmp/*.Rmd . # move copied files
 rm book.* # remove book files
 ```
 
-The `[build.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/gh-pages/build.R)` file in the `gh-page` branch contains further information on building the website.
+The [build.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/gh-pages/build.R) file in the `gh-page` branch contains further information on building the website.
 
 For more information about GitHub, please see the free online book *[Pro Git](http://git-scm.com/book/en/v2)*.
