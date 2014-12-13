@@ -12,8 +12,22 @@ Anyone can contribute to this book [here](https://github.com/Robinlovelace/spati
 Any questions about the book? Want to review an early version?
 Please contact me on rob00x-at-gmail.com.
 
+**Building the book**
+
+To compile the book you will first need to download this repository. Do this by clicking the '[Download ZIP](https://github.com/Robinlovelace/spatial-microsim-book/archive/master.zip)' button to the right or by [cloning](http://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository) this repository. To clone this repo from a Linux terminal, for example, type:
+
+```
+git clone https://github.com/Robinlovelace/spatial-microsim-book.git
+```
+
+Then navigate into the downloaded folder and open the `spatial-microsim-book.Rproj` RStudio project file. The `[build.R]()` file should contain everything you need to build the book, although you'll need to have installed a number of packages. These can be installed with the following command:
+
+```
+install.packages("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp") 
+```
 **Building the website**
 
+The [gh-pages](https://github.com/Robinlovelace/spatial-microsim-book/tree/gh-pages) branch of this repo contains the book's [website](http://robinlovelace.net/spatial-microsim-book/).
 Merges to the gh-pages website branch should only be one way: `master -> gh-pages`:
 
 ```
@@ -24,6 +38,6 @@ mv /tmp/*.Rmd . # move copied files
 rm book.* # remove book files
 ```
 
-For more information about GitHub, please see the below introduction:
+The `[build.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/gh-pages/build.R)` file in the `gh-page` branch contains further information on building the website.
 
-http://philmikejones.wordpress.com/2014/09/18/using-git-and-github/
+For more information about GitHub, please see the free online book *[Pro Git](http://git-scm.com/book/en/v2)*.
