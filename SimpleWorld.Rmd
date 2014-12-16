@@ -6,40 +6,66 @@ layout: default
 # SimpleWorld {#SimpleWorld}
 
 To see the link between the methodology introduced later in the
-book (see Chapter 5) and the various real-world applications, let's take a look at a
-simple example of the kind of situation where spatial microsimulation is useful.
+book (see Chapter 5) and the various real-world applications,
+this chapter describes the spatial microsimulation method on
+an extremely simple example. This SimpleWorld example is analogous to the
+'cartoon world' used by professor David MacKay (2009) to simplify the
+complexities of sustainable energy. The same principle works here:
+"a simple cartoon is the best way to capture the issues" (p. 203, Chapter 27).
+By helping us understand likely differences in income and age distributions
+in SimpleWorld, the example should also shed light on
+of the kinds of situation where spatial microsimulation is useful.
 
 We'll use an imaginary world called SimpleWorld, consisting of only 3 zones that
-cover the entirety of the SimpleWorld sphere. 
+cover the entirety of SimpleWorld, which is considered to be a 2 dimensional
+plane split into 3 zones (see figure 3.1). 
 
-```{r simpleworld,  fig.cap="The SimpleWorld sphere", echo=FALSE, message=FALSE}
+```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", echo=FALSE, message=FALSE}
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
+# library(sp)
+# library(ggplot2)
+# xpol <- c(-180, -60, -60, -180, -180)
+# ypol <- c(-70, -70, 70, 70, -70)
+# pol = SpatialPolygons(list(
+#   Polygons(list(Polygon(cbind(xpol, ypol))), ID="x1"),
+#   Polygons(list(Polygon(cbind(xpol + 120, ypol))), ID="x2"),
+#   Polygons(list(Polygon(cbind(xpol + 240, ypol))), ID="x3")
+#   ))
+# # plot(pol)
+# proj4string(pol) <- CRS("+init=epsg:4326")
+# pol1 <- fortify(pol)
+# 
+# theme_space_map <- theme_bw() +
+#   theme(
+# #     rect = element_blank(),
+#     axis.title = element_blank(),
+#     axis.text = element_blank(),
+#     axis.ticks = element_blank(),
+#     panel.grid.major = element_line(size = 3)
+#   )
+# 
+# ggplot(pol1) + geom_path(aes(long, lat, group, fill = group)) +
+#     coord_map("ortho", orientation=c(41, -74, 52)) + 
+#   theme_space_map
+b <- matrix(c(-180, 180, 180, -180, -180, 90, 90, -90, -90, 90), ncol = 2)
 library(sp)
-library(ggplot2)
-xpol <- c(-180, -60, -60, -180, -180)
-ypol <- c(-70, -70, 70, 70, -70)
-pol = SpatialPolygons(list(
-  Polygons(list(Polygon(cbind(xpol, ypol))), ID="x1"),
-  Polygons(list(Polygon(cbind(xpol + 120, ypol))), ID="x2"),
-  Polygons(list(Polygon(cbind(xpol + 240, ypol))), ID="x3")
-  ))
-# plot(pol)
-proj4string(pol) <- CRS("+init=epsg:4326")
-pol1 <- fortify(pol)
-
-theme_space_map <- theme_bw() +
-  theme(
-#     rect = element_blank(),
-    axis.title = element_blank(),
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    panel.grid.major = element_line(size = 3)
-  )
-
-ggplot(pol1) + geom_path(aes(long, lat, group, fill = group)) +
-    coord_map("ortho", orientation=c(41, -74, 52)) + 
-  theme_space_map
+l <- Line(coords = b)
+l <- Lines(list(l), ID = "a")
+l <- SpatialLines(list(l))
+library(rgeos)
+p <- gPolygonize(l)
+plot(p)
+l1 <- Line(matrix(c(-60, -60, 90, -90), ncol = 2))
+l1 <- Lines(list(l1), "a")
+l1 <- SpatialLines(list(l1))
+lines(l1)
+l2 <- Line(matrix(c(60, 60, 90, -90), ncol = 2))
+l2 <- Lines(list(l2), "a")
+l2 <- SpatialLines(list(l2))
+lines(l2)
+zt <- paste0("Zone ", 1:3)
+text(seq(-120, 120, length.out = 3), 0, zt)
 ```
 
 ## SimpleWorld data {#SimpleWorldData}
