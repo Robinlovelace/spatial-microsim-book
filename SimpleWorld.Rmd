@@ -136,7 +136,15 @@ pol1$ypos <- 0
 #   coord_map() 
 ```
 
-Next, imagine a more detailed dataset about 5 of SimpleWorld's
+These data come from a census, so we can consider that we have here the whole 
+population we want to analyse. However, we know only the marginal distributions
+of the two variables, but not the contingency table. Indeed, we have per zone
+the number of young and less young people, but we do not have the number
+of young girls, and so on. Moreover, we need to add an other variable (the 
+income). So, we are not satisfied with the database alone, so we desire to
+use a spatial microsimulation. But to do this, we need some additional.
+
+Next, imagine a more detailed dataset about only 5 of SimpleWorld's
 inhabitants, recorded from a survey. This is in a different
 form from the aggregate-level data presented in the above tables.
 This *microdata* survey contains one row per individual, in contrast
@@ -276,7 +284,7 @@ example for predicting future outcomes of current patterns of behaviour.
 In addition to clarifying the advantages of spatial microsimulation, the above
 example also flags some limitations of the methodology: spatial microsimulation
 will only yield useful results if the input microdataset is representative of
-the population as a whole, and for each region. If the relationship between age
+the population as a whole, and for each region. If the relationship between age and
 sex is markedly different in one zone compared with what we assume to be the
 global averages of the input data, for example, our estimates could be way out.
 Using such a small sample, one could rightly argue, how could the diversity of
