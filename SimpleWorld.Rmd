@@ -136,13 +136,24 @@ pol1$ypos <- 0
 #   coord_map() 
 ```
 
-These data come from a census, so we can consider that we have here the whole 
-population we want to analyse. However, we know only the marginal distributions
-of the two variables, but not the contingency table. Indeed, we have per zone
-the number of young and less young people, but we do not have the number
-of young girls, and so on. Moreover, we need to add an other variable (the 
-income). So, we are not satisfied with the database alone, so we desire to
-use a spatial microsimulation. But to do this, we need some additional.
+These geographically specific datasets
+come from the SimpleWorld census, so we can consider that the planet's entire
+population is represented we want to analyse.
+However, we know only the marginal distributions
+of the two variables, but not the contingency table or cross-tabulation
+that links age and sex. This means that we have per-zone information on
+the number of young and less young people and the number of males and females.
+But we currently lack information about the number
+of young females, young males, and so on. Also note that we have no information
+about other important variables such as income.
+So, we are not satisfied with this geographic count data alone. 
+These contexts, where we have access to geographical count data (usually from a
+census of population) and a more detailed but non-geographical individual-level dataset
+that spatial microsimulation is useful.
+It is in this context, where we would like to impute missing information
+about geographic zones, that we turn to spatial microsimulation
+to better understand the population of SimpleWorld.
+To do this, we need some additional information: an individual-level *microdataset*.
 
 Next, imagine a more detailed dataset about only 5 of SimpleWorld's
 inhabitants, recorded from a survey. This is in a different
