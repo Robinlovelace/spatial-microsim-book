@@ -36,21 +36,39 @@ library(grid)
 # could be the beginning of part 2 if the book's divided into parts. 
 ```
 
-This chapter focuses on the input datasets needed for spatial microsimulation.
+This chapter focuses on the mininum input datasets needed for the spatial microsimulation.
 Correctly loading, manipulating and assessing these datasets will be critical to
 the performance of your models and the ease of modifying them to include new
 inputs.  Fortunately R is an accomplished tool for data reformatting,
 as we shall see. The data objects loaded in the following steps also
 provide the basis for Chapter 5, in which we
-undertake spatial microsimulation.
+undertake spatial microsimulation. If you have more or less precise datasets, 
+just adapt the methods to your case. Indeed, we present here the philosophy behind 
+an often used spatial microsimulation, but each case is specific and it is pretty 
+impossible to generalize the theory to each kind of datasets you could have. However, 
+for a lot of applications, the datasets available are similar to the ones presented here.
+
+In a previously phase of your study, you have to determine ideally what 
+you will need for your research and fix a kind of "target dataset" containing
+the needed variables, but only these ones. So, when knowing the form
+of your desire dataset, you will not get lost in some potential additional 
+and available variables that you will not need in the future. After that, 
+you can search data. If you find what you want, you don't need spatial 
+microsimulation. But, if you find some information about a sample of your
+target population and some with the desired spatial aggregation, but some
+in a more aggregated way, than you will have to proceed in a spatial
+microsimulation.
 
 ```{r, echo=FALSE}
 ## Accessing the input data
 ```
 
+
 As with most spatial microsimulation models, the input consists of
 microdata --- a non-geographical individual-level dataset --- and the
-constraint table which represents a series of geographical zones.
+constraint table which represents a series of geographical zones. In some cases,
+you have a geographical information in your microdata, but not the needed one.
+For example, you can have the province of each individual but need its municipality.
 The data used in this Chapter and throughout the book can be
 downloaded from the book's [GitHub repository](https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
 'Download ZIP' button to the right and extract the folder into a
@@ -58,7 +76,7 @@ sensible place on your computer, such as the Desktop.  From there, you will want
 to run R from the project's root directory: open the folder in a file browser
 and double click on `spatial-microsim-book.Rproj`.  This should cause RStudio to
 be opened at this location, with all the input data files easily accessible to R
-through *relative file paths*.
+through *relative file paths* (previously, you have to install the R-studio software).
 
 ```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded", echo=FALSE, message=FALSE}
 grid.raster(readPNG("figures/studio-basic.png"))
@@ -95,7 +113,7 @@ stages:
 'Stripping down' the datasets so that they only contain the bare essential
 information will enable focus on the information that really matters. The input datasets in the example used for this chapter
 are already bare, but in real world surveys there may be literally hundreds of variables clogging up the analysis and your mind.
-It is good practice to to remove
+It is good practice to remove
 excess data at the outset. Provided you have a good workflow,
 keeping all original data files unmodified for future
 reference, it will be easy to go back and add extra variables
@@ -118,9 +136,16 @@ are variables shared between the individual and aggregate level
 datasets and can therefore be used to *constrain* the
 weights allocated to the individuals for each zone.
 If there are no shared variables between the aggregate and
-individual-level data, you cannot do spatial microsimulation.
+individual-level data, you cannot do a pertinent spatial microsimulation. 
+Indeed, in this case, your only alternative is to consider only the
+marginal distribution of the variable and make a random selection with 
+the distribution used as a probability. However, this implicitly consider
+that there are no correlations between the variables defined by this way.
 If there are only a few shared variables (e.g. age, sex,
-employment status), your options are limited. Increasingly,
+employment status), your options are limited. In each case, the accuracy
+of the result depends on a wide range of things are choice you make during the process.
+In some cases, if you have age and sex, but need only to add one characteristic, 
+these two shared variables will be the most pertinent you could have. Increasingly,
 however, there are many linking variables to chose from
 as questionnaires become broader and more available. In this
 case the choice of constraints becomes important: which and
@@ -130,6 +155,7 @@ should all be considered at the outset when choosing the
 input data and constraints.
 
 ## Selecting target and constraint variables {#Selecting}
+
 
 The geographically aggregated data should be the
 first consideration when deciding on the
@@ -141,12 +167,12 @@ allocate the individuals to different geographical zones.
 The first critical consideration for the constraint data
 is coverage: ideally close to 100% of each zone's total
 population should be included in the counts. Also, the
-survey must have been completed equally by residents in
-every geographical zone under consideration. It is important
+survey must have been completed by a number of residents  proportional to the
+total number of inhabitants in every geographical zone under consideration. It is important
 to recognise that many geographically aggregated datasets
 may be unsuitable for spatial microsimulation due to sample
 size: geographical information based on a small sample of
-a zone's populatin is not a good basis for
+a zone's population is not a good basis for
 spatial microsimulation.
 
 To take one example,
@@ -156,8 +182,11 @@ state of Victoria, from the 2011 VicHealth Indicators
 [Survey](http://data.aurin.org.au/dataset?q=sleep),
 is not a suitable constraint variable.
 **Constraint variables must be integer counts**,
-not percentages, and must contain sufficient
-categories for each variable. The sleep dataset
+not percentages (or frequencies), and must contain sufficient
+categories for each variable. Indeed, ideally, each possible
+category must be represented. It is normal not to have
+a baby with a high degree qualification, but it is good if
+all realizable category. The sleep dataset
 meets neither of these criteria. It is based on
 a small sample of individuals (on average 300 per
 geographic zone, less than 1% of the total population).
@@ -222,6 +251,10 @@ appropriate datasets is highly context dependent.
 A parallel stage is to consider the individual-level datasets
 that are available. Again, if there are dataset
 
+```{r, echo=FALSE}
+# (Dumont, 2014). What is the end of this sentence? Can be deleted or?
+```
+
 The following considerations should inform the selection of
 individual-level microdata:
 
@@ -278,7 +311,13 @@ A special type of
 constraint variable is **cross-tabulated** categories.
 This involves subdividing the categories in one variable
 by the categories of another. Cross tabulated
-constraint variables are best seen as a single variable.
+constraint variables are well describing the reality 
+and best seen as a single variable.
+```{r, echo=FALSE}
+# (Dumont, 2014). Are you sure about that? 
+Because in one way, individual level data can be consider as a big
+cross tabulated data set, but, I don't know... no so convinced
+```
 If there are 5 age categories and 2 sex categories, this
 can be seen as a single constraint variable (age/sex)
 with 10 categories. Clearly in terms of retaining
@@ -287,12 +326,17 @@ of a zone), cross-tabulated variables are preferable.
 This raises the question? what happens when a single
 variable (e.g age) is used in multiple cross-tabulated
 constraints (e.g. age/sex and age/income). In this case
+```{r, echo=FALSE}
+# (Dumont, 2014). Pay attention, for the moment it is the first 
+time that IPF is mentionned, so the reader do not know what it is
+```
 IPF can still be used, but the result may not converge
 to a single answer because the gender distribution may
 be disrupted by the age/income constraint. Further work
 is needed to test this but from theory we can be sure:
 a three way cross-tabulated constraint (age/sex/income)
-would be ideal in this case.
+would be ideal in this case. Note that a contingency table 
+give more information than two marginal distributions.
 
 Even when measuring constraint variables by categories rather
 than the cruder measure of number variables, there is still
@@ -311,6 +355,11 @@ in the model and the fidelity of the output microdata.
 # TODO: link to the location of a discussion of the empty cell problem
 ```
 
+If constraint variables come from different sources, check the coherence 
+of these datasets. In fact, if the total number of individuals is not
+the same in all datasets, the procedure will get lost.
+
+
 After suitable constraint variables have been chosen ---
 and remember that the constraints can be changed at a later
 stage to improve the model or for testing ---
@@ -322,7 +371,7 @@ is often
 more difficult
 to format. Individual-level datasets are often larger
 and more complex than the constraint data, which
-are simply integer counts of different categories.
+are usually simply integer counts of different categories.
 Of course, it is possible that the
 data you have are not suitable for
 spatial microsimulation because they lack linking variables.
