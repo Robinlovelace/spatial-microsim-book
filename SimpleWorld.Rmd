@@ -3,7 +3,7 @@ title: "SimpleWorld"
 layout: default
 ---
 
-# SimpleWorld {#SimpleWorld}
+# Spatial microsimulation in context {#SimpleWorld}
 
 To see the link between the methodology introduced later in the
 book (see Chapter 5) and the various real-world applications,
@@ -15,9 +15,9 @@ complexities of sustainable energy. The same principle works here:
 By helping us understand likely differences in income and age distributions
 in SimpleWorld, the example should also shed light on
 of the kinds of situation where spatial microsimulation is useful.
-
-We'll use an imaginary world called SimpleWorld, consisting of only 3 zones that
-cover the entirety of SimpleWorld, which is considered to be a 2 dimensional
+SimpleWorld consists of 3 zones that
+cover the entirety of the SimpleWorld planet,
+which is a 2 dimensional
 plane split into 3 zones (see figure 3.1). 
 
 ```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", echo=FALSE, message=FALSE}
@@ -137,33 +137,44 @@ pol1$ypos <- 0
 ```
 
 These geographically specific datasets
-come from the SimpleWorld census, so we can consider that the planet's entire
-population is represented we want to analyse.
-However, we know only the marginal distributions
-of the two variables, but not the contingency table or cross-tabulation
+come from the SimpleWorld census. Responding to census questionnaires
+is a legal requirement in SimpleWorld so we the planet's entire
+population is represented in the counts.
+From these *constraint tables* we know the marginal distributions
+of the two categorical variables,
+but not the contingency table (or cross-tabulation)
 that links age and sex. This means that we have per-zone information on
-the number of young and less young people and the number of males and females.
+the number of young and old people and the number of males and females.
 But we currently lack information about the number
 of young females, young males, and so on. Also note that we have no information
 about other important variables such as income.
-So, we are not satisfied with this geographic count data alone. 
-These contexts, where we have access to geographical count data (usually from a
-census of population) and a more detailed but non-geographical individual-level dataset
-that spatial microsimulation is useful.
-It is in this context, where we would like to impute missing information
-about geographic zones, that we turn to spatial microsimulation
-to better understand the population of SimpleWorld.
-To do this, we need some additional information: an individual-level *microdataset*.
 
-Next, imagine a more detailed dataset about only 5 of SimpleWorld's
-inhabitants, recorded from a survey. This is in a different
+Clearly, this geographic count data lacks detail on SimpleWorld's
+inhabitants and is therefore unsuitable for many purposes. 
+It is precisely such situations, where we have access to geographical count data
+(usually from a census of population) on the one hand and a more
+detailed and a non-geographical individual-level dataset on the other,
+that spatial microsimulation is most useful.
+It is in this context, where we would like to impute missing information
+about the individuals in specific geographic zones,
+that we turn to spatial microsimulation. In this 'cartoon' case study we
+will see how spatial microsimulation can be used to better understand the
+population of SimpleWorld. To do this, we need some additional information:
+an individual-level *microdataset*.
+
+This is provided in an individuals-level dataset on 5 of SimpleWorld's
+inhabitants, recorded from a survey. Note that this data has a different
 form from the aggregate-level data presented in the above tables.
+The individual-level data has, for now, different dimensions than the
+aggregrate data presented above.
 This *microdata* survey contains one row per individual, in contrast
 to the *aggregate constraints*, which have one row per zone.
-This individual level data includes exact age
-(as opposed to the broad categories used in the zone data), as well as income.
-
-\clearpage
+This individual-level data includes two variables that *link* it to the
+aggregate-level data described above: age
+(as an integer variable, rather than the
+broad categories used in the zone data) and sex. The individual-level
+data also provides information about a *target variable* not included
+in the geographical constraints: income.
 
 ```{r, echo=FALSE}
 # ind <- read.csv("data/SimpleWorld/ind.csv")
@@ -231,8 +242,18 @@ microdataset (which contains only 1 young female). The lowest value (0.550) is
 found in cell `[3,2]`. Again this makes sense: individual 3 from the
 microdataset is a young male yet there are only 2 young people and 4 males in
 zone 2. A special feature of the weight matrix above is that each of the column
-sums is equal to the total population in each zone.  We will discover how the
-weight matrices are generated in Chapter 5.
+sums is equal to the total population in each zone.
+
+We will discover how the
+weight matrices are generated in subsequent chapters.
+For now it is sufficient to know
+that weight matrices link individual-level data to geographically aggregated
+data and that there are multiple techniques to generate them. The techniques are sometimes
+referred to as *reweighting algorithms* in the literature (Tanton et al. 2011) and include deterministic methods such as Iterative Proportional
+Fitting (IPF) and
+probabilistic methods that rely on a pseudo-random number generator such as
+simulated annealing (SA). These and other reweighting algorithms are described
+in detail in Chapter 5.
 
 ## Spatial microdata {#spatial-microdata}
 
