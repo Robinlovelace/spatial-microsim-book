@@ -536,7 +536,7 @@ interest, the following command could be used to update the object. Note that
 only the relevant variables, corresponding to the first, third and fourth
 columns are retained:
 
-```{r}
+```{r, eval=FALSE}
 ind <- ind[, c(1, 3, 4)]
 ```
 
