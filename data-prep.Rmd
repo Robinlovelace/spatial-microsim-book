@@ -431,7 +431,13 @@ it is available in memory.
 ## Loading input data {#Loading} 
 
 Real-world individual-level data may be provided in a variety of formats
-but ultimately needs to be loaded into R as a *data frame* object.
+but ultimately needs to be loaded into R as a *data frame* object. Note 
+that there are many ways to load the data and to "clean" it. So, we present 
+here a detailed process in the case of the data avaible with this book.
+Some parts of the explanation here are really specific to this example.
+However, if you want to use your datasets, you could perhaps follow a 
+similar process. In each cases, the last section of this chapter consists
+in a list of things you have to check by loading your datasets.
 
 In this case the dataset is loaded from a `.csv` file:
 
@@ -454,10 +460,10 @@ con_age <- read.csv("data/SimpleWorld/age.csv")
 con_sex <- read.csv("data/SimpleWorld/sex.csv")
 ```
 
-We have loaded the aggregate constraints. As with the individual level data, is
+We have loaded the aggregate constraints. As with the individual level data, it is
 worth inspecting each object to ensure that they make sense before continuing.
 Taking a look at `age_con`, we can see that this data set consists of 2
-variables for 3 zones:
+categories for 3 zones:
 
 ```{r}
 con_age
@@ -469,9 +475,11 @@ example, is heavily dominated by older people: there are 8 people over 50 whilst
 there are only 2 young people (under 49) in the zone.
 
 Even at this stage there is a potential for errors to be introduced.  A classic
-mistake with areal data is that the order in which zones are loaded changes from
+mistake with a real data is that the order in which zones are loaded changes from
 one table to the next. The constraint data should therefore come with some kind of *zone
-id*, an identifying code that will eventually allow the attribute data to be
+id*, an identifying code, called the "key" of the zone and that consist in an unique
+sequence allowing different databases to be correctly joined. Moreover,
+that will eventually allow the attribute data to be
 combined with polygon shapes in GIS software.
 
 ```{r, echo=FALSE}
@@ -480,7 +488,7 @@ combined with polygon shapes in GIS software.
 
 If we're sure that the row numbers match between the age and sex tables (we are
 sure in this case), the next important test is to check that the total
-populations are equal for both sets of variables.  Ideally both the *total*
+populations are equal for both sets of constraint variables.  Ideally both the *total*
 study area populations and *row totals* should match. If the *row totals* match,
 this is a very good sign that not only confirms that the zones are listed in the
 same order, but also that each variable is sampling from the same *population
@@ -507,21 +515,21 @@ the CakeMap Chapter (\ref{CakeMap}).
 In the above code, `data.frame` objects containing precisely the information
 required for the next stage were loaded.  More often, superfluous information
 will need to be removed from the data and subsets taken. It is worth removing
-superfluous variables earl, to avoid over-complicating and slowing-down the
+superfluous variables early, to avoid over-complicating and slowing-down the
 analysis.  For example, if `ind` had 100 variables of which only the 1st, 3rd and 4th were of
-interest (in that they match the constraint variables), the following command could be used to update the object. Only the relevant variables corresponding to
+interest, the following command could be used to update the object. Only the relevant variables corresponding to
 columns (1, 3 and 4 in this case) are retained: `ind <- ind[, c(1, 3, 4)]`.
 Alternatively, `ind$age <- NULL` removes the age variable.
 
 Although `ind` is small and simple it will behave in the same way as a much
 larger dataset, providing opportunities for testing subsetting syntax in R.  It
 is common, for example, to take a subset of the working *population base*: those
-aged 16 and 74 in full-time employment. Methods for doing this are provided in
+aged between 16 and 74 in full-time employment. Methods for doing this are provided in
 the Appendix (
 [](#subsetting)
 ).
 
-## Re-cateorising individual-level variables {#re-categorise}
+## Re-categorising individual-level variables {#re-categorise}
 
 Before transforming the individual-level dataset `ind` into a form that can be
 compared with the aggregate-level constraints, we must ensure that each dataset
@@ -569,7 +577,7 @@ names(con_age)
 ```
 
 Note that the names are subtly different. To solve this issue, we can
-simply change the names of the constraint variable, assuming they
+simply change the names of the constraint variable, after verifying they
 are in the correct order:
 
 ```{r}
@@ -590,7 +598,14 @@ cons[1:2, ] # display the constraints for the first two zones
 We have made steps towards combining the individual and aggregate datasets and
 now only need to deal with 2 objects (`ind` and `cons`) which now share
 category and variable names.
-However, these datasets cannot possibly be compared because they are of different dimensions:
+However, these datasets cannot possibly be compared because rows and columns does not 
+represent the same information, so in many cases they are of different dimensions:
+
+```{r}
+#(Dumont, 2014) I don't like the previous sentence, because even if it is the same dimension
+# the real problem is that it does not represent the same thing. So, the dimension is not
+#the real reason of it
+```
 
 ```{r}
 dim(ind)
@@ -603,10 +618,14 @@ aggregate-level constraint table called `cons`, representing 3 zones
 with count data for 4 categories across 2 variables.
 
 The dimensions of at least one of these objects must change
-before they can be easily compared. To do this
+before they can be pertinently and easily compared. To do this
 we 'flatten' the individual-level dataset;
 this means increasing its width
-to match the constraint data.
+to match the constraint data. This is really intuitive, because it 
+corresponds to express this dataset in a similar way to the aggregate-level table.
+Each category of each variable will become a column with boolean number. Indeed,
+for each row (so, each individual), the columns corresponding to his own characteristics
+will be 1 and 0 for the other columns.
 This is a two-stage process. First,
 `model.matrix()` is used to expand each variable into the number of columns as there are categories in each and assign. 
 Knoblauch and Maloney (2012) provide a lengthier description of this
@@ -668,5 +687,25 @@ between cell values in the individual and aggregate level data.
 The purpose of the *reweighting* procedure in spatial microsimulation is
 to minimise this difference (as measured in TAE above)
 by adding high weights to the most representative individuals.
+
+
+## Checking your process to load the data
+
+Here are an abstract of some points that are really important to have loaded the data correctly :
+
+1. Constraint and target variables have been loaded separately : you have one dataset
+    which rows correspond to an individual and another which rows corresponds to a 
+    spatial zone;
+2. The categories of the common variables are identical and their names also :
+    for example, if you have the exact ages on one side and a category on the
+    other side, the spatial microsimulation can not occur;
+3. The structure of both datasets have to be the same : the columns are the categories
+    of the variables. The individual datasets contains boolean numbers and the aggregate one
+    contains the number of persons in this zone having this characteristics;
+4. The desire total number is define and correspond to the sum of all categories 
+    for each constraint variable.
+
+Note that in the majority of the research requiring the analyse of datasets, the collection, 
+cleaning and loading of the data is a part that take more than the half of the study period.
 
 # References
