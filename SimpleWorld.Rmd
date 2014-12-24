@@ -79,6 +79,8 @@ residents live in each
 zone, as well their genders: male and female.
 This information is displayed in the tables below.
 
+\begin{samepage}
+
 Table: Aggregate-level age counts for SimpleWorld.
 
 |zone   | 0-49 yrs| 50 + yrs|
@@ -94,6 +96,8 @@ Table: Aggregate sex counts for SimpleWorld.
 |1  |  6|  6|
 |2  |  4|  6|
 |3  |  3|  8|
+
+\end{samepage}
 
 ```{r fig = "Mercator maps of the zones in SimpleWorld", echo=FALSE, message=FALSE}
 con_age <- read.csv("data/SimpleWorld/age.csv")
