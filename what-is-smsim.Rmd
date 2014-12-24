@@ -31,6 +31,14 @@ the term involves the creation individual-level data that is grouped by geograph
 
 ## Terminology {#terminology}
 
+```{r, echo=FALSE}
+# TODO add something about the distinction between spatial microsimulation 
+# and small area estimation - e.g.:
+# "There is much overlap between spatial microsimulation and small area estimation and the terms are sometimes used
+# interchangeably. It is useful to make the distinction, however, as small area estimation refers to methods to estimate summary statistics for geographical units—sometimes via a spatial microdataset. With spatial microsimulation, on the other hand, the emphasis is on generating and analysing spatial microdata"
+```
+
+
 Delving a little into the etymology and history of the term reveals the
 reasons behind this duplicity of meaning and highlights the importance
 of terminology. Rarely will you be understood saying

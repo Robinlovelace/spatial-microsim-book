@@ -273,10 +273,8 @@ more from it if you are fluent in R. To this end the book aims to improve your
 R skills as well as your ability to perform spatial microsimulation, especially
 in the earlier practical chapters. Some prior knowledge of R will make
 reading this book easier, but R novices should be able to follow the worked
-examples, with reference to appropriate supplementary material
-. See the references listed in the Appendix
-(
-). As
+examples, with reference to appropriate supplementary material.
+(See the references listed in the Appendix.) As
 with learning Spanish or Chinese, frequent practice, persistence and
 experimentation will ensure deep learning.
 
