@@ -224,7 +224,7 @@ datasets, are used. Above all, there is no consensus about which methods
 are 'best' for different applications, so it is worth experimenting to identify
 which method is most suitable for each application.
 
-### Using the GREGWT algorithm
+### The GREGWT algorithm
 
 An interesting alternative to the IPF method is the GREGWT algorithm. An
 implementation of this algorithm in the SAS language currently exists. This
