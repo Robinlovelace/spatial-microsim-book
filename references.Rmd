@@ -11,6 +11,8 @@ Barthélemy, J. (2014). A parallelized micro-simulation platform for population 
 
 Beezer, R. A. (2008). A first course in linear algebra. Puget Sound: Congruent Press.
 
+Bell, P. (1999). Weighting and Standard Error Estimation for ABS Household Surveys (Paper prepared for ABS Methodology Advisory Committee) ABS.
+
 Blumer, A., Ehrenfeucht, A., Haussler, D., & Warmuth, M. K. (1987). Occam’s razor. Information Processing Letters, 24(6), 377–380.
 
 Boyd, S., & Vandenberghe, L. (2009). Convex optimization. Cambridge university press.
@@ -59,9 +61,15 @@ Powell, D. a., Jacob, C. J., & Chapman, B. J. (2011). Enhancing food safety cult
 
 Pritchard, D. R., & Miller, E. J. (2012). Advances in population synthesis: fitting many attributes per agent and fitting to household and person margins simultaneously. Transportation, 39(3), 685–704. doi:10.1007/s11116-011-9367-4
 
+Rahman, A. (2009). Small Area Estimation Through Spatial Microsimulation Models. In 2nd International Microsimulation Association Conference. Ottawa, Canada.
+
 Rey, S. J. (2014). Open regional science. The Annals of Regional Science, 52(3), 825–837. doi:10.1007/s00168-014-0611-7
 
+Singh, A, Mohl, C. Understanding calibration estimators in survey sampling, Survey Methodology 22, 107-115, 1996
+
 Sutherland, H., & Figari, F. (2013). EUROMOD: the European Union tax-benefit microsimulation model. International Journal of Microsimulation, 6(1), 4–26.
+
+Tanton, R., Vidyattama, Y., Nepal, B. & McNamara, J. (2011). Small area estimation using a reweighting algorithm Journal of the Royal Statistical Society: Series A (Statistics in Society), 174, 931-951
 
 Thiele, J. (2014). R Marries NetLogo: Introduction to the RNetLogo Package. Journal of Statistical, 58(2), 1–41. Retrieved from http://www.jstatsoft.org/v58/i02/paper
 
