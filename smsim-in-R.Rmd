@@ -5,6 +5,11 @@ layout: default
 
 # Spatial microsimulation in R {#smsimr}
 
+```{r, echo=FALSE}
+# TODO: add captions to timings plots
+```
+
+
 In this chapter we progress from loading and preparing the input data to
 running a spatial microsimulation model.
 The SimpleWorld data, loaded in the previous chapter,
@@ -31,38 +36,246 @@ load("cache-data-prep.RData")
 How representative each individual is of each zone is determined by their
 *weight* for that zone. If we have `nrow(cons)` zones and `nrow(ind)`
 individuals (3 and 5, respectively, in SimpleWorld) we will create
-15 weights. To start, we create an empty weight matrix, ready to be filled
+15 weights. To start, we create a matrix of ones. Thus every
+individual has an equal initial weight, ready to be updated
 with numbers calculated through the IPF procedure:
 
 ```{r}
-weights <- matrix(data = NA, nrow = nrow(ind), ncol = nrow(cons))
+weights <- matrix(data = 1, nrow = nrow(ind), ncol = nrow(cons))
 dim(weights) # dimension of weight matrix: 5 rows by 3 columns
 ```
 
 ## IPF in R {#IpfinR}
 
-The most established *deterministic* method to allocate individuals to zones
+The most widely used and mature *deterministic* method to allocate individuals
+to zones
 is iterative proportional fitting (IPF). IPF involves calculating a series of
-weights that represent how representative each individual is of each zone.
-This is *reweighting*. The IPF algorithm can be written in
-R from scratch, as illustrated in Lovelace (2014), and as implemented in the
-smsim-course GitHub repository (https://github.com/Robinlovelace/spatial-microsim-book).
-The code in this file, and the accompanying text, saves the weight
-matrix after every constraint for each iteration. While this makes the
-code relatively slow, it is useful for diagnosing issues with the reweighting
-process. However, to save computer and researcher time, we will
-skip directly to an alternative method that uses the **ipfp** package
-in this section.
+non-integer weights that represent how representative each individual is of
+each zone.
+This is *reweighting*.
 
-Regardless of which implementation of used,
-IPF can be used to allocate the individual-level data loaded in
-the previous chapter to the three zones of SimpleWorld. IPF is mature,
+Regardless of implementation method,
+IPF can be used to allocate individuals to zones through the calculation
+of *maximum likelihood* values for each zone-individual combination represented
+in the wieght matrix.
+In the subsequent examples, we use IPF to allocate individuals to zones
+in SimpleWorld, using the data loaded in
+the previous chapter as a basis. IPF is mature,
 fast and has a long history.
-Interested readers are directed towards recent papers (e.g. Lovelace and Ballas,
-2012;
-Pritchard and Miller,
-2012)
-for more detail on the method and its underlying theory.
+Interested readers are directed towards recent papers (e.g. 
+Lovelace and Ballas, 2012;
+Pritchard and Miller,2012)
+for more detail on the method.
+
+
+The IPF algorithm can be written in
+R from scratch, as illustrated in Lovelace (2014), and as taught in the
+smsim-course online
+[tutorial](https://github.com/Robinlovelace/spatial-microsim-book).
+We will refer to this implementation of IPF as 'IPFinR'.
+The code described in this tutorial 'hard-codes' the IPF algorithm
+in R and must be modified for each new application (unlike the 'ipfp' approach,
+which works unmodified on any reweighting problem).
+IPFinR works by saving the weight
+matrix after every constraint for each iteration.
+
+IPFinR begins with a
+couple of nested for loops, one to iterate through each zone
+(hence `1:nrow(cons)`, which means "from 1 to the number of zones in the
+constraint data") and one to iterate through each
+category within the constraints (0--49 and 50+ for the first constraint).
+Note that this code relies on the `cons` and `ind` objects loaded in the
+previous chapter.
+
+```{r, echo=FALSE}
+# The long way of doing it 
+# # Create initial matrix of categorical counts from ind
+# ind_agg0 <- matrix(rep(ind_agg, nrow(cons)), nrow = nrow(cons), byrow = T)
+# weights1 <- weights2 <- weights # create addition weight objects for IPFinR
+# # Assign values to the previously created weight matrix
+# for(j in 1:nrow(cons)){
+# for(i in 1:ncol(con_age)){
+# weights1[ind_cat[ , i ] == 1, j] <- con_age[j , i] / ind_agg0[j , i]
+# }
+# }
+```
+
+
+```{r}
+# Create initial matrix of categorical counts from ind 
+ind_agg0 <- t(apply(cons, 1, function(x) x^0 * ind_agg))
+weights1 <- weights2 <- weights # create addition weight objects
+
+# Assign values to the previously created weight matrix
+for(j in 1:nrow(cons)){
+  for(i in 1:ncol(con_age)){
+weights1[ind_cat[, i] == 1, j] <- con_age[j, i] / ind_agg0[j, i]
+    }
+  }
+```
+
+The above code updates the weight matrix by dividing each cell in the
+the census constraint (`con_age`) by the equivalent cell
+aggregated version of the individual level data.
+The weight matrix is critical to the spatial microsimulation procedure because
+it describes how representative each individual is of each zone. To see the
+weights that have been allocated to individuals to populate zone 2, for example
+you would query the second column of the weights: `weights1[, 2]`. Conversely,
+to see the wheight allocated for individual 3 for each for the 3 zones, you
+need to look at the 3rd column of the weight matrix: `weights1[3, ]`. Note that
+individual 3 (who's attributes can be viewed by entering `ind[3, ]`)
+is young and has a comparatively low weight of 1 for zone two. Intuitively
+this makes sense because zone 3 has only 2 young adult inhabitants (see
+the result of `cons[2,]`) but 8 older inhabitants. The reweighting stage is
+making sense. Note also that the weights generated are fractional;
+see [](#sintegerisation) for methods of converting fractional weights into
+integer weights to generate a synthetic small-area population ready for
+agent-based modelling applications. The next step in IPF, however, is to
+re-aggregate the results from individual-level data after they have been
+reweighted. The following `for` loop
+re-aggregates the individual-level data, with the new weights for each zone:
+
+```{r}
+# Create additional ind_agg objects
+ind_agg2 <- ind_agg1 <- ind_agg0 * NA
+
+# Assign values to the aggregated data after con 1
+for(i in 1:nrow(cons)){
+  ind_agg1[i, ] <- colSums(ind_cat * weights1[, i])
+}
+```
+
+Congratulations. Assuming you are running the code on you own computer, you
+have just reweighted your first individual-level dataset to geographical
+constraints and have aggregated the results.
+At this early stage it is important to do some preliminary checks
+to ensure that the code is working correctly. First, are the resulting
+populations for each zone correct? We check this for the first constraint variable
+(age) using the following code (test: check the populations of the unweighted
+and weighted data for the second constraint --- sex):
+
+```{r}
+rowSums(ind_agg1[, 1:2]) # the simulated populations in each zone
+rowSums(cons[, 1:2]) # the observed populations in each zone
+```
+
+The results of these tests show that the new populations are correct, verifying
+the technique. But what about the fit between the observed and simulated
+results after constraining by age? We will cover goodness of fit in more
+detail in subsequent sections. For now, suffice to know that the simplest
+way to test the fit is by using the `cor` function on a 1d representation of the
+aggregate-level data:
+
+```{r}
+vec <- function(x) as.numeric(as.matrix(x))
+cor(vec(ind_agg0), vec(cons))
+cor(vec(ind_agg1), vec(cons))
+```
+
+Note that as well as creating the correct total population for each zone, the
+new weights also lead to much better fit. To see how this has worked, let's
+look at the weights generated for zone 1:
+
+```{r}
+weights[, 1]
+```
+
+The results mean that individuals 3 and 5 have been allocated a weight of 4
+whilst the rest have been given a weight of $4/3$. Note that the total of these
+weights is 12, the population of zone 1. Note also that individuals 3 and 5 are
+in the younger age group (verify this with `ind$age[c(3,5)]`) which are more
+commonly observed in zone 1 than the older age group:
+
+```{r}
+cons[1, ]
+```
+
+Note there are 8 individuals under 50 years old in zone 1, but only 2 individuals
+with this age in the individual-level survey dataset. This explains why the
+weights allocated to these individuals is 4: 8 divided by 2 = 4.
+
+So far we have only constrained by age. This results in aggregate-level results
+that fit the age constraint but not the sex constraint (figure 5.1). The reason
+for this should be obvious: weights are selected such that
+the aggregated individual-level data fits the age constraint perfectly, but
+no account is taken of the sex constraint. This is why IPF must constrain for
+multiple constraint varibles.
+
+To constrain by sex, we simply repeat the
+nested `for` loop demonstrated above for the sex constraint. This is implemented
+in the code block below.
+
+```{r}
+for(j in 1:nrow(cons)){
+  for(i in 1:ncol(con_sex) + ncol(con_age)){
+weights2[ind_cat[, i] == 1, j] <- cons[j , i] / ind_agg1[j, i]
+    }
+  }
+```
+
+Again, the aggregate values need to be calculated in a `for` loop over every
+zone. Note that the final value is calculated by multiplying by
+`weights1` *and* `weights2`: the final weight is calculated as the product
+of all the weight matrices calculated from all the constraints.
+
+```{r}
+for(i in 1:nrow(cons)){
+ind_agg2[i, ] <- colSums(ind_cat * weights1[, i] * weights2[, i])
+}
+```
+
+Note that even after constraining by age and sex, there
+is still not a perfect fit between observed and simulated cell values
+(figure 5.1). The simulated cell counts for the age categories are far from
+the observed, whilst the cell counts for the age categories fit perfectly.
+On the other hand, after constraining by age *and* sex, the fit is still not
+perfect. This time the age categories do not fit perfectly, whilst the sex
+categories fit perfectly. Inspect `ind_agg1` and `ind_agg2` and try to explain
+why this is. Note that the *overall fit*, combining age and sex categories,
+has improved greatly from iteration 1.1 to 1.2 (from $r = 0.63$ to $r = 0.99$).
+In iteration 2.1 (in which we constrain by age again) the fit improves again.
+
+These results show that IPF requires multiple *iterations* before converging on
+a single weight matrix. It is relatively simple to iterate the procedure
+illustrated in this section multiple times, as described in the smsim-course
+tutorial. However, for the purposes of this book, we will move on now to consider
+implementations of IPF that automate the fitting procedure and iteration process.
+The aim is to make spatial microsimulation as easy and accessible as possible.
+
+
+```{r valit_plot1, echo=FALSE, fig.cap="Fit between observed and simulated values for age and sex categories (column facets) after constraining by age and sex constraints (iterations 1.1 and 1.2, plot rows). The dotted line in each plot represents perfect fit between the simulated and observed cell values. The overall fit in each case would be found by combining the left and right-hand plots."}
+# Make data long it with tidyr
+library(tidyr)
+x <- gather(cons, Category, Observed, a0_49:f)
+y <- gather(as.data.frame(ind_agg1), cat, Simulated, a0_49:f)
+z <- gather(as.data.frame(ind_agg2), cat, Simulated, a0_49:f)
+# y$cat <- x$cat # to make categories identical (not needed)
+df1 <- cbind(x,y)
+df1$Constraint <- "1.1: Age"
+df2 <- cbind(x, z)
+df2$Constraint <- "1.2: Sex"
+df <- rbind(df1, df2)
+df$Variable <- "Age"
+df$Variable[grep("[mf]", df$Category)] <- "Sex"
+library(ggplot2)
+qplot(Observed, Simulated, data = df, shape = Category, alpha = 0.5) +
+  facet_grid(Constraint ~ Variable) +
+  geom_abline(slope = 1, linetype = 3) +
+  scale_alpha(guide = F) +
+  scale_shape_manual(values = c(1,11,2,12)) +
+  theme_bw()
+
+# Attempt 2: do it with reshape2
+# library(reshape2)
+# melt(cons)
+```
+
+The advantage of hard-coding the IPF process, as illustrated above, is that
+it is helps understand how IPF works and aides diagnosing issues with
+the reweighting process as the weight matrix is re-saved after every
+constraint and iteration. However, there are more computationally efficient
+approaches to IPF. To save computer and researcher time, we 
+use in the next section an alternative method that uses the **ipfp** package.
 
 ```{r, echo=FALSE}
 # Possibly more on IPF here. For now, press on
@@ -234,7 +447,7 @@ Generalized Regression Weighting procedure (hence the name GREGWT).
 The resulting weights ensure that, when aggregated, the individuals selected
 for each small area fit the constraint variables. Like IPF, the GREGWT
 results in non-integer weights, meaning some kind of integerisation 
-algorthim will be needed if the output is to be used in ABM. The macro
+algorithm will be needed if the output is to be used in ABM. The macro
 developed by ABS adds a weight restriction in their GREGWT macros to ensure
 positive weights. The ABS uses
 the Linear Truncated Method described in Singh and Mohl (1996) to enforce these

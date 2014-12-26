@@ -23,27 +23,27 @@ plane split into 3 zones (see figure 3.1).
 ```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", echo=FALSE, message=FALSE}
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
-# library(sp)
-# library(ggplot2)
-# xpol <- c(-180, -60, -60, -180, -180)
-# ypol <- c(-70, -70, 70, 70, -70)
-# pol = SpatialPolygons(list(
-#   Polygons(list(Polygon(cbind(xpol, ypol))), ID="x1"),
-#   Polygons(list(Polygon(cbind(xpol + 120, ypol))), ID="x2"),
-#   Polygons(list(Polygon(cbind(xpol + 240, ypol))), ID="x3")
-#   ))
-# # plot(pol)
-# proj4string(pol) <- CRS("+init=epsg:4326")
-# pol1 <- fortify(pol)
-# 
-# theme_space_map <- theme_bw() +
-#   theme(
-# #     rect = element_blank(),
-#     axis.title = element_blank(),
-#     axis.text = element_blank(),
-#     axis.ticks = element_blank(),
-#     panel.grid.major = element_line(size = 3)
-#   )
+library(sp)
+library(ggplot2)
+xpol <- c(-180, -60, -60, -180, -180)
+ypol <- c(-70, -70, 70, 70, -70)
+pol = SpatialPolygons(list(
+  Polygons(list(Polygon(cbind(xpol, ypol))), ID="x1"),
+  Polygons(list(Polygon(cbind(xpol + 120, ypol))), ID="x2"),
+  Polygons(list(Polygon(cbind(xpol + 240, ypol))), ID="x3")
+  ))
+# plot(pol)
+proj4string(pol) <- CRS("+init=epsg:4326")
+pol1 <- fortify(pol)
+
+theme_space_map <- theme_bw() +
+  theme(
+#     rect = element_blank(),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.major = element_line(size = 3)
+  )
 # 
 # ggplot(pol1) + geom_path(aes(long, lat, group, fill = group)) +
 #     coord_map("ortho", orientation=c(41, -74, 52)) + 
