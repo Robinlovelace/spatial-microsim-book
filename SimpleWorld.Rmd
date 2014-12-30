@@ -167,7 +167,7 @@ This is provided in an individuals-level dataset on 5 of SimpleWorld's
 inhabitants, recorded from a survey. Note that this data has a different
 form from the aggregate-level data presented in the above tables.
 The individual-level data has, for now, different dimensions than the
-aggregrate data presented above.
+aggregate data presented above.
 This *microdata* survey contains one row per individual, in contrast
 to the *aggregate constraints*, which have one row per zone.
 This individual-level data includes two variables that *link* it to the

@@ -13,8 +13,9 @@ library(grid)
 
 # What is spatial microsimulation? {#what-is}
 
-Spatial microsimulation is a technique for generating data statistically as similar as 
-possible to aggregate-level observations and with a disaggregate spatial information. Its most common use in the social sciences is for allocating individuals from a survey dataset
+Spatial microsimulation is a technique for generating individual-level data
+allocated to geographical zones that is as similar as possible to
+aggregate-level constraints. Its most common use in the social sciences is for allocating individuals from a survey dataset
 to administrative zones, based on shared variables between the areal and
 individual level data. Spatial microsimulation can also be used to simulate the values of missing characteristics for individuals in a zone, information that is not otherwise available.
 As with many new and infrequently used phrases, this
@@ -221,7 +222,7 @@ EUROMOD and other economic microsimulation models, including probability-weighte
 data and aggregate-level scenario development
 (Sutherland and Figari, 2013). The majority of microsimulation
 research for economic policy evaluation does not
-disagreggate the impacts over space, however. The estimation of variability
+disaggregate the impacts over space, however. The estimation of variability
 at the *local level* is what differentiates spatial microsimulation models
 from economic microsimulation models, although the underlying methods are
 very similar.
@@ -249,7 +250,7 @@ of Sheffield. Because the constraints used in this model
 included socio-demographic variables, each individual
 represented in the figure has a rich profile of characteristics
 associated with them. This analysis can provide new evidence
-about the likely winners and loosers from very specific
+about the likely winners and losers from very specific
 interventions such as a new bicycle path or bus route
 (Lovelace et al. 2014). As a result of the increased detail
 allowed by such methods there is much interest in spatial
@@ -327,7 +328,9 @@ simply changing its aggregate-level characteristics.
 ## Spatial microsimulation in this book {#MSimThisBook}
 
 As we have seen, the term "spatial microsimulation" has a number of meanings incorporating a range of methods and applications. In this book, the focus is on the
-most used part of this branch, called reweighting: the process of generating the spatial microdata. From [](#vis) onwards, we also explain what can be done with the spatial microdata that we have generated in the preceding chapters. The technique described in this book will be most useful in contexts where you
+most used part of this branch, called reweighting: the process of generating the spatial microdata. From 
+[](#vis)
+onward, we also explain what can be done with the spatial microdata that we have generated in the preceding chapters. The technique described in this book will be most useful in contexts where you
 have categorical geographically aggregated count data about the entire target population (these are the *contraint variables*, often taken from a national census) and an individual-level survey based on a sample of the target population (the non-spatial *microdata*).
 
 ## Assumptions {#assumptions}

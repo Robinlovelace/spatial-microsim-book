@@ -36,7 +36,7 @@ library(grid)
 # could be the beginning of part 2 if the book's divided into parts. 
 ```
 
-This chapter focuses on the mininum input datasets needed for the spatial
+This chapter focuses on the minimum input datasets needed for the spatial
 microsimulation. We will build on the SimpleWorld example by demonstrating how
 the inputs about its inhabitants, in terms of geographical constraints and
 individual-level survey data, can be loaded and 'cleaned' in R. At the end
@@ -70,12 +70,12 @@ needed for your research. Focus on "target variables" related to the research
 question will help decide on the constraint variables, as we will see
 below 
 ([](#Selecting)).
-Focussing only on variables of interest will ensure you do not
+Focusing only on variables of interest will ensure you do not
 waste time thinking about and processing 
 additional variables that you will be of little use in the future.
 Regardless of the research question it is clear that the methodology depends
 on the availability of data. If the problem relates to variables that are simply
-unnavailable at any level (e.g. hair length, if your research question related
+unavailable at any level (e.g. hair length, if your research question related
 to the hairdressing industry), spatial microsimulation may be unsuitable.
 If, on the other hand, all the data is available at the geographical level
 of interest (to explore regional differences, for example, all the necessary
@@ -369,7 +369,7 @@ provides more information than two-way marginal distributions.
 
 Even when measuring constraint variables by categories rather
 than the cruder measure of number variables, there is still
-no concensus about the optimal amount. 
+no consensus about the optimal amount. 
 Norman (1999) advocates
 including the ``maximum amount of
 information in the constraints'', implying that
@@ -424,7 +424,7 @@ checking process for the datasets used in this chapter is simple: both aggregate
 and individual-level tables contain age (in continuous form
 in the microdata, as two categories in the aggregate data)
 and sex, so they can by combined. 
-Loading the data involves transfering information from a
+Loading the data involves transferring information from a
 local hard disc into R's *environment*, where
 it is available in memory.
 
@@ -540,7 +540,7 @@ columns are retained:
 ind <- ind[, c(1, 3, 4)]
 ```
 
-An alternative way to remove excess variables is to use `NULL` assignment to remove columbs. `ind$age <- NULL`, for example,
+An alternative way to remove excess variables is to use `NULL` assignment to remove columns. `ind$age <- NULL`, for example,
 would remove the age variable.
 
 Although `ind` is small, it will behave in the same way as
@@ -645,18 +645,25 @@ with count data for 4 categories across 2 variables.
 The dimensions of at least one of these objects must change
 before they can be correctly easily compared. To do this
 we 'flatten' the individual-level dataset.
-This means increasing its width such that each column becomes a category
-name. Flattening the individual-level in this way intuitively makes sese
-as it will allow the individual data to be matched
+This means increasing its width so each column becomes a category
+name. This allows the individual data to be matched
 to the geographical constraint data. In this new dataset (which we
-labe `ind_cat1`, short for 'categorical'),
-each variable becomes a column associated with boolean numbers (0 to 1, representing their proposin nasty pay cuts. 
-For each row in `ind_cat`, notice that columns are eventually re-coded. To
-undertake this 'flattening' process,
-`model.matrix()` is used to expand each variable into the same number of columns as there are categories across all constraint variables, in the
-same order as the columns in `cons`.  
+label `ind_cat`, short for 'categorical'),
+each variable becomes a column containing Boolean numbers
+(either 1 or 0, representing whether the individual belongs to each
+category or not).
+Note that each row in `ind_cat` must contain a one for each constraint variable;
+the sum of every row in `ind_cat` should be equal to the number of constraints.
+(This can be verified with `rowSums(ind_cat)`.)
+
+To undertake this 'flattening' process the
+`model.matrix()` function is used to expand each variable in turn.
+The result for each variable is a new matrix with the same number of columns as
+there are categories in the variable. Note that the order of columns is usually
+alphabetical: this can cause problems if the columns in the constraint tables
+are not ordered in this way.  
 Knoblauch and Maloney (2012) provide a lengthier description of this
-flattening process, which is available online.
+flattening process.
 
 The second stage is to use the `colSums()` function 
 to take the sum of each column.^[As we shall see in Section \ref{ipfp},
@@ -736,7 +743,7 @@ correctly:
     eventually be the same: the columns are the categories
     of the variables. The new version of the individual-level datasets
     that is ready for spatial microsimulation
-    contains boolean values whilst the aggregated version of the individual-level
+    contains Boolean values whilst the aggregated version of the individual-level
     data contains the number of persons in each.
 4. The total population of each zone is represented in the sum counts for
     each constraint variable.

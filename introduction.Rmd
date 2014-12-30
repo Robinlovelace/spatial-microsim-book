@@ -15,10 +15,12 @@ library(grid)
 # Introduction
 
 Imagine a world where you could access to all possible information, 
-for example about individuals, their characteristics, their habits, their movements. Privacy issues aside, this information would clearly be of use for many applications.
-In reality reseachers must work with information that is incomplete, lacking spatial or temporal resolution or missing key attributes.
+about individual companies, households or people. Privacy issues aside, this information would clearly be of use for many socially beneficial applications
+in the hands of a benevolent state or non-governmental organisation.
+In reality researchers must work with information that is incomplete, lacking spatial or temporal resolution or missing key attributes.
 Spatial microsimulation provides a statistical approximation of
-higher resolution individual-level data that can provide a basis for work in many fields. 
+individual-level data at high spatial resolution. This *spatial microdata*
+can provide a basis for work in many fields to better understand the world. 
 
 Spatial microsimulation is a statistical technique for combining individual and
 geographical data, typically from aggregated Census results and surveys from a sample of the population. The resulting *spatial microdata* are useful in many
@@ -51,7 +53,7 @@ treats spatial microsimulation as a magical black box. This book is about
 demystifying spatial microsimulation.
 
 "spatial microsimulation" is a term that can seem ambiguous, because it concerns all ways 
-to reach data statistically similar to the real state of the studied entities in a disaggregate level.
+to reach data statistically similar to the real state of the studied entities in a dis-aggregate level.
 So, depending on the available data and the aim of the research, spatial microsimulation can be 
 understood either as a technique or an approach:
 
@@ -223,7 +225,7 @@ microsimulation process, as we shall see in Chapter 5 in
 because R is open source, anyone can write a new package. This means we means it is important to check
 the quality of a used package before trusting it as a "black box".
 
-R is a powefull statistical language and its interface "RStudio" helps new users to become familar with this language. 
+R is a powerful statistical language and its interface "RStudio" helps new users to become familiar with this language. 
 Further information about why R is a good choice for spatial microsimulation
 is provided in the Appendix, a tutorial introduction to R for spatial
 microsimulation applications. The next section describes approaches
