@@ -39,6 +39,8 @@ library(rmarkdown)
 # Build the book:
 render("book.Rmd", output_format = "pdf_document")
 
+
+
 # Build the CRC-formatted version of the book
 source("R/bbuild.R")
 system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
