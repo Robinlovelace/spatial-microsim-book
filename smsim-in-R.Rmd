@@ -7,12 +7,18 @@ layout: default
 
 ```{r, echo=FALSE}
 # TODO: add captions to timings plots
+# TODO: add IPF theory from Cambridge handout.pdf
+# TODO: change integerisation section so it's part of IPF (done)
 ```
 
 In this chapter we progress from loading and preparing the input data to
-running a spatial microsimulation model.
+running a spatial microsimulation model. We will begin by describing the
+IPF procedure as it is the simplest and most widely used method to allocate
+individuals to zones and then progress to discuss alternative
+*reweighting algorithms* that do the same job in a different way.
+
 The SimpleWorld data, loaded in the previous chapter,
-is used. Being small and simple, the example enables understanding
+is used. Being small and simple, the example facilitates understanding
 the process on a 'human scale' and allows experimentation
 without the worry of overloading your computer.
 However, the methods apply equally to larger and more complex projects.
@@ -33,33 +39,111 @@ load("cache-data-prep.RData")
 ```
 
 How representative each individual is of each zone is determined by their
-*weight* for that zone. If we have `nrow(cons)` zones and `nrow(ind)`
-individuals (3 and 5, respectively, in SimpleWorld) we will create
-`nrow(cons)*nrow(ind)` weights (15 in SimpleWorld). To start, we create a matrix of ones. Thus every
-individual has an equal initial weight, ready to be updated
-with numbers calculated through the IPF procedure:
+*weight* for that zone. Each weight links and individual to a zone.
+The number
+of weights is therefore equal to number of zones multiplied
+by the number of individuals
+in the microdata, that is the number of rows in individual-level and constraint tables
+respectively.
+In terms of the SimpleWorld data loaded in the previous chapter we have, in
+R syntax, `nrow(cons)` zones and `nrow(ind)` individuals.
+(Typing those commands with the data loaded should confirm that there are
+3 zones and 5 individuals in the input data for the SimpleWorld example).
+This means that `nrow(cons) * nrow(ind)` weights will be estimated
+(that is $3 * 5 = 15$ in SimpleWorld). The weights must begin with an initial value. We will create a matrix of 
+ones so every
+individual is seen as equally representative of every
+zone:^[Any
+initial weight values could be used here: initial weights do not affect the final weights after many iterations. The value of one is
+used as a sensible
+convention.]
 
 ```{r}
+# Create the weight matrix of ones
 weights <- matrix(data = 1, nrow = nrow(ind), ncol = nrow(cons))
 dim(weights) # dimension of weight matrix: 5 rows by 3 columns
 ```
 
-## Different kinds of microsimulation {#KindMS}
+During the IPF procedure these weights are iteratively updated until
+they *converge* towards a single result: the final weights which create
+a representative population for each zone.^[Fienberg (1970) provides
+a geometrical proof that IPF converges to a single result, in the absence
+of *empty cells*.]
 
-There are a wide range of possible methods to proceed to a spatial microsimulation. As with the majority of statistical 
-analyses, there are *deterministic* methods, characterized by the fact that it is completely determine, so no random
-or probabilistic numbers are used. In the other side, some *stochastic* methods consist in selecting a random number 
-in a specific distribution. For example, if we had no information about the zone's distribution but just the 
-total number of inhabitant in the zone, we could consider that
-the distribution of the sample is the distribution of the whole population. So, each individual will be chosen 
-randomly inside the individual in the sample. In this case, the distribution of the whole population will be
-asymptotically the one of the sample. 
+## Reweighting algorithms {#KindMS}
 
-With stochastic methods, the intervention of a random function involves that executing two times the same algorithm
-could result in two different solution. To avoid it, we have to fix the *seed* of the random function. However,
-with these methods, we have to really trust the random function used. Note that it is impossible for a computer to
-effectively choose randomly a number, so there are existing algorithm to have *pseudo-random numbers*. The quality
-of this function has to be taken into account when proceeding to this kind of spatial microsimulation.
+A wide range of methods can be used to allocate individuals to zones for
+spatial microsimulation. As with the majority of statistical 
+analyses, there are *deterministic* and *stochastic* methods.
+The results of *deterministic* methods, such as IPF, never vary: no random
+or probabilistic numbers are used so the resulting weights will be the same
+every time. *Stochastic* methods such as *simulated annealing*, on the other hand, use random numbers.
+
+In the literature, the divide between stochastic and deterministic methods
+is usually mapped onto a wider distinction between *reweighting* methods
+and *combinatorial optimisation* methods. Reweighting methods generally calculate
+non-integer weights for every individual, whereas combinatorial optimisation
+methods randomly allocate individuals from the survey into each zone, one-by-one.
+If the fit between observed and simulated results improves after an individual
+has been 'imported' into the zone in question, the individual stays. If the fit
+deteriorates, the individual is removed from the zone and a different change
+is attempted. The distinction between reweighting and and combinatorial optimisation
+algorithms for creating spatial microdata is an important one: combinatorial
+optimisation methods result in whole individuals being allocated to each zones
+whereas reweighting strategies result in fractions of individuals being allocated
+to each zone. The latter method means that individual $i$ could have a weight of
+0.223 (or any other positive real number) for zone $j$. Of course, this sounds
+irrational: a quater of a person cannot possibly exist: either she is in the zone
+or she is not!
+
+However, the distinction between combinatorial optimisation and reweighting
+approaches to creating spatial microdata is not as clear cut as it may at first
+seem. As illustrated figure 5.1, fractional weights generated by reweighting
+algorithms such as IPF can be converted into integer weights (via *integerisation*)
+and (via *population synthesis*) spatial microdata in 'long' format.
+Likewise the synthetic spatial microdata generated directly via combinatorial
+optimisation methods can be converted back in to a more *compressed* weight
+matrix that links the individual and aggregate-level input datasets together
+(hence the name *compression*). For this reason we have labelled this section
+*reweighting algorithms* because all deterministic and stochastic
+(or reweighting and cominatorial optimisation) approaches to the generation of
+spatial microdata can be seen as different methods, algorithms, for allocating
+weights to individuals. Individuals representative of a zone will be given a
+high weight (or be replicated many times in combinatorial optimisation approaches
+--- it's essentially the same thing); individuals who are rare in a zone will
+be given a low weight (or not appear at all, equivalent to a weight of zero).
+
+```{r, fig.cap="Schematic of different approaches for the creation of spatial microdata encapsulating stochastic combinatorial optimisation and deterministic reweighting algorithms such as IPF. Note that integerisation and 'compression' steps make the results of the two approaches interchangeable, hence our use of the term 'reweighting algorithm' to cover all methods for generating spatial microdata.", fig.width=4, fig.height=4, echo=FALSE}
+img <- readPNG("figures/co-vs-ipf-schema.png")
+grid.raster(img)
+```
+
+If we had no information about the characteristics of a zone's inhabitants in SimpleWorld, for example, only its total population, we could consider that
+the distribution of characteristics found in the sample is representative of the distribution of the whole population. In this case each individual in the zone would be chosen at random from sample and the distribution of individuals allocated to the zone would be
+asymptotically (tending towards) that of the sample. In R, this case can
+be achieved easily using the `sample()` command. We could use this method to
+randomly allocate the 5 individuals of the microdata to zone 1 (which has
+a population of 12) with the following code:
+
+```{r}
+set.seed(1) # set the seed for reproducibility
+sel <- sample(x = 5, size = 12, replace = T) # create selection
+ind_z1 <- ind_orig[sel, ]
+head(ind_z1, 3)
+```
+
+Note the use of `set.seed()` in the above code to ensure the results are reproducible. It is important to emphasise that without 'setting the seed' (determining the starting point of the random number sequence) the results will change each time the code is
+run. This is because `sample()` (along with other stochastic functions such as `runif()` and `rnorm()`) is probabilistic and its output therefore depends on a random number
+generator
+(RNG).^[Without
+setting the seed, the results will change each time. In addition, changing
+the value inside the brackets of `set.seed()`
+will result in a different combination of individuals being selected for each new number --- test this
+out in your code. This happens because the method relies on *pseudo random numbers* to select values probabilistically and `set.seed()` specifies where the
+random number sequence should begin, ensuring repeatability. We must really trust the random function used. Note that it is impossible for a computer to
+choose *entirely* random numbers, so algorithms to generate *pseudo-random numbers* have been developed. See the documentation provided by `?set.seed`
+for more information.
+] 
 
 The *reweighting* methods consists in adding a weight to each individual for the zone. This method is good if we have 
 a representative sample of the zone and the minority of the population is included in it. In contrary, if we have in
@@ -69,56 +153,70 @@ similar, that will allow to mix some individual to create a new one (mutation). 
 if this solution has already been developed, it is just a proposition and to inform the reader that new process can
 still appear in the future.
 
-## A reweighting method : IPF in theory {#IpfinTh}
+## IPF in theory {#IpfinTh}
 
 The most widely used and mature *deterministic* method to allocate individuals
-to zones
-is iterative proportional fitting (IPF). IPF involves calculating a series of
+to zones is iterative proportional fitting (IPF).
+IPF is mature, fast and has a long history: it was demonstrated by
+Deming and Stephan (1940)
+for estimating internal cells based on known marginals.
+IPF involves calculating a series of
 non-integer weights that represent how representative each individual is of
-each zone.
-This is *reweighting*.
+each zone. This is *reweighting*.
 
 Regardless of implementation method,
 IPF can be used to allocate individuals to zones through the calculation
 of *maximum likelihood* values for each zone-individual combination represented
-in the weight matrix. This simply consider the more probable configuration of 
-individuals in these zones. It consists in calculating the maximum of *entropy*. 
-The *entropy* is the number of physical configurations that result in this 
-table of contingency. For more details about this theory, please refer to 
-... []. In the subsequent examples, we use IPF to allocate individuals to zones 
-in SimpleWorld, using the data loaded in the previous chapter as a basis. 
-IPF is mature, fast and has a long history. Interested readers are directed towards recent papers 
-(e.g. Lovelace and Ballas, 2012; Pritchard and Miller,2012) for more detail on the method.
+in the weight matrix. This is considered as the most probable configuration of 
+individuals in these zones. IPF is a method of *entropy maximisation*
+(Cleave et al. 1995). 
+The *entropy* is the number of configurations of the underlying spatial microdata
+that could result in the same marginal counts.
+For in-depth treatment of the mathematics and theory underlying IPF,
+interested readers are directed towards Fienberg (1979), Cleave et al. (1995) and an excellent recent review
+of methods for maximum likelihood estimation (Fienberg and Rinaldo 2007). For the
+purposes of this book, we provide a basic overview of the method for the purposes
+of spatial microsimulation.
 
 ```{r, echo=FALSE}
+# TODO (RL): add Lovelace et al (2015) example when published above
+```
+
+In spatial microsimulation, IPF is used to allocate individuals to zones.
+The subsequent section implements IPF to create *spatial microdata* for
+SimpleWorld, using the data loaded in the previous chapter as a basis. 
+Overviews of the use of spatial microsimulation method for spatial microsimulation
+are provided recent papers by Lovelace and Ballas (2012) and, for in the
+context of transport modelling, by Pritchard and Miller (2012).
+
+```{r, echo=FALSE}
+# TODO (MD): add reference above
 #(Dumont,2014) Jojo thesis and article given by Eric 
-```
 
-
-Such as with the example of SimpleWorld,, in each application, we will have a matrix 'ind' containing the 
-categorical value of each individual. So, it is a two dimensional matrix which rows are one individual and 
-each column a variable. The value of the cell 'ind(i,j)' is the category of the individual 'i' for the
-variable 'j'. Then, we always have a second matrix containing the constraint 'cons' that we can, for the theory purpose,
-express with 3 dimensions. Indeed, 'consTheory(i,j,k)' will be the constraint corresponding to the marginal 
-for the zone 'i', in the variable 'j' and category 'k'. For example, 'i' could be a municipality, 'j' the gender and
-'k' the female. So, element '(i,j,k)' is the total number of woman in this municipality according to the constraint data.
-
-The IPF algorithm will proceed zone per zone. For each zone, each individual will have a weight of representativity of the
-zone. The weights matrix will then have the dimension 'number of individual x number of zone'. So, 'weight(i,j)' corresponds
-to the weight of the individual 'i' in the zone 'j'. For the zone 'z', we will adapt the weight matrix to
-each constraint 'c'.This matrix is initialized with a full matrix of 1 and then, for each step 't',
-the formula can be expressed as:
-
-```{r, echo=FALSE}
 #(Dumont,2014) Sorry, I didn't manage to write it in a pretty way with a real fraction and sum...
+
+# Such as with the example of SimpleWorld, in each application have a matrix `ind` containing the 
+# categorical value of each individual. `ind` is a two dimensional array (a matrix) in which each row represents an individual and 
+# each column a variable. The value of the cell `ind(i,j)` is therefore the category of the individual `i` for the
+# variable `j`. A second array containing the constraining count data `cons` can, for the purpose of explaining the theory, be
+# expressed in 3 dimensions, which we will label `cons_t`: `cons_t(i,j,k)` is the number of individuals corresponding to the marginal 
+# for the zone 'i', in the variable 'j' for the category 'k'. For example, 'i' could be a municipality, 'j' the gender and
+# 'k' the female. So, element '(i,j,k)' is the total number of woman in this municipality according to the constraint data.
+# 
+# The IPF algorithm will proceed zone per zone. For each zone, each individual will have a weight of representativity of the
+# zone. The weights matrix will then have the dimension 'number of individual x number of zone'. So, 'weight(i,j)' corresponds
+# to the weight of the individual 'i' in the zone 'j'. For the zone 'z', we will adapt the weight matrix to
+# each constraint 'c'.This matrix is initialized with a full matrix of 1 and then, for each step 't',
+# the formula can be expressed as:
+
+
+# $$ weight(i,z,t+1) = weight(i,z,t) * \frac{consTheory(z,c,ind(i,c))}{ \sum_{j=1}^#indiv weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
+    
+# where the 'I(x)' function is the indicator function which value is 1 if x is true and 0 otherwise. We can see that 
+# 'ind(i,c)' is the category of the individual 'i' for the variable 'c'. So, the denominator corresponds to the
+# sum of the actual weights of all individuals having the same category in this variable as 'i'. We simply redistribue the 
+# weights so that the data follows the constraint concerning this variable.
 ```
-
-$$ weight(i,z,t+1)=weight(i,z,t)*\frac{consTheory(z,c,ind(i,c))}{ \sum_{j=1}^#indiv weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
-
-where the 'I(x)' function is the indicator function which value is 1 if x is true and 0 otherwise. We can see that 
-'ind(i,c)' is the category of the individual 'i' for the variable 'c'. So, the denominator corresponds to the
-sum of the actual weights of all individuals having the same category in this variable as 'i'. We simply redistribue the 
-weights so that the data follows the constraint concerning this variable.
 
 ```{r, echo=FALSE}
 #(Dumont,2014) I wanted to put here the answer for the example, I have it on my paper, but I didn't manage to
@@ -126,7 +224,7 @@ weights so that the data follows the constraint concerning this variable.
 # fix theoritically the weight for the first iteration and then we will verify that the R code fit to the theory
 ```
 
-## A reweighting method : IPF in R {#IpfinR}
+## IPF in R {#IpfinR}
 
 In the subsequent examples, we use IPF to allocate individuals to zones
 in SimpleWorld, using the data loaded in
@@ -300,7 +398,7 @@ with this age in the individual-level survey dataset. This explains why the
 weights allocated to these individuals is 4: 8 divided by 2 = 4.
 
 So far we have only constrained by age. This results in aggregate-level results
-that fit the age constraint but not the sex constraint (figure 5.1). The reason
+that fit the age constraint but not the sex constraint (figure 5.2). The reason
 for this should be obvious: weights are selected such that
 the aggregated individual-level data fits the age constraint perfectly, but
 no account is taken of the sex constraint. This is why IPF must constrain for
@@ -331,7 +429,7 @@ ind_agg2[i, ] <- colSums(ind_cat * weights1[, i] * weights2[, i])
 
 Note that even after constraining by age and sex, there
 is still not a perfect fit between observed and simulated cell values
-(figure 5.1). The simulated cell counts for the age categories are far from
+(figure 5.2). The simulated cell counts for the age categories are far from
 the observed, whilst the cell counts for the age categories fit perfectly.
 On the other hand, after constraining by age *and* sex, the fit is still not
 perfect. This time the age categories do not fit perfectly, whilst the sex
@@ -375,7 +473,7 @@ qplot(Observed, Simulated, data = df, shape = Category, alpha = 0.5) +
   scale_alpha(guide = F) +
   scale_shape_manual(values = c(1,11,2,12)) +
   theme_bw()
-
+# ggsave("figures/fit-obs-sim-simple-5.png")
 # Attempt 2: do it with reshape2
 # library(reshape2)
 # melt(cons)
@@ -422,10 +520,10 @@ ipfp(cons[1,], t(ind_cat), rep(1, nrow(ind)), maxit = 20, v = T)
 
 ```
 ## iteration 0:   0.141421
-## iteration 1:    0.00367328
-## iteration 2:  9.54727e-05
+## iteration 1:   0.00367328
+## iteration 2:   9.54727e-05
 ## ...
-## iteration 9:  4.96507e-16
+## iteration 9:   4.96507e-16
 ## iteration 10:	4.96507e-16
 ```
 
@@ -528,10 +626,190 @@ Clearly the final weights after 3 iterations of IPF represent the constraint
 variables well, but do not match perfectly except in the second constraint. This shows the importance of
 considering number of iterations in the reweighting stage --- too many iterations
 can be wasteful, too few may result in poor results. To reiterate,
-20 iterations of IPF should be sufficient in most cases for the results
+20 iterations of IPF are sufficient in most cases for the results
 to converge towards their final level of fit. 
 More sophisticated ways of evaluating model fit are
 presented in Section \ref{svalidation}.
+As mentioned at the beginning of this chapter there are alternative methods
+for allocating individuals to zones. These are discussed in a subsequent section
+[](#alternative-reweighting)
+.
+
+For some applications, fractional weight matrices are sufficient for analysis.
+Often, however, integer weights are required. To estimate the individual-level
+variability in target variables such as income, or for agent-based modelling
+applications, a full spatial microdataset, composed of whole individuals is
+required. For this, the fractional weights must be integerised in a process
+known as integerisation (Lovelace and Ballas, 2013). This is the subject of
+the next section.
+
+
+```{r, echo=FALSE}
+# TODO (RL): cross reference image of CO vs reweighting approaches
+```
+
+## Integerisation {#sintegerisation}
+
+Integerisation is the process by which a vector of real numbers
+is converted into a vector of integers corresponding to the
+individuals present in synthetic spatial microdata.
+The length of the new vector must equal the population of the zone
+in question and individuals with high weights must be sampled
+proportionally more frequently than those with
+low weights for the operation to be effective.
+The following example illustrates how the process,
+when seen as a function called $int$ would work
+on a vector of 3 weights:
+
+$$w_1 = (0.333, 0.667, 3)$$
+
+$$int(w_1) = (2, 3, 3, 3)$$
+
+This result was obtained by calculating the sum of the weights (4, which
+represents the total population of the zone) and sampling from these
+until the total population is reached. In this case individual 2 is selected
+once as they have a weight approaching 1, individual 3 was replicated
+(*cloned*) three times and individual 1 does not appear in the integerised
+dataset at all, as it has a low weight. In this case the outcome is straightforward
+because the numbers are small and simple. But what about in less clear-cut cases,
+such as $w_2 = (1.333, 1.333, 1.333)$? What is needed is an algorithm to undertake this
+process of *integerisation* in a systematic way to maximise the fit between
+the synthetic and constraint data for each zone.
+
+In fact there are a number of integerisation strategies available.
+Lovelace and Ballas (2012) tested 5 of these and found that probabilistic
+integerisation methods consistently outperformed deterministic rivals.
+The details of these algorithms are described in the aforementioned paper
+and code is provided in the Supplementary Information. For the purposes of
+this course we will create a function to undertake the simplest of these,
+*proportional probabilities*:
+
+```{r}
+int_pp <- function(x){
+  sample(length(x), size = round(sum(x)), prob = x, replace = T)
+}
+```
+
+To test this function let's try it on the vectors of length 3 described in
+code:
+
+```{r}
+set.seed(0)
+int_pp(x = c(0.333, 0.667, 3))
+int_pp(x = c(1.333, 1.333, 1.333))
+```
+
+The first result was the same as that obtained through intuition; the second
+result represented individual 1 being clones three times, plus one instance of individual 2. This is
+not intuitive: one would expect at least one of each individual given that they all
+have the same weight.
+
+An issue with the
+*proportional probabilities* (PP) strategy is that completely unrepresentative
+combinations of individuals have a non-zero probability of being sampled: the
+method will output $(1, 1, 1, 1)$ once in every 21 thousand runs for $w_1$ and
+once every $81$ runs for $w_2$, the same probability as for all other 81 ($3^4$)
+permutations.
+
+To overcome this issue Lovelace and Ballas (2012) developed a method which
+ensures that any individual with a weight above 1 would be sampled at least once,
+making the result $(1, 1, 1, 1)$ impossible in both cases.  This method is
+*truncate, replicate, sample* (TRS) integerisation:
+
+```{r}
+int_trs <- function(x){
+  truncated <- which(x >= 1)
+  replicated <- rep(truncated, floor(x[truncated]))
+  r <- x - floor(x)
+  def <- round(sum(x)) - length(replicated) # deficit population
+  if(def == 0){
+    out <- replicated
+  } else {
+    out <- c(replicated,
+      sample(length(x), size = def, prob = r, replace = FALSE))
+  }
+  out
+}
+```
+
+To see how this new integerisation method and associated R function
+performed, we will run it on the same input vectors:
+
+```{r}
+int_trs(c(0.333, 0.667, 3))
+int_trs(c(1.333, 1.333, 1.333))
+```
+
+The range of possible outcomes is smaller using the TRS technique; the fit
+between the resulting microdata and the aggregate constraints will tend to be
+higher. Thus we use the TRS methodology, implemented through the function
+`int_trs`, for integerising the weights generated by IPF throughout the majority
+of this book.
+
+Let's use TRS to
+generate spatial microdata for SimpleWorld.  Remember, we already have generated
+the weight matrix `weights`.  The only challenge is to save the vector of
+sampled individual id numbers, alongside the zone number, into a single object
+from which the attributes of these individuals can be recovered. Two strategies
+for doing this are presented in the code below:
+
+```{r}
+# Method 1: using a for loop
+ints_df <- NULL
+for(i in 1:nrow(cons)){
+  ints <- int_trs(weights[, i])
+  ints_df <- rbind(ints_df, data.frame(id = ints, zone = i))
+}
+
+# Method 2: using apply
+ints <- unlist(apply(weights, 2, int_trs)) # integerised result
+ints_df <- data.frame(id = ints,
+  zone = rep(1:nrow(cons), colSums(weights)))
+```
+
+Both methods yield the same result for `ints_df`. The only differences being
+that Method 1 is perhaps more explicit and easier to understand whilst Method 2
+is more concise.
+
+## Population synthesis
+
+The final remaining step is to re-allocate the attribute data from the
+individual-level data back into `ints_df`, in a process we label
+*population synthesis*, because it creates a synthetic population.
+(Be aware that this term is used by transport modellers to represent
+the entire process of spatial microdata generation.)
+To do this we use the `inner_join`
+function from the recently released **dplyr** package.^[The functions `merge`
+from the R's base package and `join` from the **plyr** provide other ways of
+undertaking this step. `inner_join` is used in place of `merge` because `merge`
+does not maintain row order.  `join` generates the same result, but is slower,
+hence the use of `inner_join` from the recently released and powerful **dplyr**
+package.]
+ Assuming **dplyr** is loaded --- with `library(plyr)`
+--- one can read more about join by entering `?inner_join` in R.
+
+```{r, message=FALSE}
+library(dplyr) # use install.packages(dplyr) if not installed
+ints_df <- inner_join(ints_df, ind_orig)
+```
+
+`ints_df` represents the final spatial microdataset, representing the entirety
+of SimpleWorld's population of 33 (this can be confirmed with `nrow(ints_df)`).
+To select individuals from one zone only is simple using R's subsetting
+notation. To select all individuals generated for zone 2, for example, the
+following code is used. Note that this is the same as the output generated in
+Table 5 at the end of the SimpleWorld chapter --- we have successfully modelled
+the inhabitants of a fictional planet, including income!
+
+```{r}
+ints_df[ints_df$zone == 2, ]
+```
+
+```{r, echo=FALSE}
+# library(knitr)
+# kable(ints_df[ints_df$zone == 2,], row.names = FALSE)
+```
+
 
 ## Alternative reweighting algorithms {#alternative-reweighting}
 
@@ -785,166 +1063,3 @@ introducing the subject based on the Flexible Modelling Framework (FMF)
 Java program. It is possible to generate integer spatial microdata using IPF, however,
 using a technique we refer to imaginatively as integerisation.
 This is the topic of the next section.
-
-## Integerisation {#sintegerisation}
-
-Integerisation is the process by which a vector of real numbers
-is converted into a vector of integers corresponding to the
-individuals present in synthetic spatial microdata.
-The length of the new vector must equal the population of the zone
-in question and individuals with high weights must be sampled
-proportionally more frequently than those with
-low weights for the operation to be effective.
-The following example illustrates how the process,
-when seen as a function called $int$ would work
-on a vector of 3 weights:
-
-$$w_1 = (0.333, 0.667, 3)$$
-
-$$int(w_1) = (2, 3, 3, 3)$$
-
-This result was obtained by calculating the sum of the weights (4, which
-represents the total population of the zone) and sampling from these
-until the total population is reached. In this case individual 2 is selected
-once as they have a weight approaching 1, individual 3 was replicated
-(*cloned*) three times and individual 1 does not appear in the integerised
-dataset at all, as it has a low weight. In this case the outcome is straightforward
-because the numbers are small and simple. But what about in less clear-cut cases,
-such as $w_2 = (1.333, 1.333, 1.333)$? What is needed is an algorithm to undertake this
-process of *integerisation* in a systematic way to maximise the fit between
-the synthetic and constraint data for each zone.
-
-In fact there are a number of integerisation strategies available.
-Lovelace and Ballas (2012) tested 5 of these and found that probabilistic
-integerisation methods consistently outperformed deterministic rivals.
-The details of these algorithms are described in the aforementioned paper
-and code is provided in the Supplementary Information. For the purposes of
-this course we will create a function to undertake the simplest of these,
-*proportional probabilities*:
-
-```{r}
-int_pp <- function(x){
-  sample(length(x), size = round(sum(x)), prob = x, replace = T)
-}
-```
-
-To test this function let's try it on the vectors of length 3 described in
-code:
-
-```{r}
-set.seed(0)
-int_pp(x = c(0.333, 0.667, 3))
-int_pp(x = c(1.333, 1.333, 1.333))
-```
-
-The first result was the same as that obtained through intuition; the second
-result represented individual 1 being clones three times, plus one instance of individual 2. This is
-not intuitive: one would expect at least one of each individual given that they all
-have the same weight.
-
-It is important to emphasise that the results will change each time the code is
-run, because `sample` is a probabilistic (its output depends on a random number
-generator): changing the value inside the brackets proceeding `set.seed`
-results in many other combinations of individuals being selected --- test this
-out in your code.  This happens because the method relies on *pseudo random
-numbers* to select values probabilistically and `set.seed` specifies where the
-random number sequence should begin, ensuring repeat-ability. An issue with the
-*proportional probabilities* (PP) strategy is that completely unrepresentative
-combinations of individuals have a non-zero probability of being sampled: the
-method will output $(1, 1, 1, 1)$ once in every 21 thousand runs for $w_1$ and
-once every $81$ runs for $w_2$, the same probability as for all other 81 ($3^4$)
-permutations.
-
-To overcome this issue Lovelace and Ballas (2012) developed a method which
-ensures that any individual with a weight above 1 would be sampled at least once,
-making the result $(1, 1, 1, 1)$ impossible in both cases.  This method is
-*truncate, replicate, sample* (TRS) integerisation:
-
-```{r}
-int_trs <- function(x){
-  truncated <- which(x >= 1)
-  replicated <- rep(truncated, floor(x[truncated]))
-  r <- x - floor(x)
-  def <- round(sum(x)) - length(replicated) # deficit population
-  if(def == 0){
-    out <- replicated
-  } else {
-    out <- c(replicated,
-      sample(length(x), size = def, prob = r, replace = FALSE))
-  }
-  out
-}
-```
-
-To see how this new integerisation method and associated R function
-performed, we will run it on the same input vectors:
-
-```{r}
-int_trs(c(0.333, 0.667, 3))
-int_trs(c(1.333, 1.333, 1.333))
-```
-
-The range of possible outcomes is smaller using the TRS technique; the fit
-between the resulting microdata and the aggregate constraints will tend to be
-higher. Thus we use the TRS methodology, implemented through the function
-`int_trs`, for integerising the weights generated by IPF throughout the majority
-of this book.
-
-Let's use TRS to
-generate spatial microdata for SimpleWorld.  Remember, we already have generated
-the weight matrix `weights`.  The only challenge is to save the vector of
-sampled individual id numbers, alongside the zone number, into a single object
-from which the attributes of these individuals can be recovered. Two strategies
-for doing this are presented in the code below:
-
-```{r}
-# Method 1: using a for loop
-ints_df <- NULL
-for(i in 1:nrow(cons)){
-  ints <- int_trs(weights[, i])
-  ints_df <- rbind(ints_df, data.frame(id = ints, zone = i))
-}
-
-# Method 2: using apply
-ints <- unlist(apply(weights, 2, int_trs)) # integerised result
-ints_df <- data.frame(id = ints,
-  zone = rep(1:nrow(cons), colSums(weights)))
-```
-
-Both methods yield the same result for `ints_df`. The only differences being
-that Method 1 is perhaps more explicit and easier to understand whilst Method 2
-is more concise.
-
-The final remaining step is to re-allocate the attribute data from the
-individual-level data back into `ints_df`. To do this we use the `inner_join`
-function from the recently released **dplyr** package.^[The functions `merge`
-from the R's base package and `join` from the **plyr** provide other ways of
-undertaking this step. `inner_join` is used in place of `merge` because `merge`
-does not maintain row order.  `join` generates the same result, but is slower,
-hence the use of `inner_join` from the recently released and powerful **dplyr**
-package.]
- Assuming **dplyr** is loaded --- with `library(plyr)`
---- one can read more about join by entering `?inner_join` in R.
-
-```{r, message=FALSE}
-ind_full <- read.csv("data/SimpleWorld/ind-full.csv")
-library(dplyr) # use install.packages(dplyr) if not installed
-ints_df <- inner_join(ints_df, ind_full)
-```
-
-`ints_df` represents the final spatial microdataset, representing the entirety
-of SimpleWorld's population of 33 (this can be confirmed with `nrow(ints_df)`).
-To select individuals from one zone only is simple using R's subsetting
-notation. To select all individuals generated for zone 2, for example, the
-following code is used. Note that this is the same as the output generated in
-Table 5 at the end of the SimpleWorld chapter --- we have successfully modelled
-the inhabitants of a fictional planet, including income!
-
-```{r}
-ints_df[ints_df$zone == 2, ]
-```
-
-```{r, echo=FALSE}
-# library(knitr)
-# kable(ints_df[ints_df$zone == 2,], row.names = FALSE)
-```
