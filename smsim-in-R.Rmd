@@ -70,7 +70,7 @@ a representative population for each zone.^[Fienberg (1970) provides
 a geometrical proof that IPF converges to a single result, in the absence
 of *empty cells*.]
 
-## Reweighting algorithms {#KindMS}
+## Weighting algorithms {#weighting}
 
 A wide range of methods can be used to allocate individuals to zones for
 spatial microsimulation. As with the majority of statistical 
