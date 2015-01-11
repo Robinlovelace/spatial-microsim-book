@@ -153,7 +153,8 @@ similar, that will allow to mix some individual to create a new one (mutation). 
 if this solution has already been developed, it is just a proposition and to inform the reader that new process can
 still appear in the future.
 
-## IPF in theory {#IpfinTh}
+## Iterative Proportional Fitting
+### IPF in theory {#IpfinTh}
 
 The most widely used and mature *deterministic* method to allocate individuals
 to zones is iterative proportional fitting (IPF).
@@ -210,7 +211,7 @@ context of transport modelling, by Pritchard and Miller (2012).
 # the formula can be expressed as:
 
 
-# $$ weight(i,z,t+1) = weight(i,z,t) * \frac{consTheory(z,c,ind(i,c))}{ \sum_{j=1}^#indiv weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
+# $$ weight(i,z,t+1) = weight(i,z,t) * \frac{consTheory(z,c,ind(i,c))}{ \sum_{j=1}^{#indiv} weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
     
 # where the 'I(x)' function is the indicator function which value is 1 if x is true and 0 otherwise. We can see that 
 # 'ind(i,c)' is the category of the individual 'i' for the variable 'c'. So, the denominator corresponds to the
@@ -224,7 +225,7 @@ context of transport modelling, by Pritchard and Miller (2012).
 # fix theoritically the weight for the first iteration and then we will verify that the R code fit to the theory
 ```
 
-## IPF in R {#IpfinR}
+### IPF in R {#IpfinR}
 
 In the subsequent examples, we use IPF to allocate individuals to zones
 in SimpleWorld, using the data loaded in
@@ -256,10 +257,10 @@ a more intuitive name.
 
 ```{r}
 # Create intuitiv names for the totals
-NbZones <- nrow(cons) #number of zones
-NbIndiv <- nrow(ind) #number of individuals
-NbCatAge <-ncol(con_age) #number of different categories for the var "age"
-NbCatSex<- ncol(con_sex)  #number of different categories for the var "sex"
+NbZones <- nrow(cons) # number of zones
+NbIndiv <- nrow(ind) # number of individuals
+NbCatAge <-ncol(con_age) # number of categories of "age"
+NbCatSex <-ncol(con_sex) # number of categories of "sex"
 ```
 
 The earlier step before to perform to an algorithm is to initialize each needed object.
@@ -297,7 +298,8 @@ previous chapter.
 
 
 ```{r}
-# Assign values to the previously created weight matrix to adapt to age constraint
+# Assign values to the previously created weight matrix 
+# to adapt to age constraint
 for(j in 1:NbZones){
   for(i in 1:NbCatAge){
 weights1[ind_cat[, i] == 1, j] <- con_age[j, i] / ind_agg0[j, i]
@@ -306,7 +308,7 @@ print(weights1)
   }
 ```
 
-The above code updates the weight matrix by dividing each cell in the
+The above code updates the weight matrix by dividing each cell in
 the census constraint (`con_age`) by the equivalent cell
 aggregated version of the individual level data.
 The weight matrix is critical to the spatial microsimulation procedure because
@@ -317,14 +319,33 @@ to see the weight allocated for individual 3 for each for the 3 zones, you
 need to look at the 3rd column of the weight matrix: `weights1[3, ]`. 
 
 Note that we asked R to write the resulting matrix after the completion of each zone.
-So, we can see that individual 3 (who's attributes can be viewed by entering `ind[3, ]`)
+As said before, the algorithm proceeds zone per zone and each column of the matrix
+corresponds to a zone. This explains why the matrix is filled in per column. We can now 
+verify that the weights correspond to the application of the theory seen before.
+For the first zone, the age constraint was to have 8 people under 50 years old and 
+4 over this age. The first individual is a man of 59 years old, so over 50.
+To determine the weight of this person inside the zone 1, we multiply the 
+actual weight, 1, by a ratio with a numerator corresponding to the
+number of person in this category of age for the constraint, here 4,
+and a denominator equal to the sum of the weights of the individual 
+having the same age category. Here, there are 3 individuals of more 
+than 50 years old and all weights are 1 for the moment. So, the new weight
+is $$ 1 * \frac{4}{1+1+1}=1.33333$$.
+We can verify the other weights with a similar reasoning. Now that
+we explained the whole process under IPF, we can understand the origin
+of the name 'Iterative Proportional Fitting'.
+
+Thanks to the weight matrix, we can see that individual 3 
+(who's attributes can be viewed by entering `ind[3, ]`)
 is young and has a comparatively low weight of 1 for zone two. Intuitively
 this makes sense because zone 3 has only 2 young adult inhabitants (see
 the result of `cons[2,]`) but 8 older inhabitants. The reweighting stage is
 making sense. Note also that the weights generated are fractional;
 see [](#sintegerisation) for methods of converting fractional weights into
 integer weights to generate a synthetic small-area population ready for
-agent-based modelling applications. The next step in IPF, however, is to
+agent-based modelling applications. 
+
+The next step in IPF, however, is to
 re-aggregate the results from individual-level data after they have been
 reweighted. For the first zone, the weights of each individual are in the
 first column of the weight matrix. Moreover, the characteristics of each
@@ -417,12 +438,26 @@ weights2[ind_cat[, i] == 1, j] <- cons[j , i] / ind_agg1[j, i]
 ```
 
 Again, the aggregate values need to be calculated in a `for` loop over every
-zone. Note that the final value is calculated by multiplying by
+zone. After the first constraint fitting, the weights for zone 1 was:
+$$(\frac{4}{3},\frac{4}{3},4,\frac{4}{3},4) $$
+We can explain theoretically explain the weights for zone 1 after the
+second fitting. For the first individual, its actual weight is $\frac{4}{3}$
+and he is a male. In the zone one, the constraint is to have 6 men. The 
+three first individuals are men, so the new weight for this person in this
+zone is $$weights2[1,1]=\frac{4}{3}*\frac{6}{\frac{4}{3}+\frac{4}{3}+4}=\frac{6}{5}=1.2 $$
+
+With an analogous reasoning, we can find all weights in *weights2*:
+
+```{r}
+weights2
+```
+
+Note that the final value is calculated by multiplying by
 `weights1` *and* `weights2`: the final weight is calculated as the product
 of all the weight matrices calculated from all the constraints.
 
 ```{r}
-for(i in 1:nrow(cons)){
+for(i in 1:NbZones){
 ind_agg2[i, ] <- colSums(ind_cat * weights1[, i] * weights2[, i])
 }
 ```
@@ -490,17 +525,17 @@ use in the next section an alternative method that uses the **ipfp** package.
 # Possibly more on IPF here. For now, press on
 ```
 
-## Reweighting with **ipfp** {#ipfp}
+### Reweighting with **ipfp** {#ipfp}
 
 IPF runs much faster and with less code using the
 **ipfp** package than in pure R. The `ipfp` function runs the IPF algorithm
 in the C language, taking aggregate constraints, individual level
-data and and an initial weight vector (`x0`) as inputs:
+data and an initial weight vector (`x0`) as inputs:
 
 ```{r}
 library(ipfp) # load ipfp library after install.packages("ipfp")
 cons <- apply(cons, 2, as.numeric) # to 1d numeric data type
-ipfp(cons[1,], t(ind_cat), x0 = rep(1, nrow(ind))) # run IPF
+ipfp(cons[1,], t(ind_cat), x0 = rep(1, NbIndiv)) # run IPF
 ```
 
 It is impressive that the entire IPF process, which takes dozens of lines of
@@ -508,14 +543,21 @@ code in pure R can been condensed into two lines: one to
 convert the input constraint dataset to `numeric`^[The integer data type fails
 because C requires `numeric` data to be converted into its *floating point*
 data class.]
-and one to perform the IPF operation itself. Note also that although
+and one to perform the IPF operation itself. The whole procedure is hiding
+behind the function that is created in C and well optimised. So, it is like a 
+magic box where you put your data and that returns the results. This is a good
+way to execute the algorithm, but you have to pay attention to well understand 
+the format of the input argument to use the function correctly. To be sure, 
+type on R *help('ipfp')*.
+
+Note that although
 we did not specify how many iterations to run, the above command
 ran the default of `maxit = 1000` iterations, despite convergence happening after
 10 iterations. This can be seen by specifying the `maxit` and `verbose` arguments
 (the latter of which can be referred to lazily as `v`) in `ipfp`, as illustrated below (only the first line of R output is shown):
 
 ```{r, eval=FALSE}
-ipfp(cons[1,], t(ind_cat), rep(1, nrow(ind)), maxit = 20, v = T)
+ipfp(cons[1,], t(ind_cat), rep(1, NbIndiv), maxit = 20, v = T)
 ```
 
 ```
@@ -524,8 +566,18 @@ ipfp(cons[1,], t(ind_cat), rep(1, nrow(ind)), maxit = 20, v = T)
 ## iteration 2:   9.54727e-05
 ## ...
 ## iteration 9:   4.96507e-16
-## iteration 10:	4.96507e-16
+## iteration 10:  4.96507e-16
 ```
+
+The `maxit` argument specifies to the function the maximum number of iterations and `verbose` set to True asks
+the function to write for each iteration the convergence rate. This corresponds to the distance between
+the previous and actual weight matrices. When the two matrix are equal, that means that the algorithm has
+converged and the distance will approach 0. Note that when calculating, the computer has to make some approximations
+(for example, when saving $\frac{4}{3}$, the computer can not save the infite of decimals and truncates the number).
+Due to this, we never reach a perfect 0, but when we have a very little number, we can consider it enough close to 0.
+Usually, we use the precision of the computer that is of order $10^{-16}$ (on R, you can display the precision of the
+machine by typing `.Machine$double.eps`). Remark that, instead of using `maxit` as stopping condition, 
+we can use the `tol` argument which is a condition on the distance between two consecutive weight matrices.
 
 Notice also that a *transposed* (via the `t()` function) version of the individual-level
 data (`ind_cat`) is used in `ipfp`
@@ -543,11 +595,11 @@ We will call this object `x0` as its argument name representing
 the starting point of the weight estimates in `ipfp`:
 
 ```{r}
-x0 <- rep(1, nrow(ind)) # save the initial vector
+x0 <- rep(1, NbIndiv) # save the initial vector
 ```
 
 To extend this process to all three zones we can wrap the line beginning
-`ipfp(...)` inside a `for` loop, saving the results each time into the
+`ipfp(...)` inside a `for` loop, saving the results each time into a
 weight variable we created earlier:
 
 ```{r}
@@ -583,6 +635,16 @@ To make the code run faster on large datasets, a parallel version of
 `apply` called `parApply` can be used. This is also
 tested in 'parallel-ipfp.R'.
 
+For your personal applications, take care of using `maxit` alone. Indeed, it is
+impossible to predict the number of iterations necessary for all applications.
+So, if your argument is to big you will needlessly lose time, but if it is
+to small, you will have a result that has not converge! However, using
+`tol` alone is also hasardous. Indeed, if you have iteratively the same
+matrices, but the approximations on the distance is a number bigger than 
+your argument, the algorithm will continue. That's why we use both togeher and
+it stops either if the convergence is achieve nor the maximum number of iterations
+is reached. By defaults, `maxit` is 1000 and `tol` is `.Machine$double.eps`. 
+
 ```{r, echo=FALSE, eval=FALSE}
 # Also discuss what happens when you get a huge dataset, from Stephen's dataset
 ```
@@ -613,16 +675,16 @@ This is a good result: the constraints perfectly match the results
 generated using ipf, at least for the sample. To check that this
 is due to the `ipfp` algorithm improving the weights with each iteration,
 let us analyse the aggregate results generated from the alternative
-set of weights, generated with only 3 iterations of IPF:
+set of weights, generated with only 2 iterations of IPF:
 
 ```{r}
 # Update ind_agg values, keeping col names (note '[]')
 ind_agg[] <- t(apply(weights_maxit_2, MARGIN = 2, 
   FUN = function(x) colSums(x * ind_cat)))
-ind_agg[1:2, 1:3]
+ind_agg[1:2, 1:4]
 ```
 
-Clearly the final weights after 3 iterations of IPF represent the constraint
+Clearly the final weights after 2 iterations of IPF represent the constraint
 variables well, but do not match perfectly except in the second constraint. This shows the importance of
 considering number of iterations in the reweighting stage --- too many iterations
 can be wasteful, too few may result in poor results. To reiterate,
@@ -636,10 +698,13 @@ for allocating individuals to zones. These are discussed in a subsequent section
 .
 
 For some applications, fractional weight matrices are sufficient for analysis.
-Often, however, integer weights are required. To estimate the individual-level
+Often, however, an individual level resulting dataset is required. To estimate the individual-level
 variability in target variables such as income, or for agent-based modelling
 applications, a full spatial microdataset, composed of whole individuals is
-required. For this, the fractional weights must be integerised in a process
+required. For this, we have to possibily. First, we can consider the weights as
+probability and randomly chose the indivuals in a distribution corresponding to the weights.
+Secondly, we can consider the weights as the number of individual in this category and
+the fractional weights must be integerised in a process
 known as integerisation (Lovelace and Ballas, 2013). This is the subject of
 the next section.
 
@@ -648,7 +713,7 @@ the next section.
 # TODO (RL): cross reference image of CO vs reweighting approaches
 ```
 
-## Integerisation {#sintegerisation}
+### Integerisation {#sintegerisation}
 
 Integerisation is the process by which a vector of real numbers
 is converted into a vector of integers corresponding to the
@@ -771,7 +836,7 @@ Both methods yield the same result for `ints_df`. The only differences being
 that Method 1 is perhaps more explicit and easier to understand whilst Method 2
 is more concise.
 
-## Population synthesis
+### Population synthesis
 
 The final remaining step is to re-allocate the attribute data from the
 individual-level data back into `ints_df`, in a process we label
@@ -811,7 +876,10 @@ ints_df[ints_df$zone == 2, ]
 ```
 
 
-## Alternative reweighting algorithms {#alternative-reweighting}
+
+
+
+## The GREGWT algorithm
 
 As described in the Introduction, IPF is just one strategy for obtaining
 a spatial microdataset. However, researchers (myself included) have tended to
@@ -826,8 +894,6 @@ datasets, are used. Above all, there is no consensus about which methods
 are 'best' for different applications, so it is worth experimenting to identify
 which method is most suitable for each application.
 
-### The GREGWT algorithm
-
 An interesting alternative to IPF method is the GREGWT algorithm.
 First implemented in the SAS language by the Statistical Service area of
 the Australian Bureau of Statistics (ABS), the algorithm reweighs a set of
@@ -836,7 +902,8 @@ Generalized Regression Weighting procedure (hence the name GREGWT).
 The resulting weights ensure that, when aggregated, the individuals selected
 for each small area fit the constraint variables. Like IPF, the GREGWT
 results in non-integer weights, meaning some kind of integerisation 
-algorithm will be needed if the output is to be used in ABM. The macro
+algorithm will be needed to obtain a final individual-level population, so
+for example, if the output is to be used in ABM. The macro
 developed by ABS adds a weight restriction in their GREGWT macros to ensure
 positive weights. The ABS uses
 the Linear Truncated Method described in Singh and Mohl (1996) to enforce these
@@ -855,39 +922,79 @@ Bell (1999). An R implementation of GREGWT, has been
 created by Esteban Muñoz, and can be found in the GitLab repository
 [mikrosim](https://gitlab.com/emunozh/mikrosim).
 
-### Spatial microsimulation as an objective function
+## Spatial microsimulation as an optimization problem
 
-In general terms, an *objective function* is a formula that processes a series of
-input variables ($x$) using a number of parameters ($par$) to generate
-a single numeric output:
+In general terms, an *optimization problem* consists in an function that has to 
+be optimized, called *objective function*. This function is not necessary defined 
+in the whole possible domain. So, the optimization problem has also constraints on
+the arguments of the function. So, $x$ can be a vector $(x_1,x_2,..,x_n)$, so the objective function 
+can have several arguments. The problem consists in finding arguments $x$ respecting
+the constraints and that minimise the objective function. The expression of this
+kind of problems is:
 
-$$ \mbox{minimise } f_0(x) $$
+$$\left\{
+\begin{array}{l}
+  min \hspace{0.2cm}f_0(x_1,x_2,..,x_n) \\
+  \\
+  s.c. \hspace{0.2cm} f_i(x) \leq par_i,\  i = 1, ..., m
+\end{array}
+\right.$$
 
-$$ \mbox{subject to } f_i(x) \leq par_i,\  i = 1, ..., m $$
+The parameters $par_i$ are defined and do not change. They determine the feasible
+set for the variables. Indeed, for example, in aircraft, we want to minimise the
+weight of the airplane, that depends on the shape (so, if it is an hypercube, all
+dimensions of it) and the chose material. But, we have some constraint, because the
+airplane has to resist to the pressure in the atmosphere and to be big enough to 
+transport people. So, we search the shape and material (to include in $x$) that minimise
+the weight ($f_0$ which is a single value depending on $x$) with the constraint that 
+the volume (depending on the shape) has to be bigger than a fixed value ($par_1$) and 
+the maximum force the airplane resists (depending on shape and material) 
+must be bigger than the applicated force in the atmosphere ($par_2$). So, $par_i$ 
+define a domain on which all value can evolve and then, we search inside this domain
+the combination of $x_i$ that minimise the weight.
 
-The goal of objective function $f_0$ such as that illustrated above is to
-enable the selection of the parameters $par_i$ to $par_m$
-which minimize the result. The values that parameters may take are constrained
-by *constraint functions* ($f_i$) or fixed values (Boyd and
-Vandenberghe, 2009). The case of spatial microsimulation has relatively
+The case of spatial microsimulation has relatively
 simple constraints: they are all positive or zero.
 Seeing spatial microsimulation as an objective function
 allows solutions to be found using established
 techniques of *constrained optimisation*.
 The main advantage of this re-framing
 is that it allows any optimisation algorithm to perform the reweighting.
+
+So, to use optimization problem, we have to define the problem and then, a lot of 
+algorithm are already coded to find the result to the optimization problems. 
+Intuitively, we search the number of occurencies we want of each individual to take
+form the final population that fits the best the constraints. So, we want to 
+find a vector of parameters `par` that will multiply the `ind` vector and we want the result
+of this multiplication to be as closer as possible to the constraints.
+
+As for the IPF proposition, we will proceed zone per zone. So, our 
+optimization problem for the first zone can be written as follows:
+
+$$\left\{
+\begin{array}{l}
+  min \hspace{0.2cm} f(par_1,..,par_m) = DIST(sim, cons[1,]) \\
+  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(ind\_cat * par)\\
+  \\
+  s.c. \hspace{0.2cm} par_i \geq 0,\  i = 1, ..., m
+\end{array}
+\right.$$
+
 Key to this is interpreting individual weights as parameters (the vector $par$,
 of length $m$ above)
 that are iteratively modified to optimise the fit between individual and
-aggregate-level data. The measure of fit is we use in this context is
-Total Absolute Error (TAE) and the objective function
-is as follows:
+aggregate-level data. The measure of fit, so the distance, we use in this context is
+Total Absolute Error (TAE).
 
-$$\mbox{minimise }f(par) = TAE(sim, con)$$
+$$\left\{
+\begin{array}{l}
+  min \hspace{0.2cm} f(par_1,..,par_m) = TAE(sim, cons[1,]) \\
+  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(ind\_cat * par)\\
+  \\
+  s.c. \hspace{0.2cm} par_i \geq 0,\  i = 1, ..., m
+\end{array}
+\right.$$
 
-$$\mbox{where }sim = colSums(ind\_cat * par) $$
-
-$$\mbox{subject to } par \geq 0$$
 
 ```{r, echo=FALSE}
 # how to write in maths?
@@ -915,10 +1022,10 @@ illustrate the point.
 
 ### Reweighting with optim and GenSA
 
-The base R function `optim` provides a general purpose optimisation framework
+The base R function `optim` provides a general purpose optimization framework
 for numerically solving objective functions. Based on the objective function
 for spatial microsimulation described above,
-we can use any general optimisation algorithm for reweighting the
+we can use any general optimization algorithm for reweighting the
 individual-level dataset. But which to use?
 
 Different reweighting strategies are suitable in different contexts and there
@@ -926,7 +1033,7 @@ is no clear winner for every occasion. However, testing a range of
 strategy makes it clear that certain algorithms are more efficient than
 others for spatial microsimulation. Figure x demonstrates this variability
 by plotting total absolute error as a function of number of iterations for
-various optimisation algorithms available from the base function
+various optimization algorithms available from the base function
 `optim` and the **GenSA** package.
 
 ![](figures/optim-its.png)
@@ -939,7 +1046,7 @@ qplot(data = opt_res, time, fit, color = algorithm, geom="line") +
 
 Figure x shows the advantage of the IPF algorithm we have been using, which
 converges rapidly to zero error after only a few iterations.
-On the other end of the spectrum is R's default optimisation algorithm,
+On the other end of the spectrum is R's default optimization algorithm,
 the Nelder-Mead method. Although the graph shows no improvement
 from one iteration to the next, it should be stated that the algorithm
 is just 'warming up' at this stage and than each iteration is very
@@ -1007,7 +1114,7 @@ times shown.
 ![](figures/optim-time.png)
 
 
-### Combinatorial optimisation
+## Combinatorial optimisation
 
 Combinatorial optimisation is an alternative to IPF for allocating individuals
 to zones. This strategy is *probabilistic*
