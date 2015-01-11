@@ -36,13 +36,55 @@ library(grid)
 # could be the beginning of part 2 if the book's divided into parts. 
 ```
 
-This chapter focuses on the input datasets needed for spatial microsimulation.
-Correctly loading, manipulating and assessing these datasets will be critical to
-the performance of your models and the ease of modifying them to include new
+This chapter focuses on the minimum input datasets needed for the spatial
+microsimulation. We will build on the SimpleWorld example by demonstrating how
+the inputs about its inhabitants, in terms of geographical constraints and
+individual-level survey data, can be loaded and 'cleaned' in R. At the end
+of the chapter the data will be in a form that is ready for IPF or another
+algorithm to create a *weight matrix* from which a synthetic population
+--- a *spatial microdataset* --- can be generated.
+
+Correctly loading, manipulating and assessing aggregate and individual-level
+datasets will be critical to
+the performance of your models and the ease of modifying them, for example to include new
 inputs.  Fortunately R is an accomplished tool for data reformatting,
-as we shall see. The data objects loaded in the following steps also
+as we shall see. In addition to providing continuity from the previous chapter
+and an easily understood set of inputs, data loaded in the following steps also
 provide the basis for Chapter 5, in which we
 undertake spatial microsimulation.
+Of course, the datasets you use in real applications will be much larger than
+those that represent SimpleWorld, which contains only 33 individuals on the
+entire planet! 
+
+The focus of this chapter is on the methods and underlying principles
+of data preparation for spatial microsimulation and these will be the same
+regardless of the size of your datasets.
+Each usage case is different and you may have input for which the processing
+steps here are not sufficient --- if this is the case, see Wickham (2014b). However, 
+in most cases, the input datasets will be similar to the ones presented here,
+consisting of an individual-level survey dataset consisting of categorical
+variables and aggregate-level constraints containing categorical counts.
+
+Before loading the spatial microdata, you must decide on the data 
+needed for your research. Focus on "target variables" related to the research
+question will help decide on the constraint variables, as we will see
+below 
+([](#Selecting)).
+Focusing only on variables of interest will ensure you do not
+waste time thinking about and processing 
+additional variables that you will be of little use in the future.
+Regardless of the research question it is clear that the methodology depends
+on the availability of data. If the problem relates to variables that are simply
+unavailable at any level (e.g. hair length, if your research question related
+to the hairdressing industry), spatial microsimulation may be unsuitable.
+If, on the other hand, all the data is available at the geographical level
+of interest (to explore regional differences, for example, all the necessary
+data may be already available as many surveys provide course geographic
+information at the individual level). Spatial microsimulation is useful when you
+have an intermediary amount of data available: geographically aggregated count
+and a non-spatial survey.
+In any case, you should have a clear idea about the range of available
+data on the topic of interest before embarking on spatial microsimulation.
 
 ```{r, echo=FALSE}
 ## Accessing the input data
@@ -50,7 +92,11 @@ undertake spatial microsimulation.
 
 As with most spatial microsimulation models, the input consists of
 microdata --- a non-geographical individual-level dataset --- and the
-constraint table which represents a series of geographical zones.
+constraint table which represents a series of geographical zones. In some cases,
+you may have geographical information in your microdata, but not at the
+required level of detail.
+For example, you may have a variable on the province of each individual
+but need its municipality, a lower geographical level.
 The data used in this Chapter and throughout the book can be
 downloaded from the book's [GitHub repository](https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
 'Download ZIP' button to the right and extract the folder into a
@@ -58,21 +104,23 @@ sensible place on your computer, such as the Desktop.  From there, you will want
 to run R from the project's root directory: open the folder in a file browser
 and double click on `spatial-microsim-book.Rproj`.  This should cause RStudio to
 be opened at this location, with all the input data files easily accessible to R
-through *relative file paths*.
+through *relative file paths* (you must have installed the RStudio software for this stage to work --- see the Appendix).
 
 ```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded", echo=FALSE, message=FALSE}
+# todo: create tutorial on installing R and RStudio
 grid.raster(readPNG("figures/studio-basic.png"))
 ```
 
-
 To ease reproducibility of the analysis when working with real data, it is
 recommended that the process begins with a copy of the *raw* dataset on one's
-hard disc.  Rather than modifying this file, modified ('cleaned') versions
+hard disc. Rather than modifying this file, modified ('cleaned') versions
 should be saved as separate files. This ensures that after any mistakes, one can
 always recover information that otherwise could have been lost and makes the
-project fully reproducible. In this chapter, however, a relatively clean and
-very tiny dataset from SimpleWorld is used.  We will see in Chapter
-\ref{CakeMap} how to deal with larger and more messy data.  Here the focus is on the principles.
+project fully reproducible. In this chapter, a relatively clean and
+very tiny dataset from SimpleWorld is used, but we still create a backup of the
+original dataset. We will see in Chapter
+\ref{CakeMap} how to deal with larger and more messy data, where being able to
+refer to the original dataset is more important. Here the focus is on the principles.
 
 ```{r, echo=FALSE}
 # It sounds trivial, but the *precise* origin of the input data
@@ -95,7 +143,7 @@ stages:
 'Stripping down' the datasets so that they only contain the bare essential
 information will enable focus on the information that really matters. The input datasets in the example used for this chapter
 are already bare, but in real world surveys there may be literally hundreds of variables clogging up the analysis and your mind.
-It is good practice to to remove
+It is good practice to remove
 excess data at the outset. Provided you have a good workflow,
 keeping all original data files unmodified for future
 reference, it will be easy to go back and add extra variables
@@ -118,7 +166,11 @@ are variables shared between the individual and aggregate level
 datasets and can therefore be used to *constrain* the
 weights allocated to the individuals for each zone.
 If there are no shared variables between the aggregate and
-individual-level data, you cannot do spatial microsimulation.
+individual-level data, you cannot do a useful spatial microsimulation. 
+In this case, your only alternative is to consider only the
+marginal distribution of the variable and make a random selection with 
+the distribution used as a probability. However, this implicitly assumes
+that there are no correlations between the available variables.
 If there are only a few shared variables (e.g. age, sex,
 employment status), your options are limited. Increasingly,
 however, there are many linking variables to chose from
@@ -131,6 +183,7 @@ input data and constraints.
 
 ## Selecting target and constraint variables {#Selecting}
 
+
 The geographically aggregated data should be the
 first consideration when deciding on the
 input data. This is because the geographical data
@@ -141,12 +194,12 @@ allocate the individuals to different geographical zones.
 The first critical consideration for the constraint data
 is coverage: ideally close to 100% of each zone's total
 population should be included in the counts. Also, the
-survey must have been completed equally by residents in
-every geographical zone under consideration. It is important
+survey must have been completed by a number of residents  proportional to the
+total number of inhabitants in every geographical zone under consideration. It is important
 to recognise that many geographically aggregated datasets
 may be unsuitable for spatial microsimulation due to sample
 size: geographical information based on a small sample of
-a zone's populatin is not a good basis for
+a zone's population is not a good basis for
 spatial microsimulation.
 
 To take one example,
@@ -155,9 +208,14 @@ get sufficient sleep in the Australian
 state of Victoria, from the 2011 VicHealth Indicators
 [Survey](http://data.aurin.org.au/dataset?q=sleep),
 is not a suitable constraint variable.
-**Constraint variables must be integer counts**,
-not percentages, and must contain sufficient
-categories for each variable. The sleep dataset
+
+**Constraint variables should be integer counts**,
+and should contain sufficient
+categories for each variable. Ideally, each relevant
+category and cross-tabulation should be represented.
+It is unusual to have
+a baby with a high degree qualification, but it may be useful to know
+there is an absence of such individuals. The sleep dataset
 meets neither of these criteria. It is based on
 a small sample of individuals (on average 300 per
 geographic zone, less than 1% of the total population).
@@ -219,9 +277,6 @@ geographic count data. Of course, available datasets
 vary greatly from country to country so selection of
 appropriate datasets is highly context dependent.
 
-A parallel stage is to consider the individual-level datasets
-that are available. Again, if there are dataset
-
 The following considerations should inform the selection of
 individual-level microdata:
 
@@ -277,26 +332,45 @@ weights will be more finely constrained.
 A special type of
 constraint variable is **cross-tabulated** categories.
 This involves subdividing the categories in one variable
-by the categories of another. Cross tabulated
-constraint variables are best seen as a single variable.
+by the categories of another. Cross-tabulated
+constraint variables provide a more detailed picture on not only the
+prevalence of particular categories, but the relationships between them.
+For the purposes of spatial microsimulation,
+cross-tabulated variables can be seen as a single variable.
+
+```{r, echo=FALSE}
+# (Dumont, 2014). Are you sure about that? 
+# Because in one way, individual level data can be consider as a big
+# cross tabulated data set, but, I don't know... no so convinced
+```
+
 If there are 5 age categories and 2 sex categories, this
 can be seen as a single constraint variable (age/sex)
 with 10 categories. Clearly in terms of retaining
 detailed local information (e.g. all young males moving out
 of a zone), cross-tabulated variables are preferable.
-This raises the question? what happens when a single
+This raises the question: what happens when a single
 variable (e.g age) is used in multiple cross-tabulated
 constraints (e.g. age/sex and age/income). In this case
-IPF can still be used, but the result may not converge
+spatial microsimulation can still be used,
+but the result may not converge
 to a single answer because the gender distribution may
 be disrupted by the age/income constraint. Further work
 is needed to test this but from theory we can be sure:
 a three way cross-tabulated constraint (age/sex/income)
-would be ideal in this case.
+would be ideal in this case because it 
+provides more information than two-way marginal distributions.
+
+```{r, echo=FALSE}
+# Todo: define/write-about marginal distributions
+# (Dumont, 2014). Pay attention, for the moment it is the first 
+#  time that IPF is mentionned, so the reader do not know what it is
+# Done 2014/12/22 RL
+```
 
 Even when measuring constraint variables by categories rather
 than the cruder measure of number variables, there is still
-no concensus about the optimal amount. 
+no consensus about the optimal amount. 
 Norman (1999) advocates
 including the ``maximum amount of
 information in the constraints'', implying that
@@ -309,6 +383,26 @@ in the model and the fidelity of the output microdata.
 
 ```{r, echo=FALSE}
 # TODO: link to the location of a discussion of the empty cell problem
+```
+
+If constraint variables come from different sources, check the coherence 
+of these datasets. In some cases the total number of individuals will not
+be consistent between constraint variables and the procedure will
+not work properly. This can happen if constraint variables are measured
+using different *base populations* or at different levels. Number of cars
+per household, for example, is usually collected at the household level
+so will contain lower counts than variables on individuals (e.g. age).
+A solution is to set all population totals equal to the most
+reliable constraint variable by multiplying values in each category by a fixed
+amount. However, caution should be taken when using this approach because
+it assumes that the relationship between categories is the same
+across all level or base populations. In the case of car ownership, where
+larger households are likely to own more cars, this assumption clearly
+would not hold: inferring individual-level marginals from household-level
+data would in this case lead to an underestimate of car availability.
+
+```{r, echo=FALSE}
+# TODO: link to a section where this 'population balancing' happens
 ```
 
 After suitable constraint variables have been chosen ---
@@ -331,20 +425,39 @@ checking process for the datasets used in this chapter is simple: both aggregate
 and individual-level tables contain age (in continuous form
 in the microdata, as two categories in the aggregate data)
 and sex, so they can by combined. 
-Loading the data involves transfering information from a
+Loading the data involves transferring information from a
 local hard disc into R's *environment*, where
 it is available in memory.
 
 ## Loading input data {#Loading} 
 
 Real-world individual-level data may be provided in a variety of formats
-but ultimately needs to be loaded into R as a *data frame* object.
+but ultimately needs to be loaded into R as a *data frame* object. Note 
+that there are many ways to load data into R, including `read.csv()` and
+`read.delim()` from base R and commands for loading proprietary data formats
+such as `read.xls` and  `read.spss()` from **gdata** and **foreign**
+packages respectively. There are many ways to 'clean' data in preparation
+for spatial microsimulation. In the following example we present 
+in detail the steps needed to load a the data underlying the SimpleWorld
+example.^[All
+data and code to replicate the procedures outlined in the book are available
+publicly from the spatial-microsimulation-book GitHub repository, as described above. We recommend loading the input data and playing
+around with it.]
+Some parts of the following explanation are specific to the example data.
+However, the
+functions and principles will apply to the majority of real
+input datasets for spatial
+microsimulation. To summarise this information, 
+the last section of this chapter provides 
+a list of things you that should be checked during this important and often
+overlooked phase of the of spatial microsimulation methodology.
 
-In this case the dataset is loaded from a `.csv` file:
+In the SimpleWorld example, the case the individual-level dataset is loaded
+from a simple `.csv` file:
 
 ```{r}
 # Load the individual-level data
-ind <- read.csv("data/SimpleWorld/ind.csv") 
+ind <- read.csv("data/SimpleWorld/ind-full.csv") 
 class(ind) # verify the data type of the object
 ind # print the individual-level data
 ```
@@ -361,10 +474,10 @@ con_age <- read.csv("data/SimpleWorld/age.csv")
 con_sex <- read.csv("data/SimpleWorld/sex.csv")
 ```
 
-We have loaded the aggregate constraints. As with the individual level data, is
+We have loaded the aggregate constraints. As with the individual level data, it is
 worth inspecting each object to ensure that they make sense before continuing.
 Taking a look at `age_con`, we can see that this data set consists of 2
-variables for 3 zones:
+categories for 3 zones:
 
 ```{r}
 con_age
@@ -376,10 +489,14 @@ example, is heavily dominated by older people: there are 8 people over 50 whilst
 there are only 2 young people (under 49) in the zone.
 
 Even at this stage there is a potential for errors to be introduced.  A classic
-mistake with areal data is that the order in which zones are loaded changes from
+mistake with areal (geographically aggregated) data is that the order in which zones are loaded can change from
 one table to the next. The constraint data should therefore come with some kind of *zone
-id*, an identifying code that will eventually allow the attribute data to be
-combined with polygon shapes in GIS software.
+id*, an identifying code, called the "key" of the zone and that consist in an unique
+sequence allowing the order of different datasets to be verified and
+for data linkage using attribute joins. Moreover,
+keeping the code associated with each administrative zone
+will subsequently allow attribute data to be
+combined with polygon shapes and visualised using GIS software.
 
 ```{r, echo=FALSE}
 # Make the constraint data contain an 'id' column, possibly scrambled 
@@ -387,7 +504,7 @@ combined with polygon shapes in GIS software.
 
 If we're sure that the row numbers match between the age and sex tables (we are
 sure in this case), the next important test is to check that the total
-populations are equal for both sets of variables.  Ideally both the *total*
+populations are equal for both sets of constraint variables.  Ideally both the *total*
 study area populations and *row totals* should match. If the *row totals* match,
 this is a very good sign that not only confirms that the zones are listed in the
 same order, but also that each variable is sampling from the same *population
@@ -414,21 +531,44 @@ the CakeMap Chapter (\ref{CakeMap}).
 In the above code, `data.frame` objects containing precisely the information
 required for the next stage were loaded.  More often, superfluous information
 will need to be removed from the data and subsets taken. It is worth removing
-superfluous variables earl, to avoid over-complicating and slowing-down the
-analysis.  For example, if `ind` had 100 variables of which only the 1st, 3rd and 4th were of
-interest (in that they match the constraint variables), the following command could be used to update the object. Only the relevant variables corresponding to
-columns (1, 3 and 4 in this case) are retained: `ind <- ind[, c(1, 3, 4)]`.
-Alternatively, `ind$age <- NULL` removes the age variable.
+superfluous variables early, to avoid over-complicating and slowing-down the
+analysis.  For example, if `ind` had 100 variables of which only the 1st, 3rd and 19th were of
+interest, the following command could be used to update the object. Note that
+only the relevant variables, corresponding to the first, third and nineteenth
+columns are
+retained:^[An
+alternative way to remove excess variables is to use `NULL` assignment to remove columns. `ind$age <- NULL`, for example,
+would remove the age 
+variable. The minus sign can also be used to remove specific rows or columns,
+as illustrated with the syntax `[, -4]` below.]
 
-Although `ind` is small and simple it will behave in the same way as a much
-larger dataset, providing opportunities for testing subsetting syntax in R.  It
+```{r, eval=FALSE}
+ind <- ind[, c(1, 3, 19)]
+```
+
+In the SimpleWorld dataset, only the `age` and `sex` variables are useful
+for reweighting: we can remove the others for the purposes of allocating
+individuals to zone. Note that it is important to keep track of individual ID's,
+to ensure individuals do not get mixed-up by a function that changes their
+order (`merge()`, for example, is a function that can cause havoc by changing
+the order of rows).
+Before removing the superflous `income` variable, we will create a backup of
+`ind` that can be referred back-to when we have a spatial microdataset:
+
+```{r}
+ind_orig <- ind # store the original ind dataset for future reference
+ind <- ind[, -4] # remove income variable
+```
+
+Although `ind` is small, it will behave in the same way as
+larger datasets, providing opportunities for testing subsetting syntax in R.  It
 is common, for example, to take a subset of the working *population base*: those
-aged 16 and 74 in full-time employment. Methods for doing this are provided in
+aged between 16 and 74 in full-time employment. Methods for doing this are provided in
 the Appendix (
 [](#subsetting)
 ).
 
-## Re-cateorising individual-level variables {#re-categorise}
+## Re-categorising individual-level variables {#re-categorise}
 
 Before transforming the individual-level dataset `ind` into a form that can be
 compared with the aggregate-level constraints, we must ensure that each dataset
@@ -449,20 +589,45 @@ on international standards on mathematical notation.]
 
 ```{r}
 # Test binning the age variable
-cut(ind$age, breaks = c(0, 49, 120))
+brks <- c(0, 49, 120) # set break points from 0 to 120 years
+cut(ind$age, breaks = brks) # bin the age variable
 ```
 
-If we wanted to change these category labels to something more readable,
-we can do this by adding another argument to the `cut` function:
+Note that the output of the above `cut()` command is correct,
+with individuals binned into one of two bins, but that the labels
+are rather
+strange.[This `[a,b)` category notation follows the International Organization for Standardization (ISO) 80000-2:2009 standard for mathematical notation: Square brackets indicate that the endpoint is included in the set, curved brackets indicate that the endpoint is not included. Hence `(49,120]` means
+'any number greater than 49 but less than *or equal to* 120'.
+]
+To change these category labels to something more readable
+for people who do not read ISO standards for mathematical notation
+(most people!),
+we add another argument, `labels` to the `cut()` function:
 
 ```{r}
-# Convert age into a categorical variable with user-chosen labels
-(ind$age <- cut(ind$age, breaks = c(0, 49, 120),
-  labels = c("a0_49", "a50+")))
+# Convert age into a categorical variable
+labs <- c("a0_49", "a50+") # create the labels
+cut(ind$age, breaks = brks, labels = labs)
 ```
 
-Users should be ware that `cut` results in a vector of class *factor*, which
-can cause problems later down the line.
+The factor generated now has satisfactory labels: they match the column headings
+of the age constraint, so we will save the result. (Note, we are not
+loosing any information at this stage because we have saved the orginal
+`ind` object as `ind_orig` for future reference.)
+
+```{r}
+# Overwrite the age variable with categorical age bands
+ind$age <- cut(ind$age, breaks = brks, labels = labs)
+```
+
+Users should beware that `cut` results in a vector of class *factor*.
+This can cause problems in subsequent steps if the order of constraint
+column headings is different from the order of the factor labels, as
+we will see in the next section.
+
+```{r, echo=FALSE}
+# TODO (RL): add reference to ipf performance paper
+```
 
 ## Matching individual and aggregate level data names {#matching}
 
@@ -476,7 +641,7 @@ names(con_age)
 ```
 
 Note that the names are subtly different. To solve this issue, we can
-simply change the names of the constraint variable, assuming they
+simply change the names of the constraint variable, after verifying they
 are in the correct order:
 
 ```{r}
@@ -497,7 +662,17 @@ cons[1:2, ] # display the constraints for the first two zones
 We have made steps towards combining the individual and aggregate datasets and
 now only need to deal with 2 objects (`ind` and `cons`) which now share
 category and variable names.
-However, these datasets cannot possibly be compared because they are of different dimensions:
+However, these datasets cannot possibly be compared because they
+measure very different things: the `ind` dataset records
+the value that each individual takes for a range of variables, whereas
+`cons` counts the number of individuals in different groups at
+the geographical level. These datesets are have different dimensions:
+
+```{r}
+#(Dumont, 2014) I don't like the previous sentence, because even if it is the same dimension
+# the real problem is that it does not represent the same thing. So, the dimension is not
+#the real reason of it
+```
 
 ```{r}
 dim(ind)
@@ -510,16 +685,30 @@ aggregate-level constraint table called `cons`, representing 3 zones
 with count data for 4 categories across 2 variables.
 
 The dimensions of at least one of these objects must change
-before they can be easily compared. To do this
-we 'flatten' the individual-level dataset;
-this means increasing its width
-to match the constraint data.
-This is a two-stage process. First,
-`model.matrix()` is used to expand each variable into the number of columns as there are categories in each and assign. 
-Knoblauch and Maloney (2012) provide a lengthier description of this
-which is available online, for free.
+before they can be correctly easily compared. To do this
+we 'flatten' the individual-level dataset.
+This means increasing its width so each column becomes a category
+name. This allows the individual data to be matched
+to the geographical constraint data. In this new dataset (which we
+label `ind_cat`, short for 'categorical'),
+each variable becomes a column containing Boolean numbers
+(either 1 or 0, representing whether the individual belongs to each
+category or not).
+Note that each row in `ind_cat` must contain a one for each constraint variable;
+the sum of every row in `ind_cat` should be equal to the number of constraints.
+(This can be verified with `rowSums(ind_cat)`.)
 
-Second, `colSums()` is used to take the sum of each column.^[As we shall see in Section \ref{ipfp},
+To undertake this 'flattening' process the
+`model.matrix()` function is used to expand each variable in turn.
+The result for each variable is a new matrix with the same number of columns as
+there are categories in the variable. Note that the order of columns is usually
+alphabetical: this can cause problems if the columns in the constraint tables
+are not ordered in this way.  
+Knoblauch and Maloney (2012) provide a lengthier description of this
+flattening process.
+
+The second stage is to use the `colSums()` function 
+to take the sum of each column.^[As we shall see in Section \ref{ipfp},
 only the former of these is needed if we use the
 **ipfp** package for re-weighting the data, but both are presented to enable
 a better understanding of how IPF works.]
@@ -575,5 +764,50 @@ between cell values in the individual and aggregate level data.
 The purpose of the *reweighting* procedure in spatial microsimulation is
 to minimise this difference (as measured in TAE above)
 by adding high weights to the most representative individuals.
+
+
+## Chapter summary
+
+To summarise, we have learned about and implemented
+methods for loading and preparing input data for spatial microsimulation
+in this chapter.
+The following checklist outlines the main features of the input datasets
+to ensure they are ready for reweighting, covered in the next chapter:
+
+1. Both constraint and target variables are loaded in R:
+    in the former rows correspond to
+    individuals; in the latter rows correspond to a 
+    spatial zone.
+2. The categories of the constraint variables in the individual-level dataset
+    are identical to the column names of the constraint
+    variables.
+    (An example of the process needed to arrive at this state is the
+    conversion of a continuous ages variable in
+    the individual-level dataset into a categorical variable to match the
+    constraint data.)
+3. The structure of the individual and aggregate-level datasets must
+    eventually be the same: the column names of `cons` and `ind_cat` in the above
+    example are the categories
+    of the constraint variables. `ind_cat` is the
+    binary (or Boolean, containing 0s and 1s) version of the individual-level dataset.
+    This allows creation of an aggregated version of the individual-level
+    data that has the same dimensions (and is comparable with)
+    the constraint data for each zone.
+4. The total population of each zone is represented as the sum counts for
+    each constraint variable.
+
+Note that in much research requiring the analysis of complex data,
+the collection, cleaning and loading of the data can consume the majority of the
+project's time. This applies as much to
+spatial microsimulation as to any other data analysis task and is an essential
+stage before moving on the more exciting analysis and modelling.
+In the next chapter we
+progress to allocate weights to each individual in our sample, continuing
+with the example of SimpleWorld. 
+
+```{r, echo=FALSE}
+# save.image("cache-data-prep.RData") # save data for next chapter
+```
+
 
 # References

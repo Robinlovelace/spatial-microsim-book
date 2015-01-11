@@ -1,11 +1,14 @@
 # Book building functions
 Rmd_bind <- function(dir = ".",
-  book_header = readLines(textConnection("---\ntitle: 'Title'\n---"))){
+  book_header = readLines(textConnection("---\ntitle: 'Title'\n---")),
+  chap_ord = NULL){
   old <- setwd(dir)
   if(length(grep("book.Rmd$", list.files())) > 0){
     warning("book.Rmd already exists")
   }
   cfiles <- list.files(pattern = "*.Rmd", )
+  cfiles <- cfiles[-grep("book", cfiles)]
+  if(!is.null(chap_ord)) cfiles <- cfiles[chap_ord] # chapter order
   write(book_header, file = "book.Rmd", )
   ttext <- NULL
   for(i in 1:length(cfiles)){
@@ -18,17 +21,16 @@ Rmd_bind <- function(dir = ".",
   setwd(old)
 }
 
-chap_ord <- c(6, 13, 8, 4, 10, 3, 11, 12, 9, 1, 2, 5, 7)
-
 Rmd_bind_mod <- function(dir = ".",
-  book_header = readLines(textConnection("---\ntitle: 'Title'\n---"))){
+  book_header = readLines(textConnection("---\ntitle: 'Title'\n---")),
+  chap_ord = NULL){
   old <- setwd(dir)
   if(length(grep("book.Rmd", list.files())) > 0){
     warning("book.Rmd already exists")
   }
   cfiles <- list.files(pattern = "*.Rmd$", )
   cfiles <- cfiles[-grep("book", cfiles)]
-  cfiles <- cfiles[chap_ord] # chapter order
+  if(!is.null(chap_ord)) cfiles <- cfiles[chap_ord] # chapter order
   write(book_header, file = "book.Rmd", )
   ttext <- NULL
   for(i in 1:length(cfiles)){

@@ -26,3 +26,5 @@ _site/
 temp.*
 book.Rmd
 cache*
+*.html
+drafts/

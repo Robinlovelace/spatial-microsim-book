@@ -14,8 +14,16 @@ library(grid)
 
 # Introduction
 
+Imagine a world where you could access to all possible information, 
+about individual companies, households or people. Privacy issues aside, this information would clearly be of use for many socially beneficial applications
+in the hands of a benevolent state or non-governmental organisation.
+In reality researchers must work with information that is incomplete, lacking spatial or temporal resolution or missing key attributes.
+Spatial microsimulation provides a statistical approximation of
+individual-level data at high spatial resolution. This *spatial microdata*
+can provide a basis for work in many fields to better understand the world. 
+
 Spatial microsimulation is a statistical technique for combining individual and
-geographical data. The resulting *spatial microdata* are useful in many
+geographical data, typically from aggregated Census results and surveys from a sample of the population. The resulting *spatial microdata* are useful in many
 situations where individual-level and geographically specific
 processes are in operation, enabling modelling and analysis on multiple levels.
 Spatial microsimulation can also be seen as an approach to better understand
@@ -44,8 +52,10 @@ are unclear or inconsistent about what the method entails.  Worse is work that
 treats spatial microsimulation as a magical black box. This book is about
 demystifying spatial microsimulation.
 
-Spatial
-microsimulation can be understood either as a technique or an approach:
+"spatial microsimulation" is a term that can seem ambiguous, because it concerns all ways 
+to reach data statistically similar to the real state of the studied entities in a dis-aggregate level.
+So, depending on the available data and the aim of the research, spatial microsimulation can be 
+understood either as a technique or an approach:
 
 1. A *technique* for generating spatial microdata --- individuals allocated to
 zones (see Figure 1).
@@ -211,12 +221,11 @@ Improvements are being added all the time.
 The **ipfp** package, for example,
 can greatly reduce the computational time taken for a key element of spatial
 microsimulation process, as we shall see in Chapter 5 in
-*Reweighting with ipfp*
-.
+*Reweighting with ipfp*. This is an advantage of R, but we have to be careful, 
+because R is open source, anyone can write a new package. This means we means it is important to check
+the quality of a used package before trusting it as a "black box".
 
-```{r, echo=FALSE}
-```
-
+R is a powerful statistical language and its interface "RStudio" helps new users to become familiar with this language. 
 Further information about why R is a good choice for spatial microsimulation
 is provided in the Appendix, a tutorial introduction to R for spatial
 microsimulation applications. The next section describes approaches
@@ -266,10 +275,8 @@ more from it if you are fluent in R. To this end the book aims to improve your
 R skills as well as your ability to perform spatial microsimulation, especially
 in the earlier practical chapters. Some prior knowledge of R will make
 reading this book easier, but R novices should be able to follow the worked
-examples, with reference to appropriate supplementary material
-. See the references listed in the Appendix
-(
-). As
+examples, with reference to appropriate supplementary material.
+(See the references listed in the Appendix.) As
 with learning Spanish or Chinese, frequent practice, persistence and
 experimentation will ensure deep learning.
 
@@ -302,7 +309,8 @@ should have meaningful names and contain only code that works and is commented.
 An additional backup directory could be used to store experimental code. There
 is no need to be prescriptive in following this structure, but projects using
 spatial microdata tend to be complex, so imposing order over your workflow early
-will likely yield dividends in the long run.
+will likely yield dividends in the long run. If you work in a team, this kind of
+structure helps each member to rapidly understand and continue your work.
 
 The same applies to learning the R language.  Fluency allows complex numerical
 ideas to be described with a few keystrokes.  If you are a new R
@@ -386,7 +394,7 @@ received.^[Feedback can be left via email to
 r.lovelace@leeds.ac.uk or via the project's GitHub page
 (http://github.com/Robinlovelace/spatial-microsim-book).]
 
-The books contains the following chapter, which progress in a
+The book contains the following chapter, which progress in a
 logical order:
 
 - *What is spatial microsimulation?*
@@ -395,7 +403,7 @@ introduces the concepts and applications of spatial
 microsimulation not only as a narrow methodology
 but as an *approach* to understanding real-world phenomena.
 - *SimpleWorld* 
-([](#vis))
+([](#SimpleWorld))
 is a simple and reproducible
 explanation of spatial microsimulation method with reference to an imaginary planet.
 - *Data preparation*

@@ -10,18 +10,59 @@ load("cache-CakeMap.RData")
 
 # Model checking and evaluation {#svalidation}
 
-To make an analogy with food safety standards, openness about mistakes is
-conducive to high standards (Powell et al. 2011). Transparency in model evaluation --- the process of deciding whether the model has worked and identifying *how good* the results are --- is desirable for
-similar reasons. Openness of code and method is advocated throughout this book and should become second nature to people using open source software. This Chapter is about specific methods to check and evaluate that the outputs of spatial microsimulation models 1) make sense and 2) coincide with external reality. The two main strategies are:
+In food safety, openness about mistakes is
+a vital ingredient for to high standards (Powell et al. 2011):
+hiding or being ashamed of inevitable mistakes allows bad practice to
+continue unnoticed. The same concept applies to statistical modelling.
+Transparency in model evaluation --- the process of deciding whether the
+model has worked and identifying *how good* the results are --- is vital in spatial microsimulation for
+similar reasons. Openness of code and method, as demonstrated and advocated
+throughout this book, is easy using command-line open source software such as R
+[(Wickham, 2014)](http://adv-r.had.co.nz/Reproducibility.html).
 
-1. Comparing the model results with knowledge of how it *should*
-perform a-priori (model checking or internal validation). This level of model checking always takes place at the aggregate level of the constraint variables.
-2. Comparing model results and with empirical data external to the microsimulation (external validation or 'ground truthing'). This approach to verification can take place on either the individual level (if real geo-coded survey data are available) or more
-commonly at the aggregate level.
+Reproducibility is especially important during model checking and
+evaluation, allowing you and others not only to *believe* that the model
+is working, but to *prove* that the results are as expected.
+This chapter is about specific methods to check and evaluate the outputs of
+spatial microsimulation. The aims are simple: to ensure that the models
+1) make sense given the input data (*model checking*) and
+2) coincide with external reality (*model evaluation*).
+These strategies are described below:
 
-Internal validation is the most common form model evaluation. In many cases internal validation is the *only* test of the model's output, because of data limitations. Often a motivation for using spatial microsimulation is lack of geographical data on a specific variable (as with the CakeMap example in the previous chapter). Therefore there is often a paucity of external information against which the model's output can be tested. Continuing with the CakeMap example, there is no other readily available data on the geographic distribution of cake consumption, so we could conclude that external validation is impossible. (In fact new and unconventional sources of data such as number of confectionery shops, consumer surveys and even social media could be used to provide 'sanity checks' on the results. Sometimes you may need to be creative to find data for external validation.)
+1. *Model checking* --- also called *internal validation*
+(Edwards et al. 2010) ---
+is comparing model results against priori knowledge of how they *should*
+be. This level of model checking usually takes place only at the aggregate level of the constraint variables.
+2. *Model evaluation* --- also known as *external validation* --- is the
+process of comparing model results with external data. This approach to
+verification relies on good 'groundtruth data' and can take place at either
+the individual level (if geo-coded survey data are available) or (more
+commonly) at the aggregate level.
 
-This Chapter explains how to undertake routine checks on the procedure, how to identify outlying variables and zones which are simply not performing well and how to undertake external validation. Even in cases where there is a paucity of data on the target variable, as with cake consumption, there is usually at least some test of the model's performance against external data that can be undertaken. Sometimes this involves creating a new target variable, purely for the purposes of validation.
+Internal validation is the most common form model evaluation. In some cases
+internal validation is the only available test of the model's output,
+because of data for external validation is not available.
+A common motivation for using spatial microsimulation is lack of
+data on a specific variable (as with the CakeMap example in the previous chapter).
+In such cases internal validation, combined with proxy variables for which external
+datasets are available, may be the best approach to model evaluation.
+This is the case with the CakeMap example explored in the previous chapter.
+There are no readily available datasets on the geographic distribution of cake consumption,
+so external validation of the dependent variable (frequency with which cake is
+eaten) is deemed impossiblen in this case. (However, new sources of data such as
+number of confectionery shops, consumer surveys and even social media could be
+explored used to provide 'sanity checks' on the results. Sometimes you may need
+to be creative to find data for external validation.)
+
+This Chapter explains how to undertake routine checks on spatial microsimulation
+procedures, how to
+identify outlying variables and zones which are simply not performing well and
+how to undertake external validation. Even in cases where there is a paucity of
+data on the target variable, as with cake consumption, there is usually at least
+some test of the model's performance against external data that can be
+undertaken. As we will see with the CakeMap example (where income is used as a
+proxy variable for external validation purposes) this can involve the creation of
+new target variables, purely for the purposes of validation.
 
 ## Internal validation
 

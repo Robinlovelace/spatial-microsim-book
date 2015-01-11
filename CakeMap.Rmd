@@ -92,12 +92,12 @@ improves the results of spatial microsimulation, either with additional
 variables or by using cross-tabulated constraints (e.g. age/sex)
 instead of single-variable constraints, has yet to be explored. It is therefore
 difficult to provide general rules of thumb regarding simplicity other than
-'do not overcomplicate the model with excessive constraint variables and
+'do not over-complicate the model with excessive constraint variables and
 constraints'.
 
 To exemplify these principles, let us consider the constraint variables available
 in the CakeMap datasets. Clearly only variables available both in the individual-level and 
-aggreate datasets can be chosen from. Five variables assigned to each
+aggregate-level datasets can be chosen from. Five variables assigned to each
 of the 916 individuals are available from the individual-level data,
 about which data is also available from the census:
 
