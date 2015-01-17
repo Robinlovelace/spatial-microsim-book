@@ -1102,10 +1102,11 @@ strategy makes it clear that certain algorithms are more efficient than
 others for spatial microsimulation. Figure x demonstrates this variability
 by plotting total absolute error as a function of number of iterations for
 various optimization algorithms available from the base function
-`optim` and the **GenSA** package.
+`optim` and the **GenSA** package. Note that the comparisons 
+are performed only for zone 1.
 
 ```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.width=4, fig.height=4, echo=FALSE}
-img <- readPNG("figures/optim-its.png")
+img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
 grid.raster(img)
 # ![](figures/optim-its.png)
 ```
@@ -1117,8 +1118,9 @@ qplot(data = opt_res, time, fit, color = algorithm, geom="line") +
   ylab("Total Absolute Error") + xlab("Time (microseconds)") + scale_color_brewer(palette = 2, type = "qual") + theme_classic() + xlim(c(0, 15000))
 ```
 
-Figure x shows the advantage of the IPF algorithm we have been using, which
-converges rapidly to zero error after only a few iterations.
+Figure x shows that, in a first step, all algorithm reach a real improvement during the first iteration. The advantage of the IPF algorithm we have been using, which
+converges rapidly to an error very close to zero (as seen before, zero is not
+reachable with a computer perfomung calculus) is observable after only the first iteration.
 On the other end of the spectrum is R's default optimization algorithm,
 the Nelder-Mead method. Although the graph shows no improvement
 from one iteration to the next, it should be stated that the algorithm
@@ -1137,11 +1139,12 @@ The remaining algorithms shown are, like Nelder-Mead, available from within R's
 default optimisation function `optim`. The implementations with `method =` set
 to `"BFGS"` (short for the Broyden–Fletcher–Goldfarb–Shanno algorithm),
 `"CG"` ('conjugate gradients') performed roughly the same, steadily approaching
-but not reaching zero error after five iterations. Finally, the `SANN` method,
+zero error and fitting to `"IPF"` and `"GenSA"` after 10 iterations. Finally, the `SANN` method,
 also available in `optim`, performed most erratically of the methods tested.
 This is another implementation of simulated annealing which demonstrates that
-optimisiation functions that depend on random numbers do not always lead to
-improved fit from one iteration to the next.
+optimisation functions that depend on random numbers do not always lead to
+improved fit from one iteration to the next. If we look until 200 iterations, 
+the fit will continue to oscillate and not be improved at all.
 
 The code used to test these alternative methods for reweighting are provided
 in the script 'R/optim-tests-SimpleWorld.R'. The results
@@ -1175,20 +1178,28 @@ that it is always the best approach.
 
 To overcome the caveat that the meaning of an 'iteration' changes dramatically
 from one algorithm to the next, further tests measured the time taken
-for each reweighting algorithm to run. The results are very different when
-iterations are seen as the independent variable (Figure xx). This figure
-Demonstrates that Nelder-Mead is fast at reaching a good
-approximation of the constraint data, despite taking many iterations.
-`GenSA`, on the other hand, is shown to be much slower than the others,
-despite only requiring 2 iterations to arrive at a good level of fit.
-The `SANN` method is not shown at all due to high TAE values for all
-times shown.
+for each reweighting algorithm to run. To have a readable graph, we 
+do not represent the error as a function of the time, but the time per
+algorithm in function of the `maxit` argument (Figure xx). This figure
+demonstrates that an iteration of GenSA take a long time in comparison 
+with the other algorithm. Moreover, `"BFGS"` and `"CG"` are still following a
+similar curve under GenSA. Nelder-Mead, SANN and ipf contains iterations that 
+take less time. Until, it appears that ipf and the best in terms of iterations
+and the time needed for few iterations is good.
 
 ```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.width=4, fig.height=4, echo=FALSE}
-img <- readPNG("figures/optim-time.png")
+img <- readPNG("figures/TimeOptim_GenSA_Mo.png")
 grid.raster(img)
 # ![](figures/optim-time.png)
 ```
+
+Nelder-Mead is fast at reaching a good
+approximation of the constraint data, despite taking many iterations.
+`GenSA`, on the other hand, is shown to be much slower than the others,
+despite only requiring 2 iterations to arrive at a good level of fit.
+
+Note that these results are biaised by the example that is pretty small 
+and runs only for the first zone.
 
 ## Combinatorial optimisation
 
