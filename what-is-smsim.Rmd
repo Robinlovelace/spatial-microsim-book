@@ -5,19 +5,122 @@ bibliography: ~/Documents/smr.bib
 ---
 
 ```{r, echo=FALSE}
-# This is an early draft of a book on spatial microsimulation, for teaching purposes
-# Introduction {#Introduction}
+# TODO:
+# Add literature on spatial microsimulation as an approach
 library(png)
 library(grid)
 ```
 
 # What is spatial microsimulation? {#what-is}
 
-Spatial microsimulation is a technique for generating individual-level data
-allocated to geographical zones that is as similar as possible to
-aggregate-level constraints. Its most common use in the social sciences is for allocating individuals from a survey dataset
+Like many words, the meaning of attributed to the term *spatial microsimulation*
+varies from one user to the next. As the eminent physicist Richard Feynman
+has stated, the "difference between knowing the name of something and
+knowing something" vital to understand the world. We could equally call the
+methods taught in this book "population synthesis" or 
+"real-world SimCity",^[SimCity is
+a popular computer game series in which the player constructs urban infrastructure
+and observes their God-like influence on the virtual citizens. Dimitris Ballas
+has jokingly used the analogy of SimCity to describe spatial microsimulation
+to students. In practice the underlying aims of SimCity (entertainment,
+education and profit for its publisher Electronic Arts) are quite different than those of
+spatial microsimulation. However in other ways the comparison is appropriate:
+SimCity creates virtual individuals allocated to geographic space and provides
+a framework for *model experiments* in the same way that spatial microsimulation
+does. SimCity can be used for teaching and better understanding urban planning
+(Gaber 2007)
+and is recommended game for those wanting to understand how complex models
+based on spatial microdata could become. A number of open-source versions of
+the SimCity concept are now available (e.g. LinCity-NG, Micropolis and Simutrans).
+]
+but this would not change how its methods work or what they do.
+
+Despite reservations about the term *spatial microsimulation* described below
+(see [](#is-not))
+it is deemed a reasonable label to describe the the material covered in this
+book as it is already widely used and succinctly conveys the main elements of the approach:
+
+- **Spatial** microsimulation is inherently concerned with how things vary
+over space, not just between individuals, groups or periods of time: this is
+what distinguishes *spatial* microsimulation from the wider field of microsimulation.
+- Spatial **micro**simulation explores issues at the individual-level, as implied
+by the word *micro*.
+- Spatial micro**simulation** involves the creation of fictitious data for
+modelling purposes, captured by the word *simulation*.
+
+From this break-down of spatial microsimulation into its component parts its meaning
+may seem obvious.
+However, it is important to define the term precisely at an early stage
+and understand how other people have used the term
+to avoid confusion.
+For the purposes of this book we define spatial microsimulation simply, as:
+
+> An approach to the analysis of individual-level phenomena over geographical space that involves the creation, analysis and modelling of spatial microdata.
+
+The rest of this chapter explains this succinct definition and demystifies
+the uses of the approach in applied settings by:
+
+- Explaining the spatial microsimulation terminology in more detail
+[](#terminology). This involves an exploration of how spatial microsimulation
+can be understood as either a method or an approach
+([](#meth-approach)),
+how the methods can best be communicated to others ([](#comms)) and
+how we use the term in this book ([](#this-book)) .
+- Exploring the applications of spatial microsimulation
+([](#applications)).
+- The important question of what spatial microsimulation is not and how
+the approach relates to other quantitative approaches such as ABM
+([](#is-not)).
+- The often unspoken assumptions underlying spatial microsimulation
+methods
+([](#assumptions)).
+
+```{r, echo=FALSE}
+# @Gaber2007
+```
+
+## Terminology {#terminology}
+
+### Spatial microsimulation: method or approach? {#meth-approach}
+
+```{r, echo=FALSE}
+# The aim of this section is to show how the term is used in the acadmic
+# literature, implicitly and via explicit definitions
+```
+
+The most common confusion about what spatial microsimulation is arises because
+the term has been used in two ways: as a method and an approach. Remembering
+Feynman's distinction between the words used to describe something and what
+it actually is, it is clear that both interpretations are acceptable,
+providing you clearly communicate what you mean
+(see [](#comms)).
+As stated in the introduction, we acknowledge both uses of the term in the
+literature but advocate that 'spatial microsimulation' is used to describe
+the overall modelling approach. The term *population synthesis*, borrowed from
+transport modelling, is used to describe the methods for actually generating
+the spatial microdata on which the spatial microsimulation approach depends.
+
+Before progressing to see how spatial microsimulation is actually applied to
+solve important real-world problems, let us pause to consider how spatial
+microsimulation is understood in the literature and how this relates to
+the definition used in this book.
+
+**Population synthesis** (the former definition of spatial microsimulation)
+is a set of techniques for generating individual-level data
+allocated to geographical zones. Population synthesis is an important
+(and often crucial) component of the spatial microsimulation approach,
+aim of which is to
+generate a realistic sample for each area that is as similar as possible to
+aggregate-level constraints. Population synthesis usually involves the allocation of individuals from a survey dataset
 to administrative zones, based on shared variables between the areal and
-individual level data. Spatial microsimulation can also be used to simulate the values of missing characteristics for individuals in a zone, information that is not otherwise available.
+individual level data. When
+additional *target variables* exist in the microdata inputs for population synthesis (which are not present in the aggregate level data), the process
+can be used to simulate information that is not otherwise available at the local
+level. Population synthesis for this purpose is a subset of the
+long-established field of *small area estimation* (Rao 2003).
+
+**Spatial microsimulation** as an approach was first conceived by
+
 As with many new and infrequently used phrases, this
 understanding is not shared by everyone. The meaning of spatial
 microsimulation varies depending on context and who you ask. To an
@@ -30,7 +133,7 @@ started speaking gobbledygook! Hence the need to consider what spatial
 microsimulation is, and what it is not, at the outset. However, every case, 
 the term involves the creation individual-level data that is grouped by geographic zone via some kind of approximation method.
 
-## Terminology {#terminology}
+### Communicating spatial microsimulation {#comms}
 
 ```{r, echo=FALSE}
 # TODO add something about the distinction between spatial microsimulation 
@@ -39,10 +142,8 @@ the term involves the creation individual-level data that is grouped by geograph
 # interchangeably. It is useful to make the distinction, however, as small area estimation refers to methods to estimate summary statistics for geographical units—sometimes via a spatial microdataset. With spatial microsimulation, on the other hand, the emphasis is on generating and analysing spatial microdata"
 ```
 
-
-Delving a little into the etymology and history of the term reveals the
-reasons behind this duplicity of meaning and highlights the importance
-of terminology. Rarely will you be understood saying
+Delving a little into the etymology and history of spatial microsimulation
+reveals the reasons behind the various meanings. Rarely will you be understood saying
 “I use *spatial microsimulation*” in everyday life. Usually it
 is important to add context. Below are a few hypothetical situations and
 suggested responses.
@@ -100,12 +201,13 @@ to an uninitiated audience. Let alone describing Gibb’s sampling. Describing c
 a constant challenge for the scientist. Using jargon when the audience 
 is experienced and simplifying when they are not is the art of science communication.
 
-If we look into the terminology "spatial microsimulation", we can intuitively 
-detect three pieces of information. First, it is a "simulation", meaning that
+As outlined above, disassembling the term provides
+detect three pieces of information about the approach.
+First, it is a "simulation", meaning that
 we can not reach the real needed data, so we make an approximation helped 
 with available data. Second, "micro" reflects the desire to simulate
 the data at the individual level. This captures the ability of spatial microsimulation to 'zoom in' from aggregated data to a higher resolution data where all the characteristics of all individuals are simulated.
-- Finally, "spatial" indicates that
+Finally, "spatial" indicates that
 each individual is allocated to a zone, that depending on the context
 can correspond to a postcode, a municipality, a district, a country etc. Usually these zones are geographical.
 
@@ -125,6 +227,14 @@ a glossary defining much of the jargon relating to spatial microsimulation
 is provided at the end. For now, to
 help answer what spatial microsimulation is we will look at 
 its applications and then at what it is not.
+
+### Spatial microsimulation in this book {#this-book}
+
+As we have seen, the term "spatial microsimulation" has a number of meanings incorporating a range of methods and applications. In this book, the focus is on the
+most used part of this branch, called reweighting: the process of generating the spatial microdata. From 
+[](#vis)
+onward, we also explain what can be done with the spatial microdata that we have generated in the preceding chapters. The technique described in this book will be most useful in contexts where you
+have categorical geographically aggregated count data about the entire target population (these are the *contraint variables*, often taken from a national census) and an individual-level survey based on a sample of the target population (the non-spatial *microdata*).
 
 ## Applications {#applications}
 
@@ -269,6 +379,8 @@ models (ABM).
 
 ## What spatial microsimulation is not {#is-not}
 
+Having seen contemporary definitions of spatial microsimulation ()
+
 **Spatial microsimulation is not strictly spatial**
 
 The most surprising feature of spatial microsimulation
@@ -324,14 +436,6 @@ in a different order and in different combinations. If the population of the
 study area is greater than the sample size of the input data, many individuals
 will have to be 'cloned'. Thus we are not increasing the diversity of the dataset,
 simply changing its aggregate-level characteristics.
-
-## Spatial microsimulation in this book {#MSimThisBook}
-
-As we have seen, the term "spatial microsimulation" has a number of meanings incorporating a range of methods and applications. In this book, the focus is on the
-most used part of this branch, called reweighting: the process of generating the spatial microdata. From 
-[](#vis)
-onward, we also explain what can be done with the spatial microdata that we have generated in the preceding chapters. The technique described in this book will be most useful in contexts where you
-have categorical geographically aggregated count data about the entire target population (these are the *contraint variables*, often taken from a national census) and an individual-level survey based on a sample of the target population (the non-spatial *microdata*).
 
 ## Assumptions {#assumptions}
 

@@ -3,15 +3,16 @@ title: "Spatial microsimulation in R"
 layout: default
 ---
 
-# Spatial microsimulation in R {#smsimr}
+# Population synthesis in R {#smsimr}
 
 ```{r, echo=FALSE}
-# TODO: add captions to timings plots
-# TODO: add IPF theory from Cambridge handout.pdf
-# TODO: update figure with expansion
+# TODO:
+# ensure text is compatible with new use of chapter title as 'population synthesis'
 
-# TODO tasks completed:
-# TODO: change integerisation section so it's part of IPF (RL)
+# Completed:
+# Change integerisation section so it's part of IPF (RL)
+# Add IPF theory from Cambridge handout.pdf (mostly done)
+# update figure with expansion
 ```
 
 In this chapter we progress from loading and preparing the input data to
@@ -1105,13 +1106,18 @@ various optimization algorithms available from the base function
 are performed only for zone 1.
 
 ```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.width=4, fig.height=4, echo=FALSE}
-img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
-grid.raster(img)
-# ![](figures/optim-its.png)
+# commented as pdf version looks better! 
+# img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
+# grid.raster(img)
 ```
 
+\begin{figure}
+\includegraphics{figures/TAEOptim_GenSA_Mo.pdf}
+\caption{Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
+\end{figure}
 
-```{r, eval=FALSE, echo=FALSE, message=FALSE, warning=FALSE}
+
+```{r, eval=FALSE, echo=FALSE}
 source("R/optim-tests-SimpleWorld.R", echo = FALSE, print.eval = FALSE )
 qplot(data = opt_res, time, fit, color = algorithm, geom="line") +
   ylab("Total Absolute Error") + xlab("Time (microseconds)") + scale_color_brewer(palette = 2, type = "qual") + theme_classic() + xlim(c(0, 15000))
@@ -1187,10 +1193,15 @@ take less time. Until, it appears that ipf and the best in terms of iterations
 and the time needed for few iterations is good.
 
 ```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.width=4, fig.height=4, echo=FALSE}
-img <- readPNG("figures/TimeOptim_GenSA_Mo.png")
-grid.raster(img)
-# ![](figures/optim-time.png)
+# img <- readPNG("figures/TimeOptim_GenSA_Mo.png")
+# grid.raster(img)
+# # ![](figures/optim-time.png)
 ```
+
+\begin{figure}
+\includegraphics{figures/TAEOptim_GenSA_Mo.pdf}
+\caption{Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
+\end{figure}
 
 Nelder-Mead is fast at reaching a good
 approximation of the constraint data, despite taking many iterations.
