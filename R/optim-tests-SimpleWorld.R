@@ -102,10 +102,13 @@ opt_res$maxit <- as.numeric(opt_res$maxit)
 
 qplot(data = opt_res, maxit, fit, linetype = algorithm, geom="line") +
   ylab("Total Absolute Error") + xlab("Iterations") +
+  scale_linetype(name = "Algorithm") +
    #scale_color_brewer(palette = 2, type = "qual") + 
   theme_classic()
-# ggsave("figures/optim-its.png")
-
+# Save the plots! 
+# ggsave("figures/optim-its.png") # (original plot)
+# ggsave("figures/TAEOptim_GenSA_Mo.png")
+# ggsave("figures/TAEOptim_GenSA_Mo.pdf")
 
 
 
@@ -154,10 +157,18 @@ opt_res[2:dim(opt_res)[1],]$time <-  mb$mean
 opt_res$time<-as.numeric(opt_res$time)
 
 qplot(data = opt_res, maxit, time, linetype = algorithm, geom="line") +
-  ylab("Time (microseconds)") + xlab("Number of iterations") + scale_colour_brewer(palette = 2, type = "div") + theme_classic() 
+  ylab("Time (microseconds)") +
+  xlab("Number of iterations") +
+  scale_colour_brewer(palette = 2, type = "div") +
+  scale_linetype(name = "Algorithm") +
+  theme_classic() 
+# Save the plots!
 # ggsave("figures/optim-time.png")
+# ggsave("figures/TimeOptim_GenSA_Mo.png")
+# ggsave("figures/TimeOptim_GenSA_Mo.pdf")
 ### Background
 
+# plot of time vs TAE
 qplot(data = opt_res, time, fit, linetype = algorithm, geom="line") +
   ylab("TAE") + xlab("Time (microseconds)") + scale_color_brewer(palette = 2, type = "qual") + theme_classic() 
 
