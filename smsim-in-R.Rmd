@@ -3,15 +3,16 @@ title: "Spatial microsimulation in R"
 layout: default
 ---
 
-# Spatial microsimulation in R {#smsimr}
+# Population synthesis in R {#smsimr}
 
 ```{r, echo=FALSE}
-# TODO: add captions to timings plots
-# TODO: add IPF theory from Cambridge handout.pdf
-# TODO: update figure with expansion
+# TODO:
+# ensure text is compatible with new use of chapter title as 'population synthesis'
 
-# TODO tasks completed:
-# TODO: change integerisation section so it's part of IPF (RL)
+# Completed:
+# Change integerisation section so it's part of IPF (RL)
+# Add IPF theory from Cambridge handout.pdf (mostly done)
+# update figure with expansion
 ```
 
 In this chapter we progress from loading and preparing the input data to

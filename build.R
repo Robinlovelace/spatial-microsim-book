@@ -5,6 +5,7 @@
 # Add urls to all the references and packages
 # Propensity to cycle
 # IPF in R/loglin/mipfp/GREGWT
+# Reference UrbanSim
 
 # View the order chapters will be knitted (see R/book-functions.R)
 chap_ord <- c(6, 13, 8, 4, 10, 3, 11, 12, 9, 1, 2, 5, 7)

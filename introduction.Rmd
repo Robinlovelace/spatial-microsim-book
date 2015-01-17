@@ -57,19 +57,27 @@ to reach data statistically similar to the real state of the studied entities in
 So, depending on the available data and the aim of the research, spatial microsimulation can be 
 understood either as a technique or an approach:
 
-1. A *technique* for generating spatial microdata --- individuals allocated to
-zones (see Figure 1).
-2. An *approach* to modelling based on
-spatial microdata, simulated or real.
+1. A *method* for generating spatial microdata --- individuals allocated to
+zones (see Figure 1) --- by combining individual and geographically aggregated
+datasets.
+2. An *approach* to understanding multi-level phenomena based on
+ spatial microdata --- simulated or real.
 
 ```{r, fig.cap="Schematic of the spatial microsimulation technique", fig.width=4, fig.height=4, echo=FALSE}
 img <- readPNG("figures/msim-schema-lowres.png")
 grid.raster(img)
 ```
 
-Throughout this book we will see spatial microsimulation in
-both senses of the term, generally moving from the former
-to the latter perspective as the chapters progress.
+Throughout this book we will cover
+both senses of the term. To make the distinction between the methodology and
+the approach, we use term *population synthesis* to describe the narrower
+process of generating the spatial microdata
+([](##smsimr)). *Spatial microsimulation* is used to describe the overall
+process, which usually involves population synthesis, unless you are lucky
+enought to have access to real spatial microdata: a scarce commodity.
+Throughout the course of the book the emphasis shifts from the from the former
+to the latter: the focus in chapters 4 to 6 is on generating spatial microdata
+while chapters 7 onwards focus on how to use this rich data type.
 
 Another issue tackled in this book is reproducibility.  Most findings in the
 field cannot easily be replicated, meaning there is no way of independently
