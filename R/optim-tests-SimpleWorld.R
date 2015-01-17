@@ -157,6 +157,8 @@ opt_res[2:dim(opt_res)[1],]$time <-  mb$mean
 opt_res$time<-as.numeric(opt_res$time)
 
 qplot(data = opt_res, maxit, time, linetype = algorithm, geom="line") +
+#   ylim(NA, 3000) +
+  coord_cartesian(ylim = c(0, 2000)) +
   ylab("Time (microseconds)") +
   xlab("Number of iterations") +
   scale_colour_brewer(palette = 2, type = "div") +

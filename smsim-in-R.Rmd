@@ -1199,7 +1199,7 @@ and the time needed for few iterations is good.
 ```
 
 \begin{figure}
-\includegraphics{figures/TAEOptim_GenSA_Mo.pdf}
+\includegraphics{figures/TimeOptim_GenSA_Mo.pdf}
 \caption{Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
 \end{figure}
 
