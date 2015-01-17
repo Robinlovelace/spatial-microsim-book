@@ -235,34 +235,29 @@ context of transport modelling, by Pritchard and Miller (2012).
 
 #(Dumont,2014) Sorry, I didn't manage to write it in a pretty way with a real fraction and sum...
 
-# Such as with the example of SimpleWorld, in each application have a matrix `ind` containing the 
-# categorical value of each individual. `ind` is a two dimensional array (a matrix) in which each row represents an individual and 
-# each column a variable. The value of the cell `ind(i,j)` is therefore the category of the individual `i` for the
-# variable `j`. A second array containing the constraining count data `cons` can, for the purpose of explaining the theory, be
-# expressed in 3 dimensions, which we will label `cons_t`: `cons_t(i,j,k)` is the number of individuals corresponding to the marginal 
-# for the zone 'i', in the variable 'j' for the category 'k'. For example, 'i' could be a municipality, 'j' the gender and
-# 'k' the female. So, element '(i,j,k)' is the total number of woman in this municipality according to the constraint data.
-# 
-# The IPF algorithm will proceed zone per zone. For each zone, each individual will have a weight of representativity of the
-# zone. The weights matrix will then have the dimension 'number of individual x number of zone'. So, 'weight(i,j)' corresponds
-# to the weight of the individual 'i' in the zone 'j'. For the zone 'z', we will adapt the weight matrix to
-# each constraint 'c'.This matrix is initialized with a full matrix of 1 and then, for each step 't',
-# the formula can be expressed as:
+ Such as with the example of SimpleWorld, in each application have a matrix `ind` containing the 
+ categorical value of each individual. `ind` is a two dimensional array (a matrix) in which each row represents an individual and 
+ each column a variable. The value of the cell `ind(i,j)` is therefore the category of the individual `i` for the
+ variable `j`. A second array containing the constraining count data `cons` can, for the purpose of explaining the theory, be
+ expressed in 3 dimensions, which we will label `cons_t`: `cons_t(i,j,k)` is the number of individuals corresponding to the marginal 
+ for the zone 'i', in the variable 'j' for the category 'k'. For example, 'i' could be a municipality, 'j' the gender and
+ 'k' the female. So, element '(i,j,k)' is the total number of woman in this municipality according to the constraint data.
+ 
+ The IPF algorithm will proceed zone per zone. For each zone, each individual will have a weight of representativity of the
+ zone. The weights matrix will then have the dimension 'number of individual x number of zone'. So, 'weight(i,j)' corresponds
+ to the weight of the individual 'i' in the zone 'j'. For the zone 'z', we will adapt the weight matrix to
+ each constraint 'c'.This matrix is initialized with a full matrix of 1 and then, for each step 't',
+ the formula can be expressed as:
 
 
-# $$ weight(i,z,t+1) = weight(i,z,t) * \frac{consTheory(z,c,ind(i,c))}{ \sum_{j=1}^{#indiv} weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
+ $$ weight(i,z,t+1) = weight(i,z,t) * \frac{consTheory(z,c,ind(i,c))}{ \sum_{j=1}^{#indiv} weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
     
-# where the 'I(x)' function is the indicator function which value is 1 if x is true and 0 otherwise. We can see that 
-# 'ind(i,c)' is the category of the individual 'i' for the variable 'c'. So, the denominator corresponds to the
-# sum of the actual weights of all individuals having the same category in this variable as 'i'. We simply redistribue the 
-# weights so that the data follows the constraint concerning this variable.
+ where the 'I(x)' function is the indicator function which value is 1 if x is true and 0 otherwise. We can see that 
+ 'ind(i,c)' is the category of the individual 'i' for the variable 'c'. So, the denominator corresponds to the
+ sum of the actual weights of all individuals having the same category in this variable as 'i'. We simply redistribue the 
+ weights so that the data follows the constraint concerning this variable.
 ```
 
-```{r, echo=FALSE}
-#(Dumont,2014) I wanted to put here the answer for the example, I have it on my paper, but I didn't manage to
-# install git with RStudio and don't know how to remember the cons and ind here, and apply the formula to 
-# fix theoritically the weight for the first iteration and then we will verify that the R code fit to the theory
-```
 
 ### IPF in R {#IpfinR}
 
@@ -753,6 +748,19 @@ the next section.
 
 ### Integerisation {#sintegerisation}
 
+With the weight matrix containing doubles, so non-integer weights, 
+two approaches are possible to obtain a resulting individual dataset.
+First, we can consider the weights as probabilities and inside each zone
+we can randomly draw the number of individuals needed (constraint of
+the zone). This randomly draw is made inside a distribution defined
+by the weights of each individual in this zone. The second possibility
+is to consider the weight matrix as the final contingency table, so 
+that contain the number of individual of this type in this zone.
+For this, we need to have integer weights, so there is a need to
+transform the matrix in another similar, but with only integers. 
+These processes are `Integerisation`. We propose here one way to
+do this.
+
 Integerisation is the process by which a vector of real numbers
 is converted into a vector of integers corresponding to the
 individuals present in synthetic spatial microdata.
@@ -768,10 +776,13 @@ $$w_1 = (0.333, 0.667, 3)$$
 
 $$int(w_1) = (2, 3, 3, 3)$$
 
-This result was obtained by calculating the sum of the weights (4, which
-represents the total population of the zone) and sampling from these
-until the total population is reached. In this case individual 2 is selected
-once as they have a weight approaching 1, individual 3 was replicated
+Note that $w_1$ is a vector of length corresponding to the number of
+people in the sample for this zone. Then, $int(w_1)$ will be the result
+of the integerisation and each sell will contain the ID of the individual
+of the sample to take.This result was obtained by calculating the sum of 
+the weights (4, which represents the total population of the zone) and sampling 
+from these until the total population is reached. In this case individual 2 is 
+selected once as they have a weight approaching 1, individual 3 was replicated
 (*cloned*) three times and individual 1 does not appear in the integerised
 dataset at all, as it has a low weight. In this case the outcome is straightforward
 because the numbers are small and simple. But what about in less clear-cut cases,
@@ -793,6 +804,10 @@ int_pp <- function(x){
 }
 ```
 
+The R function `sample` needs in the order the arguments: the set of objects
+that can be chosen, the number of randomly draw and the probability of each 
+object to be chosen. Then we can add the argument `replace` to tell R if
+the sampling has to be with replacement or not.
 To test this function let's try it on the vectors of length 3 described in
 code:
 
@@ -802,10 +817,31 @@ int_pp(x = c(0.333, 0.667, 3))
 int_pp(x = c(1.333, 1.333, 1.333))
 ```
 
+Note that it is probabilistic, so normally if we proceed two times the same, 
+the results can be a little different. So, by fixing the `seed`, we are
+sure to obtain each time the same result.
 The first result was the same as that obtained through intuition; the second
 result represented individual 1 being clones three times, plus one instance of individual 2. This is
 not intuitive: one would expect at least one of each individual given that they all
-have the same weight.
+have the same weight. But, you have to be aware that it a random choice meaning that 
+even the cell with low probability can be chosen, but not so many times. Here, we 
+draw only very few numbers, so it is normal that the resulting distribution is not
+exactly the same as the wanted. However, probabilities mean that if you have a very
+large dataset, you randow choice will result in a distribution very close to the
+desired one. We can generate 100.000 integers between 1 and 100.000 and see the 
+distribution. The next figure contains the associated histogram and we can see
+that each interval occurs more or less the same number of times.
+
+```{r, echo=FALSE}
+# (Dumont,2015): if we want to prove that with a larger dataset the distribution tends
+# to the desired one:
+# set.seed(0)
+# hist(int_pp(x=rep(1.3333,100000)),main="100000 randomly draws with a uniform probability", xlab="Random numbers",ylab="Frequency")
+```
+\begin{figure}
+\includegraphics{figures/RandomUnif100000.png}
+\caption{Distribution of a vector which cells are generated randomly with each integer between 1 and 100000 having the same probability to appear.}
+\end{figure}
 
 An issue with the
 *proportional probabilities* (PP) strategy is that completely unrepresentative
@@ -835,8 +871,13 @@ int_trs <- function(x){
 }
 ```
 
-To see how this new integerisation method and associated R function
-performed, we run it on the same input vectors:
+This method consists in 3 steps : truncate all weights, so to keep only the
+integer part and forget the decimals. Then, to replicate, so to consider these 
+integer as the number of each type of individuals in the zone. And finally, 
+sample, so complete the process to reach the good number of people in the zone.
+This stage is using a sampling with the probability corresponding to the 
+decimal weights. To see how this new integerisation method and associated 
+R function performed, we run it on the same input vectors:
 
 ```{r}
 set.seed(0)
@@ -898,8 +939,6 @@ is more concise.
 The final remaining step is to re-allocate the attribute data from the
 original microdata (contained in `ind`) data back into `ints_df`. We label this process
 *expansion*, because it creates a synthetic population.
-(Be aware that this term is used by transport modellers to represent
-the entire process of spatial microdata generation.)
 To do this we use the `inner_join`
 function from the recently released **dplyr** package.^[The functions `merge`
 from the R's base package and `join` from the **plyr** provide other ways of
@@ -1125,7 +1164,7 @@ qplot(data = opt_res, time, fit, color = algorithm, geom="line") +
 
 Figure x shows that, in a first step, all algorithm reach a real improvement during the first iteration. The advantage of the IPF algorithm we have been using, which
 converges rapidly to an error very close to zero (as seen before, zero is not
-reachable with a computer perfomung calculus) is observable after only the first iteration.
+reachable with a computer performing calculus) is observable after only the first iteration.
 On the other end of the spectrum is R's default optimization algorithm,
 the Nelder-Mead method. Although the graph shows no improvement
 from one iteration to the next, it should be stated that the algorithm
@@ -1208,7 +1247,7 @@ approximation of the constraint data, despite taking many iterations.
 `GenSA`, on the other hand, is shown to be much slower than the others,
 despite only requiring 2 iterations to arrive at a good level of fit.
 
-Note that these results are biaised by the example that is pretty small 
+Note that these results are biased by the example that is pretty small 
 and runs only for the first zone.
 
 ## Combinatorial optimisation
@@ -1219,11 +1258,18 @@ and results in integer weights, as opposed to the fractional weights
 generated by IPF. Combinatorial optimisation may be more appropriate
 for applications where input individual microdatasets are very large:
 the speed benefits of using the deterministic IPF algorithm shrink as the size of
-the survey dataset increases. An alternative to combinatorial optimisation,
-which builds on the fractional weights generated through IPF
-(or any other method of reweighting), is *intersation*.
-Integerisation largely reduces the need for combinatorial optimisation,
-as we shall see in the next section (\ref{sintegerisation}).
+the survey dataset increases. 
+
+```{r, echo=FALSE}
+# (MD, 2015) I find this has nothing to do here and I do not really
+# agree with this for the moment...
+# An alternative to combinatorial optimisation,
+# which builds on the fractional weights generated through IPF
+# (or any other method of reweighting), is *intersation*.
+# Integerisation largely reduces the need for combinatorial optimisation,
+# as we shall see in the next section (\ref{sintegerisation}).
+
+```
 
 There are two approaches for reweighting using combinatorial optimisation
 in R: shuffling individuals in and out of each area and combinatorial optimisation
