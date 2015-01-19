@@ -1,7 +1,6 @@
 ---
 title: "Introduction"
 layout: default
-output: word_document
 bibliography: ~/Documents/smr.bib
 ---
 
@@ -58,13 +57,17 @@ So, depending on the available data and the aim of the research, spatial microsi
 understood either as a technique or an approach:
 
 1. A *method* for generating spatial microdata --- individuals allocated to
-zones (see Figure 1) --- by combining individual and geographically aggregated
+zones (see Figure 1.1) --- by combining individual and geographically aggregated
 datasets.
 2. An *approach* to understanding multi-level phenomena based on
  spatial microdata --- simulated or real.
+ 
+Figure 1.1 is a very simplified flow diagram showing the difference between
+spatial microdata (bottom) and more commonly found official data types (top).
+There are clear disadvantages with both 
 
-```{r, fig.cap="Schematic of the spatial microsimulation technique", fig.width=4, fig.height=4, echo=FALSE}
-img <- readPNG("figures/msim-schema-lowres.png")
+```{r, fig.cap="Schematic diagram contrasting conventional official data (above) against spatial microdata produced during *population synthesis* (below). Note that for brevity the geographically aggregated data are called *constraints* and the individual-level survey data are called *microdata* in this book.", fig.height=6, echo=FALSE}
+img <- readPNG("figures/msim-flow.png")
 grid.raster(img)
 ```
 
@@ -72,7 +75,7 @@ Throughout this book we will cover
 both senses of the term. To make the distinction between the methodology and
 the approach, we use term *population synthesis* to describe the narrower
 process of generating the spatial microdata
-([](##smsimr)). *Spatial microsimulation* is used to describe the overall
+([](#smsimr)). *Spatial microsimulation* is used to describe the overall
 process, which usually involves population synthesis, unless you are lucky
 enought to have access to real spatial microdata: a scarce commodity.
 Throughout the course of the book the emphasis shifts from the from the former
@@ -220,8 +223,6 @@ itself
 The same
 applies to spatial microsimulation, making R an ideal choice due to its
 statistical analysis capabilities.
-
-
 
 Finally, R has an active and  growing user community. As a result there are
 thousands of packages that extend R's capabilities by providing new functions.
@@ -402,8 +403,27 @@ received.^[Feedback can be left via email to
 r.lovelace@leeds.ac.uk or via the project's GitHub page
 (http://github.com/Robinlovelace/spatial-microsim-book).]
 
-The book contains the following chapter, which progress in a
-logical order:
+The book's chapters progress in a logical
+order that corresponds to the steps typically taken during a spatial microsimulation
+research project that generates, analyses and models spatial microdata. The
+next two chapters are primarily conceptual, introducing the concept and applications
+of spatial microsimulation in more detail whilst the remaining chapters are
+practical. Because we'll be making heavy use of terminology specific to
+spatial microsimulation, it is recommended that you read these introductory
+chapters before tackling the practical section that follow although this is
+not essential. If any of the words do not make sense, the
+Glossary at the end of the book may help clarify what they mean. Chapters
+4, 5, 6 and 7 to encapsulate the process of *population synthesis* which
+generates spatial microdata and which is
+key to much spatial micrsomulation work. They should be read together in that order.
+Chapters 8 9 and 10 explain and demonstrate methods of using 
+spatial microdata to better understand the world. These chapters are more
+self-standing and can be read in any order. The chapter titles and brief
+descriptions of their contents are as follows:
+
+```{r, echo=FALSE}
+# Idea: the book could be easily split into 3 parts. Worth it?
+```
 
 - *What is spatial microsimulation?*
 ([](#what-is))

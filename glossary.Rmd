@@ -55,7 +55,14 @@ layout: default
     random numbers are not needed to generate the result and that the
     output weights are real (not integer) numbers.
     
-    The **population base** roughly equivalent to the 'target population',
+-   **Microdata** is the non-geographical individual-level dataset from which
+    synthetic **spatial microdata** are usually derived. This sample of the
+    target population has also been labelled as the 'seed'
+    (e.g. Barthelemy and Toint, 2012) and simply the 'survey data' in the academic
+    literature. The term microdata is used in this book for its brevity and
+    semantic link to spatial microdata.
+    
+-   The **population base** roughly equivalent to the 'target population',
     used by statisticians to describe the population about whom they wish to
     draw conclusions based on a 'sample population'.
     The sample population, is the group of individuals who
@@ -69,12 +76,26 @@ layout: default
     methods is incompatibility between aggregate constraints that use different     
     population bases.
     
-    **Spatial microsimulation** is the name given to a series of techniques that
+-   **Population synthesis** is the process of converting input data (generally
+    non-geographical **microda** and geographically aggregated 
+    **constraint variables**) into **spatial microdata**.
+    
+-   **Spatial microdata** is the name given to individual-level data allocated
+    to mutually exclusive geographical zones (see Figure 5.1 above). Spatial
+    microdata is useful because it provides multi-level information, about the
+    relationships between individuals and where they live. However, due to the
+    high costs of large surveys and restrictions on the release of geocoded
+    individual-level data, spatial microdata is rarely available to researchers.
+    To overcome this issue, most spatial microsimulation research employs methods
+    of **population synthesis** to generate representative spatial microdata.
+    
+-    **Spatial microsimulation** is the name given to an approach to modelling that
+    comprises a series of techniques that
     generate, analyse and model individual-level data allocated to small
     administrative zones. Spatial microsimulation is an approach for
     understanding processes that operate on individual and geographical levels.
     
-    A **weight matrix** is a 2 dimensional array that links non-spatial
+-    A **weight matrix** is a 2 dimensional array that links non-spatial
     *microdata* to geographical zones. Each row in the weight matrix represents
     an individual and each column represents a zone. Thus, in R notation,
     the weight matrix `w` has dimensions of `nrow(ind)` rows by `nrow(cons)`

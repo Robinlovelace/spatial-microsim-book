@@ -13,7 +13,7 @@ library(grid)
 
 # What is spatial microsimulation? {#what-is}
 
-Like many words, the meaning of attributed to the term *spatial microsimulation*
+Like many words, the meaning attributed to the term *spatial microsimulation*
 varies from one user to the next. As the eminent physicist Richard Feynman
 has stated, the "difference between knowing the name of something and
 knowing something" vital to understand the world. We could equally call the
@@ -236,6 +236,107 @@ most used part of this branch, called reweighting: the process of generating the
 onward, we also explain what can be done with the spatial microdata that we have generated in the preceding chapters. The technique described in this book will be most useful in contexts where you
 have categorical geographically aggregated count data about the entire target population (these are the *contraint variables*, often taken from a national census) and an individual-level survey based on a sample of the target population (the non-spatial *microdata*).
 
+### What spatial microsimulation is not {#is-not}
+
+Having seen contemporary definitions of spatial microsimulation and what it *is*,
+it is also useful to define spatial microsimulation negatively, in terms of
+what it is not. This is partly due to the close association between spatial
+microsimulation and other methods, but also because there is a tendency
+for people to think that spatial microsimulation is more complicated than
+it is.
+**Spatial microsimulation is not agent-based modelling (ABM).**
+
+Spatial microsimulation does involve the creation and analysis of individuals,
+but it does not imply any interaction between these individuals. For this, an
+agent-based model (ABM) is needed. It would be easy to assume that because
+the method contains the word 'simulation', it includes modelling of individual
+behaviours over time and space. This is not the case.
+
+Spatial microsimulation as an approach to modelling involves
+the allocation of individuals to specific zones, what-if scenarios, and, in *dynamic spatial microsimulation*, a time
+step to represent the individuals' evolution over time. In *static spatial microsimulation* studies that rely on *what-if* scenarios, time is not 
+really included. 
+
+Agent based modelling (ABM), by contrast, implies some kind of interaction between the individual units
+and time is an integral part of the process. The aims of the two methods are complementary.
+ABM requires an initial population which spatial microsimulation can provide and adds more complexity and interactivity. The rules of the ABM make each agent evolve through time and space 
+depending in a bottom-up process. Spatial microsimulation is, by contrast, more of a *top down* process. Spatial microsimulation can be 
+closely linked to ABM, however. As described in Chapter \ref{ABM}, the outputs of spatial 
+microsimulation form an excellent basis for ABMs.
+
+**Spatial microsimulation does not generate new data**
+
+During spatial microsimulation, apparently new individuals are created and
+placed into zones. It would be tempting to think that new information
+about the world is somehow
+being created. This is not the case: the 'new' individuals are simply repeats
+of individuals we already knew about from the individual-level data, albeit
+in a different order and in different combinations. If the population of the
+study area is greater than the sample size of the input data, many individuals
+will have to be 'cloned'. Thus we are not increasing the diversity of the dataset,
+simply changing its aggregate-level characteristics.
+
+
+**Spatial microsimulation is often not strictly spatial**
+
+The most surprising feature of spatial microsimulation
+is that the method is not strictly *spatial*. The only
+reason why the method has developed this name (as opposed to 'small
+area population synthesis', for example) is that practitioners tend
+to use administrative zones, which represent geographical areas, as the
+grouping variable. However, any mutually exclusive grouping variable,
+such as age band or number of bedrooms in your house, could
+be used. Likewise, geographical location can be used as a *constraint variable*.
+In most spatial microsimulation models, the spatial variable is a mutually
+exclusive grouping, interchangeable with any such group. Of course, the spatial
+microdata, maps and analysis that result from spatial microsimulation are spatial,
+it's just that there is nothing inherently spatial about the method used to
+generate the spatial microdata.
+
+To be more precise, spatial microsimulation is not *inherently spatial*.
+Spatial attributes such as the geographic coordinates of the zones
+to which individuals have been allocated and home and work
+locations can easily be added to the spatial microdata after they have been
+generated. It is the use of geographical variables as the grouping variable that is
+critical here and which distinguishes spatial microsimulation from other types
+of microsimulation.
+
+```{r, echo=FALSE}
+# **Spatial microsimulation is not always simulation**
+```
+
+## Why use spatial microsimulation?
+
+```{r, echo=FALSE}
+# TODO: finish this section
+# Add MAUP diagram
+```
+
+### To estimate missing data
+
+A common use of spatial microsimulation (at least the population synthesis aspect)
+is simply to create model estimates of data which does not exist. This 
+usage case is represented in Figure 2.1, whereby individual-level data from
+a survey is 'scaled down' to the local level using population synthesis algorithms.
+As illustrated in Figure 2.1, the process of population synthesis can be seen
+as an attempt to reproduce the real spatial microdata collected during the
+Census but which is unavailable for confidentiality reasons.
+Input *microdata* and *constraints* ensure the simulated results match reality
+(at least at the aggregate level for the constraint variables --- see
+[](#assumptions)). The resulting synthetic spatial microdata is extremely useful
+for estimating missing data at the local level. If *target variables* contained
+in the output were not present in input the contraints (income is a common example),
+estimates of income variability over space can be extracted from the spatial microdata.
+In addition, the estimated spatial microdata represented in Figure 5.1 will contain
+estimates of *cross-tabulations* (contingency tables) between different variables
+and estimates of the distribution of continuous variables such as age and income.
+These estimates are useful in many applications ([](#applications)).
+
+```{r, fig.cap="Schematic of population synthesis, a critical element in spatial microsimulation", echo=FALSE}
+img <- readPNG("figures/msim-schema.png")
+grid.raster(img)
+```
+
 ## Applications {#applications}
 
 Spatial microsimulation has a wide variety of applications and there
@@ -376,66 +477,6 @@ models (ABM).
 # img <- readPNG("figures/jtg.png")
 # grid.raster(img)
 ```
-
-## What spatial microsimulation is not {#is-not}
-
-Having seen contemporary definitions of spatial microsimulation ()
-
-**Spatial microsimulation is not strictly spatial**
-
-The most surprising feature of spatial microsimulation
-is that the method is not strictly *spatial*. The only
-reason why the method has developed this name (as opposed to 'small
-area population synthesis', for example) is that practitioners tend
-to use administrative zones, which represent geographical areas, as the
-grouping variable. However, any mutually exclusive grouping variable,
-such as age band or number of bedrooms in your house, could
-be used. Likewise, geographical location can be used as a *constraint variable*.
-In most spatial microsimulation models, the spatial variable is a mutually
-exclusive grouping, interchangeable with any such group. Of course, the spatial
-microdata, maps and analysis that result from spatial microsimulation are spatial,
-it's just that there is nothing inherently spatial about the method used to
-generate the spatial microdata.
-
-To be more precise, spatial microsimulation is not *inherently spatial*.
-Spatial attributes such as the geographic coordinates of the zones
-to which individuals have been allocated and home and work
-locations can easily be added to the spatial microdata after they have been
-generated. It is the use of geographical variables as the grouping variable that is
-critical here and which distinguishes spatial microsimulation from other types
-of microsimulation.
-
-**Spatial microsimulation is not agent-based modelling (ABM).**
-
-Spatial microsimulation does involve the creation and analysis of individuals,
-but it does not imply any interaction between these individuals. For this, an
-agent-based model (ABM) is needed. It would be easy to assume that because
-the method contains the word 'simulation', it includes modelling of individual
-behaviours over time and space. This is not the case.
-
-Spatial microsimulation as an approach to modelling involves
-the allocation of individuals to specific zones, what-if scenarios, and, in *dynamic spatial microsimulation*, a time
-step to represent the individuals' evolution over time. In *static spatial microsimulation* studies that rely on *what-if* scenarios, time is not 
-really included. 
-
-Agent based modelling (ABM), by contrast, implies some kind of interaction between the individual units
-and time is an integral part of the process. The aims of the two methods are complementary.
-ABM requires an initial population which spatial microsimulation can provide and adds more complexity and interactivity. The rules of the ABM make each agent evolve through time and space 
-depending in a bottom-up process. Spatial microsimulation is, by contrast, more of a *top down* process. Spatial microsimulation can be 
-closely linked to ABM, however. As described in Chapter \ref{ABM}, the outputs of spatial 
-microsimulation form an excellent basis for ABMs.
-
-**Spatial microsimulation does not generate new data**
-
-During spatial microsimulation, apparently new individuals are created and
-placed into zones. It would be tempting to think that new information
-about the world is somehow
-being created. This is not the case: the 'new' individuals are simply repeats
-of individuals we already knew about from the individual-level data, albeit
-in a different order and in different combinations. If the population of the
-study area is greater than the sample size of the input data, many individuals
-will have to be 'cloned'. Thus we are not increasing the diversity of the dataset,
-simply changing its aggregate-level characteristics.
 
 ## Assumptions {#assumptions}
 
