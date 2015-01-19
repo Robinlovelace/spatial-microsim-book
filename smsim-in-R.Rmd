@@ -1316,6 +1316,18 @@ Java program.
 
 ## Population synthesis without input microdata
 
+In some cases no representative individual-level
+data is available for population synthesis.
+In such cases, a 'seed' must be generated. Barthélemy and Toint (2012)
+tackled this issue by synthesising a constraint table of the
+individual-level data intended to be representative of the study area.
+
+```{r, echo=FALSE}
+TODO
+Finish this stub section
+```
+
+
 ```{r, echo=FALSE}
 # Add reference to Johan's code here
 ```
