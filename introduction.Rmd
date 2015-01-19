@@ -416,7 +416,7 @@ Glossary at the end of the book may help clarify what they mean. Chapters
 4, 5, 6 and 7 to encapsulate the process of *population synthesis* which
 generates spatial microdata and which is
 key to much spatial micrsomulation work. They should be read together in that order.
-Chapters 8 9 and 10 explains and demonstrates methods of using 
+Chapters 8 9 and 10 explain and demonstrate methods of using 
 spatial microdata to better understand the world. These chapters are more
 self-standing and can be read in any order. The chapter titles and brief
 descriptions of their contents are as follows:

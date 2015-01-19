@@ -9,6 +9,7 @@ layout: default
 # TODO:
 # Ensure text is compatible with new use of chapter title as 'population synthesis'
 # Discuss population synthesis without an input microdataset, with reference to Bathelemy and Toint (2012)
+# Consider splitting this section in 2: reweighting vs CO approaches
 
 # Completed:
 # Change integerisation section so it's part of IPF (RL)
@@ -1019,7 +1020,7 @@ Bell (1999). An R implementation of GREGWT, has been
 created by Esteban Muñoz, and can be found in the GitLab repository
 [mikrosim](https://gitlab.com/emunozh/mikrosim).
 
-## Spatial microsimulation as an optimization problem
+## Population synthesis as an optimization problem
 
 In general terms, an *optimization problem* consists of a function,
 the result of which must be minimised or maximised, called an *objective function*. This function is not necessarily defined 
@@ -1311,6 +1312,11 @@ For combinatorial optimisation algorithms designed for spatial microsimulation
 we must, for now, look for programs outside the R 'ecosystem'.
 Harland (2013) provides a practical tutorial
 introducing the subject based on the Flexible Modelling Framework (FMF)
-Java program. It is possible to generate integer spatial microdata using IPF, however,
-using a technique we refer to imaginatively as integerisation.
-This is the topic of the next section.
+Java program.
+
+## Population synthesis without input microdata
+
+```{r, echo=FALSE}
+# Add reference to Johan's code here
+```
+
