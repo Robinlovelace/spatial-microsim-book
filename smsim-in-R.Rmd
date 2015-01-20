@@ -3,6 +3,13 @@ title: "Spatial microsimulation in R"
 layout: default
 ---
 
+```{r}
+# packages to allow 'knitting' the chapter to html
+library(png)
+library(grid)
+```
+
+
 # Population synthesis in R {#smsimr}
 
 ```{r, echo=FALSE}
@@ -1304,9 +1311,9 @@ a genetic algorithm to select parameters are selected:
 
 ```{r, eval=FALSE}
 # Set min and maximum values of constraints with 'Domains'
-m <- matrix(c(0, 100), ncol = 2)[rep(1, nrow(indu)),]
+m <- matrix(c(0, 100), ncol = 2)[rep(1, nrow(ind)),]
 set.seed(2014)
-genoud(nrow(indu), fn = fun, ind_num = indu, con = cons[1,],
+genoud(nrow(ind), fn = fun, ind_num = ind, con = cons[1,],
   control = list(maxit = 1000), data.type.int = TRUE, D = m)
 ```
 
@@ -1316,7 +1323,7 @@ This means a final population with aggregated data equal to
 (as seen in the previous section):
 
 ```{r, eval=TRUE}
-colSums(indu*c(1,4,2,4))
+colSums(ind * c(1, 4, 2, 4))
 ```
 
 Note that we performed the test only for zone 1 and this aggregated
@@ -1333,18 +1340,18 @@ Remarks also that there can be several solution performing
 a perfect fit. This phenomena depends on the seed chosen for
 the random draw. Indeed, if we chose now the seed 0
 (by writing `set.seed(0)`), as before, we obtain the weights 
-`(0,6,4,2)` that results also in an perfect fit for zone 1:
+`(0, 6, 4, 2)` that results also in an perfect fit for zone 1:
 
-```{r, eval=TRUE}
-colSums(indu*c(0,6,4,2))
+```{r}
+colSums(ind * c(0 ,6 ,4 ,2))
 ```
 
 These two potential synthetic populations reach a perfect fit, but 
 are pretty different. Indeed, we can observe the two populations:
 
-```{r, eval=TRUE}
-indu*c(1,4,2,4)
-indu*c(0,6,4,2)
+```{r}
+ind * c(1 ,4 ,2 ,4)
+ind * c(0 ,6 ,4 ,2)
 ```
 
 An example of comparison is that the second proposition contains 
@@ -1375,12 +1382,8 @@ tackled this issue by synthesising a constraint table of the
 individual-level data intended to be representative of the study area.
 
 ```{r, echo=FALSE}
-TODO
-Finish this stub section
-```
-
-
-```{r, echo=FALSE}
+# TODO
+# Finish this stub section
 # Add reference to Johan's code here
 ```
 
