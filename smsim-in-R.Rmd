@@ -257,8 +257,8 @@ zone 'j'. For the zone 'z', we will adapt the weight matrix to
 each constraint 'c'.This matrix is initialized with a full matrix of 1 
 and then, for each step 't', the formula can be expressed as:
 
-$$ weight(i,z,t+1) = weight(i,z,t) * \frac{consTheory(z,c,ind(i,c))}{ \sum_{j=1}^{#indiv} weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
-   
+$$ weight(i,z,t+1) = weight(i,z,t) * \displaystyle\frac{consTheory(z,c,ind(i,c))}{ \displaystyle\sum_{j=1}^{Nbindiv} weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
+
 where the 'I(x)' function is the indicator function which value is 1 
 if x is true and 0 otherwise. We can see that 'ind(i,c)' is the category 
 of the individual 'i' for the variable 'c'. So, the denominator corresponds 
@@ -1315,7 +1315,22 @@ results in weights for the unique individuals 1 to 4 of 1, 4, 2 and 4 respective
 This means a final population with aggregated data equal to
 (as seen in the previous section):
 
-```{r, eval=TRUE}
+```{r, echo=FALSE}
+umat_count <- function(x) {
+  xp <- apply(x, 1, paste0, collapse = "") # "pasted" version of constraints
+  freq <- table(xp) # frequency of occurence of each individual
+  xu <- unique(x) # save only unique individuals
+  rns <- as.integer(row.names(xu)) # save the row names of unique values of ind
+  xpu <- xp[rns]
+  o <- order(xpu, decreasing = TRUE) # the order of the output (to rectify table)
+  cbind(xu, data.frame(ind_num = freq[o], rns = rns)) # outputs
+}
+
+umat <- umat_count(ind_cat) 
+indu <- apply(umat[1:ncol(ind_cat)], 2, function(x) x * umat$ind_num)
+```
+
+```{r}
 colSums(indu*c(1,4,2,4))
 ```
 
@@ -1335,14 +1350,14 @@ the random draw. Indeed, if we chose now the seed 0
 (by writing `set.seed(0)`), as before, we obtain the weights 
 `(0,6,4,2)` that results also in an perfect fit for zone 1:
 
-```{r, eval=TRUE}
+```{r}
 colSums(indu*c(0,6,4,2))
 ```
 
 These two potential synthetic populations reach a perfect fit, but 
 are pretty different. Indeed, we can observe the two populations:
 
-```{r, eval=TRUE}
+```{r}
 indu*c(1,4,2,4)
 indu*c(0,6,4,2)
 ```
