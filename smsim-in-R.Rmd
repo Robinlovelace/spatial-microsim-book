@@ -264,7 +264,7 @@ zone 'j'. For the zone 'z', we will adapt the weight matrix to
 each constraint 'c'.This matrix is initialized with a full matrix of 1 
 and then, for each step 't', the formula can be expressed as:
 
-$$ weight(i,z,t+1) = weight(i,z,t) * \frac{consTheory(z,c,ind(i,c))}{ \sum_{j=1}^{#indiv} weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
+$$ weight(i,z,t+1) = weight(i,z,t) * \frac{consTheory(z,c,ind(i,c))}{ \sum_{j} weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
    
 where the 'I(x)' function is the indicator function which value is 1 
 if x is true and 0 otherwise. We can see that 'ind(i,c)' is the category 
