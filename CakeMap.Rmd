@@ -8,7 +8,7 @@ layout: default
 By now we have developed a good understanding of what spatial microsimulation
 is, its applications and how it works. We have seen something of its
 underlying theory and its implementation in R. But how can
-the method can be applied 'in the wild', on real datasets?
+the method be applied 'in the wild', on real datasets?
 
 The purpose of this chapter is to answer this question
 using real data to estimate cake consumption in
@@ -16,7 +16,7 @@ different parts of Leeds, UK. The example is deliberately rather absurd to make
 it more memorable. The steps are presented in a generalisable way, to be
 applicable to a wide range of datasets.
 
-The input microdataset is a randomised ('jumbled') subset of the
+The input microdataset is a randomized ('jumbled') subset of the
 2009 [Dental Health Survey](http://data.gov.uk/dataset/adult_dental_health_survey),
 (DHS) which covers England, Northern Ireland and Wales. 1173 variables are available
 in the DHS, many of which are potentially interesting
@@ -25,6 +25,11 @@ These include weekly income, plaque buildup, and
 oral health behaviours.
 Potential linking variables include socio-economic
 classification, and dozens of variables related to oral health.
+
+```{r, echo=FALSE}
+# (MD): Could be good to say the proportion of the population 
+# included in this survey
+```
 
 In terms of constraint variables, we are more
 limited: the Census is the only survey that provides
@@ -48,7 +53,7 @@ allocate individuals to zones should be context dependent:
 if the research is on social exclusion, for example,
 many variables could potentially be of interest, ranging from car ownership
 and house tenancy though to age, gender and religion.
-Often constraint variables must be decided not based on what would
+Often constraint variables must be decided not based on what 
 would be ideal, but what datasets are available. The selection criteria
 will vary from one project to the next, but there are some overriding
 principles that apply to most projects:
@@ -95,6 +100,10 @@ difficult to provide general rules of thumb regarding simplicity other than
 'do not over-complicate the model with excessive constraint variables and
 constraints'.
 
+So, we always need to reach an equilibrium between these principles. 
+Indeed, we have to take into account `enough` and `pertinent` variables,
+but not to many.
+
 To exemplify these principles, let us consider the constraint variables available
 in the CakeMap datasets. Clearly only variables available both in the individual-level and 
 aggregate-level datasets can be chosen from. Five variables assigned to each
@@ -132,7 +141,8 @@ for the project are stored.
 Often spatial microsimulation is presented in a way that suggests the data
 arrived in a near perfect state, ready to be inserted directly into the model.
 This is rarely the case: usually, one must spend time 
-loading the data into R, re-coding categorical variables and column
+loading the data into R, dealing with missing values,
+re-coding categorical variables and column
 names, binning continuous variables and subsetting from the microdataset. In a
 typical project, data preparation can take as long as the analysis
 stage.  This section builds on Chapter 3 to illustrate strategies for data
@@ -146,7 +156,7 @@ These, logically enough, are stored in the 'cakeMap/data/' directory
 as .csv files and contain the word 'raw' in the file name
 to identify the original data. The file 'age-sex-raw.csv', for example is the raw
 age and sex data that was downloaded. As the screenshot in
-Figure 3 illustrates, these datasets are rather verbose and
+Figure 6.1 illustrates, these datasets are rather verbose and
 require pre-processing. The resulting 'clean' constraints are saved in files such as
 'con1.csv', which stands for 'constraint 1'.
 
@@ -169,7 +179,8 @@ Take a look at the R script files 'process-age.R', 'process-nssec.R' and
 into methods for data preparation in R. Wickham
 (2014b) provides a more
 general introduction to data reformatting.
-The most difficult input dataset to deal with is the age/sex constraint data.
+The most difficult input dataset to deal with, in this example,
+is the age/sex constraint data.
 The steps used to clean it are saved in 'process-age.R', in the `data/CakeMap/`
 folder. Take a look through this
 file
@@ -225,7 +236,7 @@ using the `microbenchmark()` commands found
 towards the end of the 'CakeMap.R' file.
 The second of these benchmarks depends on files from
 `smsim-course` (Lovelace, 2014), the repository of which can be downloaded from
-(https://github.com/Robinlovelace/smsim-course).
+(https://github.com/Robinlovelace/smsim-course).]
 
 Thanks to the preparatory steps described above,
 the IPF stage can be run on a single line. After the datasets are loaded in
@@ -240,7 +251,10 @@ weights <- apply(cons, 1, function(x)
   ipfp(x, ind_catt, x0, maxit = 20))
 ```
 
-As with the SimpleWorld example, the correlation between the
+As with the SimpleWorld example, the correlation^[The function "cor" of R calculate the 
+correlation coefficient of Pearson that measure the force of a linear correlation
+between the two variables. Included between -1 and 1, the best value in 
+our case is 1.] between the
 constraint table and the aggregated results of the spatial microsimulation
 can be checked to ensure that the reweighting process has worked correctly.
 This demonstrates that the process has worked with an *r* value above 0.99:
@@ -249,6 +263,24 @@ This demonstrates that the process has worked with an *r* value above 0.99:
 cor(as.numeric(cons), as.numeric(ind_agg))
 ```
 
+This value is very close to 1, so we can consider that there is a big linear
+correlation between the result and the constraint. We can verify it by plotting:
+
+```{r}
+plot(ind_agg,cons,pch=20,xlab="Result of the simulation",ylab="Constraint",main="Correspondance between and the simulation and the constraints")
+```
+
+With the best fit, we would have all constraints equal to the simulation, so a 
+perfect line (this is why we consider a `linear` correlation). Only few points
+are outside the area of the line. Note that we have 4,871,391 inhabitants in the
+simulation and only 6 more in the constraints. That represents a relative
+difference of less than $10^{-6}$. If we count category per category the
+difference between the simulation and the constraint, we obtain a difference 
+of 26,445.57, so 0.54%.
+
+This is for the basic comparison, a more detailed analysis of the quality 
+of the results is present in the next chapter.
+
 ## Integerisation {#CakeINT}
 
 As before, weights of the IPF procedure are fractional, so must be *integerised*
@@ -256,7 +288,7 @@ to create whole individuals. The code presented in chapter 4 requires little
 modification to do this: it is your task to convert the weight matrix generated
 by the above lines of code into a spatial microdataset called, as before,
 `ints_df` (hint: the `int_trs` function in 'R/functions.R' file will help).
-The spatial microdata generated in 'R/CakeMapInts.R' contain the same information
+The spatial microdata generated in 'R/CakeMapInts.R' contains the same information
 as the individual-level dataset, but with the addition of the 'zone' variable,
 which specifies which zone each individual inhabits.
 
@@ -285,6 +317,10 @@ aggregate(ints_df$NSSEC, by = list(ints_df$zone), sd,
 ## 3         3 2.019839
 ```
 
+```{r, eval=FALSE}
+#(MD) Interpret the sd and say why we calculate it
+```
+
 In the above code the third argument refers to the function to be applied to the
 input data. The fourth argument is simply an argument of this function, in this
 case instructing the standard deviation function (`sd`) to ignore all `NA` values.
@@ -311,5 +347,8 @@ consideration in spatial microsimulation models such as CakeMap: model checking 
 save.image("cache-CakeMap.RData")
 ```
 
+```{r, eval=FALSE}
+#(MD) Make it with CO to compare the results?
+```
 
 
