@@ -234,31 +234,38 @@ context of transport modelling, by Pritchard and Miller (2012).
 ```{r, echo=FALSE}
 # TODO (MD): add reference above
 #(Dumont,2014) Jojo thesis and article given by Eric 
-
-#(Dumont,2014) Sorry, I didn't manage to write it in a pretty way with a real fraction and sum...
-# 
-#  Such as with the example of SimpleWorld, in each application have a matrix `ind` containing the 
-#  categorical value of each individual. `ind` is a two dimensional array (a matrix) in which each row represents an individual and 
-#  each column a variable. The value of the cell `ind(i,j)` is therefore the category of the individual `i` for the
-#  variable `j`. A second array containing the constraining count data `cons` can, for the purpose of explaining the theory, be
-#  expressed in 3 dimensions, which we will label `cons_t`: `cons_t(i,j,k)` is the number of individuals corresponding to the marginal 
-#  for the zone 'i', in the variable 'j' for the category 'k'. For example, 'i' could be a municipality, 'j' the gender and
-#  'k' the female. So, element '(i,j,k)' is the total number of woman in this municipality according to the constraint data.
-#  
-#  The IPF algorithm will proceed zone per zone. For each zone, each individual will have a weight of representativity of the
-#  zone. The weights matrix will then have the dimension 'number of individual x number of zone'. So, 'weight(i,j)' corresponds
-#  to the weight of the individual 'i' in the zone 'j'. For the zone 'z', we will adapt the weight matrix to
-#  each constraint 'c'.This matrix is initialized with a full matrix of 1 and then, for each step 't',
-#  the formula can be expressed as:
-# 
-# 
-#  $$ weight(i,z,t+1) = weight(i,z,t) * \frac{consTheory(z,c,ind(i,c))}{ \sum_{j=1}^{#indiv} weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
-#     
-#  where the 'I(x)' function is the indicator function which value is 1 if x is true and 0 otherwise. We can see that 
-#  'ind(i,c)' is the category of the individual 'i' for the variable 'c'. So, the denominator corresponds to the
-#  sum of the actual weights of all individuals having the same category in this variable as 'i'. We simply redistribue the 
-#  weights so that the data follows the constraint concerning this variable.
 ```
+
+Such as with the example of SimpleWorld, in each application have a matrix 
+`ind` containing the categorical value of each individual. `ind` is a two 
+dimensional array (a matrix) in which each row represents an individual and 
+each column a variable. The value of the cell `ind(i,j)` is therefore the 
+category of the individual `i` for the variable `j`. A second array containing 
+the constraining count data `cons` can, for the purpose of explaining the 
+theory, be expressed in 3 dimensions, which we will label `cons_t`: 
+`cons_t(i,j,k)` is the number of individuals corresponding to the marginal 
+for the zone 'i', in the variable 'j' for the category 'k'. For example, 
+'i' could be a municipality, 'j' the gender and 'k' the female. So, 
+element '(i,j,k)' is the total number of woman in this municipality according 
+to the constraint data.
+
+The IPF algorithm will proceed zone per zone. For each zone, each individual 
+will have a weight of representativity of the zone. The weights matrix 
+will then have the dimension 'number of individual x number of zone'. 
+So, 'weight(i,j)' corresponds to the weight of the individual 'i' in the 
+zone 'j'. For the zone 'z', we will adapt the weight matrix to
+each constraint 'c'.This matrix is initialized with a full matrix of 1 
+and then, for each step 't', the formula can be expressed as:
+
+$$ weight(i,z,t+1) = weight(i,z,t) * \frac{consTheory(z,c,ind(i,c))}{ \sum_{j=1}^{#indiv} weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
+   
+where the 'I(x)' function is the indicator function which value is 1 
+if x is true and 0 otherwise. We can see that 'ind(i,c)' is the category 
+of the individual 'i' for the variable 'c'. So, the denominator corresponds 
+to the sum of the actual weights of all individuals having the same category
+in this variable as 'i'. We simply redistribue the weights so that the 
+data follows the constraint concerning this variable.
+
 
 
 ### IPF in R {#IpfinR}
@@ -1252,29 +1259,35 @@ despite only requiring 2 iterations to arrive at a good level of fit.
 Note that these results are biased by the example that is pretty small 
 and runs only for the first zone.
 
-## Combinatorial optimisation
+### Combinatorial optimisation
 
-Combinatorial optimisation is an alternative to IPF for allocating individuals
+Combinatorial optimisation is a complete field consisting in a different
+method to result optimisation problem. Instead of having one candidate that
+evolve through the iterations, combinatorial optimisation forms a set
+of feasible candidates and then evaluate them thanks to the objective
+function to be minimised. There are several types of combinatorial optimisation
+depending on how we chose the combination of candidates.
+
+This technique can be seen as an alternative to IPF for allocating individuals
 to zones. This strategy is *probabilistic*
-and results in integer weights, as opposed to the fractional weights
-generated by IPF. Combinatorial optimisation may be more appropriate
-for applications where input individual microdatasets are very large:
-the speed benefits of using the deterministic IPF algorithm shrink as the size of
-the survey dataset increases. 
+and results in integer weights (since it is a combination of individuals),
+as opposed to the fractional weights generated by IPF. Combinatorial optimisation
+may be more appropriate for applications where input individual microdatasets are 
+very large: the speed benefits of using the deterministic IPF algorithm shrink as 
+the size of the survey dataset increases. As seen before, IPF creates non integer 
+weights, but we have proposed two solutions to transform them into the final 
+individual-level population. So, the proportionality of IPF is more intuitive,
+but need to calculate the whole weights matrix in each iteration, where CO
+just proposes candidates. However, if the objective function takes a long time
+to be calculated, CO will have to perform this evaluation for each candidate.
 
-```{r, echo=FALSE}
-# (MD, 2015) I find this has nothing to do here and I do not really
-# agree with this for the moment...
-# An alternative to combinatorial optimisation,
-# which builds on the fractional weights generated through IPF
-# (or any other method of reweighting), is *intersation*.
-# Integerisation largely reduces the need for combinatorial optimisation,
-# as we shall see in the next section (\ref{sintegerisation}).
-
-```
+Genetic algorithms are included in this field and become popular in some 
+domains, such as industry, for the moment. These kind of algorithms can be 
+really effective when the objective function has several local minimum and
+we want to find the global one. (Hermes and Poulsen, 2012)
 
 There are two approaches for reweighting using combinatorial optimisation
-in R: shuffling individuals in and out of each area and combinatorial optimisation
+in R: shuffling individuals in and out of each area and combinatorial optimisation,
 the *domain* of the solution space set to allow inter-only results...
 
 The second approach to combinatorial optimisation in R depends on methods
@@ -1297,13 +1310,52 @@ genoud(nrow(indu), fn = fun, ind_num = indu, con = cons[1,],
   control = list(maxit = 1000), data.type.int = TRUE, D = m)
 ```
 
-This rather long command, implemented in 'optim-tests-SimpleWorld.R',
+This command, implemented in 'optim-tests-SimpleWorld.R',
 results in weights for the unique individuals 1 to 4 of 1, 4, 2 and 4 respectively.
-This means that a total population of 11 individuals is simulated for the zone,
-composed of 1 instance of individual 1 and 'clone' of the others.
-The command takes 5 seconds to generate
-an incorrect result, so this implementation of `genoud`
-is clearly not production ready.
+This means a final population with aggregated data equal to
+(as seen in the previous section):
+
+```{r, eval=TRUE}
+colSums(indu*c(1,4,2,4))
+```
+
+Note that we performed the test only for zone 1 and this aggregated
+data are equally the same as the first constraint. Moreover, 
+thanks to the fact that the algorithm directly consider only
+integer weight, we do not have the problem of IPF, for 
+which the perfect fit consists in non integer weights and the
+integerisation has to be really effective or could decrease the
+fit to the constraint. The fact that the gradient contains "NA"
+in the end of the algorithm is not a problem, because it just means
+that they have not been calculated.
+
+Remarks also that there can be several solution performing 
+a perfect fit. This phenomena depends on the seed chosen for
+the random draw. Indeed, if we chose now the seed 0
+(by writing `set.seed(0)`), as before, we obtain the weights 
+`(0,6,4,2)` that results also in an perfect fit for zone 1:
+
+```{r, eval=TRUE}
+colSums(indu*c(0,6,4,2))
+```
+
+These two potential synthetic populations reach a perfect fit, but 
+are pretty different. Indeed, we can observe the two populations:
+
+```{r, eval=TRUE}
+indu*c(1,4,2,4)
+indu*c(0,6,4,2)
+```
+
+An example of comparison is that the second proposition contains 
+no male being more than 50 years old, but the first one has 2.
+With this method, there can not be a population with 1 male of
+over 50, because we take integer weights and there are two 
+men in this category in the sample. This is the disadvantage of
+algorithms reaching directly integer weights. With IPF, if the 
+weights of this individual is between 0 and 1, there is a possibility 
+to have a person in this category.
+
 `genoud` is used here only
 to provide a practical demonstration of the possibilities of
 combinatorial optimisation using existing R packages.
