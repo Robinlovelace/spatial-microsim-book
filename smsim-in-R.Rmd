@@ -3,6 +3,13 @@ title: "Spatial microsimulation in R"
 layout: default
 ---
 
+```{r}
+# packages to allow 'knitting' the chapter to html
+library(png)
+library(grid)
+```
+
+
 # Population synthesis in R {#smsimr}
 
 ```{r, echo=FALSE}
@@ -1304,9 +1311,9 @@ a genetic algorithm to select parameters are selected:
 
 ```{r, eval=FALSE}
 # Set min and maximum values of constraints with 'Domains'
-m <- matrix(c(0, 100), ncol = 2)[rep(1, nrow(indu)),]
+m <- matrix(c(0, 100), ncol = 2)[rep(1, nrow(ind)),]
 set.seed(2014)
-genoud(nrow(indu), fn = fun, ind_num = indu, con = cons[1,],
+genoud(nrow(ind), fn = fun, ind_num = ind, con = cons[1,],
   control = list(maxit = 1000), data.type.int = TRUE, D = m)
 ```
 
@@ -1315,23 +1322,25 @@ results in weights for the unique individuals 1 to 4 of 1, 4, 2 and 4 respective
 This means a final population with aggregated data equal to
 (as seen in the previous section):
 
+
 ```{r, echo=FALSE}
 umat_count <- function(x) {
-  xp <- apply(x, 1, paste0, collapse = "") # "pasted" version of constraints
-  freq <- table(xp) # frequency of occurence of each individual
-  xu <- unique(x) # save only unique individuals
-  rns <- as.integer(row.names(xu)) # save the row names of unique values of ind
-  xpu <- xp[rns]
-  o <- order(xpu, decreasing = TRUE) # the order of the output (to rectify table)
-  cbind(xu, data.frame(ind_num = freq[o], rns = rns)) # outputs
+ xp <- apply(x, 1, paste0, collapse = "") # "pasted" version of constraints
+ freq <- table(xp) # frequency of occurence of each individual
+ xu <- unique(x) # save only unique individuals
+ rns <- as.integer(row.names(xu)) # save the row names of unique values of ind
+ xpu <- xp[rns]
+ o <- order(xpu, decreasing = TRUE) # the order of the output (to rectify table)
+ cbind(xu, data.frame(ind_num = freq[o], rns = rns)) # outputs
 }
 
-umat <- umat_count(ind_cat) 
+umat <- umat_count(ind_cat)
 indu <- apply(umat[1:ncol(ind_cat)], 2, function(x) x * umat$ind_num)
 ```
 
+
 ```{r}
-colSums(indu*c(1,4,2,4))
+colSums(indu * c(1, 4, 2, 4))
 ```
 
 Note that we performed the test only for zone 1 and this aggregated
@@ -1348,18 +1357,18 @@ Remarks also that there can be several solution performing
 a perfect fit. This phenomena depends on the seed chosen for
 the random draw. Indeed, if we chose now the seed 0
 (by writing `set.seed(0)`), as before, we obtain the weights 
-`(0,6,4,2)` that results also in an perfect fit for zone 1:
+`(0, 6, 4, 2)` that results also in an perfect fit for zone 1:
 
 ```{r}
-colSums(indu*c(0,6,4,2))
+colSums(indu * c(0 ,6 ,4 ,2))
 ```
 
 These two potential synthetic populations reach a perfect fit, but 
 are pretty different. Indeed, we can observe the two populations:
 
 ```{r}
-indu*c(1,4,2,4)
-indu*c(0,6,4,2)
+indu * c(1 ,4 ,2 ,4)
+indu * c(0 ,6 ,4 ,2)
 ```
 
 An example of comparison is that the second proposition contains 
@@ -1390,12 +1399,8 @@ tackled this issue by synthesising a constraint table of the
 individual-level data intended to be representative of the study area.
 
 ```{r, echo=FALSE}
-TODO
-Finish this stub section
-```
-
-
-```{r, echo=FALSE}
+# TODO
+# Finish this stub section
 # Add reference to Johan's code here
 ```
 
