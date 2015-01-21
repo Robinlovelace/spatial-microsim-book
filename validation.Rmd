@@ -91,7 +91,7 @@ new target variables, purely for the purposes of validation.
 Internal validation is the process of comparing the model's output against data that is internal to the model itself. In practice this means converting the synthetic spatial microdata into a form that is commensurate with the constraint variables and comparing the two geographically aggregated datasets: the observed vs simulated values. Every spatial microsimulation model will have access to the data needed for this comparison. Internal validation should therefore be seen as **the bare minimum** in terms of model evaluation, to be conducted as a standard procedure on all spatial microsimulation runs. When authors refer to this procedure as "result validation" they are being misleading. Internal validation tells us simply that the results are internally consistent; it should always be conducted.
 
 Because internal validation is so widely used in the literature
-there are a number of established measures of internal fit that have been used. Yet there is little consistency in the measures that are used. This makes it difficult to assess which models are performing best across different studies, a major problem in spatial microsimulation research: if one study reports only *r* values, whereas another reports only *TAE* (each measure will be described shortly), there is no way to assess which is performing better. There is a need for more consistency is reporting of internal validation. Hopefully this Chapter, which provides descriptions of each of the commonly used and recommended measures of *goodness-of-fit* as well as guidance on which to use --- is a step in the right direction.
+there are a number of established measures of internal fit that have been used. Yet there is little consistency in the measures that are used. This makes it difficult to assess which models are performing best across different studies, a major problem in spatial microsimulation research. If one study reports only *r* values, whereas another reports only *TAE* (each measure will be described shortly), there is no way to assess which is performing better. There is a need for more consistency is reporting of internal validation. Hopefully this Chapter, which provides descriptions of each of the commonly used and recommended measures of *goodness-of-fit* as well as guidance on which to use --- is a step in the right direction.
 
 Several metrics of model fit exist. We will look at some commonly used measures and define them
 mathematically before defining them in R and, in the subsequent section, implementing them to evaluate the CakeMap spatial microsimulation model. The measures developped in the section are:
@@ -120,11 +120,9 @@ So, the measure of a *linear* correlation is the one needed. The formula to calc
 $$ r=\frac{s_{XY}}{S_X S_Y}=\frac{\frac{1}{n}\displaystyle\sum_{i=1}^n x_iy_i -\bar{x}\bar{y}}{\sqrt{\frac{1}{n}\displaystyle\sum_{i=1}^n x_i^2-\bar{x}^2}\sqrt{\frac{1}{n}\displaystyle\sum_{i=1}^n y_i^2-\bar{y}^2}}$$
 
 This corresponds to the covariance divided by the product of the variance of each vector. This 
-can sounds complicate, but it is just a standardized covariance. If the fit is perfect,
-both vectors (simulated and constraint) evolve in the same rythme, so they have a high covariance
+can sound complicated, but it is just a standardized covariance. If the fit is perfect,
+both vectors (simulated and constraint) will have a high covariance
 and the $r$ is then close to 1.
-
-
 
 ### Absolute error measures
 
@@ -179,11 +177,12 @@ $$
 
 RMSE is an interesting measure of the error, since SAE would be the same if the errors are $(1,1,1,1)$ or
 $(0,0,0,4)$. However, we consider the fit as globally better if it contains several few errors than if it is perfect for 3 zones and a higher error for the fourth. In this case, RMSE will detect this difference. 
-For the first case, RMSE is $ \sqrt{\frac{4}{4}} $. For the second case, RMSE equals $\sqrt{\frac{4^2}{4}}=2 $.
+For the first case, RMSE is $\sqrt{\frac{4}{4}}$. For the second case, RMSE equals $\sqrt{\frac{4^2}{4}}=2$.
 
 As with TAE, there is also a standardised version of RMSE (), normalised root mean error squared (NRMSE). This is calculated by dividing RMSE by the range of the observed values:
+
 $$
-NRMSE = frac{RMSE}{max(obs) - min(obs)} 
+NRMSE = \frac{RMSE}{max(obs) - min(obs)} 
 $$
 
 ### Chi-squared
@@ -224,10 +223,10 @@ than 10 years ago and found no consensus
 on the measures that are appropriate for different situations.
 10 years later and we are no nearer consensus.
 
-It is important to note that all such measures, that compare aggregate
+Such measures, that compare aggregate
 count datasets, are *not* sufficient to ensure that the results of
-spatial microsimulation are reliable: they are methods of *internal validation*
-which simply show that the individual-level dataset has
+spatial microsimulation are reliable: they are methods of *internal validation*.
+They simply show that the individual-level dataset has
 been reweighted to fit with a handful of constraint variables: i.e. that the
 process has work under on its own terms.
 

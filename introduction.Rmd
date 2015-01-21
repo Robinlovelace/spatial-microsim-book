@@ -106,7 +106,7 @@ in the field of spatial microsimulation.
 Reproducibility is encouraged throughout via provision of code for readers
 to actually *do* spatial microsimulation. Small yet realistic datasets are
 provided to run the methods on your own computer.  All the findings presented in this
-book can therefore be reproduced using code and data in the book's Github
+book can therefore be reproduced using code and data in the book's GitHub
 [repository](https://github.com/Robinlovelace/spatial-microsim-book).
 
 Why spend time and effort on reproducibility? The first answer pragmatic:

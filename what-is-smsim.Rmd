@@ -234,7 +234,7 @@ As we have seen, the term "spatial microsimulation" has a number of meanings inc
 most used part of this branch, called reweighting: the process of generating the spatial microdata. From 
 [](#vis)
 onward, we also explain what can be done with the spatial microdata that we have generated in the preceding chapters. The technique described in this book will be most useful in contexts where you
-have categorical geographically aggregated count data about the entire target population (these are the *contraint variables*, often taken from a national census) and an individual-level survey based on a sample of the target population (the non-spatial *microdata*).
+have categorical geographically aggregated count data about the entire target population (these are the *constraint variables*, often taken from a national census) and an individual-level survey based on a sample of the target population (the non-spatial *microdata*).
 
 ### What spatial microsimulation is not {#is-not}
 
@@ -325,7 +325,7 @@ Input *microdata* and *constraints* ensure the simulated results match reality
 (at least at the aggregate level for the constraint variables --- see
 [](#assumptions)). The resulting synthetic spatial microdata is extremely useful
 for estimating missing data at the local level. If *target variables* contained
-in the output were not present in input the contraints (income is a common example),
+in the output were not present in input the constraints (income is a common example),
 estimates of income variability over space can be extracted from the spatial microdata.
 In addition, the estimated spatial microdata represented in Figure 5.1 will contain
 estimates of *cross-tabulations* (contingency tables) between different variables
@@ -512,7 +512,7 @@ to reproduce the full diversity of individuals and areas in the study region.
 Obviously the real world is complex and many processes are spatially dependent,
 invalidating assumptions 2 and 3. The extent to which the relationships between
 variables can be deemed to be constant over space is often
-unknown. However, there there are ways of
+unknown. However, there are ways of
 checking the spatial dependency of
 relationships between multiply variables, not least Geographically Weighted Regression
 (GWR). 
