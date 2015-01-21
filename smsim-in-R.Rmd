@@ -259,12 +259,13 @@ to the constraint data.
 The IPF algorithm will proceed zone per zone. For each zone, each individual 
 will have a weight of representativity of the zone. The weights matrix 
 will then have the dimension 'number of individual x number of zone'. 
-So, 'weight(i,j)' corresponds to the weight of the individual 'i' in the 
-zone 'j'. For the zone 'z', we will adapt the weight matrix to
+So, 'w(i,j,t)' corresponds to the weight of the individual 'i' in the 
+zone 'j' (during the step 't'). For the zone 'z', we will adapt the weight matrix to
 each constraint 'c'.This matrix is initialized with a full matrix of 1 
 and then, for each step 't', the formula can be expressed as:
 
-$$ weight(i,z,t+1) = weight(i,z,t) * \displaystyle\frac{consTheory(z,c,ind(i,c))}{ \displaystyle\sum_{j=1}^{Nbindiv} weights(j,z,t) * I(ind(j,c)==ind(i,c))}$$
+$$ w(i,z,t+1) = w(i,z,t) * \displaystyle\frac{cons \_ t(z,c,ind(i,c))}{ \displaystyle\sum_{j=1}^{Nbindiv} w(j,z,t) * I(ind(j,c)=ind(i,c))} $$
+
 
 where the 'I(x)' function is the indicator function which value is 1 
 if x is true and 0 otherwise. We can see that 'ind(i,c)' is the category 
