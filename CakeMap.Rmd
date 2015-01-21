@@ -45,7 +45,7 @@ aggregated categorical count data from the census --- the *constraint tables*.
 As discussed in Chapter  must first decide which variables should be used to link the two. We must
 select the constraints from available linking variables.
 
-## Selection of constraint variables
+## Selection of constraint variables 
 
 The selection of linking variables should not be arbitrary pre-ordained
 by preconceptions. The decision of which constraints to use to
@@ -101,8 +101,9 @@ difficult to provide general rules of thumb regarding simplicity other than
 constraints'.
 
 So, we always need to reach an equilibrium between these principles. 
-Indeed, we have to take into account `enough` and `pertinent` variables,
-but not to many.
+Indeed, we have to take into account *enough* and *pertinent* variables,
+without making the population synthesis process too complex
+(see [](#Selecting)).
 
 To exemplify these principles, let us consider the constraint variables available
 in the CakeMap datasets. Clearly only variables available both in the individual-level and 
@@ -266,8 +267,12 @@ cor(as.numeric(cons), as.numeric(ind_agg))
 This value is very close to 1, so we can consider that there is a big linear
 correlation between the result and the constraint. We can verify it by plotting:
 
-```{r}
-plot(ind_agg,cons,pch=20,xlab="Result of the simulation",ylab="Constraint",main="Correspondance between and the simulation and the constraints")
+```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis)."}
+plot(ind_agg, cons, pch=20, xlab="Result of the simulation",
+  ylab="Constraint",
+  main="Correspondance between and the simulation and the constraints")
+# I don't think it's necessary to show the code that creates this plot - but happy
+# to remove 'echo=FALSE' if need's be (RL)
 ```
 
 With the best fit, we would have all constraints equal to the simulation, so a 
