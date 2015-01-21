@@ -41,8 +41,8 @@ the individual level (if geo-coded survey data are available) or (more
 commonly) at the aggregate level.
 
 Internal validation is the most common form model evaluation. In some cases
-this validation is the only available test of the model's output,
-because of data for external validation is not available.
+this type of validation is the only available test of the model's output,
+because datasets for external validation are unavailable.
 A common motivation for using spatial microsimulation is lack of
 data on a specific variable (as with the CakeMap example in the previous chapter).
 In such cases internal validation, combined with proxy variables for which external
@@ -55,26 +55,30 @@ number of confectionery shops, consumer surveys and even social media could be
 explored used to provide 'sanity checks' on the results. Sometimes you may need
 to be creative to find data for external validation.)
 
-An important remark on these two kinds of validation is taht it does not
-test the model in the same "level". Indeed, internal validation tests
-the model quality, considering the assumptions and the input data as 
+It is important to note that these two kinds of validation is thay they
+test the model at different levels. *Internal validation* tests
+the model quality at the aggregate level, assuming the input data is
 pertinent, correct and representative. If this validation fails, you may
-have a problem in the choice made during the modelisation, the algorithm, or 
-you have contradictory constraints, so no solution exists. It is really a
-method problem. In all cases, if internal validation fails, the reasoning
-to proceed to the model has to be reviewed. 
+have a problem with the input microdata (e.g. an excess of 'empty cells'),
+implementation of the population synthesis algorithm, or 
+contradictory constraints. Internal validation highlights problems of
+method: if internal validation results are poor, the cause of the
+problem should be diagnosed (e.g. is it poor data or poor implementation?)
+and fixed. 
 
-On the other side, the external 
-validation makes a comparison with other databases, researchs. This tests
-simultaneously if the modelisation process is good, the input data are 
-correct and representative and the assumptions to the model are realistics.
-If this one fails, the problem can come from everywhere. This is why both 
-are really interresting together. 
-
+By contrast, *external 
+validation* compares the model results with data that is *external* to the
+model. External validation is more rigorous as it relates
+simultaneously to the model's performance and whether the input data are 
+suitable for answering the research questions explored by spatial microsimulation.
+Poor external validation results can come from everywhere, so are harder to fix
+(internal validation can rule out faulty methods however). Thus internal and
+external validation complement each other.
 
 This Chapter explains how to undertake routine checks on spatial microsimulation
 procedures, how to
-identify outlying variables and zones which are simply not performing well and
+identify outlying variables and zones which are simply not performing well
+(internal validation) and
 how to undertake external validation. Even in cases where there is a paucity of
 data on the target variable, as with cake consumption, there is usually at least
 some test of the model's performance against external data that can be
@@ -82,10 +86,9 @@ undertaken. As we will see with the CakeMap example (where income is used as a
 proxy variable for external validation purposes) this can involve the creation of
 new target variables, purely for the purposes of validation.
 
-
 ## Internal validation
 
-Internal validation is the process of comparing the model's output against data that is internal to the model itself. In practice this means converting the synthetic spatial microdata into a form that is commensurate with the constraint variables and comparing the two geographically aggregated datasets: the observed vs simulated values. Every spatial microsimulation will have access to the data needed for this comparison. Internal validation should therefore be seen as **the bare minimum** in terms of model evaluation, to be conducted as a standard procedure on all spatial microsimulation runs. When authors refer to this procedure, that should be a routine part of the modelling process, as "result's validation" they are being misleading. Internal validation tells us simply that the results are internally consistent and should always be conducted.
+Internal validation is the process of comparing the model's output against data that is internal to the model itself. In practice this means converting the synthetic spatial microdata into a form that is commensurate with the constraint variables and comparing the two geographically aggregated datasets: the observed vs simulated values. Every spatial microsimulation model will have access to the data needed for this comparison. Internal validation should therefore be seen as **the bare minimum** in terms of model evaluation, to be conducted as a standard procedure on all spatial microsimulation runs. When authors refer to this procedure as "result validation" they are being misleading. Internal validation tells us simply that the results are internally consistent; it should always be conducted.
 
 Because internal validation is so widely used in the literature
 there are a number of established measures of internal fit that have been used. Yet there is little consistency in the measures that are used. This makes it difficult to assess which models are performing best across different studies, a major problem in spatial microsimulation research: if one study reports only *r* values, whereas another reports only *TAE* (each measure will be described shortly), there is no way to assess which is performing better. There is a need for more consistency is reporting of internal validation. Hopefully this Chapter, which provides descriptions of each of the commonly used and recommended measures of *goodness-of-fit* as well as guidance on which to use --- is a step in the right direction.
@@ -188,6 +191,8 @@ $$
 ```{r,echo=FALSE}
 # (MD, 2015)
 # Are you sure of the relevance of a chi squared in this case?
+# No I'm not sure! (RL)
+
 # Define the hypothesis
 # I do not agree with the pvalue definition
 ```
@@ -205,6 +210,11 @@ The *chi-squared* test is the probability of obtaining the calculated $\chi^2$ v
 An advantage of chi-squared is that it can take matrices or vectors as inputs. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate-level data for the test (Agresti 2007).
 
 ### Which test to use?
+
+```{r, echo=FALSE}
+# TODO: add results from JASSS paper
+```
+
 
 The aforementioned tests are just some of the most commonly
 used and most useful *goodness of fit* measures for internal validation in spatial microsimulation. The differences
@@ -270,11 +280,9 @@ TAE is sensitive to the number of people within the model, SAE is not.
 # add some representations of the errors 
 ```
 
-
 ```{r, echo=FALSE}
 # Not that we divide by the population in the constraints which is really the total population of the study area multiplied by the number of constraints. This is because with each additional constraint there are more opportunities for error so the 
 ```
-
 
 ## External validation
 
