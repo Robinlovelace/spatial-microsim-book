@@ -571,11 +571,15 @@ it is helps understand how IPF works and aides diagnosing issues with
 the reweighting process as the weight matrix is re-saved after every
 constraint and iteration. However, there are more computationally efficient
 approaches to IPF. To save computer and researcher time, we 
-use in the next section an alternative method that uses the **ipfp** package.
+use in the next sections 
+R packages which implement optimised IPF algorithms:
+**mipfp** and  **ipfp**.
 
 ```{r, echo=FALSE}
 # Possibly more on IPF here. For now, press on
 ```
+
+### Reweighting with **mipfp** {#mipfp}
 
 ### Reweighting with **ipfp** {#ipfp}
 
