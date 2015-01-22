@@ -7,7 +7,6 @@ layout: default
 load("cache-CakeMap.RData")
 ```
 
-
 # Model checking and evaluation {#svalidation}
 
 In food safety, openness about mistakes is

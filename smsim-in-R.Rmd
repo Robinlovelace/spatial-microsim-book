@@ -1073,8 +1073,9 @@ the parameters $par_i$ represent the aggregate constraint variable
 be calculated to minimise
 to minimise $f_0(x)$, subject to $par$.
 
-To illustrate the concept further, the aim of aircraft design is to minimise
-weight by changing its shape, and materials. But these modifications
+To illustrate the concept further, consider the case of aircraft design.
+Imagine that the aim (the objective function) is to minimise
+weight by changing its shape and materials. But these modifications
 must proceed subject to some constraints, because the
 airplane must be safe and and sufficiently voluminous to 
 transport people. Constrained optimisation in this case would involve
