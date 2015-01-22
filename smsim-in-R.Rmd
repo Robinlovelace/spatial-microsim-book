@@ -1080,9 +1080,9 @@ must proceed subject to some constraints, because the
 airplane must be safe and and sufficiently voluminous to 
 transport people. Constrained optimisation in this case would involve
 searching combinations of shape and material (to include in $x$) that minimise
-the weight ($f_0$ which is a single value depending on $x$). But this search
-must take place under
-volume (depending on the shape) and safety constraints
+the weight (the result of $f_0$, is a single value depending on $x$). This search
+must take place under constraints relating to
+volume (depending on the shape) and safety
 ($par_1$ and $par_2$ in the above notation). Thus $par$ values
 define the domain of the *solution space*. We search inside this domain
 the for the combination of $x_i$ that minimise weight.
