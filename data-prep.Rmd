@@ -60,7 +60,7 @@ The focus of this chapter is on the methods and underlying principles
 of data preparation for spatial microsimulation and these will be the same
 regardless of the size of your datasets.
 Each usage case is different and you may have input for which the processing
-steps here are not sufficient --- if this is the case, see Wickham (2014b). However, 
+steps here are insufficient --- if this is the case, see Wickham (2014b). However, 
 in most cases, the input datasets will be similar to the ones presented here,
 consisting of an individual-level survey dataset consisting of categorical
 variables and aggregate-level constraints containing categorical counts.
@@ -78,9 +78,12 @@ on the availability of data. If the problem relates to variables that are simply
 unavailable at any level (e.g. hair length, if your research question related
 to the hairdressing industry), spatial microsimulation may be unsuitable.
 If, on the other hand, all the data is available at the geographical level
-of interest (to explore regional differences, for example, all the necessary
-data may be already available as many surveys provide course geographic
-information at the individual level). Spatial microsimulation is useful when you
+of interest, spatial microsimulation may not be necessary.^[To
+explore geographical variability at a low spatial resolution,
+for example, the necessary data may be already available, as surveys often
+state which region each individual inhabits. Spatial microsimulation would
+only be necessary in this case if higher spatial resolution were needed.]
+Spatial microsimulation is useful when you
 have an intermediary amount of data available: geographically aggregated count
 and a non-spatial survey.
 In any case, you should have a clear idea about the range of available
@@ -320,9 +323,8 @@ the data will be. The total number of *categories* used to
 constrain the weights is in fact more important.
 
 For example, a model constrained by two variables,
-age and income bands,
 each containing 10 categories (20 constraint categories
-in total) will be better constrained
+in total), will be better constrained
 than a model constrained by 5 binary variables such as
 male/female, young/old etc. That is not to say that the
 former set of constraints is *better* (as emphasised above,
@@ -438,7 +440,7 @@ that there are many ways to load data into R, including `read.csv()` and
 such as `read.xls` and  `read.spss()` from **gdata** and **foreign**
 packages respectively. There are many ways to 'clean' data in preparation
 for spatial microsimulation. In the following example we present 
-in detail the steps needed to load a the data underlying the SimpleWorld
+in detail the steps needed to load the data underlying the SimpleWorld
 example.^[All
 data and code to replicate the procedures outlined in the book are available
 publicly from the spatial-microsimulation-book GitHub repository, as described above. We recommend loading the input data and playing
@@ -491,9 +493,9 @@ there are only 2 young people (under 49) in the zone.
 Even at this stage there is a potential for errors to be introduced.  A classic
 mistake with areal (geographically aggregated) data is that the order in which zones are loaded can change from
 one table to the next. The constraint data should therefore come with some kind of *zone
-id*, an identifying code, called the "key" of the zone and that consist in an unique
-sequence allowing the order of different datasets to be verified and
-for data linkage using attribute joins. Moreover,
+id*, an identifying code. This usually consists of a unique
+character string or integer that allows the order of different datasets to be
+verified and for data linkage using attribute joins. Moreover,
 keeping the code associated with each administrative zone
 will subsequently allow attribute data to be
 combined with polygon shapes and visualised using GIS software.
@@ -503,8 +505,8 @@ combined with polygon shapes and visualised using GIS software.
 ```
 
 If we're sure that the row numbers match between the age and sex tables (we are
-sure in this case), the next important test is to check that the total
-populations are equal for both sets of constraint variables.  Ideally both the *total*
+sure in this case), the next important test is to check the total
+populations of the constraint variables.  Ideally both the *total*
 study area populations and *row totals* should match. If the *row totals* match,
 this is a very good sign that not only confirms that the zones are listed in the
 same order, but also that each variable is sampling from the same *population
@@ -560,8 +562,9 @@ ind_orig <- ind # store the original ind dataset for future reference
 ind <- ind[, -4] # remove income variable
 ```
 
-Although `ind` is small, it will behave in the same way as
-larger datasets, providing opportunities for testing subsetting syntax in R.  It
+Although `ind` in this case is small, it will behave in the same way as
+larger datasets. Starting small is sensible, providing
+opportunities for testing subsetting syntax in R. It
 is common, for example, to take a subset of the working *population base*: those
 aged between 16 and 74 in full-time employment. Methods for doing this are provided in
 the Appendix (
@@ -663,15 +666,16 @@ We have made steps towards combining the individual and aggregate datasets and
 now only need to deal with 2 objects (`ind` and `cons`) which now share
 category and variable names.
 However, these datasets cannot possibly be compared because they
-measure very different things: the `ind` dataset records
+measure very different things. The `ind` dataset records
 the value that each individual takes for a range of variables, whereas
 `cons` counts the number of individuals in different groups at
 the geographical level. These datesets are have different dimensions:
 
-```{r}
-#(Dumont, 2014) I don't like the previous sentence, because even if it is the same dimension
+```{r, echo=FALSE}
+# (Dumont, 2014) I don't like the previous sentence, because even if it is the same dimension
 # the real problem is that it does not represent the same thing. So, the dimension is not
-#the real reason of it
+# the real reason of it
+# Think I've corrected this issue! (RL)
 ```
 
 ```{r}
@@ -757,7 +761,7 @@ category of the constraint variables in zone and and in the individual level
 dataset overall. Clearly, the fit is not very good, with only 5 individuals
 in total existing in `ind_agg` (the total for each constraint) and 12
 in zone 1. We can measure the size of this difference using measures of
-*goodnes of fit*. A simple measure is total absolute error (TAE), calculated in this
+*goodness of fit*. A simple measure is total absolute error (TAE), calculated in this
 case as `sum(abs(cons[1,] - ind_agg))`: the sum of the positive differences
 between cell values in the individual and aggregate level data.
 

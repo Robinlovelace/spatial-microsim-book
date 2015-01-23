@@ -255,7 +255,8 @@ weight matrices are generated in subsequent chapters.
 For now it is sufficient to know
 that weight matrices link individual-level data to geographically aggregated
 data and that there are multiple techniques to generate them. The techniques are sometimes
-referred to as *reweighting algorithms* in the literature (Tanton et al. 2011) and include deterministic methods such as Iterative Proportional
+referred to as *reweighting algorithms* in the literature (Tanton et al. 2011).
+These include deterministic methods such as Iterative Proportional
 Fitting (IPF) and
 probabilistic methods that rely on a pseudo-random number generator such as
 simulated annealing (SA). These and other reweighting algorithms are described
@@ -313,15 +314,15 @@ useful output. We can estimate, for example, the average income in each zone.
 Furthermore, we could create an estimate of the *distribution* of income in each
 area. Although these estimates are unlikely to be very accurate due to the
 paucity of data, the methods could be very useful if performed on larger
-datasets from the RealWorld (planet Earth).  Finally, the spatial microdata
+datasets from 'RealWorld' (planet Earth).  Finally, the spatial microdata
 presented in the above table can be used as an input into an agent-based model
 (ABM). Assuming the inhabitants of SimpleWorld are more predictable than those
 of RealWorld, the outputs from such a model could be very useful indeed, for
 example for predicting future outcomes of current patterns of behaviour.
 
 In addition to clarifying the advantages of spatial microsimulation, the above
-example also flags some limitations of the methodology: spatial microsimulation
-will only yield useful results if the input microdataset is representative of
+example also flags some limitations of the methodology. Spatial microsimulation
+will only yield useful results if the input datasets are representative of
 the population as a whole, and for each region. If the relationship between age and
 sex is markedly different in one zone compared with what we assume to be the
 global averages of the input data, for example, our estimates could be way out.
