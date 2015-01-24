@@ -1047,15 +1047,18 @@ created by Esteban Muñoz, and can be found in the GitLab repository
 
 In general terms, an *optimization problem* consists of a function,
 the result of which must be minimised or maximised, called an *objective function*. This function is not necessarily defined 
-for the entire domain of possible inputs. Optimization problems can be
-*unconstrained* or *constrained*, by
-limits on the values that arguments of the function can take
-([Boyd 2004](http://stanford.edu/~boyd/cvxbook/)). Under this framework,
+for the entire domain of possible inputs. The domain where this function is defined is called
+the *solution space* (or the *feasible space* in formal mathematics).
+This implies that optimization problems can be *unconstrained* or *constrained*, by
+limits on the values that arguments (or that a function of the arguments) of the function can take
+([Boyd 2004](http://stanford.edu/~boyd/cvxbook/)). If there are constraints, the solution space
+include only a part of the domain of the objective funcion. The constraints define the
+solution space. Under this framework,
 population synthesis can be seen as a *constrained optimisation* problem.
 Suppose $x$ is a vector of length $n$ $(x_1,x_2,..,x_n)$ whose values are to be adjusted. In this case
-the value of the objective function is $f_0(x,par)$, depends on $x$, where
-*par* is a vector of predefined arguments or parameters of length $i$
-($par_1,par_2,..,par_i$). 
+the value of the objective function is $f_0(x)$, depends on $x$. The possible values of $x$ are defined
+thanks to *par*, a vector of predefined arguments or parameters of length $m$ ($m$ is the number of constraints)
+($par_1,par_2,..,par_m$). 
 This
 kind of problems can be expressed as:
 
@@ -1068,16 +1071,18 @@ $$\left\{
 \right.$$
 
 Applying this to the problem of population synthesis,
-the parameters $par_i$ represent the aggregate constraint variable
-`cons` which do not change. $x$ represents the weights which will
+the parameters $par_i$ represent 0, since all cells have to be positive.
+The $f_0(x)$, to be minimised, is the distance between the actual weight matrix and
+the aggregate constraint variable
+`cons`. $x$ represents the weights which will
 be calculated to minimise
-to minimise $f_0(x)$, subject to $par$.
+to minimise $f_0(x)$.
 
 To illustrate the concept further, consider the case of aircraft design.
 Imagine that the aim (the objective function) is to minimise
 weight by changing its shape and materials. But these modifications
 must proceed subject to some constraints, because the
-airplane must be safe and and sufficiently voluminous to 
+airplane must be safe and sufficiently voluminous to 
 transport people. Constrained optimisation in this case would involve
 searching combinations of shape and material (to include in $x$) that minimise
 the weight (the result of $f_0$, is a single value depending on $x$). This search
@@ -1085,27 +1090,32 @@ must take place under constraints relating to
 volume (depending on the shape) and safety
 ($par_1$ and $par_2$ in the above notation). Thus $par$ values
 define the domain of the *solution space*. We search inside this domain
-the for the combination of $x_i$ that minimise weight.
+the combination of $x_i$ that minimise weight.
 
 The case of spatial microsimulation has relatively
 simple constraints: all weights must be positive or zero:
 
 $$
-\left\{ x \in \mathbb{R}_{0}^+ \right\}
+\left\{ weight_{ij} \in \mathbb{R}_{0}^+  \forall i,j \right\}
 $$
 
-Seeing spatial microsimulation as an objective function
+Seeing spatial microsimulation as an optimisation problem
 allows solutions to be found using established
 techniques of *constrained optimisation*.
 The main advantage of this re-framing
 is that it allows any optimisation algorithm to perform the reweighting.
 
 To see population synthesis as a constrained optimization problem analogous to
-aircraft design, we must define the problem to optimise and then
-set th constraints.  
+aircraft design, we must define the problem to optimise, the variable $x$ and then
+set the constraints.  
 Intuitively, we search the number of occurrences we want of each individual to take
-form the final population that fits the best the constraints. So, we want to 
-find a vector of parameters `par` that will multiply the `ind` vector and we want the result
+form the final population that fits the best the constraints. We could take
+the weight matrix as $x$ and as the objective function the difference between the 
+population with this weight matrix and the constraint. However, we want to include
+the information of the distribution of the sample. 
+Thus, we want to find a vector of parameters `par` that will multiply the `indu` matrix,
+which is similar to `ind_cat`, but with only different rows and the cells contain
+the number of time that this kind of individual appears in the sample. We want the result
 of this multiplication to be as closer as possible to the constraints.
 
 As for the IPF proposition, we will proceed zone per zone. So, our 
@@ -1114,7 +1124,7 @@ optimization problem for the first zone can be written as follows:
 $$\left\{
 \begin{array}{l}
   min \hspace{0.2cm} f(par_1,..,par_m) = DIST(sim, cons[1,]) \\
-  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(ind\_cat * par)\\
+  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(indu * par)\\
   \\
   s.c. \hspace{0.2cm} par_i \geq 0,\  i = 1, ..., m
 \end{array}
@@ -1123,7 +1133,9 @@ $$\left\{
 Key to this is interpreting individual weights as parameters (the vector $par$,
 of length $m$ above)
 that are iteratively modified to optimise the fit between individual and
-aggregate-level data. The measure of fit, so the distance, we use in this context is
+aggregate-level data. Remarks that in comparison with the theoretical 
+definition of an optimisation problem, our `par` are the theorical $x$. 
+The measure of fit, so the distance, we use in this context is
 Total Absolute Error (TAE).
 
 $$\left\{
@@ -1135,10 +1147,12 @@ $$\left\{
 \end{array}
 \right.$$
 
+We have chosen the distance "TAE", but we could imagine to do the same with 
+other metrics.
+
 
 ```{r, echo=FALSE}
-# how to write in maths?
-# $$\mbox{minimise }f(par)$$
+# (MD) Compare with different metrics?
 ```
 
 Note that in the above, $par$ is equivalent to the `weights` object
@@ -1153,7 +1167,7 @@ only unique individuals with respect to the constraint variables
 
 The challenge is to convert the binary 'model matrix' form of the
 individual-level data (`ind_cat` in the previous examples) into
-a new matrix (`ind_num`) that has fewer rows of data. Information about the
+a new matrix (`indu`) that has fewer rows of data. Information about the
 frequency of each constraint-unique individual is kept by increasing the
 value of the '1' entries for each column for the replicated individuals
 by the number of other individuals who share the same combination of attributes.
