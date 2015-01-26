@@ -1096,7 +1096,7 @@ The case of spatial microsimulation has relatively
 simple constraints: all weights must be positive or zero:
 
 $$
-\left\{ weight_{ij} \in \mathbb{R}_{0}^+  \forall i,j \right\}
+\left\{ weight_{ij} \in \mathbb{R}^+  \cup \{0\} \hspace{0.5cm} \forall i,j \right\}
 $$
 
 Seeing spatial microsimulation as an optimisation problem
