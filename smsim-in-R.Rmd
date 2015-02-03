@@ -995,6 +995,7 @@ ints_df[ints_df$zone == 2, ]
 # library(knitr)
 # kable(ints_df[ints_df$zone == 2,], row.names = FALSE)
 ```
+
 ### Reweighting with **mipfp** {#mipfp}
 
 The R package  **mipfp** is more recent than **ipfp** . The concept is exactly the same as **ipfp**, but it is a generalized version. Indeed, **ipfp** requires two constraints and generates a two-dimensional weight matrix.
