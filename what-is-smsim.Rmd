@@ -244,24 +244,42 @@ what it is not. This is partly due to the close association between spatial
 microsimulation and other methods, but also because there is a tendency
 for people to think that spatial microsimulation is more complicated than
 it is.
-**Spatial microsimulation is not agent-based modelling (ABM).**
+**Spatial microsimulation is not a whole agent-based modelling (ABM).**
 
 Spatial microsimulation does involve the creation and analysis of individuals,
-but it does not imply any interaction between these individuals. For this, an
+but it does not necessary imply any interaction between these individuals. For this, a complete
 agent-based model (ABM) is needed. It would be easy to assume that because
 the method contains the word 'simulation', it includes modelling of individual
 behaviours over time and space. This is not the case.
 
-Spatial microsimulation as an approach to modelling involves
-the allocation of individuals to specific zones, what-if scenarios, and, in *dynamic spatial microsimulation*, a time
-step to represent the individuals' evolution over time. In *static spatial microsimulation* studies that rely on *what-if* scenarios, time is not 
-really included. 
+However, spatial microsimulation can be the starting point of an agent-based 
+modelling. Indeed, in ABM, we can analyse the evolution of agents through space
+and time, their interactions with each other and with their environment. Spatial
+microsimulation is a subpart of ABM, as it creates a computational population, such
+as their interactions with each other in some cases (see the Chapter about households).
+Alone, spatial microsimulation is fixed at a time and each individual has a fixed
+house. In ABM, when the researchers do not own sufficient data to perfom their analyses,
+they can use the whole power of ABM. For this, they initialise the population with spatial 
+microsimulation, for a starting date.
 
-Agent based modelling (ABM), by contrast, implies some kind of interaction between the individual units
-and time is an integral part of the process. The aims of the two methods are complementary.
+
+```{r, echo=FALSE}
+# TODO: (MD)
+# add a references to chapter about households when created.
+```
+
+```{r, echo=FALSE}
+# (MD) For the moment, I put this in comment, because it does not sound so clear for me (and reviewer 2)
+# Spatial microsimulation as an approach to modelling involves
+#the allocation of individuals to specific zones, what-if scenarios, and, in *dynamic spatial microsimula#tion*, a time
+#step to represent the individuals' evolution over time. In *static spatial microsimulation* studies that #rely on *what-if* scenarios, time is not 
+#really included. 
+```
+
+The aims of the two methods are complementary.
 ABM requires an initial population which spatial microsimulation can provide and adds more complexity and interactivity. The rules of the ABM make each agent evolve through time and space 
-depending in a bottom-up process. Spatial microsimulation is, by contrast, more of a *top down* process. Spatial microsimulation can be 
-closely linked to ABM, however. As described in Chapter \ref{ABM}, the outputs of spatial 
+depending in a bottom-up process. Spatial microsimulation is, by contrast, more of a *top down* process. Spatial microsimulation can be closely linked to ABM. As described in Chapter 
+\ref{ABM}, the outputs of spatial 
 microsimulation form an excellent basis for ABMs.
 
 **Spatial microsimulation does not generate new data**
