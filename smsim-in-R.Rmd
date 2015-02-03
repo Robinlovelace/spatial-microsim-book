@@ -998,30 +998,41 @@ ints_df[ints_df$zone == 2, ]
 
 ### Reweighting with **mipfp** {#mipfp}
 
-The R package  **mipfp** is more recent than **ipfp** . The concept is exactly the same as **ipfp**, but it 
-is a generalized version. Indeed, **ipfp** requires two constraints and generates a two-dimensional weight matrix.
+The R package  **mipfp** is more recent than **ipfp** . The concept is exactly the same as **ipfp**, but it is a generalized version. Indeed, **ipfp** requires two constraints and generates a two-dimensional weight matrix.
 This is useful for little applications where only one cross table is not available. With this package, we could consider
 more than two variables, since we could create a variable that, for example, paste the age and the sex. Then,
 we have a new column with, at most, as many categories as the product of the number of categories for the variable age
 and 2 (Male or Female). However, in this case, we need to have the cross table of the age and the sex available to 
 proceed this way.
 
-Now, with the **mipfp** package, you can fill a $N$-dimensional weight matrix and have as constraints some marginal table
-or contingency table. Thus, with this function, you can easily use your own data and adapt the procedure to your own 
-application. The first step is always to load the package (after its installation on your computer):
+The mipfp package offers a multidimensional implementation of the iterative 
+proportional fitting procedure (ipfp). This is able to easily to estimate 
+the update of an initial $N$-dimensional array with respect to given 
+target marginal distributions (which, in turn can be multidimensional). 
+In that sense, it is an approach different from the one taken by the 
+**ipfp** package which was originally designed to solve problems of the form $Ax=b$.
+
+Now, with the **mipfp** package, you can fill a $N$-dimensional weight 
+matrix and have as constraints some marginal table or contingency table. 
+Thus, with this function, you can easily use your own data and adapt 
+the procedure to your own application. Assuming that the package is 
+already present in the R libraries (otherwise, install.package(“mipfp”) will 
+handle the installation process), the first step is to load the package in the workspace:
 
 ```{r}
 library(mipfp) # after install.packages("mipfp")
 ```
 
-To illustrate the use of this function, we will create a fictive example. The case of SimpleWorld is here
-to simple to really illustrate the power of this package. Suppose, for each spatial
-zone, we need to have for each people his age, sex and diploma level. The sex has two categories (Male and Female),
-the age is classified in three categories (less than 18, 18-50 and more than 50) and the diploma level is
-divided in 4 different levels. We consider a zone with 50 inhabitants. The classical spatial microsimulation 
-problem consists in having all marginal distribution and the cross table only for a sample. 
+To illustrate the use of this function, we will create a fictive example. 
+The case of SimpleWorld is here to simple to really illustrate the power 
+of this package. Assume that we want to determine the contingency table 
+of a population characterized by a gender (male, female), 
+an age (0-17, 18-50, 50+) and a diploma level (level 1 to level 4).
+We consider a zone with 50 inhabitants. The classical spatial microsimulation 
+problem consists in having all marginal distributions and the cross table only for a sample. 
 
-We will consider the variable in the order (sex,age,diploma). Our constraints could for example be:
+Note that we will consider the variable in the following 
+order: sex (1), age (2) and diploma (3). Our constraints could for example be:
 
 ```{r}
 sex <- c(23,27)
@@ -1049,11 +1060,16 @@ descript <- list (1, 2, 3)
 target
 ```
 
-For the moment, all constraint are defined. Let now initialise the weight matrix. The dimension
-of this matrix has to be $(2 \times3 \times 4)$. In our case, we will consider that the weight
-matrix contains 0 when the category is not possible. For example, being less than 18 years
-old and having a diploma above level 2 is impossible. The other categories will be initialised to 1
-for the example purpose.
+For the moment, all constraint are defined. Let us now define 
+the initial array to be updated, also referred as the seed or the weight matrix. The dimension
+of this matrix has to be $(2 \times3 \times 4)$. Each cell of the array represents 
+a combination of the attributes' values, and thus defines a particular 
+category of individuals. In our case, we will consider that the weight
+matrix contains 0 when the category is not possible. In this example we 
+will assume that it is impossible for an individual being less than 18 
+years old to hold a diploma level higher than 2. 
+The corresponding are then set to 0, while the cells of the 
+feasible categories are set to 1.
 
 ```{r}
 names <- list (names(sex), names(age), names(diploma))
@@ -1064,7 +1080,12 @@ weight[, c("Less18"), c("Level3","Level4")] <- 0
 Everything being defined, we can execute the function of the package **mipfp**, which is called
 *Ipfp*. As with **ipfp**, we can chose a stoping criterion defined by *tol* and a maximum
 number of iterations. Finally, setting *print* to `TRUE` means that we want to see the evolution
-of the procedure.
+of the procedure. After reaching either the maximum number of iteration or convergence 
+(whichever comes first), the function will return a list containing the updated 
+array, as well as other informations about the convergence of the algorithm. 
+Note that if the target margins are not consistent, the input data is then 
+normalised by considering probabilities instead of frequencies.
+
 
 ```{r}
 result <- Ipfp (weight, descript, target, iter = 50, print = TRUE, tol = 1e-5)
@@ -1097,8 +1118,10 @@ colnames (cross) <- names(age)
 cross
 ```
 
-When having several constraints concerning the same variable, we have to be careful. The targets have
-to be pertinent. We can display the margins of the cross table and the previous target. There are
+When having several constraints concerning the same variable, we have insure 
+the consistency across these targets (otherwise convergence might not be reached). 
+For instance, we can display the margins of `cross` along with `diploma` and `age`
+to validate the consistency assumption. There are
 both equal, meaning that the constraints are coherent.
 
 ```{r}
@@ -1127,13 +1150,20 @@ The addition of a constraint means having less possibility. This implies that th
 converges faster. By printing the results, we see that all constraints are respected and
 we have our 3-dimensional contingency table.
 
-As with the **ipfp** package, this results in a non-integer matrix and we can determine
-a final synthetic population even by considering the weights as probabilities or by proceeding
-to the integerisation and expansion steps defined previously.
+Similarly to the **ipfp** package, the result is in a non-integer array. Consequently 
+we can generate a synthetic population either by considering the array cells 
+as probabilities for random draws or by applying the the integerisation and 
+expansion steps defined in the `ipfp` Section.
+
+```{r, echo=FALSE}
+# TODO: (MD) : put a real reference to the section of integerisation and expansion
+```
 
 Able to deal with bigger problems, the package presented here can also manage to 
 solve smaller problem such as SimpleWorld. We have simply chosen to develop here a 
 different example to show you the vast application of this function.
+
+
 
 ## The GREGWT algorithm
 

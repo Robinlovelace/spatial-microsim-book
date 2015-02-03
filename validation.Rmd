@@ -254,10 +254,44 @@ work in this function and must be converted to matrices with `as.numeric`.]
 cor(as.numeric(cons), as.numeric(ind_agg))
 ```
 
-We have just calculated our first goodness-of-fit measure for a spatial microsimulation model and the results are encoraging: the high correlation suggests that the model is working: it has internal consistency and could be described as 'internally valid'. Note that we have calculate the correlation 
-before integerisation here.
+We have just calculated our first goodness-of-fit measure for a spatial microsimulation model and the results are encouraging: the high correlation suggests that the model is working: it has internal consistency and could be described as 'internally valid'. Note that we have calculate the correlation 
+before integerisation here. In the perfect fit, we would have a linear correlation of exactly 1.
 
-Total absolute error (TAE) is easily defined as a function in R:
+We can also calculate the correlation of these two variables zone per zone. By this way, 
+we will be able to notify for which zones our simulation could be less representative.
+A vector of the correlation per zone, called `CorVec` is calculated:
+
+```{r}
+# initialize the vector of correlations
+CorVec <- rep (0, dim(cons)[1])
+
+# calculate the correlation for each zone
+for (i in 1:dim(cons)[1]){
+  CorVec[i] <- cor (as.numeric(cons[i,]), as.numeric(ind_agg[i,]))
+}
+```
+
+We can then proceed to a statistical analyses of the correlations and identify the worst zone.
+In the code below, the summary of the vector of correlation is performed. The minimum value is
+0.9451. This is the performance of the zone 84. This value is under the global correlation, 
+but still close to 1. We can also observe that the first quartile is already 1. This means
+that for more than 75% of the zones, the correlation is perfect (at least with an approximation
+to 4 decimals). Moreover, by identifying the second worst zone, we can see that its correlation
+is around 0.9816. This value becomes closer to 1.
+
+```{r}
+# summary of the correlations per zone 
+summary (CorVec)
+
+# identify the worst zone
+which(CorVec == min(CorVec))
+
+# second minimal value
+min(CorVec[-c(84)])
+```
+
+This ends our analyse with the correlation. Now, we can calculate another measure of goodness of fit.
+We can develop total absolute error (TAE),that is easily defined as a function in R:
 
 ```{r}
 tae <- function(observed, simulated){
@@ -267,19 +301,72 @@ tae <- function(observed, simulated){
 }
 ```
 
-Standardised absolute error (SAE) is a related measure: $SAE = TAE/P$ where $P$ is the
-total population of the study area (`tae(obs, sim)/sum(con1)` in R).
-While
-TAE is sensitive to the number of people within the model, SAE is not.
+By applying this function for CakeMap, we find a TAE of 26445.57, as coded below. This can
+sound very big, but remember that this measure is very dependent on the scale of the problem.
+Indeed, an error for 26445 persons out of 4,871,397 is not a so big. For this reason, we
+would like now to calculate the standardised absolute error (SAE). We observe a SAE of 
+only 0.54%. Note that here, we considered the whole population, so we have to divided
+by the total number of individuals.
 
-```{r, echo=FALSE}
-# (MD, 2015) Check the formula (really only for con1?)
-# add the results for cakemap and interpret
-# add some representations of the errors 
+```{r}
+# TAE
+tae (cons, ind_agg)
+
+# Total population (constraint)
+sum (cons)
+
+# SAE
+tae (cons, ind_agg) / sum(cons) 
 ```
 
+As with all test of goodness of fit, we can perform to the analyses zone per zone. 
+For the example, we call the vector of TAE and SAE per zone respectively `TAEVec`
+and `SAEVec`.
+
+```{r}
+# initialize the vectors
+TAEVec <- rep (0, dim(cons)[1])
+SAEVec <- rep (0, dim(cons)[1])
+
+# calculate the correlation for each zone
+for (i in 1:dim(cons)[1]){
+  TAEVec[i] <- tae (cons[i,], ind_agg[i,])
+  SAEVec[i] <- TAEVec[i] / sum(cons[1,])
+}
+```
+
+The next step is to interpret these results. The summary of each vector will help us.
+Note the in the best case, the correlation is high, but the SAE and TAE are small.
+The zone with the highest error is also the number 84, which has a TAE of 14710 individuals
+and a SAE of 43,2%. This zone seems to have a simulation a bit distant from the 
+constraint. By watching the second worst zone, we can see that its SAE is only around $10^{-16}$.
+The maximum value aside, all values in the summary are very closed to 0. Thus, 
+except for the zone 84, the model fits well the constraints.
+
+```{r}
+# summary of the TAE per zone 
+summary (TAEVec)
+
+# summary of the SAE per zone 
+summary (SAEVec)
+
+# identify the worst zone
+which(TAEVec == max(TAEVec))
+which(SAEVec == max(SAEVec))
+
+# second minimal value
+min(SAEVec[-c(84)])
+```
+
+Similar analyses can be applied for the other test of goodness of fit.
+In all cases, it is very important to have an idea of the internal validation
+of your model. For example, if we want to analyse the cake consumption by
+using your synthetic population created here, we have to be aware that for
+the zone 84, the model does not fit so well the constraints.
+
 ```{r, echo=FALSE}
-# Not that we divide by the population in the constraints which is really the total population of the study area multiplied by the number of constraints. This is because with each additional constraint there are more opportunities for error so the 
+# (MD, 2015) 
+# add some representations of the errors ? Maps? Or I don't know
 ```
 
 ## External validation
