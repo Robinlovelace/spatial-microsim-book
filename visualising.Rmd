@@ -31,7 +31,7 @@ are equally applicable to synthetic spatial microdata as
 for real microdata. With the open data movement, it is possible
 that governments realise that the benefits of releasing more
 geocoded individual-level data are likely to far outweigh any
-potenial privacy issues (especially in an age of smartphones
+potential privacy issues (especially in an age of smartphones
 which can track our every move). If and when such datasets
 become available, all previous work to generate synthetic spatial
 microdata will not be in vain: it will serve as a useful
