@@ -326,8 +326,9 @@ aggregate(ints_df$NSSEC, by = list(ints_df$zone), sd,
 ## 3         3 2.019839
 ```
 
-```{r, eval=FALSE}
+```{r, echo=FALSE}
 #(MD) Interpret the sd and say why we calculate it
+# MD I do not understand everything here..
 ```
 
 In the above code the third argument refers to the function to be applied to the
@@ -356,7 +357,7 @@ consideration in spatial microsimulation models such as CakeMap: model checking 
 save.image("cache-CakeMap.RData")
 ```
 
-```{r, eval=FALSE}
+```{r, echo=FALSE}
 #(MD) Make it with CO to compare the results?
 ```
 
