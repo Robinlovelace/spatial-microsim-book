@@ -259,6 +259,14 @@ cor(as.numeric(cons), as.numeric(ind_agg))
 We have just calculated our first goodness-of-fit measure for a spatial microsimulation model and the results are encouraging: the high correlation suggests that the model is working: it has internal consistency and could be described as 'internally valid'. Note that we have calculate the correlation 
 before integerisation here. In the perfect fit, we would have a linear correlation of exactly 1.
 
+In micro-simulation, we have the whole population with all characteristics of each individual, only after the simulation. 
+For this reason, we have to aggregate the simulated population to have a matrix comparable with the constraint. In this sense, 
+there are two ways to proceed. First, we can make the comparison variable per variable and the total number of individual is the 
+constraint number of people in the area. Secondly, we can take all variables together, meaning having a matrix including the 
+whole population for each variable. This implies that the sum of all cells equals to the multiplication of the 
+number of people in the area by the number of variable. Our choice here is the second alternative. Then, 
+if we need more details on the fit in one zone, we can proceed to an analysis per variable for this specific case.
+
 We can also calculate the correlation of these two variables zone per zone. By this way, 
 we will be able to notify for which zones our simulation could be less representative.
 A vector of the correlation per zone, called `CorVec` is calculated:
@@ -300,7 +308,7 @@ head(order(CorVec), n = 3)
 ```
 
 
-This ends our analis of correlation. Next we can calculate
+This ends our analysis of correlation. Next we can calculate
 total absolute error (TAE), which is easily defined as a function in R:
 
 ```{r}
