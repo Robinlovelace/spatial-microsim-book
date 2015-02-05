@@ -22,6 +22,8 @@ Beezer, R. A. (2008). A first course in linear algebra. Puget Sound: Congruent P
 
 Bell, P. (1999). Weighting and Standard Error Estimation for ABS Household Surveys (Paper prepared for ABS Methodology Advisory Committee).
 
+Bierlaire M. (1991), Evaluation de la demande en trafic : quelques méthodes de distribution , University of namur,Annales de la Société Scientifique de Bruxelles, T. 105, 1-2,pp :17-66
+
 Blumer, A., Ehrenfeucht, A., Haussler, D., & Warmuth, M. K. (1987). Occam’s razor. Information Processing Letters, 24(6), 377–380.
 
 Boyd, S., & Vandenberghe, L. (2009). Convex optimization. Cambridge university press.

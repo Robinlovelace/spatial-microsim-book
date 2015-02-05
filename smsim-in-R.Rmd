@@ -1622,14 +1622,84 @@ Java program.
 ## Population synthesis without input microdata
 
 In some cases no representative individual-level
-data is available for population synthesis.
-In such cases, a 'seed' must be generated. Barthélemy and Toint (2012)
-tackled this issue by synthesising a constraint table of the
-individual-level data intended to be representative of the study area.
+data is available for population synthesis. Clearly, depending
+of the domain, there are a lot or few datasets available. Moreover, 
+if aggregation needed play a role also and the aim of the research. 
+Thus, each research has to adapt his spatial microsimulation to 
+the data and the aim. In some cases, the data are recorded, but it 
+includes personal information about specific humans and the privacy
+law defines these data as confidential.
+
+Usually, having the aggregated distributions is possible. The big deal
+is to find and access the individual-level data, even if they don't concern
+the whole population. When having only aggregated data, you have to 
+reach a population that fits all these constraints. However, several 
+populations could correspond to these distributions. Then, you can be satisfied
+by one feasible result. Another consideration could be that from all 
+feasible result, we take into account the one that maximises the entropy of
+the model. This solution is considered in the chapter explaining how to 
+join the people into households in our spatial microsimulation.
+
+We present here how to find a possible distribution per zone when 
+having only aggregated data, but in two different levels of aggregation.
+For example, we have some data for the municipalities and other for
+the districts. A first proposition can be to use a genetic algorithm that 
+minimise the distance between the constraint and the simulation.
+The solution proposed by Barthélemy and Toint (2012) is intuitive and we 
+develop here the method. In such cases, they propose to generate a 'seed' before
+to execute IPF. 
+
+In their cases, they wanted to simulate a population with four characteristics
+per individual : the gender, the age class, the diploma level and the
+activity status. Let us present their solution more generalized. We will explain the 
+method by renaming the characteristics : A, B, C and D. The problem can be defined as follow:
+
+1. The aim was to simulate the cross table A x B x C x D per municipality;
+2. The data available in the municipality level were : the cross table A x B and the marginals of C and D;
+3. The data available in the district level were : the cross tables A x D, A x C, B x D and B x C.
+
+Note that a district contains several municipalities, but each municipality is associated to
+only one district. We consider the marginals of the tables being pertinent. If not, 
+a preliminary step is necessary to rescale the data.
+
+The global idea of their method is to proceed in two steps. First, 
+simulate the cross table  A x B x C x D per district. Then, the seed of the IPF algorithm
+is initialised to this table to simulate the distributions per municipality with the data
+concerning the municipality as constraint. How to execute the second part has been explained 
+in the beginning of the chapter. The point here is to develop the process, per district, 
+to simulate A x B x C x D having A x D, A x C, B x D and B x C. This is also done in two steps :
+
+1. Generate A x B x C and A x B x D;
+2. Generate A x B x C x D.
+
+For the first step, we will explain only the creation of the first cross table, since the second
+reasoning is similar. The idea is simply to proceed proportionally to respect both available table.
+The pseudo-code below corresponds to the code done by Barthélemy and Toint (2012).
+To simplify the notations, each table are written without the cross symbol in the pseudo-code.
+
+$\forall$ a in A {
+  $\forall$ b in B {
+    $\forall$ c in C {
+      $ABC(a,b,c)=\frac{AC(a,c)}{margin(c)}BC(b,c)$
+    }
+  }
+}
+
+The formula is intuitive. The AC table gives the proportion of each category of A inside the considered
+category of c. Then, this proportion splits the number of persons having characteristics b and c
+into the category of a. For example, if A is the gender, B the age class and C the diploma level, in
+the specific case of defining (Male, Young, Academics), we will have :
+
+$$ABC(Male, Young, Academics)=\frac{AC(Male,Academics)}{\#Academics}BC(Young,Academics)$$
+
+Suppose, we have 50 young academics out of 150 academics (90 female and 60 male). We would have:
+
+$$ABC(Male, Young, Academics)=\frac{60}{150}*50=20$$
+$$ABC(Female, Young, Academics)=\frac{90}{150}*50=30$$
+
+Thus, the tables A x B x C and A x B x D are simulated. The seed for the IPF function can now be
+established, with help of the two contingencies.
 
 ```{r, echo=FALSE}
-# TODO
-# Finish this stub section
-# Add reference to Johan's code here
+# TODO (MD) : continue this way to explain how to calculate the seed
 ```
-
