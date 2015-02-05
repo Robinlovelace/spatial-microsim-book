@@ -1164,6 +1164,25 @@ solve smaller problem such as SimpleWorld. We have simply chosen to develop here
 different example to show you the vast application of this function.
 
 
+### Comparison between **ipfp** and **mipfp** {#Compareipf}
+
+Conceptually, the big difference is that the R function **ipfp** uses an hard code written in C and can deal
+only with small problems as itself. With this package, some coding and manipulations of 
+data has to be performed to consider more than two variables. Note that it is 
+normal, since this package was initially designed to resolve linear problem of
+the form $Ax=b$. On the other hand, the aim of **mipfp** is to execute an iterative 
+proportional fitting. This function allows the solving of spatial microsimulation
+whatever the number of variables and the form of the constraints (cross-table or marginal 
+distributions). Moreover, the code below this "black box" is written directly in R
+and does not require another programming language.
+
+Both seems to do a similar simulation. We will compare here the results and time used 
+to solve the simple problem of SimpleWorld.
+
+```{r, echo=FALSE}
+# TODO: (MD) compare with simpleworld
+#       (MD) if mipfp is better, justify why we use ipfp with cakemap... Or compare also with cakemap
+```
 
 ## The GREGWT algorithm
 

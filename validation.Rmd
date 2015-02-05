@@ -259,6 +259,14 @@ cor(as.numeric(cons), as.numeric(ind_agg))
 We have just calculated our first goodness-of-fit measure for a spatial microsimulation model and the results are encouraging: the high correlation suggests that the model is working: it has internal consistency and could be described as 'internally valid'. Note that we have calculate the correlation 
 before integerisation here. In the perfect fit, we would have a linear correlation of exactly 1.
 
+In micro-simulation, we have the whole population with all characteristics of each individual, only after the simulation. 
+For this reason, we have to aggregate the simulated population to have a matrix comparable with the constraint. In this sense, 
+there are two ways to proceed. First, we can make the comparison variable per variable and the total number of individual is the 
+constraint number of people in the area. Secondly, we can take all variables together, meaning having a matrix including the 
+whole population for each variable. This implies that the sum of all cells equals to the multiplication of the 
+number of people in the area by the number of variable. Our choice here is the second alternative. Then, 
+if we need more details on the fit in one zone, we can proceed to an analysis per variable for this specific case.
+
 We can also calculate the correlation of these two variables zone per zone. By this way, 
 we will be able to notify for which zones our simulation could be less representative.
 A vector of the correlation per zone, called `CorVec` is calculated:
@@ -300,7 +308,7 @@ head(order(CorVec), n = 3)
 ```
 
 
-This ends our analis of correlation. Next we can calculate
+This ends our analysis of correlation. Next we can calculate
 total absolute error (TAE), which is easily defined as a function in R:
 
 ```{r}
@@ -313,7 +321,7 @@ tae <- function(observed, simulated){
 
 By applying this function to CakeMap, we find a TAE of 26445.57, as calculated below. This may
 sound very big, but remember that this measure is very dependent on the scale of the problem.
-Indeed, an error for 26445 persons out of 4,871,397 is not a so big. For this reason, 
+Indeed, an error for 26445 persons*variables out of 4,871,397 is not a so big. For this reason, 
 the standardised absolute error (SAE) is often preferable. We observe a SAE of 
 only 0.54%. Note that SAE is simply TAE divided by the total of all observed cell
 values (that is, the total population of the study area multiplied by the number of
@@ -342,17 +350,18 @@ SAEVec <- rep(0, nrow(cons))
 # calculate the correlation for each zone
 for (i in 1:nrow(cons)){
   TAEVec[i] <- tae (cons[i,], ind_agg[i,])
-  SAEVec[i] <- TAEVec[i] / sum(cons[1,])
+  SAEVec[i] <- TAEVec[i] / sum(cons[i,])
 }
 ```
 
 The next step is to interpret these results. The summary of each vector will help us.
-Note the in the best case, the correlation is high, but the SAE and TAE are small.
-The zone with the highest error is also the number 84, which has a TAE of 14710 individuals
-and a SAE of 43,2%. This zone seems to have a simulation a bit distant from the 
-constraint. By watching the second worst zone, we can see that its SAE is only around $10^{-16}$.
-The maximum value aside, all values in the summary are very closed to 0. Thus, 
-except for the zone 84, the model fits well the constraints.
+Note that in the best case, the correlation is high, but the SAE and TAE are small.
+The zone with the highest error is also the number 84, which has a TAE of 14710 individuals*variables
+and a SAE of 21,3%. This zone seems to have a simulation a bit distant from the 
+constraint. By watching the second and third worst zone, we can see that its SAE is
+respectively around 12,5% and 7,0%. The third quartile is of order $10^{-5}$ ($10^{-3}$%). This is pretty
+close to 0. Thus, 75% of the zones has a SAE smaller than the third quartile. The maximum values aside,
+it appears that for the majority of the zones, the SAE is small.
 
 ```{r}
 # Summary of the TAE per zone 
@@ -365,8 +374,9 @@ summary (SAEVec)
 which.max(TAEVec)
 which.max(SAEVec)
 
-# Minimal value
-head(order(CorVec), n = 3)
+# Maximal value
+tail(order(TAEVec), n = 3)
+tail(order(SAEVec), n = 3)
 ```
 
 Similar analyses can be applied for the other test of goodness of fit.
@@ -390,30 +400,27 @@ TAEVec[worst_zone] / sum(TAEVec)
 
 The result of the above code demonstrates that more than half (56%) of the error originates
 from a single zone: 84. Therefore zone 84 certainly is anomalous and worthy of further
-investigation. An early strategy to characterise this zone is to visualise it.
+investigation. An early strategy to characterise this zone and compare it to the others is to visualise it.
 To this end, Figure 7.1 places the TAE values calculated previously on a map,
 with a baselayer supplied by Google for context --- see the book's
 [online source code](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/validation.Rmd) to see how. Zone 84 is clearly visible in this map as a ward
 just above Leeds city centre. This does not immediatley solve
-the problem, but it could provide useful context that could help our
-investigations to identify the root cause.
-Note that the maps presented in Figure 7.1 are identical for TAE and SAE values
-except for the scale; the equivalence of these measures of fit can be
+the problem, but it confirms that only few zones have bigger errors.
+Note that the maps presented in Figure 7.1 looks identical for TAE and SAE values
+except for the scale; the similitude of these measures of fit can be
 varified using a simple correlation:
 
 ```{r}
-cor(TAEVec, SAEVec) # note that the two measures are perfectly correlated
+cor(TAEVec, SAEVec) # note that the two measures are very correlated
 ```
 
+In this case, both are very correlated. However, when having very different zones, in term of total population,
+it can happen having more differences on the two maps. Indeed, with the same TAE, if the zone 84 had contain
+a total population two times bigger, the SAE would be very smaller. Thus, SAE would be divided by the multiplication
+of 2 by the number of variables.
 
 
-```{r, echo=FALSE}
-# (MD, 2015) 
-# add some representations of the errors ? Maps? Or I don't know
-# I will add some maps/graphics here (RL)
-```
-
-```{r, echo=FALSE, fig.cap="Geographical distribution of Total Absolute Error (TAE).", message=FALSE, warning=FALSE, results=F, fig.height=14, fig.width=9}
+```{r, echo=FALSE, fig.cap="Geographical distribution of Total Absolute Error (TAE) and Standardised Absolute Error (SAE).", message=FALSE, warning=FALSE, results=F, fig.height=14, fig.width=9}
 cons_codes <- read.csv("data/CakeMap/cars-raw.csv")
 cons_codes <- as.character(cons_codes$GEO_CODE)[3:126]
 cons_codes <- data.frame(CODE = cons_codes, TAEVec)
@@ -506,10 +513,60 @@ gridExtra::grid.arrange(p1, p2)
 #   scale_fill_gradient(low = "green", high = "red", trans = "sqrt")  
 ```
 
-```{r,echo=FALSE}
-# Priority now: identify which variable is responsable for the error in zone 84
+Having identify a zone that is particularly problematic (the 84), we will look at the responsible 
+variables. We focus on the zone 84 and calculate the number of differences between the constraint
+and the simulation for each category:
+
+```{r, echo=FALSE}
+options(scipen=100,digits=3) #to avoid scientific notation
 ```
 
+```{r}
+RudeDiff <- cons[84,] - ind_agg[84,] # differences for zone 84
+Diff <- round( abs(RudeDiff) ) # interesting differences
+
+diff[diff>0] # printing the differences bigger than 0
+```
+
+The responsible variable seems to be the car ownership. We have made
+a similar check for the three worst zones and this variable is always the one with the
+biggest difference. To investigate the reasons of this, we print the constraints
+for this variable inside the three worst zones and the marginals of the
+observed individuals :
+
+```{r}
+worst <- tail(order(SAEVec), n = 3)
+cons[worst, c("Car", "NoCar")] # constraint for 3 worst zones
+
+table( ind[,2] ) # individuals to weight (1 = Car ; 2= NoCar)
+```
+
+Only few observed individuals were owning a car. Thus, for zones needing a lot of persons
+that have no car, the weight of only 178 individuals out of 916 possible can be adapted.
+The possibility of having an individual that has the whole range of characteristics needed
+is then lower. The individuals without a car are saved in the `NoCar` variable. The contingency 
+table of these people for the number of cakes and the age shows that we have nobody of age 55-64
+eating more than 6 cakes.
+
+```{r}
+NoCar <- ind[ind$Car==2,] # individuals not owning a car
+
+table(NoCar$NCakes,NoCar$ageband4) # Cross table
+```
+
+The three zones with the worst simulation needed a lot of people without a car. On the contrary, 
+below, we print the constraint of car of the three best zones. They needed less people of this category.
+This is the risk by generating a population of 1,623,800 of inhabitants and having a survey including 
+only 916 persons.
+
+In conclusion, the simulation runs well for all zone excepts few ones. This is due to the individuals
+present in the sample. This could be explained by a survey that was not uniformly distributed through
+the different zones or does not include enough persons.
+
+```{r, echo=FALSE}
+# (MD, 2015) 
+# check that somewhere, the problem of category non represented or to little sample is somewhere explained
+```
 
 ## External validation
 
@@ -536,4 +593,11 @@ which may involve some degree of subjectivity.
 I therefore advocate talking about this phase as 'evaluation'
 or simply 'model checking' if all we are doing is internal
 validation.
+
+In the example of CakeMap, no databases are available to check if the consumption of cakes
+in our simulation is pertinent with other databases. In the case of microsimulation, 
+it is always hard to proceed to an external validation, because in practice, when we have 
+databases, we use them for the simulation. Thus, comparing the result with this data
+is included in the process of internal validation.
+
 
