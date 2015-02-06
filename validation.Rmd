@@ -523,9 +523,9 @@ options(scipen=100,digits=3) #to avoid scientific notation
 
 ```{r}
 RudeDiff <- cons[84,] - ind_agg[84,] # differences for zone 84
-Diff <- round( abs(RudeDiff) ) # interesting differences
+diff <- round( abs(RudeDiff) ) # interesting differences
 
-# diff[diff>0] # printing the differences bigger than 0
+diff[diff>0] # printing the differences bigger than 0
 ```
 
 The responsible variable seems to be the car ownership. We have made
