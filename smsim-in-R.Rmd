@@ -574,10 +574,13 @@ approaches to IPF. To save computer and researcher time, we
 use in the next sections 
 R packages which implement IPF without the user needing to *hard code*
 each iteration in R:
-**ipfp** and  **mipfp**. We will use each of these methods to generate the
-same result: fractional weight matrices allocating each individual
-to zones. After following this reweighting process we will progress to
-integerisation: the process of converting 
+**ipfp** and  **mipfp**. We will use each of these methods to generate
+fractional weight matrices allocating each individual
+to zones. After following this reweighting process with **ipfp**, we will progress to
+integerisation: the process of converting the fractional weights into integers. 
+This process creates a final contingency table, which is used to generate the
+final population. This last step is called the expansion.
+
 
 ```{r, echo=FALSE}
 # Possibly more on IPF here. For now, press on
@@ -774,12 +777,12 @@ the next section.
 
 
 The R package  **mipfp** is more recent than **ipfp**
-and more a more generalized version of the IPF algorithm.
+and a more generalized version of the IPF algorithm.
 Indeed, **ipfp** generates a two-dimensional weight matrix based on mutually
 exclusive (non cross-tabulated) constraint tables.
 This is useful for applications without cross-tabulated constraints is not available.
 **mipfp** allows for multiple cross-tabulations in the constraint variables,
-such as age/sex and age/class.
+such as, for example, age/sex and age/class.
 
 ```{r, echo=FALSE}
 # The
@@ -789,11 +792,18 @@ such as age/sex and age/class.
 ```
 
 **mipfp** provides a multidimensional implementation of the iterative 
-proportional fitting procedure (ipfp). This is able to easily to estimate 
+proportional fitting procedure (ipfp). This is able to easily estimate 
 the update of an initial $N$-dimensional array with respect to given 
 target marginal distributions (which, in turn can be multidimensional). 
 In that sense, it is an approach different from the one taken by the 
 **ipfp** package which was designed to solve only the 2 dimensional case.
+
+This difference is explained by the initial aim of the packages. 
+**mipfp** was specially design to solve problem of spatial microsimulation, 
+whereas **ipfp** was created to solve an algebra problem of the form  $Ax=b$.
+Its aim is to find a vector $x$ such as $Ax=b$, after having predefined the vector 
+$b$ and the matrix $A$. Thus, the dimensions are fixed : a two-dimensional
+matrix and two vectors.
 
 ```{r, echo=FALSE}
 # Original:
@@ -815,7 +825,10 @@ library(mipfp) # after install.packages("mipfp")
 To illustrate the use of `Ipfp`, **mipfp**'s only function,
 we will create a fictive example. 
 The case of SimpleWorld is here too simple to really illustrate the power 
-of this package. Assume that we want to determine the contingency table 
+of this package. The solving of SimpleWorld with `Ipfp` is included in 
+the next section containing the comparison between the two packages.
+
+Assume that we want to determine the contingency table 
 of a population characterized by a gender (male, female), 
 an age (0-17, 18-50, 50+) and a diploma level (level 1 to level 4).
 We consider a zone with 50 inhabitants. The classic spatial microsimulation 
