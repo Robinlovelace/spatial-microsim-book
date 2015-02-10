@@ -1721,11 +1721,17 @@ The pseudo-code below corresponds to the code done by Barthélemy and Toint (201
 To simplify the notations, each table are written without the cross symbol in the pseudo-code.
 
 $\forall$ a in A {
+
   $\forall$ b in B {
+  
     $\forall$ c in C {
+    
       $ABC(a,b,c)=\frac{AC(a,c)}{margin(c)}BC(b,c)$
+      
     }
+    
   }
+  
 }
 
 The formula is intuitive. The AC table gives the proportion of each category of A inside the considered
@@ -1733,12 +1739,12 @@ category of c. Then, this proportion splits the number of persons having charact
 into the category of a. For example, if A is the gender, B the age class and C the diploma level, in
 the specific case of defining (Male, Young, Academics), we will have :
 
-$$ABC(Male, Young, Academics)=\frac{AC(Male,Academics)}{\#Academics}BC(Young,Academics)$$
+$$ABC(Male, Young, Aca)=\frac{AC(Male,Aca)}{\#Aca}BC(Young,Aca)$$
 
 Suppose, we have 50 young academics out of 150 academics (90 female and 60 male). We would have:
 
-$$ABC(Male, Young, Academics)=\frac{60}{150}*50=20$$
-$$ABC(Female, Young, Academics)=\frac{90}{150}*50=30$$
+$$ABC(Male, Young, Aca)=\frac{60}{150}*50=20$$
+$$ABC(Female, Young, Aca)=\frac{90}{150}*50=30$$
 
 Thus, the tables A x B x C and A x B x D are simulated. The seed for the IPF function can now be
 established, with help of the two contingencies.
