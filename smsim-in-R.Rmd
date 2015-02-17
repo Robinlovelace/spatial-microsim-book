@@ -1688,7 +1688,7 @@ represents the most micro-level populations (Bierlaire, 1991).
 For example, if a person in one zone has exactly the same charcteristics as
 a person in another zone, swapping these two people will not change 
 the synthetic population.
-This process of swapping or 'switching' individuals is considered in the subsequent chapter, which
+This process of maximising the entropy is considered in the subsequent chapter, which
 explainings how to 
 allocate individuals from the spatial microdata into households to fit
 household-level constraints. We will here present
@@ -1764,7 +1764,7 @@ res[1,,]
 ```
 
 As with IPF, the fractional result needs to be integerised to create
-spatial microdata. The `round()` function gives a satisfying result, in terms
+spatial microdata. The `round()` function gives a satisfying result in this case, in terms
 of fitting the constraints. However, the aforementioned integerisation algorithms such as
 *truncate, replicate, sample* (TRS) can also be used.
 This method can not be followed exactly, because we want to perfectly fit 
