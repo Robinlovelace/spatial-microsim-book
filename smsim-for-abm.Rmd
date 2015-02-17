@@ -3,19 +3,37 @@ title: "Spatial microsimulation for agent-based models"
 layout: default
 ---
 
+```{r, echo=FALSE}
+# Resources:
+# ABM www.geog.leeds.ac.uk/courses/level3/geog3150/
+
+# Java: http://www.geog.leeds.ac.uk/courses/other/crime/
+# Java about half way down ABM "details" page:
+# http://www.geog.leeds.ac.uk/courses/other/crime/abm/general-modelling/index.html
+```
+
+
+
 # Spatial microdata in agent-based models {#ABM}
 
 Spatial microsimulation can be seen as a precursor to, or early
-form of, agent-based models (ABMs). Agent-based modelling depends on 1) a number
-of discrete agents, 2) with different characteristics, 3) interacting. With the
-spatial microsimulation model created in the previous chapters we
-already have two thirds of the necessary ingredients
-of an ABMs: if your aim is to use spatial microdata as an input into
+form of, agent-based modelling (ABM). Agent-based models involve three things:
+
+1. a number of discrete agents...
+2. with different characteristics
+3. interacting.
+
+Note that based on the above definition we
+already have two-thirds of the necessary ingredients
+of an ABM: the synthetic spatial microdata created in previous chapters can,
+with the right tools, skills and understanding, be used almsot directly as an
+input into ABM. If your aim is to use spatial microdata as an input into
 agent based models, you're more than half way there!
 
-We do not have space in this book to describe the transition from the
-spatial microdata we have generated into a full ABM. Suffice to mention some of
-the tools that will be useful for the job.
+Before describing the transition from the
+spatial microdata to ABM based on a simple example (you guessed it --- SimpleWorld),
+it is worth mentioning some applications of ABMs built on spatial microdata
+and some of the tools that will be useful for the job.
 
 [NetLogo](https://ccl.northwestern.edu/netlogo/) is a
 mature and widely used toolkit for agent-based models written in
