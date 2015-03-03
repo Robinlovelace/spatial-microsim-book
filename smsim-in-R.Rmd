@@ -14,7 +14,7 @@ library(grid)
 ```{r, echo=FALSE}
 # TODO:
 # Ensure text is compatible with new use of chapter title as 'population synthesis'
-# Discuss population synthesis without an input microdataset, with reference to Bathelemy and Toint (2012)
+# Discuss population synthesis without an input microdataset, with reference to Bathelemy and Toint (2013)
 # Consider splitting this section in 2: reweighting vs CO approaches
 
 # Completed:
@@ -769,241 +769,6 @@ the fractional weights must be integerised in a process
 known as integerisation (Lovelace and Ballas, 2013). This is the subject of
 the next section.
 
-### Reweighting with **mipfp** {#mipfp}
-
-```{r, echo=FALSE}
-# Morgane: please make this example work with the SimplWorld data
-```
-
-
-The R package  **mipfp** is more recent than **ipfp**
-and a more generalized version of the IPF algorithm.
-Indeed, **ipfp** generates a two-dimensional weight matrix based on mutually
-exclusive (non cross-tabulated) constraint tables.
-This is useful for applications without cross-tabulated constraints is not available.
-**mipfp** allows for multiple cross-tabulations in the constraint variables,
-such as, for example, age/sex and age/class.
-
-```{r, echo=FALSE}
-# The
-# we have a new column with, at most, as many categories as the product of the number of categories for the variable age
-# and 2 (Male or Female). However, in this case, we need to have the cross table of the age and the sex available to 
-# proceed this way.
-```
-
-**mipfp** provides a multidimensional implementation of the iterative 
-proportional fitting procedure (ipfp). This is able to easily estimate 
-the update of an initial $N$-dimensional array with respect to given 
-target marginal distributions (which, in turn can be multidimensional). 
-In that sense, it is an approach different from the one taken by the 
-**ipfp** package which was designed to solve only the 2 dimensional case.
-
-This difference is explained by the initial aim of the packages. 
-**mipfp** was specially design to solve problem of spatial microsimulation, 
-whereas **ipfp** was created to solve an algebra problem of the form  $Ax=b$.
-Its aim is to find a vector $x$ such as $Ax=b$, after having predefined the vector 
-$b$ and the matrix $A$. Thus, the dimensions are fixed : a two-dimensional
-matrix and two vectors.
-
-```{r, echo=FALSE}
-# Original:
-# problems of the form $Ax=b$.
-# Changed because the meaning of Ax=b has not been defined
-```
-
-The `Ipfp` function of **mipfp** fills a $N$-dimensional weight 
-matrix based on a range of aggregate-level constraint table options. 
-In other words, `Ipfp` is  more flexible than the previously mentioned
-approaches; it is relatively easy to adapt 
-the code for diverse applications. The first step is to load the package
-into the workspace:
-
-```{r}
-library(mipfp) # after install.packages("mipfp")
-```
-
-To illustrate the use of `Ipfp`, **mipfp**'s only function,
-we will create a fictive example. 
-The case of SimpleWorld is here too simple to really illustrate the power 
-of this package. The solving of SimpleWorld with `Ipfp` is included in 
-the next section containing the comparison between the two packages.
-
-Assume that we want to determine the contingency table 
-of a population characterized by a gender (male, female), 
-an age (0-17, 18-50, 50+) and a diploma level (level 1 to level 4).
-We consider a zone with 50 inhabitants. The classic spatial microsimulation 
-problem consists in having all marginal distributions and the cross table only for a sample. 
-
-Note that we will consider the variable in the following 
-order: sex (1), age (2) and diploma (3). Our constraints could for example be:
-
-```{r}
-sex <- c(23,27) # the number in each sex category
-names(sex) <- c("Male","Female")
-
-age <- c(16,20,14) # the number in each age category
-names(age) <- c("Less18","18-50","More50")
-
-diploma <- c(20,18,6,6) # the number in each education category
-names(diploma) <- c("Level1","Level2","Level3","Level4")
-```
-
-Note that the population is equal in each constraint (50 people). Note also
-the order in which each category is encoded --- a common source of
-error in population synthesis.
-For this reason we have labelled each category of each constraint.
-The constraints are the target margins and need to be stored as a list.
-To tell the algorithm 
-which elements of the list correspond to which constraint,
-a second list with the description 
-of the target must be created. By printing *target* before to run the algorithm, 
-we can verify that we have encoded everything well.
-
-```{r}
-target <- list (sex, age, diploma)
-descript <- list (1, 2, 3)
-target
-```
-
-Now all constraint variables have been defined. Let us now define 
-the initial array to be updated, also referred as the seed or the weight matrix. The dimension
-of this matrix must be identical to that of the constraint tables:
-$(2 \times3 \times 4)$. Each cell of the array represents 
-a combination of the attributes' values, and thus defines a particular 
-category of individuals. In our case, we will consider that the weight
-matrix contains 0 when the category is not possible. In this example we 
-will assume that it is impossible for an individual being less than 18 
-years old to hold a diploma level higher than 2. 
-The corresponding are then set to 0, while the cells of the 
-feasible categories are set to 1.
-
-```{r}
-names <- list (names(sex), names(age), names(diploma))
-weight <- array (1, c(2,3,4), dimnames = names)
-weight[, c("Less18"), c("Level3","Level4")] <- 0
-```
-
-Everything being defined, we can execute
-*Ipfp*. As with **ipfp**, we can chose a stoping criterion defined by *tol* and a maximum
-number of iterations. Finally, setting the argument `print` to `TRUE` 
-ensures we will see the evolution of the
-of the procedure. After reaching either the maximum number of iteration or convergence 
-(whichever comes first), the function will return a list containing the updated 
-array, as well as other informations about the convergence of the algorithm. 
-Note that if the target margins are not consistent, the input data is then 
-normalised by considering probabilities instead of frequencies.
-
-```{r}
-result <- Ipfp(weight, descript, target, iter = 50, print = TRUE, tol = 1e-5)
-```
-
-We can observe that the stoping criterion becomes always smaller and attains the *tol* after 8 
-iterations. Now we have a result and we can check that we have a total number of 50 inhabitants 
-in the zone. Note that, thanks to the definitions of names in the array, we can easily 
-interpret the result. There are a total 50 people and nobody of less than 18 years old
-own a diploma level 3 or 4, as desired.
-
-```{r}
-# printing the result
-result 
-# checkin the total number of persons
-sum(result)
-```
-
-This reasoning works zone per zone and we can generate a 3-dimensional weight matrix. Another
-advantage of **mipfp** is that it allows cross-tabulated constraints to be added.
-In our example, we could
-add a target of the contingency of the age and the diploma. We can define this cross table:
-
-```{r}
-# define the cross table
-cross <- cbind(c(11,5,0,0), c(3,9,4,4), c(6,4,2,2))
-rownames (cross) <- names (diploma)
-colnames (cross) <- names(age)
-
-# print the cross table
-cross
-```
-
-When having several constraints concerning the same variable, we have insure 
-the consistency across these targets (otherwise convergence might not be reached). 
-For instance, we can display the margins of `cross` along with `diploma` and `age`
-to validate the consistency assumption. There are
-both equal, meaning that the constraints are coherent.
-
-```{r}
-# check pertinence for diploma 
-rowSums(cross)
-diploma
-
-# check pertinence for age 
-colSums(cross)
-age
-```
-
-The `target` and `descript` have to be updated to include the cross table.
-Pay attention to the order
-of the arguments by declaring a contingency table. Then, we can execute
-the task and run *Ipfp* again:
-
-```{r}
-# defining the new target and associated descript
-target <- list(sex, age, diploma, cross)
-descript <- list(1, 2, 3, c(3,2))
-
-# running the Ipfp function
-result <- Ipfp(weight, descript, target, iter = 50, print = TRUE, tol = 1e-5)
-```
-
-The addition of a constraint means there are fewer possible outcomes, implying that the algorithm 
-converges faster. By printing the results, we see that all constraints are respected and
-we have a 3-dimensional contingency table.
-
-Similarly to the **ipfp** package, the result is in a non-integer array. Consequently 
-we can generate a synthetic population either by considering the array cells 
-as probabilities for random draws or by applying the the integerisation and 
-expansion steps defined in the `ipfp` Section.
-
-```{r, echo=FALSE}
-# TODO: (MD) : put a real reference to the section of integerisation and expansion
-```
-
-Able to deal with bigger problems, the package presented here can also manage to 
-solve smaller problem such as SimpleWorld. We have simply chosen to develop here a 
-different example to show you the vast application of this function.
-
-```{r, echo=FALSE}
-# Please MD, show mipfp can solve the SimpleWorld problem (RL)
-```
-
-
-### Comparing **ipfp** with **mipfp** {#Compareipf}
-
-```{r, echo=FALSE}
-# We need to establish which is faster (RL)
-```
-
-Conceptually, the big difference is that the R function **ipfp** uses an hard code written in C and can deal
-only with small problems as itself. With this package, some coding and manipulations of 
-data has to be performed to consider more than two variables. Note that it is 
-normal, since this package was initially designed to resolve linear problem of
-the form $Ax=b$. On the other hand, the aim of **mipfp** is to execute an iterative 
-proportional fitting. This function allows the solving of spatial microsimulation
-whatever the number of variables and the form of the constraints (cross-table or marginal 
-distributions). Moreover, the code below this "black box" is written directly in R
-and does not require another programming language.
-
-Both seems to do a similar simulation. We will compare here the results and time used 
-to solve the simple problem of SimpleWorld.
-
-```{r, echo=FALSE}
-# TODO: (MD) compare with simpleworld
-#       (MD) if mipfp is better, justify why we use ipfp with cakemap... Or compare also with cakemap
-
-# TODO (RL): cross reference image of CO vs reweighting approaches
-```
-
-
 
 ### Integerisation {#sintegerisation}
 
@@ -1231,6 +996,368 @@ ints_df[ints_df$zone == 2, ]
 # library(knitr)
 # kable(ints_df[ints_df$zone == 2,], row.names = FALSE)
 ```
+
+
+### Reweighting with **mipfp** {#mipfp}
+
+```{r, echo=FALSE}
+# Morgane: please make this example work with the SimplWorld data
+```
+
+
+The R package  **mipfp** is more recent than **ipfp**
+and a more generalized version of the IPF algorithm.
+Indeed, **ipfp** generates a two-dimensional weight matrix based on mutually
+exclusive (non cross-tabulated) constraint tables.
+This is useful for applications without cross-tabulated constraints is not available.
+**mipfp** allows for multiple cross-tabulations in the constraint variables,
+such as, for example, age/sex and age/class.
+
+```{r, echo=FALSE}
+# we have a new column with, at most, as many categories as the product of the number of categories for the variable age
+# and 2 (Male or Female). However, in this case, we need to have the cross table of the age and the sex available to 
+# proceed this way.
+```
+
+**mipfp** provides a multidimensional implementation of the iterative 
+proportional fitting procedure (ipfp). This is able to easily estimate 
+the update of an initial $N$-dimensional array with respect to given 
+target marginal distributions (which, in turn can be multidimensional). 
+In that sense, it is an approach different from the one taken by the 
+**ipfp** package which was designed to solve only the 2 dimensional case.
+
+This difference is explained by the initial aim of the packages. 
+**mipfp** was specially design to solve problem of spatial microsimulation, 
+whereas **ipfp** was created to solve an algebra problem of the form  $Ax=b$.
+Its aim is to find a vector $x$ such as $Ax=b$, after having predefined the vector 
+$b$ and the matrix $A$. Thus, the dimensions are fixed : a two-dimensional
+matrix and two vectors.
+
+
+The `Ipfp` function of **mipfp** fills a $N$-dimensional weight 
+matrix based on a range of aggregate-level constraint table options. 
+In other words, `Ipfp` is  more flexible than the previously mentioned
+approaches; it is relatively easy to adapt 
+the code for diverse applications. The first step is to load the package
+into the workspace:
+
+```{r}
+library(mipfp) # after install.packages("mipfp")
+```
+
+To illustrate the use of `Ipfp`, **mipfp**'s only function,
+we will create a fictive example. 
+The case of SimpleWorld is here too simple to really illustrate the power 
+of this package. The solving of SimpleWorld with `Ipfp` is included in 
+the next section containing the comparison between the two packages.
+
+Assume that we want to determine the contingency table 
+of a population characterized by a gender (male, female), 
+an age (0-17, 18-50, 50+) and a diploma level (level 1 to level 4).
+We consider a zone with 50 inhabitants. The classic spatial microsimulation 
+problem consists in having all marginal distributions and the cross table only for a sample. 
+
+Note that we will consider the variable in the following 
+order: sex (1), age (2) and diploma (3). Our constraints could for example be:
+
+```{r}
+sex <- c(23,27) # the number in each sex category
+names(sex) <- c("Male","Female")
+
+age <- c(16,20,14) # the number in each age category
+names(age) <- c("Less18","18-50","More50")
+
+diploma <- c(20,18,6,6) # the number in each education category
+names(diploma) <- c("Level1","Level2","Level3","Level4")
+```
+
+Note that the population is equal in each constraint (50 people). Note also
+the order in which each category is encoded --- a common source of
+error in population synthesis.
+For this reason we have labelled each category of each constraint.
+The constraints are the target margins and need to be stored as a list.
+To tell the algorithm 
+which elements of the list correspond to which constraint,
+a second list with the description 
+of the target must be created. By printing *target* before to run the algorithm, 
+we can verify that we have encoded everything well.
+
+```{r}
+target <- list (sex, age, diploma)
+descript <- list (1, 2, 3)
+target
+```
+
+Now all constraint variables have been defined. Let us now define 
+the initial array to be updated, also referred as the seed or the weight matrix. The dimension
+of this matrix must be identical to that of the constraint tables:
+$(2 \times3 \times 4)$. Each cell of the array represents 
+a combination of the attributes' values, and thus defines a particular 
+category of individuals. In our case, we will consider that the weight
+matrix contains 0 when the category is not possible. In this example we 
+will assume that it is impossible for an individual being less than 18 
+years old to hold a diploma level higher than 2. 
+The corresponding are then set to 0, while the cells of the 
+feasible categories are set to 1.
+
+```{r}
+names <- list (names(sex), names(age), names(diploma))
+weight <- array (1, c(2,3,4), dimnames = names)
+weight[, c("Less18"), c("Level3","Level4")] <- 0
+```
+
+Everything being defined, we can execute
+*Ipfp*. As with **ipfp**, we can chose a stoping criterion defined by *tol* and a maximum
+number of iterations. Finally, setting the argument `print` to `TRUE` 
+ensures we will see the evolution of the
+of the procedure. After reaching either the maximum number of iteration or convergence 
+(whichever comes first), the function will return a list containing the updated 
+array, as well as other informations about the convergence of the algorithm. 
+Note that if the target margins are not consistent, the input data is then 
+normalised by considering probabilities instead of frequencies.
+
+```{r}
+result <- Ipfp(weight, descript, target, iter = 50, print = TRUE, tol = 1e-5)
+```
+
+We can observe that the stoping criterion becomes always smaller and attains the *tol* after 8 
+iterations. Now we have a result and we can check that we have a total number of 50 inhabitants 
+in the zone. Note that, thanks to the definitions of names in the array, we can easily 
+interpret the result. There are a total 50 people and nobody of less than 18 years old
+own a diploma level 3 or 4, as desired.
+
+```{r}
+# printing the result
+result 
+# checkin the total number of persons
+sum(result)
+```
+
+This reasoning works zone per zone and we can generate a 3-dimensional weight matrix. Another
+advantage of **mipfp** is that it allows cross-tabulated constraints to be added.
+In our example, we could
+add a target of the contingency of the age and the diploma. We can define this cross table:
+
+```{r}
+# define the cross table
+cross <- cbind(c(11,5,0,0), c(3,9,4,4), c(6,4,2,2))
+rownames (cross) <- names (diploma)
+colnames (cross) <- names(age)
+
+# print the cross table
+cross
+```
+
+When having several constraints concerning the same variable, we have insure 
+the consistency across these targets (otherwise convergence might not be reached). 
+For instance, we can display the margins of `cross` along with `diploma` and `age`
+to validate the consistency assumption. There are
+both equal, meaning that the constraints are coherent.
+
+```{r}
+# check pertinence for diploma 
+rowSums(cross)
+diploma
+
+# check pertinence for age 
+colSums(cross)
+age
+```
+
+The `target` and `descript` have to be updated to include the cross table.
+Pay attention to the order
+of the arguments by declaring a contingency table. Then, we can execute
+the task and run *Ipfp* again:
+
+```{r}
+# defining the new target and associated descript
+target <- list(sex, age, diploma, cross)
+descript <- list(1, 2, 3, c(3,2))
+
+# running the Ipfp function
+result <- Ipfp(weight, descript, target, iter = 50, print = TRUE, tol = 1e-5)
+```
+
+The addition of a constraint means there are fewer possible outcomes, implying that the algorithm 
+converges faster. By printing the results, we see that all constraints are respected and
+we have a 3-dimensional contingency table.
+
+Similarly to the **ipfp** package, the result is in a non-integer array. Consequently 
+we can generate a synthetic population either by considering the array cells 
+as probabilities for random draws or by applying steps similar to 
+the integerisation and expansion steps defined in the `ipfp` Section.
+
+```{r, echo=FALSE}
+# TODO: (MD) : put a real reference to the section of integerisation and expansion
+```
+
+Able to deal with bigger problems, the package presented here can also manage to 
+solve smaller problem such as SimpleWorld. We have simply chosen to develop here a 
+different example to show you the vast application of this function. However, 
+to compare **ipfp** with **mipfp**, we will focus on this simpler example :
+SimpleWorld.
+
+
+### Comparing **ipfp** with **mipfp** {#Compareipf}
+
+```{r, echo=FALSE}
+# We need to establish which is faster (RL)
+```
+
+Conceptually, the big difference is that the R function **ipfp** uses an hard 
+code written in C and can deal only with small problems as itself. With this 
+package, some coding and manipulations of 
+data has to be performed to consider more than two variables. Note that it is 
+normal, since this package was initially designed to resolve linear problem of
+the form $Ax=b$. On the other hand, the aim of **mipfp** is to execute an iterative 
+proportional fitting. This function allows the solving of spatial microsimulation
+whatever the number of variables and the form of the constraints (cross-table or marginal 
+distributions). Moreover, the code below this "black box" is written directly in R
+and does not require another programming language.
+
+Both seems to do a similar simulation. We will compare here the results and time used 
+to solve the simple problem of SimpleWorld.
+
+```{r, echo=FALSE}
+# TODO: (MD) compare with simpleworld
+#       (MD) if mipfp is better, justify why we use ipfp with cakemap... Or compare also with cakemap
+
+# TODO (RL): cross reference image of CO vs reweighting approaches
+```
+
+The whole process using **ipfp** has been developed. Now, we solve the SimpleWorld 
+problem with **mipfp**. We proceed zone per zone. To explain the process, the generation 
+of the first zone is here explained. The constraints for this area are reach as
+followed :
+
+```{r}
+# SimpleWorld constraints for zone 1
+con_age[1,]
+con_sex[1,]
+
+# list the constraints for zone 1
+target <- list (data.matrix(con_age[1,]), data.matrix(con_sex[1,])[c(2,1)])
+descript <- list (1, 2)
+```
+
+Remark that we have to take the sex data in the other order to be coherent with the
+seed.
+The sample available establishes the seed of the algorithm, also kn owned as 
+the initial weight matrix. We can take into account the entire individual level
+data, with the chosen categories. Thus, we keep the separation between ages 
+under and above 50, but we also consider the income information, even if it 
+does not appear in the constraints.
+
+```{r}
+# Add income to the categorised individual data
+ind_income <- cbind(ind, ind_full[,c("income")])
+weight_init <- table(ind_income[, c(2,3,4)])
+```
+
+Having the initial weight initialised to the aggregation of the 
+individual level data available and having the constraints well established, 
+we can now execute the `Ipfp` function.
+
+```{r}
+# Perform Ipfp on SimpleWorld example
+weight_mipfp <- Ipfp( weight_init, descript, target, print = TRUE, tol = 1e-5)
+
+# Printing the resulting weight matrix for age and sex
+apply(weight_mipfp, c(1,2), sum)
+```
+
+We can see that we reach the convergence after 5 iterations
+and the results are fractional, as the one funded with **ipfp**. 
+Now that the process is understood, we can generate the weight
+matrix for each zone. The aim is here to transform the output
+into a form similar to the one generated in the section **ipfp** 
+to allow an easy comparison.
+
+Note that for each area, the initial weight matrix will be the same.
+The final table will be called `weights_mipfp`. To complete its cells,
+we will need the number of individual in the sample in each category.
+
+```{r}
+# Matrix which rows are individual and columns are zones
+weights_mipfp <- matrix(data = NA, nrow = nrow(ind), ncol = nrow(cons))
+
+# Table of ind
+Ind_Tab <- table(ind[,c(2,3)])
+```
+
+Now, we can loop on the zones and generate the whole process with the function
+of the package **mipfp**. This is done thanks to iterations that calculate
+the weights per category for the zone and then transform them into weights
+per individual, depending on the category of each person.
+
+```{r}
+# Loop on the zones
+for (zone in 1:NbZones){
+  # Adapt the constraint 
+  target <- list (data.matrix(con_age[zone,]), data.matrix(con_sex[zone,])[c(2,1)])
+
+  # Calculate the weights
+  res <- Ipfp( weight_init, descript, target, tol = 1e-5)
+  
+  # Table of calculated weights
+  Mipfp_Tab <- apply(res,c(1,2),sum)
+
+  # Transformation into individual weights
+  for (i in 1:NbIndiv) {
+    weight_ind <- Mipfp_Tab[ind[i,c(2)],ind[i,c(3)]]
+    sample_ind <- Ind_Tab[ind[i,c(2)],ind[i,c(3)]]
+    weights_mipfp[i,zone] <- weight_ind / sample_ind
+  }
+}
+```
+
+The simulation of SimpleWorld with **mipfp** is now finished, 
+since we generated weights for each individual in each zone. The
+resulting matrix is exactly the same as the one created thanks to 
+the package **ipfp** and the integerisation and expansion step can
+be the same.
+
+One package is written in C and the other in R. The current question
+is : Which package is more efficient? The answer is hard to give, 
+because it will depend on your application. We have seen that both 
+algorithms do not consider the same form of input. For **ipfp**
+you need an initial individual level data, coming from example from 
+a survey and constraints. For **mipfp** the constraints and a contingency table of 
+a survey is enough. Thus, when having no microdata, you will have 
+to use **mipfp** (Seen in a coming section). Moreover, 
+their results are also in different structures. Having weights for each 
+individuals with **ipfp** and weights for the contingency table with **mipfp**
+(that can be retranscribe in the other form if needed).
+
+In conclusion to this comparison, **mipfp** is more adapted
+and can deal with harder problems, but depending on the structure
+of the data available, it can be easier for you to program with one
+or the other package. In term of time, we compare here only for the
+first zone of SimpleWorld problem. We compute only the function, 
+since the code to threat the data before is very influenced by the 
+application.
+
+```{r, eval=FALSE}
+# Measure time ipfp
+system.time(ipfp(cons[1,], ind_catt, x0 = rep(1,NbIndiv),  tol = 1e-5))
+```
+
+This code measure the time taken to execute the `ipfp` function for the 
+zone 1. It takes 0.001 second on a computer with a processor : 
+Intel(R) Core(TM) i7-4930K CPU @ 3.40GHz. The code below make a similar analysis
+for the `Ipfp` function and takes 0.002 second on the same computer.
+Thus, for this very little example, the package **ipfp** written in C
+is faster.
+
+```{r, eval=FALSE}
+# Chose right constraint for mipfp
+target <- list (data.matrix(con_age[zone,]), data.matrix(con_sex[zone,])[c(2,1)])
+
+# Measure time mipfp
+system.time(Ipfp( weight_init, descript, target, tol = 1e-5))
+```
+
+
 
 ## The GREGWT algorithm
 
@@ -1750,8 +1877,10 @@ source("R/SimpleWorld.R")
 
 ```{r}
 # initialise result's array and its names
-resNames <- list(1:nrow(cons), rownames(global_cons), colnames(global_cons))
-res <- array(0, dim=c(nrow(cons), dim(global_cons)), dimnames=resNames)
+resNames <- list(1:nrow(cons), rownames(global_cons), 
+            colnames(global_cons))
+res <- array(0, dim=c(nrow(cons), dim(global_cons)), 
+             dimnames=resNames)
 
 # re-scale the cross-table to fit the zone's constraints
 # loop on the zones
@@ -1782,7 +1911,8 @@ for (zone in 1:length(total_pop)){
 }
 
 # Calculate the total simulated cross-table
-SimTot <- array(0, dim=dim(global_cons), dimnames=c(rownames(global_cons), colnames(global_cons)))
+Names <- c(rownames(global_cons), colnames(global_cons))
+SimTot <- array(0, dim=dim(global_cons), dimnames = Names)
 for (zone in 1:length(total_pop)){
  SimTot <- SimTot + res[zone,,]
 }
@@ -1805,7 +1935,7 @@ resTruncate <- floor(res)
 sum(total_pop) - sum(resTruncate)
 
 # Calculate the total simulated cross-table
-SimTotTruncate <- array(0, dim=dim(global_cons), dimnames=c(rownames(global_cons), colnames(global_cons)))
+SimTotTruncate <- array(0, dim = dim(global_cons), dimnames = Names)
 for (zone in 1:length(total_pop)){
  SimTotTruncate <- SimTotTruncate + resTruncate[zone,,]
 }
@@ -1852,7 +1982,7 @@ having only aggregated data, but in two different levels of aggregation.
 For example, we have some data for the municipalities and other for
 the districts. A first proposition can be to use a genetic algorithm that 
 minimise the distance between the constraint and the simulation.
-The solution proposed by Barthélemy and Toint (2012) is intuitive and we 
+The solution proposed by Barthélemy and Toint (2013) is intuitive and we 
 develop here the method. In such cases, they propose to generate a 'seed' before
 to execute IPF. 
 
@@ -1881,7 +2011,7 @@ to simulate A x B x C x D having A x D, A x C, B x D and B x C. This is also don
 
 For the first step, we will explain only the creation of the first cross table, since the second
 reasoning is similar. The idea is simply to proceed proportionally to respect both available table.
-The pseudo-code below corresponds to the code done by Barthélemy and Toint (2012).
+The pseudo-code below corresponds to the code done by Barthélemy and Toint (2013).
 To simplify the notations, each table are written without the cross symbol in the pseudo-code.
 
 $\forall$ a in A {
