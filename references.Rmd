@@ -16,7 +16,7 @@ Avram, S., Figari, F., Leventi, C., Levy, H., Navicke, J., Matsaganis, M., … S
 
 Barthélemy, J. (2014). A parallelized micro-simulation platform for population and mobility behaviour-Application to Belgium. University de Namur.
 
-Barthelemy, J., & Toint, P. L. (2012). Synthetic Population Generation Without a Sample. Transportation Science, 47(2), 266–279. doi:10.1287/trsc.1120.0408
+Barthelemy, J., & Toint, P. L. (2013). Synthetic Population Generation Without a Sample. Transportation Science, 47(2), 266–279. doi:10.1287/trsc.1120.0408
 
 Beezer, R. A. (2008). A first course in linear algebra. Puget Sound: Congruent Press.
 
