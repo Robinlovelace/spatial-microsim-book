@@ -1326,7 +1326,7 @@ we can now execute the `Ipfp` function.
 
 ```{r}
 # Perform Ipfp on SimpleWorld example
-weight_mipfp <- Ipfp( weight_init, descript, target, print = TRUE, tol = 1e-5, iter=1)
+weight_mipfp <- Ipfp( weight_init, descript, target, print = TRUE, tol = 1e-5)
 
 # Printing the resulting weight matrix for age and sex
 apply(weight_mipfp, c(1,2), sum)
