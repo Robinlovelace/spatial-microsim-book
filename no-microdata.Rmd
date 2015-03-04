@@ -1,0 +1,267 @@
+---
+title: "Spatial microsimulation in R"
+layout: default
+---
+
+```{r, echo=FALSE}
+# packages to allow 'knitting' the chapter to html
+library(png)
+library(grid)
+```
+
+# Population synthesis without input microdata {#nomicrodata}
+
+Sometimes no representative individual-level
+dataset is available. 
+In this case, the methods of population synthesis described in the previous
+chapters must be adapted accordingly.
+The challenge
+is still to generate spatial microdata 
+that fits all the constraint tables, but based on purely synthetic
+'seed' input microdata. Many
+combinations of individual-level data
+could correspond to these distributions. Depending on the aim
+of the spatial microsimulation model, simply finding a reasonable fit
+can be sufficient.
+
+In other cases a fit based on *entropy maximisation* may be required.
+This concept involves finding the population that best
+represents the most micro-level populations (Bierlaire, 1991).
+For example, if a person in one zone has exactly the same charcteristics as
+a person in another zone, swapping these two people will not change 
+the synthetic population.
+This process of maximising the entropy is considered in the subsequent chapter, which
+explainings how to 
+allocate individuals from the spatial microdata into households to fit
+household-level constraints. We will here present
+two alternative options for population synthesis when
+real individual-level or aggregate-level data is unavailable.
+
+### Global cross-tables and local marginal distributions
+
+Assume we have whole contingency table of variable cross-tabulations in the 
+aggregated-level data. Note that this cross-table could be the result of a 
+previous step. For example, an IPFP algorithm can be executed to join
+data from different form in this high level of aggregation.
+
+For the spatial zones needed, if the marginal distributions are known, 
+we can use the **mipfp** function as previously shown. However, if
+the only information about the zones is the total population living
+there, the function is unusable. In this specific case, having 
+no additional data, the single possibility is to 
+rescale the global cross-table for each zone. Note that this
+implies stating the correlations between the variables
+as independent of the zone. 
+
+To illustrate, we will develop the SimpleWorld example with 
+adapted constraints. When watching the available data in an aggregated level, 
+we have for the moment:
+
+```{r}
+# Cross-tabulation of individual-level dataset
+table(ind$age, ind$sex)
+
+(total_pop <- rowSums(con_sex)) # total population of each zone
+```
+
+To illustrate this section, the local constraint will be the total number
+of people in each zone (last column of `consTot`). The global constraint
+is a matrix of the form of the cross-table between age and sex, but 
+including the total population (33 people for SimpleWorld). The new 
+constraints could be :
+
+```{r}
+# Global Constraint possible for SimpleWorld
+global_cons <- table(ind$age, ind$sex)
+global_cons[1,] <- c(6,9)
+global_cons[2,] <- c(7,11)
+
+# Local Constraint for SimpleWorld
+local_cons <- total_pop
+```
+
+When having only these aggregate-level data, the best way to 
+reach a synthetic population is to rescale the cross-table.
+For each zone, a table proportional to the global one is created.
+The results are stored in a three dimensional array, which first
+dimension represents the zone.
+
+```{r,echo=FALSE, message=FALSE}
+source("R/SimpleWorld.R")
+```
+
+```{r}
+# initialise result's array and its names
+resNames <- list(1:nrow(cons), rownames(global_cons), 
+            colnames(global_cons))
+res <- array(0, dim=c(nrow(cons), dim(global_cons)), 
+             dimnames=resNames)
+
+# re-scale the cross-table to fit the zone's constraints
+# loop on the zones
+for (zone in 1:length(total_pop)){
+  res[zone,,] <- global_cons*total_pop[zone]/sum(global_cons)
+}
+
+# printing the cross-table for zone 1
+res[1,,]
+```
+
+As with IPF, the fractional result needs to be integerised to create
+spatial microdata. The `round()` function gives a satisfying result in this case, in terms
+of fitting the constraints. However, the aforementioned integerisation algorithms such as
+*truncate, replicate, sample* (TRS) can also be used.
+This method can not be followed exactly, because we want to perfectly fit 
+the few constraints we have. In our example, a satisfactory result is acheived by using 
+the round function, as shown in the code below.
+
+
+```{r}
+# Integerisation by simply using round
+
+# checking the local constraints for each zone
+# (Good if all TRUE)
+for (zone in 1:length(total_pop)){
+ print( sum(round(res[zone,,])) == total_pop[zone] )
+}
+
+# Calculate the total simulated cross-table
+Names <- c(rownames(global_cons), colnames(global_cons))
+SimTot <- array(0, dim=dim(global_cons), dimnames = Names)
+for (zone in 1:length(total_pop)){
+ SimTot <- SimTot + res[zone,,]
+}
+
+# checking the global constraint 
+# (Good if 0)
+sum(SimTot - global_cons)
+```
+
+To adapt the method to use TRS, the first stage is to 
+truncate the data and identify the missing individuals.
+
+```{r}
+# Integerisation by adapting TRS
+
+# truncate the data 
+resTruncate <- floor(res)
+
+# number of missing individuals
+sum(total_pop) - sum(resTruncate)
+
+# Calculate the total simulated cross-table
+SimTotTruncate <- array(0, dim = dim(global_cons), dimnames = Names)
+for (zone in 1:length(total_pop)){
+ SimTotTruncate <- SimTotTruncate + resTruncate[zone,,]
+}
+
+# number of missing individuals per category
+ToAdd <- global_cons - SimTotTruncate
+ToAdd
+
+# number of missing individuals per zone
+for (zone in 1:length(total_pop)){
+ print(total_pop[zone] - sum(round(resTruncate[zone,,])))
+}
+
+```
+
+The principle is to add people in the not completed zones and
+categories. The cells to be implemented are always chosen as the one
+with the bigger decimal parts.
+
+```{r}
+# Adapting resTruncate to fit all constraints
+while (sum(total_pop) - sum(resTruncate) >0){
+  # find the biggest decimals
+  decimals<-res-resTruncate
+  index <- which( decimals == max(decimals), arr.ind = TRUE)
+
+  # remember we already considered this cell
+  decimals[index] <- 0
+
+  # if this zone still miss individuals
+  if (total_pop[index[1]]-sum(resTruncate[index[1],,]) > 0){
+    resTruncate[index]<-resTruncate[index]+1
+  }
+}
+```
+
+The new values in `resTruncate` follow all constraints. 
+The adaptation of TRS is to not use a random draw. 
+
+### Two-level aggregated data 
+
+We present here how to find a possible distribution per zone when 
+having only aggregated data, but in two different levels of aggregation.
+For example, we have some data for the municipalities and other for
+the districts. A first proposition can be to use a genetic algorithm that 
+minimise the distance between the constraint and the simulation.
+The solution proposed by Barthélemy and Toint (2013) is intuitive and we 
+develop here the method. In such cases, they propose to generate a 'seed' before
+to execute IPF. 
+
+In their cases, they wanted to simulate a population with four characteristics
+per individual : the gender, the age class, the diploma level and the
+activity status. Let us present their solution more generalized. We will explain the 
+method by renaming the characteristics : A, B, C and D. The problem can be defined as follow:
+
+1. The aim was to simulate the cross table A x B x C x D per municipality;
+2. The data available in the municipality level were : the cross table A x B and the marginals of C and D;
+3. The data available in the district level were : the cross tables A x D, A x C, B x D and B x C.
+
+Note that a district contains several municipalities, but each municipality is associated to
+only one district. We consider the marginals of the tables being pertinent. If not, 
+a preliminary step is necessary to rescale the data.
+
+The global idea of their method is to proceed in two steps. First, 
+simulate the cross table  A x B x C x D per district. Then, the seed of the IPF algorithm
+is initialised to this table to simulate the distributions per municipality with the data
+concerning the municipality as constraint. How to execute the second part has been explained 
+in the beginning of the chapter. The point here is to develop the process, per district, 
+to simulate A x B x C x D having A x D, A x C, B x D and B x C. This is also done in two steps :
+
+1. Generate A x B x C and A x B x D;
+2. Generate A x B x C x D.
+
+For the first step, we will explain only the creation of the first cross table, since the second
+reasoning is similar. The idea is simply to proceed proportionally to respect both available table.
+The pseudo-code below corresponds to the code done by Barthélemy and Toint (2013).
+To simplify the notations, each table are written without the cross symbol in the pseudo-code.
+
+$\forall$ a in A {
+
+  $\forall$ b in B {
+  
+    $\forall$ c in C {
+    
+      $ABC(a,b,c)=\frac{AC(a,c)}{margin(c)}BC(b,c)$
+      
+    }
+    
+  }
+  
+}
+
+The formula is intuitive. The AC table gives the proportion of each category of A inside the considered
+category of c. Then, this proportion splits the number of persons having characteristics b and c
+into the category of a. For example, if A is the gender, B the age class and C the diploma level, in
+the specific case of defining (Male, Young, Academics), we will have :
+
+$$ABC(Male, Young, Aca)=\frac{AC(Male,Aca)}{\#Aca}BC(Young,Aca)$$
+
+Suppose, we have 50 young academics out of 150 academics (90 female and 60 male). We would have:
+
+$$ABC(Male, Young, Aca)=\frac{60}{150}*50=20$$
+$$ABC(Female, Young, Aca)=\frac{90}{150}*50=30$$
+
+Thus, the tables A x B x C and A x B x D are simulated. The seed for the IPF function can now be
+established, with help of the two contingencies.
+
+
+
+```{r, echo=FALSE}
+# TODO (MD) : continue this way to explain how to calculate the seed
+# Please demonstrate the calculation of spatial microdata for SimpleWorld with 
+# no input microdata
+```
