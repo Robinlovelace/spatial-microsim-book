@@ -1204,8 +1204,8 @@ SimpleWorld.
 # We need to establish which is faster (RL)
 ```
 
-Conceptually, the big difference is that the R function **ipfp** uses an hard 
-code written in C and can deal only with small problems as itself. With this 
+A major difference between the **ipfp** package and **mipfp** is that the
+former is written in C, while the latter is written in R. With this 
 package, some coding and manipulations of 
 data has to be performed to consider more than two variables. Note that it is 
 normal, since this package was initially designed to resolve linear problem of
@@ -1318,24 +1318,22 @@ the package **ipfp** and the integerisation and expansion step can
 be the same.
 
 One package is written in C and the other in R. The current question
-is : Which package is more efficient? The answer is hard to give, 
-because it will depend on your application. We have seen that both 
+is : Which package is more efficient? The answer
+will depend on your application. We have seen that both 
 algorithms do not consider the same form of input. For **ipfp**
 you need an initial individual level data, coming from example from 
 a survey and constraints. For **mipfp** the constraints and a contingency table of 
 a survey is enough. Thus, when having no microdata, you will have 
-to use **mipfp** (Seen in a coming section). Moreover, 
-their results are also in different structures. Having weights for each 
-individuals with **ipfp** and weights for the contingency table with **mipfp**
+to use **mipfp** (described in a subsequent section). Moreover, 
+their results are also in different structures. Weights are created for each 
+individual with **ipfp** and weights for the contingency table with **mipfp**
 (that can be retranscribe in the other form if needed).
 
-In conclusion to this comparison, **mipfp** is more adapted
-and can deal with harder problems, but depending on the structure
-of the data available, it can be easier for you to program with one
-or the other package. In term of time, we compare here only for the
-first zone of SimpleWorld problem. We compute only the function, 
-since the code to threat the data before is very influenced by the 
-application.
+In conclusion to this comparison, **mipfp** is more adaptable
+than **ipfp**. Which to use will depend on the structure
+of the data available. In terms of computational time,
+the comparison demonstrates that **mipfp** was slower
+for the first zone of SimpleWorld. 
 
 ```{r, eval=FALSE}
 # Measure time ipfp
@@ -1343,8 +1341,9 @@ system.time(ipfp(cons[1,], ind_catt, x0 = rep(1,NbIndiv),  tol = 1e-5))
 ```
 
 This code measure the time taken to execute the `ipfp` function for the 
-zone 1. It takes 0.001 second on a computer with a processor : 
-Intel(R) Core(TM) i7-4930K CPU @ 3.40GHz. The code below make a similar analysis
+zone 1. It takes 0.001 second on a modern computer[The tests were performed on a
+computer with Intel i7-4930K processer running at 3.40GHz.]
+The code below make a similar analysis
 for the `Ipfp` function and takes 0.002 second on the same computer.
 Thus, for this very little example, the package **ipfp** written in C
 is faster.
@@ -1357,8 +1356,6 @@ target <- list (data.matrix(con_age[zone,]), data.matrix(con_sex[zone,])[c(2,1)]
 system.time(Ipfp( weight_init, descript, target, tol = 1e-5))
 ```
 
-
-
 ## The GREGWT algorithm
 
 ```{r, echo=FALSE}
@@ -1366,7 +1363,7 @@ system.time(Ipfp( weight_init, descript, target, tol = 1e-5))
 ```
 
 As described in the Introduction, IPF is just one strategy for obtaining
-a spatial microdataset. However, researchers (myself included) have tended to
+a spatial microdataset. However, researchers tend to
 select one method that they are comfortable and stick with that for their models.
 This is understandable because setting-up the method is usually time consuming:
 most researchers rightly focus on applying the methods to the real world rather
