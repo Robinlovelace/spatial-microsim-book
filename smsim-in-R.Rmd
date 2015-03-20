@@ -1963,8 +1963,8 @@ while (sum(total_pop) - sum(resTruncate) >0){
   decimals[index] <- 0
 
   # if this zone still miss individuals
-  if (total_pop[index[1]]-sum(resTruncate[index[1],,]) > 0){
-    resTruncate[index]<-resTruncate[index]+1
+  if (total_pop[index[1]] - sum(resTruncate[index[1],,]) > 0){
+    resTruncate[index] <- resTruncate[index]+1
   }
 }
 ```
