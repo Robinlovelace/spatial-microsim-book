@@ -1215,7 +1215,73 @@ whatever the number of variables and the form of the constraints (cross-table or
 distributions). Moreover, the code below this "black box" is written directly in R
 and does not require another programming language.
 
-Both seems to do a similar simulation. We will compare here the results and time used 
+As explained before, **ipfp** gives weights to each individual in the sample. 
+On the other hand, **mipfp** works differently. Indeed, individuals having
+the same caracteristics could appear only once and have a starting weight of 2
+instead of 1. The logic behind **mipfp** is to determine the number of people 
+in each possible different category. This can be explained for SimpleWorld. 
+We have constraints about sex and age. What will be defined is the number
+of persons in each category so that the contingency table respects the constraints.
+In other worlds, we want, for zone 1 of SimpleWorld, to fill in the table such as:
+
+
+Table: Aim of Mipfp for SimpleWorld.
+
+|sex - age | 0-49 yrs| 50 + yrs| Total|
+|:------|-----:|-----:|-----:|
+|m      |     ?|     ?|     6|
+|f      |     ?|     ?|     6|
+|Total  |     8|     4|      |
+
+When having this table available and respecting the constraint, we know how many
+individuals we need from each category. From this, it is easy to generated the 
+individual dataset. For SimpleWorld, an microdata is available. We can start with 
+this table and then generate the final contingency table (sex x age) thanks to formula
+determined in the theoretical part of ipfp. 
+
+For first step, we begin with :
+
+Table: Initial table of Mipfp for SimpleWorld.
+
+|sex - age | 0-49 yrs| 50 + yrs| Total| Wanted total |
+|:------|-----:|-----:|-----:|-----:|
+|m      |     1|     2|     3|     6|
+|f      |     1|     1|     2|     6|
+|Total  |     2|     3|      |      |
+|Wanted total  |     8|     4|      |      |
+
+
+The IPF procedure makes a proportion of the existing table to fit each constraint
+turn by turn. First, if we want to fit the age constraint, we need to totalise
+8 persons under 50 years old and 4 above. Thus, we calculate a proportional 
+weight so that this constraint is respected:
+
+Table: First step of Mipfp for SimpleWorld - age constraint.
+
+|sex - age | 0-49 yrs| 50 + yrs| Total| Wanted total |
+|:------|-----:|-----:|-----:|-----:|
+|m      |     4|     2.7|     6.7|     6|
+|f      |     4|     1.3|     5.3|     6|
+|Total  |     8|     4|      |      |
+|Wanted total  |     8|     4|      |      |
+
+First cell corresponds to $1*\frac{8}{2}$. Now, the current matrix fits exactly 
+the age constraint. We will proceed to a similar reasoning for the sex constraint:
+
+Table: First step of Mipfp for SimpleWorld - sex constraint.
+
+|sex - age | 0-49 yrs| 50 + yrs| Total| Wanted total |
+|:------|-----:|-----:|-----:|-----:|
+|m      |     3.6|     2.4|     6|     6|
+|f      |     4.5|     1.5|     6|     6|
+|Total  |     8.1|     3.9|      |      |
+|Wanted total  |     8|     4|      |      |
+
+This ends the first iteration of ipfp, in the form of contingency table. We just 
+follow the same logic, but by watching it in terms of tables.
+
+
+Both methods has to do a similar simulation. We will compare here the results and time used 
 to solve the simple problem of SimpleWorld.
 
 ```{r, echo=FALSE}
@@ -1276,12 +1342,20 @@ to allow an easy comparison.
 Note that for each area, the initial weight matrix will be the same.
 The final table will be called `weights_mipfp`. To complete its cells,
 we will need the number of individual in the sample in each category.
+Remark that the output of the function of **mipfp** can be used 
+directly to perform steps such as integerisation and expansion.
+However, for this example, we would like to verify that both algorithm
+calculated the same weights. For this, one output has to be transform 
+into the form of the output of the other function. We here
+adapt the `Ipfp` result to fit the `ipfp` final matrix. 
+To clearly identify what is added to have comparable matrices, 
+you can see the comment "- FOR COMPARISON".
 
 ```{r}
-# Matrix which rows are individual and columns are zones
+# Matrix which rows are individual and columns are zones - FOR COMPARISON
 weights_mipfp <- matrix(data = NA, nrow = nrow(ind), ncol = nrow(cons))
 
-# Table of ind
+# Table of ind - FOR COMPARISON
 Ind_Tab <- table(ind[,c(2,3)])
 ```
 
@@ -1302,7 +1376,7 @@ for (zone in 1:NbZones){
   # Table of calculated weights
   Mipfp_Tab <- apply(res,c(1,2),sum)
 
-  # Transformation into individual weights
+  # Transformation into individual weights - FOR COMPARISON
   for (i in 1:NbIndiv) {
     weight_ind <- Mipfp_Tab[ind[i,c(2)],ind[i,c(3)]]
     sample_ind <- Ind_Tab[ind[i,c(2)],ind[i,c(3)]]
@@ -1315,7 +1389,21 @@ The simulation of SimpleWorld with **mipfp** is now finished,
 since we generated weights for each individual in each zone. The
 resulting matrix is exactly the same as the one created thanks to 
 the package **ipfp** and the integerisation and expansion step can
-be the same.
+be the same. However, there is a more direct way to transform the
+weights of `Ipfp` into individual data, which is explained in the 
+chapter *Population synthesis without input microdata*.
+
+Both packages being executed for the same example and both 
+result having retranscribe to the same form, we can compare the 
+results. We observe that the bigger difference is of the order
+$10^{-7}$, which is very little and can be caused by some
+computational approximations during the calculus. Thus, 
+both functions generate the same weights.
+
+```{r}
+# Difference between weights of ipfp and mipfp
+abs(weights-weights_mipfp)
+```
 
 One package is written in C and the other in R. The current question
 is : Which package is more efficient? The answer
@@ -1352,9 +1440,73 @@ is faster.
 # Chose right constraint for mipfp
 target <- list (data.matrix(con_age[zone,]), data.matrix(con_sex[zone,])[c(2,1)])
 
+# Equitable calculus - remove income 
+weight_init_no_income <- table( ind[, c(2,3)])
+
 # Measure time mipfp
-system.time(Ipfp( weight_init, descript, target, tol = 1e-5))
+system.time(Ipfp( weight_init_no_income, descript, target, tol = 1e-5))
 ```
+
+An advantage of the **mipfp** package for problems with a lot 
+of input individuals is in terms of memory. Indeed, **ipfp**
+needs a table with as many rows as individuals, whereas **mipfp**
+needs a table of a dimension corresponding to the number of 
+different categories. For SimpleWorld, the inputs of **ipfp** 
+and **mipfp** are respectively:
+
+```{r}
+# input for ipfp
+ind_cat
+
+# input for mipfp
+Ind_Tab
+```
+
+Imagine that we have a similar problem, but with a total 
+population of 2000 and 500 initial individuals. The dimension 
+of `ind_cat` will become 500 rows for 4 columns, where the
+one of `Ind_Tab` will not change. 
+
+By testing the time for SimpleWorld when considering having 25,000
+individuals (we replicate the data 5000 times) and generating 
+12,000,000 individuals (we multiply the constraints by 1000), we obtain
+on the same computer that **ipfp** and **mipfp** take, respectively,
+0.012 and 0.005 seconds.
+
+```{r, echo=FALSE}
+#### time tests for bigger databases
+
+ind_cat2 <- ind_cat
+
+for (i in 1:4999){
+  ind_cat2<-rbind(ind_cat2,ind_cat)
+}
+
+Ind_Tab2 <- 5000 * Ind_Tab
+
+cons2 <- cons * 1000000
+
+# Measure time ipfp
+system.time(ipfp(cons2[1,], t(ind_cat2), x0 = rep(1,NbIndiv * 5000),  tol = 1e-5))
+
+# Chose right constraint for mipfp
+target <- list (data.matrix(con_age[zone,] *1000000), data.matrix(con_sex[zone,]*1000000)[c(2,1)])
+
+# Equitable calculus - remove income 
+weight_init_no_income <- table( ind[, c(2,3)])*5000
+
+# Measure time mipfp
+system.time(Ipfp( weight_init_no_income, descript, target, tol = 1e-5))
+```
+
+In conclusion to this comparison, **mipfp** is more adaptable
+than **ipfp**. Which to use will depend on the structure
+of the data available. In terms of computational time,
+the comparison demonstrates that **mipfp** was slower
+for small problems and faster for bigger problems. 
+In all cases, they calculate the same results.
+
+
 
 ## The GREGWT algorithm
 
@@ -1791,259 +1943,3 @@ Harland (2013) provides a practical tutorial
 introducing the subject based on the Flexible Modelling Framework (FMF)
 Java program.
 
-## Population synthesis without input microdata
-
-Sometimes no representative individual-level
-dataset is available. 
-In this case, the methods of population synthesis described in this
-chapter must be adapted accordingly.
-The challenge
-is still to generate spatial microdata 
-that fits all the constraint tables, but based on purely synthetic
-'seed' input microdata. Many
-combinations of individual-level data
-could correspond to these distributions. Depending on the aim
-of the spatial microsimulation model, simply finding a reasonable fit
-can be sufficient.
-
-In other cases a fit based on *entropy maximisation* may be required.
-This concept involves finding the population that best
-represents the most micro-level populations (Bierlaire, 1991).
-For example, if a person in one zone has exactly the same charcteristics as
-a person in another zone, swapping these two people will not change 
-the synthetic population.
-This process of maximising the entropy is considered in the subsequent chapter, which
-explainings how to 
-allocate individuals from the spatial microdata into households to fit
-household-level constraints. We will here present
-two alternative options for population synthesis when
-real individual-level or aggregate-level data is unavailable.
-
-### Global cross-tables and local marginal distributions
-
-Assume we have whole contingency table of variable cross-tabulations in the 
-aggregated-level data. Note that this cross-table could be the result of a 
-previous step. For example, an IPFP algorithm can be executed to join
-data from different form in this high level of aggregation.
-
-For the spatial zones needed, if the marginal distributions are known, 
-we can use the **mipfp** function as previously shown. However, if
-the only information about the zones is the total population living
-there, the function is unusable. In this specific case, having 
-no additional data, the single possibility is to 
-rescale the global cross-table for each zone. Note that this
-implies stating the correlations between the variables
-as independent of the zone. 
-
-To illustrate, we will develop the SimpleWorld example with 
-adapted constraints. When watching the available data in an aggregated level, 
-we have for the moment:
-
-```{r}
-# Cross-tabulation of individual-level dataset
-table(ind$age, ind$sex)
-
-(total_pop <- rowSums(con_sex)) # total population of each zone
-```
-
-To illustrate this section, the local constraint will be the total number
-of people in each zone (last column of `consTot`). The global constraint
-is a matrix of the form of the cross-table between age and sex, but 
-including the total population (33 people for SimpleWorld). The new 
-constraints could be :
-
-```{r}
-# Global Constraint possible for SimpleWorld
-global_cons <- table(ind$age, ind$sex)
-global_cons[1,] <- c(6,9)
-global_cons[2,] <- c(7,11)
-
-# Local Constraint for SimpleWorld
-local_cons <- total_pop
-```
-
-When having only these aggregate-level data, the best way to 
-reach a synthetic population is to rescale the cross-table.
-For each zone, a table proportional to the global one is created.
-The results are stored in a three dimensional array, which first
-dimension represents the zone.
-
-```{r,echo=FALSE, message=FALSE}
-source("R/SimpleWorld.R")
-```
-
-```{r}
-# initialise result's array and its names
-resNames <- list(1:nrow(cons), rownames(global_cons), 
-            colnames(global_cons))
-res <- array(0, dim=c(nrow(cons), dim(global_cons)), 
-             dimnames=resNames)
-
-# re-scale the cross-table to fit the zone's constraints
-# loop on the zones
-for (zone in 1:length(total_pop)){
-  res[zone,,] <- global_cons*total_pop[zone]/sum(global_cons)
-}
-
-# printing the cross-table for zone 1
-res[1,,]
-```
-
-As with IPF, the fractional result needs to be integerised to create
-spatial microdata. The `round()` function gives a satisfying result in this case, in terms
-of fitting the constraints. However, the aforementioned integerisation algorithms such as
-*truncate, replicate, sample* (TRS) can also be used.
-This method can not be followed exactly, because we want to perfectly fit 
-the few constraints we have. In our example, a satisfactory result is acheived by using 
-the round function, as shown in the code below.
-
-
-```{r}
-# Integerisation by simply using round
-
-# checking the local constraints for each zone
-# (Good if all TRUE)
-for (zone in 1:length(total_pop)){
- print( sum(round(res[zone,,])) == total_pop[zone] )
-}
-
-# Calculate the total simulated cross-table
-Names <- c(rownames(global_cons), colnames(global_cons))
-SimTot <- array(0, dim=dim(global_cons), dimnames = Names)
-for (zone in 1:length(total_pop)){
- SimTot <- SimTot + res[zone,,]
-}
-
-# checking the global constraint 
-# (Good if 0)
-sum(SimTot - global_cons)
-```
-
-To adapt the method to use TRS, the first stage is to 
-truncate the data and identify the missing individuals.
-
-```{r}
-# Integerisation by adapting TRS
-
-# truncate the data 
-resTruncate <- floor(res)
-
-# number of missing individuals
-sum(total_pop) - sum(resTruncate)
-
-# Calculate the total simulated cross-table
-SimTotTruncate <- array(0, dim = dim(global_cons), dimnames = Names)
-for (zone in 1:length(total_pop)){
- SimTotTruncate <- SimTotTruncate + resTruncate[zone,,]
-}
-
-# number of missing individuals per category
-ToAdd <- global_cons - SimTotTruncate
-ToAdd
-
-# number of missing individuals per zone
-for (zone in 1:length(total_pop)){
- print(total_pop[zone] - sum(round(resTruncate[zone,,])))
-}
-
-```
-
-The principle is to add people in the not completed zones and
-categories. The cells to be implemented are always chosen as the one
-with the bigger decimal parts.
-
-```{r}
-# Adapting resTruncate to fit all constraints
-while (sum(total_pop) - sum(resTruncate) >0){
-  # find the biggest decimals
-  decimals<-res-resTruncate
-  index <- which( decimals == max(decimals), arr.ind = TRUE)
-
-  # remember we already considered this cell
-  decimals[index] <- 0
-
-  # if this zone still miss individuals
-  if (total_pop[index[1]] - sum(resTruncate[index[1],,]) > 0){
-    resTruncate[index] <- resTruncate[index]+1
-  }
-}
-```
-
-The new values in `resTruncate` follow all constraints. 
-The adaptation of TRS is to not use a random draw. 
-
-### Two-level aggregated data 
-
-We present here how to find a possible distribution per zone when 
-having only aggregated data, but in two different levels of aggregation.
-For example, we have some data for the municipalities and other for
-the districts. A first proposition can be to use a genetic algorithm that 
-minimise the distance between the constraint and the simulation.
-The solution proposed by Barthélemy and Toint (2013) is intuitive and we 
-develop here the method. In such cases, they propose to generate a 'seed' before
-to execute IPF. 
-
-In their cases, they wanted to simulate a population with four characteristics
-per individual : the gender, the age class, the diploma level and the
-activity status. Let us present their solution more generalized. We will explain the 
-method by renaming the characteristics : A, B, C and D. The problem can be defined as follow:
-
-1. The aim was to simulate the cross table A x B x C x D per municipality;
-2. The data available in the municipality level were : the cross table A x B and the marginals of C and D;
-3. The data available in the district level were : the cross tables A x D, A x C, B x D and B x C.
-
-Note that a district contains several municipalities, but each municipality is associated to
-only one district. We consider the marginals of the tables being pertinent. If not, 
-a preliminary step is necessary to rescale the data.
-
-The global idea of their method is to proceed in two steps. First, 
-simulate the cross table  A x B x C x D per district. Then, the seed of the IPF algorithm
-is initialised to this table to simulate the distributions per municipality with the data
-concerning the municipality as constraint. How to execute the second part has been explained 
-in the beginning of the chapter. The point here is to develop the process, per district, 
-to simulate A x B x C x D having A x D, A x C, B x D and B x C. This is also done in two steps :
-
-1. Generate A x B x C and A x B x D;
-2. Generate A x B x C x D.
-
-For the first step, we will explain only the creation of the first cross table, since the second
-reasoning is similar. The idea is simply to proceed proportionally to respect both available table.
-The pseudo-code below corresponds to the code done by Barthélemy and Toint (2013).
-To simplify the notations, each table are written without the cross symbol in the pseudo-code.
-
-$\forall$ a in A {
-
-  $\forall$ b in B {
-  
-    $\forall$ c in C {
-    
-      $ABC(a,b,c)=\frac{AC(a,c)}{margin(c)}BC(b,c)$
-      
-    }
-    
-  }
-  
-}
-
-The formula is intuitive. The AC table gives the proportion of each category of A inside the considered
-category of c. Then, this proportion splits the number of persons having characteristics b and c
-into the category of a. For example, if A is the gender, B the age class and C the diploma level, in
-the specific case of defining (Male, Young, Academics), we will have :
-
-$$ABC(Male, Young, Aca)=\frac{AC(Male,Aca)}{\#Aca}BC(Young,Aca)$$
-
-Suppose, we have 50 young academics out of 150 academics (90 female and 60 male). We would have:
-
-$$ABC(Male, Young, Aca)=\frac{60}{150}*50=20$$
-$$ABC(Female, Young, Aca)=\frac{90}{150}*50=30$$
-
-Thus, the tables A x B x C and A x B x D are simulated. The seed for the IPF function can now be
-established, with help of the two contingencies.
-
-
-
-```{r, echo=FALSE}
-# TODO (MD) : continue this way to explain how to calculate the seed
-# Please demonstrate the calculation of spatial microdata for SimpleWorld with 
-# no input microdata
-```
