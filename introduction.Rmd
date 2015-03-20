@@ -442,6 +442,9 @@ of loading and 'cleaning' the input data, ready for spatial microsmulation.
 ([](#smsimr))
 introduces the main functions
 and techniques that are used to generate spatial microdata building on the previous chapters.
+- *Population synthesis without input microdata*
+([](#nomicrodata))
+gives a way to produce a spatial microsimulation without having individual-level data.
 - *Spatial microsimulation in the wild*
 ([](#CakeMap))
 is a larger
