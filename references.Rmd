@@ -70,7 +70,7 @@ Lucas, K. (2012). Transport and social exclusion: Where are we now? Transport Po
 
 McNutt, M. (2014). Journals unite for reproducibility. Science, 346(6210), 679. doi:10.1126/science.aaa1724
 
-Müller, K., & Axhausen, K. (2010). Population synthesis for microsimulation: State of the art. Population (English Edition). Retrieved from http://www.strc.ch/conferences/2010/Mueller.pdf
+Müller, K., & Axhausen, K. (2011). Population synthesis for microsimulation: State of the art, paper presented at the 90th *Annual Meeting of the Transportation Research Board*, Washington, D.C., January 2011.
 
 Norman, P. (1999). Putting Iterative Proportional Fitting (IPF) on the Researcher’s Desk. Retrieved from http://eprints.whiterose.ac.uk/5029/1/99-3.pdf
 

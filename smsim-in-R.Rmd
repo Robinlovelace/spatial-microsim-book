@@ -1417,6 +1417,11 @@ their results are also in different structures. Weights are created for each
 individual with **ipfp** and weights for the contingency table with **mipfp**
 (that can be retranscribe in the other form if needed).
 
+In conclusion to this comparison, **mipfp** is more adaptable
+than **ipfp**. Which to use will depend on the structure
+of the data available. In terms of computational time,
+the comparison demonstrates that **mipfp** was slower
+for the first zone of SimpleWorld. 
 
 ```{r, eval=FALSE}
 # Measure time ipfp
