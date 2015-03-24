@@ -1002,15 +1002,17 @@ ints_df[ints_df$zone == 2, ]
 
 ```{r, echo=FALSE}
 # Morgane: please make this example work with the SimplWorld data
+# DONE 
 ```
 
 
-The R package  **mipfp** is more recent than **ipfp**
-and a more generalized version of the IPF algorithm.
+The R package  **mipfp** came after **ipfp**
+and consist in a more generalized version of the IPF algorithm.
 Indeed, **ipfp** generates a two-dimensional weight matrix based on mutually
 exclusive (non cross-tabulated) constraint tables.
-This is useful for applications without cross-tabulated constraints is not available.
-**mipfp** allows for multiple cross-tabulations in the constraint variables,
+This is useful for applications using constraints, which are only marginals and 
+which are not cross-tabulated.
+**mipfp** allows multiple cross-tabulations in the constraint variables,
 such as, for example, age/sex and age/class.
 
 ```{r, echo=FALSE}
@@ -1045,8 +1047,7 @@ into the workspace:
 library(mipfp) # after install.packages("mipfp")
 ```
 
-To illustrate the use of `Ipfp`, **mipfp**'s only function,
-we will create a fictive example. 
+To illustrate the use of `Ipfp`, we will create a fictive example. 
 The case of SimpleWorld is here too simple to really illustrate the power 
 of this package. The solving of SimpleWorld with `Ipfp` is included in 
 the next section containing the comparison between the two packages.
@@ -1057,7 +1058,7 @@ an age (0-17, 18-50, 50+) and a diploma level (level 1 to level 4).
 We consider a zone with 50 inhabitants. The classic spatial microsimulation 
 problem consists in having all marginal distributions and the cross table only for a sample. 
 
-Note that we will consider the variable in the following 
+Note that we will consider the variables in the following 
 order: sex (1), age (2) and diploma (3). Our constraints could for example be:
 
 ```{r}
@@ -1071,7 +1072,7 @@ diploma <- c(20,18,6,6) # the number in each education category
 names(diploma) <- c("Level1","Level2","Level3","Level4")
 ```
 
-Note that the population is equal in each constraint (50 people). Note also
+We can verify that the population is equal in each constraint (50 people). Note also
 the order in which each category is encoded --- a common source of
 error in population synthesis.
 For this reason we have labelled each category of each constraint.
@@ -1088,16 +1089,16 @@ descript <- list (1, 2, 3)
 target
 ```
 
-Now all constraint variables have been defined. Let us now define 
+Now that all constraint variables have been encoded, let us define 
 the initial array to be updated, also referred as the seed or the weight matrix. The dimension
 of this matrix must be identical to that of the constraint tables:
 $(2 \times3 \times 4)$. Each cell of the array represents 
 a combination of the attributes' values, and thus defines a particular 
 category of individuals. In our case, we will consider that the weight
-matrix contains 0 when the category is not possible. In this example we 
+matrix contains 0 when the category is not possible and 1 otherwise. In this example we 
 will assume that it is impossible for an individual being less than 18 
 years old to hold a diploma level higher than 2. 
-The corresponding are then set to 0, while the cells of the 
+The corresponding cells are then set to 0, while the cells of the 
 feasible categories are set to 1.
 
 ```{r}
@@ -1106,37 +1107,48 @@ weight <- array (1, c(2,3,4), dimnames = names)
 weight[, c("Less18"), c("Level3","Level4")] <- 0
 ```
 
-Everything being defined, we can execute
-*Ipfp*. As with **ipfp**, we can chose a stoping criterion defined by *tol* and a maximum
+Everything being well defined, we can execute
+*Ipfp*. As with the package **ipfp**, we can chose a stoping criterion defined by *tol* and/or a maximum
 number of iterations. Finally, setting the argument `print` to `TRUE` 
 ensures we will see the evolution of the
-of the procedure. After reaching either the maximum number of iteration or convergence 
+of the procedure. After reaching either the maximum number of iterations or convergence 
 (whichever comes first), the function will return a list containing the updated 
 array, as well as other informations about the convergence of the algorithm. 
 Note that if the target margins are not consistent, the input data is then 
 normalised by considering probabilities instead of frequencies.
 
 ```{r}
-result <- Ipfp(weight, descript, target, iter = 50, print = TRUE, tol = 1e-5)
+result <- Ipfp(weight, descript, target, iter = 50, 
+               print = TRUE, tol = 1e-5)
 ```
 
 We can observe that the stoping criterion becomes always smaller and attains the *tol* after 8 
-iterations. Now we have a result and we can check that we have a total number of 50 inhabitants 
+iterations. The `result`contains the final weight matrix
+and some information about the convergence. 
+We have a resulting table and we can validate the total number of 50 inhabitants 
 in the zone. Note that, thanks to the definitions of names in the array, we can easily 
 interpret the result. There are a total 50 people and nobody of less than 18 years old
 own a diploma level 3 or 4, as desired.
 
 ```{r}
 # printing the result
-result 
+result$xi.hat 
 # checkin the total number of persons
-sum(result)
+sum(result$xi.hat)
+```
+
+The quality of the margins with each constraints is contained in the variable `check.margins`
+of the resulting list. In our case, we fit all constaints.
+
+```{r}
+# printing the resulting margins
+result$check.margins
 ```
 
 This reasoning works zone per zone and we can generate a 3-dimensional weight matrix. Another
 advantage of **mipfp** is that it allows cross-tabulated constraints to be added.
-In our example, we could
-add a target of the contingency of the age and the diploma. We can define this cross table:
+In our example, we could add as target the contingency of the age and the diploma. 
+We can define this cross table:
 
 ```{r}
 # define the cross table
@@ -1148,7 +1160,7 @@ colnames (cross) <- names(age)
 cross
 ```
 
-When having several constraints concerning the same variable, we have insure 
+When having several constraints concerning the same variable, we have to insure 
 the consistency across these targets (otherwise convergence might not be reached). 
 For instance, we can display the margins of `cross` along with `diploma` and `age`
 to validate the consistency assumption. There are
@@ -1175,10 +1187,11 @@ target <- list(sex, age, diploma, cross)
 descript <- list(1, 2, 3, c(3,2))
 
 # running the Ipfp function
-result <- Ipfp(weight, descript, target, iter = 50, print = TRUE, tol = 1e-5)
+result <- Ipfp(weight, descript, target, iter = 50, 
+               print = TRUE, tol = 1e-5)
 ```
 
-The addition of a constraint means there are fewer possible outcomes, implying that the algorithm 
+The addition of a constraint leave less freedom to the algorithm, implying that the algorithm 
 converges faster. By printing the results, we see that all constraints are respected and
 we have a 3-dimensional contingency table.
 
