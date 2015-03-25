@@ -1217,11 +1217,12 @@ SimpleWorld.
 # We need to establish which is faster (RL)
 ```
 
-A major difference between the **ipfp** package and **mipfp** is that the
-former is written in C, while the latter is written in R. With this 
-package, some coding and manipulations of 
-data has to be performed to consider more than two variables. Note that it is 
-normal, since this package was initially designed to resolve linear problem of
+A major difference between the packages **ipfp** and **mipfp** is that the
+former is written in C, while the latter is written in R. With **ipfp**,
+some coding and manipulations of 
+data has to be performed to consider more than two variables or to use
+cross-tabulated constraints. This is explained by the fact that
+this package was initially designed to resolve linear problem of
 the form $Ax=b$. On the other hand, the aim of **mipfp** is to execute an iterative 
 proportional fitting. This function allows the solving of spatial microsimulation
 whatever the number of variables and the form of the constraints (cross-table or marginal 
@@ -1230,11 +1231,11 @@ and does not require another programming language.
 
 As explained before, **ipfp** gives weights to each individual in the sample. 
 On the other hand, **mipfp** works differently. Indeed, individuals having
-the same caracteristics could appear only once and have a starting weight of 2
+the same characteristics could appear only once and have a starting weight of 2
 instead of 1. The logic behind **mipfp** is to determine the number of people 
 in each possible different category. This can be explained for SimpleWorld. 
-We have constraints about sex and age. What will be defined is the number
-of persons in each category so that the contingency table respects the constraints.
+We have constraints on sex and age. **mipfp** will define the number
+of persons in each category so that the resulting contingency table respects all constraints.
 In other worlds, we want, for zone 1 of SimpleWorld, to fill in the table such as:
 
 
@@ -1246,13 +1247,16 @@ Table: Aim of Mipfp for SimpleWorld.
 |f      |     ?|     ?|     6|
 |Total  |     8|     4|      |
 
-When having this table available and respecting the constraint, we know how many
-individuals we need from each category. From this, it is easy to generated the 
-individual dataset. For SimpleWorld, an microdata is available. We can start with 
-this table and then generate the final contingency table (sex x age) thanks to formula
+To execute an IPF, we need a starting table.
+For SimpleWorld, a microdata is available. We can start with 
+this table and then iterate the IPF to obtain
+the final contingency table (sex x age) thanks to the formula
 determined in the theoretical part of ipfp. 
 
-For first step, we begin with :
+For the first step, we begin with the aggregation of the microdata.
+We have initially a total of 5 individuals and we want to have 12.
+During the steps of IPF, we will always consider the current totals
+and desired totals.
 
 Table: Initial table of Mipfp for SimpleWorld.
 
@@ -1266,8 +1270,12 @@ Table: Initial table of Mipfp for SimpleWorld.
 
 The IPF procedure makes a proportion of the existing table to fit each constraint
 turn by turn. First, if we want to fit the age constraint, we need to totalise
-8 persons under 50 years old and 4 above. Thus, we calculate a proportional 
-weight so that this constraint is respected:
+8 persons under 50 years old and 4 above (wanted total of age).
+Thus, we calculate a proportional 
+weight matrix that respects this constraint. The first cell corresponds to 
+$Current_Weight*\frac{Wanted_Total}{Current_Total}=1*\frac{8}{2}$. With a similar
+reasoning, we can complete the whole matrix.
+
 
 Table: First step of Mipfp for SimpleWorld - age constraint.
 
@@ -1278,8 +1286,9 @@ Table: First step of Mipfp for SimpleWorld - age constraint.
 |Total  |     8|     4|      |      |
 |Wanted total  |     8|     4|      |      |
 
-First cell corresponds to $1*\frac{8}{2}$. Now, the current matrix fits exactly 
-the age constraint. We will proceed to a similar reasoning for the sex constraint:
+Now, the current matrix fits exactly the age constraint. However, 
+some differences appear between the current and the desired sex totals.
+We will proceed to a similar reasoning for the sex constraint.
 
 Table: First step of Mipfp for SimpleWorld - sex constraint.
 
@@ -1290,12 +1299,19 @@ Table: First step of Mipfp for SimpleWorld - sex constraint.
 |Total  |     8.1|     3.9|      |      |
 |Wanted total  |     8|     4|      |      |
 
-This ends the first iteration of ipfp, in the form of contingency table. We just 
-follow the same logic, but by watching it in terms of tables.
+This ends the first iteration of ipfp, illustrated 
+in the form of contingency table. We just 
+follow the same logic, but by watching populations in terms of tables.
 
+When having this table completely available and efficient, we know how many
+individuals we need in each category. However, the weights are fractional.
+To reach a final individual dataset, we can consider the weights as probabilities
+or transform the weight into integers and obtain a final contingency table. 
+From this, it is easy to generate the individual dataset.
 
-Both methods has to do a similar simulation. We will compare here the results and time used 
-to solve the simple problem of SimpleWorld.
+Both methods do a similar simulation. They have to use the same algorithm.
+We will first verify it by comparing the results.Then, we will measure the times used 
+to solve the simple problem of SimpleWorld. 
 
 ```{r, echo=FALSE}
 # TODO: (MD) compare with simpleworld
@@ -1304,28 +1320,43 @@ to solve the simple problem of SimpleWorld.
 # TODO (RL): cross reference image of CO vs reweighting approaches
 ```
 
-The whole process using **ipfp** has been developed. Now, we solve the SimpleWorld 
+The whole process using **ipfp** has been developed in the previous section.
+Now, we solve the SimpleWorld 
 problem with **mipfp**. We proceed zone per zone. To explain the process, the generation 
-of the first zone is here explained. The constraints for this area are reach as
-followed :
+of the first zone is here explained. The constraints for this area are : 
 
 ```{r}
 # SimpleWorld constraints for zone 1
 con_age[1,]
 con_sex[1,]
 
-# list the constraints for zone 1
-target <- list (data.matrix(con_age[1,]), data.matrix(con_sex[1,])[c(2,1)])
+# Save the constraints for zone 1
+con_age_1 <- data.matrix( con_age[1,] )
+con_sex_2 <- data.matrix( con_sex[1, c(2,1)] ) 
+```
+
+The inputs of `Ipfp` have to be included in a list. We chose to 
+consider the age first and then the sex. Remark that we have to 
+take the sex data in the other order to be coherent with the
+seed. It is really important to check the order of the category,
+because if the seed has (Male, Female) and the constraint (Female, Male), 
+the algorithm will inverse the constraints. 
+
+```{r}
+# Save the target and description for Ipfp
+target <- list (con_age_1, con_sex_2)
 descript <- list (1, 2)
 ```
 
-Remark that we have to take the sex data in the other order to be coherent with the
-seed.
-The sample available establishes the seed of the algorithm, also kn owned as 
+
+The available sample establishes the seed of the algorithm, also known as 
 the initial weight matrix. We can take into account the entire individual level
-data, with the chosen categories. Thus, we keep the separation between ages 
-under and above 50, but we also consider the income information, even if it 
-does not appear in the constraints.
+data, after checking that the categories are matching.
+Thus, we keep the separation between ages 
+under and above 50. We also consider the income information, even if it 
+does not appear in the constraints. This simply means that this information
+will be stored. It is also possible to not consider the income here and
+add it after, as seen in the expansion section.
 
 ```{r}
 # Add income to the categorised individual data
@@ -1334,81 +1365,146 @@ weight_init <- table(ind_income[, c(2,3,4)])
 ```
 
 Having the initial weight initialised to the aggregation of the 
-individual level data available and having the constraints well established, 
+individual level data and having the constraints well established, 
 we can now execute the `Ipfp` function.
 
 ```{r}
 # Perform Ipfp on SimpleWorld example
-weight_mipfp <- Ipfp( weight_init, descript, target, print = TRUE, tol = 1e-5)
-
-# Printing the resulting weight matrix for age and sex
-apply(weight_mipfp, c(1,2), sum)
+weight_mipfp <- Ipfp( weight_init, descript, target, 
+                      print = TRUE, tol = 1e-5)
 ```
 
-We can see that we reach the convergence after 5 iterations
-and the results are fractional, as the one funded with **ipfp**. 
-Now that the process is understood, we can generate the weight
-matrix for each zone. The aim is here to transform the output
-into a form similar to the one generated in the section **ipfp** 
-to allow an easy comparison.
-
-Note that for each area, the initial weight matrix will be the same.
-The final table will be called `weights_mipfp`. To complete its cells,
-we will need the number of individual in the sample in each category.
-Remark that the output of the function of **mipfp** can be used 
-directly to perform steps such as integerisation and expansion.
-However, for this example, we would like to verify that both algorithm
-calculated the same weights. For this, one output has to be transform 
-into the form of the output of the other function. We here
-adapt the `Ipfp` result to fit the `ipfp` final matrix. 
-To clearly identify what is added to have comparable matrices, 
-you can see the comment "- FOR COMPARISON".
+We can see that we reach the convergence after 5 iterations.
+The result, stored in the `weight_mipfp` is a dataframe including
+the final weight matrix, as well as information about the convergence
+of the algorithm. We can check the margins and print the final 
+weights. Note that we still have the income into the matrix, but 
+for a comparison purpose, we look at the result for the aggregate
+table of age and sex.
 
 ```{r}
-# Matrix which rows are individual and columns are zones - FOR COMPARISON
-weights_mipfp <- matrix(data = NA, nrow = nrow(ind), ncol = nrow(cons))
+# Printing the resulting margins
+weight_mipfp$check.margins
 
-# Table of ind - FOR COMPARISON
+# Printing the resulting weight matrix for age and sex
+apply(weight_mipfp$xi.hat, c(1,2), sum)
+```
+
+
+The results are fractional, as the one found with **ipfp**. 
+Now that the process is well understood, we can generate the weight
+matrix for each zone. For each area, the initial weight matrix will be the same.
+We chose to store all weights in an array `Mipfp_Tab`, which first dimension represents
+the zone.
+
+```{r}
+# Initialising the result matrix
+Names <- list(1:3, colnames(con_sex)[c(2,1)], colnames(con_age))
+Mipfp_Tab <- array(data = NA, dim = c(NbZones, 2 , 2), 
+                   dimnames = Names)
+
+# Loop on the zone and execute Ipfp
+for (zone in 1:NbZones){
+  # Adapt the constraint to the zone
+  con_age_1 <- data.matrix( con_age[zone,] )
+  con_sex_2 <- data.matrix( con_sex[zone, c(2,1)] ) 
+  target <- list (con_age_1, con_sex_2)
+  
+  # Calculate the weights
+  res <- Ipfp( weight_init, descript, target, tol = 1e-5)
+  
+  # Complete the array of calculated weights
+  Mipfp_Tab[zone,,] <- apply(res$xi.hat,c(1,2),sum)
+}
+```
+
+This piece of code has performed an IPF for each zone. 
+We can print the result for zone 1 and observe that it correspond
+to the weights previously determined.
+
+```{r}
+# Result for zone 1
+Mipfp_Tab[1,,]
+```
+
+Thanks to the possibility of **mipfp** to include cross-tabulated
+constraints, we could also consider the zone as a variable. Like this, 
+the execution of only one `Ipfp` generates the whole result. 
+
+```{r, echo=FALSE}
+# (MD) : I am not sure this is very useful here, but
+#        it is another alternative.
+
+#The code below illustrate this.
+
+#Mipfp_in_one <- array(data = NA, dim = c(NbZones,2,2,5))
+
+#for (i in 1:NbZones){
+#  Mipfp_in_one[i,,,] <- weight_init
+#}
+#target <- list (data.matrix(con_age), data.matrix(con_sex[,c(2,1)]))
+#descript <- list (c(1,2), c(1,3))
+#res <- Ipfp( Mipfp_in_one, descript, target, tol = 1e-5)
+```
+
+Remark that the output of the function `Ipfp` can be used 
+directly to perform steps such as integerisation and expansion
+or as probability.
+However, for this example, we would like to verify that both algorithms
+calculated the same weights. For this, one output has to be transform 
+to fit the structure of the other function's output. We here
+adapt the `Ipfp` result to the `ipfp` final matrix. 
+
+The aim is here to transform the output
+into a form similar to the one generated in the section **ipfp** 
+to allow an easy comparison. The comparable table will be called 
+`weights_mipfp`. To complete its cells,
+we will need the number of individual in the sample in each category.
+
+```{r}
+# Initialise the matrix 
+weights_mipfp <- matrix(data = NA, nrow = nrow(ind), 
+                        ncol = nrow(cons))
+
+# Table of ind 
 Ind_Tab <- table(ind[,c(2,3)])
 ```
 
-Now, we can loop on the zones and generate the whole process with the function
-of the package **mipfp**. This is done thanks to iterations that calculate
+Now, we can fill in the matrix `weights_mipfp`.
+For each zone, the weight of the category is 
+distributed between the individuals of the microdata
+having the right characteristics.This is done thanks to iterations that calculate
 the weights per category for the zone and then transform them into weights
 per individual, depending on the category of each person.
 
 ```{r}
-# Loop on the zones
+# Loop on the zones to transform the result's structure
 for (zone in 1:NbZones){
-  # Adapt the constraint 
-  target <- list (data.matrix(con_age[zone,]), data.matrix(con_sex[zone,])[c(2,1)])
-
-  # Calculate the weights
-  res <- Ipfp( weight_init, descript, target, tol = 1e-5)
   
-  # Table of calculated weights
-  Mipfp_Tab <- apply(res,c(1,2),sum)
-
-  # Transformation into individual weights - FOR COMPARISON
+  # Transformation into individual weights
   for (i in 1:NbIndiv) {
-    weight_ind <- Mipfp_Tab[ind[i,c(2)],ind[i,c(3)]]
+    # weight of the category
+    weight_ind <- Mipfp_Tab[zone,ind[i,c(2)],ind[i,c(3)]]
+    
+    # number of ind in the category
     sample_ind <- Ind_Tab[ind[i,c(2)],ind[i,c(3)]]
+    
+    # distribute the weight to the ind of this category
     weights_mipfp[i,zone] <- weight_ind / sample_ind
   }
 }
 ```
 
-The simulation of SimpleWorld with **mipfp** is now finished, 
-since we generated weights for each individual in each zone. The
-resulting matrix is exactly the same as the one created thanks to 
-the package **ipfp** and the integerisation and expansion step can
-be the same. However, there is a more direct way to transform the
+The simulation of SimpleWorld with **mipfp** is now comparable to the one with **ipfp**, 
+since we generated weights for each individual in each zone. Having
+the same structure, the integerisation and expansion step explained for **ipfp** could
+be followed. However, there is a more direct way to transform the
 weights of `Ipfp` into individual data, which is explained in the 
 chapter *Population synthesis without input microdata*.
 
 Both packages being executed for the same example and both 
-result having retranscribe to the same form, we can compare the 
-results. We observe that the bigger difference is of the order
+results being retranscribed to the same form, we can compare them.
+We observe that the bigger difference is of the order
 $10^{-7}$, which is very little and can be caused by some
 computational approximations during the calculus. Thus, 
 both functions generate the same weights.
@@ -1422,46 +1518,49 @@ One package is written in C and the other in R. The current question
 is : Which package is more efficient? The answer
 will depend on your application. We have seen that both 
 algorithms do not consider the same form of input. For **ipfp**
-you need an initial individual level data, coming from example from 
-a survey and constraints. For **mipfp** the constraints and a contingency table of 
+you need constraints and an initial individual level data, coming for example from 
+a survey. For **mipfp** the constraints and a contingency table of 
 a survey is enough. Thus, when having no microdata, you will have 
 to use **mipfp** (described in a subsequent section). Moreover, 
 their results are also in different structures. Weights are created for each 
-individual with **ipfp** and weights for the contingency table with **mipfp**
+individual with **ipfp** and for each different category with **mipfp**
 (that can be retranscribe in the other form if needed).
 
-In conclusion to this comparison, **mipfp** is more adaptable
-than **ipfp**. Which to use will depend on the structure
-of the data available. In terms of computational time,
-the comparison demonstrates that **mipfp** was slower
-for the first zone of SimpleWorld. 
+To evaluate the efficiency of both methods, we will 
+consider the computational time of both functions. 
 
 ```{r, eval=FALSE}
 # Measure time ipfp
-system.time(ipfp(cons[1,], ind_catt, x0 = rep(1,NbIndiv),  tol = 1e-5))
+init <- rep(1,NbIndiv)
+system.time(ipfp(cons[1,], ind_catt, x0 = init,  tol = 1e-5))
 ```
 
 This code measure the time taken to execute the `ipfp` function for the 
-zone 1. It takes 0.001 second on a modern computer[The tests were performed on a
+zone 1. It takes 0.001 second on a modern computer^[The tests were performed on a
 computer with Intel i7-4930K processer running at 3.40GHz.]
 The code below make a similar analysis
 for the `Ipfp` function and takes 0.002 second on the same computer.
 Thus, for this very little example, the package **ipfp** written in C
-is faster.
+is faster. The first lines of code below are defined to ensure that
+we perform the same calculus. Thus, the times are comparable.
 
 ```{r, eval=FALSE}
 # Chose right constraint for mipfp
-target <- list (data.matrix(con_age[zone,]), data.matrix(con_sex[zone,])[c(2,1)])
+con_age_1 <- data.matrix( con_age[1,] )
+con_sex_2 <- data.matrix( con_sex[1, c(2,1)] ) 
+target <- list (con_age_1, con_sex_2)
+descript <- list (1, 2)
 
 # Equitable calculus - remove income 
 weight_init_no_income <- table( ind[, c(2,3)])
 
 # Measure time mipfp
-system.time(Ipfp( weight_init_no_income, descript, target, tol = 1e-5))
+system.time(Ipfp( weight_init_no_income, descript, target, 
+                  tol = 1e-5))
 ```
 
-An advantage of the **mipfp** package for problems with a lot 
-of input individuals is in terms of memory. Indeed, **ipfp**
+An advantage of the **mipfp** package, for problems with a lot 
+of input individuals, is in terms of memory. Indeed, **ipfp**
 needs a table with as many rows as individuals, whereas **mipfp**
 needs a table of a dimension corresponding to the number of 
 different categories. For SimpleWorld, the inputs of **ipfp** 
@@ -1486,7 +1585,7 @@ individuals (we replicate the data 5000 times) and generating
 on the same computer that **ipfp** and **mipfp** take, respectively,
 0.012 and 0.005 seconds.
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 #### time tests for bigger databases
 
 ind_cat2 <- ind_cat
@@ -1518,7 +1617,6 @@ of the data available. In terms of computational time,
 the comparison demonstrates that **mipfp** was slower
 for small problems and faster for bigger problems. 
 In all cases, they calculate the same results.
-
 
 
 ## The GREGWT algorithm
