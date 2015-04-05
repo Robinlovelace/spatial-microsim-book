@@ -450,15 +450,17 @@ bb <- make_bbox(long, lat, data = fwards, f = 0.1)
 bbbig <- make_bbox(long, lat, data = fwards, f = 0.5)
 # ggplot() + # use instead of ggmap for quick plot
 
-p1 <- ggmap(get_map(bbbig, maptype = "terrain")) +
+
+# bmap <- ggmap(get_map(bbbig, maptype = "terrain")) 
+bmap <- ggplot()
+p1 <- bmap +
   geom_polygon(data = fwards, aes(long, lat, group = group, fill = TAEVec)
     , alpha = 0.4
     ) +
   geom_path(data = fwards, aes(long, lat, group = group), color = "white", size = 0.1) +
-  coord_cartesian(xlim = c(bb[1], bb[3]), ylim = c(bb[2], bb[4])) +
+  coord_map(xlim = c(bb[1], bb[3]), ylim = c(bb[2], bb[4])) +
   scale_fill_gradient(low = "green", high = "red", trans = "sqrt")  
   # xlim(bb[1], bb[3]) + ylim(bb[2], bb[4])
-
 
 cons_codes <- read.csv("data/CakeMap/cars-raw.csv")
 cons_codes <- as.character(cons_codes$GEO_CODE)[3:126]
@@ -472,12 +474,14 @@ fwards <- rename(fwards, CODE = id)
 fwards <- inner_join(fwards, wards@data)
 
 # Add SAE map
-p2 <- ggmap(get_map(bbbig, maptype = "terrain")) +
+# bmap <- ggmap(get_map(bbbig, maptype = "terrain"))
+bmap2 <- ggplot()
+p2 <- bmap2 +
   geom_polygon(data = fwards, aes(long, lat, group = group, fill = SAEVec)
     , alpha = 0.4
     ) +
   geom_path(data = fwards, aes(long, lat, group = group), color = "white", size = 0.1) +
-  coord_cartesian(xlim = c(bb[1], bb[3]), ylim = c(bb[2], bb[4])) +
+  coord_map(xlim = c(bb[1], bb[3]), ylim = c(bb[2], bb[4])) +
   scale_fill_gradient(low = "green", high = "red", trans = "sqrt") 
 
 gridExtra::grid.arrange(p1, p2)
