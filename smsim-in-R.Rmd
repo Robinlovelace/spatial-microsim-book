@@ -897,9 +897,9 @@ own a diploma level 3 or 4, as desired.
 
 ```{r}
 # printing the result
-result$xi.hat 
+result$x.hat 
 # checkin the total number of persons
-sum(result$xi.hat)
+sum(result$x.hat)
 ```
 
 The quality of the margins with each constraints is contained in the variable `check.margins`
@@ -1156,7 +1156,7 @@ table of age and sex.
 weight_mipfp$check.margins
 
 # Printing the resulting weight matrix for age and sex
-apply(weight_mipfp$xi.hat, c(1,2), sum)
+apply(weight_mipfp$x.hat, c(1,2), sum)
 ```
 
 We can see that we reach the convergence after 5 iterations
@@ -1186,7 +1186,7 @@ for (zone in 1:NbZones){
   res <- Ipfp(weight_init, descript, target, tol = 1e-5)
   
   # Complete the array of calculated weights
-  Mipfp_Tab[zone,,] <- apply(res$xi.hat,c(1,2),sum)
+  Mipfp_Tab[zone,,] <- apply(res$x.hat,c(1,2),sum)
 }
 ```
 
