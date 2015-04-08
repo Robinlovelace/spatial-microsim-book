@@ -987,8 +987,13 @@ former is written in C, while the latter is written in R.
 Another is that the *aim* of **mipfp** is to execute IPF for
 spatial microsimulation, accepting a wide variety of inputs
 (cross-table or marginal 
-distributions). Moreover, **mipfp** is written in R,
-so should be easy to understand for R users. **ipfp**, by contrast, is written in C.
+distributions). 
+**ipfp**, by contrast, was created to solve an algebra problem of the form $Ax=b$.
+Its aim is to find a vector $x$ such as $Ax=b$, after having predefined the vector
+$b$ and the matrix $A$. Thus, the dimensions are fixed : a two-dimensional
+matrix and two vectors. 
+In addition, **mipfp** is written in R,
+so should be easy to understand for R users. **ipfp**, by contrast, is written in pure C: fast but relatively difficult to understand.
 
 As illustrated earlier in the book, **ipfp** gives weights to every
 individual in the input microdata, for every zone. 
