@@ -12,16 +12,29 @@ layout: default
 # http://www.geog.leeds.ac.uk/courses/other/crime/abm/general-modelling/index.html
 ```
 
-
-
 # Spatial microdata in agent-based models {#ABM}
 
 Spatial microsimulation can be seen as a precursor to, or early
-form of, agent-based modelling (ABM). Agent-based models involve three things:
+form of, agent-based modelling (ABM).
+In fact, ABM was originally referred to as Individual-B
 
-1. a number of discrete agents...
-2. with different characteristics
-3. interacting.
+Agent-based models involve three things:
+
+1. a number of discrete agents, who have
+2. different characteristics and which
+3. interact with each other and their environment.
+
+ABM is a powerful and extremely flexible approach to modelling.
+ABM allows analysis of problems that are highly non-linear and *emergent*:
+the dominant processes guiding change can only be seen after the event.
+This is
+advantageous, allowing a very wide range of problems to be tackled through
+a single paradigm: "agent-based modeling can find new, better solutions to many
+problems important to our environment, health, and economy" (Grimm and
+Railsback, 2011). With this power comes danger: it is easy to get lost in
+agent-based modelling and arrive at incorrect conclusions. Using spatial
+microsimulation to generate realistic input populations is one way that
+ABM can be made more realistic and likely to succeed.
 
 Note that based on the above definition we
 already have two-thirds of the necessary ingredients
@@ -35,34 +48,46 @@ spatial microdata to ABM based on a simple example (you guessed it --- SimpleWor
 it is worth mentioning some applications of ABMs built on spatial microdata
 and some of the tools that will be useful for the job.
 
+## ABM applications
+
+
+
+## ABM software
+
+A wide range of software is available for ABM. Of these, **NetLogo**
+is one of the most
+widely used for model prototyping, development and communication 
+(Thiele et al. 2012). Alternative open source options include
+the Java-based ABM **Repast** (for power users) and **MASON** (which must
+be programmed in Java). Due to its excellent documentation, ease of learning
+and integration with R, NetLogo is the tool of choice in this book and should
+be sufficiently powerful for many applications.
+
 [NetLogo](https://ccl.northwestern.edu/netlogo/) is a
 mature and widely used toolkit for agent-based models written in
-Java.  The recently published **RNetLogo** package provides an interface between
+Java. The recently published **RNetLogo** package provides an interface between
 R and NetLogo, allowing for model runs to be set-up and run directly from within R
-(Theile et al. 2014).
-Crucially,
-this allows the outputs of agent based models to be loaded directly into
+(Theile 2014). 
+This allows the outputs of agent based models to be loaded directly into
 your R environment. Using R to run a separate programme may seem overly complicated
-("why not simply run the model in NetLogo?" is a valid question) for
-very simply models and for setting-up and testing the 
-ABM it is recommended to use NetLogo directly, with its
-intuitive graphical interface.
+for very simply models. For setting-up and testing we recommend using 
+ABM, with its intuitive graphical interface. However, there are many advantages
+of using NetLogo from within R, the foremost being R's analysis capabilities:
+"it is much more time consuming and complicated to analyse ABMs than to
+formulate and implement them" (Theile et al. 2012).
 
 ```{r,echo=FALSE}
 # TODO: Batty reference below on abm design
 ```
 
-
-For many ABM applications, however, the R interface is useful. This is because
 AMB's are inherently unpredictable due to their 'bottom up' design.
 Thus we generally want to study many model runs before drawing conclusions
 about how the overall system operates, let alone real world implications.
 Because much of the
 time taken for agent based modelling is consumed on this sensitivity/parameter space
 analysis, running NetLogo
-from within R makes sense, as R excells in these areas whereas NetLogo
-and other agent-based modelling programs do not
-[@Thiele2014]. 
+from within R makes sense. R excels in these areas whereas NetLogo
+and other agent-based modelling programs do not.
 
 ```{r, echo=FALSE}
 
@@ -71,3 +96,9 @@ and other agent-based modelling programs do not
 # 
 # https://github.com/Robinlovelace/spatial-microsim-book
 ```
+
+## SimpleWorld in NetLogo
+
+## Allocating attributes to agents
+
+## Cops and robbers in SimpleWorld

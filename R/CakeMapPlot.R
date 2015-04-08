@@ -49,7 +49,8 @@ baseMap <- get_map(location=bb, maptype="terrain")
 # baseMap <- get_map(location=b, zoom=10, source='osm')
 #  baseMap <- get_map(location=b, source='stamen')
 
-ggmap(baseMap) + 
+# ggmap(baseMap) + 
+ggplot() +
   geom_polygon(data=wardsF, aes(long, lat, group=group, fill=avCake), alpha=0.5) + 
   geom_path(data=wardsF, aes(long, lat, group=group), color="black", alpha=0.3) +
   scale_fill_continuous(low = "green", high = "red", name = "Simulated\naverage\nfreqency\nof cake\nconsumption\n(times/wk)") + xlim(bb[1,]) + ylim(bb[2,]) + 

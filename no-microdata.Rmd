@@ -1,5 +1,5 @@
 ---
-title: "Spatial microsimulation in R"
+title: "Population synthesis without microdata"
 layout: default
 ---
 
@@ -9,7 +9,7 @@ library(png)
 library(grid)
 ```
 
-# Population synthesis without input microdata {#nomicrodata}
+# Population synthesis without microdata {#nomicrodata}
 
 Sometimes no representative individual-level
 dataset is available. 
