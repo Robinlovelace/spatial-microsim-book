@@ -1167,7 +1167,7 @@ weights for each zone. The aim is to transform the output
 into a form similar to the one generated in the section **ipfp** 
 to allow an easy comparison.
 For each area, the initial weight matrix will be the same.
-We store all weights in an array `Mipfp_Tab`, in which
+We store all weights in an array `Mipfp_Tab`, in
 which each row represents a zone.
 
 ```{r}
