@@ -31,8 +31,9 @@ a0.49 <- vector(length=dim(ind)[1]); a0.49[ind$age<50] = 1
 a.50 <- vector(length=dim(ind)[1]); a.50[ind$age>=50] = 1
 # Sex, we only need one
 m <- vector(length=dim(ind)[1]);m[ind$sex == "m"] = 1
+f <- vector(length=dim(ind)[1]);f[ind$sex == "f"] = 1
 # prepare X
-X <- data.frame("a0.49" = a0.49, "a.50" = a.50, "m" = m)
+X <- data.frame("a0.49" = a0.49, "a.50" = a.50, "m" = m, "f" = f)
 # Initial weights
 ## Data ######
 dx <- vector(length=dim(X)[1]) + 1
@@ -47,11 +48,13 @@ for(area in seq(dim(age)[1])){
     Tx <- data.frame(
         "a0.49" = age[area, 1],
         "a.50" = age[area, 2],
-        "m" = sex[area, 1])
+        "m" = sex[area, 1],
+        "f" = sex[area, 2])
     # Get new weights with GREGWT
     Weights.GREGWT = GREGWT(X, dx, Tx, bounds=c(0,Inf))
     cat("area:", area, "\n")
     fw <- Weights.GREGWT$Final.Weights
+    print(fw)
     fweights <- c(fweights, fw)
     # Estimate income
     sum.income <- sum(fw * ind$income)

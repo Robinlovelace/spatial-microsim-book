@@ -16,32 +16,30 @@ library(grid)
 # TODO: make reproducible example, compare performance with IPF
 ```
 
-As described in the Introduction, IPF is just one strategy for obtaining
-a spatial microdataset. However, researchers tend to
-select one method that they are comfortable and stick with that for their models.
-This is understandable because setting-up the method is usually time consuming:
-most researchers rightly focus on applying the methods to the real world rather
-than fretting about the details. On the other hand, if alternative methods
-work better for a particular application, resistance to change can result
-in poor model fit. In the case of very large datasets, spatial microsimulation
-may not be possible unless certain methods, optimised to deal with large
-datasets, are used. Above all, there is no consensus about which methods
-are 'best' for different applications, so it is worth experimenting to identify
-which method is most suitable for each application.
+As described in the Introduction, IPF is just one strategy for obtaining a
+spatial microdataset. However, researchers tend to select one method that they
+are comfortable and stick with that for their models. This is understandable
+because setting-up the method is usually time consuming: most researchers
+rightly focus on applying the methods to the real world rather than fretting
+about the details. On the other hand, if alternative methods work better for a
+particular application, resistance to change can result in poor model fit. In
+the case of very large datasets, spatial microsimulation may not be possible
+unless certain methods, optimised to deal with large datasets, are used. Above
+all, there is no consensus about which methods are 'best' for different
+applications, so it is worth experimenting to identify which method is most
+suitable for each application.
 
-An interesting alternative to IPF method is the GREGWT algorithm.
-First implemented in the SAS language by the Statistical Service area of
-the Australian Bureau of Statistics (ABS), the algorithm reweighs a set of
-initial weights using a
-Generalized Regression Weighting procedure (hence the name GREGWT).
-The resulting weights ensure that, when aggregated, the individuals selected
-for each small area fit the constraint variables. Like IPF, the GREGWT
-results in non-integer weights, meaning some kind of integerisation 
-algorithm will be needed to obtain a final individual-level population, so
-for example, if the output is to be used in ABM. The macro
-developed by ABS adds a weight restriction in their GREGWT macros to ensure
-positive weights. The ABS uses
-the Linear Truncated Method described in Singh and Mohl (1996) to enforce these
+An interesting alternative to IPF method is the GREGWT algorithm.  First
+implemented in the SAS language by the Statistical Service area of the
+Australian Bureau of Statistics (ABS), the algorithm reweighs a set of initial
+weights using a Generalized Regression Weighting procedure (hence the name
+GREGWT).  The resulting weights ensure that, when aggregated, the individuals
+selected for each small area fit the constraint variables. Like IPF, the GREGWT
+results in non-integer weights, meaning some kind of integerisation algorithm
+will be needed to obtain a final individual-level population, so for example,
+if the output is to be used in ABM. The macro developed by ABS adds a weight
+restriction in their GREGWT macros to ensure positive weights. The ABS uses the
+Linear Truncated Method described in Singh and Mohl (1996) to enforce these
 restrictions.
 
 ```{r, echo=FALSE}
@@ -53,9 +51,68 @@ restrictions.
 A clear simplified example of this algorithm (and other algorithms) can be
 found in Rahman (2009).  In their paper Tanton et.al (2011) make a full
 description of the algorithm. For a deeper understanding of the SAS macros see
-Bell (1999). An R implementation of GREGWT, has been
-created by Esteban Muñoz, and can be found in the GitLab repository
-[mikrosim](https://gitlab.com/emunozh/mikrosim).
+Bell (1999). An R implementation of GREGWT, has been created by Esteban Muñoz,
+and can be found in the GitHub repository
+[mikrosim](https://github.com/emunozh/mikrosim).
+
+We use these implementation of the GREGWT algorithm with the data from the
+simple example presented in chapter [Simple World](#SimpleWorld). Below we
+present the use of the GREGWT library and the resulting weights matrix.
+
+```{r simpleworld GREGWT data, fig.cap="Load and prepare the data.", echo=FALSE, message=FALSE}
+# Load the data from csv files stored under ../data
+age = read.csv("data/SimpleWorld/age.csv")
+sex = read.csv("data/SimpleWorld/sex.csv")
+ind = read.csv("data/SimpleWorld/ind-full.csv")
+# Age
+a0.49 <- vector(length=dim(ind)[1]); a0.49[ind$age<50] = 1
+a.50  <- vector(length=dim(ind)[1]); a.50[ind$age>=50] = 1
+# Sex, we only need one
+m     <- vector(length=dim(ind)[1]); m[ind$sex == "m"] = 1
+f     <- vector(length=dim(ind)[1]); f[ind$sex == "f"] = 1
+# prepare X
+X <- data.frame("a0.49" = a0.49, "a.50" = a.50, "m" = m, "f" = f)
+# Initial weights
+dx <- vector(length=dim(X)[1]) + 1
+# prepare a data.frame to store the result
+fweights <- NULL
+```
+
+The code presented above loads the SimpleWorld data and created a new
+data.frame with this data. Version 1.4 of the R library requires the data to be
+in binary form. The require input for the R function is `X` representing the
+individual level survey, `dx` representing the initial weights of the survey
+and `Tx` representing the small area benchmarks. 
+
+```{r simpleworld GREGWT,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", echo=FALSE, message=FALSE}
+# load the library (1.4)
+libaarary('GREGWT')
+# We loop through each area
+for(area in seq(dim(age)[1])){
+    # True population totals for this area (Benchmarks)
+    Tx <- data.frame("a0.49" = age[area, 1],
+                     "a.50"  = age[area, 2],
+                     "m"     = sex[area, 1])
+    # Get new weights with GREGWT
+    Weights.GREGWT = GREGWT(X, dx, Tx, bounds=c(0,Inf))
+    fw <- Weights.GREGWT$Final.Weights
+    # store the new weights
+    fweights <- c(fweights, fw)
+}
+```
+
+The R library implementing the GREGWT algorithm reweights the survey for one
+area at the time, and therefor we need to construct a loop to iterate each
+area. The estimated weights are combined into a long vector that will be latter
+on transformed into the weights matrix.
+
+```{r simpleworld GREGWT,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", echo=TRUE, message=FALSE}
+fweights <- matrix(fweights, nrow = nrow(ind))
+fweights
+```
+
+In the last step we transform the vector into a matrix and see the results from
+the reweighing process. 
 
 ## Population synthesis as an optimization problem
 
