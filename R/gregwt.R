@@ -54,7 +54,6 @@ for(area in seq(dim(age)[1])){
     Weights.GREGWT = GREGWT(X, dx, Tx, bounds=c(0,Inf))
     cat("area:", area, "\n")
     fw <- Weights.GREGWT$Final.Weights
-    print(fw)
     fweights <- c(fweights, fw)
     # Estimate income
     sum.income <- sum(fw * ind$income)
