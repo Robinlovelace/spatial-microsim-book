@@ -85,7 +85,7 @@ in binary form. The require input for the R function is `X` representing the
 individual level survey, `dx` representing the initial weights of the survey
 and `Tx` representing the small area benchmarks. 
 
-```{r simpleworld GREGWT1,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", echo=FALSE, message=FALSE, eval=FALSE}
+```{r simpleworld GREGWT1,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", message=FALSE}
 # Install GREGWT (uncomment/alter as appropriate)
 # url = "https://github.com/emunozh/mikrosim/raw/master/GREGWT_1.4.tar.gz"
 # download.file(url = url, method = "wget", destfile = "GREGWT_1.4.tar.gz")
@@ -112,7 +112,7 @@ area at the time, and therefor we need to construct a loop to iterate each
 area. The estimated weights are combined into a long vector that will be latter
 on transformed into the weights matrix.
 
-```{r simpleworld GREGWT2,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", echo=TRUE, message=FALSE, eval=FALSE}
+```{r simpleworld GREGWT2,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", message=FALSE}
 fweights <- matrix(fweights, nrow = nrow(ind))
 fweights
 ```
