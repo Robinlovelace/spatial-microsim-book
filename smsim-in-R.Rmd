@@ -71,7 +71,7 @@ used as a sensible
 convention.]
 
 ```{r}
-# Create the weight matrix of ones
+# Create the weight matrix. Note: relies on data from previous chapter.
 weights <- matrix(data = 1, nrow = nrow(ind), ncol = nrow(cons))
 dim(weights) # dimension of weight matrix: 5 rows by 3 columns
 ```
@@ -267,7 +267,7 @@ zone 'j' (during the step 't'). For the zone 'z', we will adapt the weight matri
 each constraint 'c'.This matrix is initialized with a full matrix of 1 
 and then, for each step 't', the formula can be expressed as:
 
-$$ w(i,z,t+1) = w(i,z,t) * \displaystyle\frac{cons \_ t(z,c,ind(i,c))}{ \displaystyle\sum_{j=1}^{Nbindiv} w(j,z,t) * I(ind(j,c)=ind(i,c))} $$
+$$ w(i,z,t+1) = w(i,z,t) * \displaystyle\frac{cons \_ t(z,c,ind(i,c))}{ \displaystyle\sum_{j=1}^{n_ind} w(j,z,t) * I(ind(j,c)=ind(i,c))} $$
 
 
 where the 'I(x)' function is the indicator function which value is 1 
@@ -276,8 +276,6 @@ of the individual 'i' for the variable 'c'. The denominator corresponds
 to the sum of the actual weights of all individuals having the same category
 in this variable as 'i'. We simply redistribue the weights so that the 
 data follows the constraint concerning this variable.
-
-
 
 ### IPF in R {#IpfinR}
 
@@ -310,10 +308,10 @@ a more intuitive name.
 
 ```{r}
 # Create intuitiv names for the totals
-nzones <- nrow(cons) # number of zones
-NbIndiv <- nrow(ind) # number of individuals
-NbCatAge <-ncol(con_age) # number of categories of "age"
-NbCatSex <-ncol(con_sex) # number of categories of "sex"
+n_zone <- nrow(cons) # number of zones
+n_ind <- nrow(ind) # number of individuals
+n_age <-ncol(con_age) # number of categories of "age"
+n_sex <-ncol(con_sex) # number of categories of "sex"
 ```
 
 The earlier step before to perform to an algorithm is to initialize each needed object.
@@ -330,7 +328,7 @@ weights1 <- weights2 <- weights # create addition weight objects
 
 IPFinR begins with a
 couple of nested for loops, one to iterate through each zone
-(hence `1:nzones`, which means "from 1 to the number of zones in the
+(hence `1:n_zone`, which means "from 1 to the number of zones in the
 constraint data") and one to iterate through each
 category within the constraints (0--49 and 50+ for the first constraint).
 Note that this code relies on the `cons` and `ind` objects loaded in the
@@ -353,8 +351,8 @@ previous chapter.
 ```{r}
 # Assign values to the previously created weight matrix 
 # to adapt to age constraint
-for(j in 1:nzones){
-  for(i in 1:NbCatAge){
+for(j in 1:n_zone){
+  for(i in 1:n_age){
 weights1[ind_cat[, i] == 1, j] <- con_age[j, i] / ind_agg0[j, i]
     }
 print(weights1)
@@ -414,7 +412,7 @@ re-aggregates the individual-level data, with the new weights for each zone:
 ind_agg2 <- ind_agg1 <- ind_agg0 * NA
 
 # Assign values to the aggregated data after con 1
-for(i in 1:nzones){
+for(i in 1:n_zone){
   ind_agg1[i, ] <- colSums(ind_cat * weights1[, i])
 }
 ```
@@ -483,8 +481,8 @@ nested `for` loop demonstrated above for the sex constraint. This is implemented
 in the code block below.
 
 ```{r}
-for(j in 1:nzones){
-  for(i in 1:NbCatSex + NbCatAge){
+for(j in 1:n_zone){
+  for(i in 1:n_sex + n_age){
 weights2[ind_cat[, i] == 1, j] <- cons[j , i] / ind_agg1[j, i]
     }
   }
@@ -510,7 +508,7 @@ Note that the final value is calculated by multiplying by
 of all the weight matrices calculated from all the constraints.
 
 ```{r}
-for(i in 1:nzones){
+for(i in 1:n_zone){
 ind_agg2[i, ] <- colSums(ind_cat * weights1[, i] * weights2[, i])
 }
 ```
@@ -598,7 +596,7 @@ data and an initial weight vector (`x0`) as inputs:
 ```{r}
 library(ipfp) # load ipfp library after install.packages("ipfp")
 cons <- apply(cons, 2, as.numeric) # to 1d numeric data type
-ipfp(cons[1,], t(ind_cat), x0 = rep(1, NbIndiv)) # run IPF
+ipfp(cons[1,], t(ind_cat), x0 = rep(1, n_ind)) # run IPF
 ```
 
 It is impressive that the entire IPF process, which takes dozens of lines of
@@ -620,7 +618,7 @@ ran the default of `maxit = 1000` iterations, despite convergence happening afte
 (the latter of which can be referred to lazily as `v`) in `ipfp`, as illustrated below (only the first line of R output is shown):
 
 ```{r, eval=FALSE}
-ipfp(cons[1,], t(ind_cat), rep(1, NbIndiv), maxit = 20, v = T)
+ipfp(cons[1,], t(ind_cat), rep(1, n_ind), maxit = 20, v = T)
 ```
 
 ```
@@ -658,7 +656,7 @@ We will call this object `x0` as its argument name representing
 the starting point of the weight estimates in `ipfp`:
 
 ```{r}
-x0 <- rep(1, NbIndiv) # save the initial vector
+x0 <- rep(1, n_ind) # save the initial vector
 ```
 
 To extend this process to all three zones we can wrap the line beginning
@@ -1010,7 +1008,7 @@ of persons in each category so that the contingency table respects the constrain
 In other worlds, we want, for zone 1 of SimpleWorld, to fill in the table such as:
 
 
-Table: Aim of Mipfp for SimpleWorld.
+Table: Unknown constraints Mipfp estimates for SimpleWorld.
 
 |sex - age | 0-49 yrs| 50 + yrs| Total|
 |:------|-----:|-----:|-----:|
@@ -1032,11 +1030,11 @@ and desired totals.
 
 Table: Initial table of Mipfp for SimpleWorld.
 
-|sex - age | 0-49 yrs| 50 + yrs| Total| Wanted total |
-|:------|-----:|-----:|-----:|-----:|
-|m      |     1|     2|     3|     6|
-|f      |     1|     1|     2|     6|
-|Total  |     2|     3|      |      |
+|sex - age| 0-49 yrs| 50 + yrs| Total| Target total |
+|:-------------|-----:|-----:|-----:|-----:|
+|m             |     1|     2|     3|     6|
+|f             |     1|     1|     2|     6|
+|Total         |     2|     3|      |      |
 |Target total  |     8|     4|      |      |
 
 
@@ -1179,11 +1177,10 @@ which each row represents a zone.
 ```{r}
 # Initialising the result matrix
 Names <- list(1:3, colnames(con_sex)[c(2,1)], colnames(con_age))
-Mipfp_Tab <- array(data = NA, dim = c(nzones, 2 , 2), 
-                   dimnames = Names)
+Mipfp_Tab <- array(data = NA, dim = c(n_zone, 2 , 2), dimnames = Names)
 
-# Loop on the zone and execute Ipfp
-for (zone in 1:nzones){
+# Loop over the zones and execute Ipfp
+for (zone in 1:n_zone){
   # Adapt the constraint to the zone
   con_age_1 <- data.matrix(con_age[zone,] )
   con_sex_2 <- data.matrix(con_sex[zone, c(2,1)] ) 
@@ -1206,24 +1203,24 @@ to the weights previously determined.
 Mipfp_Tab[1:2,,]
 ```
 
-Thanks to the possibility of **mipfp** to include cross-tabulated
-constraints, we could also consider the zone as a variable. This allows
-the execution of one invocation of `Ipfp` (with no `for` loop)
-to generate the result for every zone. 
+Cross-tabulated constraints can be used in **mipfp**.
+This means we can consider the zone as a variable, allowing
+population synthesis to be performed with no `for` loop,
+generating a result for every zone. 
 
 ```{r, echo=FALSE}
 # (MD) : I am not sure this is very useful here, but
 #        it is another alternative.
 # RL yes this is very useful: please add an example!
-#The code below illustrate this.
+# The code below illustrate this.
 ```
 
 ```{r}
-Mipfp_in_one <- array(rep(weight_init, each = nzones), dim = c(nzones, 2, 2, 5))
+mipfp_zones <- array(rep(weight_init, each = n_zone), dim = c(n_zone, 2, 2, 5))
 
 target <- list(data.matrix(con_age), data.matrix(con_sex[,c(2,1)]))
 descript <- list (c(1,2), c(1,3))
-res <- Ipfp(Mipfp_in_one, descript, target, tol = 1e-5)
+res <- Ipfp(mipfp_zones, descript, target, tol = 1e-5)
 ```
 
 Note that the output of the function `Ipfp` can be used 
@@ -1254,10 +1251,10 @@ per individual, depending on the category of each person.
 
 ```{r}
 # Loop over the zones to transform the result's structure
-for (zone in 1:nzones){
+for (zone in 1:n_zone){
   
   # Transformation into individual weights
-  for (i in 1:NbIndiv) {
+  for (i in 1:n_ind) {
     # weight of the category
     weight_ind <- Mipfp_Tab[zone,ind[i,c(2)],ind[i,c(3)]]
     
@@ -1309,7 +1306,7 @@ This section compares the computational time of **mipfp** and **ipfp** approache
 
 ```{r, eval=FALSE}
 # Measure time ipfp
-init <- rep(1, NbIndiv)
+init <- rep(1, n_ind)
 system.time(ipfp(cons[1,], ind_catt, x0 = init,  tol = 1e-5))
 ```
 
@@ -1377,7 +1374,7 @@ Ind_Tab2 <- 5000 * Ind_Tab
 cons2 <- cons * 1000000
 
 # Measure time ipfp
-system.time(ipfp(cons2[1,], t(ind_cat2), x0 = rep(1,NbIndiv * 5000),  tol = 1e-5))
+system.time(ipfp(cons2[1,], t(ind_cat2), x0 = rep(1,n_ind * 5000),  tol = 1e-5))
 
 # Chose right constraint for mipfp
 target <- list (data.matrix(con_age[zone,] * 1000000), data.matrix(con_sex[zone,]  * 1000000)[c(2,1)])

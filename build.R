@@ -80,3 +80,12 @@ for(i in cfiles){
 # s <- grep("\\ @|\\[@", d)
 # d[s]
 
+# backup
+# system("cp -rv ~/Dropbox/spatial-microsim-book /media/robin/data/backups/")
+
+# command-line tools for dif tracking
+# latexdiff book-b4-comments.tex book.tex > dif.tex
+# pdflatex dif.tex 
+
+
+

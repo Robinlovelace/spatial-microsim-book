@@ -10,10 +10,33 @@ layout: default
 ```
 
 
-To see the link between the methodology introduced later in the
-book (see Chapter 5) and the various real-world applications,
-this chapter describes the spatial microsimulation method on
-an extremely simple example. This SimpleWorld example is analogous to the
+This chapter demonstrates the spatial microsimulation method on
+an extremely simple example we call SimpleWorld.
+The aim is to show the link between the methodology introduced later in the
+book (see Chapter 5) and the various real-world applications. The chapter
+is also a first chance for the reader to do some basic programming in R:
+the unwritten
+subtitle of this book is "a *practical* introduction" for a reason!
+
+```{r, echo=FALSE}
+# TODO (RL): Update the above if we get a subtitle, mention in preface 
+```
+
+Imagine a world containing only 33 persons, split across 3 zones.
+We have two sources of information about these people available to us:
+
+1. aggregate counts of persons by age and sex in each zone (say from a Census)
+2. survey microdata recording more detailed information (age, sex and income), for five of the world’s residents.
+
+Unfortunately the survey data lack any geography. To infer further information
+about SimpleWorld --- and more importantly to be able to model its alien
+inhabitants --- we need a methodology. This is precisely the kind of situation
+where spatial microsimulation is useful. After an explanation of this
+'starting simple' approach, we describe the input data in detail, demonstrate
+what spatial microdata look like and, finally, place the example in its wider
+context.
+
+This SimpleWorld example is analogous to the
 'cartoon world' used by professor David MacKay (2009) to simplify the
 complexities of sustainable energy. The same principle works here:
 "a simple cartoon is the best way to capture the issues" (p. 203, Chapter 27).
@@ -209,51 +232,59 @@ individual-level survey data.  Spatial microsimulation tackles this issue by
 allocating individuals from a non-geographical dataset to geographical zones in
 another.
 
-## A weight matrix {#weight-matrix}
+## Practical: generating a weight matrix {#weight-matrix}
 
 The procedures we will learn to use in this book do this by allocating *weights*
 to each individual for each zone. The higher the weight for a particular
 individual-zone combination, the more representative that individual is of that
-zone. This information can be represented as a *weight matrix*, such as the one
-shown below.
+zone. This information can be represented as a *weight matrix*.
 
-```{r, echo=FALSE, eval=FALSE}
-cat_age <- model.matrix(~ ind$age - 1)
-cat_sex <- model.matrix(~ ind$sex - 1)[, c(2, 1)]
-ind_cat <- cbind(cat_age, cat_sex) # combine flat representations of the data
-ind$age <- cut(ind$age, breaks = c(0, 49, 120), labels = c("a0_49", "a50+"))
-weights <- matrix(data = NA, nrow = nrow(ind), ncol = nrow(cons))
-cons <- apply(cons, 2, as.numeric)
-library(ipfp) # load the ipfp library after: install.packages("ipfp")
-apply(cons, MARGIN = 1, FUN =  function(x) ipfp(x, t(ind_cat), x0 = rep(1,nrow(ind))))
+The first practical challenge in this book is to generate a weight matrix.
+Usually, the input data for such procedures are read in from a file.
+However, to get acquainted with typing R code and to 'get your hands dirty'
+we type in the data. Then the **ipfp** package is used to convert these
+inputs into a matrix of weights. Don't worry if this makes little sense:
+it looks like gobbledygook to most people! Just type it in and observe the
+result. If it works, congratulations! You have generated your first
+weight matrix using Iterative Proportional Fitting (IPF). The nuts and
+bolts of this process are described in the next chapter.
+
+```{r, eval=FALSE}
+cons <- matrix(c(8,2,7,4,8,4,6,4,3,6,6,8), nrow = 3)
+
+A <- matrix(c(0,1,1,0,0,1,1,0,1,0,1,0,0,1,0,1,1,0,0,1), nrow = 4)
+
+library(ipfp) # type install.packages("ipfp") if this causes an error
+weights <- apply(cons, 1, function(x) ipfp(x, A, x0 = rep(1, 5)))
+weights
 ```
 
 Table: A 'weight matrix' linking the microdata (rows) to the zones (columns)
 of SimpleWorld.
 
 | Individual| Zone 1  | Zone 2  | Zone 3  |
-|---:|--------:|--------:|--------:|
-|   1|    1.228|    1.725|    0.725|
-|   2|    1.228|    1.725|    0.725|
-|   3|    3.544|    0.550|    1.550|
-|   4|    1.544|    4.550|    2.550|
-|   5|    4.456|    1.450|    5.450|
+|---:|----:|----:|-----:|
+|   1| 1.23| 1.73| 0.725|
+|   2| 1.23| 1.73| 0.725|
+|   3| 3.54| 0.55| 1.550|
+|   4| 1.54| 4.55| 2.550|
+|   5| 4.46| 1.45| 5.450|
 
 The highest value (5.450) is located, to use R's notation, in cell
 `weights[5,3]`, the 5th row and 3rd column in the matrix `weights`. This means
 that individual number 5 is considered to be highly representative of Zone 3,
 given the input data in SimpleWorld.  This makes sense because there are many
 (7) young people and many (8) females in Zone 3, relative to the input
-microdataset (which contains only 1 young female). The lowest value (0.550) is
+microdataset (which contains only 1 young female). The lowest value (0.55) is
 found in cell `[3,2]`. Again this makes sense: individual 3 from the
 microdataset is a young male yet there are only 2 young people and 4 males in
 zone 2. A special feature of the weight matrix above is that each of the column
 sums is equal to the total population in each zone.
 
-We will discover how the
-weight matrices are generated in subsequent chapters.
+We will discover different ways of generating such weight matrices
+in subsequent chapters.
 For now it is sufficient to know
-that weight matrices link individual-level data to geographically aggregated
+that they matrices link individual-level data to geographically aggregated
 data and that there are multiple techniques to generate them. The techniques are sometimes
 referred to as *reweighting algorithms* in the literature (Tanton et al. 2011).
 These include deterministic methods such as Iterative Proportional
