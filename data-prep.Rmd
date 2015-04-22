@@ -3,7 +3,7 @@ title: "Preparing input data"
 layout: default
 ---
 
-# Data preparation {#data-prep}
+# Data preparation with R {#data-prep}
 
 ```{r, echo=FALSE}
 library(png)
@@ -39,10 +39,17 @@ library(grid)
 This chapter focuses on the minimum input datasets needed for the spatial
 microsimulation. We will build on the SimpleWorld example by demonstrating how
 the inputs about its inhabitants, in terms of geographical constraints and
-individual-level survey data, can be loaded and 'cleaned' in R. At the end
-of the chapter the data will be in a form that is ready for IPF or another
-algorithm to create a *weight matrix* from which a synthetic population
---- a *spatial microdataset* --- can be generated.
+individual-level survey data, can be loaded and 'cleaned' in R. It is the
+first practical chapter, so it will also get you up-to-speed with
+using R via RStudio for spatial microsimulation. The aim is to produce
+data that is in a form ready for population synthesis and to acquaint
+people who are not experienced R users with the software and a workflow
+that will make developing spatial microsimulation models as easy as possible.
+
+```{r, echo=FALSE}
+# TODO: do we talk enough about RStudio projects?
+```
+
 
 Correctly loading, manipulating and assessing aggregate and individual-level
 datasets will be critical to
