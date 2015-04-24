@@ -167,16 +167,19 @@ rather than vice versa.
 # Reference for occam's razor!
 ```
 
-Spatial microsimulation is the result of combining
-individual and aggregate-level data, and both must
-be given equal consideration when designing a modelling
-strategy. The critical data constraint in many cases will
-be the number of *linking variables*. Linking variables
-are variables shared between the individual and aggregate level
-datasets and can therefore be used to *constrain* the
-weights allocated to the individuals for each zone.
+Spatial microsimulation involves combining
+individual and aggregate-level data. Each level should
+be given equal consideration when preparing the inputs for the
+modelling process. The limiting factor for model fit in many cases will
+be the number of *linking variables*, 
+variables shared between the individual and aggregate level
+datasets which are used to calculate the
+weights allocated to the individuals for each zone (see Glossary).
+These are also referred to as *constraint variables*, as they
+*constrain* the individual weights per zone (Ballas et al. 2005).
+
 If there are no shared variables between the aggregate and
-individual-level data, you cannot do a useful spatial microsimulation. 
+individual-level data generating a synthetic population is more difficult. 
 In this case, your only alternative is to consider only the
 marginal distribution of the variable and make a random selection with 
 the distribution used as a probability. However, this implicitly assumes
@@ -191,8 +194,7 @@ their order and their relationship to the target variable
 should all be considered at the outset when choosing the
 input data and constraints.
 
-## Selecting target and constraint variables {#Selecting}
-
+## Target and constraint variables {#Selecting}
 
 The geographically aggregated data should be the
 first consideration when deciding on the
@@ -377,6 +379,36 @@ provides more information than two-way marginal distributions.
 # Done 2014/12/22 RL
 ```
 
+The level of detail within the linking variables is an important determinant of
+the fidelity of the resulting synthetic population. This can be measured
+in term of the number of linking variables (there are 2 in SimpleWorld: age and sex)
+and the more measure of the number of categories within all linking variables
+(there are 4 in SimpleWorld: male, female, young and old). This latter measure
+is preferable as it provides a closer indication of the 'bin size' used to
+categorise individuals during population synthesis. Still, the nature of both
+linking variables and their categories should be considered: an age variable
+contain 5 categories may look good on paper. However, if those categories are
+defined by the breaks `c(0, 5, 10, 15, 20, 90)`, 
+the linking variable will not be effective at accurately recreating age
+distributions. More evenly distributed categories (such as
+`c(0, 20, 40, 60, 80, 120)` to continue the age example) are preferable.
+
+(As an important aside for R learners, we
+use R syntax here to define the *breaks* instead of the more common
+'0 to 5', 6 to 10' age category notation because this is how
+numerical variables are best categorised in R. To see how this works,
+try entering the following into R's command line:
+`cut(x = c(20, 21, 90, 35), breaks = c(0, 20, 40, 60, 80, 120))`. The result
+is a `factor` variable
+as follows: `(0,20]   (20,40]  (80,120] (20,40] `. This output uses standard
+notation for defining bins of continuous data: the `(0, 20]` term means, in
+English, "any value from *greater than* zero, up to *and including* 20".
+In classic mathematical notation this reads
+$0 < x \leq 20$. Note the `]` symbol means 'including'.)
+
+
+but if on closer inspection those 
+categories predominantly define very small subsets of the population, 
 Even when measuring constraint variables by categories rather
 than the cruder measure of number variables, there is still
 no consensus about the optimal amount. 
@@ -440,26 +472,34 @@ it is available in memory.
 
 ## Loading input data {#Loading} 
 
-Real-world individual-level data may be provided in a variety of formats
-but ultimately needs to be loaded into R as a *data frame* object. Note 
+Real-world individual-level are provided in many formats.
+These ultimately need to be loaded into R as a `data.frame` object. Note 
 that there are many ways to load data into R, including `read.csv()` and
-`read.delim()` from base R and commands for loading proprietary data formats
-such as `read.xls` and  `read.spss()` from **gdata** and **foreign**
-packages respectively. There are many ways to 'clean' data in preparation
-for spatial microsimulation. In the following example we present 
-in detail the steps needed to load the data underlying the SimpleWorld
-example.^[All
+`read.table()` from base R. Useful commands for loading proprietary data formats
+include `read_excel` and  `read.spss()` from **readxl** and **foreign**
+packages respectively.
+
+More time consuming is cleaning the data and there are also many ways to do this.
+In the following example we present 
+steps needed to load the data underlying the SimpleWorld
+example into R.^[All
 data and code to replicate the procedures outlined in the book are available
 publicly from the spatial-microsimulation-book GitHub repository, as described above. We recommend loading the input data and playing
 around with it.]
-Some parts of the following explanation are specific to the example data.
-However, the
-functions and principles will apply to the majority of real
+Some parts of the following explanation are specific to the example data and the
+use of Iterative Proportional Fitting (IPF) as a reweighting procedure
+(described in the next chapter). Combinatorial optimisation approaches, for
+example (as well as careful use of IPF methods, e.g. using the **mipfp** package),
+are resilent to differences in the number of individuals according to each
+constraint. However, the approach,
+functions and principles demonstrated will apply to the majority of real
 input datasets for spatial
-microsimulation. To summarise this information, 
+microsimulation. This section is quite specific to data preparation for
+spatail microsimulation; for a more general introduction to data formatting and
+cleaning methodology see Wickham (2014). To summarise this information, 
 the last section of this chapter provides 
-a list of things you that should be checked during this important and often
-overlooked phase of the of spatial microsimulation methodology.
+a checklist of items to ensure that the data has been adequately cleaned
+ready for the next phase.
 
 In the SimpleWorld example, the case the individual-level dataset is loaded
 from a simple `.csv` file:
