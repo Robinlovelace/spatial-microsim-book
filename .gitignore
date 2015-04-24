@@ -7,7 +7,6 @@ frontmatter/
 *.aux
 *.orig
 *.docx
-
 .Rproj.user
 *.pdf
 .history
@@ -28,3 +27,6 @@ book.Rmd
 cache*
 *.html
 drafts/
+.dropbox
+(White Space Conflict)
+*.out
