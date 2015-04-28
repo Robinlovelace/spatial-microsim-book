@@ -227,14 +227,26 @@ statistical analysis capabilities.
 Finally, R has an active and  growing user community. As a result there are
 thousands of packages that extend R's capabilities by providing new functions.
 Improvements are being added all the time.
-The **ipfp** package, for example,
-can greatly reduce the computational time taken for a key element of spatial
-microsimulation process, as we shall see in Chapter 5 in
-*Reweighting with ipfp*. This is an advantage of R, but we have to be careful, 
-because R is open source, anyone can write a new package. This means we means it is important to check
-the quality of a used package before trusting it as a "black box".
+The **ipfp** and **mipfp** packages, for example,
+can greatly reduce the number of lines of code *and* the computational time
+needed for population synthesis compared with 'hard-coding' the method
+in R from scratch. (For the curious reader, the 'IPF' letters in the package
+names stand for 'Iterative Proportional Fitting', a term we will use frequently
+in subsequent chapters.)
 
-R is a powerful statistical language and its interface "RStudio" helps new users to become familiar with this language. 
+These time-saving add-ons to R are described in Chapter 5.
+A clear advantage of R is that anyone can write a package.
+This is also potentially a disadvantage: it has been argued there 
+are too many packages, making it difficult for new users to identify which
+packages are most reliable and which are best suited to different situations
+(Horkik 2012). However, this problem is mitigated by the open-source
+nature of R: users can see precisely how any particular function
+works (providing they are willing to learn some programming), rather than
+relying on a "black box".
+
+An recent development that has made R far more accessible is
+RStudio, an Integrated Development Environment (IDE) for R that helps
+new users become familiar with the language (see figure 4.1). 
 Further information about why R is a good choice for spatial microsimulation
 is provided in the Appendix, a tutorial introduction to R for spatial
 microsimulation applications. The next section describes approaches
