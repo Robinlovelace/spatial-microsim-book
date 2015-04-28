@@ -571,9 +571,11 @@ rowSums(con_age) == rowSums(con_sex)
 The results of the previous operations are encouraging. The total population is
 the same for each constraint overall and for each area (row) for both
 constraints.  If the total populations between constraint variables do not match
-(e.g. because the population bases are different) this is problematic.
+(e.g. because the *population bases* are different) this is problematic (see
+the Glossary for a description of the population base).
 Appropriate steps to normalise the errant constraint variables are described in
-the CakeMap Chapter (\ref{CakeMap}).
+the CakeMap Chapter (\ref{CakeMap}). This involves scaling the category totals
+so the totals are equal across all categories.
 
 ## Subsetting to remove excess information {#subsetting-prep}
 

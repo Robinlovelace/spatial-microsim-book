@@ -25,7 +25,8 @@ library(grid)
 
 In this chapter we progress from loading and preparing the input data to
 running a spatial microsimulation model. We will begin by describing the
-IPF procedure as it is the simplest and most widely used method to allocate
+Iterative Propotional Fitting
+(IPF) procedure as it is the simplest and most widely used method to allocate
 individuals to zones and then progress to discuss alternative
 *reweighting algorithms* that do the same job in a different way.
 
@@ -605,17 +606,29 @@ convert the input constraint dataset to `numeric`^[The integer data type fails
 because C requires `numeric` data to be converted into its *floating point*
 data class.]
 and one to perform the IPF operation itself. The whole procedure is hiding
-behind the function that is created in C and well optimised. So, it is like a 
+behind the function that is created in C and optimised. So, it is like a 
 magic box where you put your data and that returns the results. This is a good
-way to execute the algorithm, but you have to pay attention to well understand 
+way to execute the algorithm, but one must pay attention to
 the format of the input argument to use the function correctly. To be sure, 
-type on R *help('ipfp')*.
+type on R `?ipfp`.
 
 Note that although
 we did not specify how many iterations to run, the above command
 ran the default of `maxit = 1000` iterations, despite convergence happening after
-10 iterations. This can be seen by specifying the `maxit` and `verbose` arguments
-(the latter of which can be referred to lazily as `v`) in `ipfp`, as illustrated below (only the first line of R output is shown):
+10 iterations. Note that 'convergence' in this context means that the
+difference between the TAE in two consequtive iterations reaches the
+value of `tol`, which can be set manually in the function
+(e.g. via `tol = 0.0000001`). The default value of `tol`
+is `.Machine$double.eps`, which is a very small number indeed:
+0.000000000000000222, to be precise.
+
+The number of iterations can also
+be set by specifying the `maxit` argument (e.g. `maxit = 5`).
+The result after each iteration will be printed if we enable the verbose argument
+with `verbose = TRUE`. Note also that these arguments can
+be referred to lazily using only their first letter: `verbose` can
+be referred to as `v`, for example,
+as illustrated below (not all lines of R output are shown):
 
 ```{r, eval=FALSE}
 ipfp(cons[1,], t(ind_cat), rep(1, n_ind), maxit = 20, v = T)
@@ -630,21 +643,31 @@ ipfp(cons[1,], t(ind_cat), rep(1, n_ind), maxit = 20, v = T)
 ## iteration 10:  4.96507e-16
 ```
 
-The `maxit` argument specifies to the function the maximum number of iterations and `verbose` set to True asks
-the function to write for each iteration the convergence rate. This corresponds to the distance between
-the previous and actual weight matrices. When the two matrix are equal, that means that the algorithm has
-converged and the distance will approach 0. Note that when calculating, the computer has to make some approximations
-(for example, when calculating the result of $\frac{4}{3}$, the computer cannot save the infinite number of decimals and truncates the number).
-Due to this, we never reach a perfect 0, but when we have a very little number, we can consider it enough close to 0.
-Usually, we use the precision of the computer that is of order $10^{-16}$ (on R, you can display the precision of the
-machine by typing `.Machine$double.eps`). Note that that instead of using `maxit` as stopping condition, 
-we can use the `tol` argument, conditional on the distance between two consecutive weight matrices.
+To be clear, the `maxit` argument in the above code
+specifies the maximum number of iterations and setting 
+`verbose` to `TRUE` (the default is `FALSE`) instructed R to print the result.
+Being able to control R in this way is critical to mastering spatial
+microsimulation with R.
 
-Notice also that a *transposed* (via the `t()` function) version of the individual-level
-data (`ind_cat`) is used in `ipfp`
-to represent the individual-level data, instead of the
+The numbers that are printed in the output from R
+correspond to the 'distance' between
+the previous and actual weight matrices. When the two matrix are equal, the algorithm has
+converged and the distance will approach 0. If the distance falls below
+the value of `tol`, the algorithm stops. 
+Note that when calculating, the computer makes numerical approximations
+of real numbers. For example, when calculating the result of $\frac{4}{3}$, the computer cannot save the infinite number of decimals and truncates the number.
+
+Due to this, we rarely reach a perfect 0 but we assume that a result that is
+very close to zero is sufficient.
+Usually, we use the precision of the computer that is of order $10^{-16}$ 
+(on R, you can display the precision of the
+machine by typing `.Machine$double.eps`). 
+
+Notice also that for the function to work
+a *transposed* (via the `t()` function) version of the individual-level
+data (`ind_cat`) was used. This differs from the the
 `ind_agg` object used in the pure R version. To prevent having to transpose
-`ind_cat` every time `ipfp` is called, save the transposed version:
+`ind_cat` every time `ipfp` is called, we save the transposed version:
 
 ```{r}
 ind_catt <- t(ind_cat) # save transposed version of ind_cat
