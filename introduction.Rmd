@@ -233,16 +233,31 @@ The same
 applies to spatial microsimulation, making R an ideal choice due to its
 statistical analysis capabilities.
 
-Finally, R has an active and  growing user community and is easy to extend.
-As a result there are
-thousands of packages that extend R's capabilities by providing new functions.
-Improvements are being added all the time.
+R has an active and  growing user community and is easy to extend.
+R's extreme flexibility allows it to call code written in other programming
+languages. This means that 'glass ceilings' encountered in other environments
+are not an issue in R: there is a wide range of algorithms that can be used
+from within R. This ability has been used to dramatically speed-up R code.
+The new R package **dplyr**, for example, uses C++ code to do the 'heavy lifting'
+of data manipulation tasks and is used in subsequent for data preparation
+tasks essential for spatial microsimulation.
+
+As a result of R's flexibility, open source ethic and strong user community there are
+thousands of packages that extend R's capabilities by providing new functions and
+improvements are being added all the time. This book seeks to provide an
+up-to-date overview of the functions from mature packages for spatial microsimulation
+at the time of publication. It is a fast-moving game, however, so it is worth
+searching the internet for updates to existing packages and new packages for
+spatial microsimulation. New software can save both research and computer time
+so it's worth staying up-to-date with the latest developments.
+
 The **ipfp** and **mipfp** packages, for example,
 can greatly reduce the number of lines of code *and* the computational time
 needed for population synthesis compared with 'hard-coding' the method
 in R from scratch. (For the curious reader, the 'IPF' letters in the package
-names stand for 'Iterative Proportional Fitting', a term we will use frequently
-in subsequent chapters.)
+names stand for 'Iterative Proportional Fitting', one of a number of
+technical terms we will use frequently
+in subsequent chapters. See the Glossary for a definition.)
 
 These time-saving add-ons to R are described in Chapter 5.
 A clear advantage of R is that anyone can write a package.
