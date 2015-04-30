@@ -179,7 +179,7 @@ These are also referred to as *constraint variables*, as they
 *constrain* the individual weights per zone (Ballas et al. 2005).
 
 If there are no shared variables between the aggregate and
-individual-level data generating a pertinent synthetic population is impossible. 
+individual-level data generating an accurate synthetic population is impossible. 
 In this case, your only alternative is to consider only the
 marginal distribution of the variable and make a random selection with 
 the distribution used as a probability. However, this implicitly assumes
