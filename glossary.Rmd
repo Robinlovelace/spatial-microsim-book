@@ -14,13 +14,6 @@ layout: default
     **constraint variable**. We tend to use the term **linking variable**
     in this book because they *link* aggregate and individual-level datasets.
 
-```{r, echo=FALSE}
-# (MD) Pay attention. Linking variable and constraint variable are potentially different
-# (MD) In the aggregated data, you can have variables that are not in the individual level data.
-# (MD) of course, they are then not used as 'constraints', but the additional variables
-# (MD) could be assigned to the final individuals in a stochastic way, usinf conditional probabilities
-```
-
 -   **Combinatorial optimisation** is an approach to spatial
     microsimulation that generates spatial microdata by randomly
     selecting individuals from a survey dataset and measuring the fit
@@ -71,7 +64,7 @@ layout: default
     aggregate-level data. Common examples include age and sex (the linking variables
     used in the SimpleWorld example): questions that are commonly asked in all
     kinds of survey. Linking variables are also referred to as 
-    **constraint variables** because they *constraint* the weights for individuals
+    **constraint variables** because they *constrain* the weights for individuals
     in each zone.
     
 -   **Microdata** is the non-geographical individual-level dataset from which
