@@ -12,9 +12,11 @@ lapply(map_pack, library, character.only = T)
 # Model checking and evaluation {#svalidation}
 
 In food safety, openness about mistakes is
-a vital ingredient for to high standards (Powell et al. 2011):
+a vital ingredient for to high standards.^[This seems to be
+because
 hiding or being ashamed of inevitable mistakes allows bad practice to
-continue unnoticed. The same concept applies to statistical modelling.
+continue unnoticed  (Powell et al. 2011).]
+The same concept applies to modelling.
 Transparency in model evaluation --- the process of deciding whether the
 model is appropriate and identifying *how good* the results are --- 
 is vital in spatial microsimulation for
@@ -89,7 +91,23 @@ new target variables, purely for the purposes of validation.
 
 ## Internal validation
 
-Internal validation is the process of comparing the model's output against data that is internal to the model itself. In practice this means converting the synthetic spatial microdata into a form that is commensurate with the constraint variables and comparing the two geographically aggregated datasets: the observed vs simulated values. Every spatial microsimulation model will have access to the data needed for this comparison. Internal validation should therefore be seen as **the bare minimum** in terms of model evaluation, to be conducted as a standard procedure on all spatial microsimulation runs. When authors refer to this procedure as "result validation" they are being misleading. Internal validation tells us simply that the results are internally consistent; it should always be conducted.
+Internal validation is the process of comparing the model's output against data that is internal to the model itself. In practice this means converting the synthetic spatial microdata into a form that is commensurate with the constraint variables and comparing the two geographically aggregated datasets: the observed vs simulated values. Every spatial microsimulation model will have access to the data needed for this comparison. Internal validation should therefore be seen as **the bare minimum** in terms of model evaluation, to be conducted as a standard procedure on all spatial microsimulation runs. When authors refer to this procedure as "result validation" they are being misleading. Internal validation tells us simply that the results are internally consistent; it should always be conducted. The two main causes of
+poor model fit in terms of internal validation are:
+
+1. Incorrectly specified constraint variables. For example the total number
+of people in each zone according to one variable (e.g. age) may be different
+from that according to another (e.g. employment status). This could be because
+each variable uses a different *population base* (see Glossary).
+
+2. **Empty cells**. These represent 'missing people' in the input microdata who
+have a combination of variables that are needed for good model fit. If in
+the input microdata for SimpleWorld there were no older males, for example,
+the model would clearly perform much worse.
+
+Other sources of poor fit between simulated and observed frequencies for
+categories in the linking variables include simple mistakes in the code
+defining the model, incorrect use of available algorithms for population
+synthesis and, to a lesser extent, integerisation (Lovelace et al. 2015).
 
 Because internal validation is so widely used in the literature
 there are a number of established measures of internal fit that have been used. Yet there is little consistency in the measures that are used. This makes it difficult to assess which models are performing best across different studies, a major problem in spatial microsimulation research. If one study reports only *r* values, whereas another reports only *TAE* (each measure will be described shortly), there is no way to assess which is performing better. There is a need for more consistency is reporting of internal validation. Hopefully this Chapter, which provides descriptions of each of the commonly used and recommended measures of *goodness-of-fit* as well as guidance on which to use --- is a step in the right direction.

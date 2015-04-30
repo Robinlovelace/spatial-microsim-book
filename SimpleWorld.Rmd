@@ -254,7 +254,7 @@ cons <- matrix(c(8,2,7,4,8,4,6,4,3,6,6,8), nrow = 3)
 
 A <- matrix(c(0,1,1,0,0,1,1,0,1,0,1,0,0,1,0,1,1,0,0,1), nrow = 4)
 
-library(ipfp) # type install.packages("ipfp") if this causes an error
+library(ipfp) # install.packages("ipfp") is a prerequisite
 weights <- apply(cons, 1, function(x) ipfp(x, A, x0 = rep(1, 5)))
 weights
 ```

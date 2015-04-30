@@ -8,6 +8,11 @@ layout: default
 -   **Algorithm**: a series of computer commands executed in a
     specific order for a pre-defined purpose.
     Algorithms process input data and produce outputs.
+    
+-   **Constraints** are variables used to estimate the number (or weight)
+    of individuals in each zone. Also referred to by the longer name of
+    **constraint variable**. We tend to use the term **linking variable**
+    in this book becaus they *link* aggregate and individual-level datasets.
 
 -   **Combinatorial optimisation** is an approach to spatial
     microsimulation that generates spatial microdata by randomly
@@ -54,6 +59,13 @@ layout: default
     zones*. IPF is a type of deterministic reweighting, meaning that
     random numbers are not needed to generate the result and that the
     output weights are real (not integer) numbers.
+    
+-   A **linking variable** is a variable that is shared between individual and 
+    aggregate-level data. Common examples include age and sex (the linking variables
+    used in the SimpleWorld example): questions that are commonly asked in all
+    kinds of survey. Linking variables are also referred to as 
+    **constraint variables** because they *constrain* the weights for individuals
+    in each zone.
     
 -   **Microdata** is the non-geographical individual-level dataset from which
     synthetic **spatial microdata** are usually derived. This sample of the
