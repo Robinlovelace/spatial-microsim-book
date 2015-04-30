@@ -10,6 +10,14 @@ library(png)
 library(grid)
 ```
 
+```{r, echo=FALSE}
+# TODO:
+# Implement what-if scenarios
+# Gini indices of income for each area
+# Creating tables and summaries per zone with dplyr
+```
+
+
 # Visualising and analysing spatial microdata {#vis}
 
 There is clearly a huge amount of information contained in
@@ -21,26 +29,34 @@ graphic, for example. Trying to do so for every one of hundreds
 of geographical zones is almost impossible using standard
 methods of visualisation in GIS. Morever, extracting important
 summary statistics is also tricky from spatial microdata
-because there are simply so many combinations of rows, zones and
+because of the multi-level nature of the data and
+the sheer number of rows, zones and
 variables to choose from.
 
 This chapter tackles each of these issues. It is the first
-chapter in the book so far that is departs from the starting
-point of having access to spatial microdata. The methods
-are equally applicable to synthetic spatial microdata as
+chapter in the book that assumes the reader has
+access to spatial microdata. (Previous chapters describe the generation
+of spatial microdata.) The methods
+are therefore equally applicable to synthetic spatial microdata as
 for real microdata. With the open data movement, it is possible
-that governments realise that the benefits of releasing more
-geocoded individual-level data are likely to far outweigh any
-potential privacy issues (especially in an age of smartphones
-which can track our every move). If and when such datasets
-become available, all previous work to generate synthetic spatial
-microdata will not be in vain: it will serve as a useful
+that more and more individual-level,
+geocoded data is released. Afterall, there is a strong argument
+to suggest that the benefits of releasing such data
+far outweigh any
+potential privacy issues (especially in the age of smartphones
+which multinational companies can use to track our every move).
+
+When real spatial microdatasets
+become available, previous work on synthetic spatial microdata
+should be easy to adapt. Thus, even if they are not 100%
+reliable, synthetic spatial microdatasets can serve as a useful
 test case against which multi-level models can be tested. In
 addition, by demonstrating the benefits of synthetic spatial
 microdata for evidence-based policy, spatial microsimulation
-research is could put pressure on governments to release more
-individual-level information in a way that would not
-comprimise security, ethics or morality.
+research encourages governments to release more
+individual-level information. Clearly, real spatial microdata should only
+ever be released in a way that would not 
+comprimise security, ethics or citizen trust.
 
 This chapter starts simply, with a basic description of how to
 visualise geographic data in R using the **ggmap** package. 
