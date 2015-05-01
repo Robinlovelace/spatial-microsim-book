@@ -12,7 +12,7 @@ layout: default
 -   **Constraints** are variables used to estimate the number (or weight)
     of individuals in each zone. Also referred to by the longer name of
     **constraint variable**. We tend to use the term **linking variable**
-    in this book becaus they *link* aggregate and individual-level datasets.
+    in this book because they *link* aggregate and individual-level datasets.
 
 -   **Combinatorial optimisation** is an approach to spatial
     microsimulation that generates spatial microdata by randomly
