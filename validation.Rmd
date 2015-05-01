@@ -7,6 +7,7 @@ layout: default
 load("cache-CakeMap.RData")
 map_pack <- c("ggmap", "rgdal", "maptools", "rgeos", "dplyr", "tidyr", "gridExtra")
 lapply(map_pack, library, character.only = T)
+# Todo: add figure comparing various goodness-of-fit measures from JASSS paper
 ```
 
 # Model checking and evaluation {#svalidation}
@@ -183,7 +184,10 @@ $$
 MAE = TAE / n
 $$
 
-Before seeing how these metrics can easily be implemented in code, we will define the other metrics defined in the above bullet points. Of the three 'absolute error' measures, I would recommend reporting SAE, as it scales with the population of the study area.
+Before seeing how these metrics can easily be implemented in code, we will
+define the other metrics defined in the above bullet points. Of the three
+'absolute error' measures, we recommend reporting SAE, as it scales with the
+population of the study area.
 
 ### Root mean squared error
 
@@ -212,7 +216,7 @@ $$
 # No I'm not sure! (RL)
 
 # Define the hypothesis
-# I do not agree with the pvalue definition
+# Wedo not agree with the pvalue definition
 ```
 
 Chi-squared is a commonly used test of the fit between absolute counts of categorical variables. It has the advantage of providing a *p value*, which represents the chances of obtaining a fit between observed and simulated values through chance alone. It is primarily used to test for relationships between categorical variables (e.g. socio-economic class and smoking) but has been used frequently in the spatial microsimulation literature (Voas and Williamson 2001; Wu et al. 2008).
@@ -249,13 +253,13 @@ They simply show that the individual-level dataset has
 been reweighted to fit with a handful of constraint variables: i.e. that the
 process has work under on its own terms.
 
-My view is that all the measures
+Our view is that all the measures
 outlined above are useful and rough analogous (a perfect fit
 will mean that measures of error evaluate to zero
 and that $r = 1$). However, some are better than others.
-Based on the discussion in Chai and Draxler (2014), I would recommend using *r* as a 'quick and dirty' test of fit and reporting *RMSE*, as it is a standard test used across the sciences. *RMSE* is robust to the number of observations and, using *NRMSE*, to the average size of zones also. Chi-squared also a good option as it is very mature, provides *p values* and is well known. However, chi-squared is a more complex measure of fit and does not perform well when the table contains cells with less than 5 observations, as will be common in spatial microsimulation models of small areas and many constraint categories.
+Based on the discussion in Chai and Draxler (2014), we would recommend using *r* as a 'quick and dirty' test of fit and reporting *RMSE*, as it is a standard test used across the sciences. *RMSE* is robust to the number of observations and, using *NRMSE*, to the average size of zones also. Chi-squared also a good option as it is very mature, provides *p values* and is well known. However, chi-squared is a more complex measure of fit and does not perform well when the table contains cells with less than 5 observations, as will be common in spatial microsimulation models of small areas and many constraint categories.
 
-I recommend reporting more than one metric, while focussing
+We recommend reporting more than one metric, while focussing
 on measures that you and your colleagues
 understand well. Comparing the results
 with one or more alternative measures will add robustness.
@@ -612,7 +616,7 @@ In practice the term 'validation' is misleading as it can
 imply that the model is in some way 'valid'. 
 A model is only as good as its underlying assumptions,
 which may involve some degree of subjectivity.
-I therefore advocate talking about this phase as 'evaluation'
+We therefore advocate talking about this phase as 'evaluation'
 or simply 'model checking' if all we are doing is internal
 validation.
 
