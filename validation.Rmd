@@ -62,7 +62,8 @@ to be creative to find data for external validation.)
 It is important to note that these two kinds of validation is thay they
 test the model at different levels. *Internal validation* tests
 the model quality at the aggregate level, assuming the input data is
-pertinent, correct and representative. If this validation fails, you may
+relevant to the research question,
+accurate and representative. If this validation fails, you may
 have a problem with the input microdata (e.g. an excess of 'empty cells'),
 implementation of the population synthesis algorithm, or 
 contradictory constraints. Internal validation highlights problems of
@@ -620,10 +621,13 @@ We therefore advocate talking about this phase as 'evaluation'
 or simply 'model checking' if all we are doing is internal
 validation.
 
-In the example of CakeMap, no databases are available to check if the consumption of cakes
-in our simulation is pertinent with other databases. In the case of microsimulation, 
-it is always hard to proceed to an external validation, because in practice, when we have 
-databases, we use them for the simulation. Thus, comparing the result with this data
-is included in the process of internal validation.
+In the example of CakeMap, no datasets are available to check if the
+simulated rate of cake is comparable with that estimated from
+other sources. In the case of microsimulation, 
+external validation is often difficult because
+available datasets are usually used for the simulation.
+This helps explain why internal validation is far more common in spatial
+microsimulation studies than external validation, although the latter is
+generally more important.
 
 
