@@ -111,9 +111,9 @@ without making the population synthesis process too complex
 
 To exemplify these principles, let us consider the constraint variables available
 in the CakeMap datasets. Clearly only variables available both in the individual-level and 
-aggregate-level datasets can be chosen from. Five variables assigned to each
-of the 916 individuals are available from the individual-level data,
-about which data is also available from the census:
+aggregate-level datasets can be chosen from. Suppose our aim is to analyze the consumption 
+of cakes depending on sociodemographic variables. Five interesting variables assigned to each
+of the 916 individuals are available from the individual-level data :
 
 - 'Car': The number of working cars in the person's household.
 - 'Sex' and 'ageband4': Gender and age group, in two separate variables. 
@@ -228,7 +228,19 @@ take some time exploring the input. Only when these
 datasets make sense (a pen and paper can help here, as well as R!) is it time to
 generate the spatial microdata.
 
-## Performing IPF on CakeMap data {#CakeIPF}
+As explained in the previous chapters, there are different methods to 
+perform a spatial microsimulation. We will here use a reweighting method, 
+since we have spatial aggregated data and non spatial individual data, both
+containing some common variables. In this category, the more often used and intuitiv
+method is the IPF. 
+
+We mentionned in the SimpleWorld example that there are two different points of view
+of IPF. First, weights are assigned to each individual for each zone (`ipfp` package).
+Second, weights are assigned to each possible category of individuals for each zone 
+(`mipfp` package). The next sections developp the whole procedure with each package.
+
+## Using the `ipfp` package
+### Performing IPF on CakeMap data {#CakeIPF}
 
 The `ipfp` reweighting strategy is concise, generalisable and computationally
 efficient. On a modern laptop, the `ipfp` method was found to be *almost 40
@@ -290,7 +302,7 @@ of 26,445.57, so 0.54%.
 This is for the basic comparison, a more detailed analysis of the quality 
 of the results is present in the next chapter.
 
-## Integerisation {#CakeINT}
+### Integerisation {#CakeINT}
 
 As before, weights of the IPF procedure are fractional, so must be *integerised*
 to create whole individuals. The code presented in chapter 4 requires little
@@ -350,8 +362,9 @@ this result with the size of the original survey dataset 'ind'. Keeping an eye
 on such parameters will ensure that the model does not generate datasets too
 large to handle.
 
-Next we move on to a vital
+Next chapter, we move on to a vital
 consideration in spatial microsimulation models such as CakeMap: model checking and validation.
+First, we developp the spatial microsimulation using `mipfp`.
 
 ```{r, echo=FALSE}
 save.image("cache-CakeMap.RData")
@@ -359,6 +372,175 @@ save.image("cache-CakeMap.RData")
 
 ```{r, echo=FALSE}
 #(MD) Make it with CO to compare the results?
+# (MD) explain better the integerisation and the reason why you calculate the things here above
 ```
 
+## Using the `mipfp` package
+### Performing IPF on CakeMap data {#CakeIPF}
+
+The whole process first needs to load the data. This is done in a similar way 
+that for the previous section. However, an additionnal step is to make the categories
+of `cons` and `ind` correspond. For example, for the car ownership, `ind` contains "1" 
+and "2", but `cons` contains "Car" and "NoCar". To facilitate the procedure, we uniformize 
+these names to the ones that give the information without having to find the keys ("1"="Car";
+"2"="NoCar"). We keep "Car" and "NoCar", "f" and "m" for the sex, etc.
+This code is included in the 'CakeMapMipfpData.R' file.
+
+```{r}
+source("R/CakeMapMipfpData.R")
+```
+
+The data are loaded and if we print the first lines of `ind`, the category 
+are now the same as the one in `cons`. Note that this step was not 
+necessary for the `ipfp` package, because the user has to encode
+the constraints in the right order and only the order has to be respected.
+However, having the same identification of the same category is 
+always more clear for validation and interpretation. Moreover, 
+the structure of some constraints will have to change and 
+this process will be easier if the names are similar.
+
+```{r}
+head( ind )
+```
+
+Defining the initial weight matrix is the next step. For each zone, we simply 
+take the cross table of the individual data. It is important to notice
+the order of the variables inside this table. We have in our case
+(NCakes, Car, Sex, NSSEC8, ageband4). This information will be necessary 
+for the definition of the target and description for `mipfp`.
+
+```{r}
+# Initial weight matrix for each zone
+weight_init_1zone <- table( ind )
+
+# Check order of the variables
+dimnames( weight_init_1zone ) 
+```
+
+To use the whole power of the `mipfp` package, we
+chose to add the spatial dimension into the weight matrix
+instead of performing a `for` loop over the zones.
+For this purpose, we repeat the table for each area.
+We define the names of the new dimension and we 
+create an array with the good cells and names.
+
+
+```{r}
+# Adding the spatial dimension
+# Repeat the initial matrix n_zone times
+init_cells <- rep(weight_init_1zone, each = nrow(cons))
+
+# Define the names
+names <- c(list(rownames(cons)), as.list(dimnames(weight_init_1zone)))
+
+# Structure the data
+weight_init <- array(init_cells, dim = 
+                c(nrow(cons), dim(weight_init_1zone)),
+                dimnames = names)
+```
+
+```{r, echo=FALSE}
+library(mipfp)
+```
+
+A good point with `mipfp` is that the algorithm
+first check the consistency of the constraint. If 
+the total number of individuals in a zone is not exactly
+the same from one constraint to another, `mipfp` will
+return the warning : 'Target not consistents - shifting to probabilities!'
+In this case, the cells of the resulting table are probabilities, 
+such as the sum of all cells is 1. This means that the algorithm does not
+know how many people per zone you want. Thus, you just have to 
+determine the total population and multiply the probabilities by this number.
+
+An alternative to this is to verify by your own 
+the totals per zone and re-scale the constraints that are 
+different from your purpose population. In our case, 
+for each constraint, we calculate the number of persons
+in the zone. For each zone, we compare the totals of 
+the different constraints. The result is "TRUE" if the totals
+are the same and "FALSE" otherwise.
+It gives `nrow(cons)` boolean values (TRUE or FALSE), of 
+which we print the table.
+
+```{r}
+# Check the constraint's totals per zone
+table(rowSums(con2) == rowSums(con1))
+table(rowSums(con3) == rowSums(con1))
+table(rowSums(con2) == rowSums(con3))
+```
+
+Constraints 1 and 2 have exactly the same marginals per zone.
+Constraint 3 has 52 zones with different totals. Since NSSEC (`con3`) 
+contains in total less individuals and the answer to this question 
+could be "NA", we consider the totals of the 
+two first constraints as the good one.
+
+To perform an effective (and not probability) `mipfp`,
+we need to re-scale `con3`, to keep its proportions, but
+with the good totals per zone. 
+
+```{r}
+# Re-scale the constraint 3
+con3_prop <- con3 * rowSums(con2) / rowSums(con3)
+
+# Check the new totals
+table(rowSums(con2) == rowSums(con3_prop))
+```
+
+The second and third constraints are simple marginals per zone, whereas
+the first is equivalent to a cross tabulated constraint per zone
+(sex and age). The structure of the first constraint has to be different 
+to execute `mipfp`. 
+
+```{r}
+# Print current structure of con1
+head(con1)
+```
+
+Thus, the structure needed is a three dimensional array, which
+dimensions are (zone, sex, age). This conversion consists in 
+taking the cells of `con1` in the right order and including them
+inside a three dimensional array. This code is included into the 
+file 'CakeMapMipfpCon1Convert.R' and the resulting array is called
+`con1_convert`.
+
+```{r}
+source("R/CakeMapMipfpCon1Convert.R")
+```
+
+All constraints being well reexpressed and the margins being
+re-scaled, the definition of the target and its description
+can be done. The target is the set of constraints and the description 
+is the figures of the corresponding dimensions into the weight matrix.
+The order of the weight's variables is here important. Remember this order is
+(Zone, NCakes, Car, Sex, NSSEC8, ageband4). For this reason, the constraint 1, 
+containing (zone, Sex, ageband4) has the description `c(1,4,6)`.
+
+
+```{r}
+# Definition of the target and descript
+# For the execution of the mipfp
+target <- list(con1_convert,
+               as.matrix(con2),
+               as.matrix(con3_prop))
+
+descript <- list(c(1,4,6), c(1,3), c(1,5))
+```
+
+The remaining step consists in executing the `Ipfp` function 
+on these data.
+
+```{r}
+weight_mipfp <- Ipfp( weight_init, descript, target, 
+                      print = FALSE,tol=1e-5)
+```
+
+Remark that we don't print the `tol` in each iteration, because
+200 iterations are necessary to reach convergence.
+
+
+## Comparison of the two methods
+
+mipfp allows to fast view the non represented categories into the individual data. Mipfp automatically check the consistency of the constraints and the names of the categories.
 
