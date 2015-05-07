@@ -25,6 +25,13 @@ Then navigate into the downloaded folder and open the `spatial-microsim-book.Rpr
 ```
 install.packages("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp", "rgeos", "mipfp", "rgdal", "gridExtra") 
 ```
+
+The book build also requires an up-to-date version of pandoc - install with:
+
+```
+sudo apt-get install pandoc
+```
+
 **Building the website**
 
 The [gh-pages](https://github.com/Robinlovelace/spatial-microsim-book/tree/gh-pages) branch of this repo contains the book's [website](http://robinlovelace.net/spatial-microsim-book/).
