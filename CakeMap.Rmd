@@ -286,20 +286,38 @@ correlation between the result and the constraint. We can verify it by plotting:
 ```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis)."}
 plot(ind_agg, cons, pch=20, xlab="Result of the simulation",
   ylab="Constraint",
-  main="Correspondance between and the simulation and the constraints")
+  main="Correspondance between the simulation and the constraints")
 # I don't think it's necessary to show the code that creates this plot - but happy
 # to remove 'echo=FALSE' if need's be (RL)
 ```
 
 With the best fit, we would have all constraints equal to the simulation, so a 
 perfect line (this is why we consider a `linear` correlation). Only few points
-are outside the area of the line. Note that we have 4,871,391 inhabitants in the
-simulation and only 6 more in the constraints. That represents a relative
-difference of less than $10^{-6}$. If we count category per category the
-difference between the simulation and the constraint, we obtain a difference 
-of 26,445.57, so 0.54%.
+are outside the area of the line. Note that we have 1,623,797 inhabitants^[
+To obtain it, code `sum(ind_agg)/3`, because you have 3 constraints.] in the
+simulation and in the constraints, `con1`and `con2` have 1,623,800, while `con3`
+contains 1,623,797. As seen before, with IPF, the result depends on
+the order of the constaints. Thus, it is logical to put as last constraint
+one really reliable, also in terms of total number of people. 
+An alternative is to rescale all constraints to be consistence. This will be done 
+in the next section, with `mipfp` and in the comparison for `ipfp`.
 
-This is for the basic comparison, a more detailed analysis of the quality 
+For the comparison category per category, we can take the absolute value of 
+the differences of the two table. This gives a table of differences. The worst 
+category and zone will be the maximum of this matrix.
+
+```{r}
+# Maximum error
+max(abs(ind_agg-cons))
+
+# Index of the maximum error
+which(abs(ind_agg-cons) == max(abs(ind_agg-cons)), arr.ind = TRUE)
+```
+
+The maximum error is now know and corresponds to the zone 84 and 13 
+columns of the constraints, which is `Car`. 
+
+This is for the basic validation, a more detailed analysis of the quality 
 of the results is present in the next chapter.
 
 ### Integerisation {#CakeINT}
@@ -533,14 +551,164 @@ on these data.
 
 ```{r}
 weight_mipfp <- Ipfp( weight_init, descript, target, 
-                      print = FALSE,tol=1e-5)
+                      print = FALSE,tol=1e-12)
 ```
 
 Remark that we don't print the `tol` in each iteration, because
-200 iterations are necessary to reach convergence.
+more than 400 iterations are necessary to reach convergence.
 
+```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis)."}
+layout(matrix(c(1:3,3), 2, 2))
+plot(con1_convert, apply(weight_mipfp$x.hat,c(1,4,6),sum), pch=20, xlab="Result of the simulation for constraint 1",
+  ylab="Constraint 1",
+  main="Correspondance between the simulation and the constraint 1")
+plot(as.matrix(con2), apply(weight_mipfp$x.hat,c(1,3),sum), pch=20, xlab="Result of the simulation for constraint 2",
+  ylab="Constraint 2",
+  main="Correspondance between the simulation and the constraint 2")
+plot(as.matrix(con3_prop), apply(weight_mipfp$x.hat,c(1,5),sum), pch=20, xlab="Result of the simulation for constraint 3",
+  ylab="Constraint 3",
+  main="Correspondance between the simulation and the constraint 3")
+# I don't think it's necessary to show the code that creates this plot - but happy
+# to remove 'echo=FALSE' if need's be (RL)
+```
+
+The third constraint is perfectly fitted. The first and second 
+constraints are globally well fitted, but some points, representing
+a category and a zone, are not so good. The analysis of 
+the quality and the comments on this generation are in the next chapter.
+Here, we focus now on the comparison between `ipfp` and 
+`mipfp` for CakeMap.
 
 ## Comparison of the two methods
 
-mipfp allows to fast view the non represented categories into the individual data. Mipfp automatically check the consistency of the constraints and the names of the categories.
+We mentionned in the `ipfp` part that the three constraints
+do not contain the same number of individuals. To compare 
+both methods, we will apply a second time `ipfp`, but 
+with the rescaled constraints. Note that in case of 
+non consistency constraints, `mipfp` warns the user, 
+but `ipfp` not. Thus, with `ipfp`, it is very 
+recommanded that the user check its constaints'totals.
+Remark that instead of number of iterations, we 
+chose to fix the tolerance threshold to $10^{-12}$,
+such as for the `mipfp`.
 
+```{r}
+# Reperforming ipfp with the rescaled constraints
+cons_prop <- cbind(con1, con2, con3_prop)
+weights <- apply(cons_prop, 1, function(x) ipfp(x, ind_catt, x0, tol = 1e-12))
+
+# Convert back to aggregates
+ind_agg <- t(apply(weights, 2, function(x) colSums(x * ind_cat)))
+```
+
+This section is divided in two parts. One that analyses 
+the distance between the results generated by the two
+different packages and the other that focus on the
+time differences.
+
+
+### Comparison of results
+
+Both results being based on the rescaled data, we can compare them.
+The structure of both resulting tables are different. 
+To compare them easily, we transform the `ipfp` final
+matrix into an array with the same structure 
+as the one of the result of `mipfp`.
+
+```{r}
+source("R/ConvertIpfpWeights.R")
+```
+
+The total number of people per zone is exactly the same in both 
+weights matrices (maximum of differences being of order $10^{-12}$).
+The size of the population are thus in both cases
+the one desired.
+
+```{r}
+# Comparison of the totals per zone
+max( apply(weight_mipfp$x.hat, 1, sum) 
+       - apply(weight_ipfp, 1, sum) )
+```
+
+To visualize all the weights, we chose to plot 
+the different counts per constraint. We observe
+that the constraint 3 is very well fitted with 
+both methods. For the two other constraints, 
+some categories in some zones are more apart.
+However, both methods seems to return very similar 
+weights, since the crosses are included inside the 
+circles.
+
+```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis)."}
+layout(matrix(c(1:3,3), 2, 2))
+plot(con1_convert, apply(weight_mipfp$x.hat,c(1,4,6),sum), pch=4, ylab="Simulated",
+  xlab="Constraint 1", main="Constraint 1")
+par(new=TRUE)
+plot(as.matrix(cons_prop[,1:12]),as.matrix(ind_agg[,1:12]), pch=1, ann=FALSE,axes=FALSE,col='blue')
+legend("topleft",c("ipfp","mipfp"),pch = c(1,4),col=c("blue","black"))
+plot(as.matrix(con2), apply(weight_mipfp$x.hat,c(1,3),sum), pch=4, ylab="Simulated",
+  xlab="Constraint 2", main="Constraint 2")
+par(new=TRUE)
+plot( as.matrix(cons_prop[,13:14]),as.matrix(ind_agg[,13:14]), pch=1, ann=FALSE,axes=FALSE,col='blue')
+legend("topleft",c("ipfp","mipfp"),pch = c(1,4),col=c("blue","black"))
+plot(as.matrix(con3_prop), apply(weight_mipfp$x.hat,c(1,5),sum), pch=4,ylab="Simulated",
+  xlab="Constraint 3", main="Constraint 3")
+par(new=TRUE)
+plot(as.matrix(cons_prop[,15:24]),as.matrix(ind_agg[,15:24]), pch=1, axes=FALSE,ann=FALSE,col='blue')
+legend("topleft",c("ipfp","mipfp"),pch = c(1,4),col=c("blue","black"))
+# I don't think it's necessary to show the code that creates this plot - but happy
+# to remove 'echo=FALSE' if need's be (RL)
+```
+
+
+By analysing the absolute differences between the two 
+resulting weights, we discover that the biggest
+absolute distance is 3.45608e-11.
+
+We can consider that both methods give very similar results.
+However, there are both distant from the constraints
+for few zones and categories. A longer analyzis 
+of this is done in the next chapter.
+
+### Comparison of times
+
+The results are the same. Thus, it is logical to prefer
+the version that we be executed the faster. For this reason, 
+the time is an important characteristics to compare
+the packages. 
+
+First, when performing the two generation with the initial example
+of CakeMap, `mipfp` was slower than `ipfp`. However, 
+when thinking of the conception of the algorithms, `ipfp` will take
+more time when the length of the survey choosed as microdata increases.
+This phenomena should not appear in the `mipfp` package. To prove this
+intuition, we decide to take CakeMap with variable individuals 
+in the micro data. To have an idea of what happens beyond the 916
+persons in the data, we copy the database a second time.
+The code used is in the "CakeMapTimeAnalysis.R".
+
+
+```{r, fig.cap="Time necessary to perform the generation of the weight matrix depending on the number of individuals inside the microdata.", echo=FALSE}
+img <- readPNG("figures/TimeCakeMap.png")
+grid.raster(img)
+```
+
+It confirms that for problems with few individuals in the microdata, 
+`ipfp` is better. However, having few people means the increase
+of the probability to have non represented categories.
+Of course, we can optimise `ipfp` to take only one 
+time the individuals that appear several times and add a count 
+in the `ind_cat` instead of a "1". However, this process is 
+possible only if the added persons are with the same characteristics
+as a previous one.
+
+In conclusion, `mipfp` is more flexible and could be use
+without microdata, but `ipfp` is faster for problems with
+less individuals in the microdata.
+
+In the best case, to perform to a microspatial simulation, 
+you have a big microdata and you use `mipfp`. Note that
+when having very few microdata, it can be better to 
+consider a method without microdata. Like this, you avoid to bias
+the result with the category included in the microdata.
+The representativity of the microdata is important. 

@@ -59,13 +59,28 @@ table(rowSums(con2)==rowSums(con3_prop))
 # This is now ok
 
 # Perform the Ipfp function
-target <- list(rowSums(con2),as.matrix(con2),con1_convert,as.matrix(con3_prop))
-descript <- list(c(1),c(1,3),c(1,4,6),c(1,5))
+target <- list(con1_convert,as.matrix(con2),as.matrix(con3_prop))
+descript <- list(c(1,4,6), c(1,3),c(1,5))
 
 
 
 weight_mipfp <- Ipfp( weight_init, descript, target, 
-                      print = TRUE,tol=1e-5)
+                      print = TRUE,tol=1e-12)
+##########################################
+# Quality of this IPF
+##########################################
+# con1
+max(abs(con1_convert-apply(weight_mipfp$x.hat,c(1,4,6),sum)))
+
+# con2
+max(abs(con2-apply(weight_mipfp$x.hat,c(1,3),sum)))
+
+# con3
+max(abs(con3_prop-apply(weight_mipfp$x.hat,c(1,5),sum)))
+
+# con3 is well fitted for all zones, but con1 and 
+# con2 have some municipalities with big errors
+
 
 ################################################
 # Convert ipfp result for comparison 
@@ -80,7 +95,7 @@ for (indiv in 1:nrow(ind)){
 
 # compare result;
 
-sum(abs(weight_ipfp-weight_mipfp$x.hat))
+which.max(abs(weight_ipfp-weight_mipfp$x.hat),ind)
 sum(weight_ipfp)
 sum(weight_mipfp$x.hat)
 
