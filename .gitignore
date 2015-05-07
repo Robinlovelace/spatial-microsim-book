@@ -1,4 +1,3 @@
-figures/msim-schema.png
 spatial-microsim-book*
 backup-code/
 figures/CakeMap.png
@@ -24,10 +23,10 @@ book/
 _site/
 temp.*
 book.Rmd
-cache*
 *.html
 drafts/
 .dropbox
 (White Space Conflict)
 *.out
 comments.ods
+cache-CakeMap.RData
