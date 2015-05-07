@@ -35,4 +35,7 @@ for (indiv in seq(minInd,maxInd,pas)){
   i=i+1
 }
 
-
+plot(times2[1,],times2[2,],pch=c(1),ylim=c(min(times2[2,])-1,max(times2[2,])+1), main= "Time to generate a weight matrix \n with tol=1e-12 ",xlab="Number of invididuals in the microdata",ylab="Time")
+par(new=TRUE)
+plot(times2[1,],times2[3,],pch=c(3),ylim=c(min(times2[2,])-1,max(times2[2,])+1),axes=F,ann=F)
+legend("topleft",c("ipfp","mipfp"),pch = c(1,3))
