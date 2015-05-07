@@ -701,3 +701,14 @@ time the individuals that appear several times and add a count
 in the `ind_cat` instead of a "1". However, this process is 
 possible only if the added persons are with the same characteristics
 as a previous one.
+
+In conclusion, `mipfp` is more flexible and could be use
+without microdata, but `ipfp` is faster for problems with
+less individuals in the microdata.
+
+In the best case, to perform to a microspatial simulation, 
+you have a big microdata and you use `mipfp`. Note that
+when having very few microdata, it can be better to 
+consider a method without microdata. Like this, you avoid to bias
+the result with the category included in the microdata.
+The representativity of the microdata is important. 
