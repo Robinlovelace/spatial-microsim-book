@@ -394,54 +394,70 @@ save.image("cache-CakeMap.RData")
 ```
 
 ## Using the `mipfp` package
+
 ### Performing IPF on CakeMap data {#CakeIPF}
 
-The whole process first needs to load the data. This is done in a similar way 
-that for the previous section. However, an additionnal step is to make the categories
-of `cons` and `ind` correspond. For example, for the car ownership, `ind` contains "1" 
-and "2", but `cons` contains "Car" and "NoCar". To facilitate the procedure, we uniformize 
-these names to the ones that give the information without having to find the keys ("1"="Car";
-"2"="NoCar"). We keep "Car" and "NoCar", "f" and "m" for the sex, etc.
-This code is included in the 'CakeMapMipfpData.R' file.
+As in the previous section, the first stage is to load the data.
+An additional step required by the `Ipfp` function ensuring the categories
+of `cons` and `ind` correspond. In the variable associated with car ownership,
+`ind` contains "1" and "2", but `cons` contains "Car" and "NoCar".
+
+To undertake this operation, we convert the category labels
+in the individual-level variable `ind` so that they conform to the
+variable names of the count data contained in constraint data `cons`. 
+Continuing with the car ownership example,
+every "1" in `ind$Car` should be converted to "Car" and every "2" to "NoCar".
+Likewise, the correct labels of "f" and "m" must be created for the
+Sex variable and likewise for the other variables in `ind`.
+The code that performs this operation is included in the R file
+`CakeMapMipfpData.R` file. Take a look at this file (e.g. by typing
+`file.edit("R/CakeMapMipfpData.R")` from RStudio) and note the use of the
+`switch` function in combination with the recursive function
+`sapply` to *switch* the values of the individual-level variables.
+The entire script is run below using the `source` command.
 
 ```{r}
 source("R/CakeMapMipfpData.R")
 ```
 
-The data are loaded and if we print the first lines of `ind`, the category 
-are now the same as the one in `cons`. Note that this step was not 
-necessary for the `ipfp` package, because the user has to encode
-the constraints in the right order and only the order has to be respected.
-However, having the same identification of the same category is 
-always more clear for validation and interpretation. Moreover, 
+The data are now loaded correctly. This can be verified by
+printing the first lines of of the individual-level data and comparing
+this with `colnames(con1)`. Note that this step was not 
+necessary for the **ipfp** package. To use **mipfp* the user must encode
+the constraints in the right order and only the order.
+In practice this is a good idea. 
+Ensuring same variable names match category labels will
+help subsequent steps of for validation and interpretation. Moreover, 
 the structure of some constraints will have to change and 
-this process will be easier if the names are similar.
+this process will be easier if the names are the same.
+To re-affirm our starting point, a sample of the
+new individual-level data is displayed below.
 
 ```{r}
-head( ind )
+head(ind)
 ```
 
 Defining the initial weight matrix is the next step. For each zone, we simply 
-take the cross table of the individual data. It is important to notice
+take the cross table (or contingency table)
+of the individual data. It is important to check
 the order of the variables inside this table. We have in our case
 (NCakes, Car, Sex, NSSEC8, ageband4). This information will be necessary 
 for the definition of the target and description for `mipfp`.
 
 ```{r}
 # Initial weight matrix for each zone
-weight_init_1zone <- table( ind )
+weight_init_1zone <- table(ind)
 
 # Check order of the variables
-dimnames( weight_init_1zone ) 
+dimnames(weight_init_1zone) 
 ```
 
-To use the whole power of the `mipfp` package, we
-chose to add the spatial dimension into the weight matrix
+To use the full power of the `mipfp` package, we
+choose to add the spatial dimension into the weight matrix
 instead of performing a `for` loop over the zones.
 For this purpose, we repeat the table for each area.
-We define the names of the new dimension and we 
-create an array with the good cells and names.
-
+We define the names of the new dimension and 
+create an array with the correct cells and names.
 
 ```{r}
 # Adding the spatial dimension
@@ -461,23 +477,26 @@ weight_init <- array(init_cells, dim =
 library(mipfp)
 ```
 
-A good point with `mipfp` is that the algorithm
-first check the consistency of the constraint. If 
+An advantage of **mipfp** over **ipfp** is that the algorithm
+first checks the consistency of the constraints, before reweighting. If 
 the total number of individuals in a zone is not exactly
 the same from one constraint to another, `mipfp` will
-return the warning : 'Target not consistents - shifting to probabilities!'
-In this case, the cells of the resulting table are probabilities, 
+return the following warning:
+'Target not consistents - shifting to probabilities!'
+In this case, the cells of the resulting table become probabilities, 
 such as the sum of all cells is 1. This means that the algorithm does not
-know how many people per zone you want. Thus, you just have to 
-determine the total population and multiply the probabilities by this number.
+know how many people per zone you want.
+This is a very useful feature of **mipfp**: creating weights corresponding to
+the correct total population is as simple as
+multiply the probabilities by this number.
 
 An alternative to this is to verify by your own 
 the totals per zone and re-scale the constraints that are 
 different from your purpose population. In our case, 
 for each constraint, we calculate the number of persons
 in the zone. For each zone, we compare the totals of 
-the different constraints. The result is "TRUE" if the totals
-are the same and "FALSE" otherwise.
+the different constraints. The result is `TRUE` if the totals
+are the same and `FALSE` otherwise.
 It gives `nrow(cons)` boolean values (TRUE or FALSE), of 
 which we print the table.
 
@@ -490,13 +509,12 @@ table(rowSums(con2) == rowSums(con3))
 
 Constraints 1 and 2 have exactly the same marginals per zone.
 Constraint 3 has 52 zones with different totals. Since NSSEC (`con3`) 
-contains in total less individuals and the answer to this question 
-could be "NA", we consider the totals of the 
-two first constraints as the good one.
-
-To perform an effective (and not probability) `mipfp`,
-we need to re-scale `con3`, to keep its proportions, but
-with the good totals per zone. 
+is anomolous in this respect 
+we consider the totals of the 
+two first constraints to be valid.
+To perform (non-probabilistic) reweighting with **mipfp**,
+we must first re-scale `con3` to keep its proportions but
+with updated totals per zone. 
 
 ```{r}
 # Re-scale the constraint 3
