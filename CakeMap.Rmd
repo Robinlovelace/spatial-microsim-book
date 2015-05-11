@@ -524,30 +524,44 @@ con3_prop <- con3 * rowSums(con2) / rowSums(con3)
 table(rowSums(con2) == rowSums(con3_prop))
 ```
 
-The second and third constraints are simple marginals per zone, whereas
-the first is equivalent to a cross tabulated constraint per zone
-(sex and age). The structure of the first constraint has to be different 
+The rescaling operation above solved one problem, but there is another,
+more difficult-to-solve issue with the input data.
+The second and third constraints are simple marginals per zone with
+a single, clearly-defined variable each. The first constraint (`con1`),
+by contrast, is cross-tabulated, a combination of two variables
+(sex and age, or age/sex as cross-tabulations are often referred to as).
+We must change structure of the first constraint
 to execute `mipfp`. 
 
 ```{r}
-# Print current structure of con1
-head(con1)
+# View the content of the first constraint
+con1[1:3, 1:8]
 ```
 
-Thus, the structure needed is a three dimensional array, which
-dimensions are (zone, sex, age). This conversion consists in 
-taking the cells of `con1` in the right order and including them
-inside a three dimensional array. This code is included into the 
-file 'CakeMapMipfpCon1Convert.R' and the resulting array is called
+The result of the above command show that `con1` is, like the other constraints,
+a two dimensional table. 
+Because it actually contains 2 constraints, the information contained within
+needs to be represented as a three dimensional array (a cube),
+the dimensions of which are zone, sex and age.
+This conversion is done by taking
+taking the cells of `con1` and adding them
+to a three dimensional array in a known order. The code to
+do this is included into the 
+file `R/CakeMapMipfpCon1Convert.R` and the resulting array is called
 `con1_convert`.
+
+```{r, echo=FALSE}
+# TODO: ascertain if this is the best way to do this (RL)
+```
 
 ```{r}
 source("R/CakeMapMipfpCon1Convert.R")
 ```
 
-All constraints being well reexpressed and the margins being
-re-scaled, the definition of the target and its description
-can be done. The target is the set of constraints and the description 
+All constraints being converted and all the margins being
+re-scaled, the target and its 'description'
+are ready to be used in `Ipfp()`.
+The target is the set of constraints and the description 
 is the figures of the corresponding dimensions into the weight matrix.
 The order of the weight's variables is here important. Remember this order is
 (Zone, NCakes, Car, Sex, NSSEC8, ageband4). For this reason, the constraint 1, 
@@ -564,16 +578,17 @@ target <- list(con1_convert,
 descript <- list(c(1,4,6), c(1,3), c(1,5))
 ```
 
-The remaining step consists in executing the `Ipfp` function 
+The remaining step involves in executing the `Ipfp` function 
 on these data.
 
 ```{r}
-weight_mipfp <- Ipfp( weight_init, descript, target, 
-                      print = FALSE,tol=1e-12)
+weight_mipfp <- Ipfp(weight_init, descript, target)
 ```
 
-Remark that we don't print the `tol` in each iteration, because
-more than 400 iterations are necessary to reach convergence.
+Note that `Ipfp` does not
+print the `tol` result by default. This was a wise decision
+by the developer of **mipfp** in this case: 
+more than 100 iterations were needed for the weights to converge.
 
 ```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis)."}
 layout(matrix(c(1:3,3), 2, 2))
@@ -592,28 +607,30 @@ plot(as.matrix(con3_prop), apply(weight_mipfp$x.hat,c(1,5),sum), pch=20, xlab="R
 
 The third constraint is perfectly fitted. The first and second 
 constraints are globally well fitted, but some points, representing
-a category and a zone, are not so good. The analysis of 
-the quality and the comments on this generation are in the next chapter.
-Here, we focus now on the comparison between `ipfp` and 
-`mipfp` for CakeMap.
+a category and a zone, are not so good. Analysis of 
+quality of fit are provided in the next chapter.
+In the next section we focus on comparing **ipfp** and 
+**mipfp** for real-world microsimulation applications involving
+large datasets, such as CakeMap.
 
-## Comparison of the two methods
+## Comparing methods of reweighting large datasets
 
-We mentionned in the `ipfp` part that the three constraints
+We mentionned in the **ipfp** part of this chapter that the three constraints
 do not contain the same number of individuals. To compare 
-both methods, we will apply a second time `ipfp`, but 
+both methods, we will run a second time `ipfp`, but 
 with the rescaled constraints. Note that in case of 
-non consistency constraints, `mipfp` warns the user, 
-but `ipfp` not. Thus, with `ipfp`, it is very 
-recommanded that the user check its constaints'totals.
-Remark that instead of number of iterations, we 
-chose to fix the tolerance threshold to $10^{-12}$,
-such as for the `mipfp`.
+non-consistent constraints, `mipfp` warns the user, 
+but `ipfp` does not. Thus, with `ipfp`, it is 
+recommended that the user checks constaint totals before reweighting.
+Note that instead of number of iterations, we 
+chose to fix the tolerance threshold to $10^{-10}$,
+the default tolerance argument used in the `mipfp` function
+(remember, such details can be verified by typing `?mipfp`).
 
 ```{r}
-# Reperforming ipfp with the rescaled constraints
+# Re-running ipfp with the rescaled constraints
 cons_prop <- cbind(con1, con2, con3_prop)
-weights <- apply(cons_prop, 1, function(x) ipfp(x, ind_catt, x0, tol = 1e-12))
+weights <- apply(cons_prop, 1, function(x) ipfp(x, ind_catt, x0, tol = 1e-10))
 
 # Convert back to aggregates
 ind_agg <- t(apply(weights, 2, function(x) colSums(x * ind_cat)))
@@ -628,7 +645,7 @@ time differences.
 ### Comparison of results
 
 Both results being based on the rescaled data, we can compare them.
-The structure of both resulting tables are different. 
+The structure of both resulting tables are different, however.
 To compare them easily, we transform the `ipfp` final
 matrix into an array with the same structure 
 as the one of the result of `mipfp`.
@@ -638,7 +655,7 @@ source("R/ConvertIpfpWeights.R")
 ```
 
 The total number of people per zone is exactly the same in both 
-weights matrices (maximum of differences being of order $10^{-12}$).
+weights matrices (maximum of differences being of order $10^{-10}$).
 The size of the population are thus in both cases
 the one desired.
 
@@ -648,7 +665,7 @@ max( apply(weight_mipfp$x.hat, 1, sum)
        - apply(weight_ipfp, 1, sum) )
 ```
 
-To visualize all the weights, we chose to plot 
+To visualize all the weights, we plot 
 the different counts per constraint. We observe
 that the constraint 3 is very well fitted with 
 both methods. For the two other constraints, 
@@ -678,9 +695,8 @@ legend("topleft",c("ipfp","mipfp"),pch = c(1,4),col=c("blue","black"))
 # to remove 'echo=FALSE' if need's be (RL)
 ```
 
-
 By analysing the absolute differences between the two 
-resulting weights, we discover that the biggest
+resulting weights, we discover that the largest
 absolute distance is 3.45608e-11.
 
 We can consider that both methods give very similar results.
@@ -690,28 +706,36 @@ of this is done in the next chapter.
 
 ### Comparison of times
 
-The results are the same. Thus, it is logical to prefer
-the version that we be executed the faster. For this reason, 
+The weights produced by **ipfp** and **mipfp**
+packages are the same. Thus, we must use other criteria to assess
+which is more appropriate in different settings.
+For applications involving very large microdatasets and numbers of zones,
+it speed of execution may be an important criterion. For this reason, 
 the time is an important characteristics to compare
-the packages. 
+the packages. However, other considerations such as flexibility and
+user-friendliness should also be taken into account. The question of
+'scalability' (how large can the simulation be before the software crashes)
+is also important.
 
-First, when performing the two generation with the initial example
-of CakeMap, `mipfp` was slower than `ipfp`. However, 
-when thinking of the conception of the algorithms, `ipfp` will take
-more time when the length of the survey choosed as microdata increases.
-This phenomena should not appear in the `mipfp` package. To prove this
-intuition, we decide to take CakeMap with variable individuals 
-in the micro data. To have an idea of what happens beyond the 916
-persons in the data, we copy the database a second time.
-The code used is in the "CakeMapTimeAnalysis.R".
-
+When reweighting individuals for the
+of CakeMap example, `mipfp` was slower than `ipfp`. However, 
+when accounting for wider considerations the speed advantage of `ipfp`
+is reduced. Tests show that as the size of input microdata increases, any
+performance advantages of `ipfp` declines.
+This phenomena should not appear in the `mipfp` package. To demonstrate this
+we will run the CakeMap example with variable numbers of individuals 
+in the microdata. To do this, `ind` objects with more than 916
+persons in the data are created, by copying  the database a second time.
+The code used to create new `ind` objects can be seen
+by entering `file.edit("R/CakeMapTimeAnalysis.R")` in RStudio
+from inside the 'spatial-microsimulation-book' project. 
 
 ```{r, fig.cap="Time necessary to perform the generation of the weight matrix depending on the number of individuals inside the microdata.", echo=FALSE}
 img <- readPNG("figures/TimeCakeMap.png")
 grid.raster(img)
 ```
 
-It confirms that for problems with few individuals in the microdata, 
+Figure x confirms that for problems with few individuals in the microdata, 
 `ipfp` is better. However, having few people means the increase
 of the probability to have non represented categories.
 Of course, we can optimise `ipfp` to take only one 
@@ -724,9 +748,11 @@ In conclusion, `mipfp` is more flexible and could be use
 without microdata, but `ipfp` is faster for problems with
 less individuals in the microdata.
 
-In the best case, to perform to a microspatial simulation, 
-you have a big microdata and you use `mipfp`. Note that
-when having very few microdata, it can be better to 
-consider a method without microdata. Like this, you avoid to bias
-the result with the category included in the microdata.
-The representativity of the microdata is important. 
+These results suggest that to perform population synthesis for spatial
+microspatial simulation in contexts where the input microdataset is large,
+one should use `mipfp`. Note that
+when having very few microdata, it may be advantageous to 
+consider a method without microdata. This way one avoids biasing
+the results with the (non-random) category included in the microdata.
+The extent to which the input microdata represent the study
+area is critical to obtaining valid results. 
