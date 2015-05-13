@@ -367,9 +367,8 @@ how spatial microsimulation is used.
 
 ### Health applications
 
-An excellent example of the potential practical utility of spatial microsimulation
-is a study
-which estimated the rate of smoking at the
+A classic example of the potential practical utility of spatial microsimulation
+is a study which estimated the rate of smoking at the
 small area level in the city of Leeds UK
 (Tomintz et al. 2008).
 Smoking is a classic 'target variable' in spatial microsimulation:
@@ -402,8 +401,7 @@ making tools that would be difficult to implement with non-spatial surveys alone
 **Simobesity** is another research project and spatial microsimulation software tool that
 estimates the prevalence of obesity at the local levels depending on demographic
 constraint variables
-(Edwards and Clarke, 2013)
-.
+(Edwards and Clarke, 2013).
 Recent evidence has emerged on the impact of
 car-dependent urban environments on inactive lifestyles and resulting poor health
 (these areas have been labelled 'obesogenic'). In this context, there is
@@ -416,6 +414,27 @@ to tackle physical inactivity, to maximise the benefits of public health funds.
 ```{r, echo=FALSE}
 # TODO: link the reader here to a chapter where smsim models are linked to geo-data
 ```
+
+Another health-related example in which spatial microsimulation serves to link
+different secondary data sources to generate new insight for health applications
+is Deetjen and Powell (forthcoming).
+This model combines individual level survey data on Internet use with census
+data and hospital episode statistics for all of England.
+The aim was to explore the relationship between Internet use, perceived health
+and health service provision.
+
+Spatial microsimulation was used alongside 
+hierarchical linear modelling, structural equation modelling and cluster analysis. Internet use was been hypothesised to 
+reduce inequalities in access to health services and reduce costs.
+However, quantitative evidence to support this hypothesis is been lacking,
+leading to the adoption of a spatial microsimulation approach.
+ 
+Deetjen and Powell (forthecoming) is noteable for its use of
+external validation and qualitative data alongside spatial
+microsimulation. The results were compared with the results
+from 3 other data sources (see chapter 9 of this book).
+Interviews were used to further
+'ground-truth' the quantitative findings against real-world experience.
 
 ### Economic policy evaluation
 
