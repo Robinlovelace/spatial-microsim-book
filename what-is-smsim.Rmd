@@ -255,10 +255,10 @@ behaviours over time and space. This is not the case.
 However, spatial microsimulation can be the starting point of an agent-based 
 modelling. Indeed, in ABM, we can analyse the evolution of agents through space
 and time, their interactions with each other and with their environment. Spatial
-microsimulation is a subpart of ABM, as it creates a computational population, such
+microsimulation is a sub-part of ABM, as it creates a computational population, such
 as their interactions with each other in some cases (see the Chapter about households).
 Alone, spatial microsimulation is fixed at a time and each individual has a fixed
-house. In ABM, when the researchers do not own sufficient data to perfom their analyses,
+house. In ABM, when the researchers do not own sufficient data to perform their analyses,
 they can use the whole power of ABM. For this, they initialise the population with spatial 
 microsimulation, for a starting date.
 
@@ -423,17 +423,18 @@ data and hospital episode statistics for all of England.
 The aim was to explore the relationship between Internet use, perceived health
 and health service provision.
 
-Spatial microsimulation was used alongside 
-hierarchical linear modelling, structural equation modelling and cluster analysis. Internet use was been hypothesised to 
+The simulated dataset was analysed using hierarchical linear modelling,
+structural equation modelling and cluster analysis. 
+Internet use is often assumed to
 reduce inequalities in access to health services and reduce costs.
 However, quantitative evidence to support this hypothesis is been lacking,
 leading to the adoption of a spatial microsimulation approach.
  
-Deetjen and Powell (forthecoming) is noteable for its use of
+Deetjen and Powell (forthcoming) is notable for its use of
 external validation and qualitative data alongside spatial
 microsimulation. The results were compared with the results
 from 3 other data sources (see chapter 9 of this book).
-Interviews were used to further
+Interviews helped
 'ground-truth' the quantitative findings against real-world experience.
 
 ### Economic policy evaluation
