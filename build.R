@@ -1,5 +1,5 @@
 # file.edit("_includes/programming-nav.html") # edits chapter order
-file.edit("frontmatter/index.html") # edit frontmatter
+# file.edit("frontmatter/index.html") # edit frontmatter
 
 # For website build
 system("cp -v /tmp/*.Rmd .") # move copied files

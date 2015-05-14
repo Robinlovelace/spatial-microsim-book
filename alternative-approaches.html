@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Alternative approaches to population synthesis &middot; Spatial Microsimulation with R.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="www/bootstrap.min.css" rel="stylesheet">
+    <link href="www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Table of contents<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu pull-right" role="menu">
+              <li><a href="introduction.html">Introduction</a></li>
+<li><a href="what-is-smsim.html">What is spatial microsimulation?</a></li>
+<li><a href="SimpleWorld.html">SimpleWorld</a></li>
+<li><a href="data-prep.html">Preparing input data</a></li>
+<li><a href="smsim-in-R.html">Spatial microsimulation in R</a></li>
+<li><a href="alternative-approaches.html">Spatial microsimulation in R</a></li>
+<li><a href="no-microdata.html">Spatial microsimulation in R</a></li>
+<li><a href="CakeMap.html">CakeMap</a></li>
+<li><a href="validation.html">Model checking and evaluation</a></li>
+<li><a href="visualising.html">Visualising spatial microdata</a></li>
+<li><a href="smsim-for-abm.html">Spatial microsimulation for agent-based models</a></li>
+<li><a href="additional.html">Additional tools and techniques</a></li>
+<li><a href="appendix.html">Appendix</a></li>
+<li><a href="glossary.html">Glossary</a></li>
+<li><a href="references.html">References</a></li>
+
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="muted"><a href="http://robinlovelace.net/spatial-microsim-book/">Spatial Microsimulation with R</a> <small>by Robin Lovelace</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+        <div class="well">
+          Available soon as a physical book</a>.
+        </div>
+
+        <h4>Contents</h4>
+          <ul class="list-unstyled" id="toc"></ul>
+
+          <hr>
+          <!--<p><a href="/contribute.html">How to contribute</a></p>-->
+
+          <p><a class="btn btn-primary" href="https://github.com/RobinLovelace/spatial-microsim-book/edit/master/alternative-approaches.Rmd">Edit this page</a></p>
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1>Alternative approaches to population synthesis</h1>
+<h2>GREGWT</h2>
+<p>As described in the Introduction, IPF is just one strategy for obtaining a spatial microdataset. However, researchers tend to select one method that they are comfortable and stick with that for their models. This is understandable because setting-up the method is usually time consuming: most researchers rightly focus on applying the methods to the real world rather than fretting about the details. On the other hand, if alternative methods work better for a particular application, resistance to change can result in poor model fit. In the case of very large datasets, spatial microsimulation may not be possible unless certain methods, optimised to deal with large datasets, are used. Above all, there is no consensus about which methods are ‘best’ for different applications, so it is worth experimenting to identify which method is most suitable for each application.</p>
+<p>An interesting alternative to IPF method is the GREGWT algorithm. First implemented in the SAS language by the Statistical Service area of the Australian Bureau of Statistics (ABS), the algorithm reweighs a set of initial weights using a Generalized Regression Weighting procedure (hence the name GREGWT). The resulting weights ensure that, when aggregated, the individuals selected for each small area fit the constraint variables. Like IPF, the GREGWT results in non-integer weights, meaning some kind of integerisation algorithm will be needed to obtain a final individual-level population, so for example, if the output is to be used in ABM. The macro developed by ABS adds a weight restriction in their GREGWT macros to ensure positive weights. The ABS uses the Linear Truncated Method described in Singh and Mohl (1996) to enforce these restrictions.</p>
+<p>A clear simplified example of this algorithm (and other algorithms) can be found in Rahman (2009). In their paper Tanton et.al (2011) make a full description of the algorithm. For a deeper understanding of the SAS macros see Bell (1999). An R implementation of GREGWT, has been created by Esteban Muñoz, and can be found in the GitHub repository <a href="https://github.com/emunozh/mikrosim">mikrosim</a>.</p>
+<p>We use these implementation of the GREGWT algorithm with the data from the present the use of the GREGWT library and the resulting weights matrix.</p>
+<p>The code presented above loads the SimpleWorld data and created a new data.frame with this data. Version 1.4 of the R library requires the data to be in binary form. The require input for the R function is <code>X</code> representing the individual level survey, <code>dx</code> representing the initial weights of the survey and <code>Tx</code> representing the small area benchmarks.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install GREGWT (uncomment/alter as appropriate)</span>
+<span class="co"># url = &quot;https://github.com/emunozh/mikrosim/raw/master/GREGWT_1.4.tar.gz&quot;</span>
+<span class="co"># download.file(url = url, method = &quot;wget&quot;, destfile = &quot;GREGWT_1.4.tar.gz&quot;)</span>
+<span class="co"># install.packages(&quot;GREGWT_1.4.tar.gz&quot;, repos = NULL, type = &quot;source&quot;)</span>
+<span class="co"># load the library (1.4)</span>
+<span class="kw">library</span>(<span class="st">&#39;GREGWT&#39;</span>)
+<span class="co"># We loop through each area</span>
+for(area in <span class="kw">seq</span>(<span class="kw">dim</span>(age)[<span class="dv">1</span>])){
+    <span class="co"># True population totals for this area (Benchmarks)</span>
+    Tx &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="st">&quot;a0.49&quot;</span> =<span class="st"> </span>age[area, <span class="dv">1</span>],
+                     <span class="st">&quot;a.50&quot;</span>  =<span class="st"> </span>age[area, <span class="dv">2</span>],
+                     <span class="st">&quot;f&quot;</span>     =<span class="st"> </span>sex[area, <span class="dv">2</span>],
+                     <span class="st">&quot;m&quot;</span>     =<span class="st"> </span>sex[area, <span class="dv">1</span>])
+    <span class="co"># Get new weights with GREGWT</span>
+    Weights.GREGWT =<span class="st"> </span><span class="kw">GREGWT</span>(X, dx, Tx, <span class="dt">bounds=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="ot">Inf</span>))
+    fw &lt;-<span class="st"> </span>Weights.GREGWT$Final.Weights
+    <span class="co"># store the new weights</span>
+    fweights &lt;-<span class="st"> </span><span class="kw">c</span>(fweights, fw)
+}
+<span class="co">#&gt; GREGWT .OK   OK  GREGWT .OK  OK  GREGWT .OK  OK  </span></code></pre>
+<p>The R library implementing the GREGWT algorithm reweights the survey for one area at the time, and therefor we need to construct a loop to iterate each area. The estimated weights are combined into a long vector that will be latter on transformed into the weights matrix.</p>
+<pre class="sourceCode r"><code class="sourceCode r">fweights &lt;-<span class="st"> </span><span class="kw">matrix</span>(fweights, <span class="dt">nrow =</span> <span class="kw">nrow</span>(ind))
+fweights
+<span class="co">#&gt;       [,1]   [,2]   [,3]</span>
+<span class="co">#&gt; [1,] 1.143 2.5714 1.8571</span>
+<span class="co">#&gt; [2,] 1.143 2.5714 1.8571</span>
+<span class="co">#&gt; [3,] 3.714 0.8571 4.2857</span>
+<span class="co">#&gt; [4,] 1.714 2.8571 0.2857</span>
+<span class="co">#&gt; [5,] 4.286 1.1429 2.7143</span></code></pre>
+<p>In the last step we transform the vector into a matrix and see the results from the reweighing process.</p>
+<h2>Population synthesis as an optimization problem</h2>
+<p>In general terms, an <em>optimization problem</em> consists of a function, the result of which must be minimised or maximised, called an <em>objective function</em>. This function is not necessarily defined for the entire domain of possible inputs. The domain where this function is defined is called the <em>solution space</em> (or the <em>feasible space</em> in formal mathematics). This implies that optimization problems can be <em>unconstrained</em> or <em>constrained</em>, by limits on the values that arguments (or that a function of the arguments) of the function can take (<a href="http://stanford.edu/~boyd/cvxbook/">Boyd 2004</a>). If there are constraints, the solution space include only a part of the domain of the objective funcion. The constraints define the solution space. Under this framework, population synthesis can be seen as a <em>constrained optimisation</em> problem. Suppose <span class="math"><em>x</em></span> is a vector of length <span class="math"><em>n</em></span> <span class="math">(<em>x</em><sub>1</sub>, <em>x</em><sub>2</sub>, .., <em>x</em><sub><em>n</em></sub>)</span> whose values are to be adjusted. In this case the value of the objective function is <span class="math"><em>f</em><sub>0</sub>(<em>x</em>)</span>, depends on <span class="math"><em>x</em></span>. The possible values of <span class="math"><em>x</em></span> are defined thanks to <em>par</em>, a vector of predefined arguments or parameters of length <span class="math"><em>m</em></span> (<span class="math"><em>m</em></span> is the number of constraints) (<span class="math"><em>p</em><em>a</em><em>r</em><sub>1</sub>, <em>p</em><em>a</em><em>r</em><sub>2</sub>, .., <em>p</em><em>a</em><em>r</em><sub><em>m</em></sub></span>). This kind of problems can be expressed as:</p>
+<p><br /><span class="math">$$\left\{
+\begin{array}{l}
+  min \hspace{0.2cm}f_0(x_1,x_2,..,x_n) \\
+  \\
+  s.c. \hspace{0.2cm} f_i(x) \leq par_i,\  i = 1, ..., m
+\end{array}
+\right.$$</span><br /></p>
+<p>Applying this to the problem of population synthesis, the parameters <span class="math"><em>p</em><em>a</em><em>r</em><sub><em>i</em></sub></span> represent 0, since all cells have to be positive. The <span class="math"><em>f</em><sub>0</sub>(<em>x</em>)</span>, to be minimised, is the distance between the actual weight matrix and the aggregate constraint variable <code>cons</code>. <span class="math"><em>x</em></span> represents the weights which will be calculated to minimise to minimise <span class="math"><em>f</em><sub>0</sub>(<em>x</em>)</span>.</p>
+<p>To illustrate the concept further, consider the case of aircraft design. Imagine that the aim (the objective function) is to minimise weight by changing its shape and materials. But these modifications must proceed subject to some constraints, because the airplane must be safe and sufficiently voluminous to transport people. Constrained optimisation in this case would involve searching combinations of shape and material (to include in <span class="math"><em>x</em></span>) that minimise the weight (the result of <span class="math"><em>f</em><sub>0</sub></span>, is a single value depending on <span class="math"><em>x</em></span>). This search must take place under constraints relating to volume (depending on the shape) and safety (<span class="math"><em>p</em><em>a</em><em>r</em><sub>1</sub></span> and <span class="math"><em>p</em><em>a</em><em>r</em><sub>2</sub></span> in the above notation). Thus <span class="math"><em>p</em><em>a</em><em>r</em></span> values define the domain of the <em>solution space</em>. We search inside this domain the combination of <span class="math"><em>x</em><sub><em>i</em></sub></span> that minimise weight.</p>
+<p>The case of spatial microsimulation has relatively simple constraints: all weights must be positive or zero:</p>
+<p><br /><span class="math">$$
+\left\{ weight_{ij} \in \mathbb{R}^+  \cup \{0\} \hspace{0.5cm} \forall i,j \right\}
+$$</span><br /></p>
+<p>Seeing spatial microsimulation as an optimisation problem allows solutions to be found using established techniques of <em>constrained optimisation</em>. The main advantage of this re-framing is that it allows any optimisation algorithm to perform the reweighting.</p>
+<p>To see population synthesis as a constrained optimization problem analogous to aircraft design, we must define the problem to optimise, the variable <span class="math"><em>x</em></span> and then set the constraints.<br />Intuitively, we search the number of occurrences we want of each individual to take form the final population that fits the best the constraints. We could take the weight matrix as <span class="math"><em>x</em></span> and as the objective function the difference between the population with this weight matrix and the constraint. However, we want to include the information of the distribution of the sample. Thus, we want to find a vector of parameters <code>par</code> that will multiply the <code>indu</code> matrix, which is similar to <code>ind_cat</code>, but with only different rows and the cells contain the number of time that this kind of individual appears in the sample. We want the result of this multiplication to be as closer as possible to the constraints.</p>
+<p>As for the IPF proposition, we will proceed zone per zone. So, our optimization problem for the first zone can be written as follows:</p>
+<p><br /><span class="math">$$\left\{
+\begin{array}{l}
+  min \hspace{0.2cm} f(par_1,..,par_m) = DIST(sim, cons[1,]) \\
+  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(indu * par)\\
+  \\
+  s.c. \hspace{0.2cm} par_i \geq 0,\  i = 1, ..., m
+\end{array}
+\right.$$</span><br /></p>
+<p>Key to this is interpreting individual weights as parameters (the vector <span class="math"><em>p</em><em>a</em><em>r</em></span>, of length <span class="math"><em>m</em></span> above) that are iteratively modified to optimise the fit between individual and aggregate-level data. Remarks that in comparison with the theoretical definition of an optimisation problem, our <code>par</code> are the theorical <span class="math"><em>x</em></span>. The measure of fit, so the distance, we use in this context is Total Absolute Error (TAE).</p>
+<p><br /><span class="math">$$\left\{
+\begin{array}{l}
+  min \hspace{0.2cm} f(par_1,..,par_m) = TAE(sim, cons[1,]) \\
+  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(ind\_cat * par)\\
+  \\
+  s.c. \hspace{0.2cm} par_i \geq 0,\  i = 1, ..., m
+\end{array}
+\right.$$</span><br /></p>
+<p>We have chosen the distance “TAE”, but we could imagine to do the same with other metrics.</p>
+<p>Note that in the above, <span class="math"><em>p</em><em>a</em><em>r</em></span> is equivalent to the <code>weights</code> object we have created in previous sections to represent how representative each individual is of each zone. The main issue with this definition of reweighting is therefore the large number of free parameters: equal to the number of individual-level dataset. Clearly this can be very very large. To overcome this issue, we must ‘compress’ the individual level dataset to its essence, to contain only unique individuals with respect to the constraint variables (<em>constraint-unique</em> individuals).</p>
+<p>The challenge is to convert the binary ‘model matrix’ form of the individual-level data (<code>ind_cat</code> in the previous examples) into a new matrix (<code>indu</code>) that has fewer rows of data. Information about the frequency of each constraint-unique individual is kept by increasing the value of the ‘1’ entries for each column for the replicated individuals by the number of other individuals who share the same combination of attributes. This may sound quite simple, so let’s use the example of SimpleWorld to illustrate the point.</p>
+<h3>Reweighting with optim and GenSA</h3>
+<p>The base R function <code>optim</code> provides a general purpose optimization framework for numerically solving objective functions. Based on the objective function for spatial microsimulation described above, we can use any general optimization algorithm for reweighting the individual-level dataset. But which to use?</p>
+<p>Different reweighting strategies are suitable in different contexts and there is no clear winner for every occasion. However, testing a range of strategy makes it clear that certain algorithms are more efficient than others for spatial microsimulation. Figure x demonstrates this variability by plotting total absolute error as a function of number of iterations for various optimization algorithms available from the base function <code>optim</code> and the <strong>GenSA</strong> package. Note that the comparisons are performed only for zone 1.</p>
+
+<p>Figure x shows that, in a first step, all algorithm reach a real improvement during the first iteration. The advantage of the IPF algorithm we have been using, which converges rapidly to an error very close to zero (as seen before, zero is not reachable with a computer performing calculus) is observable after only the first iteration. On the other end of the spectrum is R’s default optimization algorithm, the Nelder-Mead method. Although the graph shows no improvement from one iteration to the next, it should be stated that the algorithm is just ‘warming up’ at this stage and than each iteration is very fast, as we shall see. After 400 iterations (which happen in the same time that other algorithms take for a single iteration!), the Nelder-Mead begins to converge: it works effectively. However, it requires far more iterations to converge to a value approximating zero than IPF. Next best in terms of iterations is <code>GenSA</code>, the Generalized Simulated Annealing Function from the <strong>GenSA</strong> package. <code>GenSA</code> attained a near-perfect fit after only two full iterations.</p>
+<p>The remaining algorithms shown are, like Nelder-Mead, available from within R’s default optimisation function <code>optim</code>. The implementations with <code>method =</code> set to <code>&quot;BFGS&quot;</code> (short for the Broyden–Fletcher–Goldfarb–Shanno algorithm), <code>&quot;CG&quot;</code> (‘conjugate gradients’) performed roughly the same, steadily approaching zero error and fitting to <code>&quot;IPF&quot;</code> and <code>&quot;GenSA&quot;</code> after 10 iterations. Finally, the <code>SANN</code> method, also available in <code>optim</code>, performed most erratically of the methods tested. This is another implementation of simulated annealing which demonstrates that optimisation functions that depend on random numbers do not always lead to improved fit from one iteration to the next. If we look until 200 iterations, the fit will continue to oscillate and not be improved at all.</p>
+<p>The code used to test these alternative methods for reweighting are provided in the script ‘R/optim-tests-SimpleWorld.R’. The results should be reproducible on any computer, provided the book’s supplementary materials have been downloaded. There are many other optimisation algorithms available in R through a wide range of packages and new and improved functions are being made available all the time. Enthusiastic readers are encouraged to experiment with the methods presented here: it is possible that an algorithm exists which outperforms all of those tested for this book. Also, it should be noted that the algorithms were tested on the extremely simple and rather contrived example dataset of SimpleWorld. Some algorithms may perform better with larger datasets than others and may be sensitive to changes to the initial conditions such as the problem of ‘empty cells’.</p>
+<p>Therefore these results, as with any modelling exercise, should be interpreted with a healthy dose of skepticism: just because an algorithm converges after few ‘iterations’ this does not mean it is inherently any faster or more useful than another. The results are context specific, so it is recommended that the tested framework in ‘R/optim-tests-SimpleWorld.R’ is used as a basis for further tests on algorithm performance on the datasets you are using. IPF has performed well in the situations I have tested it in (especially via the <code>ipfp</code> function, which performs disproportionately faster than the pure R implementation on large datasets) but this does not mean that it is always the best approach.</p>
+<p>To overcome the caveat that the meaning of an ‘iteration’ changes dramatically from one algorithm to the next, further tests measured the time taken for each reweighting algorithm to run. To have a readable graph, we do not represent the error as a function of the time, but the time per algorithm in function of the <code>maxit</code> argument (Figure xx). This figure demonstrates that an iteration of GenSA take a long time in comparison with the other algorithm. Moreover, <code>&quot;BFGS&quot;</code> and <code>&quot;CG&quot;</code> are still following a similar curve under GenSA. Nelder-Mead, SANN and ipf contains iterations that take less time. Until, it appears that ipf and the best in terms of iterations and the time needed for few iterations is good.</p>
+
+<p>Nelder-Mead is fast at reaching a good approximation of the constraint data, despite taking many iterations. <code>GenSA</code>, on the other hand, is shown to be much slower than the others, despite only requiring 2 iterations to arrive at a good level of fit.</p>
+<p>Note that these results are biased by the example that is pretty small and runs only for the first zone.</p>
+<h3>Combinatorial optimisation</h3>
+<p>Combinatorial optimisation is a complete field consisting in a different method to result optimisation problem. Instead of having one candidate that evolve through the iterations, combinatorial optimisation forms a set of feasible candidates and then evaluate them thanks to the objective function to be minimised. There are several types of combinatorial optimisation depending on how we chose the combination of candidates.</p>
+<p>This technique can be seen as an alternative to IPF for allocating individuals to zones. This strategy is <em>probabilistic</em> and results in integer weights (since it is a combination of individuals), as opposed to the fractional weights generated by IPF. Combinatorial optimisation may be more appropriate for applications where input individual microdatasets are very large: the speed benefits of using the deterministic IPF algorithm shrink as the size of the survey dataset increases. As seen before, IPF creates non integer weights, but we have proposed two solutions to transform them into the final individual-level population. So, the proportionality of IPF is more intuitive, but need to calculate the whole weights matrix in each iteration, where CO just proposes candidates. However, if the objective function takes a long time to be calculated, CO will have to perform this evaluation for each candidate.</p>
+<p>Genetic algorithms are included in this field and become popular in some domains, such as industry, for the moment. These kind of algorithms can be really effective when the objective function has several local minimum and we want to find the global one. (Hermes and Poulsen, 2012)</p>
+<p>There are two approaches for reweighting using combinatorial optimisation in R: shuffling individuals in and out of each area and combinatorial optimisation, the <em>domain</em> of the solution space set to allow inter-only results…</p>
+<p>The second approach to combinatorial optimisation in R depends on methods that allow only integer solutions to the general constrained optimisation formulae demonstrated in the previous section. <em>Integer programming</em> is the branch of computer science dedicated to this area, and it is associated with its own algorithms and approaches, some of which have been implemented in R (Zubizarreta, 2012).</p>
+<p>To illustrate how the approach works in general terms, we can use the <code>data.type.int</code> argument of the <code>genoud</code> function in the <strong>rgenoud</strong> package. This ensures only integer results for a genetic algorithm to select parameters are selected:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set min and maximum values of constraints with &#39;Domains&#39;</span>
+m &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="dt">ncol =</span> <span class="dv">2</span>)[<span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(ind)),]
+<span class="kw">set.seed</span>(<span class="dv">2014</span>)
+<span class="kw">genoud</span>(<span class="kw">nrow</span>(ind), <span class="dt">fn =</span> fun, <span class="dt">ind_num =</span> ind, <span class="dt">con =</span> cons[<span class="dv">1</span>,],
+  <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1000</span>), <span class="dt">data.type.int =</span> <span class="ot">TRUE</span>, <span class="dt">D =</span> m)</code></pre>
+<p>This command, implemented in ‘optim-tests-SimpleWorld.R’, results in weights for the unique individuals 1 to 4 of 1, 4, 2 and 4 respectively. This means a final population with aggregated data equal to (as seen in the previous section):</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colSums</span>(indu *<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>, <span class="dv">4</span>))
+<span class="co">#&gt; ind$agea0_49  ind$agea50+     ind$sexm     ind$sexf </span>
+<span class="co">#&gt;            8            4            6            6</span></code></pre>
+<p>Note that we performed the test only for zone 1 and this aggregated data are equally the same as the first constraint. Moreover, thanks to the fact that the algorithm directly consider only integer weights, we do not have the issue of fractional weights associated with IPF, which only generates perfect fit for non-integer weights. Combinatorial optimisation algorithms for population synthesis do not rely on integerisation, which can damage model fit. The fact that the gradient contains “NA” in the end of the algorithm is not a problem, because it just means that they have not been calculated.</p>
+<p>Note that there can be several solutions which attain a perfect fit. This result depends on the random seed chosen for the random draw. Indeed, if we chose a seed of 0 (by writing <code>set.seed(0)</code>), as before, we obtain the weights <code>(0, 6, 4, 2)</code> which results also in a perfect fit for zone 1:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">colSums</span>(indu *<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span> ,<span class="dv">6</span> ,<span class="dv">4</span> ,<span class="dv">2</span>))
+<span class="co">#&gt; ind$agea0_49  ind$agea50+     ind$sexm     ind$sexf </span>
+<span class="co">#&gt;            8            4            6            6</span></code></pre>
+<p>These two potential synthetic populations reach a perfect fit, but are quite different. Indeed, we can observe the two populations:</p>
+<pre class="sourceCode r"><code class="sourceCode r">indu *<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span> ,<span class="dv">4</span> ,<span class="dv">2</span> ,<span class="dv">4</span>)
+<span class="co">#&gt;   ind$agea0_49 ind$agea50+ ind$sexm ind$sexf</span>
+<span class="co">#&gt; 1            0           2        2        0</span>
+<span class="co">#&gt; 3            4           0        4        0</span>
+<span class="co">#&gt; 4            0           2        0        2</span>
+<span class="co">#&gt; 5            4           0        0        4</span>
+indu *<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span> ,<span class="dv">6</span> ,<span class="dv">4</span> ,<span class="dv">2</span>)
+<span class="co">#&gt;   ind$agea0_49 ind$agea50+ ind$sexm ind$sexf</span>
+<span class="co">#&gt; 1            0           0        0        0</span>
+<span class="co">#&gt; 3            6           0        6        0</span>
+<span class="co">#&gt; 4            0           4        0        4</span>
+<span class="co">#&gt; 5            2           0        0        2</span></code></pre>
+<p>An example of comparison is that the second proposition contains no male being more than 50 years old, but the first one has 2. With this method, there cannot be a population with 1 male of over 50, because we take integer weights and there are two men in this category in the sample. This is the disadvantage of algorithms reaching directly integer weights. With IPF, if the weights of this individual is between 0 and 1, there is a possibility to have a person in this category.</p>
+<p><code>genoud</code> is used here only to provide a practical demonstration of the possibilities of combinatorial optimisation using existing R packages.</p>
+<p>For combinatorial optimisation algorithms designed for spatial microsimulation we must, for now, look for programs outside the R ‘ecosystem’. Harland (2013) provides a practical tutorial introducing the subject based on the Flexible Modelling Framework (FMF) Java program.</p>
+
+        </div>
+      </div>
+
+      <div class="footer">
+        <hr>
+        <p>&copy; Site design: Hadley Wickham. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/robinlovelace/spatial-microsim-book/">github</a>.
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="www/bootstrap.min.js"></script>
+  <script src="www/toc.js"></script>
+  </body>
+</html>

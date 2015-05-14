@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Population synthesis with R &middot; Spatial Microsimulation with R.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href="www/bootstrap.min.css" rel="stylesheet">
+    <link href="www/highlight.css" rel="stylesheet">
+
+    <link href='http://fonts.googleapis.com/css?family=Inconsolata:400,700'
+      rel='stylesheet' type='text/css'>
+  </head>
+
+  <body>
+
+    <div class="container">
+
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+              Table of contents<b class="caret"></b>
+            </a>
+            <ul class="dropdown-menu pull-right" role="menu">
+              <li><a href="introduction.html">Introduction</a></li>
+<li><a href="what-is-smsim.html">What is spatial microsimulation?</a></li>
+<li><a href="SimpleWorld.html">SimpleWorld</a></li>
+<li><a href="data-prep.html">Preparing input data</a></li>
+<li><a href="smsim-in-R.html">Spatial microsimulation in R</a></li>
+<li><a href="alternative-approaches.html">Spatial microsimulation in R</a></li>
+<li><a href="no-microdata.html">Spatial microsimulation in R</a></li>
+<li><a href="CakeMap.html">CakeMap</a></li>
+<li><a href="validation.html">Model checking and evaluation</a></li>
+<li><a href="visualising.html">Visualising spatial microdata</a></li>
+<li><a href="smsim-for-abm.html">Spatial microsimulation for agent-based models</a></li>
+<li><a href="additional.html">Additional tools and techniques</a></li>
+<li><a href="appendix.html">Appendix</a></li>
+<li><a href="glossary.html">Glossary</a></li>
+<li><a href="references.html">References</a></li>
+
+            </ul>
+          </li>
+        </ul>
+
+        <h3 class="muted"><a href="http://robinlovelace.net/spatial-microsim-book/">Spatial Microsimulation with R</a> <small>by Robin Lovelace</small></h3>
+        <hr>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3" id="nav">
+        <div class="well">
+          Available soon as a physical book</a>.
+        </div>
+
+        <h4>Contents</h4>
+          <ul class="list-unstyled" id="toc"></ul>
+
+          <hr>
+          <!--<p><a href="/contribute.html">How to contribute</a></p>-->
+
+          <p><a class="btn btn-primary" href="https://github.com/RobinLovelace/spatial-microsim-book/edit/master/smsim-in-R.Rmd">Edit this page</a></p>
+        </div>
+
+        <div id="content" class="col-sm-8 pull-right">
+          <h1 id="smsimr">Population synthesis with R</h1>
+<p>In this chapter we progress from loading and preparing the input data to running a spatial microsimulation model. We will begin by describing the Iterative Propotional Fitting (IPF) procedure as it is the simplest and most widely used method to allocate individuals to zones and then progress to discuss alternative <em>reweighting algorithms</em> that do the same job in a different way.</p>
+<p>The SimpleWorld data, loaded in the previous chapter, is used. Being small and simple, the example facilitates understanding the process on a ‘human scale’ and allows experimentation without the worry of overloading your computer. However, the methods apply equally to larger and more complex projects. Thus practicing the basic principles and methods of spatial microsimulation in R is the focus of this chapter. Time spent mastering these basics will make subsequent steps much easier.</p>
+<p>How representative each individual is of each zone is represented by their <em>weight</em> for that zone. Each weight links and individual to a zone. The number of weights is therefore equal to number of zones multiplied by the number of individuals in the microdata, that is the number of rows in individual-level and constraint tables respectively. In terms of the SimpleWorld data loaded in the previous chapter we have, in R syntax, <code>nrow(cons)</code> zones and <code>nrow(ind)</code> individuals. (Typing those commands with the data loaded should confirm that there are 3 zones and 5 individuals in the input data for the SimpleWorld example). This means that <code>nrow(cons) * nrow(ind)</code> weights will be estimated (that is <span class="math">3 * 5 = 15</span> in SimpleWorld). The weights must begin with an initial value. We will create a matrix of ones so every individual is seen as equally representative of every zone:<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create the weight matrix. Note: relies on data from previous chapter.</span>
+weights &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="dv">1</span>, <span class="dt">nrow =</span> <span class="kw">nrow</span>(ind), <span class="dt">ncol =</span> <span class="kw">nrow</span>(cons))
+<span class="kw">dim</span>(weights) <span class="co"># dimension of weight matrix: 5 rows by 3 columns</span>
+<span class="co">#&gt; [1] 5 3</span></code></pre>
+<p>The weigth matrix links individual-level data to aggregate-level data. A weight matrix value of 0 in cell <code>[i,j]</code>, for example, suggests that nobody with the characteristics of individual <code>i</code> is present in zone <code>j</code>. During the IPF procedure these weights are iteratively updated until they <em>converge</em> towards a single result: the final weights which create a representative population for each zone.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
+<h2 id="weighting">Weighting algorithms</h2>
+<p>A wide range of methods can be used to allocate individuals to zones in spatial microsimulation. As with the majority of procedures for statistical analysis, there are <em>deterministic</em> and <em>stochastic</em> methods. The results of <em>deterministic</em> methods, such as IPF, never vary: no random or probabilistic numbers are used so the resulting weights will be the same every time. <em>Stochastic</em> methods such as <em>simulated annealing</em>, on the other hand, use random numbers.</p>
+<p>In the literature, the divide between stochastic and deterministic approaches is usually mapped onto a wider distinction between <em>reweighting</em> and <em>combinatorial optimisation</em> methods. Reweighting methods generally calculate non-integer weights for every individual-zone combination. Combinatorial optimisation methods generally work by randomly allocating individuals from the microdata survey into each zone, one-by-one, and re-calculating the goodness-of-fit after each change. If the fit between observed and simulated results improves after an individual has been ‘imported’ into the zone in question, the individual will stay. If the fit deteriorates, the individual will be removed from the zone and the impact of switching a different individual into the zone is tested.</p>
+<p>This distinction between reweighting of fractional weights and combinatorial optimisation algorithms is important: combinatorial optimisation methods result in whole individuals being allocated to each zones whereas reweighting strategies result in fractions of individuals being allocated to each zone. The latter method means that individual <span class="math"><em>i</em></span> could have a weight of 0.223 (or any other positive real number) for zone <span class="math"><em>j</em></span>. Of course, this sounds irrational: a quarter of a person cannot possibly exist: either she is in the zone or she is not!</p>
+<p>However, the distinction between combinatorial optimisation and reweighting approaches to creating spatial microdata is not as clear cut as it may at first seem. As illustrated figure 5.1, fractional weights generated by reweighting algorithms such as IPF can be converted into integer weights (via <em>integerisation</em>). Through the process of <em>expansion</em>, the integer weight matrix produced by integerisation can be converted into the final spatial microdata output stored in ‘long’ format represented in the right-hand box of figure 5.1. Thus the combined processes of integerisation and expansion allow weight matrices to be translated into the same output format that combinatorial optimisation algorithms produce directly. In other words fractional weighting is interchangeable with combinatorial optimisation approaches to population synthesis.</p>
+<p>The reverse process is also possible: synthetic spatial microdata generated by combinatorial optimisation algorithms can be converted back in to a more compact weight matrix in a step that we call <em>compression</em>. This integer weight has the same dimensions as the integer matrix generated through integerisation described above.</p>
+<p>Integerisation, expansion and compression procedures allow fractional weighting and combinatorial optimisation approaches to population synthesis to be seen as essentially the same thing. This equivalence between different methods of population synthesis is the reason we have labelled this section <em>weighting algorithms</em>: combinatorial optimisation approaches to population synthesis can be seen as a special case of fractional weighting and vice versa. Thus all deterministic and stochastic (or weighting and combinatorial optimisation) approaches to the generation of spatial microdata can be seen as different methods, algorithms, for allocating weights to individuals. Individuals representative of a zone will be given a high weight (which is equivalent to being replicated many times in combinatorial optimisation). Individuals who are rare in a zone will be given a low weight (or not appear at all, equivalent to a weight of zero). Later in this chapter we demonstrate functions to translate between the ‘weight matrix’ and ‘long spatial microdata’ formats generated by each approach.</p>
+<p><img src="figures/unnamed-chunk-6-1.png" title="Schematic of different approaches for the creation of spatial microdata encapsulating stochastic combinatorial optimisation and deterministic reweighting algorithms such as IPF. Note that integerisation and 'compression' steps make the results of the two approaches interchangeable, hence our use of the term 'reweighting algorithm' to cover all methods for generating spatial microdata." alt="Schematic of different approaches for the creation of spatial microdata encapsulating stochastic combinatorial optimisation and deterministic reweighting algorithms such as IPF. Note that integerisation and 'compression' steps make the results of the two approaches interchangeable, hence our use of the term 'reweighting algorithm' to cover all methods for generating spatial microdata." width="384" /></p>
+<p>The concept of weights is critical to understanding how population synthesis generates spatial microdata. To illustrate the point imagine a parallel SimpleWorld, in which we have no information about the characteristics its inhabitants, only the total population of each zone. In this case we could only assume that the distribution of characteristics found in the sample is representative of the distribution of the whole population. Under this scenario, individuals would be chosen at random from the sample and allocated to zones at random and the distribution of characteristics of individuals in each zone would be asymptotically the same as (tending towards) the microdata.</p>
+<p>In R, this case can be achieved using the <code>sample()</code> command. We could use this method to randomly allocate the 5 individuals of the microdata to zone 1 (which has a population of 12) with the following code:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1</span>) <span class="co"># set the seed for reproducibility</span>
+sel &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dt">x =</span> <span class="dv">5</span>, <span class="dt">size =</span> <span class="dv">12</span>, <span class="dt">replace =</span> T) <span class="co"># create selection</span>
+ind_z1 &lt;-<span class="st"> </span>ind_orig[sel, ]
+<span class="kw">head</span>(ind_z1, <span class="dv">3</span>)
+<span class="co">#&gt;     id age sex income</span>
+<span class="co">#&gt; 2    2  54   m   2474</span>
+<span class="co">#&gt; 2.1  2  54   m   2474</span>
+<span class="co">#&gt; 3    3  35   m   2231</span></code></pre>
+<p>Note the use of <code>set.seed()</code> in the above code to ensure the results are reproducible. It is important to emphasise that without ‘setting the seed’ (determining the starting point of the random number sequence) the results will change each time the code is run. This is because <code>sample()</code> (along with other stochastic functions such as <code>runif()</code> and <code>rnorm()</code>) is probabilistic and its output therefore depends on a random number generator (RNG).<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>The <em>reweighting</em> methods consists in adding a weight to each individual for the zone. This method is good if we have a representative sample of the zone and the minority of the population is included in it. In contrary, if we have in the individual level only the majority of the population and for example, we have not an old man still working, this kind of individual will not appear in the final data. A proposal to avoid this is to use a <em>genetic algorithm</em> or something similar, that will allow to mix some individual to create a new one (mutation). We do not know for the moment if this solution has already been developed, it is just a proposition and to inform the reader that new process can still appear in the future.</p>
+<h2>Iterative Proportional Fitting</h2>
+<h3 id="IpfinTh">IPF in theory</h3>
+<p>The most widely used and mature <em>deterministic</em> method to allocate individuals to zones is iterative proportional fitting (IPF). IPF is mature, fast and has a long history: it was demonstrated by Deming and Stephan (1940) for estimating internal cells based on known marginals. IPF involves calculating a series of non-integer weights that represent how representative each individual is of each zone. This is <em>reweighting</em>.</p>
+<p>Regardless of implementation method, IPF can be used to allocate individuals to zones through the calculation of <em>maximum likelihood</em> values for each zone-individual combination represented in the weight matrix. This is considered as the most probable configuration of individuals in these zones. IPF is a method of <em>entropy maximisation</em> (Cleave et al. 1995). The <em>entropy</em> is the number of configurations of the underlying spatial microdata that could result in the same marginal counts. For in-depth treatment of the mathematics and theory underlying IPF, interested readers are directed towards Fienberg (1979), Cleave et al. (1995) and an excellent recent review of methods for maximum likelihood estimation (Fienberg and Rinaldo 2007). For the purposes of this book, we provide a basic overview of the method for the purposes of spatial microsimulation.</p>
+<p>In spatial microsimulation, IPF is used to allocate individuals to zones. The subsequent section implements IPF to create <em>spatial microdata</em> for SimpleWorld, using the data loaded in the previous chapter as a basis. Overviews of the use of spatial microsimulation method for spatial microsimulation are provided recent papers by Lovelace and Ballas (2012) and, for in the context of transport modelling, by Pritchard and Miller (2012).</p>
+<p>Such as with the example of SimpleWorld, in each application have a matrix <code>ind</code> containing the categorical value of each individual. <code>ind</code> is a two dimensional array (a matrix) in which each row represents an individual and each column a variable. The value of the cell <code>ind(i,j)</code> is therefore the category of the individual <code>i</code> for the variable <code>j</code>. A second array containing the constraining count data <code>cons</code> can, for the purpose of explaining the theory, be expressed in 3 dimensions, which we will label <code>cons_t</code>: <code>cons_t(i,j,k)</code> is the number of individuals corresponding to the marginal for the zone ‘i’, in the variable ‘j’ for the category ‘k’. For example, ‘i’ could be a municipality, ‘j’ the gender and ‘k’ the female. Element ‘(i,j,k)’ is the total number of woman in this municipality according to the constraint data.</p>
+<p>The IPF algorithm will proceed zone per zone. For each zone, each individual will have a weight of representativity of the zone. The weights matrix will then have the dimension ‘number of individual x number of zone’. ‘w(i,j,t)’ corresponds to the weight of the individual ‘i’ in the zone ‘j’ (during the step ‘t’). For the zone ‘z’, we will adapt the weight matrix to each constraint ‘c’.This matrix is initialized with a full matrix of 1 and then, for each step ‘t’, the formula can be expressed as:</p>
+<p><br /><span class="math">$$ w(i,z,t+1) = w(i,z,t) * \displaystyle\frac{cons \_ t(z,c,ind(i,c))}{ \displaystyle\sum_{j=1}^{n_ind} w(j,z,t) * I(ind(j,c)=ind(i,c))} $$</span><br /></p>
+<p>where the ‘I(x)’ function is the indicator function which value is 1 if x is true and 0 otherwise. We can see that ‘ind(i,c)’ is the category of the individual ‘i’ for the variable ‘c’. The denominator corresponds to the sum of the actual weights of all individuals having the same category in this variable as ‘i’. We simply redistribue the weights so that the data follows the constraint concerning this variable.</p>
+<h3 id="IpfinR">IPF in R</h3>
+<p>In the subsequent examples, we use IPF to allocate individuals to zones in SimpleWorld, using the data loaded in the previous chapter as a basis. IPF is mature, fast and has a long history. Interested readers are directed towards recent papers (e.g. Lovelace and Ballas, 2012; Pritchard and Miller,2012) for more detail on the method.</p>
+<p>The IPF algorithm can be written in R from scratch, as illustrated in Lovelace (2014), and as taught in the smsim-course online <a href="https://github.com/Robinlovelace/spatial-microsim-book">tutorial</a>. We will refer to this implementation of IPF as ‘IPFinR’. The code described in this tutorial ‘hard-codes’ the IPF algorithm in R and must be adapted to each new application (unlike the generalized ‘ipfp’ approach, which works unmodified on any reweighting problem). IPFinR works by saving the weight matrix after every constraint for each iteration. We here develop first IPFinR to give you an idea of the algorithm. Indeed, ‘ipfp’ package is more general, but is like a “black box”, so we can use it without being sure of what it performs.</p>
+<p>The aim is to obtain the final weight matrix that will represent how well each individual fit each zone in terms of their characteristics. Each row of this matrix is an individual and each column is a zone. The algorithm will operate zone per zone. Thus the weight matrix will be filled in column per column. To help the understanding of this section, we can rename the totals with a more intuitive name.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create intuitiv names for the totals</span>
+n_zone &lt;-<span class="st"> </span><span class="kw">nrow</span>(cons) <span class="co"># number of zones</span>
+n_ind &lt;-<span class="st"> </span><span class="kw">nrow</span>(ind) <span class="co"># number of individuals</span>
+n_age &lt;-<span class="kw">ncol</span>(con_age) <span class="co"># number of categories of &quot;age&quot;</span>
+n_sex &lt;-<span class="kw">ncol</span>(con_sex) <span class="co"># number of categories of &quot;sex&quot;</span></code></pre>
+<p>The earlier step before to perform to an algorithm is to initialize each needed object. Here, we will have the <em>weight</em> matrix and the marginal distribution of individuals in each zone. Thus first we create an object (<code>ind_agg0</code>), in which rows are zones and columns are the different categories of the variables. Then, we duplicate the weight matrix to keep in memory each step.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create initial matrix of categorical counts from ind </span>
+ind_agg0 &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(cons, <span class="dv">1</span>, function(x) x^<span class="dv">0</span> *<span class="st"> </span>ind_agg))
+weights1 &lt;-<span class="st"> </span>weights2 &lt;-<span class="st"> </span>weights <span class="co"># create addition weight objects</span></code></pre>
+<p>IPFinR begins with a couple of nested for loops, one to iterate through each zone (hence <code>1:n_zone</code>, which means “from 1 to the number of zones in the constraint data”) and one to iterate through each category within the constraints (0–49 and 50+ for the first constraint). Note that this code relies on the <code>cons</code> and <code>ind</code> objects loaded in the previous chapter.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Assign values to the previously created weight matrix </span>
+<span class="co"># to adapt to age constraint</span>
+for(j in <span class="dv">1</span>:n_zone){
+  for(i in <span class="dv">1</span>:n_age){
+weights1[ind_cat[, i] ==<span class="st"> </span><span class="dv">1</span>, j] &lt;-<span class="st"> </span>con_age[j, i] /<span class="st"> </span>ind_agg0[j, i]
+    }
+<span class="kw">print</span>(weights1)
+  }
+<span class="co">#&gt;       [,1] [,2] [,3]</span>
+<span class="co">#&gt; [1,] 1.333    1    1</span>
+<span class="co">#&gt; [2,] 1.333    1    1</span>
+<span class="co">#&gt; [3,] 4.000    1    1</span>
+<span class="co">#&gt; [4,] 1.333    1    1</span>
+<span class="co">#&gt; [5,] 4.000    1    1</span>
+<span class="co">#&gt;       [,1]  [,2] [,3]</span>
+<span class="co">#&gt; [1,] 1.333 2.667    1</span>
+<span class="co">#&gt; [2,] 1.333 2.667    1</span>
+<span class="co">#&gt; [3,] 4.000 1.000    1</span>
+<span class="co">#&gt; [4,] 1.333 2.667    1</span>
+<span class="co">#&gt; [5,] 4.000 1.000    1</span>
+<span class="co">#&gt;       [,1]  [,2]  [,3]</span>
+<span class="co">#&gt; [1,] 1.333 2.667 1.333</span>
+<span class="co">#&gt; [2,] 1.333 2.667 1.333</span>
+<span class="co">#&gt; [3,] 4.000 1.000 3.500</span>
+<span class="co">#&gt; [4,] 1.333 2.667 1.333</span>
+<span class="co">#&gt; [5,] 4.000 1.000 3.500</span></code></pre>
+<p>The above code updates the weight matrix by dividing each cell in the census constraint (<code>con_age</code>) by the equivalent cell aggregated version of the individual level data. The weight matrix is critical to the spatial microsimulation procedure because it describes how representative each individual is of each zone. To see the weights that have been allocated to individuals to populate zone 2, for example you would query the second column of the weights: <code>weights1[, 2]</code>. Conversely, to see the weight allocated for individual 3 for each for the 3 zones, you need to look at the 3rd column of the weight matrix: <code>weights1[3, ]</code>.</p>
+<p>Note that we asked R to write the resulting matrix after the completion of each zone. As said before, the algorithm proceeds zone per zone and each column of the matrix corresponds to a zone. This explains why the matrix is filled in per column. We can now verify that the weights correspond to the application of the theory seen before. For the first zone, the age constraint was to have 8 people under 50 years old and 4 over this age. The first individual is a man of 59 years old, so over 50. To determine the weight of this person inside the zone 1, we multiply the actual weight, 1, by a ratio with a numerator corresponding to the number of person in this category of age for the constraint, here 4, and a denominator equal to the sum of the weights of the individual having the same age category. Here, there are 3 individuals of more than 50 years old and all weights are 1 for the moment. The new weight is <br /><span class="math">$$ 1 * \frac{4}{1+1+1}=1.33333$$</span><br />. We can verify the other weights with a similar reasoning. Now that we explained the whole process under IPF, we can understand the origin of the name ‘Iterative Proportional Fitting’.</p>
+<p>Thanks to the weight matrix, we can see that individual 3 (who’s attributes can be viewed by entering <code>ind[3, ]</code>) is young and has a comparatively low weight of 1 for zone two. Intuitively this makes sense because zone 3 has only 2 young adult inhabitants (see the result of <code>cons[2,]</code>) but 8 older inhabitants. The reweighting stage is making sense. Note also that the weights generated are fractional; integer weights to generate a synthetic small-area population ready for agent-based modelling applications.</p>
+<p>The next step in IPF, however, is to re-aggregate the results from individual-level data after they have been reweighted. For the first zone, the weights of each individual are in the first column of the weight matrix. Moreover, the characteristics of each individual are inside the matrix <code>ind_cat</code>. When multiplying <code>ind_cat</code> by the first column of <code>weights1</code> we obtain a vector, the values of which correspond to the number of people in each category for zone 1. To aggregate all individuals this for the first zone, we just sum the values in each category. The following <code>for</code> loop re-aggregates the individual-level data, with the new weights for each zone:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create additional ind_agg objects</span>
+ind_agg2 &lt;-<span class="st"> </span>ind_agg1 &lt;-<span class="st"> </span>ind_agg0 *<span class="st"> </span><span class="ot">NA</span>
+
+<span class="co"># Assign values to the aggregated data after con 1</span>
+for(i in <span class="dv">1</span>:n_zone){
+  ind_agg1[i, ] &lt;-<span class="st"> </span><span class="kw">colSums</span>(ind_cat *<span class="st"> </span>weights1[, i])
+}</code></pre>
+<p>Congratulations. Assuming you are running the code on you own computer, you have just reweighted your first individual-level dataset to a geographical constraint (the age) and have aggregated the results. At this early stage it is important to do some preliminary checks to ensure that the code is working correctly. First, are the resulting populations for each zone correct? We check this for the first constraint variable (age) using the following code (test: check the populations of the unweighted and weighted data for the second constraint — sex):</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rowSums</span>(ind_agg1[, <span class="dv">1</span>:<span class="dv">2</span>]) <span class="co"># the simulated populations in each zone</span>
+<span class="co">#&gt; [1] 12 10 11</span>
+<span class="kw">rowSums</span>(cons[, <span class="dv">1</span>:<span class="dv">2</span>]) <span class="co"># the observed populations in each zone</span>
+<span class="co">#&gt; [1] 12 10 11</span></code></pre>
+<p>The results of these tests show that the new populations are correct, verifying the technique. But what about the fit between the observed and simulated results after constraining by age? We will cover goodness of fit in more detail in subsequent sections. For now, suffice to know that the simplest way to test the fit is by using the <code>cor</code> function on a 1d representation of the aggregate-level data:</p>
+<pre class="sourceCode r"><code class="sourceCode r">vec &lt;-<span class="st"> </span>function(x) <span class="kw">as.numeric</span>(<span class="kw">as.matrix</span>(x))
+<span class="kw">cor</span>(<span class="kw">vec</span>(ind_agg0), <span class="kw">vec</span>(cons))
+<span class="co">#&gt; [1] -0.3369</span>
+<span class="kw">cor</span>(<span class="kw">vec</span>(ind_agg1), <span class="kw">vec</span>(cons))
+<span class="co">#&gt; [1] 0.6284</span></code></pre>
+<p>The point here is to calculate the correlation between the aggregate actual data and the constraints. This value is between -1 and 1 and in our case, the best fit will be 1, meaning that there is a perfect correlation between our data and the constraints. Note that as well as creating the correct total population for each zone, the new weights also lead to much better fit. To see how this has worked, let’s look at the weights generated for zone 1:</p>
+<pre class="sourceCode r"><code class="sourceCode r">weights1[, <span class="dv">1</span>]
+<span class="co">#&gt; [1] 1.333 1.333 4.000 1.333 4.000</span></code></pre>
+<p>The results mean that individuals 3 and 5 have been allocated a weight of 4 whilst the rest have been given a weight of <span class="math">4/3</span>. Note that the total of these weights is 12, the population of zone 1. Note also that individuals 3 and 5 are in the younger age group (verify this with <code>ind$age[c(3,5)]</code>) which are more commonly observed in zone 1 than the older age group:</p>
+<pre class="sourceCode r"><code class="sourceCode r">cons[<span class="dv">1</span>, ]
+<span class="co">#&gt;   a0_49 a50+ m f</span>
+<span class="co">#&gt; 1     8    4 6 6</span></code></pre>
+<p>Note there are 8 individuals under 50 years old in zone 1, but only 2 individuals with this age in the individual-level survey dataset. This explains why the weights allocated to these individuals is 4: 8 divided by 2 = 4.</p>
+<p>So far we have only constrained by age. This results in aggregate-level results that fit the age constraint but not the sex constraint (figure 5.2). The reason for this should be obvious: weights are selected such that the aggregated individual-level data fits the age constraint perfectly, but no account is taken of the sex constraint. This is why IPF must constrain for multiple constraint variables.</p>
+<p>To constrain by sex, we simply repeat the nested <code>for</code> loop demonstrated above for the sex constraint. This is implemented in the code block below.</p>
+<pre class="sourceCode r"><code class="sourceCode r">for(j in <span class="dv">1</span>:n_zone){
+  for(i in <span class="dv">1</span>:n_sex +<span class="st"> </span>n_age){
+weights2[ind_cat[, i] ==<span class="st"> </span><span class="dv">1</span>, j] &lt;-<span class="st"> </span>cons[j , i] /<span class="st"> </span>ind_agg1[j, i]
+    }
+  }</code></pre>
+<p>Again, the aggregate values need to be calculated in a <code>for</code> loop over every zone. After the first constraint fitting, the weights for zone 1 was: <br /><span class="math">$$(\frac{4}{3},\frac{4}{3},4,\frac{4}{3},4) $$</span><br /> We can explain theoretically explain the weights for zone 1 after the second fitting. For the first individual, its actual weight is <span class="math">$\frac{4}{3}$</span> and he is a male. In the zone one, the constraint is to have 6 men. The three first individuals are men, so the new weight for this person in this zone is <br /><span class="math">$$weights2[1,1]=\frac{4}{3}*\frac{6}{\frac{4}{3}+\frac{4}{3}+4}=\frac{6}{5}=1.2 $$</span><br /></p>
+<p>With an analogous reasoning, we can find all weights in <em>weights2</em>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">weights2
+<span class="co">#&gt;       [,1]   [,2]   [,3]</span>
+<span class="co">#&gt; [1,] 0.900 0.6316 0.4865</span>
+<span class="co">#&gt; [2,] 0.900 0.6316 0.4865</span>
+<span class="co">#&gt; [3,] 0.900 0.6316 0.4865</span>
+<span class="co">#&gt; [4,] 1.125 1.6364 1.6552</span>
+<span class="co">#&gt; [5,] 1.125 1.6364 1.6552</span></code></pre>
+<p>Note that the final value is calculated by multiplying by <code>weights1</code> <em>and</em> <code>weights2</code>: the final weight is calculated as the product of all the weight matrices calculated from all the constraints.</p>
+<pre class="sourceCode r"><code class="sourceCode r">for(i in <span class="dv">1</span>:n_zone){
+ind_agg2[i, ] &lt;-<span class="st"> </span><span class="kw">colSums</span>(ind_cat *<span class="st"> </span>weights1[, i] *<span class="st"> </span>weights2[, i])
+}</code></pre>
+<p>Note that even after constraining by age and sex, there is still not a perfect fit between observed and simulated cell values (figure 5.2). The simulated cell counts for the age categories are far from the observed, whilst the cell counts for the age categories fit perfectly. On the other hand, after constraining by age <em>and</em> sex, the fit is still not perfect. This time the age categories do not fit perfectly, whilst the sex categories fit perfectly. Inspect <code>ind_agg1</code> and <code>ind_agg2</code> and try to explain why this is. Note that the <em>overall fit</em>, combining age and sex categories, has improved greatly from iteration 1.1 to 1.2 (from <span class="math"><em>r</em> = 0.63</span> to <span class="math"><em>r</em> = 0.99</span>). In iteration 2.1 (in which we constrain by age again) the fit improves again.</p>
+<p>So, each time we reweight to a specific constraint, the fit of this constraint is perfect, because, as seen in theory, it is a proportional reallocation. Then, we repeat for another constraint and the first one can diverge from his perfect fit. However, when operating this process several time, we always refit to the next constraint and we can converge to a unique weight matrix.</p>
+<p>These results show that IPF requires multiple <em>iterations</em> before converging on a single weight matrix. It is relatively simple to iterate the procedure illustrated in this section multiple times, as described in the smsim-course tutorial. However, for the purposes of this book, we will move on now to consider implementations of IPF that automate the fitting procedure and iteration process. The aim is to make spatial microsimulation as easy and accessible as possible.</p>
+<pre><code>#&gt; 
+#&gt; Attaching package: &#39;dplyr&#39;
+#&gt; 
+#&gt; The following object is masked from &#39;package:stats&#39;:
+#&gt; 
+#&gt;     filter
+#&gt; 
+#&gt; The following objects are masked from &#39;package:base&#39;:
+#&gt; 
+#&gt;     intersect, setdiff, setequal, union</code></pre>
+<p><img src="figures/valit_plot1-1.png" title="Fit between observed and simulated values for age and sex categories (column facets) after constraining a first time by age and sex constraints (iterations 1.1 and 1.2, plot rows). The dotted line in each plot represents perfect fit between the simulated and observed cell values. The overall fit in each case would be found by combining the left and right-hand plots. Each symbol correspond to a category and each category has a couple (observed, simulated) for each zone." alt="Fit between observed and simulated values for age and sex categories (column facets) after constraining a first time by age and sex constraints (iterations 1.1 and 1.2, plot rows). The dotted line in each plot represents perfect fit between the simulated and observed cell values. The overall fit in each case would be found by combining the left and right-hand plots. Each symbol correspond to a category and each category has a couple (observed, simulated) for each zone." width="384" /></p>
+<p>The advantage of hard-coding the IPF process, as illustrated above, is that it is helps understand how IPF works and aides diagnosing issues with the reweighting process as the weight matrix is re-saved after every constraint and iteration. However, there are more computationally efficient approaches to IPF. To save computer and researcher time, we use in the next sections R packages which implement IPF without the user needing to <em>hard code</em> each iteration in R: <strong>ipfp</strong> and <strong>mipfp</strong>. We will use each of these methods to generate fractional weight matrices allocating each individual to zones. After following this reweighting process with <strong>ipfp</strong>, we will progress to integerisation: the process of converting the fractional weights into integers. This process creates a final contingency table, which is used to generate the final population. This last step is called the expansion.</p>
+<h3 id="ipfp">Reweighting with <strong>ipfp</strong></h3>
+<p>IPF runs much faster and with less code using the <strong>ipfp</strong> package than in pure R. The <code>ipfp</code> function runs the IPF algorithm in the C language, taking aggregate constraints, individual level data and an initial weight vector (<code>x0</code>) as inputs:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ipfp) <span class="co"># load ipfp library after install.packages(&quot;ipfp&quot;)</span>
+cons &lt;-<span class="st"> </span><span class="kw">apply</span>(cons, <span class="dv">2</span>, as.numeric) <span class="co"># to 1d numeric data type</span>
+<span class="kw">ipfp</span>(cons[<span class="dv">1</span>,], <span class="kw">t</span>(ind_cat), <span class="dt">x0 =</span> <span class="kw">rep</span>(<span class="dv">1</span>, n_ind)) <span class="co"># run IPF</span>
+<span class="co">#&gt; [1] 1.228 1.228 3.544 1.544 4.456</span></code></pre>
+<p>It is impressive that the entire IPF process, which takes dozens of lines of code in pure R can been condensed into two lines: one to convert the input constraint dataset to <code>numeric</code><a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> and one to perform the IPF operation itself. The whole procedure is hiding behind the function that is created in C and optimised. So, it is like a magic box where you put your data and that returns the results. This is a good way to execute the algorithm, but one must pay attention to the format of the input argument to use the function correctly. To be sure, type on R <code>?ipfp</code>.</p>
+<p>Note that although we did not specify how many iterations to run, the above command ran the default of <code>maxit = 1000</code> iterations, despite convergence happening after 10 iterations. Note that ‘convergence’ in this context means that the norm of the matrix containing difference between two consecutive iterations reaches the value of <code>tol</code>, which can be set manually in the function (e.g. via <code>tol = 0.0000001</code>). The default value of <code>tol</code> is <code>.Machine$double.eps</code>, which is a very small number indeed: 0.000000000000000222, to be precise.</p>
+<p>The number of iterations can also be set by specifying the <code>maxit</code> argument (e.g. <code>maxit = 5</code>). The result after each iteration will be printed if we enable the verbose argument with <code>verbose = TRUE</code>. Note also that these arguments can be referred to lazily using only their first letter: <code>verbose</code> can be referred to as <code>v</code>, for example, as illustrated below (not all lines of R output are shown):</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ipfp</span>(cons[<span class="dv">1</span>,], <span class="kw">t</span>(ind_cat), <span class="kw">rep</span>(<span class="dv">1</span>, n_ind), <span class="dt">maxit =</span> <span class="dv">20</span>, <span class="dt">v =</span> T)</code></pre>
+<pre><code>## iteration 0:   0.141421
+## iteration 1:   0.00367328
+## iteration 2:   9.54727e-05
+## ...
+## iteration 9:   4.96507e-16
+## iteration 10:  4.96507e-16</code></pre>
+<p>To be clear, the <code>maxit</code> argument in the above code specifies the maximum number of iterations and setting <code>verbose</code> to <code>TRUE</code> (the default is <code>FALSE</code>) instructed R to print the result. Being able to control R in this way is critical to mastering spatial microsimulation with R.</p>
+<p>The numbers that are printed in the output from R correspond to the ‘distance’ between the previous and actual weight matrices. When the two matrix are equal, the algorithm has converged and the distance will approach 0. If the distance falls below the value of <code>tol</code>, the algorithm stops. Note that when calculating, the computer makes numerical approximations of real numbers. For example, when calculating the result of <span class="math">$\frac{4}{3}$</span>, the computer cannot save the infinite number of decimals and truncates the number.</p>
+<p>Due to this, we rarely reach a perfect 0 but we assume that a result that is very close to zero is sufficient. Usually, we use the precision of the computer that is of order <span class="math">10<sup> − 16</sup></span> (on R, you can display the precision of the machine by typing <code>.Machine$double.eps</code>).</p>
+<p>Notice also that for the function to work a <em>transposed</em> (via the <code>t()</code> function) version of the individual-level data (<code>ind_cat</code>) was used. This differs from the the <code>ind_agg</code> object used in the pure R version. To prevent having to transpose <code>ind_cat</code> every time <code>ipfp</code> is called, we save the transposed version:</p>
+<pre class="sourceCode r"><code class="sourceCode r">ind_catt &lt;-<span class="st"> </span><span class="kw">t</span>(ind_cat) <span class="co"># save transposed version of ind_cat</span></code></pre>
+<p>Another object that can be saved prior to running <code>ipfp</code> on all zones (the rows of <code>cons</code>) is <code>rep(1, nrow(ind))</code>, simply a series of ones - one for each individual. We will call this object <code>x0</code> as its argument name representing the starting point of the weight estimates in <code>ipfp</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">x0 &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, n_ind) <span class="co"># save the initial vector</span></code></pre>
+<p>To extend this process to all three zones we can wrap the line beginning <code>ipfp(...)</code> inside a <code>for</code> loop, saving the results each time into a weight variable we created earlier:</p>
+<pre class="sourceCode r"><code class="sourceCode r">weights_maxit_2 &lt;-<span class="st"> </span>weights <span class="co"># create a copy of the weights object</span>
+for(i in <span class="dv">1</span>:<span class="kw">ncol</span>(weights)){
+  weights_maxit_2[,i] &lt;-<span class="st"> </span><span class="kw">ipfp</span>(cons[i,], ind_catt, x0, <span class="dt">maxit =</span> <span class="dv">2</span>)
+}</code></pre>
+<p>The above code uses <code>i</code> to iterate through the constraints, one row (zone) at a time, saving the output vector of weights for the individuals into columns of the weight matrix. To make this process even more concise (albeit less clear to R beginners), we can use R’s internal <code>for</code> loop, <code>apply</code>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">apply</span>(cons, <span class="dt">MARGIN =</span> <span class="dv">1</span>, <span class="dt">FUN =</span> 
+    function(x) <span class="kw">ipfp</span>(x, ind_catt, x0, <span class="dt">maxit =</span> <span class="dv">20</span>))</code></pre>
+<p>In the above code R iterates through each row (hence the second argument <code>MARGIN</code> being <code>1</code>, <code>MARGIN = 2</code> would signify column-wise iteration). Thus <code>ipfp</code> is applied to each zone in turn, as with the <code>for</code> loop implementation. The speed savings of writing the function with different configurations are benchmarked in ‘parallel-ipfp.R’ in the ‘R’ folder of the book project directory. This shows that reducing the maximum iterations of <code>ipfp</code> from the default 1000 to 20 has the greatest performance benefit.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> To make the code run faster on large datasets, a parallel version of <code>apply</code> called <code>parApply</code> can be used. This is also tested in ‘parallel-ipfp.R’.</p>
+<p>For your personal applications, take care of using <code>maxit</code> alone. Indeed, it is impossible to predict the number of iterations necessary for all applications. So, if your argument is to big you will needlessly lose time, but if it is to small, you will have a result that has not converge! However, using <code>tol</code> alone is also hazardous. Indeed, if you have iteratively the same matrices, but the approximations on the distance is a number bigger than your argument, the algorithm will continue. That’s why we use both together and it stops either if the convergence is achieve nor the maximum number of iterations is reached. By defaults, <code>maxit</code> is 1000 and <code>tol</code> is <code>.Machine$double.eps</code>.</p>
+<p>It is important to check that the weights obtained from IPF make sense. To do this, we multiply the weights of each individual by rows of the <code>ind_cat</code> matrix, for each zone. Again, this can be done using a for loop, but the apply method is more concise:</p>
+<pre class="sourceCode r"><code class="sourceCode r">ind_agg &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(weights, <span class="dv">2</span>, function(x) <span class="kw">colSums</span>(x *<span class="st"> </span>ind_cat)))
+<span class="kw">colnames</span>(ind_agg) &lt;-<span class="st"> </span><span class="kw">colnames</span>(cons) <span class="co"># make the column names equal</span></code></pre>
+<p>As a preliminary test of fit, it makes sense to check a sample of the aggregated weighted data (<code>ind_agg</code>) against the same sample of the constraints. Let’s look at the results (one would use a subset of the results, e.g. `ind_agg[1:3, 1:5] for the first five values of the first 3 zones for larger constraint tables found in the real world):</p>
+<pre class="sourceCode r"><code class="sourceCode r">ind_agg
+<span class="co">#&gt;      a0_49 a50+ m f</span>
+<span class="co">#&gt; [1,]     8    4 6 6</span>
+<span class="co">#&gt; [2,]     2    8 4 6</span>
+<span class="co">#&gt; [3,]     7    4 3 8</span>
+cons
+<span class="co">#&gt;      a0_49 a50+ m f</span>
+<span class="co">#&gt; [1,]     8    4 6 6</span>
+<span class="co">#&gt; [2,]     2    8 4 6</span>
+<span class="co">#&gt; [3,]     7    4 3 8</span></code></pre>
+<p>This is a good result: the constraints perfectly match the results generated using ipf, at least for the sample. To check that this is due to the <code>ipfp</code> algorithm improving the weights with each iteration, let us analyse the aggregate results generated from the alternative set of weights, generated with only 2 iterations of IPF:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Update ind_agg values, keeping col names (note &#39;[]&#39;)</span>
+ind_agg[] &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(weights_maxit_2, <span class="dt">MARGIN =</span> <span class="dv">2</span>, 
+  <span class="dt">FUN =</span> function(x) <span class="kw">colSums</span>(x *<span class="st"> </span>ind_cat)))
+ind_agg[<span class="dv">1</span>:<span class="dv">2</span>, <span class="dv">1</span>:<span class="dv">4</span>]
+<span class="co">#&gt;      a0_49  a50+ m f</span>
+<span class="co">#&gt; [1,] 8.003 3.997 6 6</span>
+<span class="co">#&gt; [2,] 2.004 7.996 4 6</span></code></pre>
+<p>Clearly the final weights after 2 iterations of IPF represent the constraint variables well, but do not match perfectly except in the second constraint. This shows the importance of considering number of iterations in the reweighting stage — too many iterations can be wasteful, too few may result in poor results. To reiterate, 20 iterations of IPF are sufficient in most cases for the results to converge towards their final level of fit. More sophisticated ways of evaluating model fit are presented in Section . As mentioned at the beginning of this chapter there are alternative methods for allocating individuals to zones. These are discussed in a subsequent section .</p>
+<p>For some applications, fractional weight matrices are sufficient for analysis. Often, however, an individual level resulting dataset is required. To estimate the individual-level variability in target variables such as income, or for agent-based modelling applications, a full spatial microdataset, composed of whole individuals is required. For this, we have to possibly. First, we can consider the weights as probability and randomly chose the individuals in a distribution corresponding to the weights. Secondly, we can consider the weights as the number of individual in this category and the fractional weights must be integerised in a process known as integerisation (Lovelace and Ballas, 2013). This is the subject of the next section.</p>
+<h2 id="mipfp">Reweighting with <strong>mipfp</strong></h2>
+<p>The R package <strong>mipfp</strong> is a more generalized implementation of the IPF algorithm than <strong>ipfp</strong>, and was designed for population synthesis. <strong>ipfp</strong> generates a two-dimensional weight matrix based on mutually exclusive (non cross-tabulated) constraint tables. This is useful for applications using constraints, which are only marginals and which are not cross-tabulated. <strong>mipfp</strong> is more flexible, allowing multiple cross-tabulations in the constraint variables, such as age/sex and age/class combinations.</p>
+<p><strong>mipfp</strong> is therefore a multidimensional implementation of IPF, which can update an initial <span class="math"><em>N</em></span>-dimensional array with respect to given target marginal distributions. These, in turn, can be multidimensional. In this sense <strong>mipfp</strong> is more advanced than <strong>ipfp</strong> which solves only the 2 dimensional case.</p>
+<p>The main function of <strong>mipfp</strong> is <code>Ipfp()</code>, which fills a <span class="math"><em>N</em></span>-dimensional weight matrix based on a range of aggregate-level constraint table options. Let’s test the package on some example data. The first step is to load the package into the workspace:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(mipfp) <span class="co"># after install.packages(&quot;mipfp&quot;)</span>
+<span class="co">#&gt; Loading required package: cmm</span>
+<span class="co">#&gt; Loading required package: Rsolnp</span>
+<span class="co">#&gt; Loading required package: truncnorm</span>
+<span class="co">#&gt; Loading required package: parallel</span>
+<span class="co">#&gt; Loading required package: numDeriv</span></code></pre>
+<p>To illustrate the use of <code>Ipfp</code>, we will create a fictive example. The case of SimpleWorld is here too simple to really illustrate the power of this package. The solving of SimpleWorld with <code>Ipfp</code> is included in the next section containing the comparison between the two packages.</p>
+<p>The example case is as follows: to determine the contingency table of a population characterized by categorical variables for age (0-17, 18-50, 50+), gender (male, female) and educational level (level 1 to level 4). We consider a zone with 50 inhabitants. The classic spatial microsimulation problem consists in having all marginal distributions and the cross-tabulated result (age/gender/education in this case) only for a non-geographical sample.</p>
+<p>We consider the variables in the following order: sex (1), age (2) and diploma (3). Our constraints could for example be:</p>
+<pre class="sourceCode r"><code class="sourceCode r">sex &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">23</span>,<span class="dv">27</span>) <span class="co"># the number in each sex category</span>
+<span class="kw">names</span>(sex) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Male&quot;</span>,<span class="st">&quot;Female&quot;</span>)
+
+age &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">16</span>,<span class="dv">20</span>,<span class="dv">14</span>) <span class="co"># the number in each age category</span>
+<span class="kw">names</span>(age) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Less18&quot;</span>,<span class="st">&quot;18-50&quot;</span>,<span class="st">&quot;More50&quot;</span>)
+
+diploma &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">20</span>,<span class="dv">18</span>,<span class="dv">6</span>,<span class="dv">6</span>) <span class="co"># the number in each education category</span>
+<span class="kw">names</span>(diploma) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Level1&quot;</span>,<span class="st">&quot;Level2&quot;</span>,<span class="st">&quot;Level3&quot;</span>,<span class="st">&quot;Level4&quot;</span>)</code></pre>
+<p>We can verify that the population is equal in each constraint (50 people). Note also the order in which each category is encoded — a common source of error in population synthesis. For this reason we have labelled each category of each constraint. The constraints are the target margins and need to be stored as a list. To tell the algorithm which elements of the list correspond to which constraint, a second list with the description of the target must be created. By printing <em>target</em> before to run the algorithm, we can verify that we have encoded everything well.</p>
+<pre class="sourceCode r"><code class="sourceCode r">target &lt;-<span class="st"> </span><span class="kw">list</span> (sex, age, diploma)
+descript &lt;-<span class="st"> </span><span class="kw">list</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)
+target
+<span class="co">#&gt; [[1]]</span>
+<span class="co">#&gt;   Male Female </span>
+<span class="co">#&gt;     23     27 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[2]]</span>
+<span class="co">#&gt; Less18  18-50 More50 </span>
+<span class="co">#&gt;     16     20     14 </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; [[3]]</span>
+<span class="co">#&gt; Level1 Level2 Level3 Level4 </span>
+<span class="co">#&gt;     20     18      6      6</span></code></pre>
+<p>Now that all constraint variables have been encoded, let us define the initial array to be updated, also referred as the seed or the weight matrix. The dimension of this matrix must be identical to that of the constraint tables: <span class="math">(2 × 3 × 4)</span>. Each cell of the array represents a combination of the attributes’ values, and thus defines a particular category of individuals. In our case, we will consider that the weight matrix contains 0 when the category is not possible and 1 otherwise. In this example we will assume that it is impossible for an individual being less than 18 years old to hold a diploma level higher than 2. The corresponding cells are then set to 0, while the cells of the feasible categories are set to 1.</p>
+<pre class="sourceCode r"><code class="sourceCode r">names &lt;-<span class="st"> </span><span class="kw">list</span> (<span class="kw">names</span>(sex), <span class="kw">names</span>(age), <span class="kw">names</span>(diploma))
+weight &lt;-<span class="st"> </span><span class="kw">array</span> (<span class="dv">1</span>, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>), <span class="dt">dimnames =</span> names)
+weight[, <span class="kw">c</span>(<span class="st">&quot;Less18&quot;</span>), <span class="kw">c</span>(<span class="st">&quot;Level3&quot;</span>,<span class="st">&quot;Level4&quot;</span>)] &lt;-<span class="st"> </span><span class="dv">0</span></code></pre>
+<p>Everything being well defined, we can execute <em>Ipfp</em>. As with the package <strong>ipfp</strong>, we can chose a stoping criterion defined by <em>tol</em> and/or a maximum number of iterations. Finally, setting the argument <code>print</code> to <code>TRUE</code> ensures we will see the evolution of the of the procedure. After reaching either the maximum number of iterations or convergence (whichever comes first), the function will return a list containing the updated array, as well as other informations about the convergence of the algorithm. Note that if the target margins are not consistent, the input data is then normalised by considering probabilities instead of frequencies.</p>
+<pre class="sourceCode r"><code class="sourceCode r">result &lt;-<span class="st"> </span><span class="kw">Ipfp</span>(weight, descript, target, <span class="dt">iter =</span> <span class="dv">50</span>, 
+               <span class="dt">print =</span> <span class="ot">TRUE</span>, <span class="dt">tol =</span> <span class="fl">1e-5</span>)
+<span class="co">#&gt; Margins consistency checked!</span>
+<span class="co">#&gt; ... ITER 1 </span>
+<span class="co">#&gt;        stoping criterion: 4.236 </span>
+<span class="co">#&gt; ... ITER 2 </span>
+<span class="co">#&gt;        stoping criterion: 0.576 </span>
+<span class="co">#&gt; ... ITER 3 </span>
+<span class="co">#&gt;        stoping criterion: 0.09594 </span>
+<span class="co">#&gt; ... ITER 4 </span>
+<span class="co">#&gt;        stoping criterion: 0.01451 </span>
+<span class="co">#&gt; ... ITER 5 </span>
+<span class="co">#&gt;        stoping criterion: 0.002163 </span>
+<span class="co">#&gt; ... ITER 6 </span>
+<span class="co">#&gt;        stoping criterion: 0.0003215 </span>
+<span class="co">#&gt; ... ITER 7 </span>
+<span class="co">#&gt;        stoping criterion: 4.778e-05 </span>
+<span class="co">#&gt; ... ITER 8 </span>
+<span class="co">#&gt; Convergence reached after 8 iterations!</span></code></pre>
+<p>We can observe that the stoping criterion becomes always smaller and attains the <em>tol</em> after 8 iterations. The <code>result</code>contains the final weight matrix and some information about the convergence. We have a resulting table and we can validate the total number of 50 inhabitants in the zone. Note that, thanks to the definitions of names in the array, we can easily interpret the result. There are a total 50 people and nobody of less than 18 years old own a diploma level 3 or 4, as desired.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># printing the result</span>
+result$x.hat 
+<span class="co">#&gt; , , Level1</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;        Less18 18-50 More50</span>
+<span class="co">#&gt; Male    3.874 3.133  2.193</span>
+<span class="co">#&gt; Female  4.547 3.678  2.575</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , Level2</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;        Less18 18-50 More50</span>
+<span class="co">#&gt; Male    3.486  2.82  1.974</span>
+<span class="co">#&gt; Female  4.093  3.31  2.317</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , Level3</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;        Less18 18-50 More50</span>
+<span class="co">#&gt; Male        0 1.624  1.136</span>
+<span class="co">#&gt; Female      0 1.906  1.334</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , Level4</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;        Less18 18-50 More50</span>
+<span class="co">#&gt; Male        0 1.624  1.136</span>
+<span class="co">#&gt; Female      0 1.906  1.334</span>
+<span class="co"># checkin the total number of persons</span>
+<span class="kw">sum</span>(result$x.hat)
+<span class="co">#&gt; [1] 50</span></code></pre>
+<p>The quality of the margins with each constraints is contained in the variable <code>check.margins</code> of the resulting list. In our case, we fit all constaints.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># printing the resulting margins</span>
+result$check.margins
+<span class="co">#&gt; [1] 0.000e+00 4.361e-06 3.553e-15</span></code></pre>
+<p>This reasoning works zone per zone and we can generate a 3-dimensional weight matrix. Another advantage of <strong>mipfp</strong> is that it allows cross-tabulated constraints to be added. In our example, we could add as target the contingency of the age and the diploma. We can define this cross table:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># define the cross table</span>
+cross &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="kw">c</span>(<span class="dv">11</span>,<span class="dv">5</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">9</span>,<span class="dv">4</span>,<span class="dv">4</span>), <span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">2</span>))
+<span class="kw">rownames</span> (cross) &lt;-<span class="st"> </span><span class="kw">names</span> (diploma)
+<span class="kw">colnames</span> (cross) &lt;-<span class="st"> </span><span class="kw">names</span>(age)
+
+<span class="co"># print the cross table</span>
+cross
+<span class="co">#&gt;        Less18 18-50 More50</span>
+<span class="co">#&gt; Level1     11     3      6</span>
+<span class="co">#&gt; Level2      5     9      4</span>
+<span class="co">#&gt; Level3      0     4      2</span>
+<span class="co">#&gt; Level4      0     4      2</span></code></pre>
+<p>When having several constraints concerning the same variable, we have to insure the consistency across these targets (otherwise convergence might not be reached). For instance, we can display the margins of <code>cross</code> along with <code>diploma</code> and <code>age</code> to validate the consistency assumption. There are both equal, meaning that the constraints are coherent.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># check pertinence for diploma </span>
+<span class="kw">rowSums</span>(cross)
+<span class="co">#&gt; Level1 Level2 Level3 Level4 </span>
+<span class="co">#&gt;     20     18      6      6</span>
+diploma
+<span class="co">#&gt; Level1 Level2 Level3 Level4 </span>
+<span class="co">#&gt;     20     18      6      6</span>
+
+<span class="co"># check pertinence for age </span>
+<span class="kw">colSums</span>(cross)
+<span class="co">#&gt; Less18  18-50 More50 </span>
+<span class="co">#&gt;     16     20     14</span>
+age
+<span class="co">#&gt; Less18  18-50 More50 </span>
+<span class="co">#&gt;     16     20     14</span></code></pre>
+<p>The <code>target</code> and <code>descript</code> have to be updated to include the cross table. Pay attention to the order of the arguments by declaring a contingency table. Then, we can execute the task and run <em>Ipfp</em> again:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># defining the new target and associated descript</span>
+target &lt;-<span class="st"> </span><span class="kw">list</span>(sex, age, diploma, cross)
+descript &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">2</span>))
+
+<span class="co"># running the Ipfp function</span>
+result &lt;-<span class="st"> </span><span class="kw">Ipfp</span>(weight, descript, target, <span class="dt">iter =</span> <span class="dv">50</span>, 
+               <span class="dt">print =</span> <span class="ot">TRUE</span>, <span class="dt">tol =</span> <span class="fl">1e-5</span>)
+<span class="co">#&gt; Margins consistency checked!</span>
+<span class="co">#&gt; ... ITER 1 </span>
+<span class="co">#&gt;        stoping criterion: 4.94 </span>
+<span class="co">#&gt; ... ITER 2 </span>
+<span class="co">#&gt; Convergence reached after 2 iterations!</span></code></pre>
+<p>The addition of a constraint leave less freedom to the algorithm, implying that the algorithm converges faster. By printing the results, we see that all constraints are respected and we have a 3-dimensional contingency table.</p>
+<p>Similarly to the <strong>ipfp</strong> package, the result is in a non-integer array. Consequently we can generate a synthetic population either by considering the array cells as probabilities for random draws or by applying steps similar to the integerisation and expansion steps defined in the <code>ipfp</code> Section.</p>
+<p>Able to deal with bigger problems, the package presented here can also manage to solve smaller problem such as SimpleWorld. We have simply chosen to develop here a different example to show you the vast application of this function. However, to compare <strong>ipfp</strong> with <strong>mipfp</strong>, we will focus on this simpler example : SimpleWorld.</p>
+<h3 id="Compareipf">Comparing <strong>ipfp</strong> with <strong>mipfp</strong></h3>
+<p>A major difference between the packages <strong>ipfp</strong> and <strong>mipfp</strong> is that the former is written in C, while the latter is written in R. Another is that the <em>aim</em> of <strong>mipfp</strong> is to execute IPF for spatial microsimulation, accepting a wide variety of inputs (cross-table or marginal distributions). <strong>ipfp</strong>, by contrast, was created to solve an algebra problem of the form <span class="math"><em>A</em><em>x</em> = <em>b</em></span>. Its aim is to find a vector <span class="math"><em>x</em></span> such as <span class="math"><em>A</em><em>x</em> = <em>b</em></span>, after having predefined the vector <span class="math"><em>b</em></span> and the matrix <span class="math"><em>A</em></span>. Thus, the dimensions are fixed : a two-dimensional matrix and two vectors. In addition, <strong>mipfp</strong> is written in R, so should be easy to understand for R users. <strong>ipfp</strong>, by contrast, is written in pure C: fast but relatively difficult to understand.</p>
+<p>As illustrated earlier in the book, <strong>ipfp</strong> gives weights to every individual in the input microdata, for every zone. <strong>mipfp</strong> works differently. Individuals who have the same caracteristics (in terms of the constraint variables) appear only once in the input ‘seed’, their number represented by their starting weight. <strong>mipfp</strong> thus determines the number of people in each unique combination of constraint variable categories. This makes <strong>mipfp</strong> more <em>computationally efficient</em> than <strong>ipfp</strong>. This efficiency can be explained for SimpleWorld. We have constraints about sex and age. What will be defined is the number of persons in each category so that the contingency table respects the constraints. In other worlds, we want, for zone 1 of SimpleWorld, to fill in the table such as:</p>
+<table>
+<caption>Unknown constraints Mipfp estimates for SimpleWorld.</caption>
+<thead>
+<tr class="header">
+<th align="left">sex - age</th>
+<th align="right">0-49 yrs</th>
+<th align="right">50 + yrs</th>
+<th align="right">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">m</td>
+<td align="right">?</td>
+<td align="right">?</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">f</td>
+<td align="right">?</td>
+<td align="right">?</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="right">12</td>
+</tr>
+</tbody>
+</table>
+<p>From this contingency table, and respecting the known marginal constraints, the individual dataset must be generated. For SimpleWorld, input microdata is available. While <strong>ipfp</strong> uses the individual-level microdata directly, the ‘seed’ used in <strong>mipfp</strong> must also be a contingency table. This table is then used to generate the final contingency table (sex/age) thanks to the theory underlying IPF.</p>
+<p>For the first step, we begin with the aggregation of the microdata. We have initially a total of 5 individuals and we want to have 12. During the steps of IPF, we will always consider the current totals and desired totals.</p>
+<table>
+<caption>Initial table of Mipfp for SimpleWorld.</caption>
+<thead>
+<tr class="header">
+<th align="left">sex - age</th>
+<th align="right">0-49 yrs</th>
+<th align="right">50 + yrs</th>
+<th align="right">Total</th>
+<th align="right">Target total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">m</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">f</td>
+<td align="right">1</td>
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">2</td>
+<td align="right">3</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">Target total</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<p>IPF makes a proportion of the existing table to fit each constraint turn by turn. First, if we want to fit the age constraint, we need to totalise 8 persons under 50 years old and 4 above (wanted total of age). Thus, we calculate a proportional weight matrix that respects this constraint. The first cell corresponds to <span class="math">$Current_Weight*\frac{Wanted_Total}{Current_Total}=1*\frac{8}{2}$</span>. With a similar reasoning, we can complete the whole matrix.</p>
+<table>
+<caption>First step of Mipfp for SimpleWorld - age constraint.</caption>
+<thead>
+<tr class="header">
+<th align="left">sex - age</th>
+<th align="right">0-49 yrs</th>
+<th align="right">50 + yrs</th>
+<th align="right">Total</th>
+<th align="right">Wanted total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">m</td>
+<td align="right">4</td>
+<td align="right">2.7</td>
+<td align="right">6.7</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">f</td>
+<td align="right">4</td>
+<td align="right">1.3</td>
+<td align="right">5.3</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">Target total</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<p>Now, the current matrix fits exactly the age constraint — note how this was acheived (<span class="math">$1*\frac{8}{2}$</span> for the first cell). However, there are still differences between the current and target sex totals. IPF proceeds to make the table fit for the sex constraint:</p>
+<table>
+<caption>First step of Mipfp for SimpleWorld - sex constraint.</caption>
+<thead>
+<tr class="header">
+<th align="left">sex - age</th>
+<th align="right">0-49 yrs</th>
+<th align="right">50 + yrs</th>
+<th align="right">Total</th>
+<th align="right">Wanted total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">m</td>
+<td align="right">3.6</td>
+<td align="right">2.4</td>
+<td align="right">6</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">f</td>
+<td align="right">4.5</td>
+<td align="right">1.5</td>
+<td align="right">6</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">8.1</td>
+<td align="right">3.9</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+<tr class="even">
+<td align="left">Wanted total</td>
+<td align="right">8</td>
+<td align="right">4</td>
+<td align="right"></td>
+<td align="right"></td>
+</tr>
+</tbody>
+</table>
+<p>This ends the first iteration of ipfp, illustrated in the form of contingency table. <strong>mipfp</strong> simply automates the logic, but by watching populations in terms of tables. When the contingency table is complete, completely, we know how many individuals we need in each category. As with the <strong>ipfp</strong> method, the weights are fractional. To reach a final individual-level dataset, we can consider the weights as probabilities or transform the weight into integers and obtain a final contingency table. From this, it is easy to generate the individual dataset.</p>
+<p>It should be clear from the above that both methods perform the same procedure. The purpose of this section, beyond demonstrating the equivalence of <strong>ipfp</strong> and <strong>mipfp</strong> approaches to population synthesis, is to compare the <em>performance</em> of each approach. Using the simple example of SimpleWorld we first compare the results before assessing the time taken by each package.</p>
+<p>The whole process using <strong>ipfp</strong> has been developed in the previous section. Here, we describe how to solve the same SimpleWorld problem with <strong>mipfp</strong>. We proceed zone-by-zone, explaining in detail the process for zone 1. The constraints for this area are as follows:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># SimpleWorld constraints for zone 1</span>
+con_age[<span class="dv">1</span>,]
+<span class="co">#&gt;   a0_49 a50+</span>
+<span class="co">#&gt; 1     8    4</span>
+con_sex[<span class="dv">1</span>,]
+<span class="co">#&gt;   m f</span>
+<span class="co">#&gt; 1 6 6</span>
+
+<span class="co"># Save the constraints for zone 1</span>
+con_age_1 &lt;-<span class="st"> </span><span class="kw">as.matrix</span>( con_age[<span class="dv">1</span>,] )
+con_sex_2 &lt;-<span class="st"> </span><span class="kw">data.matrix</span>( con_sex[<span class="dv">1</span>, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)] ) </code></pre>
+<p>The inputs of <code>Ipfp</code> must be a list. We consider the age first and then the sex. Note that the order of the sex categories must be the same as those of the seed. Checking the order of the category is sensible as incorrect ordering here is a common source of error: if the seed has (Male, Female) and the constraint (Female, Male), the results will be wrong.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Save the target and description for Ipfp</span>
+target &lt;-<span class="st"> </span><span class="kw">list</span> (con_age_1, con_sex_2)
+descript &lt;-<span class="st"> </span><span class="kw">list</span> (<span class="dv">1</span>, <span class="dv">2</span>)</code></pre>
+<p>The available sample establishes the seed of the algorithm. This is also known as the <em>initial weight matrix</em>. This represents the entire individual-level input microdata (<code>ind</code>), converted into the same categories as in the constraints (50 is still the break point for ages in SimpleWorld). We also consider income, so that it is stored in the format required by <strong>mipfp</strong>. (An alternative would be to ignore income here and add it after, as seen in the expansion section.)</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add income to the categorised individual data</span>
+ind_full &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/SimpleWorld/ind-full.csv&quot;</span>) <span class="co"># load full ind data</span>
+ind_income &lt;-<span class="st"> </span><span class="kw">cbind</span>(ind, ind_full[,<span class="kw">c</span>(<span class="st">&quot;income&quot;</span>)])
+weight_init &lt;-<span class="st"> </span><span class="kw">table</span>(ind_income[, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>)])</code></pre>
+<p>Having the initial weight initialised to the aggregation of the individual level data and having the constraints well established, we can now execute the <code>Ipfp</code> function.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Perform Ipfp on SimpleWorld example</span>
+weight_mipfp &lt;-<span class="st"> </span><span class="kw">Ipfp</span>( weight_init, descript, target, 
+                      <span class="dt">print =</span> <span class="ot">TRUE</span>, <span class="dt">tol =</span> <span class="fl">1e-5</span>)
+<span class="co">#&gt; Margins consistency checked!</span>
+<span class="co">#&gt; ... ITER 1 </span>
+<span class="co">#&gt;        stoping criterion: 3.5 </span>
+<span class="co">#&gt; ... ITER 2 </span>
+<span class="co">#&gt;        stoping criterion: 0.05455 </span>
+<span class="co">#&gt; ... ITER 3 </span>
+<span class="co">#&gt;        stoping criterion: 0.001413 </span>
+<span class="co">#&gt; ... ITER 4 </span>
+<span class="co">#&gt;        stoping criterion: 3.673e-05 </span>
+<span class="co">#&gt; ... ITER 5 </span>
+<span class="co">#&gt; Convergence reached after 5 iterations!</span></code></pre>
+<p>Convergence was acheived after only 5 iterations. The result, stored in the <code>weight_mipfp</code> is a <code>data.frame</code> including the final weight matrix, as well as information about the convergence of the algorithm. We can check the margins and print the final weights. Note that we still have the income into the matrix, but comparison, we look at the result for the aggregate table of age and sex.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Printing the resulting margins</span>
+weight_mipfp$check.margins
+<span class="co">#&gt; [1] 4.561e-08 0.000e+00</span>
+
+<span class="co"># Printing the resulting weight matrix for age and sex</span>
+<span class="kw">apply</span>(weight_mipfp$x.hat, <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), sum)
+<span class="co">#&gt;        sex</span>
+<span class="co">#&gt; age         f     m</span>
+<span class="co">#&gt;   a0_49 4.456 3.544</span>
+<span class="co">#&gt;   a50+  1.544 2.456</span></code></pre>
+<p>We can see that we reach the convergence after 5 iterations and that the results are fractional, as with <strong>ipfp</strong>. Now that the process is understood for one zone, we can progress to generate weights for each zone. The aim is to transform the output into a form similar to the one generated in the section <strong>ipfp</strong> to allow an easy comparison. For each area, the initial weight matrix will be the same. We store all weights in an array <code>Mipfp_Tab</code>, in which each row represents a zone.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Initialising the result matrix</span>
+Names &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">1</span>:<span class="dv">3</span>, <span class="kw">colnames</span>(con_sex)[<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)], <span class="kw">colnames</span>(con_age))
+Mipfp_Tab &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dt">data =</span> <span class="ot">NA</span>, <span class="dt">dim =</span> <span class="kw">c</span>(n_zone, <span class="dv">2</span> , <span class="dv">2</span>), <span class="dt">dimnames =</span> Names)
+
+<span class="co"># Loop over the zones and execute Ipfp</span>
+for (zone in <span class="dv">1</span>:n_zone){
+  <span class="co"># Adapt the constraint to the zone</span>
+  con_age_1 &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(con_age[zone,] )
+  con_sex_2 &lt;-<span class="st"> </span><span class="kw">data.matrix</span>(con_sex[zone, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)] ) 
+  target &lt;-<span class="st"> </span><span class="kw">list</span>(con_age_1, con_sex_2)
+  
+  <span class="co"># Calculate the weights</span>
+  res &lt;-<span class="st"> </span><span class="kw">Ipfp</span>(weight_init, descript, target, <span class="dt">tol =</span> <span class="fl">1e-5</span>)
+  
+  <span class="co"># Complete the array of calculated weights</span>
+  Mipfp_Tab[zone,,] &lt;-<span class="st"> </span><span class="kw">apply</span>(res$x.hat,<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>),sum)
+}</code></pre>
+<p>The above code executes IPF for each zone. We can print the result for zone 1:2 and observe that it correspond to the weights previously determined.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Result for zone 1</span>
+Mipfp_Tab[<span class="dv">1</span>:<span class="dv">2</span>,,]
+<span class="co">#&gt; , , a0_49</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;       f     m</span>
+<span class="co">#&gt; 1 4.456 1.544</span>
+<span class="co">#&gt; 2 1.450 4.550</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; , , a50+</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;        f     m</span>
+<span class="co">#&gt; 1 3.5440 2.456</span>
+<span class="co">#&gt; 2 0.5498 3.450</span></code></pre>
+<p>Cross-tabulated constraints can be used <strong>mipfp</strong>. This means that we can consider the zone as a variable, allowing population synthesis to be performed with no <code>for</code> loop, to generate a result for every zone. This could seem analogous to the use of <code>apply()</code> in conjunction with <code>ipfp()</code>, but it is not really the case. Indeed, the version with <code>apply()</code> calls <code>n_zones</code> times the function <code>ipfp()</code>, where the <strong>mipfp</strong> is called only one time with the here proposed abbreviation.</p>
+<p>Only one aspect of our model set-up needs to be modified: the number of the zone needs to be included as an additional dimension in the weight matrix. This allows us to access the table for one particular zone and obtain exactly the same result as previously determined.</p>
+<p>Thus, as before, we first need to define an initial weight matrix. For this, we repeat the current initial data as many times as the number of zones. The variables are created in the following order: zone, age, sex, income. Note that zone is the first dimension here, but it could be be the second, third or last.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Repeat the initial matrix n_zone times</span>
+init_cells &lt;-<span class="st"> </span><span class="kw">rep</span>(weight_init, <span class="dt">each =</span> n_zone)
+
+<span class="co"># Define the names</span>
+names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">list</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)), <span class="kw">as.list</span>(<span class="kw">dimnames</span>(weight_init)))
+
+<span class="co"># Structure the data</span>
+mipfp_zones &lt;-<span class="st"> </span><span class="kw">array</span>(init_cells, <span class="dt">dim =</span> 
+                 <span class="kw">c</span>(n_zone, n_age, n_sex, <span class="dv">5</span>),
+                 <span class="dt">dimnames =</span> names)</code></pre>
+<p>The resulting array is larger than the ones obtained with <code>ipfp()</code>, containing <code>n_zone</code> times more cells. Instead of having <code>n_zones</code> different little matrices, the result is here a bigger matrix. In total, the same number of cells are recorded. To access all information about the first zone, type <code>mipfp_zones[1,,,]</code>. Let’s check that this corresponds to the initial weights used in the <code>for</code> loop example:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>( mipfp_zones[<span class="dv">1</span>,,,] ==<span class="st"> </span>weight_init )
+<span class="co">#&gt; </span>
+<span class="co">#&gt; TRUE </span>
+<span class="co">#&gt;   20</span></code></pre>
+<p>The results show that the 20 cells of zone 1 are equal in value to those in the previous matrix. With these initial weights, we can keep the whole age and sex constraint tables (after checking the order of the categories). The constraint of age is in this case cross-tabulated with zone, with the first entry the zone and second the age.</p>
+<pre class="sourceCode r"><code class="sourceCode r">con_age
+<span class="co">#&gt;   a0_49 a50+</span>
+<span class="co">#&gt; 1     8    4</span>
+<span class="co">#&gt; 2     2    8</span>
+<span class="co">#&gt; 3     7    4</span></code></pre>
+<p>Next the <code>target</code> and the <code>descript</code> variables must be adapted for use without a <code>for</code> loop. The new target takes the two whole matrices and the <code>descript</code> associates the first constraint with (zone, age) and the second with (zone, sex).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Adapt target and descript </span>
+target &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">data.matrix</span>(con_age), <span class="kw">data.matrix</span>(con_sex[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)]))
+descript &lt;-<span class="st"> </span><span class="kw">list</span> (<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>), <span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))</code></pre>
+<p>We are now able to perform the entire execution of <code>Ipfp</code>, for all zones, in only one line.</p>
+<pre class="sourceCode r"><code class="sourceCode r">res &lt;-<span class="st"> </span><span class="kw">Ipfp</span>(mipfp_zones, descript, target, <span class="dt">tol =</span> <span class="fl">1e-5</span>)</code></pre>
+<p>This process gives exactly the same result as the for loop but is more practical and efficient. For all applications, the ‘no for loop’ strategy is prefered, being faster and more concise. However, in this section, we aim to compare the two processes for specific zones. For this reason, to make things comparable for little area, we will keep the ‘for loop’, allowing an equitable comparison of time for one iteration.</p>
+<p>Note that the output of the function <code>Ipfp</code> can be used directly to perform steps such as integerisation and expansion. However, here we first verify that both algorithms calculate the same weights. For this we must transform the output of <code>Ipfp</code> from <strong>mipfp</strong> to match the weight matrix generated by <code>ipfp</code> from the <strong>ipfp</strong> package. The comparison table will be called <code>weights_mipfp</code>. To complete its cells, we need the number of individuals in the sample in each category.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Initialise the matrix </span>
+weights_mipfp &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">data =</span> <span class="ot">NA</span>, <span class="dt">nrow =</span> <span class="kw">nrow</span>(ind), 
+                        <span class="dt">ncol =</span> <span class="kw">nrow</span>(cons))
+
+<span class="co"># Cross-tabulated contingency table of the microdata, ind</span>
+Ind_Tab &lt;-<span class="st"> </span><span class="kw">table</span>(ind[,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)])</code></pre>
+<p>Now, we can fill this matrix <code>weights_mipfp</code>. For each zone, the weight of the category is distributed between the individuals of the microdata having the right characteristics. This is done thanks to iterations that calculate the weights per category for the zone and then transform them into weights per individual, depending on the category of each person.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Loop over the zones to transform the result&#39;s structure</span>
+for (zone in <span class="dv">1</span>:n_zone){
+  
+  <span class="co"># Transformation into individual weights</span>
+  for (i in <span class="dv">1</span>:n_ind) {
+    <span class="co"># weight of the category</span>
+    weight_ind &lt;-<span class="st"> </span>Mipfp_Tab[zone,ind[i,<span class="kw">c</span>(<span class="dv">2</span>)],ind[i,<span class="kw">c</span>(<span class="dv">3</span>)]]
+    
+    <span class="co"># number of ind in the category</span>
+    sample_ind &lt;-<span class="st"> </span>Ind_Tab[ind[i,<span class="kw">c</span>(<span class="dv">2</span>)],ind[i,<span class="kw">c</span>(<span class="dv">3</span>)]]
+    
+    <span class="co"># distribute the weight to the ind of this category</span>
+    weights_mipfp[i,zone] &lt;-<span class="st"> </span>weight_ind /<span class="st"> </span>sample_ind
+  }
+}</code></pre>
+<p>The results from <strong>mipfp</strong> are now comparable to those from <strong>ipfp</strong>, since we generated weights for each individual in each zone. Having the same structure, the integerisation and expansion step explained for <strong>ipfp</strong> could be followed. However, there is a more direct way to transform the weights of <code>Ipfp</code> into individual data, which is explained in the chapter <em>Population synthesis without input microdata</em>.</p>
+<p>The below code demonstrates that the largest difference is of the order <span class="math">10<sup> − 7</sup></span>, which is neglible. Thus, we have demonstrated that both functions generate the same result.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Difference between weights of ipfp and mipfp</span>
+<span class="kw">abs</span>(weights-weights_mipfp)
+<span class="co">#&gt;           [,1]      [,2]      [,3]</span>
+<span class="co">#&gt; [1,] 1.274e-08 2.868e-09 2.207e-08</span>
+<span class="co">#&gt; [2,] 1.274e-08 2.868e-09 2.207e-08</span>
+<span class="co">#&gt; [3,] 2.547e-08 5.736e-09 4.414e-08</span>
+<span class="co">#&gt; [4,] 2.013e-08 1.330e-08 1.024e-07</span>
+<span class="co">#&gt; [5,] 2.013e-08 1.330e-08 1.024e-07</span></code></pre>
+<p>One package is written in C and the other in R. The current question is : Which package is more efficient? The answer will depend on your application. We have seen that both algorithms do not consider the same form of input. For <strong>ipfp</strong> you need constraints and an initial individual level data, coming for example from a survey. For <strong>mipfp</strong> the constraints and a contingency table of a survey is enough. Thus, in the absence of microdata, <strong>mipfp</strong> must be used (described in a subsequent chapter). Moreover, their results are in different structures. Weights are created for each individual with <strong>ipfp</strong> and weights for the contingency table with <strong>mipfp</strong>. The results can be transformed from one to the other form if needs be.</p>
+<h3>Speed testing</h3>
+<p>This section compares the computational time of <strong>mipfp</strong> and <strong>ipfp</strong> approaches.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Measure time ipfp</span>
+init &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>, n_ind)
+<span class="kw">system.time</span>(<span class="kw">ipfp</span>(cons[<span class="dv">1</span>,], ind_catt, <span class="dt">x0 =</span> init,  <span class="dt">tol =</span> <span class="fl">1e-5</span>))</code></pre>
+<p>The above code measure the time taken to execute the <code>ipfp</code> function for the zone 1. It takes 0.001 second on a modern computer<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> The code below make a similar analysis for the <code>Ipfp</code> function and takes 0.002 second on the same computer. Thus, for this very little example, the package <strong>ipfp</strong> written in C is faster. The first lines of code below are defined to ensure that we perform the same calculation. Thus, the times are comparable.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Chose correct constraint for mipfp</span>
+con_age_1 &lt;-<span class="st"> </span><span class="kw">data.matrix</span>( con_age[<span class="dv">1</span>,] )
+con_sex_2 &lt;-<span class="st"> </span><span class="kw">data.matrix</span>( con_sex[<span class="dv">1</span>, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>)] ) 
+target &lt;-<span class="st"> </span><span class="kw">list</span> (con_age_1, con_sex_2)
+descript &lt;-<span class="st"> </span><span class="kw">list</span> (<span class="dv">1</span>, <span class="dv">2</span>)
+
+<span class="co"># Equitable calculus - remove income </span>
+weight_init_no_income &lt;-<span class="st"> </span><span class="kw">table</span>( ind[, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>)])
+
+<span class="co"># Measure time mipfp</span>
+<span class="kw">system.time</span>(<span class="kw">Ipfp</span>( weight_init_no_income, descript, target, 
+                  <span class="dt">tol =</span> <span class="fl">1e-5</span>))</code></pre>
+<p>An advantage of the <strong>mipfp</strong> package, for problems with a lot of input individuals, is in terms of memory. Indeed, <strong>ipfp</strong> needs a table with as many rows as individuals, whereas <strong>mipfp</strong> needs a table of a dimension corresponding to the number of different categories. For SimpleWorld, the inputs of <strong>ipfp</strong> and <strong>mipfp</strong> are respectively:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># input for ipfp</span>
+ind_cat
+<span class="co">#&gt;   ind$agea0_49 ind$agea50+ ind$sexm ind$sexf</span>
+<span class="co">#&gt; 1            0           1        1        0</span>
+<span class="co">#&gt; 2            0           1        1        0</span>
+<span class="co">#&gt; 3            1           0        1        0</span>
+<span class="co">#&gt; 4            0           1        0        1</span>
+<span class="co">#&gt; 5            1           0        0        1</span>
+
+<span class="co"># input for mipfp</span>
+Ind_Tab
+<span class="co">#&gt;        sex</span>
+<span class="co">#&gt; age     f m</span>
+<span class="co">#&gt;   a0_49 1 1</span>
+<span class="co">#&gt;   a50+  1 2</span></code></pre>
+<p>Imagine that we have a similar problem, but with a total population of 2000 and 500 initial individuals. The dimension of <code>ind_cat</code> will become 500 rows for 4 columns, where the one of <code>Ind_Tab</code> will not change.</p>
+<p>By testing the time for SimpleWorld when considering having 25,000 individuals (we replicate the data 5000 times) and generating 12,000,000 individuals (we multiply the constraints by 1000), we obtain on the same computer that <strong>ipfp</strong> and <strong>mipfp</strong> take, respectively, 0.012 and 0.005 seconds.</p>
+<p>In conclusion to this comparison, <strong>mipfp</strong> is more adaptable than <strong>ipfp</strong>. Which to use will depend on the structure of the data available. In terms of computational time, the comparison demonstrates that <strong>mipfp</strong> was slower for small problems and faster for bigger problems. In all cases, they calculate the same results. Importantly for agent-based modelling, the weight matrices generated by both methods must undergo processes of <em>expansion</em> and <em>integerisation</em> to be converted into spatial microdata. These processes are covered in the next two sections.</p>
+<h3 id="sintegerisation">Integerisation</h3>
+<p>With the weight matrix containing doubles, so non-integer weights, two approaches are possible to obtain a resulting individual dataset. First, we can consider the weights as probabilities and inside each zone we can randomly draw the number of individuals needed (constraint of the zone). This randomly draw is made inside a distribution defined by the weights of each individual in this zone. The second possibility is to consider the weight matrix as the final contingency table, so that contain the number of individual of this type in this zone. For this, we need to have integer weights, so there is a need to transform the matrix in another similar, but with only integers. These processes are <code>Integerisation</code>. We propose here one way to do this.</p>
+<p>Integerisation is the process by which a vector of real numbers is converted into a vector of integers corresponding to the individuals present in synthetic spatial microdata. The length of the new vector must equal the population of the zone in question and individuals with high weights must be sampled proportionally more frequently than those with low weights for the operation to be effective. The following example illustrates how the process, when seen as a function called <span class="math"><em>i</em><em>n</em><em>t</em></span> would work on a vector of 3 weights:</p>
+<p><br /><span class="math"><em>w</em><sub>1</sub> = (0.333, 0.667, 3)</span><br /></p>
+<p><br /><span class="math"><em>i</em><em>n</em><em>t</em>(<em>w</em><sub>1</sub>) = (2, 3, 3, 3)</span><br /></p>
+<p>Note that <span class="math"><em>w</em><sub>1</sub></span> is a vector of length corresponding to the number of people in the sample for this zone. Then, <span class="math"><em>i</em><em>n</em><em>t</em>(<em>w</em><sub>1</sub>)</span> will be the result of the integerisation and each sell will contain the ID of the individual of the sample to take.This result was obtained by calculating the sum of the weights (4, which represents the total population of the zone) and sampling from these until the total population is reached. In this case individual 2 is selected once as they have a weight approaching 1, individual 3 was replicated (<em>cloned</em>) three times and individual 1 does not appear in the integerised dataset at all, as it has a low weight. In this case the outcome is straightforward because the numbers are small and simple. But what about in less clear-cut cases, such as <span class="math"><em>w</em><sub>2</sub> = (1.333, 1.333, 1.333)</span>? What is needed is an algorithm to undertake this process of <em>integerisation</em> in a systematic way to maximise the fit between the synthetic and constraint data for each zone.</p>
+<p>In fact there are a number of integerisation strategies available. Lovelace and Ballas (2012) tested 5 of these and found that probabilistic integerisation methods consistently outperformed deterministic rivals. The details of these algorithms are described in the aforementioned paper and code is provided in the Supplementary Information. For the purposes of this course we will create a function to undertake the simplest of these, <em>proportional probabilities</em>:</p>
+<pre class="sourceCode r"><code class="sourceCode r">int_pp &lt;-<span class="st"> </span>function(x){
+  <span class="kw">sample</span>(<span class="kw">length</span>(x), <span class="dt">size =</span> <span class="kw">round</span>(<span class="kw">sum</span>(x)), <span class="dt">prob =</span> x, <span class="dt">replace =</span> T)
+}</code></pre>
+<p>The R function <code>sample</code> needs in the order the arguments: the set of objects that can be chosen, the number of randomly draw and the probability of each object to be chosen. Then we can add the argument <code>replace</code> to tell R if the sampling has to be with replacement or not. To test this function let’s try it on the vectors of length 3 described in code:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">0</span>)
+<span class="kw">int_pp</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="fl">0.333</span>, <span class="fl">0.667</span>, <span class="dv">3</span>))
+<span class="co">#&gt; [1] 2 3 3 3</span>
+<span class="kw">int_pp</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="fl">1.333</span>, <span class="fl">1.333</span>, <span class="fl">1.333</span>))
+<span class="co">#&gt; [1] 1 2 1 1</span></code></pre>
+<p>Note that it is probabilistic, so normally if we proceed two times the same, the results can be a little different. So, by fixing the <code>seed</code>, we are sure to obtain each time the same result. The first result was the same as that obtained through intuition; the second result represented individual 1 being clones three times, plus one instance of individual 2. This is not intuitive: one would expect at least one of each individual given that they all have the same weight. But, you have to be aware that it a random choice meaning that even the cell with low probability can be chosen, but not so many times. Here, we draw only very few numbers, so it is normal that the resulting distribution is not exactly the same as the wanted. However, probabilities mean that if you have a very large dataset, you randow choice will result in a distribution very close to the desired one. We can generate 100.000 integers between 1 and 100.000 and see the distribution. The next figure contains the associated histogram and we can see that each interval occurs more or less the same number of times.</p>
+
+<p>An issue with the <em>proportional probabilities</em> (PP) strategy is that completely unrepresentative combinations of individuals have a non-zero probability of being sampled. The method will output <span class="math">(1, 1, 1, 1)</span> once in every 21 thousand runs for <span class="math"><em>w</em><sub>1</sub></span> and once every <span class="math">81</span> runs for <span class="math"><em>w</em><sub>2</sub></span>. The same probability is allocated to all other 81 (<span class="math">3<sup>4</sup></span>) permutations.</p>
+<p>To overcome this issue Lovelace and Ballas (2012) developed a method which ensures that any individual with a weight above 1 would be sampled at least once, making the result <span class="math">(1, 1, 1, 1)</span> impossible in both cases. This method is <em>truncate, replicate, sample</em> (TRS) integerisation:</p>
+<pre class="sourceCode r"><code class="sourceCode r">int_trs &lt;-<span class="st"> </span>function(x){
+  truncated &lt;-<span class="st"> </span><span class="kw">which</span>(x &gt;=<span class="st"> </span><span class="dv">1</span>)
+  replicated &lt;-<span class="st"> </span><span class="kw">rep</span>(truncated, <span class="kw">floor</span>(x[truncated]))
+  r &lt;-<span class="st"> </span>x -<span class="st"> </span><span class="kw">floor</span>(x)
+  def &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">sum</span>(x)) -<span class="st"> </span><span class="kw">length</span>(replicated) <span class="co"># deficit population</span>
+  if(def ==<span class="st"> </span><span class="dv">0</span>){
+    out &lt;-<span class="st"> </span>replicated
+  } else {
+    out &lt;-<span class="st"> </span><span class="kw">c</span>(replicated,
+      <span class="kw">sample</span>(<span class="kw">length</span>(x), <span class="dt">size =</span> def, <span class="dt">prob =</span> r, <span class="dt">replace =</span> <span class="ot">FALSE</span>))
+  }
+  out
+}</code></pre>
+<p>This method consists in 3 steps : truncate all weights, so to keep only the integer part and forget the decimals. Then, to replicate, so to consider these integer as the number of each type of individuals in the zone. And finally, sample, so complete the process to reach the good number of people in the zone. This stage is using a sampling with the probability corresponding to the decimal weights. To see how this new integerisation method and associated R function performed, we run it on the same input vectors:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">0</span>)
+<span class="kw">int_trs</span>(<span class="kw">c</span>(<span class="fl">0.333</span>, <span class="fl">0.667</span>, <span class="dv">3</span>))
+<span class="co">#&gt; [1] 3 3 3 1</span>
+<span class="kw">int_trs</span>(<span class="kw">c</span>(<span class="fl">1.333</span>, <span class="fl">1.333</span>, <span class="fl">1.333</span>))
+<span class="co">#&gt; [1] 1 2 3 2</span></code></pre>
+<p>Note that while <code>int_pp</code> (the <em>proportional probabilities</em> function) produced an output with 3 instances of individual 1 (in other words allocated individual 1 a weight of 3 for this zone), TRS allocated a weight of at least 1 to every individual. Although the individual that is allocated a weight of 2 will vary depending on the random seed used in TRS, we can be sure that TRS will never covert a fractional weight above one into an integer weight of less than one. In other words the range of possible integer weight outcomes is smaller using TRS instead of the PP technique. TRS is a more tightly constrained method of integerisation. This explains why spatial microdata produced using TRS fit more closely to the aggregate constraints than spatial microdata produced using different integerisation algorithms (Lovelace and Ballas 2013). This is why we use the TRS methodology, implemented through the function <code>int_trs</code>, for integerisation throughout the majority of this book.</p>
+<p>Let’s use TRS to generate spatial microdata for SimpleWorld. Remember, we already have generated the weight matrix <code>weights</code>. The only challenge is to save the vector of sampled individual id numbers, alongside the zone number, into a single object from which the attributes of these individuals can be recovered….</p>
+<h3>Expansion</h3>
+<p>As illustrated in figure 5.1…</p>
+<p>Two strategies for doing this are presented in the code below:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Method 1: using a for loop</span>
+ints_df &lt;-<span class="st"> </span><span class="ot">NULL</span>
+for(i in <span class="dv">1</span>:<span class="kw">nrow</span>(cons)){
+  ints &lt;-<span class="st"> </span><span class="kw">int_trs</span>(weights[, i])
+  ints_df &lt;-<span class="st"> </span><span class="kw">rbind</span>(ints_df, <span class="kw">data.frame</span>(<span class="dt">id =</span> ints, <span class="dt">zone =</span> i))
+}
+
+<span class="co"># Method 2: using apply</span>
+ints &lt;-<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">apply</span>(weights, <span class="dv">2</span>, int_trs)) <span class="co"># integerised result</span>
+ints_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> ints,
+  <span class="dt">zone =</span> <span class="kw">rep</span>(<span class="dv">1</span>:<span class="kw">nrow</span>(cons), <span class="kw">colSums</span>(weights)))</code></pre>
+<p>Both methods yield the same result for <code>ints_df</code>. The only differences being that Method 1 is perhaps more explicit and easier to understand whilst Method 2 is more concise.</p>
+<p>The final remaining step is to re-allocate the attribute data from the original microdata (contained in <code>ind</code>) data back into <code>ints_df</code>. We label this process <em>expansion</em>, because it creates a synthetic population. To do this we use the <code>inner_join</code> function from the recently released <strong>dplyr</strong> package.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> Assuming <strong>dplyr</strong> is loaded — with <code>library(plyr)</code> — one can read more about join by entering <code>?inner_join</code> in R.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr) <span class="co"># use install.packages(dplyr) if not installed</span>
+ints_df &lt;-<span class="st"> </span><span class="kw">inner_join</span>(ints_df, ind_orig)</code></pre>
+<p><code>ints_df</code> represents the final spatial microdataset, representing the entirety of SimpleWorld’s population of 33 (this can be confirmed with <code>nrow(ints_df)</code>). To select individuals from one zone only is simple using R’s subsetting notation. To select all individuals generated for zone 2, for example, the following code is used. Note that this is the same as the output generated in Table 5 at the end of the SimpleWorld chapter — we have successfully modelled the inhabitants of a fictional planet, including income!</p>
+<pre class="sourceCode r"><code class="sourceCode r">ints_df[ints_df$zone ==<span class="st"> </span><span class="dv">2</span>, ]
+<span class="co">#&gt;    id zone age sex income</span>
+<span class="co">#&gt; 13  1    2  59   m   2868</span>
+<span class="co">#&gt; 14  2    2  54   m   2474</span>
+<span class="co">#&gt; 15  4    2  73   f   3152</span>
+<span class="co">#&gt; 16  4    2  73   f   3152</span>
+<span class="co">#&gt; 17  4    2  73   f   3152</span>
+<span class="co">#&gt; 18  4    2  73   f   3152</span>
+<span class="co">#&gt; 19  5    2  49   f   2473</span>
+<span class="co">#&gt; 20  2    2  54   m   2474</span>
+<span class="co">#&gt; 21  4    2  73   f   3152</span>
+<span class="co">#&gt; 22  1    2  59   m   2868</span></code></pre>
+<h2>The GREGWT algorithm</h2>
+<p>As described in the Introduction, IPF is just one strategy for obtaining a spatial microdataset. However, researchers (myself included) have tended to select one method that they are comfortable and stick with that for their models. This is understandable because setting-up the method is usually time consuming: most researchers rightly focus on applying the methods to the real world rather than fretting about the details. On the other hand, if alternative methods work better for a particular application, resistance to change can result in poor model fit. In the case of very large datasets, spatial microsimulation may not be possible unless certain methods, optimised to deal with large datasets, are used. Above all, there is no consensus about which methods are ‘best’ for different applications, so it is worth experimenting to identify which method is most suitable for each application.</p>
+<p>An interesting alternative to IPF method is the GREGWT algorithm. First implemented in the SAS language by the Statistical Service area of the Australian Bureau of Statistics (ABS), the algorithm reweighs a set of initial weights using a Generalized Regression Weighting procedure (hence the name GREGWT). The resulting weights ensure that, when aggregated, the individuals selected for each small area fit the constraint variables. Like IPF, the GREGWT results in non-integer weights, meaning some kind of integerisation algorithm will be needed to obtain a final individual-level population, so for example, if the output is to be used in ABM. The macro developed by ABS adds a weight restriction in their GREGWT macros to ensure positive weights. The ABS uses the Linear Truncated Method described in Singh and Mohl (1996) to enforce these restrictions.</p>
+<p>A clear simplified example of this algorithm (and other algorithms) can be found in Rahman (2009). In their paper Tanton et.al (2011) make a full description of the algorithm. For a deeper understanding of the SAS macros see Bell (1999). An R implementation of GREGWT, has been created by Esteban Muñoz, and can be found in the GitLab repository <a href="https://gitlab.com/emunozh/mikrosim">mikrosim</a>.</p>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Any initial weight values could be used here: initial weights do not affect the final weights after many iterations. The value of one is used as a sensible convention.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Fienberg (1970) provides a geometrical proof that IPF converges to a single result, in the absence of <em>empty cells</em>.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>Without setting the seed, the results will change each time. In addition, changing the value inside the brackets of <code>set.seed()</code> will result in a different combination of individuals being selected for each new number — test this out in your code. This happens because the method relies on <em>pseudo random numbers</em> to select values probabilistically and <code>set.seed()</code> specifies where the random number sequence should begin, ensuring reproducibility. We must really trust the random function used. Note that it is impossible for a computer to choose <em>entirely</em> random numbers, so algorithms to generate <em>pseudo-random numbers</em> have been developed. See the documentation provided by <code>?set.seed</code> for more information.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p>The integer data type fails because C requires <code>numeric</code> data to be converted into its <em>floating point</em> data class.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>These tests also show that any speed gains from using <code>apply</code> instead of <code>for</code> are negligible, so whether to use <code>for</code> or <code>apply</code> can be decided by personal preference.<a href="#fnref5">↩</a></p></li>
+<li id="fn6"><p>The tests were performed on a computer with Intel i7-4930K processer running at 3.40GHz.<a href="#fnref6">↩</a></p></li>
+<li id="fn7"><p>The functions <code>merge</code> from the R’s base package and <code>join</code> from the <strong>plyr</strong> provide other ways of undertaking this step. <code>inner_join</code> is used in place of <code>merge</code> because <code>merge</code> does not maintain row order. <code>join</code> generates the same result, but is slower, hence the use of <code>inner_join</code> from the recently released and powerful <strong>dplyr</strong> package.<a href="#fnref7">↩</a></p></li>
+</ol>
+</div>
+
+        </div>
+      </div>
+
+      <div class="footer">
+        <hr>
+        <p>&copy; Site design: Hadley Wickham. Powered by <a href="http://jekyllrb.com/">jekyll</a>,
+          <a href="http://yihui.name/knitr/">knitr</a>, and
+          <a href="http://johnmacfarlane.net/pandoc/">pandoc</a>. Source
+          available on <a href="https://github.com/robinlovelace/spatial-microsim-book/">github</a>.
+        </p>
+      </div>
+
+    </div> <!-- /container -->
+
+  <script src="//code.jquery.com/jquery.js"></script>
+  <script src="www/bootstrap.min.js"></script>
+  <script src="www/toc.js"></script>
+  </body>
+</html>
