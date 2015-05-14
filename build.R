@@ -19,9 +19,11 @@ for(i in rmds){
 system("cp -v frontmatter/index.html .")
 # then type 'jekyll build' or 'jekyll serve' in bash
 
-file.remove("temp.html")
-system("mv -v _site/*.html .") # copy site dir to local
-system("rm -v *.Rmd") # remove .Rmd files - or just don't add them
+
+# warning: run only after jekyll!
+# file.remove("temp.html")
+# system("mv -v _site/*.html .") # copy site dir to local
+# system("rm -v *.Rmd") # remove .Rmd files - or just don't add them
 
 
 # then push directly to the internet
