@@ -42,6 +42,7 @@ umat_count <- function(x) {
   cbind(xu, data.frame(ind_num = freq[o], rns = rns)) # output
 }
 
+# Generates list of outputs - requires dplyr
 umat_count_dplyr <- function(x){
   x$p <- apply(x, 1, paste0, collapse = "")
   up <- data.frame(p = unique(x$p)) # unique values in order they appeared
@@ -49,55 +50,4 @@ umat_count_dplyr <- function(x){
   umat <- inner_join(up, y) # quite fast
   umat <- join(umat, x, match = "first")
   list(u = umat, p = x$p) # return unique individuals and attributes
-}
-
-# Generates list of outputs
-umat_count_dplyr <- function(x){
-  x$p <- apply(x, 1, paste0, collapse = "")
-  up <- data.frame(p = unique(x$p)) # unique values in order they appeared
-  y <- dplyr::count(x, p) # fast freq table
-  umat <- inner_join(up, y) # quite fast
-  umat <- join(umat, x, match = "first")
-  list(u = umat, p = x$p) # return unique individuals and attributes
-}
-
-# Book building functions
-Rmd_bind <- function(dir = ".",
-  book_header = readLines(textConnection("---\ntitle: 'Title'\n---"))){
-  old <- setwd(dir)
-  if(length(grep("book.Rmd$", list.files())) > 0){
-    warning("book.Rmd already exists")
-  }
-  cfiles <- list.files(pattern = "*.Rmd", )
-  write(book_header, file = "book.Rmd", )
-  ttext <- NULL
-  for(i in 1:length(cfiles)){
-    text <- readLines(cfiles[i])
-    hspan <- grep("---", text)
-    text <- text[-c(hspan[1]:hspan[2])]
-    write(text, sep = "\n", file = "book.Rmd", append = T)
-  }
-  #     render("book.Rmd", output_format = "pdf_document")
-  setwd(old)
-}
-
-Rmd_bind_mod <- function(dir = ".",
-  book_header = readLines(textConnection("---\ntitle: 'Title'\n---"))){
-  old <- setwd(dir)
-  if(length(grep("book.Rmd", list.files())) > 0){
-    warning("book.Rmd already exists")
-  }
-  cfiles <- list.files(pattern = "*.Rmd$", )
-  cfiles <- cfiles[-grep("book", cfiles)]
-  cfiles <- cfiles[c(6, 11, 8, 4, 10, 3, 9, 1, 2, 5, 7)] # chapter order
-  write(book_header, file = "book.Rmd", )
-  ttext <- NULL
-  for(i in 1:length(cfiles)){
-    text <- readLines(cfiles[i])
-    hspan <- grep("---", text)
-    text <- text[-c(hspan[1]:hspan[2])]
-    write(text, sep = "\n", file = "book.Rmd", append = T)
-  }
-  #     render("book.Rmd", output_format = "pdf_document")
-  setwd(old)
 }
