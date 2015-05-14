@@ -66,6 +66,8 @@ Kabacoff, R. (2011). R in Action. Manning Publications Co.
 
 Knoblauch, K., & Maloney, L. T. (2012). Modeling psychophysical data in R (Vol. 32). Springer. Retrieved from http://mpdir.r-forge.r-project.org/book/Front.pdf
 
+Lenormand, M, & Deffuant, G. (2015). Generating a synthetic population of individuals in households: Sample-free vs sample-based methods. Journal of Artificial Societies and Social Simulation, 16(4):12. Retrieved from http://arxiv.org/pdf/1208.6403v2.pdf
+
 Lovelace, R. (2014). Introducing spatial microsimulation with R: a practical. National Centre for Research Methods, 08(14). Retrieved from http://eprints.ncrm.ac.uk/3348/
 
 Lovelace, R., & Ballas, D. (2013). “Truncate, replicate, sample”: A method for creating integer weights for spatial microsimulation. Computers, Environment and Urban Systems, 41, 1–11. doi:10.1016/j.compenvurbsys.2013.03.004
