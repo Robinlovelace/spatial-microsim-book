@@ -71,12 +71,20 @@ opt_res <- data.frame(algorithm = NA,
   maxit = NA,
   fit = NA,
   time = NA)
-i = 20 # default iteration number
+init<-fun(par = rep(1,nrow(indu)), ind_num = indu, con = cons)
+opt_res <- rbind(opt_res, c("optim_Nelder", 0,init, NA))
+opt_res <- rbind(opt_res, c("optim_SANN", 0,init, NA))
+opt_res <- rbind(opt_res, c("optim_BFGS", 0,init, NA))
+opt_res <- rbind(opt_res, c("optim_CG", 0,init, NA))
+opt_res <- rbind(opt_res, c("ipf", 0,init, NA))
+opt_res <- rbind(opt_res, c("GenSA", 0,init, NA))
+
+Nb = 11 # default iteration number
 set.seed(2014)
-for(i in 1:5){
+for(i in 1:Nb){
   tmp_res <- optim(par = rep(1, nrow(indu)), fn = fun, method = "Nelder-Mead", ind_num = indu, con = cons[1,], control = list(maxit = i))
   opt_res <- rbind(opt_res, c("optim_Nelder", i, tmp_res$value, NA))
-  tmp_res <- optim(par = rep(1, nrow(indu)), fn = fun, method = "SANN", ind_num = indu, con = cons[1,], control = list(maxit = i * 100))
+  tmp_res <- optim(par = rep(1, nrow(indu)), fn = fun, method = "SANN", ind_num = indu, con = cons[1,], control = list(maxit = i ))
   opt_res <- rbind(opt_res, c("optim_SANN", i, tmp_res$value, NA))
   tmp_res <- optim(par = rep(1, nrow(indu)), fn = fun, method = "BFGS", ind_num = indu, con = cons[1,], control = list(maxit = i))
   opt_res <- rbind(opt_res, c("optim_BFGS", i, tmp_res$value, NA))
@@ -94,22 +102,30 @@ opt_res$maxit <- as.numeric(opt_res$maxit)
 
 qplot(data = opt_res, maxit, fit, linetype = algorithm, geom="line") +
   ylab("Total Absolute Error") + xlab("Iterations") +
-#   scale_color_brewer(palette = 2, type = "qual") + 
+  scale_linetype(name = "Algorithm") +
+   #scale_color_brewer(palette = 2, type = "qual") + 
   theme_classic()
-# ggsave("figures/optim-its.png")
+# Save the plots! 
+# ggsave("figures/optim-its.png") # (original plot)
+# ggsave("figures/TAEOptim_GenSA_Mo.png")
+# ggsave("figures/TAEOptim_GenSA_Mo.pdf")
+
+
 
 # Regenerate results for timings plot
 opt_res <- data.frame(algorithm = NA,
   maxit = NA,
   fit = NA,
   time = NA)
-i = 20 # default iteration number
+
+
+Nb = 11 # default iteration number
 set.seed(2014)
-for(i in 1:5){
-  tmp_res <- optim(par = rep(1, nrow(indu)), fn = fun, method = "Nelder-Mead", ind_num = indu, con = cons[1,], control = list(maxit = i * 50))
+for(i in 1:Nb){
+  tmp_res <- optim(par = rep(1, nrow(indu)), fn = fun, method = "Nelder-Mead", ind_num = indu, con = cons[1,], control = list(maxit = i))
   opt_res <- rbind(opt_res, c("optim_Nelder", i, tmp_res$value, NA))
   tmp_res <- optim(par = rep(1, nrow(indu)), fn = fun, method = "SANN", ind_num = indu, con = cons[1,], control = list(maxit = i))
-  opt_res <- rbind(opt_res, c("optim_SANN", i * 100, tmp_res$value, NA))
+  opt_res <- rbind(opt_res, c("optim_SANN", i , tmp_res$value, NA))
   tmp_res <- optim(par = rep(1, nrow(indu)), fn = fun, method = "BFGS", ind_num = indu, con = cons[1,], control = list(maxit = i))
   opt_res <- rbind(opt_res, c("optim_BFGS", i, tmp_res$value, NA))
   tmp_res <- optim(par = rep(1, nrow(indu)), fn = fun, method = "CG", ind_num = indu, con = cons[1,], control = list(maxit = i))
@@ -126,22 +142,39 @@ opt_res$maxit <- as.numeric(opt_res$maxit)
 
 ### Timings
 mb <- NULL
-for(i in 1:5){
-  Nelder <- function(){optim(par = rep(1, nrow(indu)), fn = fun, method = "Nelder-Mead", ind_num = indu, con = cons[1,], control = list(maxit = i * 50))}
-  SANN <- function(){optim(par = rep(1, nrow(indu)), fn = fun, method = "SANN", ind_num = indu, con = cons[1,], control = list(maxit = i * 1000))}
+for(i in 1:Nb){
+  Nelder <- function(){optim(par = rep(1, nrow(indu)), fn = fun, method = "Nelder-Mead", ind_num = indu, con = cons[1,], control = list(maxit = i ))}
+  SANN <- function(){optim(par = rep(1, nrow(indu)), fn = fun, method = "SANN", ind_num = indu, con = cons[1,], control = list(maxit = i ))}
   BFGS <- function(){optim(par = rep(1, nrow(indu)), fn = fun, method = "BFGS", ind_num = indu, con = cons[1,], control = list(maxit = i))}
   CG <- function(){optim(par = rep(1, nrow(indu)), fn = fun, method = "CG", ind_num = indu, con = cons[1,], control = list(maxit = i))}
-  IPF <- function(){weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = i^5 ))
+  IPF <- function(){weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = i ))
   tae <- sum(abs(colSums(weights[,1] * ind_cat) - cons[1,]))}
   GENSA <- function(){GenSA(par = rep(1, nrow(indu)), fn = fun, lower = rep(0, nrow(indu)), upper = rep(10^2, nrow(indu)), control = list(maxit = i), ind_num = indu, con = cons[1,])}
-  mb <- rbind(mb, print(microbenchmark(Nelder(), SANN(), BFGS(), CG(), IPF(), GENSA(), times = 10)))
+  mb <- rbind(mb, print(microbenchmark(Nelder(), SANN(), BFGS(), CG(), IPF(), GENSA(), times = 20)))
 }
 
-opt_res$time <- c(NA, mb$median)
-qplot(data = opt_res, time, fit, linetype = algorithm, geom="line") +
-  ylab("Total Absolute Error") + xlab("Time (microseconds)") + scale_color_brewer(palette = 2, type = "qual") + theme_classic() + xlim(c(0, 10000))
+opt_res[2:dim(opt_res)[1],]$time <-  mb$mean
+opt_res$time<-as.numeric(opt_res$time)
+
+qplot(data = opt_res, maxit, time, linetype = algorithm, geom="line") +
+#   ylim(NA, 3000) +
+  coord_cartesian(ylim = c(0, 2000)) +
+  ylab("Time (microseconds)") +
+  xlab("Number of iterations") +
+  scale_colour_brewer(palette = 2, type = "div") +
+  scale_linetype(name = "Algorithm") +
+  theme_classic() 
+# Save the plots!
 # ggsave("figures/optim-time.png")
+# ggsave("figures/TimeOptim_GenSA_Mo.png")
+# ggsave("figures/TimeOptim_GenSA_Mo.pdf")
 ### Background
+
+# plot of time vs TAE
+qplot(data = opt_res, time, fit, linetype = algorithm, geom="line") +
+  ylab("TAE") + xlab("Time (microseconds)") + scale_color_brewer(palette = 2, type = "qual") + theme_classic() 
+
 
 ### Stack overflow - simplest form - representation of the above
 # See http://stackoverflow.com/questions/26160079/fast-concise-way-to-generate-ordered-frequency-count-of-unique-matrix-rows
+

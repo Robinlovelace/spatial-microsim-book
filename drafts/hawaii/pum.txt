@@ -1,0 +1,272 @@
+ This 1% Public Use Microdata Sample Equivalency (PUMEQ1) file is intended to help users understand the relationships
+ between standard Census 2000 geographic concepts (counties, county subdivisions, places, and census tracts) and the
+ SuperPUMA geographic units of the 1% PUMS data files.
+
+ Each PUMEQ1 file delineates the summary level codes specific to the PUMS geography, and has its own set of summary
+ level code and hierarchical sequencing, as described below:
+
+ 790 State-SuperPUMA
+     791 State-SuperPUMA-County (or part)
+         792 State-SuperPUMA-County-County Subdivision (or part) (20 states with functioning county subdivisions)
+             793 State-SuperPUMA-County-County Subdivision-Place/Remainder (or part)
+                 794 State-SuperPUMA-County-County Subdivision-Place/Remainder-Census Tract
+
+ Please note that in the New England states, there may be more than one summary level 791 record within a single
+ SuperPUMA, since these areas may exist in more than one metropolitan area/nonmetropolitan area.  Please also
+ note that county subdivision codes are not used in the 30 states, the District of Columbia, and Puerto Rico,
+ that have no functioning county subdivisions. Census tracts are shown only when a place has parts in more than
+ one SuperPUMA.
+
+ The fields and content of the PUMEQ1 file is described below:
+
+   FIELD     DESCRIPTION
+
+     A       Summary Level Code (described above)
+     B       FIPS State Code
+     C       SuperPUMA Code
+     D       Reserved for future use
+     E       FIPS County Code
+     F       FIPS County Subdivision Code
+     G       FIPS Place Code
+     H       Central City Indicator:
+               0 = Not in central city
+               1 = In central city
+     I       Census Tract Code
+     J       Metropolitan Statistical Area/Consolidated Statistical Area Code
+     K       Primary Metropolitan Statistical Area Code
+     L       Census 2000 100% Population Count
+     M       Area Name
+
+
+   A  B     C     D   E     F     G H      I    J    K        L M
+
+ 790 15 15101                                            627475 SuperPUMA 15101                                              
+ 791 15 15101       001                      9999        148677 Hawaii County                                                
+ 793 15 15101       001       01085 0        9999          1910 Ainaloa CDP                                                  
+ 793 15 15101       001       03850 0        9999          3206 Captain Cook CDP                                             
+ 793 15 15101       001       06325 0        9999           451 Eden Roc CDP                                                 
+ 793 15 15101       001       07542 0        9999           756 Fern Acres CDP                                               
+ 793 15 15101       001       07675 0        9999           480 Fern Forest CDP                                              
+ 793 15 15101       001       09700 0        9999           495 Halaula CDP                                                  
+ 793 15 15101       001       12450 0        9999          1776 Hawaiian Acres CDP                                           
+ 793 15 15101       001       12500 0        9999          3709 Hawaiian Beaches CDP                                         
+ 793 15 15101       001       12530 0        9999          2178 Hawaiian Ocean View CDP                                      
+ 793 15 15101       001       12600 0        9999          7051 Hawaiian Paradise Park CDP                                   
+ 793 15 15101       001       13600 0        9999           938 Hawi CDP                                                     
+ 793 15 15101       001       14650 0        9999         40759 Hilo CDP                                                     
+ 793 15 15101       001       15700 0        9999          6107 Holualoa CDP                                                 
+ 793 15 15101       001       16000 0        9999          1987 Honalo CDP                                                   
+ 793 15 15101       001       16160 0        9999          2414 Honaunau-Napoopoo CDP                                        
+ 793 15 15101       001       16450 0        9999          2233 Honokaa CDP                                                  
+ 793 15 15101       001       17450 0        9999           541 Honomu CDP                                                   
+ 793 15 15101       001       21230 0        9999          2414 Kahaluu-Keauhou CDP                                          
+ 793 15 15101       001       23000 0        9999          9870 Kailua CDP                                                   
+ 793 15 15101       001       25400 0        9999          6794 Kalaoa CDP                                                   
+ 793 15 15101       001       29000 0        9999          1159 Kapaau CDP                                                   
+ 793 15 15101       001       32900 0        9999          2010 Keaau CDP                                                    
+ 793 15 15101       001       33950 0        9999          1645 Kealakekua CDP                                               
+ 793 15 15101       001       41000 0        9999           317 Kukuihaele CDP                                               
+ 793 15 15101       001       42800 0        9999          1157 Kurtistown CDP                                               
+ 793 15 15101       001       44150 0        9999           473 Laupahoehoe CDP                                              
+ 793 15 15101       001       44562 0        9999          1046 Leilani Estates CDP                                          
+ 793 15 15101       001       53300 0        9999          2799 Mountain View CDP                                            
+ 793 15 15101       001       53600 0        9999           919 Naalehu CDP                                                  
+ 793 15 15101       001       53975 0        9999          1073 Nanawale Estates CDP                                         
+ 793 15 15101       001       58775 0        9999          1731 Orchidlands Estates CDP                                      
+ 793 15 15101       001       59300 0        9999           571 Paauilo CDP                                                  
+ 793 15 15101       001       59750 0        9999          1378 Pahala CDP                                                   
+ 793 15 15101       001       59900 0        9999           962 Pahoa CDP                                                    
+ 793 15 15101       001       61550 0        9999          1414 Papaikou CDP                                                 
+ 793 15 15101       001       61700 0        9999           495 Paukaa CDP                                                   
+ 793 15 15101       001       63650 0        9999          1697 Pepeekeo CDP                                                 
+ 793 15 15101       001       65150 0        9999           429 Puako CDP                                                    
+ 793 15 15101       001       72350 0        9999          2231 Volcano CDP                                                  
+ 793 15 15101       001       76600 0        9999          4806 Waikoloa Village CDP                                         
+ 793 15 15101       001       78500 0        9999          7028 Waimea CDP                                                   
+ 793 15 15101       001       78950 0        9999          1227 Wainaku CDP                                                  
+ 793 15 15101       001       99999 0        9999         16041 Remainder of Hawaii County                                   
+ 791 15 15101       003                      3320        292094 Honolulu County (part)                                       
+ 793 15 15101       003       02500 0        3320            67 Barbers Point Housing CDP                                    
+ 793 15 15101       003       07450 0        3320         14650 Ewa Beach CDP                                                
+ 793 15 15101       003       07470 0        3320          4939 Ewa Gentry CDP                                               
+ 793 15 15101       003       07485 0        3320          4741 Ewa Villages CDP                                             
+ 793 15 15101       003       10750 0        3320          2225 Haleiwa CDP                                                  
+ 793 15 15101       003       12400 0        3320          3651 Hauula CDP                                                   
+ 793 15 15101       003       19100 0        3320          2462 Iroquois Point CDP                                           
+ 793 15 15101       003       19550 0        3320          1324 Kaaawa CDP                                                   
+ 793 15 15101       003       22250 0        3320          2097 Kahuku CDP                                                   
+ 793 15 15101       003       32700 0        3320           410 Kawela Bay CDP                                               
+ 793 15 15101       003       43250 0        3320          4585 Laie CDP                                                     
+ 793 15 15101       003       47300 0        3320          5943 Maili CDP                                                    
+ 793 15 15101       003       47450 0        3320          7753 Makaha CDP                                                   
+ 793 15 15101       003       47560 0        3320          1289 Makaha Valley CDP                                            
+ 793 15 15101       003       47750 0        3320         13156 Makakilo City CDP                                            
+ 793 15 15101       003       51050 0        3320         28608 Mililani Town CDP                                            
+ 793 15 15101       003       52550 0        3320          1839 Mokuleia CDP                                                 
+ 793 15 15101       003       53900 0        3320         10814 Nanakuli CDP                                                 
+ 793 15 15101       003       66500 0        3320           881 Punaluu CDP                                                  
+ 793 15 15101       003       66800 0        3320          4250 Pupukea CDP                                                  
+ 793 15 15101       003       69050 0        3320         14428 Schofield Barracks CDP                                       
+ 793 15 15101       003       72255 0        3320          9625 Village Park CDP                                             
+ 793 15 15101       003       72650 0        3320         16151 Wahiawa CDP                                                  
+ 793 15 15101       003       74000 0        3320          3761 Waialua CDP                                                  
+ 793 15 15101       003       74450 0        3320         10506 Waianae CDP                                                  
+ 793 15 15101       003       79700 0        3320         33108 Waipahu CDP                                                  
+ 793 15 15101       003       79860 0        3320         11672 Waipio CDP                                                   
+ 793 15 15101       003       80000 0        3320          5298 Waipio Acres CDP                                             
+ 793 15 15101       003       80600 0        3320          2829 Wheeler AFB CDP                                              
+ 793 15 15101       003       80900 0        3320          4057 Whitmore Village CDP                                         
+ 793 15 15101       003       99999 0        3320         64975 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008200 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008301 3320          1394 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008401 3320          3300 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008402 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008403 3320          2249 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008404 3320          3751 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008500 3320          1244 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008603 3320           823 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008604 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008605 3320          3866 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008606 3320          7290 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008607 3320          1544 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008608 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008609 3320          1671 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008610 3320             9 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008701 3320           535 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008703 3320          2219 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008905 3320          1896 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008908 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008912 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008916 3320         11181 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008918 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008919 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008920 3320           341 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008921 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 008922 3320          6895 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009000 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009100 3320           606 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009501 3320           299 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009505 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009601 3320          1147 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009603 3320          1849 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009604 3320           672 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009701 3320          1102 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009702 3320          1095 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009801 3320            89 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009802 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009901 3320           131 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 009902 3320          2023 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 010000 3320          4048 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 010100 3320           730 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 010201 3320           644 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 010202 3320           327 Remainder of Honolulu County (part)                          
+ 794 15 15101       003       99999 0 011498 3320             5 Remainder of Honolulu County (part)                          
+ 791 15 15101       005                      9999           147 Kalawao County                                               
+ 793 15 15101       005       99999 0        9999           147 Remainder of Kalawao County                                  
+ 791 15 15101       007                      9999         58463 Kauai County                                                 
+ 793 15 15101       007       02200 0        9999          1932 Anahola CDP                                                  
+ 793 15 15101       007       07000 0        9999          2040 Eleele CDP                                                   
+ 793 15 15101       007       11500 0        9999           478 Hanalei CDP                                                  
+ 793 15 15101       007       11650 0        9999          3272 Hanamaulu CDP                                                
+ 793 15 15101       007       11800 0        9999          2153 Hanapepe CDP                                                 
+ 793 15 15101       007       24950 0        9999          3913 Kalaheo CDP                                                  
+ 793 15 15101       007       26750 0        9999           717 Kalihiwai CDP                                                
+ 793 15 15101       007       28850 0        9999          9472 Kapaa CDP                                                    
+ 793 15 15101       007       30650 0        9999           607 Kaumakani CDP                                                
+ 793 15 15101       007       35600 0        9999          3175 Kekaha CDP                                                   
+ 793 15 15101       007       36650 0        9999          2092 Kilauea CDP                                                  
+ 793 15 15101       007       39200 0        9999          1942 Koloa CDP                                                    
+ 793 15 15101       007       44450 0        9999          1984 Lawai CDP                                                    
+ 793 15 15101       007       45200 0        9999          5674 Lihue CDP                                                    
+ 793 15 15101       007       57800 0        9999          1221 Omao CDP                                                     
+ 793 15 15101       007       60350 0        9999           478 Pakala Village CDP                                           
+ 793 15 15101       007       64550 0        9999          1075 Poipu CDP                                                    
+ 793 15 15101       007       65075 0        9999          1698 Princeville CDP                                              
+ 793 15 15101       007       65750 0        9999          1186 Puhi CDP                                                     
+ 793 15 15101       007       77000 0        9999          2083 Wailua CDP                                                   
+ 793 15 15101       007       77225 0        9999          4567 Wailua Homesteads CDP                                        
+ 793 15 15101       007       78800 0        9999          1787 Waimea CDP                                                   
+ 793 15 15101       007       99999 0        9999          4917 Remainder of Kauai County                                    
+ 791 15 15101       009                      9999        128094 Maui County                                                  
+ 793 15 15101       009       09260 0        9999          6578 Haiku-Pauwela CDP                                            
+ 793 15 15101       009       10900 0        9999           895 Haliimaile CDP                                               
+ 793 15 15101       009       11350 0        9999           709 Hana CDP                                                     
+ 793 15 15101       009       20000 0        9999          1375 Kaanapali CDP                                                
+ 793 15 15101       009       22700 0        9999         20146 Kahului CDP                                                  
+ 793 15 15101       009       29725 0        9999           467 Kapalua CDP                                                  
+ 793 15 15101       009       31100 0        9999          2726 Kaunakakai CDP                                               
+ 793 15 15101       009       36500 0        9999         16749 Kihei CDP                                                    
+ 793 15 15101       009       39500 0        9999          1936 Kualapuu CDP                                                 
+ 793 15 15101       009       42950 0        9999          9118 Lahaina CDP                                                  
+ 793 15 15101       009       43700 0        9999          3164 Lanai City CDP                                               
+ 793 15 15101       009       46400 0        9999           454 Maalaea CDP                                                  
+ 793 15 15101       009       48050 0        9999          6327 Makawao CDP                                                  
+ 793 15 15101       009       50150 0        9999           230 Maunaloa CDP                                                 
+ 793 15 15101       009       54100 0        9999          6788 Napili-Honokowai CDP                                         
+ 793 15 15101       009       60200 0        9999          2499 Paia CDP                                                     
+ 793 15 15101       009       65900 0        9999          7380 Pukalani CDP                                                 
+ 793 15 15101       009       75510 0        9999          7310 Waihee-Waiehu CDP                                            
+ 793 15 15101       009       75950 0        9999          1115 Waikapu CDP                                                  
+ 793 15 15101       009       76935 0        9999          5671 Wailea-Makena CDP                                            
+ 793 15 15101       009       77450 0        9999         12296 Wailuku CDP                                                  
+ 793 15 15101       009       99999 0        9999         14161 Remainder of Maui County                                     
+ 790 15 15102                                            584062 SuperPUMA 15102                                              
+ 791 15 15102       003                      3320        584062 Honolulu County (part)                                       
+ 793 15 15102       003       00400 0        3320          8506 Ahuimanu CDP                                                 
+ 793 15 15102       003       00550 0        3320          9019 Aiea CDP                                                     
+ 793 15 15102       003       10000 0        3320         13891 Halawa CDP                                                   
+ 793 15 15102       003       13900 0        3320          4944 Heeia CDP                                                    
+ 793 15 15102       003       14200 0        3320          5471 Hickam Housing CDP                                           
+ 793 15 15102       003       17000 1        3320        371657 Honolulu CDP                                                 
+ 793 15 15102       003       21200 0        3320          2935 Kahaluu CDP                                                  
+ 793 15 15102       003       23150 0        3320         36513 Kailua CDP                                                   
+ 793 15 15102       003       28250 0        3320         34970 Kaneohe CDP                                                  
+ 793 15 15102       003       28400 0        3320         11827 Kaneohe Station CDP                                          
+ 793 15 15102       003       50750 0        3320          4869 Maunawili CDP                                                
+ 793 15 15102       003       62600 0        3320         30976 Pearl City CDP                                               
+ 793 15 15102       003       75800 0        3320           726 Waikane CDP                                                  
+ 793 15 15102       003       77750 0        3320         29371 Waimalu CDP                                                  
+ 793 15 15102       003       78050 0        3320          3664 Waimanalo CDP                                                
+ 793 15 15102       003       78200 0        3320          4271 Waimanalo Beach CDP                                          
+ 793 15 15102       003       99999 0        3320         10452 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 000102 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 000105 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 000110 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 000200 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 000302 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 000500 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 000600 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 001700 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 001901 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 003700 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 003800 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 003900 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 005700 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007200 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007300 3320           216 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007400 3320          2172 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007502 3320          1600 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007506 3320          1327 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007701 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007702 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007802 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007806 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007808 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 007810 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 008001 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 008005 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 008100 3320           368 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 010302 3320             6 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 010303 3320          2087 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 010305 3320            13 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 010306 3320           212 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 010505 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 010801 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 010802 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 011000 3320           137 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 011103 3320            88 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 011106 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 011201 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 011202 3320             0 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 011301 3320          2111 Remainder of Honolulu County (part)                          
+ 794 15 15102       003       99999 0 011302 3320           115 Remainder of Honolulu County (part)                          
