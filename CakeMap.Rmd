@@ -3,6 +3,11 @@ title: "CakeMap"
 layout: default
 ---
 
+```{r, echo=FALSE}
+library(png)
+library(grid)
+```
+
 # Spatial microsimulation in the wild {#CakeMap}
 
 By now we have developed a good understanding of what spatial microsimulation
