@@ -3,7 +3,7 @@
 source("R/functions.R") # functions for spatial microsimulation, inc. int_trs
 
 ints <- unlist(apply(weights, 2, int_trs)) # generate integerised result
-ints_df <- data.frame(id = ints, zone = rep(1:nrow(cons), colSums(weights)))
+ints_df <- data.frame(id = ints, zone = rep(1:nrow(cons), round(colSums(weights))))
 ind$id <- 1:nrow(ind) # assign each individual an id
 
 # Create spatial microdata, by joining the ids with associated attributes
