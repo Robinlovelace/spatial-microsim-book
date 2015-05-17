@@ -428,8 +428,8 @@ source("R/CakeMapMipfpData.R")
 The data are now loaded correctly. This can be verified by
 printing the first lines of of the individual-level data and comparing
 this with `colnames(con1)`. Note that this step was not 
-necessary for the **ipfp** package. To use **mipfp* the user must encode
-the constraints in the right order and only the order.
+necessary for the **ipfp** package. To use **ipfp* the user must encode
+the constraints in the right order and only the order counts.
 In practice this is a good idea. 
 Ensuring same variable names match category labels will
 help subsequent steps of for validation and interpretation. Moreover, 
@@ -444,7 +444,7 @@ head(ind)
 
 Defining the initial weight matrix is the next step. For each zone, we simply 
 take the cross table (or contingency table)
-of the individual data. It is important to check
+of the individual data. It is important to be aware of
 the order of the variables inside this table. We have in our case
 (NCakes, Car, Sex, NSSEC8, ageband4). This information will be necessary 
 for the definition of the target and description for `mipfp`.
@@ -516,7 +516,10 @@ Constraints 1 and 2 have exactly the same marginals per zone.
 Constraint 3 has 52 zones with different totals. Since NSSEC (`con3`) 
 is anomolous in this respect 
 we consider the totals of the 
-two first constraints to be valid.
+two first constraints to be valid. It is always
+important to find the reason of the differences in totals.
+For `con3`, the individual could give no answer. This explains
+why we have a smaller population in this variable.
 To perform (non-probabilistic) reweighting with **mipfp**,
 we must first re-scale `con3` to keep its proportions but
 with updated totals per zone. 
@@ -545,12 +548,13 @@ con1[1:3, 1:8]
 
 The result of the above command show that `con1` is, like the other constraints,
 a two dimensional table. 
-Because it actually contains 2 constraints, the information contained within
+Because it actually contains 2 constraints per zone, the information contained within
 needs to be represented as a three dimensional array (a cube),
 the dimensions of which are zone, sex and age.
 This conversion is done by taking
 taking the cells of `con1` and adding them
-to a three dimensional array in a known order. The code to
+to a three dimensional array in the correct order
+(corresponding to the order of the 2 dimensional table). The code to
 do this is included into the 
 file `R/CakeMapMipfpCon1Convert.R` and the resulting array is called
 `con1_convert`.
@@ -760,4 +764,15 @@ when having very few microdata, it may be advantageous to
 consider a method without microdata. This way one avoids biasing
 the results with the (non-random) category included in the microdata.
 The extent to which the input microdata represent the study
-area is critical to obtaining valid results. 
+area is critical to obtaining valid results. Indeed, 
+the reweighting methods with input microdata are very 
+depending on the microdata representativity (M. Lenormand, 
+G. Deffuant,2015). If the used sample 
+is too small, or if the sample, for example, contains a 90%
+of female, whereas the whole population has only 51%, the
+microdata will not be reprensetative. Usually, to consider a 
+sample as representative, each individual should
+have exactly the same probability of being in the 
+sample. For example, if you make your survey in a university, 
+old people have less chance to be inside that younger. In 
+this case, the sample is not representative. 
