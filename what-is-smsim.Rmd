@@ -244,23 +244,58 @@ what it is not. This is partly due to the close association between spatial
 microsimulation and other methods, but also because there is a tendency
 for people to think that spatial microsimulation is more complicated than
 it is.
-**Spatial microsimulation is not a whole agent-based modelling (ABM).**
 
-Spatial microsimulation does involve the creation and analysis of individuals,
-but it does not necessary imply any interaction between these individuals. For this, a complete
-agent-based model (ABM) is needed. It would be easy to assume that because
-the method contains the word 'simulation', it includes modelling of individual
-behaviours over time and space. This is not the case.
+**Spatial microsimulation is not (quite) agent-based modelling**
 
-However, spatial microsimulation can be the starting point of an agent-based 
-modelling. Indeed, in ABM, we can analyse the evolution of agents through space
-and time, their interactions with each other and with their environment. Spatial
-microsimulation is a sub-part of ABM, as it creates a computational population, such
-as their interactions with each other in some cases (see the Chapter about households).
-Alone, spatial microsimulation is fixed at a time and each individual has a fixed
-house. In ABM, when the researchers do not own sufficient data to perform their analyses,
-they can use the whole power of ABM. For this, they initialise the population with spatial 
-microsimulation, for a starting date.
+Spatial microsimulation does involve the creation and analysis of individuals 
+and their allocation to families and zone.
+But it does not necessarily involve imply interaction between these individuals.
+For this,
+agent-based model (ABM) is needed. One could assume that because
+the method contains the word 'simulation', it includes detailed
+modelling of individual
+behaviours in which individuals interact with each other and the environment
+over time and space. This is not always the case: spatial microsimulation
+is generally a more 'top down' approach to modelling, in which the results
+can be broadly predicted. ABM, by contrast is bottom-up and can result in
+highly non-linear and chaotic states (Batty 2005).
+
+There is, however, no clearly defined boundary stating where
+spatial microsimulation ends and ABM begins and the two approaches are closely
+linked. The synthetic populations produced as part of spatial microsimulation
+can form an excellent starting point for ABM.
+ABM can be seen as an extension of spatial microsimulation.
+While spatial microsimulation *produces* individuals and assigns their
+characteristics over space (and en masse via various 'what-if' scenarios),
+ABMs tend to have higher spatial and temporal resolution,
+allowing individuals to interact through space
+and time, with each other and with their environment. This increased
+level of detail and complexity means that ABM tends to have higher
+computational needs per individual. As a result, spatial microsimulation
+models tend to be much larger, encapsulating up to millions of individuals.
+As computing power continues to increase the potential for adding ABM
+capabilities to such models is only set to grow (Wegener 2011).
+
+The above discussion illustrates that
+microsimulation can be seen as a subset of advanced ABM.
+However, many of the ABMs presented in the academic literature lack realism,
+instead assigning illustrative (and in some cases arbitrary) values to the
+agents, that may not closely correspond to reality, and area where the population
+synthesis phase of spatial microsimulation can be of great use.
+The results of spatial microsimulation models tend to apply to only specific
+snapshots in time and individuals tend to be fixed to a single area.
+ABM can thus add great additional value to spatial microsimulation models,
+by providing a framework for more complex interactions.
+Chapter 
+\ref{ABM}
+illustrates how the outputs of spatial 
+microsimulation can form an empirical basis for ABM.
+
+In summary, ABM and spatial microsimulation are closely related, overlapping and
+complementary approaches to the analysis of individual-level processes
+operating over geographical space and time. A main conceptual difference is
+that the spans of space and time tend to be larger in spatial microsimulation
+work, for reasons relating to computing power and model complexity.
 
 
 ```{r, echo=FALSE}
@@ -274,13 +309,14 @@ microsimulation, for a starting date.
 #the allocation of individuals to specific zones, what-if scenarios, and, in *dynamic spatial microsimula#tion*, a time
 #step to represent the individuals' evolution over time. In *static spatial microsimulation* studies that #rely on *what-if* scenarios, time is not 
 #really included. 
+
+# # removed as this section was getting long! (RL)
+# 
+# The aims of the two methods are complementary.
+# ABM requires an initial population which spatial microsimulation can provide and adds more complexity and interactivity. The rules of the ABM make each agent evolve through time and space 
+# depending in a bottom-up process. Spatial microsimulation is, by contrast, more of a *top down* process. Spatial microsimulation can be closely linked to ABM. 
 ```
 
-The aims of the two methods are complementary.
-ABM requires an initial population which spatial microsimulation can provide and adds more complexity and interactivity. The rules of the ABM make each agent evolve through time and space 
-depending in a bottom-up process. Spatial microsimulation is, by contrast, more of a *top down* process. Spatial microsimulation can be closely linked to ABM. As described in Chapter 
-\ref{ABM}, the outputs of spatial 
-microsimulation form an excellent basis for ABMs.
 
 **Spatial microsimulation does not generate new data**
 
