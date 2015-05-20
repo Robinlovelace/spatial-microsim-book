@@ -27,11 +27,11 @@ can be sufficient.
 In other cases a fit based on *entropy maximisation* may be required.
 This concept involves finding the population that best
 represents the most micro-level populations (Bierlaire, 1991).
-For example, if a person in one zone has exactly the same charcteristics as
+For example, if a person in one zone has exactly the same characteristics as
 a person in another zone, swapping these two people will not change 
 the synthetic population.
 This process of maximising the entropy is considered in the subsequent chapter, which
-explainings how to 
+explains how to 
 allocate individuals from the spatial microdata into households to fit
 household-level constraints. We will here present
 two alternative options for population synthesis when
@@ -147,7 +147,7 @@ spatial microdata. The `round()` function gives a satisfying result in this case
 of fitting the constraints. However, the aforementioned integerisation algorithms such as
 *truncate, replicate, sample* (TRS) can also be used.
 This method can not be followed exactly, because we want to perfectly fit 
-the few constraints we have. In our example, a satisfactory result is acheived by using 
+the few constraints we have. In our example, a satisfactory result is achieved by using 
 the round function, as shown in the code below.
 
 
@@ -202,7 +202,7 @@ ToComplete
 
 The principle is to add people in the not completed zones and
 categories. The cells to be implemented are always chosen as the one
-with the bigger decimal parts. Remark that we chose
+with the bigger decimal parts. Note that we chose
 to adapt the `resTruncate` instead of defining
 another tabular.
 
@@ -330,9 +330,9 @@ is a table with the four variables per district.
 
 Finally, the easiest step, we can make as explained in 
 the previous section. Indeed, we have a contingency table
-in the district level and the municipaly marginals. 
+in the district level and the zone margins. 
 
-Remark that you can imagine a lot of combinations 
+Note that you can imagine a lot of combinations 
 of IPF and other techniques to perform to a 
 synthesis population thanks to the data 
 you own.
