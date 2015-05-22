@@ -8,7 +8,7 @@
 # Reference UrbanSim
 
 # View the order chapters will be knitted (see R/book-functions.R)
-chap_ord <- c(7,15,10,5,12,2,8,4,13,14,11,1,3,6,9)
+chap_ord <- c(7,16,10,5,12,2,8,4,13,14,15,11,1,3,6,9)
 cfiles <- list.files(pattern = "*.Rmd$", )
 cfiles <- cfiles[chap_ord] # chapter order
 cfiles
