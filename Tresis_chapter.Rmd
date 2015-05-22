@@ -2,76 +2,102 @@
 title: "The TRESIS approach to population synthesis and spatial microsimulation"
 layout: default
 output:
+  word_document: default
   pdf_document:
     fig_caption: yes
 bibliography: tresis.bib
 ---
 
-# The TRESIS approach to population synthesis and spatial microsimulation[^authors]
-
 ```{r echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 library(knitr) # Needed for the kable function used in this chapter.
 ```
-[^authors]: Contributed chapter by Richard B. Ellison and David A. Hensher, Institute of Transport and Logistics Studies, The University of Sydney Business School, The University of Sydney
 
-TRESIS is a Transport and Environment Strategy Impact Simulator originally developed by Professor David Hensher and others at the Institute of Transport Studies (now Institute of Transport and Logistics Studies --- ITLS) that evolved from an earlier project for the Bureau of Transport and Communications Economics [@HensherD2002;@Hensher2002a]. 
-The TRESIS software provides users with the ability to assess the impacts of a large number of both transport and land-use policies including on the environment, end-user costs and benefits and government revenue.
-TRESIS incorporates an extensive model system including discrete and continuous choice models that is combined with a process of population (or more accurately, household) synthesis and a set of equilibriation criteria to provide a powerful alternative to some more widely used microsimulation implementations.
+# The TRESIS approach to population synthesis and spatial microsimulation^[Contributed chapter by Richard B. Ellison and David A. Hensher, Institute of Transport and Logistics Studies, The University of Sydney Business School, The University of Sydney]
 
-This chapter introduces the TRESIS model system before providing a detailed description of the generation of synthetic households implemented in R. This is followed by details of how the synthetic households can be used to identify where households live using a residential location model.
 
-## Overview of TRESIS model system
-The TRESIS model system was designed to cover many of the long-term and short-term decisions made by individuals and households that affect how they travel.
-These range from the very long-term (e.g., where to live and where to work) to the very short-term decisions (e.g., departure time and travel mode).
+TRESIS is a Transport and Environment Strategy Impact Simulator originally developed by Professor David Hensher and others at the 
+Institute of Transport and Logistics Studies (ITLS). TRESIS evolved from an earlier project for the Bureau of Transport and Communications Economics [@HensherD2002;@Hensher2002a]. 
+The TRESIS software provides users with the ability to assess the impacts of a large number of transport and land-use policies
+on various systems linked to travel behaviour. These include
+the environment, user expenditure and government revenue.
+TRESIS incorporates an extensive model system including discrete and continuous choice models. These are combined with a process of population (or more accurately, household) synthesis and a set of equilibriation criteria.
+TRESIS provides a powerful alternative to some more widely used microsimulation implementations.
+
+```{r, echo=FALSE}
+# Add reference to end of this paragraph (RL)
+# 
+```
+
+This chapter introduces the TRESIS model system from a spatial microsimulation perspective. The bulk of substantive material focusses the generation of synthetic households, which is described in detail. This is the first time that TRESIS has been implemented in R. The methods and code blocks oultined below could therefore provid a stepping stone towards further transport modelling work R, which is currently under-used in transportation research. The chapter demonstrates how the synthetic populations generated through TRESIS can be used to identify where different types of households live using a residential location model. The chapter concludes with discussion of other important aspects of transport modelling that could be integreted into R, building on this work.
+
+## Overview of TRESIS modelling system
+
+The TRESIS modelling system was designed to cover many of the long and short-term decisions made by individuals and households that affect how they travel.
+These range from the very long-term (e.g., where to live and where to work) to the very short-term (e.g., departure time and travel mode).
 Together, these models predict households' long-term decisions and how these decisions then affect how individuals within that household travel given user-specified transport and land-use policies.
 The figure below shows an overview of the high-level TRESIS model structure [@Hensher2008].
 ![Overview of TRESIS model structure](figures/TRESISModels.png)
 
 The TRESIS demand models have been estimated from a combination of stated preference (SP) and revealed preference (RP) data using the NLOGIT software (see @Hensher2015 for details of the software and estimation models).
 The model system provides for feedback between the models that are connected using inclusive value parameters that are fed up through the models.
-In this chapter, we discuss a stand-alone residential location model but it is important to understand that in the full TRESIS model system, the residential location choice model is closely linked to the other models including the fleet size, vehicle type choice, workplace location and dwelling type choice models.
+In this chapter, we discuss only the stand-alone residential location model. This is just one part of TRESIS, which would be closely coupled to other sub-models covering fleet size, vehicle type choice, workplace location and dwelling type choice [@Hensher2008].
 
 ### Differences between TRESIS and other microsimulation systems
-TRESIS differs from standard micro-simulation models in that TRESIS has been designed to be primarily a strategic model system that preserves the behavioural richness in the models.
-In contrast, standard micro-simulation techniques (used in transport) are largely designed for small-scale studies that cover only a small area.
-The TRESIS models also operate at a slightly higher spatial level than most micro-simulation systems since individuals in the household are not run through a micro-simulation model to determine specific routes.
-Instead, the TRESIS system applies the estimated demand based on the travel demand models and uses this within a network assignment model.
-Although this means that link-level travel times for a specific individual can not be determined, it provides a more reliable aggregate estimate of travel times that is needed for the efficient running of the TRESIS models.
+
+TRESIS differs from standard micro-simulation models in that it was designed primarily it preserves the behavioural richness of observed individuals.
+In contrast, standard micro-simulation techniques commonly used in transport are largely designed for small-scale studies that cover only a small area.
+TRESIS tends to operate at higher geographical levels than micro-simulation systems. Individuals in the household are not run through a micro-simulation model to determine specific routes.
+
+Instead, the TRESIS system estimates travel demand based on a separate travel demand models within a network assignment model.
+Although this means that link-level travel times for a specific individual can not be determined, it provides more reliable aggregate estimates of travel times. These are needed for the efficient running of the TRESIS models.
 
 ## Synthetic households
 
 ### What are synthetic households?
+
 Synthetic households as used in TRESIS are a combination of a set of socio-demographic characteristics and a weight that represents their incidence in the population.
-These synthetic households form the basis of the TRESIS model system and provide the necessary underlying variables required for the models in the simulation.
+These synthetic households form the building blocks for TRESIS and provide the necessary underlying variables required for the models in the simulation.
 The households are sampled such that given certain combinations of socio-demographic variables, there is a sufficiently large variation in the sample to reasonably cover all segments of the population that are of interest.
 
-#### How do synthetic households in TRESIS differ from traditional population synthesis
-In contrast to traditional population synthesis (described in earlier chapters), synthetic households in TRESIS have several primary differences.
-One of these differences is that synthetic households retain their original composition and characteristics from the source sample.
-This means that rather than take individual-level microdata and assigning these individuals to a household, individuals remain linked to their original households.
-Crucially, it is the household as a single entity that is the unit of anaylsis/synthesis within TRESIS.
-Furthermore, each household is not simply a sum of the household members but may also be considered to have its own characteristics.
+#### Synthetic households in TRESIS 
 
-Another of the main differences between the synthetic households as used in TRESIS compared to traditional population synthesis is that synthetic households as used in TRESIS are not assigned to a specific geographic zone.
-Instead, the sample from which the synthetic households are drawn is limited to those households that are resident in the whole of the study area (generally a city's Greater Metropolitan Area) resulting in synthetic households having an overall geographic coverage matching the study area but no specific location within it.
+There are fundamental differences between the populations generated through traditional population synthesis (described in earlier chapters) and synthetic households in TRESIS.
+First is that synthetic households retain their original composition and characteristics from the source sample. 
+Rather than assigning sample individuals to households, in TRESIS individuals remain linked to their original households.
+Household are seen as a single entity,
+the unit of anaylsis within TRESIS.
+This has the side-effect that each household is not simply a sum of its members but may also be considered to have its own characteristics.
+
+Second is that synthetic households in TRESIS are not assigned to a unique geographic zone.
+Instead, the sample from which the synthetic households are drawn is limited to those households that are resident in the whole of the study area (generally a city's Greater Metropolitan Area). This results in synthetic households having an overall geographic coverage matching the study area but no specific location within it.
 This approach means that the weights of the synthetic households are calculated based on their incidence in the entire population in the study area and not just their specific geographic location.
-The specific location of each synthetic household is assigned by running them through the TRESIS model and equilibrating the model system at the trip, location and vehicle type levels in order to reproduce the base year spatial travel and location profiles as well as vehicle type and fleet size composition and which, among other models, includes a model for the choice of residential location using more disaggregate zones.
-It must be emphasised that the household weights of the household do not change when the household is assigned to a zone.
+The specific location of synthetic households is then assigned by running them through the TRESIS model and equilibrating the model system at trip, location and vehicle type levels. This reproduces with some accuracy the base year spatial travel and location profiles, as well as vehicle type and fleet size composition. Among TRESIS also includes a model for the choice of residential location using more disaggregate zones.
+It must be emphasised that household weights do not change when the they are assigned to zones.
 
 ### Required data for generating synthetic households
-Generating synthetic households requires a combination of micro-level census data and aggregate population statistics.
-The microdata needs to include matched household and individual level data to allow for the retaining of the link between individuals and households within the synthetic households.
-The aggregate population data need to include the variables that are of interest for selecting synthetic households but is only required as a total for the whole study area.
-This data should ideally be available as a multi-way cross-tabulation for each combination of variables that are desired for representing the households in the population.
-The reasons for this will be explained further later in this chapter.
-In Australia, for which TRESIS was developed (for six capital cities), this data is typically all available from the census but could come from different sources if the variables are comparable.
+
+Like IPF and other population synthesis methods discussed previously, the generation of synthetic households in TRESIS requires a combination of micro-level census data and aggregate population statistics.
+
+The microdata needs to include matched household and individual level data. These are retained within the synthetic households.
+The aggregate population data should include the variables that are of most
+relevance to the research question for selecting synthetic households.
+The only *requirement* from the aggregate-level data is that it includes 
+a total count for zones and the whole study area.
+The census data should ideally be available as a multi-way cross-tabulation for each combination of variables that are desired for representing the households in the target population.
+The reasons for this are explained further later in this chapter.
+For now suffice to say that 
+the input data for TRESIS are all available from the census in most advanced
+nations such as Australia, where the model was first developed.
+The input data could come from different sources, however,
+if the variables are comparable.
 
 ### Synthetic households in R
-Generating synthetic households in R requires three stages.
-The first stage involves ensuring that the variables in the micro-data sample are compatible with those used in the demand models.
+
+Generating synthetic households in R, using the TRESIS method, requires three stages.
+The first involves ensuring that the variables in the micro-data sample are compatible with those used in the demand models.
 Where variables used in the demand models or in the aggregate population-level data are derived from one (or more) of the original micro-data variables, then these variables must be defined for each of the households in the micro-data sample.
 The second stage involves selecting variables on which to base the synthetic households and then calculating their weights and required sample.
-Finally, the micro-data is sampled to generate the final synthetic households each with an individual weight based on their incidence in the population.
+Third, the micro-data is sampled to generate the final synthetic households each with an individual weight based on their incidence in the population.
 
 For this chapter, we will use the same CakeMap dataset as was used in the previous chapter.
 To ensure that we are using the base data without any modifications, re-import the CakeMap data files:
@@ -608,6 +634,7 @@ kable(synresults, digits=0)
 ```
 
 ## Conclusions
+
 This chapter has described the process required for generating and applying the synthetic households used within the TRESIS model system to a more general application of population synthesis.
 Although TRESIS is a land-use and transport simulator, the approach described here is a generalised one that is applicable to a wide range of model systems that require, or would benefit from, the use of disaggregate data for simulating decision making involving spatial decisions including residential location but also workplace location and other activity destinations.
 
