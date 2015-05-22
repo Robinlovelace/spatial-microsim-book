@@ -12,9 +12,9 @@ bibliography: tresis.bib
 ```{r echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 library(knitr) # Needed for the kable function used in this chapter.
 ```
-[^authors]: Contributed chapter by Richard B. Ellison and David A. Hensher, Institute of Transport and Logistics Studies, The University of Sydney
+[^authors]: Contributed chapter by Richard B. Ellison and David A. Hensher, Institute of Transport and Logistics Studies, The University of Sydney Business School, The University of Sydney
 
-TRESIS is a Transport and Environment Strategy Impact Simulator originally developed by Professor David Hensher and others at the Institute of Transport Studies (now Institute of Transport and Logistics Studies --- ITLS) that evolved from an earlier project for the Bureau of Transport and Communications Economics [@Hensher2002a]. 
+TRESIS is a Transport and Environment Strategy Impact Simulator originally developed by Professor David Hensher and others at the Institute of Transport Studies (now Institute of Transport and Logistics Studies --- ITLS) that evolved from an earlier project for the Bureau of Transport and Communications Economics [@HensherD2002;@Hensher2002a]. 
 The TRESIS software provides users with the ability to assess the impacts of a large number of both transport and land-use policies including on the environment, end-user costs and benefits and government revenue.
 TRESIS incorporates an extensive model system including discrete and continuous choice models that is combined with a process of population (or more accurately, household) synthesis and a set of equilibriation criteria to provide a powerful alternative to some more widely used microsimulation implementations.
 
@@ -27,14 +27,14 @@ Together, these models predict households' long-term decisions and how these dec
 The figure below shows an overview of the high-level TRESIS model structure [@Hensher2008].
 ![Overview of TRESIS model structure](figures/TRESISModels.png)
 
-The TRESIS demand models have been estimated from a combination of stated preference (SP) and revealed preference (RP) data using the NLOGIT software.
+The TRESIS demand models have been estimated from a combination of stated preference (SP) and revealed preference (RP) data using the NLOGIT software (see @Hensher2015 for details of the software and estimation models).
 The model system provides for feedback between the models that are connected using inclusive value parameters that are fed up through the models.
 In this chapter, we discuss a stand-alone residential location model but it is important to understand that in the full TRESIS model system, the residential location choice model is closely linked to the other models including the fleet size, vehicle type choice, workplace location and dwelling type choice models.
 
 ### Differences between TRESIS and other microsimulation systems
 TRESIS differs from standard micro-simulation models in that TRESIS has been designed to be primarily a strategic model system that preserves the behavioural richness in the models.
 In contrast, standard micro-simulation techniques (used in transport) are largely designed for small-scale studies that cover only a small area.
-The TRESIS models also operate at a slightly higher level than most micro-simulation systems since individuals in the household are not run through a micro-simulation model to determine specific routes.
+The TRESIS models also operate at a slightly higher spatial level than most micro-simulation systems since individuals in the household are not run through a micro-simulation model to determine specific routes.
 Instead, the TRESIS system applies the estimated demand based on the travel demand models and uses this within a network assignment model.
 Although this means that link-level travel times for a specific individual can not be determined, it provides a more reliable aggregate estimate of travel times that is needed for the efficient running of the TRESIS models.
 
@@ -55,7 +55,7 @@ Furthermore, each household is not simply a sum of the household members but may
 Another of the main differences between the synthetic households as used in TRESIS compared to traditional population synthesis is that synthetic households as used in TRESIS are not assigned to a specific geographic zone.
 Instead, the sample from which the synthetic households are drawn is limited to those households that are resident in the whole of the study area (generally a city's Greater Metropolitan Area) resulting in synthetic households having an overall geographic coverage matching the study area but no specific location within it.
 This approach means that the weights of the synthetic households are calculated based on their incidence in the entire population in the study area and not just their specific geographic location.
-The specific location of each synthetic household is assigned by running them through the TRESIS model system which, among other models, includes a model for the choice of residential location using more disaggregate zones.
+The specific location of each synthetic household is assigned by running them through the TRESIS model and equilibrating the model system at the trip, location and vehicle type levels in order to reproduce the base year spatial travel and location profiles as well as vehicle type and fleet size composition and which, among other models, includes a model for the choice of residential location using more disaggregate zones.
 It must be emphasised that the household weights of the household do not change when the household is assigned to a zone.
 
 ### Required data for generating synthetic households
@@ -64,7 +64,7 @@ The microdata needs to include matched household and individual level data to al
 The aggregate population data need to include the variables that are of interest for selecting synthetic households but is only required as a total for the whole study area.
 This data should ideally be available as a multi-way cross-tabulation for each combination of variables that are desired for representing the households in the population.
 The reasons for this will be explained further later in this chapter.
-In Australia, for which TRESIS was developed, this data is typically all available from the census but could come from different sources if the variables are comparable.
+In Australia, for which TRESIS was developed (for six capital cities), this data is typically all available from the census but could come from different sources if the variables are comparable.
 
 ### Synthetic households in R
 Generating synthetic households in R requires three stages.
@@ -313,7 +313,7 @@ At its most basic, a residential location model as used with the TRESIS syntheti
 Although the full details of the estimation of discrete choice models is outside the scope of this book, it is worth briefly discussing how the models used for TRESIS can be estimated.
 The discrete choice models used for residential location in TRESIS have been estimated from disaggregate choice data collected using a combination of revealed preference and stated preference surveys.
 It is also possible to estimate discrete choice models using micro-level data provided sufficient spatial detail is available for your purposes.
-The models in TRESIS were estimated using the NLOGIT software package because it provides features needed for advanced models unavailable in other packages.
+The models in TRESIS were estimated using the NLOGIT software package because it provides features needed for advanced models unavailable in most other packages.
 However, many discrete choice models as would be used by those developing residential location models can also be estimated in R using the __mlogit__ and __mnlogit__ packages.
 
 ### Simple discrete choice model for residential location
@@ -621,7 +621,7 @@ Just as synthetic households are a collection of socio-demographic variables, sy
 The data requirements of synthetic households are however also problematic for synthetic firms.
 
 ### MetroScan-TI
-TRESIS, although extremely powerful in many ways, has lacked a few features that are increasingly being needed for a full assessment of potential transport and infrastructure projects.
+TRESIS, although extremely powerful in many ways, has lacked some features that are increasingly being needed for a full assessment of potential transport and infrastructure projects.
 MetroScan-TI is the latest evolution of the TRESIS model system that is currently being developed and incorporates all the behavioural richness of the original TRESIS models and extends this to include a much more detailed zone structure, a fully integrated network assignment model, freight models, models for firm location and modules for cost-benefit analysis and wider economy impact assessments.
 MetroScan-TI is intended to provide users with the ability to quickly and easily prioritise a large number of potential projects on a wide range of variables.
 These projects include the standard transport infrastructure (new railway lines, roads and service improvements) as well as other infrastructure and strategic-level property development (the mix and number of flats, semi-detached and detached houses).
