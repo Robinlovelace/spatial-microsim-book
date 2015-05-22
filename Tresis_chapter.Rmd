@@ -373,19 +373,14 @@ resmodelout <- round(resmodel$coefficients,4)
 
 ```
 
-```{r, eval=FALSE, echo=FALSE}
 $$
 \begin{aligned}
-U_1 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("1:",names(resmodelout))]],str_replace(names(resmodelout)[grep("1:",names(resmodelout))],"1:",""),sep='*',collapse = " + "),'[*][(]intercept)',""),"[+][ ][-]","- ") ` \\
-U_2 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("2:",names(resmodelout))]],str_replace(names(resmodelout)[grep("2:",names(resmodelout))],"2:",""),sep='*',collapse = " + "),'[*][(]intercept)',""),"[+][ ][-]","- ") ` \\
-U_3 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("3:",names(resmodelout))]],str_replace(names(resmodelout)[grep("3:",names(resmodelout))],"3:",""),sep='*',collapse = " + "),'[*][(]intercept)',""),"[+][ ][-]","- ") ` \\
-U_4 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("4:",names(resmodelout))]],str_replace(names(resmodelout)[grep("4:",names(resmodelout))],"4:",""),sep='*',collapse = " + "),'[*][(]intercept)',""),"[+][ ][-]","- ") `
+U_1 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("1:",names(resmodelout))]],str_replace(names(resmodelout)[grep("1:",names(resmodelout))],"1:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') ` \\
+U_2 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("2:",names(resmodelout))]],str_replace(names(resmodelout)[grep("2:",names(resmodelout))],"2:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') ` \\
+U_3 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("3:",names(resmodelout))]],str_replace(names(resmodelout)[grep("3:",names(resmodelout))],"3:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') ` \\
+U_4 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("4:",names(resmodelout))]],str_replace(names(resmodelout)[grep("4:",names(resmodelout))],"4:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') `
 \end{aligned}
 $$
-```
-
-
-
 
 In this model, the subscript on _U_ indicates the zone, _mgmt_ is the number of workers in the household who are managers, _prof_ is the number of workers who are professionals, _rout_ is the number of workers whose occupation is considered "route", and _numCars_ is the number of cars in the household.
 
