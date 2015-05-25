@@ -1,6 +1,7 @@
 ---
 title: "CakeMap"
 layout: default
+bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE, results='hide'}

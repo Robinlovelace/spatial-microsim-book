@@ -1,9 +1,10 @@
 ---
 title: "Preparing input data"
 layout: default
+bibliography: bibliography.bib
 ---
 
-# Data preparation with R {#data-prep}
+# Data preparation {#data-prep}
 
 ```{r, echo=FALSE}
 library(png)

@@ -1,6 +1,7 @@
 ---
-title: "Population synthesis with R"
+title: "Population synthesis"
 layout: default
+bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}
@@ -9,7 +10,7 @@ library(png)
 library(grid)
 ```
 
-# Population synthesis with R {#smsimr}
+# Population synthesis{#smsimr}
 
 ```{r, echo=FALSE}
 # TODO:

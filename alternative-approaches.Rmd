@@ -1,6 +1,7 @@
 ---
 title: "Alternative approaches to population synthesis"
 layout: default
+bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}
@@ -9,7 +10,7 @@ library(grid)
 load("cache-smsim-in-R.RData")
 ```
 
-# Alternative approaches to population synthesis
+# Alternative approaches to population synthesis {#alt}
 
 ## GREGWT
 

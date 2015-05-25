@@ -1,6 +1,7 @@
 ---
 title: "Population synthesis without microdata"
 layout: default
+bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}
