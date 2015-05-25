@@ -1,21 +1,22 @@
 ---
-title: "The TRESIS approach to population synthesis and spatial microsimulation"
+title: "The TRESIS approach to spatial microsimulation"
 layout: default
 output:
   pdf_document:
     fig_caption: yes
   word_document: default
-bibliography: tresis.bib
+bibliography: bibliography.bib
 ---
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 library(knitr) # Needed for the kable function used in this chapter.
 ```
 
-# The TRESIS approach to population synthesis and spatial microsimulation^[Contributed chapter by Richard B. Ellison and David A. Hensher, Institute of Transport and Logistics Studies, The University of Sydney Business School, The University of Sydney]
+# The TRESIS approach to spatial microsimulation {#tresis}
 
 
-TRESIS is a Transport and Environment Strategy Impact Simulator originally developed by Professor David Hensher and others at the 
+TRESIS^[This is a contributed chapter by Richard B. Ellison and David A. Hensher, Institute of Transport and Logistics Studies, The University of Sydney Business School, The University of Sydney]
+is a Transport and Environment Strategy Impact Simulator originally developed by Professor David Hensher and others at the 
 Institute of Transport and Logistics Studies (ITLS). TRESIS evolved from an earlier project for the Bureau of Transport and Communications Economics [@HensherD2002;@Hensher2002a]. 
 The TRESIS software provides users with the ability to assess the impacts of a large number of transport and land-use policies
 on various systems linked to travel behaviour. These include
