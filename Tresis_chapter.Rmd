@@ -118,15 +118,19 @@ This means we need to add a variable to the dataset that records which household
 Since we do not know who in the CakeMap dataset is in which household, for this example we will randomly assign each individual to a household:
 
 ```{r}
-set.seed(99) # This line sets the seed for the random number generation in the 
-# sample() function used below. This is used here to ensure that the results are 
-# consistent for each run. To ensure that your weighted of synthetic 
-# variables is reasonable for your application it is best
-# to run this several times without a seed and compare the results.
+set.seed(99) # This line sets the seed for the random number 
+# generation in the sample() function used below. This is 
+# used here to ensure that the results are consistent for each
+# run. To ensure that your weighted of synthetic variables is
+# reasonable for your application it is best to run this 
+# several times without a seed and compare the results.
 
-# Randomly select the sizes of the households and then assign the
-# unique IDs of each household to sequential individuals in the dataset.
-ind$hhld <- rep(1:1000, times=sample(c(1:6), 1000, replace=TRUE))[1:nrow(ind)]
+# Randomly select the sizes of the households and then assign 
+# the unique IDs of each household to sequential individuals 
+# in the dataset.
+ind$hhld <- rep(1:1000, 
+                times=sample(c(1:6), 1000, replace=TRUE)
+                )[1:nrow(ind)]
 
 # Check how many households we have in our dataset:
 length(unique(ind$hhld))
@@ -143,21 +147,29 @@ library(stringr)
 hhlds <- group_by(ind, hhld) %>% 
   summarise(
     numres = n(),
-    # Values of 8 and 97 mean "long-term unemployed and not answered respectively"
+    # Values of 8 and 97 mean "long-term unemployed" and 
+    # "not answered respectively"
     numworkers = length(NSSEC8[NSSEC8 < 8]),
     nummanager = length(NSSEC8[NSSEC8 == 1.1]),
     numprof = length(NSSEC8[NSSEC8 == 1.2]),
     numrout = length(NSSEC8[NSSEC8 == 7]),
-    # Take the midpoint of the age ranges then take the maximum for that household
-    maxage = max(rowMeans(read.table(text=str_replace(ageband4, '-', ','), 
-                                     header=FALSE, sep=','))),
-    # Value of 1 means they have a car, value of 2 means they do not
-    # Divide the number of cars by 1.5 to get a more realistic number since more than 1 person
-    # can use the same car.
+    # Take the midpoint of the age ranges then take the maximum
+    # for that household
+    maxage = max(
+      rowMeans(
+        read.table(
+          text=str_replace(ageband4, '-', ','), 
+               header=FALSE, sep=',')
+        )
+      ),
+    # Value of 1 means they have a car, 2 means they do not.
+    # Divide the number of cars by 1.5 to get a more realistic
+    # number since more than 1 person can use the same car.
     numcars = floor(sum((Car-2)*-1)/1.5)
   )
 
-hhlds
+hhlds[,c("hhld","numres","numworkers","nummanager",
+         "numprof","numrout","numcars")]
 ```
 
 This code uses __dplyr__'s group_by() and summarise() functions to generate the household-level data from the individual-level data.
@@ -191,9 +203,12 @@ prop.table(c(totcons['Car'],totcons['NoCar']))
 
 # Professionals vs All others:
 prop.table(c(Professionals=totcons['X1.2'], 
-             OtherOcc=sum(totcons[c(match('X1.1', names(totcons)), 
-                                    match('X2', names(totcons)):match('Other', names(totcons))
-                                    )])))
+             OtherOcc=sum(
+               totcons[c(match('X1.1', names(totcons)), 
+                         match('X2', names(totcons)):match(
+                           'Other', names(totcons)
+                           )
+                         )])))
 ```
 
 The _prop.table()_ function takes two or more values and generates a table with the proportion of each value is of the total.
@@ -206,9 +221,13 @@ Given our assumption that these distributions also apply for all combinations, w
 popdistprop <- tcrossprod(
   prop.table(c(totcons['Car'],totcons['NoCar'])),
   prop.table(c(Professionals=totcons['X1.2'], 
-             OtherOcc=sum(totcons[c(match('X1.1', names(totcons)), 
-                                    match('X2', names(totcons)):match('Other', names(totcons))
-                                    )])))
+             OtherOcc=sum(
+               totcons[c(
+                 match('X1.1', names(totcons)), 
+                 match('X2', names(totcons)):match(
+                   'Other', names(totcons)
+                   )
+               )])))
 )
 colnames(popdistprop) <- c('Professionals','Other')
 rownames(popdistprop) <- c('Car','NoCar')
@@ -224,7 +243,9 @@ If we assume that each household has an average of three people living there the
 Note that if you have the actual number of households in each group, this should be used instead.
 
 ```{r}
-popdisttot <- round(popdistprop*(totcons['Car']+totcons['NoCar'])/3)
+popdisttot <- round(
+    popdistprop*(totcons['Car']+totcons['NoCar'])/3
+  )
 popdisttot
 ```
 
@@ -254,9 +275,19 @@ Although it is possible to automate this process provided the variable names are
 Taking the first group (professionals with a car) we can select the required number of households by using the following code:
 
 ```{r}
-synhhlds <- sample(filter(hhlds,numprof > 0, numcars > 0)$hhld, popdist['Car','Professionals'])
-synhhldweights <- rep(popweights['Car','Professionals'], popdist['Car','Professionals'])
-synhhldtypes <- rep('Car+Professionals', popdist['Car','Professionals'])
+synhhlds <- sample(
+  filter(
+    hhlds,numprof > 0, numcars > 0)$hhld, 
+  popdist['Car','Professionals']
+  )
+synhhldweights <- rep(
+  popweights['Car','Professionals'], 
+  popdist['Car','Professionals']
+  )
+synhhldtypes <- rep(
+  'Car+Professionals', 
+  popdist['Car','Professionals']
+  )
 ```
 
 The second line takes the calculated weights for that group of synthetic households and repeats it for the required number of households using the _rep()_ function.
@@ -270,35 +301,71 @@ This is then repeated for each of the subsequent groups.
 ```{r}
 # Households with a car and no professionals
 synhhlds <- c(synhhlds,
-              sample(filter(hhlds,numprof == 0, numcars > 0)$hhld, popdist['Car','Other'])
+              sample(
+                filter(hhlds,
+                       numprof == 0, 
+                       numcars > 0
+                      )$hhld, 
+                popdist['Car','Other'])
               )
 synhhldweights <- c(synhhldweights,
-                    rep(popweights['Car','Other'], popdist['Car','Other']))
+                    rep(popweights['Car','Other'], 
+                        popdist['Car','Other']
+                       )
+                    )
 synhhldtypes <- c(synhhldtypes,
-                  rep('Car+Other', popdist['Car','Other']))
+                  rep('Car+Other', 
+                      popdist['Car','Other']
+                     )
+                  )
 # Households with a professional but no car
 synhhlds <- c(synhhlds,
-              sample(filter(hhlds,numprof > 0, numcars == 0)$hhld, popdist['NoCar','Professionals'])
+              sample(
+                filter(hhlds,
+                       numprof > 0, 
+                       numcars == 0
+                      )$hhld, 
+                popdist['NoCar','Professionals'])
               )
 synhhldweights <- c(synhhldweights,
-                    rep(popweights['NoCar','Professionals'], popdist['NoCar','Professionals']))
+                    rep(popweights['NoCar','Professionals'], 
+                        popdist['NoCar','Professionals']
+                       )
+                    )
 synhhldtypes <- c(synhhldtypes,
-                  rep('NoCar+Professionals', popdist['NoCar','Professionals']))
+                  rep('NoCar+Professionals', 
+                      popdist['NoCar','Professionals']
+                     )
+                  )
 # Households with no car and no professionals.
 synhhlds <- c(synhhlds,
-              sample(filter(hhlds,numprof == 0, numcars == 0)$hhld, popdist['NoCar','Other'])
+              sample(
+                filter(hhlds,
+                       numprof == 0, 
+                       numcars == 0
+                      )$hhld, 
+                popdist['NoCar','Other'])
               )
 synhhldweights <- c(synhhldweights,
-                    rep(popweights['NoCar','Other'], popdist['NoCar','Other']))
+                    rep(popweights['NoCar','Other'], 
+                        popdist['NoCar','Other']
+                       )
+                    )
 synhhldtypes <- c(synhhldtypes,
-                  rep('NoCar+Other', popdist['NoCar','Other']))
+                  rep('NoCar+Other', 
+                      popdist['NoCar','Other']
+                     )
+                  )
 ```
 
 This results in a vector with the household IDs of the households from the micro-data selected to be used for the synthetic households and a separate vector for the household weights.
 Since these two vectors are both in the same order, we can create a data frame that contains the synthetic household ID and the matching household weights.
 
 ```{r}
-synhhldDF <- data.frame(hhld=synhhlds,hhldweight=synhhldweights,hhldtype=synhhldtypes)
+synhhldDF <- data.frame(hhld=synhhlds,
+                        hhldweight=synhhldweights,
+                        hhldtype=synhhldtypes
+                       )
 ```
 
 Once this has been done generating the synthetic household dataset is relatively straightforward requiring us to merge the individual and household-level data for our desired households.
@@ -321,7 +388,8 @@ synhhlddata <- merge(
   all.x=TRUE
 )
 
-# Add an ID for each individual in the household (starting from 1 for each household)
+# Add an ID for each individual in the household 
+# (starting from 1 for each household)
 synhhlddata <- group_by(synhhlddata, hhld) %>%
   mutate(
     indid = 1:n()
@@ -407,10 +475,14 @@ resmodelout <- round(resmodel$coefficients,4)
 
 $$
 \begin{aligned}
-U_1 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("1:",names(resmodelout))]],str_replace(names(resmodelout)[grep("1:",names(resmodelout))],"1:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') ` \\
-U_2 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("2:",names(resmodelout))]],str_replace(names(resmodelout)[grep("2:",names(resmodelout))],"2:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') ` \\
-U_3 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("3:",names(resmodelout))]],str_replace(names(resmodelout)[grep("3:",names(resmodelout))],"3:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') ` \\
-U_4 &= `r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("4:",names(resmodelout))]],str_replace(names(resmodelout)[grep("4:",names(resmodelout))],"4:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') `
+U_1 &= \\
+&`r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("1:",names(resmodelout))]],str_replace(names(resmodelout)[grep("1:",names(resmodelout))],"1:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') ` \\
+U_2 &= \\
+&`r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("2:",names(resmodelout))]],str_replace(names(resmodelout)[grep("2:",names(resmodelout))],"2:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') ` \\
+U_3 &= \\
+&`r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("3:",names(resmodelout))]],str_replace(names(resmodelout)[grep("3:",names(resmodelout))],"3:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') ` \\
+U_4 &= \\
+&`r str_replace_all(str_replace_all(paste(resmodelout[names(resmodelout)[grep("4:",names(resmodelout))]],str_replace(names(resmodelout)[grep("4:",names(resmodelout))],"4:",""),sep='*',collapse = " + "),'\\*\\(intercept\\)',""),'\\+ -','- ') `
 \end{aligned}
 $$
 
@@ -421,8 +493,9 @@ The easiest way to calculate the utilities for each synthetic household is to ma
 Since our model includes only household-level characteristics, we begin by simplifying the synthetic household data to one row per household with only the variables necessary for our model, making sure to rename them to match the variable names in our utility expressions:
 
 ```{r}
-synrun <- unique(synhhlddata[,c("hhld","nummanager","numprof","numcars",
-                                "numrout","hhldweight","hhldtype")])
+synrun <- unique(synhhlddata[,c("hhld","nummanager","numprof",
+                                "numcars","numrout",
+                                "hhldweight","hhldtype")])
 synrun <- rename(synrun,
                  mgmt = nummanager,
                  prof = numprof,
@@ -448,10 +521,14 @@ i <- 1;
 while (i <= 4) {
   synrun[,7+i] <- with(synrun,
        eval(parse(text=c(
-         "3.2989*mgmt + 1.8519*rout + 1.733*numCars",  
-         "6.5633 - 1.3535*prof + 26.8106*mgmt - 0.8307*rout - 3.1094*numCars",
-         "0.115 - 1.0771*prof + 1.3984*mgmt + 1.781*rout + 1.9871*numCars",
-         "3.7052 - 8.0874*prof + 33.2434*mgmt + 1.8073*rout - 1.291*numCars"
+         "3.2989*mgmt + 1.8519*rout + 
+         1.733*numCars",  
+         "6.5633 - 1.3535*prof + 26.8106*mgmt - 0.8307*rout - 
+         3.1094*numCars",
+         "0.115 - 1.0771*prof + 1.3984*mgmt + 1.781*rout + 
+         1.9871*numCars",
+         "3.7052 - 8.0874*prof + 33.2434*mgmt + 1.8073*rout - 
+         1.291*numCars"
        )[i])))
   i <- i + 1
 }
@@ -513,10 +590,14 @@ Although we will not run the calibration procedure here, to illustrate the sensi
 
 $$
 \begin{aligned}
-U_1 &= 3.2989*mgmt + 1.8519*rout + 1.733*numCars \\
-U_2 &= 5.5633 - 1.3535*prof + 26.8106*mgmt - 0.8307*rout - 3.1094*numCars \\
-U_3 &= 0.115 - 1.0771*prof + 1.3984*mgmt + 1.781*rout + 1.9871*numCars \\
-U_4 &= 3.7052 - 8.0874*prof + 33.2434*mgmt + 1.8073*rout - 1.291*numCars
+U_1 &= \\
+&3.2989*mgmt + 1.8519*rout + 1.733*numCars \\
+U_2 &= \\
+&5.5633 - 1.3535*prof + 26.8106*mgmt - 0.8307*rout - 3.1094*numCars \\
+U_3 &= \\
+&0.115 - 1.0771*prof + 1.3984*mgmt + 1.781*rout + 1.9871*numCars \\
+U_4 &= \\
+&3.7052 - 8.0874*prof + 33.2434*mgmt + 1.8073*rout - 1.291*numCars
 \end{aligned}
 $$
 
@@ -577,10 +658,14 @@ As a result, calibration involves the incremental changes of more than one alter
 
 $$
 \begin{aligned}
-U_1 &= 3.2989*mgmt + 1.8519*rout + 1.733*numCars \\
-U_2 &= 4.5633 - 1.3535*prof + 26.8106*mgmt - 0.8307*rout - 3.1094*numCars \\
-U_3 &= 0.115 - 1.0771*prof + 1.3984*mgmt + 1.781*rout + 1.9871*numCars \\
-U_4 &= 3.7052 - 8.0874*prof + 33.2434*mgmt + 1.8073*rout - 1.291*numCars
+U_1 &= \\
+&3.2989*mgmt + 1.8519*rout + 1.733*numCars \\
+U_2 &= \\
+&4.5633 - 1.3535*prof + 26.8106*mgmt - 0.8307*rout - 3.1094*numCars \\
+U_3 &= \\
+&0.115 - 1.0771*prof + 1.3984*mgmt + 1.781*rout + 1.9871*numCars \\
+U_4 &= \\
+&3.7052 - 8.0874*prof + 33.2434*mgmt + 1.8073*rout - 1.291*numCars
 \end{aligned}
 $$
 
