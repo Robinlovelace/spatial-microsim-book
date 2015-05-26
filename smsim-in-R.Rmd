@@ -10,7 +10,7 @@ library(png)
 library(grid)
 ```
 
-# Population synthesis{#smsimr}
+# Population synthesis {#smsimr}
 
 ```{r, echo=FALSE}
 # TODO:

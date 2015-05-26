@@ -136,8 +136,8 @@ to administrative zones, based on shared variables between the areal and
 individual level data. When
 additional *target variables* exist in the microdata inputs for population synthesis (which are not present in the aggregate level data), the process
 can be used to simulate information that is not otherwise available at the local
-level. Population synthesis for this purpose is a subset of the
-long-established field of *small area estimation* (Rao 2003).
+level. Population synthesis in this context can be seen as part of the
+long-established field of *small area estimation* [@Rao2003].
 
 **Microsimulation** (of which spatial microsimulation is a subset)
 is an approach that was first conceived by
@@ -292,7 +292,7 @@ behaviours in which individuals interact with each other and the environment
 over time and space. This is not always the case: spatial microsimulation
 is generally a more 'top down' approach to modelling, in which the results
 can be broadly predicted. ABM, by contrast is bottom-up and can result in
-highly non-linear and chaotic states (Batty 2005).
+highly non-linear and chaotic states [@Batty2005].
 
 There is, however, no clearly defined boundary stating where
 spatial microsimulation ends and ABM begins and the two approaches are closely
@@ -308,7 +308,7 @@ level of detail and complexity means that ABM tends to have higher
 computational needs per individual. As a result, spatial microsimulation
 models tend to be much larger, encapsulating up to millions of individuals.
 As computing power continues to increase the potential for adding ABM
-capabilities to such models is only set to grow (Wegener 2011).
+capabilities to such models is only set to grow [@Wegener2011].
 
 The above discussion illustrates that
 microsimulation can be seen as a subset of advanced ABM.
@@ -440,7 +440,7 @@ how spatial microsimulation is used.
 A classic example of the potential practical utility of spatial microsimulation
 is a study which estimated the rate of smoking at the
 small area level in the city of Leeds UK
-(Tomintz et al. 2008).
+[@Tomintz2008].
 Smoking is a classic 'target variable' in spatial microsimulation:
 it is reported in a number of individual-level surveys but there is surprisingly
 little information about how smoking rates vary from place to place.
@@ -471,15 +471,16 @@ making tools that would be difficult to implement with non-spatial surveys alone
 **Simobesity** is another research project and spatial microsimulation software tool that
 estimates the prevalence of obesity at the local levels depending on demographic
 constraint variables
-(Edwards and Clarke, 2013).
+[@Edwards2013].
 Recent evidence has emerged on the impact of
 car-dependent urban environments on inactive lifestyles and resulting poor health
 (these areas have been labelled 'obesogenic'). In this context, there is
 great potential for combining socio-demographic and environmental-geographic
 variables in a spatial microsimulation model. Using the same principles
-described in Tomintz et al. (2008), the outputs of such a model
+described in [@Tomintz2008], the outputs of such a model
 could help target local interventions
-to tackle physical inactivity, to maximise the benefits of public health funds.
+to tackle physical inactivity, maximising the benefits of public health
+initiatives.
 
 ```{r, echo=FALSE}
 # TODO: link the reader here to a chapter where smsim models are linked to geo-data
@@ -523,10 +524,11 @@ research agencies in many countries to estimate the distributional impacts
 of policy reforms. In a recent example,
 EUROMOD was used to assess
 effects of austerity on different income groups in the UK
-(De Agostini et al. 2014).
+[@de2014were].
 The finding that recent policies have been highly regressive (Figure 2.1)
 shows that
-microsimulation can provide a new evidence base in policy relevant areas.
+microsimulation can provide important new lines of evidence
+to inform national-level policies [@avram2012distributional].
 
 ```{r vingtile, fig.cap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.", fig.width=5, fig.height=5, echo=FALSE}
 # A typical output from a microsimulation model for economic policy evaluation, from De Agostini et al. (2014). Each vertical bar represents the relative gains or losses of each income 'vingtile' (there are 20 equally sized groups, by income, in the model) and the black line shows that the austerity budget has been most detrimental to low income groups and most beneficial to the upper-middle classes.
@@ -539,7 +541,7 @@ grid.raster(img)
 Spatial microsimulation uses very similar techniques as those employed by
 EUROMOD and other economic microsimulation models, including probability-weighted random sampling of individual-level
 data and aggregate-level scenario development
-(Sutherland and Figari, 2013). The majority of microsimulation
+[@sutherland2013euromod]. The majority of microsimulation
 research for economic policy evaluation does not
 disaggregate the impacts over space, however. The estimation of variability
 at the *local level* is what differentiates spatial microsimulation models
@@ -557,7 +559,7 @@ Generally, little attention is paid to this process of
 synthetic population generation in transport modelling
 because the focus is on movement of individuals rather
 than their characteristics. Distributional impacts
-are often overlooked in transport models (Lucas 2012)
+are often overlooked in transport models [@Lucas2012]
 and there is much potential to integrate spatial microsimulation
 with existing transport modelling methods.
 
@@ -571,7 +573,7 @@ represented in the figure has a rich profile of characteristics
 associated with them. This analysis can provide new evidence
 about the likely winners and losers from very specific
 interventions such as a new bicycle path or bus route
-(Lovelace et al. 2014). As a result of the increased detail
+[@Lovelace2014-jtg]. As a result of the increased detail
 allowed by such methods there is much interest in spatial
 microsimulation for transport applications. Figure 2.2 also
 illustrates the potential for the output of 
@@ -593,11 +595,7 @@ assumptions, some of which are unlikely to hold in all cases. This
 does not preclude spatial microsimulation in cases where the assumptions
 do not hold: "It is far better to foresee even without
 certainty than not to foresee at all", as Henri Poincaré put it
-(Barthélemy 2014).
-
-```{r, echo=FALSE}
-# (Barthélemy, 2014).
-```
+[@barthelemy2014parallelized].
 
 
 It is vital, however, that users of spatial microsimulation and
@@ -631,3 +629,5 @@ microsimulation simplifies the real world, the next chapter describes
 a hypothetical scenario where 33 inhabitants of an imaginary land
 are simulated and allocated to three zones
 based on a microdataset of only 5 individuals and two constraint variables.
+
+# References

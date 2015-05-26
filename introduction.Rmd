@@ -310,7 +310,7 @@ installation (e.g. `lm()`, to create a linear regression model) perform
 statistical analysis 'out of the box'.  In agent-based modelling, the
 statistical analysis of results often occupies more time than running the model
 itself
-(Thiele 2014).
+[@Thiele2014].
 The same
 applies to spatial microsimulation, making R an ideal choice due to its
 statistical analysis capabilities.
@@ -346,7 +346,7 @@ A clear advantage of R is that anyone can write a package.
 This is also potentially a disadvantage: it has been argued there 
 are too many packages, making it difficult for new users to identify which
 packages are most reliable and which are best suited to different situations
-(Horkik 2012). However, this problem is mitigated by the open-source
+[@Hornik2012]. However, this problem is mitigated by the open-source
 nature of R: users can see precisely how any particular function
 works (providing they are willing to learn some programming), rather than
 relying on a "black box".
@@ -555,7 +555,7 @@ explanation of spatial microsimulation method with reference to an imaginary pla
 is dedicated to the boring but vital task
 of loading and 'cleaning' the input data, ready for spatial microsmulation.
 
-- *Population synthesis with R*
+- *Population synthesis*
 ([](#smsimr))
 uses the input data created in the previous chapter to perform population
 synthesis, the process of creating synthetic spatial microdata. 
