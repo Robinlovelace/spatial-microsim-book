@@ -16,7 +16,7 @@ k <- readLines("~/Desktop/Krantz_v1.11/Example/Run_This_Example.tex")
 # kp <- 9 # where do package descriptions end?
 # kf <- grep("mainmatter", k) # frontmatter up to and including here
 kf <- readLines("frontmatter/pream.tex")
-kb <- grep("bibliographystyle", k) # frontmatter up to and including here
+kb <- grep("printindex", k) # frontmatter up to and including here
 
 # kp <- k[1:kp]
 # kf <- k[(length(kp) + 1):kf] # frontmatter
@@ -25,6 +25,17 @@ kb <- k[kb:length(k)]
 # kp <- c(kp, a)
 
 k <- c(kf, b, kb)
+biblilines <- grep("section\\*\\{Bibliography\\}|\\{section\\}\\{Bibliography\\}", x = k)
+kbl <- k[biblilines]
+kbl <- gsub(pattern = "section", replacement = "chapter", x = kbl)
+
+# glosline <-  grep("chapter\\{Glossary\\}", x = k)
+# k[(glosline - 1):(glosline + 2)]
+# k[glosline + 1] <- "\\addcontentsline{toc}{chapter}{Glossary}"
+
+k[biblilines] <- kbl
+
+
 writeLines(k, con = "spatial-microsim-book.tex")
 
 # out-takes - code not used
