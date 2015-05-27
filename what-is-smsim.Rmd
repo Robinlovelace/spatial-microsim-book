@@ -1,7 +1,8 @@
 ---
 title: "What is spatial microsimulation?"
 layout: default
-bibliography: ~/Documents/smr.bib
+output: word_document
+bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}
@@ -13,32 +14,30 @@ library(grid)
 
 # What is spatial microsimulation? {#what-is}
 
-Like many words, the meaning attributed to the term *spatial microsimulation*
-varies from one user to the next. As the eminent physicist Richard Feynman
-has stated, the "difference between knowing the name of something and
-knowing something" vital to understand the world. We could equally call the
-methods taught in this book "population synthesis" or 
-"real-world SimCity",^[SimCity is
-a popular computer game series in which the player constructs urban infrastructure
-and observes their God-like influence on the virtual citizens. Dimitris Ballas
-has jokingly used the analogy of SimCity to describe spatial microsimulation
-to students. In practice the underlying aims of SimCity (entertainment,
-education and profit for its publisher Electronic Arts) are quite different than those of
-spatial microsimulation. However in other ways the comparison is appropriate:
-SimCity creates virtual individuals allocated to geographic space and provides
-a framework for *model experiments* in the same way that spatial microsimulation
-does. SimCity can be used for teaching and better understanding urban planning
-(Gaber 2007)
-and is recommended game for those wanting to understand how complex models
-based on spatial microdata could become. A number of open-source versions of
-the SimCity concept are now available (e.g. LinCity-NG, Micropolis and Simutrans).
-]
-but this would not change how its methods work or what they do.
+Like many phrases, the meaning of *spatial microsimulation*
+varies depending on context. The term is more ambiguous than most,
+however, because it is a relatively new method and because different
+people have used the term in different ways.
+Of course, the label attributed to the method is less important than the
+method itself. As eminent physicist Richard Feynman
+put it, "the difference between knowing the name of something and
+knowing something" is vital to understand the world. The
+methods used in this book could equally be "multi-level modelling" or 
+"real-world SimCity",
+but this would not change how its methods work or what they do. However,
+it is important that the terminology we use is at least *internally consistent*
+to avoid confusion. Furthermore, it is important to understand something about
+how others have used 'spatial microsimulation' to avoid
+mis-interpretation of literature that employs the term.
 
-Despite reservations about the term *spatial microsimulation* described below
-(see [](#is-not))
-it is deemed a reasonable label to describe the the material covered in this
-book as it is already widely used and succinctly conveys the main elements of the approach:
+There are valid reservations about the term *spatial microsimulation*, as
+described below
+(see [](#is-not)).
+However, *spatial microsimulation*
+it is an appropriate label for the material covered in this
+book because it is
+already widely used and because it
+succinctly conveys the main elements of the approach:
 
 - **Spatial** microsimulation is inherently concerned with how things vary
 over space, not just between individuals, groups or periods of time: this is
@@ -53,33 +52,49 @@ may seem obvious.
 However, it is important to define the term precisely at an early stage
 and understand how other people have used the term
 to avoid confusion.
-For the purposes of this book we define spatial microsimulation simply, as:
+For the purposes of this book we define spatial microsimulation as:
 
 > An approach to the analysis of individual-level phenomena over geographical space that involves the creation, analysis and modelling of spatial microdata.
 
-The rest of this chapter explains this succinct definition and demystifies
-the uses of the approach in applied settings by:
+The rest of this chapter explains this succinct definition.
+The purpose is to demystify
+the various interpretations and uses of the approach in applied settings.
+The chapter is ordered as follows:
 
-- Explaining the spatial microsimulation terminology in more detail
-[](#terminology). This involves an exploration of how spatial microsimulation
+- The next section on terminology (\ref{terminology})
+explains the spatial microsimulation nomenclature in more detail.
+This involves an exploration of how spatial microsimulation
 can be understood as either a method or an approach
 ([](#meth-approach)),
 how the methods can best be communicated to others ([](#comms)) and
-how we use the term in this book ([](#this-book)) .
-- Exploring the applications of spatial microsimulation
-([](#applications)).
-- The important question of what spatial microsimulation is not and how
-the approach relates to other quantitative approaches such as ABM
+the use of the term in this book ([](#this-book)).
+- An exploration of the applications of spatial microsimulation in
+the Applications section
+ ([](#applications)).
+- The question of what spatial microsimulation is not and how
+it relates to other approaches such as ABM
 ([](#is-not)).
 - The often unspoken assumptions underlying spatial microsimulation
-methods
-([](#assumptions)).
-
-```{r, echo=FALSE}
-# @Gaber2007
-```
+methods ([](#assumptions)).
 
 ## Terminology {#terminology}
+
+### Spatial microsimultion as SimCity
+
+SimCity is
+a popular computer game series in which the player constructs urban infrastructure
+and observes their God-like influence on the virtual citizens. 
+The analogy of SimCity to describe spatial microsimulation.
+In practice, however, the underlying aims of SimCity (entertainment,
+education and profit for its publisher) are quite different from those of
+spatial microsimulation research.
+In some ways the comparison is appropriate:
+SimCity creates virtual individuals allocated to geographic space and provides
+a framework for *model experiments* in the same way that spatial microsimulation
+does. SimCity can be used for teaching urban planning
+[@Gaber2007] and illustrates how complex computer simulations of urban
+systems can become. A number of open-source versions of
+the SimCity concept are now available (e.g. LinCity-NG, Micropolis and Simutrans).
 
 ### Spatial microsimulation: method or approach? {#meth-approach}
 
@@ -89,23 +104,28 @@ methods
 ```
 
 The most common confusion about what spatial microsimulation is arises because
-the term has been used in two ways: as a method and an approach. Remembering
-Feynman's distinction between the words used to describe something and what
-it actually is, it is clear that both interpretations are acceptable,
-providing you clearly communicate what you mean
+the term has been used to refer to both a narrow
+methodology and a broader research approach. From
+Feynman's distinction between a thing's label what
+it actually is, it is clear that both interpretations are acceptable.
+The critical step is to use the term in a way that others can understand,
+remembering that the audience may
+have not have heard of spatial microsimulation before
 (see [](#comms)).
 As stated in the introduction, we acknowledge both uses of the term in the
 literature but advocate that 'spatial microsimulation' is used to describe
-the overall modelling approach. The term *population synthesis*, borrowed from
-transport modelling, is used to describe the methods for actually generating
+the overall modelling approach. The term *population synthesis*, used in
+transport modelling, is used to describe the methods for generating
 the spatial microdata on which the spatial microsimulation approach depends.
 
-Before progressing to see how spatial microsimulation is actually applied to
-solve important real-world problems, let us pause to consider how spatial
+A subsequent section
+([](#applications))
+outlines some of the real-world problems spatial microsimulation has
+been used to tackle. Before us pause to consider how spatial
 microsimulation is understood in the literature and how this relates to
-the definition used in this book.
+the definitions used in this book.
 
-**Population synthesis** (the former definition of spatial microsimulation)
+**Population synthesis**
 is a set of techniques for generating individual-level data
 allocated to geographical zones. Population synthesis is an important
 (and often crucial) component of the spatial microsimulation approach,
@@ -116,16 +136,30 @@ to administrative zones, based on shared variables between the areal and
 individual level data. When
 additional *target variables* exist in the microdata inputs for population synthesis (which are not present in the aggregate level data), the process
 can be used to simulate information that is not otherwise available at the local
-level. Population synthesis for this purpose is a subset of the
-long-established field of *small area estimation* (Rao 2003).
+level. Population synthesis in this context can be seen as part of the
+long-established field of *small area estimation* [@Rao2003].
 
-**Spatial microsimulation** as an approach was first conceived by
+**Microsimulation** (of which spatial microsimulation is a subset)
+is an approach that was first conceived by
+Guy Orcutt. This can be defined in general terms as
+"a methodology ...
+to simulate the states and behaviors of different
+units --- e.g. individuals, households, firms --- as
+they evolve in a given environment" 
+[@Baroni2007]. The defining feature of *spatial microsimulation* is that
+the 'environment' is defined in predominently geographical terms: the
+individuals are allocated to small parcels of land which affect their
+characteristics and inferred behaviour.
+This wider perspective helps explain why,
+destpite not using the term 'spatial microsimulation',
+@Orcutt1957-new-type is frequently cited as one of the founding fathers of
+the field.
 
-As with many new and infrequently used phrases, this
-understanding is not shared by everyone. The meaning of spatial
-microsimulation varies depending on context and who you ask. To an
+As with many new and infrequently used words, the term
+spatial microsimulation is a source of confusion, and its meaning can vary
+depending on context and who you ask. To an
 economist, spatial microsimulation is likely to imply
-modelling some kind of temporal process such as how individual agents in
+modelling a temporal process such as how individual agents in
 different areas respond to changes in prices or policies. To a transport
 planner, the term may imply simulating the precise movements of vehicles on
 the transport network. To your next door neighbour it may mean you have
@@ -258,7 +292,7 @@ behaviours in which individuals interact with each other and the environment
 over time and space. This is not always the case: spatial microsimulation
 is generally a more 'top down' approach to modelling, in which the results
 can be broadly predicted. ABM, by contrast is bottom-up and can result in
-highly non-linear and chaotic states (Batty 2005).
+highly non-linear and chaotic states [@Batty2005].
 
 There is, however, no clearly defined boundary stating where
 spatial microsimulation ends and ABM begins and the two approaches are closely
@@ -274,7 +308,7 @@ level of detail and complexity means that ABM tends to have higher
 computational needs per individual. As a result, spatial microsimulation
 models tend to be much larger, encapsulating up to millions of individuals.
 As computing power continues to increase the potential for adding ABM
-capabilities to such models is only set to grow (Wegener 2011).
+capabilities to such models is only set to grow [@Wegener2011].
 
 The above discussion illustrates that
 microsimulation can be seen as a subset of advanced ABM.
@@ -406,7 +440,7 @@ how spatial microsimulation is used.
 A classic example of the potential practical utility of spatial microsimulation
 is a study which estimated the rate of smoking at the
 small area level in the city of Leeds UK
-(Tomintz et al. 2008).
+[@Tomintz2008].
 Smoking is a classic 'target variable' in spatial microsimulation:
 it is reported in a number of individual-level surveys but there is surprisingly
 little information about how smoking rates vary from place to place.
@@ -437,15 +471,16 @@ making tools that would be difficult to implement with non-spatial surveys alone
 **Simobesity** is another research project and spatial microsimulation software tool that
 estimates the prevalence of obesity at the local levels depending on demographic
 constraint variables
-(Edwards and Clarke, 2013).
+[@Edwards2013].
 Recent evidence has emerged on the impact of
 car-dependent urban environments on inactive lifestyles and resulting poor health
 (these areas have been labelled 'obesogenic'). In this context, there is
 great potential for combining socio-demographic and environmental-geographic
 variables in a spatial microsimulation model. Using the same principles
-described in Tomintz et al. (2008), the outputs of such a model
+described in [@Tomintz2008], the outputs of such a model
 could help target local interventions
-to tackle physical inactivity, to maximise the benefits of public health funds.
+to tackle physical inactivity, maximising the benefits of public health
+initiatives.
 
 ```{r, echo=FALSE}
 # TODO: link the reader here to a chapter where smsim models are linked to geo-data
@@ -489,10 +524,11 @@ research agencies in many countries to estimate the distributional impacts
 of policy reforms. In a recent example,
 EUROMOD was used to assess
 effects of austerity on different income groups in the UK
-(De Agostini et al. 2014).
+[@de2014were].
 The finding that recent policies have been highly regressive (Figure 2.1)
 shows that
-microsimulation can provide a new evidence base in policy relevant areas.
+microsimulation can provide important new lines of evidence
+to inform national-level policies [@avram2012distributional].
 
 ```{r vingtile, fig.cap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.", fig.width=5, fig.height=5, echo=FALSE}
 # A typical output from a microsimulation model for economic policy evaluation, from De Agostini et al. (2014). Each vertical bar represents the relative gains or losses of each income 'vingtile' (there are 20 equally sized groups, by income, in the model) and the black line shows that the austerity budget has been most detrimental to low income groups and most beneficial to the upper-middle classes.
@@ -505,7 +541,7 @@ grid.raster(img)
 Spatial microsimulation uses very similar techniques as those employed by
 EUROMOD and other economic microsimulation models, including probability-weighted random sampling of individual-level
 data and aggregate-level scenario development
-(Sutherland and Figari, 2013). The majority of microsimulation
+[@sutherland2013euromod]. The majority of microsimulation
 research for economic policy evaluation does not
 disaggregate the impacts over space, however. The estimation of variability
 at the *local level* is what differentiates spatial microsimulation models
@@ -523,7 +559,7 @@ Generally, little attention is paid to this process of
 synthetic population generation in transport modelling
 because the focus is on movement of individuals rather
 than their characteristics. Distributional impacts
-are often overlooked in transport models (Lucas 2012)
+are often overlooked in transport models [@Lucas2012]
 and there is much potential to integrate spatial microsimulation
 with existing transport modelling methods.
 
@@ -537,7 +573,7 @@ represented in the figure has a rich profile of characteristics
 associated with them. This analysis can provide new evidence
 about the likely winners and losers from very specific
 interventions such as a new bicycle path or bus route
-(Lovelace et al. 2014). As a result of the increased detail
+[@Lovelace2014-jtg]. As a result of the increased detail
 allowed by such methods there is much interest in spatial
 microsimulation for transport applications. Figure 2.2 also
 illustrates the potential for the output of 
@@ -559,11 +595,7 @@ assumptions, some of which are unlikely to hold in all cases. This
 does not preclude spatial microsimulation in cases where the assumptions
 do not hold: "It is far better to foresee even without
 certainty than not to foresee at all", as Henri Poincaré put it
-(Barthélemy 2014).
-
-```{r, echo=FALSE}
-# (Barthélemy, 2014).
-```
+[@barthelemy2014parallelized].
 
 
 It is vital, however, that users of spatial microsimulation and
@@ -597,3 +629,5 @@ microsimulation simplifies the real world, the next chapter describes
 a hypothetical scenario where 33 inhabitants of an imaginary land
 are simulated and allocated to three zones
 based on a microdataset of only 5 individuals and two constraint variables.
+
+# References

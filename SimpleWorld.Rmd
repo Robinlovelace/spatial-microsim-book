@@ -1,6 +1,7 @@
 ---
 title: "SimpleWorld"
 layout: default
+bibliography: bibliography.bib
 ---
 
 # Spatial microsimulation in context {#SimpleWorld}

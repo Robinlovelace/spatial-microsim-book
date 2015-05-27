@@ -1,6 +1,7 @@
 ---
 title: "Glossary"
 layout: default
+bibliography: bibliography.bib
 ---
 
 # Glossary
@@ -19,7 +20,9 @@ layout: default
     selecting individuals from a survey dataset and measuring the fit
     between the simulated output and the constraint variables. If the
     fit improves after any particular change, the change is kept.
-    Williamson (2007) provides a practical user manual. Harland ()
+    Williamson (2007) provides a practical user manual. @Harland2013
+    provides a practical demonstration of the method implemented in
+    the Java-based Flexible Modelling Framework (FMF).
 
 -   **Data frame**: a type of object (formally referred to as a class)
     in R, data frames are square tables composed of rows and columns of

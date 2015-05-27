@@ -1,6 +1,7 @@
 ---
 title: "Additional tools and techniques"
 layout: default
+bibliography: bibliography.bib
 ---
 
 # Additional tools and techniques {#additional}

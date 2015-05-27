@@ -1,6 +1,7 @@
 ---
 title: "Visualising and analysing spatial microdata"
 layout: default
+bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}

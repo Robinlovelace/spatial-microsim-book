@@ -7,9 +7,11 @@
 # IPF in R/loglin/mipfp/GREGWT
 # Reference UrbanSim
 
+file.copy(from = "~/Documents/smr.bib", to = "bibliography.bib", overwrite = T)
+
 # View the order chapters will be knitted (see R/book-functions.R)
-chap_ord <- c(7,15,10,5,12,2,8,4,13,14,11,1,3,6,9)
-cfiles <- list.files(pattern = "*.Rmd$", )
+chap_ord <- c(7,16,10,5,12,2,8,4,13,14,15,11,1,3,6,9)
+cfiles <- list.files(pattern = "*.Rmd$")
 cfiles <- cfiles[chap_ord] # chapter order
 cfiles
 
@@ -24,6 +26,7 @@ output:
 \ \ \ \ keep_tex: yes
 \ \ \ \ number_sections: yes
 \ \ \ \ toc: yes
+bibliography: bibliography.bib
 layout: default
 ---'))
 
@@ -75,6 +78,4 @@ for(i in cfiles){
 # command-line tools for dif tracking
 # latexdiff book-b4-comments.tex book.tex > dif.tex
 # pdflatex dif.tex 
-
-
 

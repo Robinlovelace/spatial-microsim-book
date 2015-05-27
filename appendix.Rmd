@@ -1,6 +1,7 @@
 ---
 title: "Appendix"
 layout: default
+bibliography: bibliography.bib
 ---
 
 # Appendix: Getting up-to-speed with R {#apR}

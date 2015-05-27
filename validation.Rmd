@@ -1,9 +1,10 @@
 ---
 title: "CakeMap"
 layout: default
+bibliography: bibliography.bib
 ---
 
-```{r, echo=FALSE, results='hide'}
+```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 load("cache-CakeMap.RData")
 map_pack <- c("ggmap", "rgdal", "maptools", "rgeos", "dplyr", "tidyr", "gridExtra")
 lapply(map_pack, library, character.only = T)

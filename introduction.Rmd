@@ -1,7 +1,7 @@
 ---
 title: "Introduction"
 layout: default
-bibliography: ~/Documents/smr.bib
+bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}
@@ -11,7 +11,7 @@ library(png)
 library(grid)
 ```
 
-# Introduction
+# Introduction {#intro}
 
 Imagine a world in which anyone could access any dataset.
 Information on companies, households and governments would become more
@@ -145,11 +145,11 @@ to the latter side of the spatial microsimulation process:
 the focus in chapters 4 to 6 is on generating spatial microdata
 while chapters 7 onwards focus on how to use this rich data type.
 
-# Learning by doing
+## Learning by doing
 
 Another issue tackled in this book is reproducibility, which is intimately
 linked to the 'learning by doing' approach.  Beyond a few excpetions
-(e.g. Lovelace et al. 2015), most findings in the
+[@Lovelace-ipfinr], most findings in the
 field cannot replicated: there is no way of independently
 verifying the results of spatial microsimulation research.
 When one considers that some of the decisions that the model can inform
@@ -162,17 +162,11 @@ unique to the field of
 spatial microsimulation. Opaque methods, impossible to replicate,
 are widespread in academia, leading to
 calls for an 'Open Regional Science'
-(Rey 2014).
+[@Rey2014].
 Similar proposals made in other research areas are gaining
-traction (Ince et al. 2012; Peng et al. 2006; McNutt 2014).
+traction [@Ince2012; @Peng2006a; and most recently, @McNutt2014].
 This book encourages such a shift towards transparency
 in the field of spatial microsimulation.
-
-```{r, echo=FALSE}
-# [@Rey2014]
-# [@Ince2012; @Peng2006; and most recently, @McNutt2014]
-```
-
 
 Reproducibility is encouraged throughout via provision of code for readers
 to actually *do* spatial microsimulation rather than simply *watch*
@@ -193,7 +187,7 @@ research: by enabling and encouraging others to use your methods, your work
 could gain more credit and citations. 
 The third reason is more profound:
 reproducibility is a prerequisite of falsifiability and
-falsifiability is the backbone of science (Popper 1959).  The results of
+falsifiability is the backbone of science [@Popper1959].  The results of
 non-reproducible research cannot be verified, reducing its
 scientific credibility.
 These philosophical observations inform the book’s practical nature.
@@ -220,7 +214,7 @@ answer.  Spatial microsimulation is largely defined by its user-community, made
 up of a growing number of people worldwide. This book
 aims to contribute to the community by encouraging collaboration, innovation and rigour. It also encourages playing with the methods and
 'getting your hands dirty' with the code. As
-(Kabakoff 2011)
+@kabacoff2011r [p. xxii]
 put it regarding R, "the best way to learn is to
 experiment". 
 
@@ -240,7 +234,7 @@ experiment".
 
 Software decisions have a major impact on the flexibility, efficiency and
 reproducibility of research.  Nearly three decades ago
-Clarke and Hölm (1987)
+@Holm1987
 observed that "little
 attention is paid to the choice of programming language used" for
 microsimulation. This appears to be as true now as it was then. Software is
@@ -250,7 +244,7 @@ microsimulation packages.^[The Flexible Modelling Framework
 Java that can perform various modelling tasks.] 
 There is a strong and diverse software community in the ABM field,
 and many of these bring insights that could be of use to researchers using
-spatial microsimulation. Mannion et al. (2012), for example, present JAMSIM.
+spatial microsimulation. @Mannion2012, for example, present JAMSIM.
 This is a new software framework for combining the powerful **Repast** ABM 
 application with R for graphing and analysis of the results. JAMSIM
 and other projects in the field (including the development of NetLogo and
@@ -310,7 +304,7 @@ installation (e.g. `lm()`, to create a linear regression model) perform
 statistical analysis 'out of the box'.  In agent-based modelling, the
 statistical analysis of results often occupies more time than running the model
 itself
-(Thiele 2014).
+[@Thiele2014].
 The same
 applies to spatial microsimulation, making R an ideal choice due to its
 statistical analysis capabilities.
@@ -346,7 +340,7 @@ A clear advantage of R is that anyone can write a package.
 This is also potentially a disadvantage: it has been argued there 
 are too many packages, making it difficult for new users to identify which
 packages are most reliable and which are best suited to different situations
-(Horkik 2012). However, this problem is mitigated by the open-source
+[@Hornik2012]. However, this problem is mitigated by the open-source
 nature of R: users can see precisely how any particular function
 works (providing they are willing to learn some programming), rather than
 relying on a "black box".
@@ -504,14 +498,9 @@ However, to ensure clarity and consistency, a single style, advocated in
 a [chapter](http://r-pkgs.had.co.nz/style.html) in Hadley
 Wickham's *Advanced R*, is followed
 throughout
-(Wickham 2014a). 
+[@wickham2014adv]. 
 Consistent style and plentiful comments will make your code
 readable by yourself and others for decades to come.
-
-```{r, echo=FALSE}
-# [@wickham2014adv].
-```
-
 
 ## An overview of the book {#overview}
 
@@ -549,36 +538,72 @@ descriptions of their contents are as follows:
 introduces the concepts and applications of spatial 
 microsimulation not only as a narrow methodology
 but as an *approach* to understanding real-world phenomena.
+
 - *SimpleWorld* 
 ([](#SimpleWorld))
 is a simple and reproducible
 explanation of spatial microsimulation method with reference to an imaginary planet.
+
 - *Data preparation*
 ([](#data-prep))
 is dedicated to the boring but vital task
 of loading and 'cleaning' the input data, ready for spatial microsmulation.
-- *Spatial microsimulation in R*
+
+- *Population synthesis*
 ([](#smsimr))
-introduces the main functions
-and techniques that are used to generate spatial microdata building on the previous chapters.
-- *Population synthesis without input microdata*
+uses the input data created in the previous chapter to perform population
+synthesis, the process of creating synthetic spatial microdata. 
+The chapter describes the main functions
+and techniques that are used for undertaking this key aspect of spatial
+microsimulation, with a focus
+on the **ipfp** and **mipfp* packages, which perform Iterative Proportion
+Fitting (IPF). 
+
+- *Alternative approaches to population synthesis*
+([](#alt)) describes some alternative methods, beyond IPF, for population
+synthesis. These include an R implementation the
+Generalized Regression Weighting procedure (GREGWT), a description
+of 'simulated annealling'
+and a demonstration that population synthesis can be interpreted as a
+constrained optimisisation problem. This final insight has the consequence
+that many previously developed optimisation algorithms can be used to
+perform the 'heavy lifting' of population synthesis. A few of these,
+including R's `optim` and `GenSA` functions, are tested, illustrating the
+importance of performance testing.
+
+- *Population synthesis without microdata*
 ([](#nomicrodata))
 gives a way to produce a spatial microsimulation without having individual-level data.
+
 - *Spatial microsimulation in the wild*
 ([](#CakeMap))
-is a larger
-and more involved example using real data. In this chapter
-you will estimate geographical variation in cake consumption.
+is based a larger
+and more complex example than SimpleWorld called CakeMap, that uses real data.
+This chapter combines geographic constraints with non-geographical survey
+data to
+estimate the geographical variation in cake consumption.
+
 - *Model checking and evaluation*
 ([](#svalidation))
-tackles the understudied but crucially important questions of 'is the model working?' and 'do the results coincide with reality?'. Here you will learn appropriate tests and checks to verify spatial microsimulation outputs and think about its underlying assumptions.
+tackles the understudied but important questions of 'is the model working?' and 'do the results coincide with reality?'. Here you will learn appropriate tests and checks to verify spatial microsimulation outputs and think about its underlying assumptions.
+
+- *The TRESIS approach to spatial microsimulation*
+([](#tresis))
+describes an alternative approach to spatial microsimulation
+that operates at the household level. This contributed chapter, by
+Richard Ellison and David Hensher, demonstrates the population synthesis
+stage of the wider Transport and Environment Strategy Impact Simulator
+(TRESIS) modelling system. 
+
 - *Visualising and analysing spatial microdata*
 ([](#vis))
 is dedicated to displaying the complex data generated through spatial microsimulation in a concise, compelling and beautiful way.
+
 - *Spatial microdata in agent-based models*
 ([](#ABM))
 describes how the output
 from spatial microsimulation can be used as an input into more complex models.
+
 - *Additional tools and techniques*
 ([](#additional))
 introduces further methods

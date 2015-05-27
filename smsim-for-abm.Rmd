@@ -1,6 +1,7 @@
 ---
 title: "Spatial microsimulation for agent-based models"
 layout: default
+bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}
