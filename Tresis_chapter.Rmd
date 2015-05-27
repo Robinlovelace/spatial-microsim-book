@@ -69,7 +69,7 @@ The households are sampled such that given certain combinations of socio-demogra
 There are fundamental differences between the populations generated through traditional population synthesis (described in earlier chapters) and synthetic households in TRESIS.
 First is that synthetic households retain their original composition and characteristics from the source sample. 
 Rather than assigning sample individuals to households, in TRESIS individuals remain linked to their original households.
-Households are seen as a single entity, and used as the unit of anaylsis for many of the models, including the residential location model, within TRESIS.
+Households are seen as a single entity, and used as the unit of analysis for many of the models, including the residential location model, within TRESIS.
 This has the side-effect that each household is not simply a sum of its members but may also be considered to have its own characteristics.
 
 Second is that synthetic households in TRESIS are not assigned to a unique geographic zone.
@@ -148,7 +148,7 @@ hhlds <- group_by(ind, hhld) %>%
   summarise(
     numres = n(),
     # Values of 8 and 97 mean "long-term unemployed" and 
-    # "not answered respectively"
+    # "not answered" respectively
     numworkers = length(NSSEC8[NSSEC8 < 8]),
     nummanager = length(NSSEC8[NSSEC8 == 1.1]),
     numprof = length(NSSEC8[NSSEC8 == 1.2]),
