@@ -757,4 +757,4 @@ In particular, implementing full network assignment in R is likely to be particu
 This chapter has provided an introduction to the TRESIS approach to population synthesis through the use of synthetic households and demand models.
 The relative simplicity, yet behavioural richness, of the synthetic households means they are relatively straightforward to implement in R (subject to data requirements) and can be used for a variety of applications not limited to those involving transport models.
 
-### References
+# References
