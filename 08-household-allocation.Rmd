@@ -1,0 +1,23 @@
+---
+title: "Allocating individuals to households"
+layout: default
+output:
+  pdf_document:
+    fig_caption: yes
+  word_document: default
+bibliography: bibliography.bib
+---
+
+# Allocating individuals to households
+
+So far the book has explored data on 2 levels: the individual level and
+the level of administrative zones. The household is another
+fundamental building block of human organisation around which key decision-making,
+economic and data-collecting activities are centred.
+
+This chapter explains how to take spatial microdata, of the type
+we have generated in the previous chapters, and allocate the resulting
+individuals into household units.
+
+
+## References
