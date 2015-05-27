@@ -793,12 +793,14 @@ For some applications, fractional weight matrices are sufficient for analysis.
 Often, however, an individual level resulting dataset is required. To estimate the individual-level
 variability in target variables such as income, or for agent-based modelling
 applications, a full spatial microdataset, composed of whole individuals is
-required. For this, we have to possibly. First, we can consider the weights as
-probability and randomly chose the individuals in a distribution corresponding to the weights.
-Secondly, we can consider the weights as the number of individual in this category and
-the fractional weights must be integerised in a process
-known as integerisation (Lovelace and Ballas, 2013). This is the subject of
-the next section.
+required. For this, we have two possibilities.
+First, we can consider the weights as
+probabilities and randomly chose the individuals in a distribution corresponding to the weights.
+Second, we can consider the weights as the number of individuals
+in this category and create integer weights [@Lovelace2013-trs],
+as described in a subsequent section
+[](#sintegerisation)
+on 'integerisation'.
 
 ## Reweighting with **mipfp** {#mipfp}
 
@@ -1721,55 +1723,8 @@ ints_df[ints_df$zone == 2, ]
 # kable(ints_df[ints_df$zone == 2,], row.names = FALSE)
 ```
 
-## The GREGWT algorithm
-
-```{r, echo=FALSE}
-# TODO: make reproducible example, compare performance with IPF
-```
-
-As described in the Introduction, IPF is just one strategy for obtaining
-a spatial microdataset. However, researchers (myself included) have tended to
-select one method that they are comfortable and stick with that for their models.
-This is understandable because setting-up the method is usually time consuming:
-most researchers rightly focus on applying the methods to the real world rather
-than fretting about the details. On the other hand, if alternative methods
-work better for a particular application, resistance to change can result
-in poor model fit. In the case of very large datasets, spatial microsimulation
-may not be possible unless certain methods, optimised to deal with large
-datasets, are used. Above all, there is no consensus about which methods
-are 'best' for different applications, so it is worth experimenting to identify
-which method is most suitable for each application.
-
-An interesting alternative to IPF method is the GREGWT algorithm.
-First implemented in the SAS language by the Statistical Service area of
-the Australian Bureau of Statistics (ABS), the algorithm reweighs a set of
-initial weights using a
-Generalized Regression Weighting procedure (hence the name GREGWT).
-The resulting weights ensure that, when aggregated, the individuals selected
-for each small area fit the constraint variables. Like IPF, the GREGWT
-results in non-integer weights, meaning some kind of integerisation 
-algorithm will be needed to obtain a final individual-level population, so
-for example, if the output is to be used in ABM. The macro
-developed by ABS adds a weight restriction in their GREGWT macros to ensure
-positive weights. The ABS uses
-the Linear Truncated Method described in Singh and Mohl (1996) to enforce these
-restrictions.
-
-```{r, echo=FALSE}
-# A problem with this
-# approach is that the geneated weights produced by GREG do not have any
-# restrictions, this leads to the generation of negative weights.
-```
-
-A clear simplified example of this algorithm (and other algorithms) can be
-found in Rahman (2009).  In their paper Tanton et.al (2011) make a full
-description of the algorithm. For a deeper understanding of the SAS macros see
-Bell (1999). An R implementation of GREGWT, has been
-created by Esteban Muñoz, and can be found in the GitLab repository
-[mikrosim](https://gitlab.com/emunozh/mikrosim).
-
 ```{r, echo=FALSE, eval=FALSE}
 save.image(file = "cache-smsim-in-R.RData")
 ```
 
-
+# References
