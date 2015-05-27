@@ -164,15 +164,9 @@ are widespread in academia, leading to
 calls for an 'Open Regional Science'
 [@Rey2014].
 Similar proposals made in other research areas are gaining
-traction [@Ince2012; @Peng2006; and most recently, @McNutt2014].
+traction [@Ince2012; @Peng2006a; and most recently, @McNutt2014].
 This book encourages such a shift towards transparency
 in the field of spatial microsimulation.
-
-```{r, echo=FALSE}
-# [@Rey2014]
-# [@Ince2012; @Peng2006; and most recently, @McNutt2014]
-```
-
 
 Reproducibility is encouraged throughout via provision of code for readers
 to actually *do* spatial microsimulation rather than simply *watch*
@@ -220,7 +214,7 @@ answer.  Spatial microsimulation is largely defined by its user-community, made
 up of a growing number of people worldwide. This book
 aims to contribute to the community by encouraging collaboration, innovation and rigour. It also encourages playing with the methods and
 'getting your hands dirty' with the code. As
-@Kabakoff [p. xxii]
+@kabacoff2011r [p. xxii]
 put it regarding R, "the best way to learn is to
 experiment". 
 
