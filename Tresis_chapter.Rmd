@@ -10,6 +10,7 @@ bibliography: bibliography.bib
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 library(knitr) # Needed for the kable function used in this chapter.
+# TODO explain what a discrete choice model
 ```
 
 # The TRESIS approach to spatial microsimulation {#tresis}
@@ -27,9 +28,9 @@ TRESIS provides a powerful alternative to some more widely used microsimulation 
 This chapter introduces the TRESIS model system from a spatial microsimulation perspective. 
 The bulk of substantive material focusses on the generation of synthetic households, which is described in detail. 
 This is the first time that a method for implementing TRESIS' synthetic households in R has been published. 
-The methods and code blocks outlined below could therefore provid a stepping stone towards further transport modelling work in R, which is currently under-used in transport research. 
+The methods and code blocks outlined below could therefore provide a stepping stone towards further transport modelling work in R, which is currently under-used in transport research. 
 The chapter demonstrates how the synthetic populations generated through TRESIS can be used to identify where different types of households live using a residential location model. 
-The chapter concludes with discussion of other important aspects of transport modelling that could be integreted into R, building on this work.
+The chapter concludes with discussion of other important aspects of transport modelling that could be integrated into R, building on this work.
 
 ## Overview of TRESIS modelling system
 
@@ -42,7 +43,7 @@ The figure below shows an overview of the high-level TRESIS model structure [@He
 
 The TRESIS demand models have been estimated from a combination of stated preference (SP) and revealed preference (RP) data using the NLOGIT software (see @Hensher2015 for details of the software and estimation models).
 The model system provides for feedback between the different models using inclusive value parameters.
-These inclusive value parameters provide the mechanism through which the decicions made using one model (e.g., what vehicle to buy) are incorporated into the decisions made using other models in the system (e.g., where to live).
+These inclusive value parameters provide the mechanism through which the decisions made using one model (e.g., what vehicle to buy) are incorporated into the decisions made using other models in the system (e.g., where to live).
 In this chapter, we discuss only the stand-alone residential location model. 
 This is just one part of TRESIS, which would be closely coupled to other sub-models covering fleet size, vehicle type choice, workplace location and dwelling type choice, among others [@Hensher2008].
 
@@ -175,8 +176,8 @@ hhlds[,c("hhld","numres","numworkers","nummanager",
 This code uses __dplyr__'s group_by() and summarise() functions to generate the household-level data from the individual-level data.
 Generally, some household-level data is already provided in the micro-data sample from the census but it may be necessary to add additional summary variables using the individual-level micro-data.
 
-The _cons_ dataframe from the CakeMap dataset contains the aggregate population-level data we need for generating the weights and identifying the required sample.
-However, since the _cons_ dataframe is at the Ward level, we need to aggregate to get a total for all the wards.
+The _cons_ data frame from the CakeMap dataset contains the aggregate population-level data we need for generating the weights and identifying the required sample.
+However, since the _cons_ data frame is at the Ward level, we need to aggregate to get a total for all the wards.
 This is easy to accomplish by using the colSums() function:
 
 ```{r}
@@ -190,7 +191,7 @@ Which variables should be used depends on exactly what is being investigated.
 If it is of interest to identify how a specific policy will affect households with a different number of workers (e.g., peak hour congestion charging), then it is important to ensure that the number of workers is used as one of the variables in the generation of synthetic households.
 For this relatively simple dataset, we will use the availability of a car and the number of professionals in the household as the weighting and sampling variables.
 Typically, synthetic households in TRESIS are generated using three (nested) pairs of variables including household income, number of workers, family structure (e.g., family with children, family without children, single-person household, etc) and the occupation of the reference person, among others.
-However, since the crosstabs are not available for the CakeMap data, for the purposes of this example we will assume that the distributions of the two variables (car and professionals) are the same for all combinations as they are for the population.
+However, since the cross-tabs are not available for the CakeMap data, for the purposes of this example we will assume that the distributions of the two variables (car and professionals) are the same for all combinations as they are for the population.
 Similarly, we will assume that the distribution for households is the same for individuals.[^distnote]
 
 [^distnote]: This will generally not be the case in reality and so every effort should be made to source multi-way cross tab data for the required variables.
@@ -213,7 +214,7 @@ prop.table(c(Professionals=totcons['X1.2'],
 
 The _prop.table()_ function takes two or more values and generates a table with the proportion of each value is of the total.
 The _match()_ function is used to find the elements in the vector, _names(totcons)_ containing the names of the variables in the totcons data frame, that match the relevant variable name.
-This is used here to avoid hard coding the correct index which we may change inadvertantly.
+This is used here to avoid hard coding the correct index which we may change inadvertently.
 Using this code we see that approximately 30% of households in the population have no car and that only 6% of the population are professionals (occupation category 1.2).
 Given our assumption that these distributions also apply for all combinations, we can calculate that for the population as a whole using the _tcrossprod()_ function:
 
@@ -397,7 +398,7 @@ synhhlddata <- group_by(synhhlddata, hhld) %>%
 ```
 
 The _synhhlddata_ data frame now contains all the data we need to use within the residential location model for assigning households to zones.
-So we can avoid regenerating synthetic households everytime we change our residential location model, it is useful to save our data frame to an RData file:
+So we can avoid regenerating synthetic households every time we change our residential location model, it is useful to save our data frame to an RData file:
 
 ```{r}
 save(synhhlddata,file="output/synhhlddata.RData")
@@ -427,7 +428,7 @@ The utility functions for each alternative can include either the same independe
 Since our dataset contains 124 wards, we will simplify our example by reducing these to 4 larger zones of 31 wards each.
 Zone 1 will include wards 1-31, zone 2 will include wards 32-62, etc.
 The model below was estimated based on using average values for each ward using a very simple model and can not be regarded as a "good" model.
-However, it fits the required structure for the utility expressions and in the absense of disaggregate data for estimating the model we will use it for this example.
+However, it fits the required structure for the utility expressions and in the absence of disaggregate data for estimating the model we will use it for this example.
 
 ```{r, echo=FALSE,results='hide',warning=FALSE,message=FALSE}
 # Code used for estimating basic model.
@@ -506,7 +507,7 @@ synrun <- rename(synrun,
 
 We then create variables for each of the four utility expressions. The while loop iterates through each of the utility expressions to calculate the relevant utilities.[^utilitynote]
 The _eval()_ and _parse()_ functions are used together to take text input and evaluate the expressions as if R code had been typed into the console or a standard R script file.
-The _with()_ function allows the variable names in the utility expressions to be used as-is, without prepending the data frame name and a \$ to them and not attaching the dataframe to the global environment.
+The _with()_ function allows the variable names in the utility expressions to be used as-is, without pre-pending the data frame name and a \$ to them and not attaching the data frame to the global environment.
 
 [^utilitynote]: It is possible to extract the coefficients and variables names directly from the output of mlogit if desired. The text format is shown here since models estimated using nlogit are generally written in this format.
 
@@ -548,10 +549,10 @@ synrun <- synrun %>% mutate(
 )
 ```
 
-The final probablities for 10 households are shown in the table below.
+The final probabilities for 10 households are shown in the table below.
 In this very simple example, you will see that there are some households with the same probabilities.
 Given a fully developed residential location model as the one used in TRESIS, with more explanatory variables as well as a wider range of grouping variables for the synthetic households, the number of households with the same probabilities would be very low.
-However, even from this relatively simplistic example, it is apparent that even within the same groups, the probabilties of living in a particular zone vary (sometimes substantially).
+However, even from this relatively simplistic example, it is apparent that even within the same groups, the probabilities of living in a particular zone vary (sometimes substantially).
 ```{r echo=FALSE, warning=FALSE, message=FALSE}
 kable(synrun[1:10,c("hhld","hhldweight","hhldtype","p1","p2","p3","p4")],digits=2)
 ```
@@ -584,7 +585,7 @@ kable(synresults, digits=0)
 
 The second reason for the difference is that the model we used was not calibrated on the population shares.
 The TRESIS models are calibrated to ensure they reproduce the shares in the base period before being used to run any analysis.
-Calibration is not a straight-forward process but involves adjusting the alternative-specific constants in the model until the estimated shares match the population shares within an acceptable level of tolerence.
+Calibration is not a straight-forward process but involves adjusting the alternative-specific constants in the model until the estimated shares match the population shares within an acceptable level of tolerance.
 
 Although we will not run the calibration procedure here, to illustrate the sensitivity of the results to the quality of the model and the need for calibration, we will re-run the calculations with small changes to the alternative-specific constants of the utility expressions. If we decrease the value of the alternative-specific constant of zone 2 so that the utility expressions become:
 
@@ -725,16 +726,22 @@ This chapter has described the process required for generating and applying the 
 Although TRESIS is a land-use and transport simulator, the approach described here is a generalised one that is applicable to a wide range of model systems that require, or would benefit from, the use of disaggregate data for simulating decision making involving spatial decisions including residential location but also workplace location and other activity destinations.
 
 ### Limitations
-The primary limitation of the TRESIS approach to population synthesis is also one of its key strengths.
-The heavy reliance on detailed disaggregate household and population-level data means that acquiring the necessary data needed for generating the synthetic households, and estimating and calibrating the models is frequently a time-consuming and sometimes expensive undertaking.
-However, once the data has been collected, the resulting model system is extremely behaviourally powerful allowing predictions not only of the current state, but also of future forecasts of decisions under uncertainty provided the variables on which the forecasts rely are available in the synthetic households and models.
+
+The primary limitation of the TRESIS approach to population synthesis is 
+its heavy reliance on detailed disaggregate household and population-level data.
+This means that acquiring the necessary data needed for generating the synthetic households, and estimating and calibrating the models is frequently a time-consuming and sometimes expensive undertaking. In many contexts
+such data simply does not exist.
+
+However, once the data has been collected, the resulting model system is very powerful, allowing predictions not only of the current state, but also of future forecasts of decisions under uncertainty. Provided the variables on which the forecasts rely are available in the synthetic households and models and are
+trust-worthy, the TRESIS approach provides an integrated framework for
+modelling transport decisions.
 
 #### Freight models
 TRESIS has until recently been focused entirely on passenger transport with freight transport considered as part of the capacity of the network but not considered in the demand models.
 As such, the methods developed for TRESIS have been optimised for passenger transport modes.
-However, there is ongoing development within the Institute of Transport and Logistics Studies to develop freight and light commerical vehicle models.
+However, there is ongoing development within the Institute of Transport and Logistics Studies to develop freight and light commercial vehicle models.
 These models, although different in some ways to the passenger models, have been found fit in well with the concept of synthetic households.
-In contrast to the passenger models that rely on synthetic households, the freight and commerical vehicle models have applied the concept used for generating synthetic households, to firms resulting in the development of "synthetic firms".
+In contrast to the passenger models that rely on synthetic households, the freight and commercial vehicle models have applied the concept used for generating synthetic households, to firms resulting in the development of "synthetic firms".
 Just as synthetic households are a collection of socio-demographic variables, synthetic firms are a collection of firm-level (and worker) characteristics.
 The data requirements of synthetic households are however also problematic for synthetic firms.
 
@@ -747,7 +754,7 @@ These projects include the standard transport infrastructure (new railway lines,
 ### Extending residential location to transport models in R
 Residential location models are an important component of any fully integrated transport model because they provide the "productions" (i.e., demand) for travel.
 However, at a minimum transport models also require a method of estimating the likely destinations (or "attractions") of trips, as well as the mode used for these trips.
-The TRESIS approach uses the same synthetic households, and the individuals within those households, as were used in this chapter for the residential locaiton model, to estimate the destinations and modes of trips.
+The TRESIS approach uses the same synthetic households, and the individuals within those households, as were used in this chapter for the residential location model, to estimate the destinations and modes of trips.
 This means the development of a full transport model in R can apply the synthetic household method described in this chapter.
 Although developing the full set of models can not be described as a simple process, as demonstrated in this chapter, the functionality of R, and some of its packages, makes it well suited to applying transport models.
 In particular, implementing full network assignment in R is likely to be particularly challenging, but its data structures and rapidly improving GIS functionality, some of which has been demonstrated in this chapter, means these are also likely to be possible.
