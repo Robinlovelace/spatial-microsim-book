@@ -45,6 +45,8 @@ render("book.Rmd", output_format = "pdf_document")
 
 # Build the CRC-formated version - requires local files
 # source("R/build-CRC-version.R")
+# in case index does not build - run again!
+# system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
 
 # For website build see gh-pages version
 

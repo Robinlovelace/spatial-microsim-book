@@ -1602,6 +1602,11 @@ ensures that any individual with a weight above 1 would be sampled at least once
 making the result $(1, 1, 1, 1)$ impossible in both cases.  This method is
 *truncate, replicate, sample* (TRS) integerisation:
 
+```{r, echo=FALSE}
+# TODO: explain this function in more detail! (RL)
+```
+
+
 ```{r}
 int_trs <- function(x){
   truncated <- which(x >= 1)
