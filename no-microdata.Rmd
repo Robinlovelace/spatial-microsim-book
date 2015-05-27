@@ -38,7 +38,7 @@ household-level constraints. We will here present
 two alternative options for population synthesis when
 real individual-level or aggregate-level data is unavailable.
 
-### Global cross-tables and local marginal distributions
+## Global cross-tables and local marginal distributions
 
 Assume we have whole contingency table of variable cross-tabulations in the 
 aggregated-level data. Note that this cross-table could be the result of a 
@@ -237,7 +237,26 @@ optimization to decide in which zone and category
 we add individuals. However, the TRS is more 
 intuitive.
 
-### Two-level aggregated data 
+After the integerisation, the last step to 
+get the final individual dataset is the 
+expansion. This stage is intuitive, since
+we have know a table containing the number of
+individuals in each category. Thus, we simply
+need to replicate the combination of categories
+the right number of times.
+
+We can first flatten the 3 dimensional matrix.
+Then, the final individual micro dataset `ind_data`
+is created.
+
+```{r}
+countData <- as.data.frame.table(resTruncate)
+indices <- rep(1:nrow(countData), countData$Freq)
+ind_data <- countData[indices,]
+```
+
+
+## Two-level aggregated data 
 
 We present here how to find a possible distribution per zone when 
 having only aggregated data, but in two different levels of aggregation.
