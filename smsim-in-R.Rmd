@@ -755,7 +755,7 @@ As a preliminary test of fit,
 it makes sense to check a sample of the aggregated weighted data
 (`ind_agg`) against the same sample of the constraints.
 Let's look at the results (one would use a subset of the results, 
-e.g. `ind_agg[1:3, 1:5] for the first five values of the first 3
+e.g. `ind_agg[1:3, 1:5]` for the first five values of the first 3
 zones for larger constraint tables found in the real world):
 
 ```{r}
@@ -848,7 +848,7 @@ of this package. The solving of SimpleWorld with `Ipfp` is included in
 the next section containing the comparison between the two packages.
 
 The example case is as follows: to determine the contingency table 
-of a population characterized by categorical variables for age (0-17, 18-50, 50+),
+of a population characterized by categorical variables for age (0-17, Workage, 50+),
 gender (male, female) and educational level (level 1 to level 4).
 We consider a zone with 50 inhabitants. The classic spatial microsimulation 
 problem consists in having all marginal distributions and the cross-tabulated
@@ -859,17 +859,14 @@ order: sex (1), age (2) and diploma (3).
 Our constraints could for example be:
 
 ```{r}
-sex <- c(23,27) # the number in each sex category
-names(sex) <- c("Male","Female")
+sex <- c(Male = 23, Female = 27) # n. in each sex category
 
-age <- c(16,20,14) # the number in each age category
-names(age) <- c("Less18","18-50","More50")
+age <- c(Less18 = 16, Workage = 20, Senior = 14) # age bands
 
-diploma <- c(20,18,6,6) # the number in each education category
-names(diploma) <- c("Level1","Level2","Level3","Level4")
+diploma <- c(Level1 = 20, Level2 = 18, Level3 = 6, Level4 = 6) 
 ```
 
-We can verify that the population is equal in each constraint (50 people). Note also
+Note the population is equal in each constraint (50 people). Note also
 the order in which each category is encoded --- a common source of
 error in population synthesis.
 For this reason we have labelled each category of each constraint.
@@ -919,19 +916,17 @@ result <- Ipfp(weight, descript, target, iter = 50,
                print = TRUE, tol = 1e-5)
 ```
 
-We can observe that the stoping criterion becomes always smaller and attains the *tol* after 8 
+Note that the fit improves rapidly attains the *tol* after 8 
 iterations. The `result`contains the final weight matrix
 and some information about the convergence. 
 We have a resulting table and we can validate the total number of 50 inhabitants 
-in the zone. Note that, thanks to the definitions of names in the array, we can easily 
+in the zone. Thanks to the definitions of names in the array, we can easily 
 interpret the result. There are a total 50 people and nobody of less than 18 years old
 own a diploma level 3 or 4, as desired.
 
 ```{r}
-# printing the result
-result$x.hat 
-# checkin the total number of persons
-sum(result$x.hat)
+result$x.hat # print the result
+sum(result$x.hat) # check the total number of persons
 ```
 
 The quality of the margins with each constraints is contained in the variable `check.margins`
@@ -1281,7 +1276,7 @@ type `mipfp_zones[1,,,]`. Let's check that this
 corresponds to the initial weights used in the `for` loop example:
 
 ```{r}
-table( mipfp_zones[1,,,] == weight_init )
+table(mipfp_zones[1,,,] == weight_init)
 ```
 
 The results show that the 20 cells of zone 1 are equal in value to those in
@@ -1496,7 +1491,7 @@ spatial microdata. These processes are covered in the next two sections.
 
 
 
-### Integerisation {#sintegerisation}
+## Integerisation {#sintegerisation}
 
 With the weight matrix containing doubles, so non-integer weights, 
 two approaches are possible to obtain a resulting individual dataset.
