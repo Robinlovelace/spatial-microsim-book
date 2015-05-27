@@ -26,7 +26,7 @@ library(grid)
 
 In this chapter we progress from loading and preparing the input data to
 running a spatial microsimulation model. We will begin by describing the
-Iterative Propotional Fitting
+Iterative Proportional Fitting
 (IPF) procedure as it is the simplest and most widely used method to allocate
 individuals to zones and then progress to discuss alternative
 *reweighting algorithms* that do the same job in a different way.
@@ -36,7 +36,7 @@ is used. Being small and simple, the example facilitates understanding
 the process on a 'human scale' and allows experimentation
 without the worry of overloading your computer.
 However, the methods apply equally to larger and more complex projects.
-Thus practicing the basic principles and methods of spatial microsimulation
+Thus practising the basic principles and methods of spatial microsimulation
 in R is the focus of this chapter.
 Time spent mastering these basics will make subsequent steps
 much easier.
@@ -78,7 +78,7 @@ weights <- matrix(data = 1, nrow = nrow(ind), ncol = nrow(cons))
 dim(weights) # dimension of weight matrix: 5 rows by 3 columns
 ```
 
-The weigth matrix links individual-level data to aggregate-level data.
+The weight matrix links individual-level data to aggregate-level data.
 A weight matrix value of 0 in cell `[i,j]`, for example, suggests that
 nobody with the characteristics of individual `i` is present in
 zone `j`.
@@ -262,7 +262,7 @@ Element '(i,j,k)' is the total number of woman in this municipality according
 to the constraint data.
 
 The IPF algorithm will proceed zone per zone. For each zone, each individual 
-will have a weight of representativity of the zone. The weights matrix 
+will have a weight of 'representatively' of the zone. The weights matrix 
 will then have the dimension 'number of individual x number of zone'. 
 'w(i,j,t)' corresponds to the weight of the individual 'i' in the 
 zone 'j' (during the step 't'). For the zone 'z', we will adapt the weight matrix to
@@ -276,7 +276,7 @@ where the 'I(x)' function is the indicator function which value is 1
 if x is true and 0 otherwise. We can see that 'ind(i,c)' is the category 
 of the individual 'i' for the variable 'c'. The denominator corresponds 
 to the sum of the actual weights of all individuals having the same category
-in this variable as 'i'. We simply redistribue the weights so that the 
+in this variable as 'i'. We simply redistribute the weights so that the 
 data follows the constraint concerning this variable.
 
 ### IPF in R {#IpfinR}
@@ -292,7 +292,7 @@ for more detail on the method.
 
 The IPF algorithm can be written in
 R from scratch, as illustrated in Lovelace (2014), and as taught in the
-smsim-course online
+smsim-course on-line
 [tutorial](https://github.com/Robinlovelace/spatial-microsim-book).
 We will refer to this implementation of IPF as 'IPFinR'.
 The code described in this tutorial 'hard-codes' the IPF algorithm
@@ -727,8 +727,9 @@ To make the code run faster on large datasets, a parallel version of
 `apply` called `parApply` can be used. This is also
 tested in 'parallel-ipfp.R'.
 
-For your personal applications, take care of using `maxit` alone. Indeed, it is
-impossible to predict the number of iterations necessary for all applications.
+Take care when using `maxit` as the only stopping criteria as it is
+impossible to predict the number of iterations necessary
+to achieve the desired level of fit for every application.
 So, if your argument is to big you will needlessly lose time, but if it is
 to small, you will have a result that has not converge! However, using
 `tol` alone is also hazardous. Indeed, if you have iteratively the same
@@ -902,7 +903,7 @@ weight[, c("Less18"), c("Level3","Level4")] <- 0
 ```
 
 Everything being well defined, we can execute
-*Ipfp*. As with the package **ipfp**, we can chose a stoping criterion defined by *tol* and/or a maximum
+*Ipfp*. As with the package **ipfp**, we can chose a stopping criterion defined by *tol* and/or a maximum
 number of iterations. Finally, setting the argument `print` to `TRUE` 
 ensures we will see the evolution of the
 of the procedure. After reaching either the maximum number of iterations or convergence 
@@ -930,7 +931,7 @@ sum(result$x.hat) # check the total number of persons
 ```
 
 The quality of the margins with each constraints is contained in the variable `check.margins`
-of the resulting list. In our case, we fit all constaints.
+of the resulting list. In our case, we fit all constraints.
 
 ```{r}
 # printing the resulting margins
@@ -1025,7 +1026,7 @@ so should be easy to understand for R users. **ipfp**, by contrast, is written i
 As illustrated earlier in the book, **ipfp** gives weights to every
 individual in the input microdata, for every zone. 
 **mipfp** works differently. Individuals who have
-the same caracteristics (in terms of the constraint variables)
+the same characteristics (in terms of the constraint variables)
 appear only once in the input 'seed', their number represented by their
 starting weight. **mipfp** thus determines the number of people 
 in each unique combination of constraint variable categories.
@@ -1067,7 +1068,7 @@ Table: Initial table of Mipfp for SimpleWorld.
 
 
 IPF makes a proportion of the existing table to fit each constraint
-turn by turn. First, if we want to fit the age constraint, we need to totalise
+turn by turn. First, if we want to fit the age constraint, we need to sum
 8 persons under 50 years old and 4 above (wanted total of age).
 Thus, we calculate a proportional 
 weight matrix that respects this constraint. The first cell corresponds to 
@@ -1084,7 +1085,7 @@ Table: First step of Mipfp for SimpleWorld - age constraint.
 |Target total  |     8|     4|      |      |
 
 Now, the current matrix fits exactly the age constraint ---
-note how this was acheived ($1*\frac{8}{2}$ for the first cell).
+note how this was achieved ($1*\frac{8}{2}$ for the first cell).
 However, there are still differences between the current and target sex totals.
 IPF proceeds to make the table fit for the sex constraint:
 
@@ -1176,7 +1177,7 @@ weight_mipfp <- Ipfp( weight_init, descript, target,
                       print = TRUE, tol = 1e-5)
 ```
 
-Convergence was acheived after only 5 iterations.
+Convergence was achieved after only 5 iterations.
 The result, stored in the `weight_mipfp` is a `data.frame` including
 the final weight matrix, as well as information about the convergence
 of the algorithm. We can check the margins and print the final 
@@ -1310,7 +1311,7 @@ res <- Ipfp(mipfp_zones, descript, target, tol = 1e-5)
 
 This process gives exactly the same result as the for loop but
 is more practical and efficient. For all applications, 
-the 'no for loop' strategy is prefered, being faster and
+the 'no for loop' strategy is preferred, being faster and
 more concise. However, in this section, we aim to compare
 the two processes for specific zones. For this reason, 
 to make things comparable for little area, we will keep 
@@ -1373,7 +1374,7 @@ chapter *Population synthesis without input microdata*.
 ```
 
 The below code demonstrates that the largest difference is of the order
-$10^{-7}$, which is neglible. Thus, we have demonstrated that
+$10^{-7}$, which is negligible. Thus, we have demonstrated that
 both functions generate the same result.
 
 ```{r}
@@ -1405,7 +1406,7 @@ system.time(ipfp(cons[1,], ind_catt, x0 = init,  tol = 1e-5))
 
 The above code measure the time taken to execute the `ipfp` function for the 
 zone 1. It takes 0.001 second on a modern computer^[The tests were performed on a
-computer with Intel i7-4930K processer running at 3.40GHz.]
+computer with Intel i7-4930K processor running at 3.40GHz.]
 The code below make a similar analysis
 for the `Ipfp` function and takes 0.002 second on the same computer.
 Thus, for this very little example, the package **ipfp** written in C
@@ -1572,7 +1573,7 @@ have the same weight. But, you have to be aware that it a random choice meaning 
 even the cell with low probability can be chosen, but not so many times. Here, we 
 draw only very few numbers, so it is normal that the resulting distribution is not
 exactly the same as the wanted. However, probabilities mean that if you have a very
-large dataset, you randow choice will result in a distribution very close to the
+large dataset, your random choice will result in a distribution very close to the
 desired one. We can generate 100.000 integers between 1 and 100.000 and see the 
 distribution. The next figure contains the associated histogram and we can see
 that each interval occurs more or less the same number of times.
