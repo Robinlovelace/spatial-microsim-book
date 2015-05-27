@@ -10,6 +10,7 @@ bibliography: bibliography.bib
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
 library(knitr) # Needed for the kable function used in this chapter.
+# TODO explain what a discrete choice model
 ```
 
 # The TRESIS approach to spatial microsimulation {#tresis}
@@ -27,9 +28,9 @@ TRESIS provides a powerful alternative to some more widely used microsimulation 
 This chapter introduces the TRESIS model system from a spatial microsimulation perspective. 
 The bulk of substantive material focusses on the generation of synthetic households, which is described in detail. 
 This is the first time that a method for implementing TRESIS' synthetic households in R has been published. 
-The methods and code blocks outlined below could therefore provid a stepping stone towards further transport modelling work in R, which is currently under-used in transport research. 
+The methods and code blocks outlined below could therefore provide a stepping stone towards further transport modelling work in R, which is currently under-used in transport research. 
 The chapter demonstrates how the synthetic populations generated through TRESIS can be used to identify where different types of households live using a residential location model. 
-The chapter concludes with discussion of other important aspects of transport modelling that could be integreted into R, building on this work.
+The chapter concludes with discussion of other important aspects of transport modelling that could be integrated into R, building on this work.
 
 ## Overview of TRESIS modelling system
 
@@ -42,7 +43,7 @@ The figure below shows an overview of the high-level TRESIS model structure [@He
 
 The TRESIS demand models have been estimated from a combination of stated preference (SP) and revealed preference (RP) data using the NLOGIT software (see @Hensher2015 for details of the software and estimation models).
 The model system provides for feedback between the different models using inclusive value parameters.
-These inclusive value parameters provide the mechanism through which the decicions made using one model (e.g., what vehicle to buy) are incorporated into the decisions made using other models in the system (e.g., where to live).
+These inclusive value parameters provide the mechanism through which the decisions made using one model (e.g., what vehicle to buy) are incorporated into the decisions made using other models in the system (e.g., where to live).
 In this chapter, we discuss only the stand-alone residential location model. 
 This is just one part of TRESIS, which would be closely coupled to other sub-models covering fleet size, vehicle type choice, workplace location and dwelling type choice, among others [@Hensher2008].
 
