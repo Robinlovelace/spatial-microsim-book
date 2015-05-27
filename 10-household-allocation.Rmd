@@ -8,16 +8,135 @@ output:
 bibliography: bibliography.bib
 ---
 
+```{r, echo=FALSE}
+library(png)
+library(grid)
+```
+
+
 # Allocating individuals to households
 
 So far the book has explored data on 2 levels: the individual level and
 the level of administrative zones. The household is another
 fundamental building block of human organisation around which key decision-making,
-economic and data-collecting activities are centred.
+economic and data-collecting activities are centered.
 
 This chapter explains how to take spatial microdata, of the type
 we have generated in the previous chapters, and allocate the resulting
 individuals into household units.
 
+As for all spatial microsimulation, the method to use
+depends on the data available. Having a sample of 
+households for which you have information about 
+each member is a possibility. Or, you can have
+independently data about individuals and households.
+In an other case, you have no aggregate data
+for the households, but some individuals'
+characteristics concern the household of
+this person (number of people living with, 
+type of households,...).
+
+We will in this book develop a method
+for each of these three cases. The first
+possibility, having a sample of households
+is the topic of next chapter, developed
+thanks to a method called TRESIS. 
+
+In this chapter, we focus on the two cases
+where you have no microdata for the households.
+
+## Independent data (individuals and households)
+
+The case when you have completely independent data
+is rather difficult. In most cases, the individuals 
+and households data don't fit to each other in this 
+configuration. Data coming from different sources
+and with different cleaning processes causes this
+inconsistency.
+
+We explain in this section the method
+proposed by Johan Barthélemy^[This is a contributed chapter by Johan Barthélemy, 
+Associate Research Fellow (Agent-Based Modelling), SMART, University of Wollongong].
+
+The idea is to proceed in three steps. 
+First, we determine the individual distribution, 
+thanks to for example the package `mipfp` as
+explained before. Second, we make a similar
+stage but for the household's data. This can
+be done by a totally similar way, considering
+the households instead of the individuals in
+the previous chapters.
+
+Then, individuals' and households' distributions having been 
+estimated, the last step of 
+the synthetic population generation consists of gathering 
+individuals into households. This is done one household 
+at a time by first selecting its type before randomly 
+drawing its constituent members [@Barthelemy2012]. 
+
+### Household type selection
+
+The household type selection is performed in order to make 
+the distribution of the generated synthetic households 
+statistically similar to the estimated one, denoted $Hh$. 
+This is achieved by choosing the type $hh*$ such that the 
+distribution $Hh'$ of the already generated households 
+(including the household being built) minimize the 
+$\chi^2$ distance between $Hh'$ and $Hh$ i.e:
+
+$$d_{\chi^2}=\sum_{i} \frac{(hh'_i-hh_i)^2}{hh_i^2} $$
+
+where $hh_i$ and $hh_i'$ respectively denote the number 
+of households of type $i$ in the estimated and generated 
+synthetic population. Note that this optimization is simple 
+as the number of household type is limited.
+
+### Constituent members selection
+
+Now that a household type has been determined, we can 
+detail the members selection process. First a household 
+head is draw from the pool of individual `IndPool` defined 
+by the estimated individuals distribution `Ind`. Then, 
+depending on the household type a partner, children 
+and additional adults are also draw if necessary. 
+This process is illustrated in Figure 10.1.
+
+
+```{r, fig.cap="Constituent members selection process", fig.height=6, echo=FALSE}
+img <- readPNG("figures/Jojo.png")
+grid.raster(img)
+```
+
+Some attributes of the members can be directly 
+obtained from their household type (for instance 
+the gender of the head for an household of the type 
+`Isolated Man`). The remaining missing attributes are then 
+
+- either randomly draw according to some known distributions 
+(e.g. the household type x head's gender x head's age x mate's age);
+- or if different values are feasible and equally likely then, 
+similarly to what is done for the household type selection, 
+we retain the one minimizing the $\chi^2$ distance between the generated 
+and the estimated individuals distribution.
+
+
+Once an individual type has been determined, then the 
+corresponding member is added to the household being generated:
+
+- if the selected class is still populated in the `IndPool`,
+we extract an individual from this class and add it to the household;
+- else find a suitable member by searching in the members of 
+the households already generated. This last individual is then replaced 
+an appropriate one drawn in `IndPool`.
+
+
+### End of the household generation process
+
+The households generation process ends if all households have been 
+constructed or if the pool of individual is empty or if it fails 
+to find a member for a household in the previously generated ones.
+Note that when the procedure stops, two types of inconsistencies 
+may remain in the synthetic population: the final number of 
+households and/or individuals may be smaller than estimated.
 
 ## References
