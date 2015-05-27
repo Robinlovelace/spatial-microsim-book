@@ -35,6 +35,20 @@ kbl <- gsub(pattern = "section", replacement = "chapter", x = kbl)
 
 k[biblilines] <- kbl
 
+# add part 1
+p1 <- "\\part{Introducing spatial microsimulation with R}"
+p2 <- "\\part{Generating spatial microdata}"
+p3 <- "\\part{Modelling spatial microdata}"
+
+ps <- grep(pattern = "\\chapter\\{Intro|\\chapter\\{Data|\\chapter\\{The T", x = k)
+
+k <- c(
+  k[1:(ps[1] -1)],
+  p1, k[ps[1]:(ps[2] -1)],
+  p2, k[ps[2]:(ps[3] -1)],
+  p3, k[ps[3]:length(k)]
+  )
+
 
 writeLines(k, con = "spatial-microsim-book.tex")
 

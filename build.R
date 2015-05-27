@@ -33,7 +33,7 @@ layout: default
 source("R/book-functions.R")
 # file.remove("book.Rmd")
 # Rmd_bind(book_header = book_header) 
-Rmd_bind_mod(book_header = book_header, chap_ord = chap_ord)
+Rmd_bind_mod(book_header = book_header)
 
 # Packages needed to build the book
 # install.packages("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp") 
@@ -49,7 +49,7 @@ render("book.Rmd", output_format = "pdf_document")
 # For website build see gh-pages version
 
 # Files to move to gh-pages branch
-file.remove("book.Rmd")
+# file.remove("book.Rmd")
 
 # Remove latex-specific document links for website
 cfiles <- list.files("/tmp", pattern = "*.Rmd", full.names = T)

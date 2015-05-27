@@ -117,9 +117,13 @@ datasets. Used this was 'spatial microsimulation' is roughly synonymous with
 2. An *approach* to understanding multi-level phenomena based on
  spatial microdata --- simulated or real.
  
-Figure 1.1 is a very simplified flow diagram showing the difference between
+Figure 1.1 is a simplified flow diagram showing the difference between
 spatial microdata (bottom) and more commonly found official data types (top).
-There are clear disadvantages with both 
+There are clear disadvantages with both geographically aggregated and
+individual-level (non-geographical) sources. Spatial microsimulation
+seeks to overcome some of these limitations, creating new outputs that
+are useful for a number of research applications and as inputs to
+more sophisticated models.
 
 ```{r, fig.cap="Schematic diagram contrasting conventional official data (above) against spatial microdata produced during *population synthesis* (below). Note that for brevity the geographically aggregated data are called *constraints* and the individual-level survey data are called *microdata* in this book.", fig.height=6, echo=FALSE}
 img <- readPNG("figures/msim-flow.png")
@@ -127,7 +131,8 @@ grid.raster(img)
 ```
 
 Throughout this book we use the term in the wider sense of the term.
-We thus define spatial microsimulation broadly, as follows:
+We thus define spatial microsimulation broadly, as follows: 
+\index{spatial microsimulation!definition of}
 
 **The creation, analysis and modelling of individual-level data allocated to geographic zones.**
 
@@ -167,6 +172,8 @@ Similar proposals made in other research areas are gaining
 traction [@Ince2012; @Peng2006a; and most recently, @McNutt2014].
 This book encourages such a shift towards transparency
 in the field of spatial microsimulation.
+
+\index{reproducibility}
 
 Reproducibility is encouraged throughout via provision of code for readers
 to actually *do* spatial microsimulation rather than simply *watch*
