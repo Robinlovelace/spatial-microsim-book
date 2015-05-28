@@ -27,6 +27,7 @@ int_trs <- function(x){
   topup <- sample(length(x), size = def, prob = r)
   xint[topup] <- xint[topup] + 1
   dim(xint) <- dim(x)
+  dimnames(xint) <- dimnames(x)
   xint
 }
 
@@ -35,6 +36,17 @@ int_expand <- function(x){
   index <- 1:length(x)
   rep(index, round(x))
 }
+
+int_expand_array <- function(x){
+  # Transform the array into a dataframe
+  count_data <- as.data.frame.table(x)
+  # Store the indices of categories for the final population
+  indices <- rep(1:nrow(count_data), count_data$Freq)
+  # Create the final individuals
+  ind_data <- count_data[indices,]
+  ind_data
+}
+
 
 
 # Total absolute error
