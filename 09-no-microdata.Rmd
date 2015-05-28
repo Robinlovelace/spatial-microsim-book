@@ -13,49 +13,47 @@ library(grid)
 # Population synthesis without microdata {#nomicrodata}
 
 Sometimes no representative individual-level
-dataset is available. 
-In this case, the methods of population synthesis described in the previous
+dataset is available as an input for population synthesis.
+In this case, the methods described in the previous
 chapters must be adapted accordingly.
 The challenge
 is still to generate spatial microdata 
-that fits all the constraint tables, but based on purely synthetic
-'seed' input microdata. Many
+that fits all the constraint tables, but based on a purely synthetic
+'seed' input cross-tabulated contingency table. Many
 combinations of individual-level data
 could correspond to these distributions. Depending on the aim
 of the spatial microsimulation model, simply finding a reasonable fit
 can be sufficient.
 
 In other cases a fit based on *entropy maximisation* may be required.
-This concept involves finding the population that best
-represents the most micro-level populations (Bierlaire, 1991).
-For example, if a person in one zone has exactly the same characteristics as
-a person in another zone, swapping these two people will not change 
-the synthetic population.
-This process of maximising the entropy is considered in the subsequent chapter, which
-explains how to 
-allocate individuals from the spatial microdata into households to fit
-household-level constraints. We will here present
-two alternative options for population synthesis when
+This concept involves finding the population that is most likely to
+represent the micro-level populations (Bierlaire, 1991).
+This chapter demonstrates
+two options for population synthesis when
 real individual-level or aggregate-level data is unavailable.
 
 ## Global cross-tables and local marginal distributions
 
-Assume we have whole contingency table of variable cross-tabulations in the 
-aggregated-level data. Note that this cross-table could be the result of a 
-previous step. For example, an IPFP algorithm can be executed to join
-data from different form in this high level of aggregation.
+Assume we have a contingency table of constraint variables
+for the entire study area (but not at the local level) in the 
+aggregate-level data. This multi-dimensional
+cross-table (the seed) could be the result of a 
+previous step such as the implementation of
+IPF
+re-weight individual-level data to fit the case-study area of interest.
 
-For the spatial zones needed, if the marginal distributions are known, 
-we can use the **mipfp** function as previously shown. However, if
+If the marginal distributions for small areas are known, 
+we can use the **mipfp** function as previously shown. If, however,
 the only information about the zones is the total population living
 there, the function is unusable. In this specific case, having 
-no additional data, the single possibility is to 
+no additional data, the only option is to 
 rescale the global cross-table for each zone. Note that this
-implicitly
-implies stating the correlations between the variables
-as independent of the zone. 
+implies that the correlations between the variables
+is independent of the zone in question. 
 
-To illustrate, we will develop the SimpleWorld example with 
+To illustrate, we will develop the SimpleWorld example
+(which can be loaded from the book's data directory by entering
+`source("R/SimpleWorld.R")`) with 
 adapted constraints. When watching the available data in an aggregated level, 
 we have for the moment:
 
@@ -74,7 +72,7 @@ To illustrate this section, the local constraint will be the total number
 of people in each zone (last column of `consTot`). The global constraint
 is a matrix of the form of the cross-table between age and sex, but 
 including the total population (33 people for SimpleWorld). The new 
-constraints could be :
+constraints could be:
 
 ```{r}
 # Global Constraint possible for SimpleWorld
@@ -86,8 +84,8 @@ global_cons[2,] <- c(7,11)
 local_cons <- total_pop
 ```
 
-When having only these aggregate-level data, the best way to 
-reach a synthetic population is to rescale the cross-table.
+When only the total population is known for each zone, the best way to 
+create a synthetic population is to simply rescale the cross-table.
 For each zone, a table proportional to the global one is created.
 The results are stored in a three dimensional array, which first
 dimension represents the zone. The initialisation of the resulting
@@ -103,18 +101,17 @@ res <- array(0, dim=c(nrow(cons), dim(global_cons)),
 ```
 
 Now the final weight table is calculated, simply by 
-taking the global matrix and rescale it to fit the 
-the wanted marginals. Like this, we keep the global
+taking the global matrix and rescaling it to fit the 
+the desired marginals. In this way we keep the global
 proportions, but with the correct total per zone.
 Note that making this process is exactly the same as 
 running `mipfp` on the seed table with as constraints
 only the zone marginals.
 
 ```{r}
-# re-scale the cross-table to fit the zone's constraints
-# loop on the zones
-for (zone in 1:length(total_pop)){
-  res[zone,,] <- global_cons*total_pop[zone]/sum(global_cons)
+# Re-scale the cross-table to fit the zone's constraints
+for (zone in 1:length(total_pop)){ # loop over the zones
+  res[zone,,] <- global_cons * total_pop[zone] / sum(global_cons)
 }
 
 # printing the cross-table for zone 1
@@ -128,23 +125,21 @@ This means that we have now weights fitting
 well all available data.
 
 ```{r}
-# checking the local constraints for each zone
-# (Good if all TRUE)
+# Check the local constraints for each zone (should be TRUE)
 for (zone in 1:length(total_pop)){
  print( sum(round(res[zone,,])) == total_pop[zone] )
 }
 
-# saving the global final table
+# Sav the global final table
 SimTot <- apply(res,c(2,3),sum)
 
-# checking the global constraint 
-# (Good if 0)
+# Check the global constraint (should be 0)
 sum(SimTot - global_cons)
 ```
 
 
 As with IPF, the fractional result needs to be integerised to create
-spatial microdata. The `round()` function gives a satisfying result in this case, in terms
+spatial microdata. The `round()` function generally provides a reasonable approximation, in terms
 of fitting the constraints. However, the aforementioned integerisation algorithms such as
 *truncate, replicate, sample* (TRS) can also be used.
 This method can not be followed exactly, because we want to perfectly fit 
@@ -156,39 +151,58 @@ the round function, as shown in the code below.
 # Integerisation by simply using round
 resRound <- round(res)
 
-# Error by rounding for global constraint
+# Zero error achieved by rounding for global constraint
 apply(resRound,c(2,3),sum) - global_cons
 
-# Error by rounding for local constraint
+# Zero error achieved by rounding for local constraint
 apply(resRound,c(1),sum) - local_cons
 ```
 
-We are very lucky that `round` works. Indeed, in most 
-of cases, you will then have some errors. For example, 
-if a zone has 4 individuals and three categories, there
-is a possibility to have the weights 
+It is due to luck (and the small size of the SimpleWorld example)
+that the `round` method works in this case. In most 
+cases, however, there will be errors due to rounding. 
+If a zone had 4 individuals and three categories, for example
+there the resultin weights could be
 $(\frac{4}{3},\frac{4}{3},\frac{4}{3})$. Then, 
 the rounding gives $(1,1,1)$ and one individual 
-is missing after this process.
+would be missing.
 To adapt the method to use TRS, the first stage is to 
 truncate the data and identify the missing individuals.
 
 ```{r}
 # Integerisation by adapting TRS
+# TODO: create new trs function (e.g. int_trs2)
 
-# truncate the data 
+set.seed(14)
+res_trs <- res_pp <- array(dim = dim(res))
+# Apply trs (see R/functions.R to see how int_trs works)
+res_trs[] <- summary(as.factor(int_trs(res))) 
+```
+
+```{r, echo=FALSE}
+# TODO remove or tidy this (RL)
+zeros <- rep(0, length(res))
+
+pp_weight <- summary(as.factor(int_pp(res))) 
+
+zeros[as.numeric(names(pp_weight))] <- pp_weight
+pp_weight[1:length(res)]
+summary(as.factor(int_pp(res))) 
+res_pp[] <- summary(as.factor(int_pp(res))) 
+```
+
+
+
+```{r, echo=FALSE}
+# This means 4 individuals are missing
+# after we have truncated. We need to 
+# observe in which category and in which zone 
+# we have to add individuals.
+
 resTruncate <- floor(res)
 
 # number of missing individuals
 sum(total_pop) - sum(resTruncate)
-```
-
-This means 4 individuals are missing
-after we have truncated. We need to 
-observe in which category and in which zone 
-we have to add individuals.
-
-```{r}
 # Calculate the total simulated cross-table
 SimTotTruncate <- apply(resTruncate,c(2,3),sum)
 
@@ -199,19 +213,17 @@ ToAdd
 # number of missing individuals per zone
 ToComplete <- local_cons - apply(resTruncate,c(1),sum)
 ToComplete
-```
 
-The principle is to add people in the not completed zones and
-categories. The cells to be implemented are always chosen as the one
-with the bigger decimal parts. Note that we chose
-to adapt the `resTruncate` instead of defining
-another tabular.
+# The principle is to add people in the not completed zones and
+# categories. The cells to be implemented are always chosen as the one
+# with the bigger decimal parts. Note that we chose
+# to adapt the `resTruncate` instead of defining
+# another tabular.
 
-```{r}
 # Calculate the decimals left by truncate
 decimals <- res - resTruncate
 
-# Adapting resTruncate to fit all constraints
+# Adapting resTruncate to fit all constraints # NB - this is counter-weight
 while (sum(total_pop) - sum(resTruncate) > 0){
   # find the biggest decimals
   i <- which( decimals == max(decimals), arr.ind = TRUE)
@@ -231,11 +243,11 @@ while (sum(total_pop) - sum(resTruncate) > 0){
 }
 ```
 
-The new values in `resTruncate` follow all constraints. 
-The adaptation of TRS could be avoid by making a combinatorial
+The new values in `res_trs` follow all constraints. 
+The adaptation of TRS could be to avoid by making a combinatorial
 optimization to decide in which zone and category
-we add individuals. However, the TRS is more 
-intuitive.
+we add individuals. However, the TRS method is 
+faster and requires fewer lines of code [see @Lovelace2013-trs for more detail].
 
 After the integerisation, the last step to 
 get the final individual dataset is the 
@@ -254,7 +266,6 @@ countData <- as.data.frame.table(resTruncate)
 indices <- rep(1:nrow(countData), countData$Freq)
 ind_data <- countData[indices,]
 ```
-
 
 ## Two-level aggregated data 
 

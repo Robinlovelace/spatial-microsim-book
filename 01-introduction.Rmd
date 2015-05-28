@@ -134,7 +134,7 @@ Throughout this book we use the term in the wider sense of the term.
 We thus define spatial microsimulation broadly, as follows: 
 \index{spatial microsimulation!definition of}
 
-**The creation, analysis and modelling of individual-level data allocated to geographic zones.**
+> **The creation, analysis or modelling of individual-level data allocated to geographic zones.**
 
 To further clarify the distinction between the methodology and
 the approach, we use term *population synthesis* to describe the narrower
