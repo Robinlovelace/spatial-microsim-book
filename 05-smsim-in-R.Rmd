@@ -1558,9 +1558,15 @@ To test this function let's try it on the vectors of length 3 described in
 code:
 
 ```{r}
-set.seed(0)
-int_pp(x = c(0.333, 0.667, 3))
-int_pp(x = c(1.333, 1.333, 1.333))
+set.seed(12)
+xint1 <- int_pp(x = c(0.333, 0.667, 3))
+xint1
+
+xint2 <- int_pp(x = c(1.333, 1.333, 1.333))
+xint2
+
+int_expand(xint1)
+int_expand(xint2)
 ```
 
 Note that it is probabilistic, so normally if we proceed two times the same, 
@@ -1632,9 +1638,11 @@ decimal weights. To see how this new integerisation method and associated
 R function performed, we run it on the same input vectors:
 
 ```{r}
-set.seed(0)
-int_trs(c(0.333, 0.667, 3))
-int_trs(c(1.333, 1.333, 1.333))
+set.seed(12)
+x <- c(0.333, 0.667, 3)
+x_int <- int_trs(x)
+x_int
+int_expand(x_int)
 ```
 
 Note that while `int_pp` (the *proportional probabilities* function) produced

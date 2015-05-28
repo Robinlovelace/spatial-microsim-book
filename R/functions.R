@@ -6,23 +6,36 @@
 # 'Proportional probabilities' (PP) method of integerisation
 # (see http://www.sciencedirect.com/science/article/pii/S0198971513000240):
 int_pp <- function(x){
-  sample(length(x), size = round(sum(x)), prob = x, replace = T)
+  xv <- as.vector(x)
+  xint <- rep(0, length(x))
+  xs <- sample(length(x), size = round(sum(x)), prob = x, replace = T)
+  xsumm <- summary(as.factor(xs))
+  topup <- as.numeric(names(xsumm))
+  xint[topup] <- xsumm
+  dim(xint) <- dim(x)
+  xint
 }
 
 # 'Truncate, replicate, sample' (TRS) method of integerisation
 # (see http://www.sciencedirect.com/science/article/pii/S0198971513000240):
 int_trs <- function(x){
-  truncated <- which(x >= 1)
-  replicated <- rep(truncated, floor(x[truncated]))
-  r <- x - floor(x)
-  def <- round(sum(x)) - length(replicated) # the deficit population
-  if(def == 0){
-    out <- replicated
-  } else {
-    out <- c(replicated, sample(length(x), size = def, prob = r, replace = F))
-  }
-  out
+  xv <- as.vector(x)
+  xint <- floor(xv)
+  r <- xv - xint
+  def <- round(sum(r)) # the deficit population
+  # the weights be 'topped up' (+ 1 applied)
+  topup <- sample(length(x), size = def, prob = r)
+  xint[topup] <- xint[topup] + 1
+  dim(xint) <- dim(x)
+  xint
 }
+
+int_expand <- function(x){
+  x <- as.vector(x)
+  index <- 1:length(x)
+  rep(index, round(x))
+}
+
 
 # Total absolute error
 tae <- function(observed, simulated){
