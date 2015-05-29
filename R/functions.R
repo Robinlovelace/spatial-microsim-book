@@ -31,8 +31,7 @@ int_trs <- function(x){
   xint
 }
 
-int_expand <- function(x){
-  x <- as.vector(x)
+int_expand_vector <- function(x){
   index <- 1:length(x)
   rep(index, round(x))
 }
