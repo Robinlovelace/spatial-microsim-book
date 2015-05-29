@@ -1264,7 +1264,7 @@ number of iterations. Finally, setting the argument `print` to `TRUE`
 ensures we will see the evolution of the
 of the procedure. After reaching either the maximum number of iterations or convergence 
 (whichever comes first), the function will return a list containing the updated 
-array, as well as other informations about the convergence of the algorithm. 
+array, as well as other information about the convergence of the algorithm. 
 Note that if the target margins are not consistent, the input data is then 
 normalised by considering probabilities instead of frequencies.
 
@@ -1346,7 +1346,13 @@ converges faster. By printing the results, we see
 that all constraints are respected and
 we have a 3-dimensional contingency table.
 
-
+Note that the steps of integerisation and 
+expansion are pretty similar to the ones
+in **ipfp**. In the logic, it is exactly the same.
+The only difference is that for **ipfp** we consider
+vectors and for **mipfp** we consider arrays. 
+For this reason, another function of expansion
+is created for arrays.
 
 ### Integerisation
 
