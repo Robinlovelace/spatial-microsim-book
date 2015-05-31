@@ -216,7 +216,7 @@ ind <- read.csv("data/SimpleWorld/ind-full.csv")
 # kable(ind)
 ```
 
-Table: Individual-level survey data from SimpleWorld.
+Table x: Individual-level survey data from SimpleWorld.
 
 | id| age|sex | income|
 |--:|---:|:---|------:|

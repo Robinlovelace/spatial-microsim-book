@@ -5,11 +5,12 @@ output: pdf_document
 bibliography: bibliography.bib
 ---
 
-```{r, echo=FALSE}
+```{r, include=FALSE}
 # packages to allow 'knitting' the chapter to html
 library(png)
 library(grid)
 source("R/functions.R")
+source("R/SimpleWorld.R")
 ```
 
 # Population synthesis {#smsimr}
@@ -839,6 +840,8 @@ to execute it for all zones is explained.
 
 ### Integerisation {#sintegerisation}
 
+\index{integerisation}
+
 With the weight matrix containing doubles, so non-integer weights.
 Simply rounding the function often results in an undervalued population.
 Two main approaches are possible to obtain a resulting integer matrix.
@@ -1061,13 +1064,13 @@ The fascinating part of TRS is that you are sure that you result
 will first look like $(1,1,3,1,4)$ and then, it just reallocate the 
 two missing individuals by chosing two cells that will be incremented.
 
-
-
 ### Expansion
 
-As illustrated in figure 5.1., the remaining step to obtain 
-a final spatial microdata is the expansion. This can be achieved 
-by this function, which we call `int_expand_vector`:
+\index{expansion}
+
+As illustrated in figure 5.1., the remaining step to 
+create the spatial microdata is expansion. This can be achieved 
+with the function `int_expand_vector`, defined below:
 
 ```{r}
 int_expand_vector <- function(x){
@@ -1076,43 +1079,38 @@ int_expand_vector <- function(x){
 }
 ```
 
-This function returns a vector, which element represents
-an individual in the final spatial microdata and 
-each sell will contain the ID of the individual
-of the sample to take. This is illustrated with 
-the `int_weight1` integerised SimpleWorld weights for
-zone 1. 
+This function returns a vector. Each element of this vector
+represents an individual in the final spatial microdata and 
+each cell will contain the ID of the sampled individual
+of the sample to take. This is illustrated in the code below,
+which uses the integerised weights for zone 1, generated above. 
 
 ```{r}
-# Print weights
-int_weight1
+int_weight1 # print weights 
 
 # Expand the individual according to the weights
-int_expand_vector(int_weight1)
+exp_indices <- int_expand_vector(int_weight1)
+exp_indices
 ```
 
 The final data can be found simply 
-by replicating the individual, thanks to 
-the indices found.
+by replicating the individuals.
 
 ```{r}
 # Generate spatial microdata for zone 1
-ind_full[int_expand_vector(int_weight1),]
+ind_full[exp_indices,]
 ```
 
 
-### Integerisation and expansion
-
+### Integerisation and expansion 
 
 The process to transform the weights into
-a final spatial microdata has to be perform
-for all zones. This section gives concise ways
-to reach the final data. Note that if you skipped the
+spatial microdata is performed
+for all zones below. This section demonstrates two ways
+to generate spatial
+microdata.^[Note that if you skipped the
 detailed previous sections, you will need 
-to load the functions by executing `source("R/functions.R")`.
-
-Two strategies for doing this for all zones 
-are presented in the code below:
+to load the functions by executing `source("R/functions.R")`.] 
 
 ```{r}
 # Method 1: using a for loop
@@ -1354,7 +1352,7 @@ vectors and for **mipfp** we consider arrays.
 For this reason, another function of expansion
 is created for arrays.
 
-### Integerisation
+### Integerisation in 
 
 Similarly to the **ipfp** package, the result is in a non-integer array. Consequently 
 we can generate a synthetic population either by considering the array cells 
@@ -1463,6 +1461,7 @@ to compare **ipfp** with **mipfp**, we will focus on this simpler example :
 SimpleWorld.
 
 ### Comparing the methods
+
 A major difference between the packages **ipfp** and **mipfp** is that the
 former is written in C, while the latter is written in R. 
 Another is that the *aim* of **mipfp** is to execute IPF for
@@ -1575,6 +1574,7 @@ we first compare the results before assessing the time taken by each package.
 
 # TODO (RL): cross reference image of CO vs reweighting approaches
 ```
+
 ### Comparing the results
 
 The whole process using **ipfp** has been developed in the previous section.
@@ -1627,9 +1627,14 @@ we can now execute the `Ipfp` function.
 
 ```{r}
 # Perform Ipfp on SimpleWorld example
-weight_mipfp <- Ipfp( weight_init, descript, target, 
-                      print = TRUE, tol = 1e-5)
+weight_mipfp <- Ipfp(weight_init, descript, target,
+  print = TRUE, tol = 1e-5)
 ```
+
+```{r, echo=FALSE}
+# TODO: print spatial microdata output for zone II for clarity
+```
+
 
 Convergence was achieved after only 5 iterations.
 The result, stored in the `weight_mipfp` is a `data.frame` including
@@ -1716,9 +1721,9 @@ init_cells <- rep(weight_init, each = n_zone)
 names <- c(list(c(1, 2, 3)), as.list(dimnames(weight_init)))
 
 # Structure the data
-mipfp_zones <- array(init_cells, dim = 
-                 c(n_zone, n_age, n_sex, 5),
-                 dimnames = names)
+mipfp_zones <- array(init_cells,
+  dim = c(n_zone, n_age, n_sex, 5),
+  dimnames = names)
 ```
 
 The resulting array is larger than the ones obtained with `ipfp()`,
@@ -1752,7 +1757,8 @@ with (zone, sex).
 
 ```{r}
 # Adapt target and descript 
-target <- list(data.matrix(con_age), data.matrix(con_sex[,c(2,1)]))
+target <- list(data.matrix(con_age),
+  data.matrix(con_sex[,c(2,1)]))
 descript <- list (c(1,2), c(1,3))
 ```
 
@@ -1783,8 +1789,7 @@ we   need the number of individuals in the sample in each category.
 
 ```{r}
 # Initialise the matrix 
-weights_mipfp <- matrix(data = NA, nrow = nrow(ind), 
-                        ncol = nrow(cons))
+weights_mipfp <- matrix(nrow = nrow(ind), ncol = nrow(cons))
 
 # Cross-tabulated contingency table of the microdata, ind
 Ind_Tab <- table(ind[,c(2,3)])
@@ -1802,16 +1807,37 @@ per individual, depending on the category of each person.
 for (zone in 1:n_zone){
   
   # Transformation into individual weights
-  for (i in 1:n_ind) {
+  for (i in 1:n_ind){
     # weight of the category
-    weight_ind <- Mipfp_Tab[zone,ind[i,c(2)],ind[i,c(3)]]
+    weight_ind <- Mipfp_Tab[zone, ind[i, 2], ind[i, 3]]
     
     # number of ind in the category
-    sample_ind <- Ind_Tab[ind[i,c(2)],ind[i,c(3)]]
+    sample_ind <- Ind_Tab[ind[i, 2], ind[i, 3]]
     
     # distribute the weight to the ind of this category
     weights_mipfp[i,zone] <- weight_ind / sample_ind
   }
+}
+```
+
+```{r, echo=FALSE}
+# Note: this function may not work on all data
+# TODO (all): speculate if this can be more general (done - Jojo)
+restructure <- function(Mipfp_Tab, weights, ind, zindex = 1){
+  n_zone <- dim(Mipfp_Tab)[zindex] # number of zones
+  for (zone in 1:n_zone){
+    for (i in 1:nrow(ind)){
+      # weight of the category
+      weight_ind <- Mipfp_Tab[zone, ind[i, 2], ind[i, 3]]
+    
+      # number of ind in the category
+      sample_ind <- Ind_Tab[ind[i, 2], ind[i, 3]]
+    
+      # distribute the weight to the ind of this category
+      weights_mipfp[i,zone] <- weight_ind / sample_ind
+    }
+  }
+  weights_mipfp
 }
 ```
 
@@ -1820,7 +1846,10 @@ since we generated weights for each individual in each zone. Having
 the same structure, the integerisation and expansion step explained for
 **ipfp** could
 be followed. However, there is a more direct way to transform the
-weights of `Ipfp` into individual data, which is explained in the 
+weights of `Ipfp` into individual data, using `int_expand_array()`
+on the integerised weights (see section \ref{})
+
+which is explained in the 
 chapter *Population synthesis without input microdata*.
 
 ```{r, echo=FALSE}
@@ -1833,7 +1862,7 @@ both functions generate the same result.
 
 ```{r}
 # Difference between weights of ipfp and mipfp
-abs(weights-weights_mipfp)
+abs(weights - weights_mipfp)
 ```
 
 One package is written in C and the other in R. The current question

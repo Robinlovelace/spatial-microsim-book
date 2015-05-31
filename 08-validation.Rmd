@@ -1,12 +1,13 @@
 ---
 title: "CakeMap"
 layout: default
+output: pdf_document
 bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 load("cache-CakeMap.RData")
-map_pack <- c("ggmap", "rgdal", "maptools", "rgeos", "dplyr", "tidyr", "gridExtra")
+map_pack <- c("ggmap", "rgdal", "maptools", "rgeos", "dplyr", "tidyr", "gridExtra", "knitr")
 lapply(map_pack, library, character.only = T)
 # Todo: add figure comparing various goodness-of-fit measures from JASSS paper
 ```
@@ -595,6 +596,120 @@ the different zones or does not include enough persons.
 # (MD, 2015) 
 # check that somewhere, the problem of category non represented or to little sample is somewhere explained
 ```
+
+## Empty cells {#empty-cells}
+
+\index{empty cells}
+
+Roughly speaking, 'empty cells' refer to individuals who are absent from
+the input microdata. More specifically, empty cells represent
+individuals with a combination of attributes in the constraint variables
+that are likely to be present in the real spatial microdata but are known not
+to exist in the individual-level data. Empty cells are easiest to envision
+when the 'seed' is represented as a contingency table. Imagine, for example,
+if the microdata from SimpleWorld contained no young males:
+
+```{r, include=FALSE}
+# source("R/SimpleWorld.R")
+indsw <- 
+  structure(list(id = 1:5, age = structure(c(2L, 2L, 1L, 2L, 1L
+), .Label = c("a0_49", "a50+"), class = "factor"), sex = structure(c(2L, 
+2L, 2L, 1L, 1L), .Label = c("f", "m"), class = "factor")), .Names = c("id", 
+"age", "sex"), row.names = c(NA, -5L), class = "data.frame")
+```
+
+```{r, results='hide'}
+ind_nym <- indsw[-3,2:3]
+ind_nym
+table(ind_nym)
+```
+
+```{r, echo=FALSE, results='asis', message=FALSE}
+
+# # the kable way
+# kable(ind_nym)
+# kable(table(ind_nym))
+
+# xtable way
+# library(xtable)
+# xt <- xtable(ind_nym, caption = "Individual-level data from SimpleWorld with empty cells. Note there are no young males.")
+# print(xt, caption.placement = "top", type = "latex", comment = FALSE)
+# xt <- xtable(table(ind_nym), "Contingency table of the SimpleWorld microdata with no young males. Not the zero: this is the empty cell.")
+# print(xt, caption.placement = "top", comment = FALSE, type = "latex", booktabs = TRUE)
+```
+
+Table: Individual-level data from SimpleWorld with empty cells. Note there are no young males.
+
+|   |age   |sex |
+|:--|:-----|:---|
+|1  |a50+  |m   |
+|2  |a50+  |m   |
+|4  |a50+  |f   |
+|5  |a0_49 |f   |
+
+
+Table:  Contingency table of the SimpleWorld microdata with no young males. Not the zero: this is the empty cell.
+
+|      |  f|  m|
+|:-----|--:|--:|
+|a0_49 |  1|  0|
+|a50+  |  1|  2|
+
+The importance of empty cells and methods
+for identifying whether or not they exist in the
+individual-level is explained in a recent paper @Lovelace-ipfinr.
+The number of different constraint variable permutations ($Nperm$)
+increases rapidly with the number of constraints (see
+equation \ref{eqempty} below),
+where $n.cons$ is the total number of constraints and 
+$n.cat_i$ is the number of categories
+within constraint $i$:
+
+\begin{equation}
+\displaystyle Nperm = \prod_{i = 1}^{n.cons} n.cat_{i}
+\label{eqempty}
+\end{equation}
+
+To exemplify this equation, the number of permutations of constraints in the
+SimpleWorld microdata example is 4:
+2 categories in the sex variables multiplied by
+2 categories in the age variable. Clearly, $Nperm$ depends on how continuous variables
+are binned, the number of constraints and diversity within each constraint.
+Once we know the number of unique individuals (in terms of the constraint variables)
+in the survey ($Nuniq$), the test to check a dataset for empty cells is straightforward,
+based on equation \ref{eqempty}:
+
+\begin{equation}
+is.complete =
+\left\{
+	\begin{array}{ll}
+		TRUE  & \mbox{if } Nuniq = Nperm \\
+		FALSE & \mbox{if } Nuniq < Nperm
+	\end{array}
+\right\}
+\end{equation}
+
+Once the presence of empty cells is determined, the next
+stage is to identify which types of individuals
+are missing from the individual-level input
+dataset ($Ind$).
+
+```{r, echo=FALSE}
+# TODO: link this to discussion with paper (MD)
+# TODO: say when it's better to use a sample-free method
+```
+
+The `missing' individuals, needed to be added to make $Ind$ complete can be defined
+by the following equation \ref{eqmiss}.
+
+$$
+Ind_{missing} = \{x | x \in complete \cap x \not \in Ind \}
+$$ 
+\label{eqmiss}
+
+This means simply that the missing cells are defined as individuals with constraint categories
+that are present in the complete dataset but absent from the input data.
+
 
 ## External validation
 
