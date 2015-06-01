@@ -27,7 +27,7 @@ The input microdataset is a randomized ('jumbled') subset of the
 (DHS) which covers England, Northern Ireland and Wales. 1173 variables are available
 in the DHS, many of which are potentially interesting
 target variables not available at the local level.
-These include weekly income, plaque buildup, and
+These include weekly income, plaque build-up, and
 oral health behaviours.
 Potential linking variables include socio-economic
 classification, and dozens of variables related to oral health.
@@ -117,8 +117,8 @@ without making the population synthesis process too complex
 
 To exemplify these principles, let us consider the constraint variables available
 in the CakeMap datasets. Clearly only variables available both in the individual-level and 
-aggregate-level datasets can be chosen from. Suppose our aim is to analyze the consumption 
-of cakes depending on sociodemographic variables. Five interesting variables assigned to each
+aggregate-level datasets can be chosen from. Suppose our aim is to analyse the consumption 
+of cakes depending on socio-demographic variables. Five interesting variables assigned to each
 of the 916 individuals are available from the individual-level data :
 
 - 'Car': The number of working cars in the person's household.
@@ -237,13 +237,13 @@ generate the spatial microdata.
 As explained in the previous chapters, there are different methods to 
 perform a spatial microsimulation. We will here use a reweighting method, 
 since we have spatial aggregated data and non spatial individual data, both
-containing some common variables. In this category, the more often used and intuitiv
+containing some common variables. In this category, the more often used and intuitive
 method is the IPF. 
 
-We mentionned in the SimpleWorld example that there are two different points of view
+We mentioned in the SimpleWorld example that there are two different points of view
 of IPF. First, weights are assigned to each individual for each zone (`ipfp` package).
 Second, weights are assigned to each possible category of individuals for each zone 
-(`mipfp` package). The next sections developp the whole procedure with each package.
+(`mipfp` package). The next sections develop the whole procedure with each package.
 
 ## Using the `ipfp` package
 ### Performing IPF on CakeMap data {#CakeIPF}
@@ -303,7 +303,7 @@ are outside the area of the line. Note that we have 1,623,797 inhabitants^[
 To obtain it, code `sum(ind_agg)/3`, because you have 3 constraints.] in the
 simulation and in the constraints, `con1`and `con2` have 1,623,800, while `con3`
 contains 1,623,797. As seen before, with IPF, the result depends on
-the order of the constaints. Thus, it is logical to put as last constraint
+the order of the constraints. Thus, it is logical to put as last constraint
 one really reliable, also in terms of total number of people. 
 An alternative is to rescale all constraints to be consistence. This will be done 
 in the next section, with `mipfp` and in the comparison for `ipfp`.
@@ -388,7 +388,7 @@ large to handle.
 
 Next chapter, we move on to a vital
 consideration in spatial microsimulation models such as CakeMap: model checking and validation.
-First, we developp the spatial microsimulation using `mipfp`.
+First, we develop the spatial microsimulation using `mipfp`.
 
 ```{r, echo=FALSE}
 save.image("cache-CakeMap.RData")
@@ -488,7 +488,7 @@ first checks the consistency of the constraints, before reweighting. If
 the total number of individuals in a zone is not exactly
 the same from one constraint to another, `mipfp` will
 return the following warning:
-'Target not consistents - shifting to probabilities!'
+'Target not consistent - shifting to probabilities!'
 In this case, the cells of the resulting table become probabilities, 
 such as the sum of all cells is 1. This means that the algorithm does not
 know how many people per zone you want.
@@ -515,7 +515,7 @@ table(rowSums(con2) == rowSums(con3))
 
 Constraints 1 and 2 have exactly the same marginals per zone.
 Constraint 3 has 52 zones with different totals. Since NSSEC (`con3`) 
-is anomolous in this respect 
+is anomalous in this respect 
 we consider the totals of the 
 two first constraints to be valid. It is always
 important to find the reason of the differences in totals.
@@ -625,13 +625,13 @@ large datasets, such as CakeMap.
 
 ## Comparing methods of reweighting large datasets
 
-We mentionned in the **ipfp** part of this chapter that the three constraints
+We mentioned in the **ipfp** part of this chapter that the three constraints
 do not contain the same number of individuals. To compare 
 both methods, we will run a second time `ipfp`, but 
 with the rescaled constraints. Note that in case of 
 non-consistent constraints, `mipfp` warns the user, 
 but `ipfp` does not. Thus, with `ipfp`, it is 
-recommended that the user checks constaint totals before reweighting.
+recommended that the user checks constraint totals before reweighting.
 Note that instead of number of iterations, we 
 chose to fix the tolerance threshold to $10^{-10}$,
 the default tolerance argument used in the `mipfp` function
@@ -711,7 +711,7 @@ absolute distance is 3.45608e-11.
 
 We can consider that both methods give very similar results.
 However, there are both distant from the constraints
-for few zones and categories. A longer analyzis 
+for few zones and categories. A longer analysis 
 of this is done in the next chapter.
 
 ### Comparison of times
@@ -759,19 +759,22 @@ without microdata, but `ipfp` is faster for problems with
 less individuals in the microdata.
 
 These results suggest that to perform population synthesis for spatial
-microspatial simulation in contexts where the input microdataset is large,
+microsimulation in contexts where the input microdataset is large,
 one should use `mipfp`. Note that
 when having very few microdata, it may be advantageous to 
 consider a method without microdata. This way one avoids biasing
 the results with the (non-random) category included in the microdata.
 The extent to which the input microdata represent the study
-area is critical to obtaining valid results. Indeed, 
-the reweighting methods with input microdata are very 
-depending on the microdata representativity (M. Lenormand, 
-G. Deffuant,2015). If the used sample 
+area is critical to obtaining valid results:
+the results of spatial microsimulation
+that use input microdata are highly
+dependent on the extent to which the microdata are representative of the 
+study area
+[@Lenormand2012].
+If the used sample 
 is too small, or if the sample, for example, contains a 90%
 of female, whereas the whole population has only 51%, the
-microdata will not be reprensetative. Usually, to consider a 
+microdata will not be representative. Usually, to consider a 
 sample as representative, each individual should
 have exactly the same probability of being in the 
 sample. For example, if you make your survey in a university, 

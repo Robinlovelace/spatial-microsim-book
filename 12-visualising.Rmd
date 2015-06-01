@@ -28,7 +28,7 @@ and visualisation problematic. It is challenging enough to
 represent a continuous distribution of incomes on in a single
 graphic, for example. Trying to do so for every one of hundreds
 of geographical zones is almost impossible using standard
-methods of visualisation in GIS. Morever, extracting important
+methods of visualisation in GIS. Moreover, extracting important
 summary statistics is also tricky from spatial microdata
 because of the multi-level nature of the data and
 the sheer number of rows, zones and
@@ -41,7 +41,7 @@ of spatial microdata.) The methods
 are therefore equally applicable to synthetic spatial microdata as
 for real microdata. With the open data movement, it is possible
 that more and more individual-level,
-geocoded data is released. Afterall, there is a strong argument
+geocoded data is released. After all, there is a strong argument
 to suggest that the benefits of releasing such data
 far outweigh any
 potential privacy issues (especially in the age of smartphones
@@ -57,7 +57,7 @@ microdata for evidence-based policy, spatial microsimulation
 research encourages governments to release more
 individual-level information. Clearly, real spatial microdata should only
 ever be released in a way that would not 
-comprimise security, ethics or citizen trust.
+compromise security, ethics or citizen trust.
 
 This chapter starts simply, with a basic description of how to
 visualise geographic data in R using the **ggmap** package. 
@@ -105,7 +105,7 @@ we will load an additional dataset and compare it with the estimates of cake
 consumption per person  generated in the previous section at the ward level.  
 
 The hypothesis we would like to test is that cake consumption is linked to
-deprivation: More deprived people will eat unheathily and cake is a relatively
+deprivation: More deprived people will eat unhealthily and cake is a relatively
 cheap 'comfort food'.  Assuming our simulated data is correct ---  a
 questionable assumption but lets roll with it for now --- we can explore this at
 the ward level thanks to an official

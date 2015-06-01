@@ -31,7 +31,7 @@ In this chapter we progress from loading and preparing the input data to
 running a spatial microsimulation model. The focus is on
 Iterative Proportional Fitting
 procedure (IPF), a simple, fast and widely used method to allocate
-individuals to zones. Other methods can acheive the same result,
+individuals to zones. Other methods can achieve the same result,
 as discussed in the first section of this chapter and as
 demonstrated in the next chapter (\ref{alt}).
 
@@ -51,7 +51,7 @@ is used as the basis of this chapter.
 Being small, simple and hopefully by now familiar,
 SimpleWorld facilitates understanding of
 the process on a 'human scale'. As always, we encourage
-experimentation with small datasets to avoide
+experimentation with small datasets to avoid
 the worry of overloading your computer, before
 applying the same methods to larger and more complex data.
 Learning the basic principles and methods of spatial microsimulation
@@ -950,7 +950,7 @@ Note that it is probabilistic, so normally if we proceed two times the same,
 the results can be different. So, by fixing the `seed`, we are
 sure to obtain each time the same result.
 The result here was the same as that obtained through intuition.
-However, we can reexecute the same code and obtain different 
+However, we can re-execute the same code and obtain different 
 results:
 
 ```{r}
@@ -1077,7 +1077,7 @@ int_weight1
 
 The fascinating part of TRS is that you are sure that you result
 will first look like $(1,1,3,1,4)$ and then, it just reallocate the 
-two missing individuals by chosing two cells that will be incremented.
+two missing individuals by choosing two cells that will be incremented.
 
 ### Expansion
 
@@ -1444,10 +1444,10 @@ int_expand_array <- function(x){
 ```
 
 We apply this function to our data and the result
-is an dataframe, which rows represent individuals.
+is a `data.frame` object, rows of which rows represent individuals.
 The first column is the gender, the second is age 
 and the third is the education level. We print
-the head of this dataframe and we can check that
+the head of this data frame and we can check that
 the individual of type (Male, Less18, Level1) is repeated
 5 times, which is its weight.
 

@@ -22,7 +22,7 @@ Institute of Transport and Logistics Studies (ITLS). TRESIS evolved from an earl
 The TRESIS software provides users with the ability to assess the impacts of a large number of transport and land-use policies
 on various systems linked to travel behaviour. These include
 the environment, user expenditure and government revenue.
-TRESIS incorporates an extensive model system including discrete and continuous choice models. These are combined with a process of population (or more accurately, household) synthesis and a set of equilibriation criteria.
+TRESIS incorporates an extensive model system including discrete and continuous choice models. These are combined with a process of population (or more accurately, household) synthesis and a set of equilibration criteria.
 TRESIS provides a powerful alternative to some more widely used microsimulation implementations for evaluating strategic projects [@Hidas2005].
 
 This chapter introduces the TRESIS model system from a spatial microsimulation perspective. 

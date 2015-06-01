@@ -42,7 +42,7 @@ is comparing model results against priori knowledge of how they *should*
 be. This level of model checking usually takes place only at the aggregate level of the constraint variables.
 2. *Model evaluation* --- also known as *external validation* --- is the
 process of comparing model results with external data. This approach to
-verification relies on good 'groundtruth data' and can take place at either
+verification relies on good 'ground-truth data' and can take place at either
 the individual level (if geo-coded survey data are available) or (more
 commonly) at the aggregate level.
 
@@ -61,7 +61,7 @@ number of confectionery shops, consumer surveys and even social media could be
 explored used to provide 'sanity checks' on the results. Sometimes you may need
 to be creative to find data for external validation.)
 
-It is important to note that these two kinds of validation is thay they
+It is important to note that these two kinds of validation is that they
 test the model at different levels. *Internal validation* tests
 the model quality at the aggregate level, assuming the input data is
 relevant to the research question,
@@ -117,13 +117,13 @@ Because internal validation is so widely used in the literature
 there are a number of established measures of internal fit that have been used. Yet there is little consistency in the measures that are used. This makes it difficult to assess which models are performing best across different studies, a major problem in spatial microsimulation research. If one study reports only *r* values, whereas another reports only *TAE* (each measure will be described shortly), there is no way to assess which is performing better. There is a need for more consistency is reporting of internal validation. Hopefully this Chapter, which provides descriptions of each of the commonly used and recommended measures of *goodness-of-fit* as well as guidance on which to use --- is a step in the right direction.
 
 Several metrics of model fit exist. We will look at some commonly used measures and define them
-mathematically before defining them in R and, in the subsequent section, implementing them to evaluate the CakeMap spatial microsimulation model. The measures developped in the section are:
+mathematically before defining them in R and, in the subsequent section, implementing them to evaluate the CakeMap spatial microsimulation model. The measures developed in the section are:
 
 - Pearson's correlation (*r*), a formula to quantify the linear correlation between the observed and final counts in each of the categories for every zone.
 - Total absolute error (TAE), simply the sum of absolute (positive) differences between the observed and final counts in each of the categories for every zone.
 - Standardised absolute error (SAE), the TAE divided by the total observed population.
 - Mean absolute error (MAE), the TAE divided by *n*, the number of observations.
-- Root mean squared error (RMSE), the square root of the sum of all errors. This metric emphasises the relative importance of a few large errors over the buildup of many small errors.
+- Root mean squared error (RMSE), the square root of the sum of all errors. This metric emphasises the relative importance of a few large errors over the build-up of many small errors.
 - Chi-squared, a test that the predicted and observed values for categorical values match.
 
 Often, to illustrate the internal quality of the model, we add some representations.
@@ -194,8 +194,9 @@ population of the study area.
 
 ### Root mean squared error
 
-RMSE is similar to the absolute error metrics, but uses the *sum of squares* of the error. Recent work in geoscience has suggested that RMSE is preferable to absolute measures of error when the errors approximate a normal distribution (Chai and Draxler 2014).
-Errors in spatial microsimulation tend to have a normal-ish distribution, with many very small errors around the mean of zero and comparatively few larger error. RMSE is defined as follows:
+RMSE is similar to the absolute error metrics, but uses the *sum of squares* of the error. Recent work suggests that RMSE is preferable to absolute measures of error when the errors approximate a normal distribution
+[@Chai2014].
+Errors in spatial microsimulation tend to have a 'normal-ish' distribution, with many very small errors around the mean of zero and comparatively few larger error. RMSE is defined as follows:
 
 $$
 RMSE = \sqrt{\frac{1}{n} \sum_i^n e^2_i}
@@ -224,7 +225,7 @@ $$
 
 Chi-squared is a commonly used test of the fit between absolute counts of categorical variables. It has the advantage of providing a *p value*, which represents the chances of obtaining a fit between observed and simulated values through chance alone. It is primarily used to test for relationships between categorical variables (e.g. socio-economic class and smoking) but has been used frequently in the spatial microsimulation literature (Voas and Williamson 2001; Wu et al. 2008).
 
-The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values (Agresti 2007):
+The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values [@Agresti2007]:
 
 $$
 \chi^2= \frac{(sim_{ij} - obs_{ij})^2}{obs_{ij}}
@@ -232,7 +233,8 @@ $$
 
 The *chi-squared* test is the probability of obtaining the calculated $\chi^2$ value or a worst, given the number of *degrees of freedom* (representing the number of categories) in the test.
 
-An advantage of chi-squared is that it can take matrices or vectors as inputs. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate-level data for the test (Agresti 2007).
+An advantage of chi-squared is that it can take matrices or vectors as inputs. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate-level data for the test 
+[@Agresti2007].
 
 ### Which test to use?
 
@@ -427,13 +429,13 @@ The result of the above code demonstrates that more than half (56%) of the error
 from a single zone: 84. Therefore zone 84 certainly is anomalous and worthy of further
 investigation. An early strategy to characterise this zone and compare it to the others is to visualise it.
 To this end, Figure 7.1 places the TAE values calculated previously on a map,
-with a baselayer supplied by Google for context --- see the book's
+with a base-layer supplied by Google for context --- see the book's
 [online source code](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/validation.Rmd) to see how. Zone 84 is clearly visible in this map as a ward
-just above Leeds city centre. This does not immediatley solve
+just above Leeds city centre. This does not immediately solve
 the problem, but it confirms that only few zones have bigger errors.
 Note that the maps presented in Figure 7.1 looks identical for TAE and SAE values
 except for the scale; the similitude of these measures of fit can be
-varified using a simple correlation:
+verified using a simple correlation:
 
 ```{r}
 cor(TAEVec, SAEVec) # note that the two measures are very correlated

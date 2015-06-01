@@ -161,7 +161,7 @@ excess data at the outset. Provided you have a good workflow,
 keeping all original data files unmodified for future
 reference, it will be easy to go back and add extra variables
 at a later stage. Following Occam's razor
-which favors simple solutions (Blumer et al. 1987),
+which favours simple solutions (Blumer et al. 1987),
 it is often best to start with a minimum
 of data and add complexity subsequently
 rather than vice versa.
@@ -491,15 +491,15 @@ Some parts of the following explanation are specific to the example data and the
 use of Iterative Proportional Fitting (IPF) as a reweighting procedure
 (described in the next chapter). Combinatorial optimisation approaches, for
 example (as well as careful use of IPF methods, e.g. using the **mipfp** package),
-are resilent to differences in the number of individuals according to each
+are resilient to differences in the number of individuals according to each
 constraint. However, the approach,
 functions and principles demonstrated will apply to the majority of real
 input datasets for spatial
 microsimulation. This section is quite specific to data preparation for
-spatail microsimulation; for a more general introduction to data formatting and
+spatial microsimulation; for a more general introduction to data formatting and
 cleaning methodology see Wickham (2014). To summarise this information, 
 the last section of this chapter provides 
-a checklist of items to ensure that the data has been adequately cleaned
+a check-list of items to ensure that the data has been adequately cleaned
 ready for the next phase.
 
 In the SimpleWorld example, the individual-level dataset is loaded
@@ -600,11 +600,11 @@ ind <- ind[, c(1, 3, 19)]
 
 In the SimpleWorld dataset, only the `age` and `sex` variables are useful
 for reweighting: we can remove the others for the purposes of allocating
-individuals to zone. Note that it is important to keep track of individual ID's,
+individuals to zone. Note that it is important to keep track of individual Id's,
 to ensure individuals do not get mixed-up by a function that changes their
 order (`merge()`, for example, is a function that can cause havoc by changing
 the order of rows).
-Before removing the superflous `income` variable, we will create a backup of
+Before removing the superfluous `income` variable, we will create a backup of
 `ind` that can be referred back-to when we have a spatial microdataset:
 
 ```{r}
@@ -665,7 +665,7 @@ cut(ind$age, breaks = brks, labels = labs)
 
 The factor generated now has satisfactory labels: they match the column headings
 of the age constraint, so we will save the result. (Note, we are not
-loosing any information at this stage because we have saved the orginal
+loosing any information at this stage because we have saved the original
 `ind` object as `ind_orig` for future reference.)
 
 ```{r}
@@ -825,7 +825,7 @@ by adding high weights to the most representative individuals.
 To summarise, we have learned about and implemented
 methods for loading and preparing input data for spatial microsimulation
 in this chapter.
-The following checklist outlines the main features of the input datasets
+The following check-list outlines the main features of the input datasets
 to ensure they are ready for reweighting, covered in the next chapter:
 
 1. Both constraint and target variables are loaded in R:

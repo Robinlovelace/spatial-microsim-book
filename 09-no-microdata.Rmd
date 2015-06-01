@@ -161,8 +161,8 @@ apply(resRound,c(1),sum) - local_cons
 It is due to luck (and the small size of the SimpleWorld example)
 that the `round` method works in this case. In most 
 cases, however, there will be errors due to rounding. 
-If a zone had 4 individuals and three categories, for example
-there the resultin weights could be
+If a zone had 4 individuals and three categories, for example,
+the resulting weights could be
 $(\frac{4}{3},\frac{4}{3},\frac{4}{3})$. Then, 
 the rounding gives $(1,1,1)$ and one individual 
 would be missing.
