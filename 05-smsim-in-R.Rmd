@@ -28,20 +28,33 @@ source("R/SimpleWorld.R")
 ```
 
 In this chapter we progress from loading and preparing the input data to
-running a spatial microsimulation model. We will begin by describing the
+running a spatial microsimulation model. The focus is on
 Iterative Proportional Fitting
-(IPF) procedure as it is the simplest and most widely used method to allocate
-individuals to zones and then progress to discuss alternative
-*reweighting algorithms* that do the same job in a different way.
+procedure (IPF), a simple, fast and widely used method to allocate
+individuals to zones. Other methods can acheive the same result,
+as discussed in the first section of this chapter and as
+demonstrated in the next chapter (\ref{alt}).
 
-\index{reweighting algorithms}
+This chapter moves from theory to practice. It describes the
+maths that underlies the method (section \ref{ipftheory}) before implementing
+the algorithm in base R (section \ref{ipfinr}) and two packages that automate
+IPF, **ipfp** and **mipfp** in sections \ref{ipfp} and \ref{mipfp}
+respectively. The chapter also introduces the important concepts of 
+*integerisation* and *expansion*. These methods are introduced
+towards the end of each package-specific section. The final
+section
+(\ref{compareipf})
+compares the relative merits of **ipfp** **mipfp**.
 
 The SimpleWorld data, loaded in the previous chapter,
-is used. Being small and simple, the example facilitates understanding
-the process on a 'human scale' and allows experimentation
-without the worry of overloading your computer.
-However, the methods apply equally to larger and more complex projects.
-Thus practicing the basic principles and methods of spatial microsimulation
+is used as the basis of this chapter.
+Being small, simple and hopefully by now familiar,
+SimpleWorld facilitates understanding of
+the process on a 'human scale'. As always, we encourage
+experimentation with small datasets to avoide
+the worry of overloading your computer, before
+applying the same methods to larger and more complex data.
+Learning the basic principles and methods of spatial microsimulation
 in R is the focus of this chapter.
 Time spent mastering these basics will make subsequent steps
 much easier.
@@ -95,6 +108,8 @@ a geometrical proof that IPF converges to a single result, in the absence
 of *empty cells*.]
 
 ## Weighting algorithms {#weighting}
+
+\index{reweighting algorithms}
 
 A wide range of methods can be used to allocate individuals 
 to zones in spatial microsimulation. As with the majority of procedures for statistical 
@@ -219,7 +234,7 @@ still appear in the future.
 
 ## Iterative Proportional Fitting
 
-### IPF in theory {#IpfinTh}
+### IPF in theory {#ipftheory}
 
 The most widely used and mature *deterministic* method to allocate individuals
 to zones is iterative proportional fitting (IPF).
@@ -295,7 +310,7 @@ Don't worry if this theory doesn't really make sense for you
 for the moment. The next section will develop an example and
 will help you to understand the process.
 
-### IPF in R {#IpfinR}
+### IPF in R {#ipfinr}
 
 In the subsequent examples, we use IPF to allocate individuals to zones
 in SimpleWorld, using the data loaded in
@@ -1448,7 +1463,7 @@ Note that this example was designed for only one zone.
 A similar reasoning is applicable to as many
 zones as you want.
 
-## Comparing **ipfp** with **mipfp** {#Compareipf}
+## Comparing **ipfp** with **mipfp** {#compareipf}
 
 ```{r, echo=FALSE}
 # We need to establish which is faster (RL)
@@ -1877,7 +1892,7 @@ their results are in different structures. Weights are created for each
 individual with **ipfp** and weights for the contingency table with **mipfp**.
 The results can be transformed from one to the other form if needs be.
 
-### Comparing the speeds
+### Speed comparisons
 
 This section compares the computational time of **mipfp** and **ipfp** approaches. 
 
