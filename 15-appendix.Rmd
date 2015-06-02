@@ -65,7 +65,7 @@ different objects depending on their class.
 
 To illustrate the point, let's create two objects, each with a different class
 and see how the function `summarise` behaves differently, depending on the type.
-This behavior is *polymorphism* (Matloff, 2011):
+This behaviour is *polymorphism* (Matloff, 2011):
 
 ```{r}
 # Create a character and a vector object
@@ -178,7 +178,7 @@ accessible and highly practical course that will form a solid foundation
 for a range of modelling applications, including spatial microsimulation.
 - *An Introduction to R* (Venables et al., 2014)
 is the foundational introductory R manual, written by the
-software's core developers and is available online for free.
+software's core developers and is available on-line for free.
 It is terse and covers some advanced topics, but
 provides a useful reference on the fundamentals of R as a language.
 - *Advanced R* 

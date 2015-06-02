@@ -46,9 +46,9 @@ spatial microsimulation.
 A question that arises after spatial microdata have been allocated to
 geographical zones is: where exactly in the zone do the people inhabit?
 For some applications this may not matter but for others, such as disaster
-management (see Smith et al. 2014 and the work of Kazumasa Hanaoka of Tohoku University for more on this)
-or transport planning, estimating the precise location of an individual, to the
-building-level, is important.
+management and
+or transport planning, the precise location of an individual
+is important [@Smith2014; @Hanaoka2014].
 
 ```{r, echo=FALSE}
 # TODO: add reference for above

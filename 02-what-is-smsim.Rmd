@@ -143,15 +143,15 @@ long-established field of *small area estimation* [@Rao2003].
 is an approach that was first conceived by
 Guy Orcutt. This can be defined in general terms as
 "a methodology ...
-to simulate the states and behaviors of different
+to simulate the states and behaviours of different
 units --- e.g. individuals, households, firms --- as
 they evolve in a given environment" 
 [@Baroni2007]. The defining feature of *spatial microsimulation* is that
-the 'environment' is defined in predominently geographical terms: the
+the 'environment' is defined in predominantly geographical terms: the
 individuals are allocated to small parcels of land which affect their
 characteristics and inferred behaviour.
 This wider perspective helps explain why,
-destpite not using the term 'spatial microsimulation',
+despite not using the term 'spatial microsimulation',
 @Orcutt1957-new-type is frequently cited as one of the founding fathers of
 the field.
 

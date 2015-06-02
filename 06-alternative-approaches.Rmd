@@ -108,8 +108,8 @@ for(area in seq(dim(age)[1])){
 }
 ```
 
-The R library implementing the GREGWT algorithm reweights the survey for one
-area at the time, and therefor we need to construct a loop to iterate each
+The R library implementing the GREGWT algorithm re-weights the survey for one
+area at the time, and therefore we need to construct a loop to iterate each
 area. The estimated weights are combined into a long vector that will be latter
 on transformed into the weights matrix.
 
@@ -130,7 +130,7 @@ the *solution space* (or the *feasible space* in formal mathematics).
 This implies that optimization problems can be *unconstrained* or *constrained*, by
 limits on the values that arguments (or that a function of the arguments) of the function can take
 ([Boyd 2004](http://stanford.edu/~boyd/cvxbook/)). If there are constraints, the solution space
-include only a part of the domain of the objective funcion. The constraints define the
+include only a part of the domain of the objective function. The constraints define the
 solution space. Under this framework,
 population synthesis can be seen as a *constrained optimisation* problem.
 Suppose $x$ is a vector of length $n$ $(x_1,x_2,..,x_n)$ whose values are to be adjusted. In this case
@@ -212,7 +212,7 @@ Key to this is interpreting individual weights as parameters (the vector $par$,
 of length $m$ above)
 that are iteratively modified to optimise the fit between individual and
 aggregate-level data. Remarks that in comparison with the theoretical 
-definition of an optimisation problem, our `par` are the theorical $x$. 
+definition of an optimisation problem, our `par` are the theoretical $x$. 
 The measure of fit, so the distance, we use in this context is
 Total Absolute Error (TAE).
 
@@ -333,7 +333,7 @@ such as the problem of 'empty cells'.
 ```
 
 Therefore these results, as with any modelling exercise,
-should be interpreted with a healthy dose of skepticism: just because an
+should be interpreted with a healthy dose of scepticism: just because an
 algorithm converges after few 'iterations' this does not mean it is
 inherently any faster or more useful than another. The results are context
 specific, so it is recommended that the tested framework

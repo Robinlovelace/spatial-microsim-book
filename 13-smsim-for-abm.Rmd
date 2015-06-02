@@ -30,9 +30,10 @@ ABM allows analysis of problems that are highly non-linear and *emergent*:
 the dominant processes guiding change can only be seen after the event.
 This is
 advantageous, allowing a very wide range of problems to be tackled through
-a single paradigm: "agent-based modeling can find new, better solutions to many
-problems important to our environment, health, and economy" (Grimm and
-Railsback, 2011). With this power comes danger: it is easy to get lost in
+a single paradigm: "agent-based modelling can find new, better solutions to many
+problems important to our environment, health, and economy"
+[@Grimm2011].
+With this power comes danger: it is easy to get lost in
 agent-based modelling and arrive at incorrect conclusions. Using spatial
 microsimulation to generate realistic input populations is one way that
 ABM can be made to more closely represent the population under study.
@@ -40,7 +41,7 @@ ABM can be made to more closely represent the population under study.
 Note that based on the above definition we
 already have two-thirds of the necessary ingredients
 of an ABM: the synthetic spatial microdata created in previous chapters can,
-with the right tools, skills and understanding, be used almsot directly as an
+with the right tools, skills and understanding, be used almost directly as an
 input into ABM. If your aim is to use spatial microdata as an input into
 agent based models, you're more than half way there!
 
@@ -58,14 +59,14 @@ and some of the tools that will be useful for the job.
 A wide range of software is available for ABM. Of these, **NetLogo**
 is one of the most
 widely used for model prototyping, development and communication 
-(Thiele et al. 2012). Alternative open source options include
+[@Thiele2012]. Alternative open source options include
 the Java-based ABM **Repast** (for power users) and **MASON** (which must
 be programmed in Java). Due to its excellent documentation, ease of learning
 and integration with R, NetLogo is the tool of choice in this book and should
 be sufficiently powerful for many applications.
 
 [NetLogo](https://ccl.northwestern.edu/netlogo/) is a
-mature and widely used toolkit for agent-based models. It is written in
+mature and widely used tool-kit for agent-based models. It is written in
 Java, but uses a derivation of the Logo language to develop models 
 (most users will be blissfully unaware of Java).
 The recently published **RNetLogo** package provides an interface between

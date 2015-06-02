@@ -73,7 +73,7 @@ have the potential to be useful in a wide
 range of applications. Spatial microsimulation
 has great potential to be applied to new areas
 for informing public policy. Work of great potential social benefit
-is already being done using spatial micrsomulation in
+is already being done using spatial microsimulation in
 housing, transport and
 sustainable urban planning. Detailed modelling
 will clearly be of use for planning for a *post-carbon future*, one in
@@ -153,7 +153,7 @@ while chapters 7 onwards focus on how to use this rich data type.
 ## Learning by doing
 
 Another issue tackled in this book is reproducibility, which is intimately
-linked to the 'learning by doing' approach.  Beyond a few excpetions
+linked to the 'learning by doing' approach.  Beyond a few exceptions
 [@Lovelace-ipfinr], most findings in the
 field cannot replicated: there is no way of independently
 verifying the results of spatial microsimulation research.
@@ -530,7 +530,7 @@ not essential. If any of the words do not make sense, the
 Glossary at the end of the book may help clarify what they mean. Chapters
 4, 5, 6 and 7 to encapsulate the process of *population synthesis* which
 generates spatial microdata and which is
-key to much spatial micrsomulation work. They should be read together in that order.
+key to much spatial microsimulation work. They should be read together in that order.
 Chapters 8 9 and 10 explain and demonstrate methods of using 
 spatial microdata to better understand the world. These chapters are more
 self-standing and can be read in any order. The chapter titles and brief
@@ -570,9 +570,9 @@ Fitting (IPF).
 ([](#alt)) describes some alternative methods, beyond IPF, for population
 synthesis. These include an R implementation the
 Generalized Regression Weighting procedure (GREGWT), a description
-of 'simulated annealling'
+of 'simulated annealing'
 and a demonstration that population synthesis can be interpreted as a
-constrained optimisisation problem. This final insight has the consequence
+constrained optimisation problem. This final insight has the consequence
 that many previously developed optimisation algorithms can be used to
 perform the 'heavy lifting' of population synthesis. A few of these,
 including R's `optim` and `GenSA` functions, are tested, illustrating the
