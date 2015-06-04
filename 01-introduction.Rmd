@@ -13,7 +13,7 @@ library(grid)
 
 # Introduction {#intro}
 
-Imagine a world in which everyone could access any dataset.
+Imagine a world in which you could access any dataset.
 Information on companies, households and governments would be more
 transparent. Imagine, further, that researchers
 and decision-makers acting in the public interest had
