@@ -13,32 +13,41 @@ library(grid)
 
 # Introduction {#intro}
 
-Imagine a world in which anyone could access any dataset.
-Information on companies, households and governments would become more
+Imagine a world in which you could access any dataset.
+Information on companies, households and governments would be more
 transparent. Imagine, further, that researchers
-and decision-makers acting in the public interest had access to
-tools enabling them to test *model* such data and explore different
+and decision-makers acting in the public interest had
+tools enabling them to test and *model* such data to explore different
 scenarios of the future.
-In such an (albeit technocratic) utopia,
-people would be empowered to better understand the world
-and make more informed decisions based than before.
-Such rich datasets could, in theory, help solve pressing
+People would be empowered to
+make informed decisions, based on the latest evidence.
+Such rich datasets could, if used correctly, help solve pressing
 environmental problems such as climate change, inequality and poor human
 health worldwide. 
 
+These are the types of real-world issues we hope the methods in this
+book will help to address. Spatial microsimulation can provide new
+insights into complex problems and, ultimately, lead to better
+decision-making. By allowing new insights into existing information,
+the methods can help shift decision-making processes away from
+ideological biases and towards truly evidence-based policy.
+
 Despite continuing progress in the realm of data access, driven largely
 by the 'open data' movement, the reality is still far from
-this dream. Researchers typically must work with information that
-is incomplete or entirely inaccessible.
-Datasets, when they are made available, often
+this dream sketched in the opening paragraph.
+Researchers typically must work with information that
+is incomplete or inaccessible.
+When they are made available, datasets often
 lack a high degree of spatial or temporal resolution.
 Furthermore, publicly available datasets miss key attributes, such as income.
-Even when sensitive datasets are made available, it can be very difficult
+Even when high quality data is made available, it can be very difficult
 for others to check or *reproduce* results based on them, because of
-strict conditions of use.
-Due the empowering potential of new information, encapsulated in the
-saying that 'knowledge is power', methods for generating new datasets that at 
-least *represent* the full complexity of reality are in high demand.
+strict conditions of use. This blocks democratic decision making.
+The empowering potential of new information is encapsulated in the
+saying that 'knowledge is power'.
+This helps explain why methods such as spatial microsimulation,
+that help represent the full complexity of reality in new ways,
+are in high demand.
 
 Spatial microsimulation is a growing approach for tackling these issues.
 Put simply, spatial microsimulation methodologies have been developed
