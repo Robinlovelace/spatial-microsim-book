@@ -33,12 +33,14 @@ Iterative Proportional Fitting
 procedure (IPF), a simple, fast and widely used method to allocate
 individuals to zones. Other methods can achieve the same result,
 as discussed in the first section of this chapter and as
-demonstrated in the next chapter (\ref{alt}).
+demonstrated in
+[](#alternative-reweighting}).
 
 This chapter moves from theory to practice. It describes the
 maths that underlies the method (section \ref{ipftheory}) before implementing
 the algorithm in base R (section \ref{ipfinr}) and two packages that automate
-IPF, **ipfp** and **mipfp** in sections \ref{ipfp} and \ref{mipfp}
+IPF, **ipfp** and **mipfp** in subsequent sections
+([](#ipfp) and [](#mipfp) respectively).
 respectively. The chapter also introduces the important concepts of 
 *integerisation* and *expansion*. These methods are introduced
 towards the end of each package-specific section. The final
@@ -635,7 +637,7 @@ integerisation: the process of converting the fractional weights into integers.
 This process creates a final contingency table, which is used to generate the
 final population. This last step is called the expansion.
 
-### IPF with the R package  **ipfp**
+### IPF with  **ipfp** {#ipfp}
 
 IPF runs much faster and with less code using the
 **ipfp** package than in pure R. The `ipfp` function runs the IPF algorithm
@@ -847,11 +849,11 @@ probabilities and randomly chose the individuals in a distribution corresponding
 Second, we can consider the weights as the number of individuals
 in this category and create integer weights [@Lovelace2013-trs],
 as described in a subsequent section
-[](#sintegerisation)
+([](#sintegerisation))
 on 'integerisation'. 
 
 
-### IPF with the R package  **mipfp**
+### IPF with the R package  **mipfp** {#mipfp}
 
 
 The R package **mipfp** is a more generalized implementation of the IPF algorithm
