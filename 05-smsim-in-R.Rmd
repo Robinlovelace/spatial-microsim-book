@@ -232,7 +232,28 @@ similar, that will allow to mix some individual to create a new one (mutation). 
 if this solution has already been developed, it is just a proposition and to inform the reader that new process can
 still appear in the future.
 
+In the rest of this chapter, we develop an often used
+reweighting algorithm : the Iterative Proportional Fitting (IPF).
+When reweighting, three steps are
+always necessary. First, you generate a 
+weight matrix containing fractional numbers, then you integerise it.
+When knowing the number of times
+each individual needs to be replicated, 
+the expansion step calculates the final dataset, 
+which contains a row per individual in the whole
+population and a zone for each person. The process
+is explained in theory and then demonstrates on an 
+example coded in R.
+
 ## Iterative Proportional Fitting
+
+This section begins with the theory (and intuition) under the IPF
+algorithm. Then, the R code to run the method is explained. However, 
+in R, it is often unnecessary to write the whole code. Indeed, 
+packages including functions to perform an IPF exist and are optimised. 
+The **ipfp** and **mipfp** packages are the subjects of the two last 
+sub-sections of this section.
+
 
 ### IPF in theory {#ipftheory}
 
@@ -614,23 +635,7 @@ integerisation: the process of converting the fractional weights into integers.
 This process creates a final contingency table, which is used to generate the
 final population. This last step is called the expansion.
 
-
-```{r, echo=FALSE}
-# Possibly more on IPF here. For now, press on
-```
-
-## Reweighting with **ipfp** {#ipfp}
-
-When reweighting, three steps are
-always necessary. First, you generate a 
-weight matrix, then you integerise it.
-When knowing the number of times
-each individual needs to be replicated, 
-the expansion step calculates the final dataset, 
-which contains a row per individual in the whole
-population and a zone for each person.
-
-### Execution of  **ipfp**
+### IPF with the R package  **ipfp**
 
 IPF runs much faster and with less code using the
 **ipfp** package than in pure R. The `ipfp` function runs the IPF algorithm
@@ -845,6 +850,204 @@ as described in a subsequent section
 [](#sintegerisation)
 on 'integerisation'. 
 
+
+### IPF with the R package  **mipfp**
+
+
+The R package **mipfp** is a more generalized implementation of the IPF algorithm
+than **ipfp**, and was designed for population synthesis.
+**ipfp** generates a two-dimensional weight matrix based on mutually
+exclusive (non cross-tabulated) constraint tables.
+This is useful for applications using constraints, which are only marginals and 
+which are not cross-tabulated.
+**mipfp** is more flexible, allowing multiple cross-tabulations
+in the constraint variables, such as age/sex and age/class combinations.
+
+```{r, echo=FALSE}
+# we have a new column with, at most, as many categories as the product of the number of categories for the variable age
+# and 2 (Male or Female). However, in this case, we need to have the cross table of the age and the sex available to 
+# proceed this way.
+```
+
+**mipfp** is therefore a multidimensional implementation of 
+IPF, which can 
+update an initial $N$-dimensional array with respect to given 
+target marginal distributions. These, in turn, can be multidimensional. 
+In this sense **mipfp** is more advanced than
+**ipfp** which solves only the 2 dimensional case.
+
+The main function of **mipfp** is `Ipfp()`, which
+fills a $N$-dimensional weight 
+matrix based on a range of aggregate-level constraint table options. 
+Let's test the package on some example data.
+The first step is to load the package into the workspace:
+
+```{r, message=F}
+library(mipfp) # after install.packages("mipfp")
+```
+
+To illustrate the use of `Ipfp`, we will create a fictive example. 
+The case of SimpleWorld is here too simple to really illustrate the power 
+of this package. The solving of SimpleWorld with `Ipfp` is included in 
+the next section containing the comparison between the two packages.
+
+The example case is as follows: to determine the contingency table 
+of a population characterized by categorical variables for age (0-17, Workage, 50+),
+gender (male, female) and educational level (level 1 to level 4).
+We consider a zone with 50 inhabitants. The classic spatial microsimulation 
+problem consists in having all marginal distributions and the cross-tabulated
+result (age/gender/education in this case) only for a non-geographical sample. 
+
+We consider the variables in the following 
+order: sex (1), age (2) and diploma (3).
+Our constraints could for example be:
+
+```{r}
+sex <- c(Male = 23, Female = 27) # n. in each sex category
+
+age <- c(Less18 = 16, Workage = 20, Senior = 14) # age bands
+
+diploma <- c(Level1 = 20, Level2 = 18, Level3 = 6, Level4 = 6) 
+```
+
+Note the population is equal in each constraint (50 people). Note also
+the order in which each category is encoded --- a common source of
+error in population synthesis.
+For this reason we have labelled each category of each constraint.
+The constraints are the target margins and need to be stored as a list.
+To tell the algorithm 
+which elements of the list correspond to which constraint,
+a second list with the description 
+of the target must be created. By printing *target* before to run the algorithm, 
+we can verify that we have encoded everything well.
+
+```{r}
+target <- list (sex, age, diploma)
+descript <- list (1, 2, 3)
+target
+```
+
+Now that all constraint variables have been encoded, let us define 
+the initial array to be updated, also referred as the seed or the weight matrix. The dimension
+of this matrix must be identical to that of the constraint tables:
+$(2 \times3 \times 4)$. Each cell of the array represents 
+a combination of the attributes' values, and thus defines a particular 
+category of individuals. In our case, we will consider that the weight
+matrix contains 0 when the category is not possible and 1 otherwise. In this example we 
+will assume that it is impossible for an individual being less than 18 
+years old to hold a diploma level higher than 2. 
+The corresponding cells are then set to 0, while the cells of the 
+feasible categories are set to 1.
+
+```{r}
+names <- list (names(sex), names(age), names(diploma))
+weight_init <- array (1, c(2,3,4), dimnames = names)
+weight_init[, c("Less18"), c("Level3","Level4")] <- 0
+```
+
+Everything being well defined, we can execute
+*Ipfp*. As with the package **ipfp**, we can chose a stopping criterion defined by *tol* and/or a maximum
+number of iterations. Finally, setting the argument `print` to `TRUE` 
+ensures we will see the evolution of the
+of the procedure. After reaching either the maximum number of iterations or convergence 
+(whichever comes first), the function will return a list containing the updated 
+array, as well as other information about the convergence of the algorithm. 
+Note that if the target margins are not consistent, the input data is then 
+normalised by considering probabilities instead of frequencies.
+
+```{r}
+result <- Ipfp(weight_init, descript, target, iter = 50, 
+               print = TRUE, tol = 1e-5)
+```
+
+Note that the fit improves rapidly attains the *tol* after 8 
+iterations. The `result`contains the final weight matrix
+and some information about the convergence. 
+We have a resulting table and we can validate the total number of 50 inhabitants 
+in the zone. Thanks to the definitions of names in the array, we can easily 
+interpret the result. There are a total 50 people and nobody of less than 18 years old
+own a diploma level 3 or 4, as desired.
+
+```{r}
+result$x.hat # print the result
+sum(result$x.hat) # check the total number of persons
+```
+
+The quality of the margins with each constraints is contained in the variable `check.margins`
+of the resulting list. In our case, we fit all constraints.
+
+```{r}
+# printing the resulting margins
+result$check.margins
+```
+
+This reasoning works zone per zone and we can generate a 3-dimensional weight matrix. Another
+advantage of **mipfp** is that it allows cross-tabulated constraints to be added.
+In our example, we could add as target the contingency of the age and the diploma. 
+We can define this cross table:
+
+```{r}
+# define the cross table
+cross <- cbind(c(11,5,0,0), c(3,9,4,4), c(6,4,2,2))
+rownames (cross) <- names (diploma)
+colnames (cross) <- names(age)
+
+# print the cross table
+cross
+```
+
+When having several constraints concerning the same variable, we have to insure 
+the consistency across these targets (otherwise convergence might not be reached). 
+For instance, we can display the margins of `cross` along with `diploma` and `age`
+to validate the consistency assumption. There are
+both equal, meaning that the constraints are coherent.
+
+```{r}
+# check pertinence for diploma 
+rowSums(cross)
+diploma
+
+# check pertinence for age 
+colSums(cross)
+age
+```
+
+The `target` and `descript` have to be updated to include the cross table.
+Pay attention to the order
+of the arguments by declaring a contingency table. Then, we can execute
+the task and run *Ipfp* again:
+
+```{r}
+# defining the new target and associated descript
+target <- list(sex, age, diploma, cross)
+descript <- list(1, 2, 3, c(3,2))
+
+# running the Ipfp function
+result <- Ipfp(weight_init, descript, target, iter = 50, 
+               print = TRUE, tol = 1e-5)
+```
+
+The addition of a constraint leave less freedom to 
+the algorithm, implying that the algorithm 
+converges faster. By printing the results, we see 
+that all constraints are respected and
+we have a 3-dimensional contingency table.
+
+Note that the steps of integerisation and 
+expansion are pretty similar to the ones
+in **ipfp**. In the logic, it is exactly the same.
+The only difference is that for **ipfp** we consider
+vectors and for **mipfp** we consider arrays. 
+For this reason, another function of expansion
+is created for arrays.
+
+
+## Integerisation {#sintegerisation}
+
+\index{integerisation}
+
+### Concept of integerisation
+
 Note that if you are not 
 interested in knowing all details of
 the process to transform the weight table into 
@@ -852,13 +1055,10 @@ the final data, you can go directly to the sub section
 called "Integerisation and expansion", where the process
 to execute it for all zones is explained.
 
-
-### Integerisation {#sintegerisation}
-
-\index{integerisation}
-
-With the weight matrix containing doubles, so non-integer weights.
+The weight matrix contains doubles, so non-integer weights.
 Simply rounding the function often results in an undervalued population.
+Thus, we need to integerise the matrix, but by staying as close as possible
+to the constraints.
 Two main approaches are possible to obtain a resulting integer matrix.
 First, we can consider the weights as probabilities and inside each zone
 we can randomly draw the number of individuals needed (constraint of
@@ -872,10 +1072,11 @@ These processes are `Integerisation`. We propose here one way to
 do this.
 
 Integerisation is the process by which a vector of real numbers
-is converted into a vector of integers corresponding to the
+is converted into a vector of integers corresponding to the number of
 individuals present in synthetic spatial microdata.
 The length of the new vector must equal the weight vector
-and individuals with high weights must be sampled
+and high weights must be still high in the intergised version.
+Thus, high weights must be sampled
 proportionally more frequently than those with
 low weights for the operation to be effective.
 The following example illustrates how the process,
@@ -886,7 +1087,7 @@ $$w_1 = (0.333, 0.667, 3)$$
 
 $$int(w_1) = (0, 1, 3)$$
 
-Note that $w_1$ is a vector of same length. Then, $int(w_1)$ will be the result
+Note that $int(w_1)$ is a vector of same length. Then, $int(w_1)$ will be the result
 of the integerisation and each sell will contains an integer corresponding
 to the number of replication of this individual needed for this zone.
 This result was obtained by calculating the sum of 
@@ -1057,6 +1258,8 @@ different integerisation algorithms (Lovelace and Ballas 2013).
 This is why we use the TRS methodology, implemented through the function
 `int_trs`, for integerisation throughout the majority of this book.
 
+### Example of integerisation
+
 Let's use TRS to
 generate spatial microdata for SimpleWorld.  Remember, we already have generated
 the weight matrix `weights`.  To integerise the weights of first zone, 
@@ -1079,12 +1282,69 @@ The fascinating part of TRS is that you are sure that you result
 will first look like $(1,1,3,1,4)$ and then, it just reallocate the 
 two missing individuals by choosing two cells that will be incremented.
 
-### Expansion
+
+When using the **mipfp** package, the result is a cross table per category
+instead of a weight vector per individual. Consequently, we must repeat
+the categories instead of the individual. However, the integerisation step 
+is exactly similar, since we just need to have integers to replace the 
+doubles. The function `int_trs` presented before is 
+applicable on this 3 dimensional array. 
+
+```{r}
+set.seed(42)
+mipfp_int <- int_trs(result$x.hat)
+```
+
+The variable `mipfp_int` contains the integerised
+weights. This means that the cross table of all 
+target variables is stored in `mipfp_int`.
+
+We can look at the table before and after integerisation.
+To be more concise, we just print the sub-table
+corresponding to the first level of education.
+
+```{r}
+# Printing weights for first level of education
+# before integerisation
+result$x.hat[,,1]
+
+# Printing weights for first level of education
+# after integerisation
+mipfp_int[,,1]
+```
+
+The integerisation has just chosen between the two 
+integers close to the weight. Note that
+this step is indispensable, but can generate little
+divergence from the constraint. However, the 
+maximal error is always 1 per category.
+We could developp an algorithm to check the 
+constraint and be sure to still fit them, but
+this implies a more complicate and computational 
+expensive version. We consider unnecessary to 
+make this huge effort for the very little underlying improvement.
+To generate the final microdata, the only
+step missing is the expansion.
+
+
+## Expansion
 
 \index{expansion}
 
 As illustrated in figure 5.1., the remaining step to 
-create the spatial microdata is expansion. This can be achieved 
+create the spatial microdata is expansion. Depending
+on the chosen method, you can have as result either 
+a vector of weights per individual (for example with **ipfp**), 
+or a matrix of weights per different possible category (for example with **mipfp**).
+The expansion step will be a bit different if you have 
+one or the other structure of weights.
+
+### Weights per individual
+
+In this case, each integerised weight correspond
+to the number of needed repetition of this individual.
+For this purpose, we will first generate a 
+vector of IDs of the sampled individuals. This can be achieved 
 with the function `int_expand_vector`, defined below:
 
 ```{r}
@@ -1096,9 +1356,10 @@ int_expand_vector <- function(x){
 
 This function returns a vector. Each element of this vector
 represents an individual in the final spatial microdata and 
-each cell will contain the ID of the sampled individual
-of the sample to take. This is illustrated in the code below,
-which uses the integerised weights for zone 1, generated above. 
+each cell will contain the ID of the associated sampled 
+individual. This is illustrated in the code below,
+which uses the integerised weights for zone 1 of Simple World,
+generated above. 
 
 ```{r}
 int_weight1 # print weights 
@@ -1108,6 +1369,8 @@ exp_indices <- int_expand_vector(int_weight1)
 exp_indices
 ```
 
+The third weight was 4 and the associated 
+`exp_indices` contains 4 times the ID '3'.
 The final data can be found simply 
 by replicating the individuals.
 
@@ -1116,8 +1379,63 @@ by replicating the individuals.
 ind_full[exp_indices,]
 ```
 
+### Weights per category
 
-### Integerisation and expansion 
+
+This stage is different from the expansion 
+developped above, because the 
+structure of data is totally different.
+Indeed, above we simply need to
+replicate the individuals, where in the 
+this case, we have to retrieve 
+the category names to recreate the individuals.
+
+This process is included inside the 
+function `int_expand_array`. This little
+function first save a data frame version 
+of the integerised matrix. Then, the 
+`count_data` contains a line for each
+different combination of categories 
+(gender, sex, diploma) and the corresponding 
+number of individuals. Having this, 
+the remaining task is to consider only
+categories have more than 0 counts and
+repeat them the right number of times.
+
+
+```{r}
+int_expand_array <- function(x){
+  # Transform the array into a dataframe
+  count_data <- as.data.frame.table(x)
+  # Store the indices of categories for the final population
+  indices <- rep(1:nrow(count_data), count_data$Freq)
+  # Create the final individuals
+  ind_data <- count_data[indices,]
+  ind_data
+}
+```
+
+We apply this function to our data and the result
+is a `data.frame` object, whose rows represent individuals.
+The first column is the gender, the second is age 
+and the third is the education level. We print
+the head of this data frame and we can check that
+the individual of type (Male, Less18, Level1) is repeated
+5 times, which is its weight.
+
+```{r}
+# Expansion step
+ind_mipfp <- int_expand_array(mipfp_int)
+
+# Printing final results
+head(ind_mipfp)
+```
+
+Note that this example was designed for only one zone.
+A similar reasoning is applicable to as many
+zones as you want.
+
+## Integerisation and expansion 
 
 The process to transform the weights into
 spatial microdata is performed
@@ -1126,6 +1444,7 @@ to generate spatial
 microdata.^[Note that if you skipped the
 detailed previous sections, you will need 
 to load the functions by executing `source("R/functions.R")`.] 
+
 
 ```{r}
 # Method 1: using a for loop
@@ -1174,294 +1493,15 @@ ints_df[ints_df$zone == 2, ]
 save.image(file = "cache-smsim-in-R.RData")
 ```
 
+Note that we take here the example for the case of
+weights per individual, but the process for weights 
+per category is exactly the same except that you need
+to use the function `int_expand_array` instead of `int_expand_vector` and
+checking that the `i` is in the dimension corresponding to the zone.
+In the previous example for the array, we didn't 
+execute the algorithm for several zones. However, 
+this process will be explained in the comparison section.
 
-## Reweighting with **mipfp** {#mipfp}
-
-### Execution of  **mipfp**
-
-
-The R package **mipfp** is a more generalized implementation of the IPF algorithm
-than **ipfp**, and was designed for population synthesis.
-**ipfp** generates a two-dimensional weight matrix based on mutually
-exclusive (non cross-tabulated) constraint tables.
-This is useful for applications using constraints, which are only marginals and 
-which are not cross-tabulated.
-**mipfp** is more flexible, allowing multiple cross-tabulations
-in the constraint variables, such as age/sex and age/class combinations.
-
-```{r, echo=FALSE}
-# we have a new column with, at most, as many categories as the product of the number of categories for the variable age
-# and 2 (Male or Female). However, in this case, we need to have the cross table of the age and the sex available to 
-# proceed this way.
-```
-
-**mipfp** is therefore a multidimensional implementation of 
-IPF, which can 
-update an initial $N$-dimensional array with respect to given 
-target marginal distributions. These, in turn, can be multidimensional. 
-In this sense **mipfp** is more advanced than
-**ipfp** which solves only the 2 dimensional case.
-
-The main function of **mipfp** is `Ipfp()`, which
-fills a $N$-dimensional weight 
-matrix based on a range of aggregate-level constraint table options. 
-Let's test the package on some example data.
-The first step is to load the package into the workspace:
-
-```{r, message=F}
-library(mipfp) # after install.packages("mipfp")
-```
-
-To illustrate the use of `Ipfp`, we will create a fictive example. 
-The case of SimpleWorld is here too simple to really illustrate the power 
-of this package. The solving of SimpleWorld with `Ipfp` is included in 
-the next section containing the comparison between the two packages.
-
-The example case is as follows: to determine the contingency table 
-of a population characterized by categorical variables for age (0-17, Workage, 50+),
-gender (male, female) and educational level (level 1 to level 4).
-We consider a zone with 50 inhabitants. The classic spatial microsimulation 
-problem consists in having all marginal distributions and the cross-tabulated
-result (age/gender/education in this case) only for a non-geographical sample. 
-
-We consider the variables in the following 
-order: sex (1), age (2) and diploma (3).
-Our constraints could for example be:
-
-```{r}
-sex <- c(Male = 23, Female = 27) # n. in each sex category
-
-age <- c(Less18 = 16, Workage = 20, Senior = 14) # age bands
-
-diploma <- c(Level1 = 20, Level2 = 18, Level3 = 6, Level4 = 6) 
-```
-
-Note the population is equal in each constraint (50 people). Note also
-the order in which each category is encoded --- a common source of
-error in population synthesis.
-For this reason we have labelled each category of each constraint.
-The constraints are the target margins and need to be stored as a list.
-To tell the algorithm 
-which elements of the list correspond to which constraint,
-a second list with the description 
-of the target must be created. By printing *target* before to run the algorithm, 
-we can verify that we have encoded everything well.
-
-```{r}
-target <- list (sex, age, diploma)
-descript <- list (1, 2, 3)
-target
-```
-
-Now that all constraint variables have been encoded, let us define 
-the initial array to be updated, also referred as the seed or the weight matrix. The dimension
-of this matrix must be identical to that of the constraint tables:
-$(2 \times3 \times 4)$. Each cell of the array represents 
-a combination of the attributes' values, and thus defines a particular 
-category of individuals. In our case, we will consider that the weight
-matrix contains 0 when the category is not possible and 1 otherwise. In this example we 
-will assume that it is impossible for an individual being less than 18 
-years old to hold a diploma level higher than 2. 
-The corresponding cells are then set to 0, while the cells of the 
-feasible categories are set to 1.
-
-```{r}
-names <- list (names(sex), names(age), names(diploma))
-weight <- array (1, c(2,3,4), dimnames = names)
-weight[, c("Less18"), c("Level3","Level4")] <- 0
-```
-
-Everything being well defined, we can execute
-*Ipfp*. As with the package **ipfp**, we can chose a stopping criterion defined by *tol* and/or a maximum
-number of iterations. Finally, setting the argument `print` to `TRUE` 
-ensures we will see the evolution of the
-of the procedure. After reaching either the maximum number of iterations or convergence 
-(whichever comes first), the function will return a list containing the updated 
-array, as well as other information about the convergence of the algorithm. 
-Note that if the target margins are not consistent, the input data is then 
-normalised by considering probabilities instead of frequencies.
-
-```{r}
-result <- Ipfp(weight, descript, target, iter = 50, 
-               print = TRUE, tol = 1e-5)
-```
-
-Note that the fit improves rapidly attains the *tol* after 8 
-iterations. The `result`contains the final weight matrix
-and some information about the convergence. 
-We have a resulting table and we can validate the total number of 50 inhabitants 
-in the zone. Thanks to the definitions of names in the array, we can easily 
-interpret the result. There are a total 50 people and nobody of less than 18 years old
-own a diploma level 3 or 4, as desired.
-
-```{r}
-result$x.hat # print the result
-sum(result$x.hat) # check the total number of persons
-```
-
-The quality of the margins with each constraints is contained in the variable `check.margins`
-of the resulting list. In our case, we fit all constraints.
-
-```{r}
-# printing the resulting margins
-result$check.margins
-```
-
-This reasoning works zone per zone and we can generate a 3-dimensional weight matrix. Another
-advantage of **mipfp** is that it allows cross-tabulated constraints to be added.
-In our example, we could add as target the contingency of the age and the diploma. 
-We can define this cross table:
-
-```{r}
-# define the cross table
-cross <- cbind(c(11,5,0,0), c(3,9,4,4), c(6,4,2,2))
-rownames (cross) <- names (diploma)
-colnames (cross) <- names(age)
-
-# print the cross table
-cross
-```
-
-When having several constraints concerning the same variable, we have to insure 
-the consistency across these targets (otherwise convergence might not be reached). 
-For instance, we can display the margins of `cross` along with `diploma` and `age`
-to validate the consistency assumption. There are
-both equal, meaning that the constraints are coherent.
-
-```{r}
-# check pertinence for diploma 
-rowSums(cross)
-diploma
-
-# check pertinence for age 
-colSums(cross)
-age
-```
-
-The `target` and `descript` have to be updated to include the cross table.
-Pay attention to the order
-of the arguments by declaring a contingency table. Then, we can execute
-the task and run *Ipfp* again:
-
-```{r}
-# defining the new target and associated descript
-target <- list(sex, age, diploma, cross)
-descript <- list(1, 2, 3, c(3,2))
-
-# running the Ipfp function
-result <- Ipfp(weight, descript, target, iter = 50, 
-               print = TRUE, tol = 1e-5)
-```
-
-The addition of a constraint leave less freedom to 
-the algorithm, implying that the algorithm 
-converges faster. By printing the results, we see 
-that all constraints are respected and
-we have a 3-dimensional contingency table.
-
-Note that the steps of integerisation and 
-expansion are pretty similar to the ones
-in **ipfp**. In the logic, it is exactly the same.
-The only difference is that for **ipfp** we consider
-vectors and for **mipfp** we consider arrays. 
-For this reason, another function of expansion
-is created for arrays.
-
-### Integerisation in 
-
-Similarly to the **ipfp** package, the result is in a non-integer array. Consequently 
-we can generate a synthetic population either by considering the array cells 
-as probabilities for random draws or by applying steps similar to 
-the integerisation and expansion steps defined in the `ipfp` Section.
-
-The function `int_trs` presented in the **ipfp** section is 
-applicable on this 3 dimensional array. 
-
-```{r}
-set.seed(42)
-mipfp_int <- int_trs(result$x.hat)
-```
-
-The variable `mipfp_int` contains the integerised
-weights. This means that the cross table of all 
-target variables is stored in `mipfp_int`.
-
-We can look at the table before and after integerisation.
-To be more concise, we just print the sub-table
-corresponding to the first level of education.
-
-```{r}
-# Printing weights for first level of education
-# before integerisation
-result$x.hat[,,1]
-
-# Printing weights for first level of education
-# after integerisation
-mipfp_int[,,1]
-```
-
-The integerisation has just chosen between the two 
-integers close to the weight. This process has
-always a maximal error of 1 per category.
-To generate the final microdata, the only
-step missing is the expansion.
-
-
-### Expansion
-
-
-This stage is different from the expansion 
-used in the **ipfp** section, because the 
-structure of data is totally different.
-Indeed, with **ipfp** we simply need to
-replicate the individuals, where in the 
-**mipfp** case, we have to retrieve 
-the category names to recreate the individuals.
-
-This process is included inside the 
-function `int_expand_array`. This little
-function first save a data frame version 
-of the integerised matrix. Then, the 
-`count_data` contains a line for each
-different combination of categories 
-(gender, sex, diploma) and the corresponding 
-number of individuals. Having this, 
-the remaining task is to consider only
-categories have more than 0 counts and
-repeat them the right number of times.
-
-
-```{r}
-int_expand_array <- function(x){
-  # Transform the array into a dataframe
-  count_data <- as.data.frame.table(x)
-  # Store the indices of categories for the final population
-  indices <- rep(1:nrow(count_data), count_data$Freq)
-  # Create the final individuals
-  ind_data <- count_data[indices,]
-  ind_data
-}
-```
-
-We apply this function to our data and the result
-is a `data.frame` object, rows of which rows represent individuals.
-The first column is the gender, the second is age 
-and the third is the education level. We print
-the head of this data frame and we can check that
-the individual of type (Male, Less18, Level1) is repeated
-5 times, which is its weight.
-
-```{r}
-# Expansion step
-ind_mipfp <- int_expand_array(mipfp_int)
-
-# Printing final results
-head(ind_mipfp)
-```
-
-Note that this example was designed for only one zone.
-A similar reasoning is applicable to as many
-zones as you want.
 
 ## Comparing **ipfp** with **mipfp** {#compareipf}
 
