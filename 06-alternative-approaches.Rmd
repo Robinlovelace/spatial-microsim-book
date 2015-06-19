@@ -10,7 +10,7 @@ library(grid)
 load("cache-smsim-in-R.RData")
 ```
 
-# Alternative approaches to population synthesis {#alt}
+# Alternative approaches to population synthesis {#alternative-reweighting}
 
 ## GREGWT
 
@@ -252,7 +252,7 @@ by the number of other individuals who share the same combination of attributes.
 This may sound quite simple, so let's use the example of SimpleWorld to
 illustrate the point.
 
-### Reweighting with optim and GenSA
+## Reweighting with optim and GenSA
 
 The base R function `optim` provides a general purpose optimization framework
 for numerically solving objective functions. Based on the objective function
@@ -374,7 +374,7 @@ despite only requiring 2 iterations to arrive at a good level of fit.
 Note that these results are biased by the example that is pretty small 
 and runs only for the first zone.
 
-### Combinatorial optimisation
+## Combinatorial optimisation
 
 Combinatorial optimisation is a complete field consisting in a different
 method to result optimisation problem. Instead of having one candidate that
