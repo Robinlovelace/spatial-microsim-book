@@ -94,7 +94,8 @@ used as a sensible
 convention.]
 
 ```{r}
-# Create the weight matrix. Note: relies on data from previous chapter.
+# Create the weight matrix. 
+# Note: relies on data from previous chapter.
 weights <- matrix(data = 1, nrow = nrow(ind), ncol = nrow(cons))
 dim(weights) # dimension of weight matrix: 5 rows by 3 columns
 ```
@@ -1632,7 +1633,7 @@ we first compare the results before assessing the time taken by each package.
 # TODO (RL): cross reference image of CO vs reweighting approaches
 ```
 
-### Comparing the results
+### Comparing the weights for SimpleWorld
 
 The whole process using **ipfp** has been developed in the previous section.
 Here, we describe how to solve the same SimpleWorld 
@@ -1672,8 +1673,9 @@ We also consider income, so that it is stored in the format required by **mipfp*
 add it after, as seen in the expansion section.)
 
 ```{r}
+# load full ind data
+ind_full <- read.csv("data/SimpleWorld/ind-full.csv") 
 # Add income to the categorised individual data
-ind_full <- read.csv("data/SimpleWorld/ind-full.csv") # load full ind data
 ind_income <- cbind(ind, ind_full[,c("income")])
 weight_init <- table(ind_income[, c(2,3,4)])
 ```
@@ -1722,7 +1724,8 @@ which each row represents a zone.
 ```{r}
 # Initialising the result matrix
 Names <- list(1:3, colnames(con_sex)[c(2,1)], colnames(con_age))
-Mipfp_Tab <- array(data = NA, dim = c(n_zone, 2 , 2), dimnames = Names)
+Mipfp_Tab <- array(data = NA, dim = c(n_zone, 2 , 2), 
+                   dimnames = Names)
 
 # Loop over the zones and execute Ipfp
 for (zone in 1:n_zone){
@@ -1753,7 +1756,7 @@ This means that we can consider the zone as a variable, allowing
 population synthesis to be performed with no `for` loop,
 to generate a result for every zone. This could seem analogous to the use of
 `apply()` in conjunction with `ipfp()`, but it is not really the case. 
-Indeed, the version with `apply()` calls `n_zones` times the function
+Indeed, the version with `apply()` calls `n_zone` times the function
 `ipfp()`, where the **mipfp** is called only one time with the here 
 proposed abbreviation. 
 
@@ -1785,7 +1788,7 @@ mipfp_zones <- array(init_cells,
 
 The resulting array is larger than the ones obtained with `ipfp()`,
 containing `n_zone` times more 
-cells. Instead of having `n_zones` different little matrices,
+cells. Instead of having `n_zone` different little matrices,
 the result is here a bigger matrix. In total, the same number
 of cells are recorded.
 To access all information about the first zone, 
@@ -1934,14 +1937,64 @@ their results are in different structures. Weights are created for each
 individual with **ipfp** and weights for the contingency table with **mipfp**.
 The results can be transformed from one to the other form if needs be.
 
+### Comparing the results for SimpleWorld
+
+In this section, we compare the final dataset, 
+after integerisation and expansion, for SimpleWorld.
+The final individuals are stored in the variable 
+`ints_df` for the package **ipfp**.
+
+On the other side, for **mipfp**, the integerisation 
+and expansion steps need to be done. First, note
+that it is better to integerise zone per zone. Indeed, 
+the method consists in drawing randomly the remaining 
+individuals. However, if we execute it for all zones together,
+it is possible that an individual will be drawn in a zone
+already full and another zone will be under evaluated.
+
+```{r}
+# Save the matrix in a new variable
+int_mipfp <- res$x.hat
+# Integerise zone per zone
+for (i in 1:n_zone){
+  int_mipfp[i,,,] <- int_trs(int_mipfp[i,,,])
+}
+```
+
+Now, we can expand the result by using the same function
+as previously and call the final microdata `indiv_mipfp`.
+
+```{r}
+# Expansion of mipfp integerised weight matrix
+indiv_mipfp <- int_expand_array(int_mipfp)
+Names <- c("Zone", "Age", "Sex", "Income", "Freq")
+colnames(indiv_mipfp) <- Names
+```
+
+We print the result of both methods for zone 2.
+We observe that the **ipfp** package gives the precise
+age, whereas **mipfp** includes the categories. However, 
+it is sometimes better to stay in the category level,
+since the ages possible are only the ones present in the
+sample data. Moreover, due to the integerisation step, 
+the constraints are not perfectly fitted. Indeed, the
+**ipfp** result should include a supplementary man and
+**mipfp** a young.
+
+```{r}
+ints_df[ints_df$zone == 2, ]
+indiv_mipfp[indiv_mipfp$Zone==2,]
+```
+
+Usually, when dealing with big problems, the relative error 
+caused by this step is small.
+
 ### Speed comparisons
 
 This section compares the computational time of **mipfp** and **ipfp** approaches. 
 
 ```{r, eval=FALSE}
-# Measure time ipfp
-init <- rep(1, n_ind)
-system.time(ipfp(cons[1,], ind_catt, x0 = init,  tol = 1e-5))
+ind_mipfp <- int_expand_array(int_trs(res$x.hat))
 ```
 
 The above code measure the time taken to execute the `ipfp` function for the 
