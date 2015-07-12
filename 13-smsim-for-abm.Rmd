@@ -572,12 +572,62 @@ img <- readPNG("figures/nl-plots.png")
 grid.raster(img)
 ```
 
-The last thing we might want to do to complete the model is some sort of stopping condition, since as it stands the model will keep on running until we de-press the *go* button. There are several ways of doing this, using the command `stop` in the `go` procedure. We could for example insert as the first line into the `go` procedure the following code: `if ticks >= 2000 [ stop ]`, which will simply stop the model once 2000 iterations have passed. Or we can stop it when all the inhabitants have ended up in a single zone, while still stopping at 2000 ticks if that doesn't happen:
+### Stopping behavoir
+
+The last thing we might want to do to complete the model is some sort of stopping condition, since as it stands the model will keep on running until we de-press the *go* button. There are several ways of doing this, using the command `stop` in the `go` procedure. We could for example insert as the first line into the `go` procedure the following code: `if ticks >= 1000 [ stop ]`, which will simply stop the model once 1000 iterations have passed. Or we can stop it when all the inhabitants have ended up in a single zone, while still stopping at 1000 ticks if that doesn't happen:
 ```
 if (count inhabitants with [zone = 1] = 33) or
   (count inhabitants with [zone = 2] = 33) or
   (count inhabitants with [zone = 3] = 33) or
-  (ticks >= 2000)  [stop]
+  (ticks >= 1000)  [stop]
+```
+
+You will have noticed by now that the model, if left to run, ends up in one of two ways: either with all ihabitants in one zone, or in an indefinite "tie" between zones 1 and 3. Adding the `if ticks >= 1000` condition is one way of dealing with the tie issue. But it becomes problematic if we expect the model under some conditions to take longer to reach a single zone winning, so this is not ideal. Another way to avoid the problem of ties is to change the geography of SimpleWorld by *wrapping* the world horizontally (in the GUI settings menu) which creates a border between zones 1 and 3. SimpleWorld then becomes a vertical cylinder and inhabitants from zones 1 and 3 can bribe eachother across their new mutual border. 
+
+But in many situations this is not a satisfactory solution and we want to preserve the geography as we originally intednded it and allow a tie to be a legitimate end point of the model. So as a final addition to our SimpleWorld ABM we will add some code to keep track of the distribution of inhabitants across the zones and the number of ticks it has remained stable. Then we need to decide on a (rather arbitrary) cut off point after which we declare a tie and stop the model.  
+
+In order to do this we must define two global variables at the beginning of the code. The variable `inhabitant-distribution` will be a list of three values: the current number of inhabitants in each zone and the variable `time-stable` will be the number of ticks that have passed since the list has changed. 
+
+```
+globals [
+  inhabitant-distribution
+  time-stable
+  ]
+```
+We need to initialize the two variables from the setup procedure, so we add a new procedure `start-distribution-tracking` at the end of the setup procedure:
+
+```
+to start-distribution-tracking
+    set time-stable 0
+  set inhabitant-distribution (list 
+    count inhabitants with [zone = 1]  
+    count inhabitants with [zone = 2] 
+    count inhabitants with [zone = 3])
+end
+```
+
+Then we have to add a `track-distribution` procedure that executes at every tick, so we add it to the `go` procedure - at the end, after `record`. Each time `track-distribution` is called we create a local variable `new-inhabitant-distribution` and compare it to the existing one. If it is the same, we add one tick to the `time-stable` counter, otherwise we reset the counter back to zero. Finaly we replace the old distribution variable with the new one:
+
+```
+to track-distribution
+  let new-inhabitant-distribution (list 
+    count inhabitants with [zone = 1]  
+    count inhabitants with [zone = 2] 
+    count inhabitants with [zone = 3])
+  ifelse new-inhabitant-distribution = inhabitant-distribution [
+    set time-stable time-stable + 1]
+  [set time-stable 0]
+  set inhabitant-distribution new-inhabitant-distribution
+end
+```
+
+We now have a running counter tracking how long it has been since the inhabitant distribution has changed. Now all we need is to decide that e.g. 200 ticks with no change indicates a tie and the simulation can safely be stopped: 
+
+```
+if (count inhabitants with [zone = 1] = 33) or
+  (count inhabitants with [zone = 2] = 33) or
+  (count inhabitants with [zone = 3] = 33) or
+  (time-stable >= 200)  [stop]
 ```
 
 Now we have a working model to explore. You can try running it with different parameters to see how they affect the behaviour of the model, and you can also try expanding the model to add more. For example a simple way of doing that is by making the 10 % bribe a parameter of the model that can be adjusted by the user. But in order to systematically investigate the model, we want to explore the *parameter space* by systematically varying all the parameters and recording the results. 
@@ -586,13 +636,13 @@ NetLogo provides a tool for this called *Behaviour Space*, which can be found in
 
 ## Control the ABM from R
 
-The RNetLogo package ([citation]) allows us to control a NetLogo model directly from R. Now that we have a working model and have explored it in NetLogo to get a feel for what it's doing (and make sure that it is doing what we want it to do), we can explore the model more systematically, and for the most part do not need the graphical interface anymore. RNetLogo allows us to run the model silently in the background (in so called *headless mode*), issue commands, set global values, repeatedly run the model and collect the results. 
+The RNetLogo package ([citation]) allows us to control a NetLogo model directly from R. Now that we have a working model and have explored it in NetLogo to get a feel for what it's doing (and make sure that it is doing what we want it to do), we can explore the model more systematically: issue commands, set global values, repeatedly run the model and collect the results, everything directly from R.
 
 The RNetLogo package is installed in R like any other package using `install.packages("RNetLogo")` [fn: It does require that the package rJava ([citation]) is also installed, which may require some extra configuration of Java depending on your setup. ]. The basic code for opening and running a model in R is then:
 ```
 require(RNetLogo)
 
-NLStart("C:/Program Files (x86)/NetLogo 5.1.0", gui=FALSE)
+NLStart("C:/Program Files (x86)/NetLogo 5.1.0")
 NLLoadModel("C:/Users/mz/NetLogo/SimpleWorld.nlogo")
 
 [...main code here ...]
@@ -652,7 +702,26 @@ grid.raster(img)
 ```
 
 
+The `NLCommand` and `NLReport` functions can therefore be exectuted either singly or repeatedly using their "`Do`" versions. For ultimate control there are also "`Do-While`" versions of the functions which take as an argument a condition and keep executing until the condition is met [fn: In order to prevent NetLogo from getting stuck in an endless loop if you inadvertantly set a condition that is never met, the both od these commands have a `max.minutes` argument, the default value of which is 10. The execution will halt after this time has passed before the condition was met. This may be relevant especially if you are expecting to run a long simulation in which case you should increase the value - of course if you are absolutely certain that the condition will be met, then you can also set `max.minutes` to 0 and the command will be exectuted for as long as it takes. In fact for testing your code, when you might be prone to inadvertantly writing endless loops, it will make your life easier to change the value to 1 and avoid waiting the 10 minutes it takes for R to stop execution. ]
+
+To continue with our simple example the `NLDoCommandWhile` function could be used simply end the simulation after a certain number of ticks:
+
+```
+NLDoCommandWhile (" (ticks <= 100) " , "go")
+NLReport("ticks")
+```
+
 ### Running a single NetLogo simulation 
+
+We now have all the ingredients to run our model from R, and proboably do not need to observe the running model in the graphical interface anymore. RNetLogo allows us to run the NetLogo silently in the background (in so called *headless mode*), which runs quite a bit faster than using the GUI. We can also wrap all our NetLogo commands in an R function and make further simulation more modular. 
+
+Lets set up a single simulation where we open NetLogo silently, load the model, run the simulation until one zone wins or there is a definite tie, all the while collecting the average income in each zone. There is one thing we need to keep in mind running the simulation from R though: we are repeatedly calling a *single* `go` procedure as opposed to running it in NetLogo, where we are executing it *forever*. This means we will get no error if we issue the `go` command after the stopping conditions have been met, the call will simply do nothing. 
+
+
+```
+NLStart("C:/Program Files (x86)/NetLogo 5.1.0", gui=FALSE)
+NLLoadModel("C:/Users/mz/NetLogo/SimpleWorld.nlogo")
+
 
 
 ### Running multiple NetLogo simulations
