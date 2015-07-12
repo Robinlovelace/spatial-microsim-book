@@ -627,7 +627,7 @@ We now have a running counter tracking how long it has been since the inhabitant
 if (count inhabitants with [zone = 1] = 33) or
   (count inhabitants with [zone = 2] = 33) or
   (count inhabitants with [zone = 3] = 33) or
-  (time-stable >= 200)  [stop]
+  (time-stable >= 100)  [stop]
 ```
 
 Now we have a working model to explore. You can try running it with different parameters to see how they affect the behaviour of the model, and you can also try expanding the model to add more. For example a simple way of doing that is by making the 10 % bribe a parameter of the model that can be adjusted by the user. But in order to systematically investigate the model, we want to explore the *parameter space* by systematically varying all the parameters and recording the results. 
@@ -715,14 +715,65 @@ NLReport("ticks")
 
 We now have all the ingredients to run our model from R, and proboably do not need to observe the running model in the graphical interface anymore. RNetLogo allows us to run the NetLogo silently in the background (in so called *headless mode*), which runs quite a bit faster than using the GUI. We can also wrap all our NetLogo commands in an R function and make further simulation more modular. 
 
-Lets set up a single simulation where we open NetLogo silently, load the model, run the simulation until one zone wins or there is a definite tie, all the while collecting the average income in each zone. There is one thing we need to keep in mind running the simulation from R though: we are repeatedly calling a *single* `go` procedure as opposed to running it in NetLogo, where we are executing it *forever*. This means we will get no error if we issue the `go` command after the stopping conditions have been met, the call will simply do nothing. 
+We will set up a single simulation where we open NetLogo silently, load the model, run the simulation until one zone wins or there is a definite tie, all then collect the `history` of all inhabitants at the end. There is one thing we need to keep in mind running the simulation from R though: we are repeatedly calling a *single* `go` procedure. This means we can still continue to call `go` even if the stopping conditions in the procedure have been met - it simple means the call does nothing. Because there is no warning (or error - nothing went wrong) we have no way of knowing from R that we are continuing to call `go` which is not doing anything - unless we check the tick counter every time and make sure it has advanced by one. 
+
+So in order to run the simulation in R as we had designed it in NetLogo we simply use the same stopping conditions we used in the `go` procedure. In fact, if you plan to only run your model from R it is a good idea to delete the stopping conditions from the NetLogo code completely and make sure you always define them in the call from R. That way you can avoid setting stopping conditions in R that are less strict than the ones in the model, which would again mean R calling a `go` procedure that is not doing anything. And be careful: in NetLogo they were *stopping conditions*, but in `NLDoCommandWhile` they are exactly the inverse, so make sure you rewrite them appropriately!
+
+```
+SimpleWorld <- function(time.stable = 100) {
+  NLCommand("setup")
+  NLDoCommandWhile (paste("(count inhabitants with [zone = 1] < 33) and",
+                          "(count inhabitants with [zone = 2] < 33) and",
+                          "(count inhabitants with [zone = 3] < 33) and",
+                          "(time-stable <= ", time.stable, ") ") , "go")
+  NLGetAgentSet("history", "inhabitants")
+}
+```
+
+The `SimpleWorld` function can even take an argument that gets passed on to NetLogo: here we have made the 
+number of ticks before we declare a tie adjustable, in case we decide at some point that 100 is not really an appropriate value. Now we can run the simulation and explore the resulting data. Just like R, NetLogo also uses a pseudo random number generator so we can set the random seed we get the same result each time - this may be useful for testing your code and making sure you have set up the simulation the same way as these instructions. 
 
 
 ```
 NLStart("C:/Program Files (x86)/NetLogo 5.1.0", gui=FALSE)
 NLLoadModel("C:/Users/mz/NetLogo/SimpleWorld.nlogo")
+NLCommand("random-seed 42")
+inhabitant.histories <- SimpleWorld(50)
+```
+                  
+We now have the complete history of all 33 inhabitants in the simulation to explore! We can for example count how many times each inhabitant moved zones during the simulation and see if that number correlates with their starting income? You can perhaps guess inhabitants with low income will have changed more often, simply because they will have lost more negotiations, but how does the number of moves correlate with their final income? Or with their net income gain during the simulation? 
 
+```
+require(dplyr)
 
+history <- as.data.frame(matrix(unlist(inhabitant.histories), ncol=4, byrow=TRUE))
+colnames(history) <- c("id", "tick","income", "zone")
+
+changes <- group_by(history, id) %>%
+  mutate( change=c(0,diff(zone))) %>%
+  summarize(start.income = income[1],
+            end.income = tail(income,1),
+            income.change = end.income - start.income,
+            zone.changes = sum(change != 0))
+
+par(mfrow=c(1,3))
+plot(zone.changes ~ start.income , data=changes)
+abline(lm(zone.changes ~ start.income , data=changes))
+plot(zone.changes ~ end.income , data=changes)
+abline(lm(zone.changes ~ end.income , data=changes))
+plot(zone.changes ~ income.change , data=changes)
+abline(lm(zone.changes ~ income.change , data=changes))
+
+```
+
+```{r fig9, fig.cap="Number of zone changes correlated with inhabitants' income variables", fig.width=8, fig.height=4, echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("figures/history01.png")
+grid.raster(img)
+```
+
+Naturally there are many other things to explore in the `history` data frame. The flip side of the collected results being so rich is of course that this is a very large data object and it's collection during the simulation and importation into R cost valuable resources. The recommended course of action is therefore to explore the `history` data on a single simulation in order to decide on what is really of interest and then change the NetLogo model to only collect the data we are really interested in. In this case we could change the `record` procedure to only track the number of zone changes for each inhabitant, which would mean simply recovering 33 values at the end of the simulation instead of the full history table, which in this case (a relatively short run) was over 15,000 values. When running multiple simulations exploring the parameter space of the model, as we will do in the next section, collecting such data would be prohibitive.
 
 ### Running multiple NetLogo simulations
 
