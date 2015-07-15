@@ -44,7 +44,8 @@ library(rmarkdown)
 render("book.Rmd", output_format = "pdf_document")
 
 # Build the CRC-formated version - requires local files
-# source("R/build-CRC-version.R")
+# need to build the .tex manually
+# source("R/build-CRC-version.R") 
 # in case index does not build - run again!
 # system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
 
