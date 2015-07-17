@@ -25,33 +25,37 @@ This chapter explains how to take spatial microdata, of the type
 we have generated in the previous chapters, and allocate the resulting
 individuals into household units.
 
-As for all spatial microsimulation, the method to use
-depends on the data available. Having a sample of 
+As with all spatial microsimulation work, the appropriate method
+for household creation
+depends on the data available. Data availability scenarios,
+in descending order of detail, include:
+
+- Access to a sample of 
 households for which you have information about 
-each member is a possibility. Or, you can have
-independently data about individuals and households.
-In an other case, you have no aggregate data
-for the households, but some individuals'
-characteristics concern the household of
-this person (number of people living with, 
-type of households,...).
+each member.
+- Access to a separate datasets about individuals and households, stored in independent
+data tables that are not linked by household ID.
+-  No access to aggregate data relating to households, but access some
+individual-level variables related to the household of which they are a part
+(e.g. number of people living with, type of households).
 
-We will in this book develop a method
-for each of these three cases. The first
-possibility, having a sample of households
-is the topic of next chapter, developed
-thanks to a method called TRESIS. 
-
+This chapter explains methods
+for household-level data generation for the latter two cases. The first
+possibility, having a sample of households,
+is the topic of next chapter (Chapter 11) on the TRESIS method.
 In this chapter, we focus on the two cases
-where you have no microdata for the households.
+where you have no microdata for the households
+(one row of data per household). We begin by considering the
+case in which data on households and individuals remain completely separate.
 
 ## Independent data (individuals and households)
 
 The case when you have completely independent data
-is rather difficult. In most cases, the individuals 
-and households data don't fit to each other in this 
-configuration. Data coming from different sources
-and with different cleaning processes causes this
+is rather difficult. In most cases, the individual
+and household level cannot be linked in this 
+configuration. Data coming from different sources,
+sometimes implying different total populations,
+and with different cleaning processes can cause this
 inconsistency.
 
 We explain in this section the method
@@ -60,7 +64,7 @@ Associate Research Fellow (Agent-Based Modelling), SMART, University of Wollongo
 
 The idea is to proceed in three steps. 
 First, we determine the individual distribution, 
-thanks to for example the package `mipfp` as
+for example by using the package `mipfp`, as
 explained before. Second, we make a similar
 stage but for the household's data. This can
 be done by a totally similar way, considering
@@ -143,8 +147,9 @@ households and/or individuals may be smaller than estimated.
 ## Cross data : individuals and household's information
 
 This section is made thanks to a research funded by the 
-Wallonia Region of Belgium (a work in progress).^[This project is yield by 
-Morgane Dumont (UNamur), with the help of her comittee : Timoteo Carletti (UNamur),
+Wallonia Region of Belgium (a work in progress).^[This chapter was written by 
+Morgane Dumont from the University of Numur (UNamur),
+with the help of her comittee: Timoteo Carletti (UNamur),
 Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
 Eggericks (UCL Louvain-La-Neuve); the group DEMO of UCL-Louvain-La-Neuve and the
 OWS (Observatoire Wallon de la Santé).]
