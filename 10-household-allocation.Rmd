@@ -220,7 +220,7 @@ having the good characteristics.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{figures/HH-CO.png}
+\includegraphics[width=0.7\textwidth]{figures/HH-CO.png}
 \caption{Illustration of the combinatorial problem : How to group individuals into households.}
 \end{center}
 \end{figure}
@@ -229,8 +229,8 @@ For example, as illustrated
 on the figure above, we will divide the individuals by
 type of households and then by size of households. 
 Thus, for the type "married couples with children", we will 
-have sizes of at least 3 (to have two parents and a least a child).
-Inside this restricted set, we will look at each link with the head
+have sizes of at least 3 (to have two parents and at least a child).
+Inside this restricted sets, we will look at each link with the head
 and again split the pool per link. It is only after this classification
 that we will proceed to the random draw, respecting the links.
 For example, for the married couples, we first draw randomly a head
@@ -238,12 +238,27 @@ and then a partner of the opposite gender (the national register
 of Belgium for 2011 doesn't contain homosexual couples). Then, depending
 on the size of household to be generated, the right number of children
 are also drawn. This process ends when no additional household can be drawn 
-and respect the constraints.
+and respect the constraints. We observe on the illustration that we have
+a household with head 1, who is a woman; partner 2, who is a man;
+and two children : the 2 and the 5.
 
-The only possible errors with this method is caused by the errors incoherence 
-of the data or by the process of the IPF. 
+The only possible errors with this method are caused by the incoherence 
+of the data or by the process of the IPF before the grouping. 
 
 
 ### With additional household's data
+
+Without having data concerning the structure of household, the only
+possible method is the one of the previous section. 
+However, this allows improbable households, such as 
+couples between an individual of 18 years old and
+another of 81. For this reason, when we create households,
+it is often very useful to take into account
+the age distributions. We can consider the ages of a
+couple, but also of parents and children.
+
+To do this, you need tables of age differences and
+age must be in the characteristics of your individuals.
+
 
 ## References
