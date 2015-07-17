@@ -148,7 +148,7 @@ households and/or individuals may be smaller than estimated.
 
 This section is made thanks to a research funded by the 
 Wallonia Region of Belgium (a work in progress).^[This chapter was written by 
-Morgane Dumont from the University of Numur (UNamur),
+Morgane Dumont from the University of Namur (UNamur),
 with the help of her comittee: Timoteo Carletti (UNamur),
 Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
 Eggericks (UCL Louvain-La-Neuve); the group DEMO of UCL-Louvain-La-Neuve and the
