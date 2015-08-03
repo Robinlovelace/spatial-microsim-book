@@ -57,27 +57,26 @@ end
 
 to read-agent-data-2
   set-default-shape inhabitants "person"   
-  file-open csv ; opens connection to file - last line in procedure closes it
-  while [not file-at-end?][ ; outer loop through all rows
-     let %case file-read-line ; reads single line from .csv file
-     set %case word %case "," ; add a comma at the end
-     let %data.list []  ; set empty list to collect elements from each case
-     create-inhabitants 1[ ; create single agent and read their data:
-       while [not empty? %case] [  ; inner loop through all elements in row
-         let %pos position "," %case  ; find next comma
-         let %item read-from-string substring %case 0 %pos  ; extract item before the comma 
-         set %data.list lput %item %data.list  ; add the item to the list
-         set %case substring %case (%pos + 1) length %case  ; remove item and comma from case. repeat loop
+  file-open csv 
+  while [not file-at-end?][ 
+     let %case file-read-line 
+     set %case word %case "," 
+     let %data.list []  
+     create-inhabitants 1[ 
+       while [not empty? %case] [  
+         let %pos position "," %case  
+         let %item read-from-string substring %case 0 %pos  
+         set %data.list lput %item %data.list  
+         set %case substring %case (%pos + 1) length %case
          ]
-       ; now all the items from the row are a items in data.list. assign them to the agent
        set id item 0 %data.list 
        set zone.original item 1 %data.list
        set age item 2 %data.list
        set sex item 3 %data.list
        set income item 4 %data.list
-       ifelse sex = "m" [set color yellow] [set color green] ; assign colour based on sex
-       move-to one-of patches with [not any? turtles-here and zone = [zone.original] of myself ]
-       ; position agent in an empty patch in the correct zone. 
+       ifelse sex = "m" [set color yellow] [set color green] 
+       move-to one-of patches with [not any? turtles-here and 
+         zone = [zone.original] of myself ]     
      ]
   ] 
   file-close

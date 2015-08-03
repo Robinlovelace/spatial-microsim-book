@@ -200,10 +200,9 @@ grid.raster(img)
 
 In order to assign the relevant attributes to our agents we first need to create an appropriately formatted file to be read by NetLogo. 
 Our list of 33 agents and their attributes is in the data frame ints_df. In order to read it in NetLogo we first need to export it as a .csv file (making sure the row and column names are not also exported) and place it in the same folder as our .nlogo model:
-````{r}
-#save(ints_df, file="NetLogo/ints_df.RData")
-load("NetLogo/ints_df.RData")
-write.table(ints_df, "NetLogo/agents.csv", row.names=FALSE, col.names=FALSE, sep=",")
+````{r, eval=FALSE}
+write.table(ints_df, "NetLogo/agents.csv", row.names=FALSE, 
+            col.names=FALSE, sep=",")
 ````
 
 ### Defining variables
@@ -243,16 +242,16 @@ to read-agent-data
   set-default-shape inhabitants "person"
   file-open csv
   while [not file-at-end?][
-     let %line file-read-line ; reads single line from .csv file
-     create-inhabitants 1[
-       set id read-from-string substring %line 0 1  ; get the first value 
+     let %line file-read-line 
+     create-inhabitants 1 [
+       set id read-from-string substring %line 0 1  
        set zone.original read-from-string substring %line 2 3
        set age read-from-string substring  %line 4 6
        set sex substring %line 8 9
        set income read-from-string substring %line 11 15
-       ;set history [] ;[remove]
        ifelse sex = "m" [set color yellow] [set color green]
-       move-to one-of patches with [not any? turtles-here and zone = [zone.original] of myself ]
+       move-to one-of patches with [not any? turtles-here and 
+         zone = [zone.original] of myself ]
        ]
   ] 
   file-close
@@ -274,29 +273,27 @@ This way of reading in the data would not work however, if we had inhabitants of
 
 ```
 to read-agent-data-2
-  set-default-shape inhabitants "person"
-  file-open csv ; opens connection to file - last line in procedure closes it
-  while [not file-at-end?][ ; outer loop through all rows
-     let %case file-read-line ; reads single line from .csv file
-     set %case word %case "," ; add a comma at the end
-     let %data.list []  ; set empty list to collect elements from each case
-     create-inhabitants 1[ ; create single agent and read their data:
-       while [not empty? %case] [  ; inner loop through all elements in row
-         let %pos position "," %case  ; find next comma
-         let %item read-from-string substring %case 0 %pos  ; extract item before the comma 
-         set %data.list lput %item %data.list  ; add the item to the list
-         set %case substring %case (%pos + 1) length %case  ; remove item and comma from case. repeat loop
+  set-default-shape inhabitants "person"   
+  file-open csv 
+  while [not file-at-end?][ 
+     let %case file-read-line 
+     set %case word %case "," 
+     let %data.list []  
+     create-inhabitants 1[ 
+       while [not empty? %case] [  
+         let %pos position "," %case  
+         let %item read-from-string substring %case 0 %pos  
+         set %data.list lput %item %data.list  
+         set %case substring %case (%pos + 1) length %case
          ]
-       ; now all the items from the row are a items in data.list. assign them to the agent
        set id item 0 %data.list 
        set zone.original item 1 %data.list
        set age item 2 %data.list
        set sex item 3 %data.list
        set income item 4 %data.list
-       :set history [] ;[remove]
-       ifelse sex = "m" [set color yellow] [set color green] ; assign colour based on sex
-       move-to one-of patches with [not any? turtles-here and zone = [zone.original] of myself ]
-       ; position agent in an empty patch in the correct zone. 
+       ifelse sex = "m" [set color yellow] [set color green] 
+       move-to one-of patches with [not any? turtles-here and 
+         zone = [zone.original] of myself ]     
      ]
   ] 
   file-close
@@ -355,14 +352,16 @@ inhabitants-own [
 Before we start constructing the `Go` procedure, we need to add one more setup procedure: one that assigns each agent a level of bribeability. In order to have some level of stochasticity in our model, we will randomly pick a bribeability value from the normal distribution with the mean and standard deviation defined using the sliders. One way of doing that is with the following line [fn: You can try it out simply by typing it into the command centre. Seemingly nothing will happen, but if you inspect an inhabitant you will see that their `bribeability` variable is now 100.]:
 
 ```
-ask inhabitants [set bribeability random-normal average-bribeability stdev-bribeability ]
+ask inhabitants [set bribeability random-normal 
+  average-bribeability stdev-bribeability ]
 ```
 The problem with this command though, is that the normal distribution is unbounded, whereas a value of bribeability below 0% or above 100% makes no practical sense in our example. So we will use a little trick to force the values in the correct interval:
 
 ```
 to determine-bribeability
   ask inhabitants [
-    set bribeability median (list 0 (random-normal average-bribeability stdev-bribeability) 100) ]
+    set bribeability median (list 0 (random-normal 
+      average-bribeability stdev-bribeability) 100) ]
 end
 ```
 Placing the random value in a list with the values 0 and 100 means we can use the `median` command to extract it when it falls within the interval. But if it falls below 0 the median value of the three will be 0, and similarly if the random normal is over 100, the median will be 100. We can now add the procedure `determine-bribeability` to the setup procedure, which should look now like this [fn: Make sure you keep clear-all as the first and reset-ticks as the last procedures.]:
@@ -386,7 +385,7 @@ We are now ready to write the main action procedure, normally labelled the `go` 
 to go
   ;reposition
   ;engage
-  ;record [remove]
+  ;record
   tick
 end
 ```
@@ -397,7 +396,8 @@ For repositioning the inhabitants we can in fact use a very similar line of code
 ```
 to reposition
   ask inhabitants [
-    move-to one-of patches with [not any? turtles-here and zone = [zone] of myself ]
+    move-to one-of patches with [not any? turtles-here and 
+      zone = [zone] of myself ]
   ]
 end
 ```
@@ -456,11 +456,14 @@ Finally the `find-pairs-and-negotiate` procedure, where we rely again on several
 to find-pairs-and-negotiate
   ask inhabitants [
     if in-negotiations = false [
-      let %field-of-vision patches in-cone distance-of-vision angle-of-vision  with [zone != [zone] of myself]
-      let %viable-partners ((inhabitants-on %field-of-vision)  with [ in-negotiations = false])
+      let %field-of-vision patches in-cone distance-of-vision 
+        angle-of-vision  with [zone != [zone] of myself]
+      let %viable-partners ((inhabitants-on %field-of-vision) 
+        with [ in-negotiations = false])
       if count %viable-partners > 0 [
           let %party self
-          let %counter-party  min-one-of %viable-partners [distance myself]          
+          let %counter-party  min-one-of %viable-partners 
+            [distance myself]          
           negotiate (turtle-set %party %counter-party)  
           ]
       ]
@@ -501,7 +504,8 @@ to negotiate [ parties ]
   if (random-float 100 < [bribeability] of loser)[ 
     ask loser[
       set income income + 0.1 * [income] of winner
-      move-to one-of patches with [not any? turtles-here and zone = [zone] of winner ]
+      move-to one-of patches with [not any? turtles-here and 
+        zone = [zone] of winner]
       set color brown]
     ask winner[
       set income income * 0.9]
@@ -667,10 +671,11 @@ NLReport("ticks")
 should now show the tick counter to be 51. We can also repeatedly call a reporter, in this case we have to pass both a command to be repeated a certain number of times and a reporter that will be executed each time. Naturally we can also assign the resut to an R variable, and instead of the default list data class return it as a data frame instead:
 
 ```
-test <- NLDoReport(10,"go", c(" ticks",
-                              "count inhabitants with [zone = 1]",
-                              "count inhabitants with [zone = 2]",
-                              "count inhabitants with [zone = 3]"), 
+test <- NLDoReport(10,"go", 
+                   c(" ticks",
+                     "count inhabitants with [zone = 1]",
+                     "count inhabitants with [zone = 2]",
+                     "count inhabitants with [zone = 3]"), 
                    as.data.frame = TRUE)
 test
    X1 X2 X3 X4
@@ -686,13 +691,14 @@ test
 10 61 12  9 12
 ```
 
-Finally we can aslo extract the current variable values from an agentset. For example the incomes and current zones of all inhabitants, which we can then visualize using a simple boxplot:
+Finally we can aslo extract the current variable values from an agentset. For example the incomes and current zones of all inhabitants, which we can then visualize using a simple boxplot (Figure 8):
 
 ```
-current.state <- NLGetAgentSet(c("who","income", "zone"), "inhabitants")
+current.state <- NLGetAgentSet(c("who","income", "zone"), 
+                               "inhabitants")
 boxplot(current.state$income~current.state$zone,
-        xlab="Zone", ylab="Income", 
-        main=paste("Income distribution after", NLReport("ticks"), "ticks" ))
+        xlab="Zone", ylab="Income", main=paste("Income distribution after",
+                                               NLReport("ticks"), "ticks" ))
 ```
 ```{r fig8, fig.cap="NetLogo data plotted in R", fig.width=6, fig.height=4, echo=FALSE}
 library(png)
@@ -777,9 +783,112 @@ Naturally there are many other things to explore in the `history` data frame. Th
 
 ### Running multiple NetLogo simulations
 
+We will focus on a simple outcome variable: the amount of time (number of ticks) it takes for the simulation to end with clear win for one zone. For simplicity we will treat all simulations that exhibit no changes for over 200 ticks as non-convergent and ignore them. We will explore how this outcome varies depending on the parameters `angle-of-vision` and `distance-of-vision`. This is called a *full factorial experiment* and is only really practical if we have a few parameters to explore, which is why we will stick with only the two variables mentioned. 
+
+First let's rewrite the simulation function to set the appropriate variables before each run (the briebeability variables will not be changing in this simulation, but it is safer to set them explicitly as they may have been changed manually in NetLogo and we would not even notice, because we are running it witout the GUI!). After the variables are set, we of course call the `setup` procedure. We can omit the conditions for running `go` by simply stopping after nothing has changed for 200 ticks, regardless of how many zones are still in play. After the simulation is finnished, we collect two values: the number of ticks minus the value of time-stable, giving us the actual length of the simulation run before it stabilized, and the number of zones that were occupied at the end. [fn. Make sure you remove the history recording from the .nlogo file as it so no longer necessary and will simply slow down the simulations.]  
+
+```
+SimpleWorld <- function(angle.of.vision=360, distance.of.vision=10,time.stable = 200) {
+  NLCommand (paste("set average-bribeability", 100))
+  NLCommand (paste("set stdev-bribeability", 0))
+  NLCommand (paste("set angle-of-vision", angle.of.vision))
+  NLCommand (paste("set distance-of-vision", distance.of.vision))
+  NLCommand("setup")
+  NLDoCommandWhile (paste("(time-stable <= ", time.stable, ") ") , "go")
+  c(NLReport(c("ticks - time-stable", nrow(unique(NLGetAgentSet( "zone", "inhabitants"))))))
+}
+
+```
+
+The next step is to create a function to run multiple simulations where `reps` determines the number of repetitions of each parameter value combination and `a.o.v` and `d.o.v` determine the value sequences of each parameter that the simulation iterates through. Within it we first create a data frame of the parameter space we intend to examine, with a singl row for each simulation run. The function then iterates through this dataframe, each time running the `SimpleWorld` function with the appropriate arguments and collecting these, together with the simulation results, as a data frame with a single row. At the end of all the runs, these are simply binded together into a final data frame with all the results. 
+
+```
+MultipleSimulations <- function (reps=1, a.o.v = 360, d.o.v = c(5,10)){
+  p.s <- expand.grid(rep = seq(1, reps), a.o.v = a.o.v, d.o.v = d.o.v) 
+  result.list <- lapply(as.list(1:nrow(p.s)), function(i) 
+    setNames(cbind(p.s[i,], SimpleWorld(p.s[i,2], p.s[i,3])), c("rep", "a.o.v", "d.o.v", "ticks", "zones")))
+  do.call(rbind, result.list)
+}
+```
+
+To be on the safe side, we may want to give this function a little test run with only two sets of parameter values and two repetitions each. 
+```
+results.df <- MultipleSimulations(reps=2, a.o.v=360, d.o.v=c(5,10))
+results.df
+  rep a.o.v d.o.v ticks zones
+1   1   360     5    49     2
+2   2   360     5    94     1
+3   1   360    10    16     2
+4   2   360    10    57     1
+
+```
+
+The first three columns in the `results.df` data frame are simply the simulation parameters: the number of the repetition and the angle-of-vision and distance-of-vision parameters that were passed to NetLogo. The final two columns give the number of ticks the simulation required to stabilize and the number of zones occupied at the end. Assuming we are happy with the functions, we can now try to running a more serious simulation e.g. five repetitions exploring pretty much the whole of the parameter space - this may take a while!
+
+```
+results.df <- MultipleSimulations(5,seq(60,360,30),seq(1,10) )
+```
+
+With the results safely stored in the data frame, we can summarise the data and visualise it as well. [fn: In order to smooth out the results the data presented here is based on 20 repetitions.] Using the `dplyr` package to reorganize our data we can see how the number of zones occupied at the end of the simulation differed across the parameter space. 
+
+```
+zones <- results.df %>%
+  group_by(a.o.v, d.o.v, zones) %>%
+  summarize(prop.sims = n()/reps) %>%
+  group_by(a.o.v, d.o.v)
+
+head(zones)
+Source: local data frame [6 x 4]
+Groups: a.o.v, d.o.v
+
+  a.o.v d.o.v zones prop.sims
+1    60     1     3      1.00
+2    60     2     2      0.15
+3    60     2     3      0.85
+4    60     3     1      0.15
+5    60     3     2      0.75
+6    60     3     3      0.10
+```
+
+We can see that in the first set of simulations with angle of vision being 60 and the distance of vision only 1, all of the simulations ended with a three way draw. In the next set, where the distance was set to 2, 85 % of the simulations still ended in a three way draw, while the remaining 15 % were a two way draw. Figure 10 summarises the data for all 2200 simulations. While there is a clear cluster of three-way ties in the bottom left hand corner, which corresponds to the simulations with the smallest field of vision, there is interestingly no observable pattern to distinguish the two-way ties and single zone simulations. 
 
 
+```{r fig10, fig.cap="Number of zones occupied at end of simulation (20 repetitions)", fig.width=8, fig.height=4, echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("figures/nl-zones.png")
+grid.raster(img)
+```
+
+If we focus on the simulations where a single winning zone emerged, we can find the average number of ticks required across the parameter space 
+
+```
+av.ticks <- results.df %>%
+  group_by(a.o.v, d.o.v) %>%
+  filter(zones == 1) %>%
+  summarize(mean.ticks = mean(ticks, na.rm=TRUE))
+
+head(av.ticks)
+Source: local data frame [6 x 3]
+Groups: a.o.v
+
+  a.o.v d.o.v mean.ticks
+1    60     3  1876.6667
+2    60     4  1577.1000
+3    60     5   973.6667
+4    60     6   368.7000
+5    60     7   265.6000
+```
+
+The average tick counts for all the 2200 simulations (or rather in this case only the 989 that ended with a winnign zone) can be plotted as a heatmap (Figure 11). 
+
+```{r fig11, fig.cap="Average number of ticks in simulations with single zone winning", fig.width=8, fig.height=4, echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("figures/nl-ticks.png")
+grid.raster(img)
+```
 
 
-
+This is of course only a taster of the numerous options for agent-based modelling exploration you now have at your disposal having integrated NetLogo with R. For an excellent overview with practical examples see in particular Thiele et al.(2014), which covers a variety of parameter estimation and optimisation methods as well as a comprehensive set of approaches to sensitivity analysis using the RNetLogo setup described here. 
 
