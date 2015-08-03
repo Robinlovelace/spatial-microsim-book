@@ -25,33 +25,37 @@ This chapter explains how to take spatial microdata, of the type
 we have generated in the previous chapters, and allocate the resulting
 individuals into household units.
 
-As for all spatial microsimulation, the method to use
-depends on the data available. Having a sample of 
+As with all spatial microsimulation work, the appropriate method
+for household creation
+depends on the data available. Data availability scenarios,
+in descending order of detail, include:
+
+- Access to a sample of 
 households for which you have information about 
-each member is a possibility. Or, you can have
-independently data about individuals and households.
-In an other case, you have no aggregate data
-for the households, but some individuals'
-characteristics concern the household of
-this person (number of people living with, 
-type of households,...).
+each member.
+- Access to a separate datasets about individuals and households, stored in independent
+data tables that are not linked by household ID.
+-  No access to aggregate data relating to households, but access some
+individual-level variables related to the household of which they are a part
+(e.g. number of people living with, type of households).
 
-We will in this book develop a method
-for each of these three cases. The first
-possibility, having a sample of households
-is the topic of next chapter, developed
-thanks to a method called TRESIS. 
-
+This chapter explains methods
+for household-level data generation for the latter two cases. The first
+possibility, having a sample of households,
+is the topic of next chapter (Chapter 11) on the TRESIS method.
 In this chapter, we focus on the two cases
-where you have no microdata for the households.
+where you have no microdata for the households
+(one row of data per household). We begin by considering the
+case in which data on households and individuals remain completely separate.
 
 ## Independent data (individuals and households)
 
 The case when you have completely independent data
-is rather difficult. In most cases, the individuals 
-and households data don't fit to each other in this 
-configuration. Data coming from different sources
-and with different cleaning processes causes this
+is rather difficult. In most cases, the individual
+and household level cannot be linked in this 
+configuration. Data coming from different sources,
+sometimes implying different total populations,
+and with different cleaning processes can cause this
 inconsistency.
 
 We explain in this section the method
@@ -60,7 +64,7 @@ Associate Research Fellow (Agent-Based Modelling), SMART, University of Wollongo
 
 The idea is to proceed in three steps. 
 First, we determine the individual distribution, 
-thanks to for example the package `mipfp` as
+for example by using the package `mipfp`, as
 explained before. Second, we make a similar
 stage but for the household's data. This can
 be done by a totally similar way, considering
@@ -138,5 +142,108 @@ to find a member for a household in the previously generated ones.
 Note that when the procedure stops, two types of inconsistencies 
 may remain in the synthetic population: the final number of 
 households and/or individuals may be smaller than estimated.
+
+
+## Cross data : individuals and household's information
+
+This section is made thanks to a research funded by the 
+Wallonia Region of Belgium (a work in progress).^[This chapter was written by 
+Morgane Dumont from the University of Numur (UNamur),
+with the help of her comittee: Timoteo Carletti (UNamur),
+Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
+Eggericks (UCL Louvain-La-Neuve); the group DEMO of UCL-Louvain-La-Neuve and the
+OWS (Observatoire Wallon de la Santé).]
+
+In some cases, data concerning the households are included in the
+individual datasets. For example, in data concerning the 
+individuals, we also have a contingency table of sex, age and
+the number of cohabitants. Thus, we have a cross information between
+the households and the individuals. Considering the number of cohabitants
+as an usual variable, we can perform an IPF to obtain, per zone, inhabitants
+described by individual variable (such as sex, age, income, ...) and some
+household's information (such as household's type, household's size, ...).
+Ti deal with these kind of data, we have two possible alternatives: 
+either we chose to aggregate
+these data to have independent data or we have to find a technique to 
+use the whole power of our data. The former solution is more simple and 
+needs only the first chapters of the book, but it is also 
+a loss of possible precision. In the sense that we aim to 
+reach a synthetic population statistically as close as possible to 
+the real population, our preference goes in the second possibility, 
+which is explained in this section.
+
+In this situation, we usually proceed in two stages. First, we create
+the individuals with all their characteristics.
+Then, the second step is to group these individuals into households.
+This corresponds to a huge combinatorial problem. Indeed, each
+person has to be in one and only one households and we have to 
+determine who lives with who.
+
+For this process, we also have two possible cases. Indeed, on one 
+side, each individual contains information about its household and
+we have no access to additional data concerning the structure of the
+households. For example, the age difference between two married persons.
+On the other side, you can have only the data from these 
+created individuals.
+
+Note that in the case of the study for Belgium, we have
+some pertinent additional data. However, we will continue the
+section by explaining the used methods without and with
+these supplementary tables.
+
+### Without additional household's data
+
+When having only the household's constraints 
+contained in the individual's characteristics, 
+the aim is to form households where each individual
+is contained in one and only one households and respects
+as well as possible its attributes. For example, in the
+case of the study for Belgium, each individual has the attributes
+(after an IPF process) :
+age, gender, municipality, education level and professional status and, 
+in addition, size and type of its personal households and the link
+with the head (wife, child, ...). A good grouping is one that 
+maximises the number of well fitted constraints. Indeed, the perfect
+association would be one where each individual respects its size and
+type of household and link with the head. In general, it
+is impossible to reach a perfect grouping, since the data are not 
+exactly coherent. For example, if you have an odd number
+of persons who need to live in couple, it will be impossible
+to find a perfect coupling.
+
+In our Belgian study, to maximise this fit, we chose to 
+first create pools of individuals and secondly to draw
+the households "randomly". We chose to quote "randomly",
+because we will make this draw only inside a pool of individuals 
+having the good characteristics.
+
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{figures/HH-CO.png}
+\caption{Illustration of the combinatorial problem : How to group individuals into households.}
+\end{center}
+\end{figure}
+
+For example, as illustrated
+on the figure above, we will divide the individuals by
+type of households and then by size of households. 
+Thus, for the type "married couples with children", we will 
+have sizes of at least 3 (to have two parents and a least a child).
+Inside this restricted set, we will look at each link with the head
+and again split the pool per link. It is only after this classification
+that we will proceed to the random draw, respecting the links.
+For example, for the married couples, we first draw randomly a head
+and then a partner of the opposite gender (the national register
+of Belgium for 2011 doesn't contain homosexual couples). Then, depending
+on the size of household to be generated, the right number of children
+are also drawn. This process ends when no additional household can be drawn 
+and respect the constraints.
+
+The only possible errors with this method is caused by the errors incoherence 
+of the data or by the process of the IPF. 
+
+
+### With additional household's data
 
 ## References
