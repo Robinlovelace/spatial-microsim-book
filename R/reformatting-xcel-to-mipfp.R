@@ -1,0 +1,46 @@
+pkgs <- c("readxl")
+lapply(pkgs, library, character.only = T)
+
+df <- read_excel("/tmp/Case Study 3 Data.xlsx", sheet = 2)
+df <- df[1:48,]
+head(df)
+
+n1 <- as.character(df[2,3:7]) # first set of names
+
+
+# remove sums
+d <- df
+sel <- df[,2] == "Sum"
+d <- d[!sel,]
+d <- d[-c(1:2)]
+d <- d[1:5]
+d <- d[-c(1, nrow(d)),]
+d <- d[-1,]
+
+# convert to multi-dimensional array
+dnames <- c("age", "eth", "health")
+dims <- c(8, 5, 5)
+
+
+dvec <- as.numeric(d)
+# apply(dvec, MARGIN = 2, FUN = class)
+# d <- apply(X = d, MARGIN = 2, FUN = as.numeric)
+
+seed <- array(data = dvec, dim = dims, dimnames = dnames)
+
+# marginal
+
+# read-in the data
+
+# for zone 1 
+target.data <- list(c1, c2, c3) # each c is marginal for 1 constraint and 1 zone
+Ipfp() # for zone 1
+
+result <- as.list(1:348)
+result[[1]] #
+for(i in 1:nrow(constraints)){
+  target.data <- list(c1 = ...,
+    )
+  result[[i]] <- Ipfp()
+}
+
