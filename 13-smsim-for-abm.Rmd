@@ -15,18 +15,10 @@ bibliography: bibliography.bib
 
 # Spatial microdata in agent-based models {#ABM}
 
-Agent-based models (ABMs) of human systems require information about the 
-individual people that the agents will represent.
-One way to initialise an ABM, is through the use of spatial microsimulation
-
-Agent-based models involve three things:
-
-1. a number of discrete agents, who have
-2. different characteristics and which
-3. interact with each other and their environment.
-
-ABM is a powerful and extremely flexible approach to modelling.
-ABM allows analysis of problems that are highly non-linear and *emergent*:
+Agent-based modelling is a powerful and extremely flexible approach for
+simulating complex systems.
+Agent-based models (ABMs)
+allow analysis of problems that are highly non-linear and *emergent*:
 the dominant processes guiding change can only be seen after the event.
 This is
 advantageous, allowing a very wide range of problems to be tackled through
@@ -38,21 +30,33 @@ agent-based modelling and arrive at incorrect conclusions. Using spatial
 microsimulation to generate realistic input populations is one way that
 ABM can be made to more closely represent the population under study.
 
+ABMs require information about the 
+individual people, households or other units that the agents will represent.
+One way to generate input data for
+an ABM is through spatial microsimulation.
+Although ABMs can be very diverse, all agent-based models involve
+at least three things:
+
+1. a number of discrete agents with characteristics
+2. who exist in an environment
+3. and who interact with each other and the environment.
+
 Note that based on the above definition we
 already have two-thirds of the necessary ingredients
-of an ABM: the synthetic spatial microdata created in previous chapters can,
-with the right tools, skills and understanding, be used almost directly as an
+of an ABM: the synthetic spatial microdata created in previous chapters
+represent individuals with characteristics allocated to zones (the environment).
+With the right tools spatial microdata can be used as an
 input into ABM. If your aim is to use spatial microdata as an input into
-agent based models, you're more than half way there!
+agent based models, you may already be more than half way there!
 
-Before describing the transition from the
-spatial microdata to ABM based on a simple example (you guessed it --- SimpleWorld),
-it is worth mentioning some applications of ABMs built on spatial microdata
-and some of the tools that will be useful for the job.
-
-## ABM applications
-
-
+```{r}
+# # Commented out: we can re-include at some point
+# Before describing the transition from the
+# spatial microdata to ABM based on a simple example (you guessed it --- SimpleWorld),
+# it is worth mentioning some applications of ABMs built on spatial microdata
+# and some of the tools that will be useful for the job.
+# ## ABM applications
+```
 
 ## ABM software
 
@@ -110,22 +114,24 @@ and other agent-based modelling programs do not.
 
 ## Setting up SimpleWorld in NetLogo 
 
-The NetLogo programming language is a well developed and documented modelling environment and the reader is encouraged to explore the numerous tutorials and the rich library of pre-written models that come with the programme. This chapter provides a very limited introduction to NetLogo's functionality required to build SimpleWorld.
+The NetLogo programming language is a well developed and documented modelling environment. The reader is encouraged to explore the numerous [tutorials](http://ccl.northwestern.edu/netlogo/docs/tutorial1.html) and the rich library of pre-written models that come with the programme (File > Model Library). This chapter introduces the basics of NetLogo's functionality to create an ABM of SimpleWorld.
 
-In NetLogo the design of the model's graphical user interface (GUI) is handled differently than the model procedures. The latter are constructed in code using the NetLogo programming language in the Code tab, and this is discussed in more detail below. The graphical interface on the other hand, which includes the agents' world as well the control *widgets*, is set up using the drop-down menus located in the Interface tab toolbar. 
+In NetLogo the design of the model's graphical user interface (GUI) is handled separately from the model procedures. This is analogous to the separation in R's [**shiny**](http://shiny.rstudio.com/) package between the user interface and the 'server side'. The latter are constructed in code using the NetLogo programming language in the Code tab (discussed below). The graphical interface, which includes the environment and the control *widgets*, is set-up using the drop-down menus located in the Interface toolbar. 
 
-The whole model is saved as a .nlogo file, which is a text file that includes both the code, the GUI parameters as well as the contents of the (optional) Info tab. Although .nlogo files are human readable, most of the information relating to the GUI is not very easy to manipulate and it is therefore recommended you not open and modify the .nlogo file directly. [fn: From the point of view of the reproducible research paradigm this setup is not ideal. The non-manually-coded aspect of designing the GUI makes it imprecise, albeit this refers to mostly trivial aspects such as the alignment of buttons and sliders. In the end the GUI design is still written in the .nlogo file, so in a strict sense it is in fact transferable and reproducible.]
+The whole model is saved as a .nlogo file. This text file includes code, GUI parameters and the contents of the (optional) Info tab. Although .nlogo files are human readable, most of the information relating to the GUI is difficult to manipulate. We advise against modifying the .nlogo file
+directly.^[From a reproducibility perspective this setup is not ideal. The non-manually-coded aspect of designing the GUI (which relies on point-and-click and is therefore hard to automate) makes it imprecise, albeit this refers to mostly trivial aspects such as the alignment of buttons and sliders. The GUI design is still written in the .nlogo file so, strictly speaking, it is in fact transferable and reproducible.]
 
-### Graphical Interface in NetLogo
-The Graphical Interface of your model in NetLogo has three types of elements: controls, settings and views. The minimum requirement for a model to work - and these are the only two default elements when you open a new model - are the Graphics window (a *view*) and the Command  Centre (a *control*). For most purposes however you will want to add others and adjust the defaults. The Graphics window for example, which defines the ABM *world*, has a default size of 33 by 33 patches, 13 pixels square, which  wrap both horizontally and vertically -- settings that can quickly turn out to be inappropriate. 
+### Graphical User Interface in NetLogo
+
+The GUI of your model in NetLogo has three types of elements: controls, settings and views. The minimum requirement for a model to work --- and these are the only two default elements when you open a new model --- are the Graphics window (a *view*) and the Command  Centre (a *control*). For most purposes however you will want to add others and adjust the defaults. The Graphics window for example, which defines the ABM *world*, has a default size of 33 by 33 patches, 13 pixels square. These  wrap both horizontally and vertically, settings that can quickly turn out to be inappropriate. 
 
 The main elements of the NetLogo GUI are described below, along with their setup for the SimpleWorld agent-based model.
 
 #### Views
+
 In addition to the main view of our agents' world, the other optional views are monitors, plots and an output window. 
 
-As already mentioned, the Graphical window is the most important - mandatory - part of the GUI. We will adjust it to suit our SimpleWorld needs using the Settings button on the right-hand side of the Interface tab toolbar. First change the default location of origin from "Center" to "Corner".Then set the value of max-pxcor to 35 and max-pycor to 17. With [0 0] describing the coordinates of the bottom left patch, this means we now have a 36 by 18 size world. Untick both the world wrapping boxes and click Apply. You may find the size inappropriate for your screen in which case adjust the value of Patch size until you are happy with the interface size. Right-clicking on a patch and selecting the bottom option "inspect patch x y" will open a patch monitor where you can inspect the values of all the patch's variables, currently only the default ones: its coordinates, colour, label and label colour. These can be changed in the monitor, but we will change them programmatically instead just a bit later.
-
+As already mentioned, the Graphical window is the most important --- mandatory --- part of the GUI. We will adjust it to suit SimpleWorld with the Settings button on the right-hand side of the Interface tab toolbar. First change the default location of origin from "Center" to "Corner". Then set the value of max-pxcor to 35 and max-pycor to 17. With [0 0] describing the coordinates of the bottom left patch, this means we now have a 36 by 18 size world. Untick both the world wrapping boxes and click Apply. You may find the size inappropriate for your screen in which case adjust the value of Patch size until you are happy with the interface size. Right-clicking on a patch and selecting the bottom option "inspect patch x y" will open a patch monitor where you can inspect the values of all the patch's variables, currently only the default ones: its coordinates, colour, label and label colour. These can be changed in the monitor, but we will change them programmatically below.
 
 ```{r fig1, fig.cap="Setting the world size and resolution", fig.width=4, fig.height=4, echo=FALSE}
 library(png)
@@ -134,10 +140,9 @@ img <- readPNG("figures/nl-graphics-window.png")
 grid.raster(img)
 ```
 
-Monitors report the values of variables. Our model currently doesn't have very many variables, but to demonstrate we can add a monitor - either by right-clicking somewhere on the empty interface or by clicking the Add button on the toolbar and selecting Monitor from the dropdown menu next to it. In the dialogue box that appears type `count patches` in the reporter field and click OK. 
+Monitors report the values of variables. Our model currently has no variables. To demonstrate, add a monitor --- either by right-clicking somewhere on the empty interface or by clicking the Add button on the toolbar and selecting Monitor from the dropdown menu next to it. In the dialogue box that appears type `count patches` in the reporter field and click OK. 
 
 Instead of just reporting the current value of a variable, plots report their changing value through time when the model is running, which can be a very useful visual summary of the model's progress. We will set up a plot later on, when we have populated the model with some agents!
-
 Finally the output box can be used to output text while the model is running.
 
 #### Controls
@@ -160,11 +165,12 @@ img <- readPNG("figures/nl-simpleworld.png")
 grid.raster(img)
 ```
 
-You will probably find the font size a bit small, in which case you can adjust it in the Graphic Window Settings menu. When we now save, close and reopen our model we will however find that our world - although or the right dimensions - is again black without any zone labels. The Command centre is useful for testing out code snippets like this, but we will have to include these lines in the code tab for them to be saved and run every time.
+You will probably find the font size a bit small, in which case you can adjust it in the Graphic Window Settings menu. When we now save, close and reopen our model we will however find that our world --- although or the right dimensions --- is again black without any zone labels. The Command centre is useful for testing out code snippets like this, but we will have to include these lines in the code tab for them to be saved and run every time.
 
-The second main type of control are the buttons. Although buttons cannot do anything you could not do in the Command centre it is usually convenient to create buttons to call your most used commands and procedures. Most models will therefore have at least a "Setup" button (which is normally run only once at the beginning) and a "Go" button, which continuously executes the commands until it is de-pressed. The commands that are run by the buttons can be simple commands such as the patch colour ones we used above, but more than likely they will be more complex procedures we will define in the code tab. It is good practice therefore to try to keep as much of your model procedures in the code tab, so that it is comprehensive and in one place, although you can place snippets of code directly inside the button dialogue boxes or of course run them directly from the Command centre. 
+The second main type of control are the buttons. Although buttons cannot do anything you could not do in the Command centre it is usually convenient to create buttons to call your most used commands and procedures. Most models will therefore have at least a "Setup" button (which is normally run only once at the beginning) and a "Go" button, which continuously executes the commands until it is de-pressed. The commands that are run by the buttons can be simple commands such as the patch colour ones we used above, but more than likely they will be more complex procedures we will define in the code tab. It is good practice therefore to try to keep model procedures in the code tab, so that can be found one place. Alternatively code snippets can go directly inside the button dialogue boxes or run them directly from the Command centre. 
 
-Let's then create a button calling the command "setup". NetLogo will offer a warning "Nothing named setup has been defined." Now switch to the Code tab and type in the following:
+Let's create a button calling the command "setup". NetLogo will offer a warning "Nothing named setup has been defined." Now switch to the Code tab and type in the following:
+
 ```
 to setup
   clear-all
@@ -183,7 +189,7 @@ end
   
 ```
 
-The definition of the `setup` procedure, like all procedures, requires a `to` opening call and an `end` to close. All the commands within these two lines will be executed whenever we click on the setup button. The first and last lines are standard in any setup procedure as it will normally be called after a previous model run, so we want to make sure the world is back in starting position and the time or tick counter is set back to zero. The third line calls the `create-zones` procedure, which is defined underneath. We could have of course put all the zone creating commands directly into the setup procedure, but in order to keep the code nicely organized and easier to read, we will follow this sort of structure, and separate out logical blocks of code. We can now test the setup button, and note that this procedure is now saved as part of the model. 
+The definition of the `setup` procedure, like all procedures, requires a `to` opening call and an `end` to close. All the commands within these two lines will be executed whenever we click on the setup button. The first and last lines are standard in any setup procedure as it will normally be called after a previous model run, so we want to make sure the world is back in starting position and the time or tick counter is set back to zero. The third line calls the `create-zones` procedure, which is defined underneath. We could have put all the zone-creation commands directly into the setup procedure. But in order to keep the code nicely organized and easier to read, we follow this structure, and separate out logical blocks of code. We can now test the setup button. Note that this procedure is now saved as part of the model. 
 
 #### Settings 
 There are four types of settings widgets: sliders, choosers, switches and input text boxes. These can be used by the user to change specific variables' values. By adding one of the types of settings widgets we define the *global variable* that the slider or other type of input modifies, and these variables can then be called in the code. We do not really need to define any selectable inputs at the moment, but let us assume we might want to populate our agents with attributes from different files, and create a *chooser* that can be used to select the .csv data file. In the dialogue that opens when we add the chooser we define the global variable `csv` and give it (for now only) a single possible value "agents.csv" (see Figure 3). 
@@ -199,14 +205,22 @@ grid.raster(img)
 ## Allocating attributes to agents
 
 In order to assign the relevant attributes to our agents we first need to create an appropriately formatted file to be read by NetLogo. 
-Our list of 33 agents and their attributes is in the data frame ints_df. In order to read it in NetLogo we first need to export it as a .csv file (making sure the row and column names are not also exported) and place it in the same folder as our .nlogo model:
+Our list of 33 agents and their attributes is in the data frame `ints_df`. In order to read it in NetLogo we first need to export it as a .csv file (making sure the row and column names are not also exported) and place it in the same folder as our .nlogo model:
+
 ````{r, eval=FALSE}
 write.table(ints_df, "NetLogo/agents.csv", row.names=FALSE, 
             col.names=FALSE, sep=",")
 ````
 
 ### Defining variables
-In NetLogo we can define three types of variables: *global* variables are at the highest level and are accessible to all agents, *agent* variables have a unique value for each agent, and *local* variables are defined and accessed only within procedures. We have already defined the global `csv` variable when we created the chooser, the other option is to declare a new global variable in the code using `globals [ 'variable-name']`. Some agent variables are predefined, for example the patches are a type of agent and we have already encountered the variables `pcolor` and `plabel`. A user defined patch variable is declared using the command `patches-own`. Lets fix the `create-zones` procedure so that in addition to colouring the patches with correct zones, we also add a zone variable to each patch and give it the correct value: 
+
+In NetLogo we can define three types of variables: 
+
+- *Global* variables are at the highest level and are accessible to all agents.
+- *Agent* variables have a unique value for each agent.
+- *Local* variables are defined and accessed only within procedures.
+
+We have already defined the global `csv` variable when we created the chooser, the other option is to declare a new global variable in the code using `globals [ 'variable-name']`. Some agent variables are predefined, for example the patches are a type of agent and we have already encountered the variables `pcolor` and `plabel`. A user defined patch variable is declared using the command `patches-own`. Lets fix the `create-zones` procedure so that in addition to colouring the patches with correct zones, we also add a zone variable to each patch and give it the correct value: 
 
 ```
 patches-own [zone]
@@ -221,14 +235,18 @@ end
 ```
 If we now inspect an individual patch, we will see that it has a new variable `zone` that holds the correct value for each patch. 
 
-Similarly we can define the variables for our agents. The generic agents in NetLogo are called `turtles` and hence the `turtles-own` command is used to add agent variables. We can also create our own *breed* of turtles and call them for example `inhabitants`. The definition of the new breed has two inputs: the name of the *agentset*, that is the set off all the agents in the breed and the name for a single agent of that breed. Once we define the breed we can declare its variables as well [fn: Although this is not strictly necessary, one recommended structure for your code tab is to break it up into three blocks: 1. Declarations, where you define the global variables, the breeds if any and the agents-own variables; 2. Setup procedures where you define `setup` and all its sub-procedures and in a similar vein 3. Go procedures.]:
+Similarly we can define the variables for our agents. The generic agents in NetLogo are called `turtles` and hence the `turtles-own` command is used to add agent variables. We can also create our own *breed* of turtles and call them for example `inhabitants`. The definition of the new breed has two inputs: the name of the *agentset*, that is the set off all the agents in the breed and the name for a single agent of that breed. Once we define the breed we can declare its variables as
+well:^[Although
+this is not strictly necessary, one recommended structure for your code tab is to break it up into three blocks: 1. Declarations, where you define the global variables, the breeds if any and the agents-own variables; 2. Setup procedures where you define `setup` and all its sub-procedures and in a similar vein 3. Go procedures.]
+
 ```
 breed [inhabitants inhabitant]
 inhabitants-own [id zone.original age sex income history]
 ```
-These are the variables from the .csv file, note that we changed the name of the zone variable  - because we already have a zone variable that belongs to the patches, but also for clarity, since the agents will be able to move around SimpleWorld and in might be useful at some later stage to see which zone they started from. We have also added a variable called `history`, which we will use to record each individual agent's history, which we might find interesting to analyse at some future point. 
 
-Local variables are defined and accessible only within procedures. For clarity - although this is not necessary - we will write local variable names with a `%` sign at the front. Reading the code we can then immediately see if a variable is of locally limited scope or if it is a global or agent variable. To keep the code even clearer, we can make sure that we always declare the global, patches-own and other agent variables at the beginning of the code, before we start writing the procedures. Assignments are then made to them using the `set` command. Local variables are declared on the fly using the `let` command, and once declared assignments are also made to them using the `set` command. 
+These are the variables from the .csv file. Note that we changed the name of the zone variable because we already have a zone variable that belongs to the patches and, for clarity, because the agents will be able to move around SimpleWorld and it might be useful at some later stage to explore their starting zone. We have also added a variable called `history`, to record each individual agent's history for future analysis. 
+
+Local variables are defined and accessible only within procedures. For clarity --- although this is not necessary --- local variable names will commence with `%`. Reading the code we can then immediately see if a variable is of locally limited scope or if it is a global or agent variable. To keep the code even clearer, we can make sure that we always declare the global, patches-own and other agent variables at the beginning of the code, before we start writing the procedures. Assignments are then made to them using the `set` command. Local variables are declared on-the-fly (while the model is running) using the `let` command, and once declared assignments are also made to them using the `set` command. 
 
 ### Reading agent data - Option 1
 
