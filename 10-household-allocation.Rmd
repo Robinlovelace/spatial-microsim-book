@@ -139,17 +139,9 @@ may remain in the synthetic population: the final number of
 households may be smaller than estimated or the number of individuals estimated
 may be less than the known population of the area.
 
-## Cross data: individual and household level information
-
-<<<<<<< HEAD
-This section is based on research funded by the 
-Wallonia Region of Belgium.^[Timoteo Carletti (UNamur),
-=======
-This section is made thanks to a research funded by the 
-Wallonia Region of Belgium (a work in progress).^[This chapter was written by 
-Morgane Dumont from the University of Namur (UNamur),
-with the help of her comittee: Timoteo Carletti (UNamur),
->>>>>>> 73a170c0c5b7d8bbd02f161085193ceb2945964a
+## Cross data: individual and household level information^[This
+section is based on research funded by the 
+Wallonia Region of Belgium. Timoteo Carletti (UNamur),
 Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
 Eggericks (UCL Louvain-La-Neuve) were involved in the research.
 The academic groups of DEMO from UCL-Louvain-La-Neuve and the
@@ -175,82 +167,74 @@ household-level tables, is explained in this section.
 
 In this situation, we usually proceed in two stages. First, we create
 the individuals with all their characteristics.
-Then, the second step is to group these individuals into households.
-This corresponds to a huge combinatorial problem. Indeed, each
-person has to be in one and only one households and we have to 
-determine who lives with who.
+The second step is to group these individuals into households using
+combinatorial optimisation. Each
+person must be matched to
+one and only one household.
 
-For this process, we also have two possible cases. Indeed, on one 
-side, each individual contains information about its household and
-we have no access to additional data concerning the structure of the
-households. For example, the age difference between two married persons.
-On the other side, you can have only the data from these 
-created individuals.
-
-Note that in the case of the study for Belgium, we have
-some pertinent additional data. However, we will continue the
-section by explaining the used methods without and with
-these supplementary tables.
+For this process there are two possible methods. One assumes
+access to household-level variables in the individual-level
+data. The other assumes
+no access to additional data concerning the structure of the
+households such as the age difference between a married couple.
+These options are described below.
 
 ### Without additional household's data
 
-When having only the household's constraints 
+When household-level constraints are
 contained in the individual's characteristics, 
 the aim is to form households where each individual
-is contained in one and only one households and respects
-as well as possible its attributes. For example, in the
-case of the study for Belgium, each individual has the attributes
-(after an IPF process) :
-age, gender, municipality, education level and professional status and, 
-in addition, size and type of its personal households and the link
-with the head (wife, child, ...). A good grouping is one that 
-maximises the number of well fitted constraints. Indeed, the perfect
-association would be one where each individual respects its size and
+is contained in one and only one households.
+Each individual must respect,
+as well as possible, its household's attributes.
+Consider the case where the individual-level variables are
+age, gender, municipality, education level, professional status,
+size and type of households and link
+with the household head (e.g. wife, child). A good grouping is one that 
+maximises the number of well-fitted constraints.
+The perfect
+grouping would be one in which each individual respects its size and
 type of household and link with the head. In general, it
 is impossible to reach a perfect grouping, since the data are not 
-exactly coherent. For example, if you have an odd number
-of persons who need to live in couple, it will be impossible
+perfect. This can happen, for example, if there are an odd number
+of people who need to live in couple, making it impossible
 to find a perfect coupling.
-
-In our Belgian study, to maximise this fit, we chose to 
-first create pools of individuals and secondly to draw
-the households "randomly". We chose to quote "randomly",
-because we will make this draw only inside a pool of individuals 
-having the good characteristics.
-
 
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/HH-CO.png}
-\caption{Illustration of the combinatorial problem : How to group individuals into households.}
+\caption{Illustration of the combinatorial problem: How to group individuals into households.}
 \end{center}
 \end{figure}
 
-For example, as illustrated
-on the figure above, we will divide the individuals by
-type of households and then by size of households. 
-Thus, for the type "married couples with children", we will 
-have sizes of at least 3 (to have two parents and at least a child).
-Inside this restricted sets, we will look at each link with the head
-and again split the pool per link. It is only after this classification
-that we will proceed to the random draw, respecting the links.
+As illustrated
+in figure 10.2, we individuals can be categorised first by
+type of household ("married couples with children"" in this case)
+and then by size of households. 
+This household type has a size of at least 3
+(two parents and at least a child).
+Inside this restricted set of households, the next step is to
+look at the link that each household has with the household head
+("Head 1(W)" in this case)
+and again split the pool of individuals per link. It is only after this classification
+that we proceed to the random draw, respecting the links.
 For example, for the married couples, we first draw randomly a head
 and then a partner of the opposite gender (the national register
 of Belgium for 2011 doesn't contain homosexual couples). Then, depending
 on the size of household to be generated, the right number of children
 are also drawn. This process ends when no additional household can be drawn 
-and respect the constraints. We observe on the illustration that we have
+and respect the constraints. Figure 10.2 shows that we have
 a household with head 1, who is a woman; partner 2, who is a man;
-and two children : the 2 and the 5.
+and two children: (with ids 2 and 5).
 
-The only possible errors with this method are caused by the incoherence 
-of the data or by the process of the IPF before the grouping. 
+The main sources of error with this method are incoherence 
+of the data and by the process of the IPF before the grouping. 
 
 
 ### With additional household's data
 
-Without having data concerning the structure of household, the only
-possible method is the one of the previous section. 
+Without data on household structure, the only
+possible method is the one described in the previous section. 
 However, this allows improbable households, such as 
 couples between an individual of 18 years old and
 another of 81. For this reason, when we create households,
@@ -258,8 +242,8 @@ it is often very useful to take into account
 the age distributions. We can consider the ages of a
 couple, but also of parents and children.
 
-To do this, you need tables of age differences and
-age must be in the characteristics of your individuals.
+To do this, tables of age differences and
+age must be in the characteristics of the individuals.
 
 
 ## References
