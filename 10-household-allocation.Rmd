@@ -70,7 +70,7 @@ the households instead of the individuals in
 the previous chapters.
 
 Third, after individual and household level distributions have been 
-estimated, the individuals can be allocated to
+estimated, the individuals can be allocated
 to households. This is done one household 
 at a time by first selecting its type before randomly 
 drawing its constituent members [@Barthelemy2012]. 
@@ -181,7 +181,7 @@ These options are described below.
 
 ### Without additional household's data
 
-When household-level constraints are
+When household-level constraints are only
 contained in the individual's characteristics, 
 the aim is to form households where each individual
 is contained in one and only one households.
@@ -208,7 +208,7 @@ to find a perfect coupling.
 \end{figure}
 
 As illustrated
-in figure 10.2, we individuals can be categorised first by
+in figure 10.2, the individuals can be categorised first by
 type of household ("married couples with children"" in this case)
 and then by size of households. 
 This household type has a size of at least 3
@@ -233,7 +233,7 @@ of the data and by the process of the IPF before the grouping.
 
 ### With additional household's data
 
-Without data on household structure, the only
+Without additional data on household structure, the only
 possible method is the one described in the previous section. 
 However, this allows improbable households, such as 
 couples between an individual of 18 years old and
@@ -242,8 +242,9 @@ it is often very useful to take into account
 the age distributions. We can consider the ages of a
 couple, but also of parents and children.
 
-To do this, tables of age differences and
-age must be in the characteristics of the individuals.
+To do this, we need tables of age differences,
+with the same categories as in 
+the characteristics of the individuals.
 
 
 ## References
