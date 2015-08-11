@@ -228,7 +228,7 @@ a household with head 1, who is a woman; partner 2, who is a man;
 and two children: (with ids 2 and 5).
 
 The main sources of error with this method are incoherence 
-of the data and by the process of the IPF before the grouping. 
+of the data and the error caused by the process of the IPF before the grouping. 
 
 
 ### With additional household's data
