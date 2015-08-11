@@ -139,16 +139,17 @@ may remain in the synthetic population: the final number of
 households may be smaller than estimated or the number of individuals estimated
 may be less than the known population of the area.
 
-## Cross data: individual and household level information^[This
+## Cross data: individual and household level information
+
+In some cases, data on households are included in the
+individual datasets.^[This
 section is based on research funded by the 
 Wallonia Region of Belgium. Timoteo Carletti (UNamur),
 Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
 Eggericks (UCL Louvain-La-Neuve) were involved in the research.
 The academic groups of DEMO from UCL-Louvain-La-Neuve and the
 OWS (Observatoire Wallon de la Santé) also provided support.]
-
-In some cases, data on households are included in the
-individual datasets. For example, individual-level data
+For example, individual-level data
 may include variables on sex, age and
 the number of cohabitants. This provides cross-tabulated information between
 the households and the individuals. Considering the number of cohabitants,
