@@ -23,10 +23,11 @@ git clone https://github.com/Robinlovelace/spatial-microsim-book.git
 Then navigate into the downloaded folder and open the `spatial-microsim-book.Rproj` RStudio project file. The [build.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/build.R) file should contain everything you need to build the book, although you'll need to have installed a number of packages. These can be installed with the following command:
 
 ```
-install.packages(c("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp", "rgeos", "mipfp", "rgdal", "gridExtra"))
+install.packages(c("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp",
+"rgeos", "mipfp", "rgdal", "gridExtra", "tidyr"))
 ```
 
-To install `ipfp` on Ubuntu (tested with version 14.04) a number of additional packages are required.[^ipfp-packages] These can be installed from the command line with:
+To install `ipfp` on Ubuntu (tested with version 14.04, the latest 'long-term support' version at the time of writing) a number of additional packages are required. These can be installed from the command line with:
 
 ```
 sudo apt-get install liblapack-dev liblapack3 libopenblas-base libopenblas-dev
@@ -37,9 +38,7 @@ The book build also requires an up-to-date version of pandoc - install with:
 ```
 sudo apt-get install pandoc
 ```
-
-[^ipfp-packages]: http://stackoverflow.com/a/27036775/3022126
-
+install.packages("GREGWT")
 **Building the website**
 
 The [gh-pages](https://github.com/Robinlovelace/spatial-microsim-book/tree/gh-pages) branch of this repo contains the book's [website](http://robinlovelace.net/spatial-microsim-book/).
