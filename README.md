@@ -38,7 +38,7 @@ The book build also requires an up-to-date version of pandoc - install with:
 ```
 sudo apt-get install pandoc
 ```
-install.packages("GREGWT")
+
 **Building the website**
 
 The [gh-pages](https://github.com/Robinlovelace/spatial-microsim-book/tree/gh-pages) branch of this repo contains the book's [website](http://robinlovelace.net/spatial-microsim-book/).
