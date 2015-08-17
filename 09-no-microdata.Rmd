@@ -1,6 +1,7 @@
 ---
 title: "Population synthesis without microdata"
 layout: default
+output: pdf_document
 bibliography: bibliography.bib
 ---
 
