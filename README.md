@@ -26,11 +26,19 @@ Then navigate into the downloaded folder and open the `spatial-microsim-book.Rpr
 install.packages(c("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp", "rgeos", "mipfp", "rgdal", "gridExtra"))
 ```
 
+To install `ipfp` on Ubuntu (tested with version 14.04) a number of additional packages are required.[^ipfp-packages] These can be installed from the command line with:
+
+```
+sudo apt-get install liblapack-dev liblapack3 libopenblas-base libopenblas-dev
+```
+
 The book build also requires an up-to-date version of pandoc - install with:
 
 ```
 sudo apt-get install pandoc
 ```
+
+[^ipfp-packages]: http://stackoverflow.com/a/27036775/3022126
 
 **Building the website**
 
