@@ -26,29 +26,30 @@ This allows ABMs to tackle a very wide range of problems:
 problems important to our environment, health, and economy"
 [@Grimm2011].
 
-With this power comes danger. It is easy to get lost in
-agent-based modelling and arrive at incorrect conclusions. Using spatial
-microsimulation to generate realistic input populations is one way that
-ABM can be made to more closely represent the population under study.
+ABMs can broadly be divided into two general categories. Discussions in the
+literature are more nuanced, but a broad categorisation is adequate here.
+First are descriptive models. These explore a system at an abstract level, in an
+attempt to better understand the underlying dynamics that drive the system.
+Second are predictive models. These attempt to represent the system
+to a certain level of accuracy in order to predict or explore future states of
+the system. One of the main barriers to the success of predictive models is
+reliable, high-resolution data. ABMs require information about the individual
+people, households or other units on which the population of agents can be
+based.
+Using spatial microsimulation to generate realistic input populations is one way that predictive ABMs can be made to more closely represent the population under study.
 
-ABMs require information about the 
-individual people, households or other units that the agents will represent.
-One way to generate input data for
-an ABM is through spatial microsimulation.
 Although ABMs can be very diverse, all agent-based models involve
-at least three things:
+at least three things [@Castle2006]:
 
-1. a number of discrete agents with characteristics
+1. a number of discrete agents with characteristics 
 2. who exist in an environment
 3. and who interact with each other and the environment.
 
-Note that based on the above definition we
-already have two-thirds of the necessary ingredients
-of an ABM: the synthetic spatial microdata created in previous chapters
-represent individuals with characteristics allocated to zones (the environment).
-With the right tools spatial microdata can be used as an
-input into ABM. If your aim is to use spatial microdata as an input into
-agent based models, you may already be more than half way there!
+Using the synthetic spatial microdata created in previous chapters we can
+represent the individuals and their characteristics, and allocate them to zones
+(the environment). With the right tools spatial microdata can be used as an
+input into ABM. If your aim is to use spatial microdata as an input into agent
+based models, you may already be more than half way there!
 
 ```{r, echo=FALSE}
 # # Commented out: we can re-include at some point
@@ -64,23 +65,24 @@ agent based models, you may already be more than half way there!
 A wide range of software is available for ABM. Of these, **NetLogo**
 is one of the most
 widely used for model prototyping, development and communication 
-[@Thiele2012]. Alternative open source options include
-the Java-based ABM **Repast** (for power users) and **MASON** (which must
-be programmed in Java). Due to its excellent documentation, ease of learning
-and integration with R, NetLogo is the tool of choice in this book and should
-be sufficiently powerful for many applications.
+[@Thiele2012]. Alternative open source options include **Repast**
+and **MASON**. Both
+are written in Java, although Repast also includes optional
+graphical development and some higher-level language support. Due to its
+excellent documentation, ease of learning and integration with R, NetLogo is the
+tool of choice in this book and should be sufficiently powerful for many
+applications.
 
 [NetLogo](https://ccl.northwestern.edu/netlogo/) is a
 mature and widely used tool-kit for agent-based models. It is written in
-Java, but uses a derivation of the Logo language to develop models 
-(most users will be blissfully unaware of Java).
+Java, but uses a derivation of the Logo language to develop models.
 The recently published **RNetLogo** package provides an interface between
 R and NetLogo, allowing for model runs to be set-up and run directly from within R
 (Theile 2014). 
 This allows the outputs of agent based models to be loaded directly into
 your R environment. Using R to run a separate programme may seem overly complicated
 for very simply models. For setting-up and testing we recommend using 
-ABM, with its intuitive graphical interface. However, there are many advantages
+NetLogo, with its intuitive graphical interface. However, there are many advantages
 of using NetLogo from within R, the foremost being R's analysis capabilities:
 "it is much more time consuming and complicated to analyse ABMs than to
 formulate and implement them" (Theile et al. 2012).
@@ -95,14 +97,17 @@ formulate and implement them" (Theile et al. 2012).
 # TODO: Batty reference below on abm design
 ```
 
-AMB's are inherently unpredictable due to their 'bottom up' design.
-Thus we generally want to study many model runs before drawing conclusions
+ABMs commonly represent unpredictable behaviour through probabilistic agent
+rules. This means that two model runs are unlikely to lead to identical results.
+Therefore we generally want to study many model runs before drawing conclusions
 about how the overall system operates, let alone real world implications.
-Because much of the
-time taken for agent based modelling is consumed on this sensitivity/parameter space
-analysis, running NetLogo
-from within R makes sense. R excels in these areas whereas NetLogo
-and other agent-based modelling programs do not.
+Much of the time taken for agent based modelling is consumed on this
+sensitivity/parameter space analysis. Although NetLogo has some inbuilt tools
+(e.g. the Behaviour Space) that support the running of large numbers of
+experiments, the capabilities for subsequent analysis are limited. R
+provides a much more comprehensive suite of data analysis
+tools, making the integration of R
+and NetLogo an obvious choice.
 
 ```{r, echo=FALSE}
 
@@ -115,12 +120,21 @@ and other agent-based modelling programs do not.
 
 ## Setting up SimpleWorld in NetLogo 
 
-The NetLogo programming language is a well developed and documented modelling environment. The reader is encouraged to explore the numerous [tutorials](http://ccl.northwestern.edu/netlogo/docs/tutorial1.html) and the rich library of pre-written models that come with the programme (File > Model Library). This chapter introduces the basics of NetLogo's functionality to create an ABM of SimpleWorld.
+The NetLogo programming language is a well-developed and thoroughly
+documented modelling environment. We expect the reader to have some working
+knowledge of the language, e.g. through an exploration of the numerous [tutorials](http://ccl.northwestern.edu/netlogo/docs/tutorial1.html) and the rich library of pre-written models that come with the programme (File > Model Library)
+before undertaking the practical elements of this chapter.
+Section introduces the basics of NetLogo's functionality
+to create an ABM of SimpleWorld --- we will cover RNetLogo later.
 
 In NetLogo the design of the model's graphical user interface (GUI) is handled separately from the model procedures. This is analogous to the separation in R's [**shiny**](http://shiny.rstudio.com/) package between the user interface and the 'server side'. The latter are constructed in code using the NetLogo programming language in the Code tab (discussed below). The graphical interface, which includes the environment and the control *widgets*, is set-up using the drop-down menus located in the Interface toolbar. 
 
 The whole model is saved as a .nlogo file. This text file includes code, GUI parameters and the contents of the (optional) Info tab. Although .nlogo files are human readable, most of the information relating to the GUI is difficult to manipulate. We advise against modifying the .nlogo file
-directly.^[From a reproducibility perspective this setup is not ideal. The non-manually-coded aspect of designing the GUI (which relies on point-and-click and is therefore hard to automate) makes it imprecise, albeit this refers to mostly trivial aspects such as the alignment of buttons and sliders. The GUI design is still written in the .nlogo file so, strictly speaking, it is in fact transferable and reproducible.]
+directly.
+
+```{r, echo=FALSE}
+# ^[From a reproducibility perspective this setup is not ideal. The non-manually-coded aspect of designing the GUI (which relies on point-and-click and is therefore hard to automate) makes it imprecise, albeit this refers to mostly trivial aspects such as the alignment of buttons and sliders. The GUI design is still written in the .nlogo file so, strictly speaking, it is in fact transferable and reproducible.]
+```
 
 ### Graphical User Interface in NetLogo
 
@@ -300,7 +314,7 @@ grid.raster(img)
 ### Reading agent data - Option 2
 
 The method of reading in the data described above would not work if SimpleWorld inhabitants
-had, for example, a five-figure income. A more generic way of reading the data would therefore be, instead of relying on the absolute position of the values in the .csv file, to extract the substrings based on the positions of the commas. This second method is similar to the method described above, but it has an extra loop within. Having extracted a single `%line`, we first add an extra comma to the end of it (using the command `word`), which will allow us to determine the end position of the last value. The inner loop then finds the position of the first comma and saves it in `%pos`, reads the value between positions 0 and `%pos` and saves it as `%item`, and appends `%item` to an internal list variable called `%data.list`. It then removes this item from `%line`, shortening it by one element, and repeats the loop. This `while` loop runs until all the items have been extracted individually and saved in `%data.list`. The rest of the code is similar to the first version: each item is assigned to the inhabitant's variables, their colour is determined and finally they are positioned in their correct zone. 
+had, for example, a five-figure income. A more generic way of reading the data would therefore be to extract the substrings based on the positions of the commas rather than their absolute position. This method is similar to that described above, but it has an extra loop within. Having extracted a single `%line`, we first add an extra comma to the end of it (using the command `word`), which will allow us to determine the end position of the last value. The inner loop then finds the position of the first comma and saves it in `%pos`, reads the value between positions 0 and `%pos` and saves it as `%item`, and appends `%item` to an internal list variable called `%data.list`. It then removes this item from `%line`, shortening it by one element, and repeats the loop. This `while` loop runs until all the items have been extracted individually and saved in `%data.list`. The rest of the code is similar to the first version: each item is assigned to the inhabitant's variables, their colour is determined and finally they are positioned in their correct zone. 
 
 
 ```
@@ -436,7 +450,7 @@ end
 
 Because we haven't defined the first two procedures yet, we are keeping them commented out, as soon as we define them, delete the semicolon and test the code. 
 
-For repositioning the inhabitants we can in fact use a very similar line of code used to first position the inhabitants in SimpleWorld. Only now we want to reposition them inside the zone they are currently in, and not in their original zone. Furthermore, this time we will ask all of the inhabitants to do it at the same time.^[In fact they are not doing it at the same time, concurrent actions are in fact strongly discouraged in NetLogo. If we consider the repositioning code we can see why concurrency would not produce the desired result: we are asking inhabitants to move on to an empty patch, but if they all moved at the same time, there would be no way of making sure two or more agents did not end up on the same patch. Instead NetLogo implements all `ask` commands sequentially, going through all agents or patches *in random order*.
+For repositioning the inhabitants we can in fact use a very similar line of code used to first position the inhabitants in SimpleWorld. To reposition all agents we can use the `ask` command. NetLogo implements all `ask` commands sequentially, going through all agents or patches in *random order*.
 
 ```
 to reposition
@@ -449,8 +463,7 @@ end
 
 If we now uncomment `reposition` in the `go` procedure, we can test it out. You can adjust the speed of the command execution with the slider on the toolbar at the top of the window. 
 
-The construction of the `engage` procedure is a bit more complex, so let's break it down into steps.
-Breaking the steps into 2.1 and 2.2 is for clarity. But steps 1 and 2 must be separated because they will be run using the `ask inhabitants` command which, as mentioned above, is implemented sequentially looping through all the agents. Splitting both steps into two `ask` commands ensures that the first step is completed for the whole agentset before the second step is started. This is crucial because of the `in-negotiations` variable, which we are using to keep track of who is available - if we implemented them as one step, then every inhabitant would always be available:
+The construction of the `engage` procedure is a bit more complex, so let's break it down into steps 2.1 and 2.2 clarity. But steps 1 and 2 must be separated because all agents must complete the first step before the second. This is crucial because of the in-negotiations variable, which we are using to keep track of who is available - if we implemented them as one step, then every inhabitant would always be available:
 
 1. `reset:` first we must reset everyone's `in-negotiations` variable to `false`
 
@@ -686,7 +699,7 @@ if (count inhabitants with [zone = 1] = 33) or
 
 Now we have a working model to explore. You can try running it with different parameters to see how they affect the behaviour of the model, and you can also try expanding the model to add more. For example a simple way of doing that is by making the 10 % bribe a parameter of the model that can be adjusted by the user. But to systematically investigate the model, we must explore the *parameter space* by carefully varying all the parameters and recording the results. 
 
-NetLogo provides a tool for this called *Behaviour Space*, which can be found in the *Tools* menu. It allows you to specify how to vary the variables, how many times to repeat each experiment and which measures to report after each run. Unfortunately this way of doing a parameter sweep is not codeable - the commands defining the *experiment* are entered in a dialogue box, and the outputs are saved as .csv files, which require further handling for analysis. There are other extensions for NetLogo, such as BehaviourSearch, which can search the parameter space using various search algorithms to optimize an objective function. These and other tools may meet your requirements and/or fit with your workflow. But we will return full circle now back to R and use it to run SimpleWorld and analyse the model results using RNetLogo. 
+NetLogo provides a tool for this called *Behaviour Space*, which can be found in the *Tools* menu. It allows you to specify how to vary the variables, how many times to repeat each experiment and which measures to report after each run. Additionally, the tool offers the possibility of running many simultaneously, taking advantage of multi-core processors. Unfortunately this way of doing a parameter sweep is not codeable --- the commands defining the *experiment* are entered in a dialogue box, and the outputs are saved as .csv files, which require further handling for analysis. There are other extensions for NetLogo, such as BehaviourSearch, which can search the parameter space using various search algorithms to optimize an objective function. These and other tools may meet your requirements and/or fit with your workflow. But we will return full circle now back to R and use it to run SimpleWorld and analyse the model results using RNetLogo. 
 
 ## Control the ABM from R
 
@@ -968,4 +981,6 @@ grid.raster(img)
 ```
 
 This is of course only a taster of the numerous options for agent-based modelling exploration you now have at your disposal having integrated NetLogo with R. For an excellent overview with practical examples see in particular Thiele et al.(2014), which covers a variety of parameter estimation and optimisation methods as well as a comprehensive set of approaches to sensitivity analysis using the RNetLogo setup described here. 
+
+# References
 
