@@ -1,6 +1,7 @@
 ---
 title: "SimpleWorld"
 layout: default
+output: pdf_document
 bibliography: bibliography.bib
 ---
 

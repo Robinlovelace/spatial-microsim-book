@@ -1,7 +1,7 @@
 ---
 title: "What is spatial microsimulation?"
 layout: default
-output: word_document
+output: pdf_document
 bibliography: bibliography.bib
 ---
 

@@ -1,5 +1,5 @@
 ---
-title: "CakeMap"
+title: "Validation"
 layout: default
 output: pdf_document
 bibliography: bibliography.bib

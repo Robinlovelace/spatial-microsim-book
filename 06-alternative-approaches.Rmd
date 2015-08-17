@@ -1,6 +1,7 @@
 ---
 title: "Alternative approaches to population synthesis"
 layout: default
+output: pdf_document
 bibliography: bibliography.bib
 ---
 
