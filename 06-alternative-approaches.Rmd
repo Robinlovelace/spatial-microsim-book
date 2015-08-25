@@ -1,6 +1,7 @@
 ---
 title: "Alternative approaches to population synthesis"
 layout: default
+output: pdf_document
 bibliography: bibliography.bib
 ---
 
@@ -55,29 +56,35 @@ found in Rahman (2009).  In their paper Tanton et.al (2011) make a full
 description of the algorithm. For a deeper understanding of the SAS macros see
 Bell (1999). An R implementation of GREGWT, has been created by Esteban Muñoz,
 and can be found in the GitHub repository
-[mikrosim](https://github.com/emunozh/mikrosim).
+[GREGWT](https://github.com/emunozh/GREGWT).
 
 We use these implementation of the GREGWT algorithm with the data from the
 simple example presented in chapter [Simple World](#SimpleWorld). Below we
 present the use of the GREGWT library and the resulting weights matrix.
 
 ```{r, fig.cap="Load and prepare the data.", echo=FALSE, message=FALSE}
+# Install GREGWT (uncomment/alter as appropriate)
+# library(devtools)
+# install_github("emunozh/GREGWT")
+# load the library (0.7.0)
+library('GREGWT')
+
 # Load the data from csv files stored under ../data
-age = read.csv("data/SimpleWorld/age.csv")
-sex = read.csv("data/SimpleWorld/sex.csv")
-ind = read.csv("data/SimpleWorld/ind-full.csv")
-# Age
-a0.49 <- vector(length=dim(ind)[1]); a0.49[ind$age<50] = 1
-a.50  <- vector(length=dim(ind)[1]); a.50[ind$age>=50] = 1
-# Sex, we only need one
-m     <- vector(length=dim(ind)[1]); m[ind$sex == "m"] = 1
-f     <- vector(length=dim(ind)[1]); f[ind$sex == "f"] = 1
-# prepare X
-X <- data.frame("a0.49" = a0.49, "a.50" = a.50, "m" = m, "f" = f)
-# Initial weights
-dx <- vector(length=dim(X)[1]) + 1
+age = read.csv("../data/SimpleWorld/age.csv")
+sex = read.csv("../data/SimpleWorld/sex.csv")
+ind = read.csv("../data/SimpleWorld/ind-full.csv")
+# Make categories for age
+ind$age <- cut(ind$age, breaks=c(0,49,Inf), labels = c("a0.49", "a.50."))
+# Add initial weights to survey
+ind$w <- vector(mode = "numeric", length=dim(ind)[1]) + 1
+
+# prepare simulation data using GREGWT::prepareData
+data_in <- prepareData(cbind(age, sex), ind, census_area_id = F, breaks = c(3))
+
 # prepare a data.frame to store the result
 fweights <- NULL
+Result <- as.data.frame(matrix(NA, ncol=3, nrow=dim(age)[1]))
+names(Result) <- c("area", "income", "cap.income")
 ```
 
 The code presented above loads the SimpleWorld data and created a new
@@ -87,25 +94,19 @@ individual level survey, `dx` representing the initial weights of the survey
 and `Tx` representing the small area benchmarks. 
 
 ```{r simpleworld GREGWT1,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", message=FALSE}
-# Install GREGWT (uncomment/alter as appropriate)
-# url = "https://github.com/emunozh/mikrosim/raw/master/GREGWT_1.4.tar.gz"
-# download.file(url = url, method = "wget", destfile = "GREGWT_1.4.tar.gz")
-# install.packages("GREGWT_1.4.tar.gz", repos = NULL, type = "source")
-# load the library (1.4)
-library('GREGWT')
-# We loop through each area
+# now we loop through all areas and reweight the survey using GREGWT::GREGWT
 for(area in seq(dim(age)[1])){
-    # True population totals for this area (Benchmarks)
-    Tx <- data.frame("a0.49" = age[area, 1],
-                     "a.50"  = age[area, 2],
-                     "f"     = sex[area, 2],
-                     "m"     = sex[area, 1])
-    # Get new weights with GREGWT
-    Weights.GREGWT = GREGWT(X, dx, Tx, bounds=c(0,Inf))
-    fw <- Weights.GREGWT$Final.Weights
-    # store the new weights
+    gregwt = GREGWT(data_in, area_code = area)
+    fw <- gregwt$final_weights
     fweights <- c(fweights, fw)
+    ## Estimate income
+    sum.income <- sum(fw * ind$income)
+    cap.income <- sum(fw * ind$income / sum(fw))
+    Result[area,] <- c(area, sum.income, cap.income)
 }
+
+fweights <- matrix(fweights, nrow = nrow(ind))
+fweights
 ```
 
 The R library implementing the GREGWT algorithm re-weights the survey for one
