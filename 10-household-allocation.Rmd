@@ -141,14 +141,15 @@ may be less than the known population of the area.
 
 ## Cross data: individual and household level information
 
-In some cases, data on households are included in the
-individual datasets.^[This
-section is based on research funded by the 
+^[This whole
+section is based on research done by Dumont Morgane (UNamur) and funded by the 
 Wallonia Region of Belgium. Timoteo Carletti (UNamur),
 Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
 Eggericks (UCL Louvain-La-Neuve) were involved in the research.
 The academic groups of DEMO from UCL-Louvain-La-Neuve and the
 OWS (Observatoire Wallon de la Santé) also provided support.]
+In some cases, data on households are included in the
+individual datasets.
 For example, individual-level data
 may include variables on sex, age and
 the number of cohabitants. This provides cross-tabulated information between
@@ -180,7 +181,7 @@ no access to additional data concerning the structure of the
 households such as the age difference between a married couple.
 These options are described below.
 
-### Without additional household's data
+### Without additional household's data  {#WithoutHHdata}
 
 When household-level constraints are only
 contained in the individual's characteristics, 
@@ -235,7 +236,7 @@ of the data and the error caused by the process of the IPF before the grouping.
 ### With additional household's data
 
 Without additional data on household structure, the only
-possible method is the one described in the previous section. 
+possible method is the one described in [](#WithoutHHdata). 
 However, this allows improbable households, such as 
 couples between an individual of 18 years old and
 another of 81. For this reason, when we create households,
@@ -245,7 +246,139 @@ couple, but also of parents and children.
 
 To do this, we need tables of age differences,
 with the same categories as in 
-the characteristics of the individuals.
+the characteristics of the individuals. To explain 
+the process, we develop here the methodology used 
+for the creation of the couples. This means that we have 
+men and women of different ages and role in the household (head or spouse)
+and that we need to form the couples. The random draw executed when not 
+having additional data will be improved by considering the
+real age distributions. Imagine that a part of the additional data is 
+the one in table \ref{fictivageDistrib}.
 
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{|c|c|c|c|}
+\hline
+Municipality & Age woman & Age man & Count\\
+\hline
+\hline
+Namur & 20-25 & 15-20 & 4\\
+\hline
+Namur & 20-25 & 20-25 & 25\\
+\hline
+Namur & 20-25 & 25-30 & 18\\
+\hline
+Namur & 20-25 & 30-35 & 8\\
+\hline
+Namur & 20-25 & 35-40 & 2\\
+\hline 
+... & ... & ... & ...\\
+\hline
+\end{tabular}
+\caption{Example of an age distribution table for the couple without children}
+\label{fictivageDistrib}
+\end{center}
+\end{table}
+
+Note that this is a fictive table, non corresponding to the 
+Namur data, just to explain the reasoning. Thanks to this
+table, we know that to fit the real population, we will need 25 
+couples of man and woman in the same age class 20-25, etc.
+
+However, these data coming from another source, the marginals are incoherent 
+with the current synthetic population. For this reason, we will consider 
+the new data only as proportions. For our example, 
+it means that in the total of women having 20-25 years old 
+(57 individuals), $\frac{4}{57}=0.07=7$\% are married with a 
+man of age 15-20. With this reasoning, we can have the new table \ref{fictivageDistrib2}, 
+with a supplementary column considering the proportions.
+
+\begin{table}[h!]
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+\hline
+Municipality & Age woman & Age man & Count & Proportion of men married \\
+&&&&with a woman of this age\\
+\hline
+\hline
+Namur & 20-25 & 15-20 & 4 & 7\% \\
+\hline
+Namur & 20-25 & 20-25 & 25 & 43,9\% \\
+\hline
+Namur & 20-25 & 25-30 & 18 & 31,6\% \\
+\hline
+Namur & 20-25 & 30-35 & 8 & 14\% \\
+\hline
+Namur & 20-25 & 35-40 & 2 & 3,5\% \\
+\hline 
+... & ... & ... & ... & ...\\
+\hline
+\end{tabular}
+\caption{Example of an age distribution table with the proportions per women age}
+\label{fictivageDistrib2}
+\end{center}
+\end{table}
+
+These proportions will be useful in one step of the global process.
+
+The methodology for the male heads is illustrated in figure 
+\ref{AlgoCouple}. For
+female heads, the process is totally similar. First, 
+we separate the set of 
+individuals depending on their role and gender. 
+This forms male heads and female 
+partners to join on one hand; and female heads 
+with male partners on the other hand. We consider
+the heads turn by turn. For each head, we
+determine the theoretical distributions of each women ages, 
+depending in the age of the head
+(thanks to the additional age distribution table). 
+Out of this distribution, we 
+remove the ages that are no more available in the set of 
+possible partners. Indeed, at the end of the process, 
+we have only few partners to assign. Thus, 
+all ages will not be represented anymore.
+Out of this distribution of ages, we calculate the
+proportions, whose will be used as probabilities in the random draw.
+Then, thanks to this, we draw an age. Finally, knowing
+the age of his partner, we choose a wife randomly. This
+process is repeated until a set of remaining individuals
+is empty, or no remaining partner is the possible age for the
+remaining heads.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/IllustrationCouples.png}
+\caption{Illustration of the algorithm to form the couples}
+\label{AlgoCouple}
+\end{center}
+\end{figure}
+
+This algorithm has been applied to all municipalities in Belgium.
+The final result is illustrated in figure \ref{ResultBE}. On this graph, 
+each point corresponds to a combination of (age woman x age man) for a 
+municipality. Its abscissa is the theoretical count for this category, 
+included in the database of the age distributions inside couples. 
+Its ordinate is the number of couples in this category in our 
+synthetic population. Since the dots are approximately on the line
+formed by the points having both coordinates equal, our
+simulation worked well.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/HHCouplesBelgium.png}
+\caption{Illustration of the results for Belgium}
+\label{ResultBE}
+\end{center}
+\end{figure}
+
+Note that we could make a simulated annealing to resolve these kind of problems.
+In our case, we have tested it, but it is very long to obtain a result
+as good as the one showed above. However, in cases where 
+the objectives are different, it is possible that a simulated annealing becomes
+better. Indeed, for our purpose, it worked, but only the computational time
+was not sufficient. But, if you would like to fit age distributions, 
+diploma distributions, and more complicated cases, the simulated annealing could
+be a good option.
 
 ## References
