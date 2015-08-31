@@ -48,7 +48,7 @@ where you have no microdata for the households
 (one row of data per household). We begin by considering the
 case in which data on households and individuals remain completely separate.
 
-## Independent data (individuals and households)
+## Independent data (individuals and households) {#IndData}
 
 When the individual-level data are
 independent from the household-level data, they can rarely be linked.
@@ -148,26 +148,32 @@ Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
 Eggericks (UCL Louvain-La-Neuve) were involved in the research.
 The academic groups of DEMO from UCL-Louvain-La-Neuve and the
 OWS (Observatoire Wallon de la Santé) also provided support.]
-In some cases, data on households are included in the
+In some cases, information about households are included in the
 individual datasets.
 For example, individual-level data
-may include variables on sex, age and
-the number of cohabitants. This provides cross-tabulated information between
-the households and the individuals. Considering the number of cohabitants,
+may include variables on type of household or/and
+the number of cohabitants in addition to gender and age. This provides cross-tabulated information between
+the households and the individuals. Considering the microdataset,
 IPF can help to obtain, per zone, inhabitants
 described by individual-level variables (such as sex, age and income) and some
 household-level information (such as household type and household's size).
 
-To deal with this kind of data, we have two possible alternatives: 
-1) aggregation results in independent
-individual and household level data or 2) a technique is used
-to preserve the full contents of the data. The former solution is simpler and 
-requires only the first chapters of the book, but results in
+To form the households with this resulting data, we have two possible alternatives.
+The first is to aggregate the information concerning the individuals and 
+the households independently. By this way, we build two independent 
+tables and we can use an algorithm similar to the one in [](#IndData).
+The second possibility aims in preserving the full potential of the data.
+This means that individuals are joined with the constraint to follow
+as well as possible their caracteristics. For example, two people
+being head can not live together; if a person has 3 cohabitants,
+he needs to be in a household of 4 individuals. 
+The former solution is simpler and 
+requires only the first chapters of the book. However it results in
 a loss of possible precision.
-A second possibility, which preserves all the information in individual and
+The second possibility, which preserves all the information in individual and
 household-level tables, is explained in this section.
 
-In this situation, we usually proceed in two stages. First, we create
+With cross data, we usually proceed in two stages. First, we create
 the individuals with all their characteristics.
 The second step is to group these individuals into households using
 combinatorial optimisation. Each
@@ -175,30 +181,31 @@ person must be matched to
 one and only one household.
 
 For this process there are two possible methods. One assumes
-access to household-level variables in the individual-level
+access to household-level variables only in the individual-level
 data. The other assumes
-no access to additional data concerning the structure of the
+access to additional data concerning the structure of the
 households such as the age difference between a married couple.
-These options are described below.
+These options are described below. Note that in both 
+situations, the aim is to form households where each individual
+is contained in one and only one households. Each individual must respect,
+as well as possible, its household's attributes.
 
 ### Without additional household's data  {#WithoutHHdata}
 
 When household-level constraints are only
 contained in the individual's characteristics, 
-the aim is to form households where each individual
-is contained in one and only one households.
-Each individual must respect,
-as well as possible, its household's attributes.
-Consider the case where the individual-level variables are
+they are often several possible grouping.
+
+Consider the case of our Belgium study where the individual-level variables are
 age, gender, municipality, education level, professional status,
 size and type of households and link
 with the household head (e.g. wife, child). A good grouping is one that 
 maximises the number of well-fitted constraints.
 The perfect
-grouping would be one in which each individual respects its size and
+grouping would be one in which each individual respects its size,
 type of household and link with the head. In general, it
 is impossible to reach a perfect grouping, since the data are not 
-perfect. This can happen, for example, if there are an odd number
+perfect. Indeed, it can happen, for example, that there are an odd number
 of people who need to live in couple, making it impossible
 to find a perfect coupling.
 
@@ -216,9 +223,8 @@ and then by size of households.
 This household type has a size of at least 3
 (two parents and at least a child).
 Inside this restricted set of households, the next step is to
-look at the link that each household has with the household head
-("Head 1(W)" in this case)
-and again split the pool of individuals per link. It is only after this classification
+look at the link that each individual has with the household head
+and again split the pool of individuals, per link. It is only after this classification
 that we proceed to the random draw, respecting the links.
 For example, for the married couples, we first draw randomly a head
 and then a partner of the opposite gender (the national register
@@ -231,6 +237,8 @@ and two children: (with ids 2 and 5).
 
 The main sources of error with this method are incoherence 
 of the data and the error caused by the process of the IPF before the grouping. 
+Howeber, it implicitly consider that each couple is equiprobable independently 
+of their characteristics.
 
 
 ### With additional household's data
@@ -241,7 +249,8 @@ However, this allows improbable households, such as
 couples between an individual of 18 years old and
 another of 81. For this reason, when we create households,
 it is often very useful to take into account
-the age distributions. We can consider the ages of a
+the age distributions (when these data are available).
+We can consider the ages of a
 couple, but also of parents and children.
 
 To do this, we need tables of age differences,
@@ -285,7 +294,7 @@ Namur data, just to explain the reasoning. Thanks to this
 table, we know that to fit the real population, we will need 25 
 couples of man and woman in the same age class 20-25, etc.
 
-However, these data coming from another source, the marginals are incoherent 
+However, these data being not perfect, the marginals are incoherent 
 with the current synthetic population. For this reason, we will consider 
 the new data only as proportions. For our example, 
 it means that in the total of women having 20-25 years old 
@@ -329,7 +338,7 @@ individuals depending on their role and gender.
 This forms male heads and female 
 partners to join on one hand; and female heads 
 with male partners on the other hand. We consider
-the heads turn by turn. For each head, we
+each head turn by turn. For each head, we
 determine the theoretical distributions of each women ages, 
 depending in the age of the head
 (thanks to the additional age distribution table). 
@@ -374,10 +383,10 @@ simulation worked well.
 
 Note that we could make a simulated annealing to resolve these kind of problems.
 In our case, we have tested it, but it is very long to obtain a result
-as good as the one showed above. However, in cases where 
+as good as the one shown above. However, in cases where 
 the objectives are different, it is possible that a simulated annealing becomes
 better. Indeed, for our purpose, it worked, but only the computational time
-was not sufficient. But, if you would like to fit age distributions, 
+was not sufficient. If you would like to fit age distributions, 
 diploma distributions, and more complicated cases, the simulated annealing could
 be a good option.
 
