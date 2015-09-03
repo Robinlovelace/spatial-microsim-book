@@ -114,8 +114,18 @@ data_in <- prepareData(cbind(age, sex), ind, census_area_id = F, breaks = c(3))
 fweights <- NULL
 Result <- as.data.frame(matrix(NA, ncol=3, nrow=dim(age)[1]))
 names(Result) <- c("area", "income", "cap.income")
-```
 
+# loop through simlaton areas
+for(area in seq(dim(age)[1])){
+    gregwt = GREGWT(data_in = data_in, area_code = area)
+    fw <- gregwt$final_weights
+    fweights <- c(fweights, fw)
+    ## Estimate income
+    sum.income <- sum(fw * ind$income)
+    cap.income <- sum(fw * ind$income / sum(fw))
+    Result[area,] <- c(area, sum.income, cap.income)
+}
+```
 
 In the last step we transform the vector into a matrix and see the results from
 the reweighing process. 
