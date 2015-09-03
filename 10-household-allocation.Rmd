@@ -63,8 +63,8 @@ for dealing with such situations.
 The method is to proceed in three steps. 
 First, we determine the individual distribution, 
 for example by using the package `mipfp`, as
-explained before. Second, determine the distribution
-of characteristics for the household's data. This can
+explained before. Second, we determine the distribution
+of characteristics for the household's data, hereafter named $Hh$. This can
 be done using the same technique as for the individual-level data, considering
 the households instead of the individuals in
 the previous chapters.
@@ -79,7 +79,7 @@ drawing its constituent members [@Barthelemy2012].
 
 The household type selection is performed to ensure
 the distribution of the generated synthetic households 
-is statistically similar to the estimated one, denoted $Hh$. 
+is statistically similar to the previously estimated one, denoted $Hh$. 
 This is achieved by choosing the type $hh*$ such that the 
 distribution $Hh'$ of the already generated households 
 (including the household being built) minimize the 
