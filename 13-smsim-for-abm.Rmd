@@ -16,7 +16,7 @@ bibliography: bibliography.bib
 
 # Spatial microdata in agent-based models {#ABM}
 
-Agent-based modelling is a powerful and extremely flexible approach for
+Agent-based modelling is a powerful and flexible approach for
 simulating complex systems.
 Agent-based models (ABMs)
 allow analysis of problems that are highly non-linear and *emergent*, in which

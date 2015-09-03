@@ -6,8 +6,6 @@ bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}
-# This is an early draft of a book on spatial microsimulation, for teaching purposes
-# Introduction {#Introduction}
 library(png)
 library(grid)
 ```
