@@ -64,15 +64,14 @@ present the use of the GREGWT library and the resulting weights matrix.
 
 ```{r, fig.cap="Load and prepare the data.", echo=FALSE, message=FALSE}
 # Install GREGWT (uncomment/alter as appropriate)
-# library(devtools)
-# install_github("emunozh/GREGWT")
+# devtools::install_github("emunozh/GREGWT")
 # load the library (0.7.0)
 library('GREGWT')
 
-# Load the data from csv files stored under ../data
-age = read.csv("../data/SimpleWorld/age.csv")
-sex = read.csv("../data/SimpleWorld/sex.csv")
-ind = read.csv("../data/SimpleWorld/ind-full.csv")
+# Load the data from csv files stored under data
+age = read.csv("data/SimpleWorld/age.csv")
+sex = read.csv("data/SimpleWorld/sex.csv")
+ind = read.csv("data/SimpleWorld/ind-full.csv")
 # Make categories for age
 ind$age <- cut(ind$age, breaks=c(0,49,Inf), labels = c("a0.49", "a.50."))
 # Add initial weights to survey
@@ -93,31 +92,30 @@ in binary form. The require input for the R function is `X` representing the
 individual level survey, `dx` representing the initial weights of the survey
 and `Tx` representing the small area benchmarks. 
 
-```{r simpleworld GREGWT1,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", message=FALSE}
-# now we loop through all areas and reweight the survey using GREGWT::GREGWT
-for(area in seq(dim(age)[1])){
-    gregwt = GREGWT(data_in, area_code = area)
-    fw <- gregwt$final_weights
-    fweights <- c(fweights, fw)
-    ## Estimate income
-    sum.income <- sum(fw * ind$income)
-    cap.income <- sum(fw * ind$income / sum(fw))
-    Result[area,] <- c(area, sum.income, cap.income)
-}
+```{r, fig.cap="Load and prepare the data.", echo=FALSE, message=FALSE}
+# Install GREGWT (uncomment/alter as appropriate)
+# devtools::install_github("emunozh/GREGWT")
+# load the library (0.7.0)
+library('GREGWT')
 
-fweights <- matrix(fweights, nrow = nrow(ind))
-fweights
+# Load the data from csv files stored under data
+age = read.csv("data/SimpleWorld/age.csv")
+sex = read.csv("data/SimpleWorld/sex.csv")
+ind = read.csv("data/SimpleWorld/ind-full.csv")
+# Make categories for age
+ind$age <- cut(ind$age, breaks=c(0,49,Inf), labels = c("a0.49", "a.50."))
+# Add initial weights to survey
+ind$w <- vector(mode = "numeric", length=dim(ind)[1]) + 1
+
+# prepare simulation data using GREGWT::prepareData
+data_in <- prepareData(cbind(age, sex), ind, census_area_id = F, breaks = c(3))
+
+# prepare a data.frame to store the result
+fweights <- NULL
+Result <- as.data.frame(matrix(NA, ncol=3, nrow=dim(age)[1]))
+names(Result) <- c("area", "income", "cap.income")
 ```
 
-The R library implementing the GREGWT algorithm re-weights the survey for one
-area at the time, and therefore we need to construct a loop to iterate each
-area. The estimated weights are combined into a long vector that will be latter
-on transformed into the weights matrix.
-
-```{r simpleworld GREGWT2,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", message=FALSE}
-fweights <- matrix(fweights, nrow = nrow(ind))
-fweights
-```
 
 In the last step we transform the vector into a matrix and see the results from
 the reweighing process. 
