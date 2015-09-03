@@ -92,10 +92,10 @@ in binary form. The require input for the R function is `X` representing the
 individual level survey, `dx` representing the initial weights of the survey
 and `Tx` representing the small area benchmarks. 
 
-```{r simpleworld GREGWT1,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", message=FALSE, eval=FALSE}
-# now we loop through all areas and reweight the survey using GREGWT::GREGWT
+```{r, fig.cap="Load and prepare the data.", echo=FALSE, message=FALSE}
+# loop through simlaton areas
 for(area in seq(dim(age)[1])){
-    gregwt = GREGWT(data_in, area_code = area)
+    gregwt = GREGWT(data_in = data_in, area_code = area)
     fw <- gregwt$final_weights
     fweights <- c(fweights, fw)
     ## Estimate income
@@ -103,19 +103,6 @@ for(area in seq(dim(age)[1])){
     cap.income <- sum(fw * ind$income / sum(fw))
     Result[area,] <- c(area, sum.income, cap.income)
 }
-
-fweights <- matrix(fweights, nrow = nrow(ind))
-fweights
-```
-
-The R library implementing the GREGWT algorithm re-weights the survey for one
-area at the time, and therefore we need to construct a loop to iterate each
-area. The estimated weights are combined into a long vector that will be latter
-on transformed into the weights matrix.
-
-```{r simpleworld GREGWT2,  fig.cap="The SimpleWorld example implemented with the R implementation of the GREGWT algorithm", message=FALSE, eval=FALSE}
-fweights <- matrix(fweights, nrow = nrow(ind))
-fweights
 ```
 
 In the last step we transform the vector into a matrix and see the results from
