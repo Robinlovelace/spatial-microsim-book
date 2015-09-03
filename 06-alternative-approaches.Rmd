@@ -92,7 +92,7 @@ in binary form. The require input for the R function is `X` representing the
 individual level survey, `dx` representing the initial weights of the survey
 and `Tx` representing the small area benchmarks. 
 
-```{r, fig.cap="Load and prepare the data.", echo=FALSE, message=FALSE}
+```{r, fig.cap="Load and prepare the data.", echo=FALSE, eval=FALSE, message=FALSE}
 # loop through simlaton areas
 for(area in seq(dim(age)[1])){
     gregwt = GREGWT(data_in = data_in, area_code = area)
@@ -258,14 +258,13 @@ are performed only for zone 1.
 
 ```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.width=4, fig.height=4, echo=FALSE}
 # commented as pdf version looks better! 
-# img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
-# grid.raster(img)
+img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
+grid.raster(img)
+# \begin{figure}
+# \includegraphics{figures/TAEOptim_GenSA_Mo.pdf}
+# \caption{Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
+# \end{figure}
 ```
-
-\begin{figure}
-\includegraphics{figures/TAEOptim_GenSA_Mo.pdf}
-\caption{Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
-\end{figure}
 
 
 ```{r, eval=FALSE, echo=FALSE}
