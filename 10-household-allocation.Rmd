@@ -48,7 +48,7 @@ where you have no microdata for the households
 (one row of data per household). We begin by considering the
 case in which data on households and individuals remain completely separate.
 
-## Independent data (individuals and households) 
+## Independent data (individuals and households) {#IndData}
 
 When the individual-level data are
 independent from the household-level data, they can rarely be linked.
