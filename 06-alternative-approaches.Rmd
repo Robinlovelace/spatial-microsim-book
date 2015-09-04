@@ -92,30 +92,18 @@ in binary form. The require input for the R function is `X` representing the
 individual level survey, `dx` representing the initial weights of the survey
 and `Tx` representing the small area benchmarks. 
 
-```{r, fig.cap="Load and prepare the data.", echo=FALSE, message=FALSE}
-# Install GREGWT (uncomment/alter as appropriate)
-# devtools::install_github("emunozh/GREGWT")
-# load the library (0.7.0)
-library('GREGWT')
-
-# Load the data from csv files stored under data
-age = read.csv("data/SimpleWorld/age.csv")
-sex = read.csv("data/SimpleWorld/sex.csv")
-ind = read.csv("data/SimpleWorld/ind-full.csv")
-# Make categories for age
-ind$age <- cut(ind$age, breaks=c(0,49,Inf), labels = c("a0.49", "a.50."))
-# Add initial weights to survey
-ind$w <- vector(mode = "numeric", length=dim(ind)[1]) + 1
-
-# prepare simulation data using GREGWT::prepareData
-data_in <- prepareData(cbind(age, sex), ind, census_area_id = F, breaks = c(3))
-
-# prepare a data.frame to store the result
-fweights <- NULL
-Result <- as.data.frame(matrix(NA, ncol=3, nrow=dim(age)[1]))
-names(Result) <- c("area", "income", "cap.income")
+```{r, fig.cap="Load and prepare the data.", echo=FALSE, eval=FALSE, message=FALSE}
+# loop through simlaton areas
+for(area in seq(dim(age)[1])){
+    gregwt = GREGWT(data_in = data_in, area_code = area)
+    fw <- gregwt$final_weights
+    fweights <- c(fweights, fw)
+    ## Estimate income
+    sum.income <- sum(fw * ind$income)
+    cap.income <- sum(fw * ind$income / sum(fw))
+    Result[area,] <- c(area, sum.income, cap.income)
+}
 ```
-
 
 In the last step we transform the vector into a matrix and see the results from
 the reweighing process. 
@@ -270,14 +258,13 @@ are performed only for zone 1.
 
 ```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.width=4, fig.height=4, echo=FALSE}
 # commented as pdf version looks better! 
-# img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
-# grid.raster(img)
+img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
+grid.raster(img)
+# \begin{figure}
+# \includegraphics{figures/TAEOptim_GenSA_Mo.pdf}
+# \caption{Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
+# \end{figure}
 ```
-
-\begin{figure}
-\includegraphics{figures/TAEOptim_GenSA_Mo.pdf}
-\caption{Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
-\end{figure}
 
 
 ```{r, eval=FALSE, echo=FALSE}
