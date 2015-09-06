@@ -178,22 +178,22 @@ the term involves the creation individual-level data that is grouped by geograph
 
 Delving a little into the etymology and history of spatial microsimulation
 reveals the reasons behind the various meanings. Rarely will you be understood saying
-“I use *spatial microsimulation*” in everyday life. Usually it
+"I use *spatial microsimulation*" in everyday life. Usually it
 is important to add context. Below are a few hypothetical situations and
 suggested responses.
 
--   When talking to a colleague, a transport modeller: “spatial
-    microsimulation, also known as population synthesis...”
+-   When talking to a colleague, a transport modeller: spatial
+    microsimulation, also known as population synthesis..."
 
--   Speaking to agent based modellers: “we use spatial microsimulation
-    to simulate the characteristics of geo-referenced agents...”
+-   Speaking to agent based modellers: "we use spatial microsimulation
+    to simulate the characteristics of geo-referenced agents..."
 
 -   Communicating with undergraduates who are unlikely to have come
-    across the term or its analogies. “I do spatial microsimulation, a
-    way of generating individual-level data for small areas...”
+    across the term or its analogies. "I do spatial microsimulation, a
+    way of generating individual-level data for small areas..."
 
--   Chatting casually in the pub or coffee shop: “I’m using a technique
-    called spatial microsimulation to model people...”.
+-   Chatting casually in the pub or coffee shop: "I’m using a technique
+    called spatial microsimulation to model people...".
 
 The above examples illustrate potential for
 confusion: care needs to be taken to use terminology each audience understands. The transport modeller, for example, may
@@ -205,8 +205,8 @@ avoid implying spatial microsimulation is something it is not.
 
 Faced with uncomprehending stares when describing the method, some may
 be tempted to ‘blind them with science’, relying on
-sophisticated-sounding jargon, for example by saying: “we use simulated
-annealing in our integerised spatial microsimulation model”. Such
+sophisticated-sounding jargon, for example by saying: "we use simulated
+annealing in our integerised spatial microsimulation model". Such
 wording obscures meaning (how many people in the room will understand
 ‘integerised’, let alone ‘simulated annealing’) and makes the process
 inaccessible. Although much jargon is used in the spatial
