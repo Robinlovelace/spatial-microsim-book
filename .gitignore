@@ -1,7 +1,6 @@
 spatial-microsim-book*
 backup-code/
 figures/CakeMap.png
-frontmatter/
 *.tex
 *.aux
 *.orig
@@ -26,10 +25,8 @@ book.Rmd
 *.html
 drafts/
 .dropbox
-(White Space Conflict)
 *.out
 comments.ods
 cache-CakeMap.RData
 .~lock.book.docx#
-
 desktop.ini
