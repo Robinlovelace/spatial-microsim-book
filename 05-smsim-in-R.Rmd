@@ -230,10 +230,10 @@ for more information.
 The *reweighting* methods consists in adding a weight to each individual for the zone. This method is good if we have 
 a representative sample of the zone and the minority of the population is included in it. In contrary, if we have in
 the individual level only the majority of the population and for example, we have not an old man still working, this
-kind of individual will not appear in the final data. A proposal to avoid this is to use a *genetic algorithm* or something
-similar, that will allow to mix some individual to create a new one (mutation). We do not know for the moment
-if this solution has already been developed, it is just a proposition and to inform the reader that new process can
-still appear in the future.
+kind of individual will not appear in the final data. A proposal to avoid this is to use a *genetic algorithm*
+to allow mixing some individual-level variables to create a new individuals (mutation). 
+We are not aware of this technique being used at present,
+although it could be used in future microsimulation work.
 
 In the rest of this chapter, we develop an often used
 reweighting algorithm : the Iterative Proportional Fitting (IPF).
@@ -313,7 +313,7 @@ Element '(i,j,k)' is the total number of woman in this municipality according
 to the constraint data.
 
 The IPF algorithm will proceed zone per zone. For each zone, each individual 
-will have a weight of 'representatively' of the zone. The weights matrix 
+will have a weight of 'representatively' of the zone. The weight matrix 
 will then have the dimension 'number of individual x number of zone'. 
 'w(i,j,t)' corresponds to the weight of the individual 'i' in the 
 zone 'j' (during the step 't'). For the zone 'z', we will adapt the weight matrix to
@@ -364,7 +364,7 @@ column per column. To help the understanding of this section, we can rename the 
 a more intuitive name.
 
 ```{r}
-# Create intuitiv names for the totals
+# Create intuitive names for the totals
 n_zone <- nrow(cons) # number of zones
 n_ind <- nrow(ind) # number of individuals
 n_age <-ncol(con_age) # number of categories of "age"
@@ -584,7 +584,7 @@ In iteration 2.1 (in which we constrain by age again) the fit improves again.
 So, each time we reweight to a specific constraint, the fit of this constraint 
 is perfect, because, as seen in theory, it is a proportional reallocation. 
 Then, we repeat for another constraint and the first one can diverge from his
-perfect fit. However, when  operating this process several time, we always
+perfect fit. However, when  operating this process several times, we always
 refit to the next constraint and we can converge to a unique weight matrix.
 
 These results show that IPF requires multiple *iterations* before converging on
@@ -723,7 +723,7 @@ machine by typing `.Machine$double.eps`).
 
 Notice also that for the function to work
 a *transposed* (via the `t()` function) version of the individual-level
-data (`ind_cat`) was used. This differs from the the
+data (`ind_cat`) was used. This differs from the
 `ind_agg` object used in the pure R version. To prevent having to transpose
 `ind_cat` every time `ipfp` is called, we save the transposed version:
 
@@ -781,12 +781,14 @@ Take care when using `maxit` as the only stopping criteria as it is
 impossible to predict the number of iterations necessary
 to achieve the desired level of fit for every application.
 So, if your argument is to big you will needlessly lose time, but if it is
-to small, you will have a result that has not converge! However, using
-`tol` alone is also hazardous. Indeed, if you have iteratively the same
+to small, you the result will not converge.
+
+Using `tol` alone is also hazardous. Indeed, if you have iteratively the same
 matrices, but the approximations on the distance is a number bigger than 
-your argument, the algorithm will continue. That's why we use both together and
-it stops either if the convergence is achieve nor the maximum number of iterations
-is reached. By defaults, `maxit` is 1000 and `tol` is `.Machine$double.eps`. 
+your argument, the algorithm will continue. That's why we use `tol`
+and `maxit` in tandem. Default values for
+`maxit` and `tol` are 1000 a very small number defined in R as
+`.Machine$double.eps` respectively. 
 
 ```{r, echo=FALSE, eval=FALSE}
 # Also discuss what happens when you get a huge dataset, from Stephen's dataset
@@ -815,7 +817,7 @@ cons
 ```
 
 This is a good result: the constraints perfectly match the results
-generated using ipf, at least for the sample. To check that this
+generated using IPF, at least for the sample. To check that this
 is due to the `ipfp` algorithm improving the weights with each iteration,
 let us analyse the aggregate results generated from the alternative
 set of weights, generated with only 2 iterations of IPF:
@@ -949,10 +951,10 @@ weight_init[, c("Less18"), c("Level3","Level4")] <- 0
 ```
 
 Everything being well defined, we can execute
-*Ipfp*. As with the package **ipfp**, we can chose a stopping criterion defined by *tol* and/or a maximum
+*Ipfp*. As with the package **ipfp**, we can choose a stopping criterion defined by *tol* and/or a maximum
 number of iterations. Finally, setting the argument `print` to `TRUE` 
-ensures we will see the evolution of the
-of the procedure. After reaching either the maximum number of iterations or convergence 
+ensures we will see the evolution of the procedure.
+After reaching either the maximum number of iterations or convergence 
 (whichever comes first), the function will return a list containing the updated 
 array, as well as other information about the convergence of the algorithm. 
 Note that if the target margins are not consistent, the input data is then 

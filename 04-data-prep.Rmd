@@ -685,7 +685,7 @@ we will see in the next section.
 
 ## Matching individual and aggregate level data names {#matching}
 
-Before combining the newly recategorised individual-level data with the
+Before combining the newly re-categorised individual-level data with the
 aggregate constraints, it is useful to for the category labels to match up.
 This may seem trivial, but will save time in the long run. Here is the problem:
 
@@ -720,7 +720,7 @@ However, these datasets cannot possibly be compared because they
 measure very different things. The `ind` dataset records
 the value that each individual takes for a range of variables, whereas
 `cons` counts the number of individuals in different groups at
-the geographical level. These datesets are have different dimensions:
+the geographical level. These datasets are have different dimensions:
 
 ```{r, echo=FALSE}
 # (Dumont, 2014) I don't like the previous sentence, because even if it is the same dimension
