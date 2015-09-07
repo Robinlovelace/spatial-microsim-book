@@ -497,6 +497,6 @@ combinatorial optimisation using existing R packages.
 For combinatorial optimisation algorithms designed for spatial microsimulation
 we must, for now, look for programs outside the R 'ecosystem'.
 Harland (2013) provides a practical tutorial
-introducing the subject based on the Java-based
+introducing the subject using the Java-based
 Flexible Modelling Framework (FMF).
 
