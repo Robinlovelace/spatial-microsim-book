@@ -51,18 +51,18 @@ restrictions.
 # restrictions, this leads to the generation of negative weights.
 ```
 
-A clear simplified example of this algorithm (and other algorithms) can be
-found in Rahman (2009).  In their paper Tanton et.al (2011) make a full
-description of the algorithm. For a deeper understanding of the SAS macros see
-Bell (1999). An R implementation of GREGWT, has been created by Esteban Muñoz,
-and can be found in the GitHub repository
-[GREGWT](https://github.com/emunozh/GREGWT).
+A simplified version of this algorithm (and other algorithms) is provided in
+by Rahman (2009).  Tanton et al. (2011)
+describe of the algorithm in full.
+An R implementation of GREGWT can be found in the GitHub repository
+[GREGWT](https://github.com/emunozh/GREGWT) and installed using
+the function `install_github()` from the **devtools** package.
 
-We use these implementation of the GREGWT algorithm with the data from the
-simple example presented in chapter [Simple World](#SimpleWorld). Below we
-present the use of the GREGWT library and the resulting weights matrix.
+The code below
+uses this implementation of the GREGWT algorithm, with the data from the
+Chapter 3.
 
-```{r, fig.cap="Load and prepare the data.", echo=FALSE, message=FALSE}
+```{r, fig.cap="Load and prepare the data.", message=FALSE}
 # Install GREGWT (uncomment/alter as appropriate)
 # devtools::install_github("emunozh/GREGWT")
 # load the library (0.7.0)
@@ -92,7 +92,8 @@ in binary form. The require input for the R function is `X` representing the
 individual level survey, `dx` representing the initial weights of the survey
 and `Tx` representing the small area benchmarks. 
 
-```{r, fig.cap="Load and prepare the data.", echo=FALSE, eval=FALSE, message=FALSE}
+```{r, fig.cap="Load and prepare the data.", eval=FALSE, message=FALSE}
+# Warning: test code
 # loop through simlaton areas
 for(area in seq(dim(age)[1])){
     gregwt = GREGWT(data_in = data_in, area_code = area)
@@ -140,7 +141,7 @@ the parameters $par_i$ represent 0, since all cells have to be positive.
 The $f_0(x)$, to be minimised, is the distance between the actual weight matrix and
 the aggregate constraint variable
 `cons`. $x$ represents the weights which will
-be calculated to minimise
+be calculated
 to minimise $f_0(x)$.
 
 To illustrate the concept further, consider the case of aircraft design.
@@ -181,7 +182,7 @@ the information of the distribution of the sample.
 Thus, we want to find a vector of parameters `par` that will multiply the `indu` matrix,
 which is similar to `ind_cat`, but with only different rows and the cells contain
 the number of time that this kind of individual appears in the sample. We want the result
-of this multiplication to be as closer as possible to the constraints.
+of this multiplication to be as close as possible to the constraints.
 
 As for the IPF proposition, we will proceed zone per zone. So, our 
 optimization problem for the first zone can be written as follows:
@@ -212,8 +213,9 @@ $$\left\{
 \end{array}
 \right.$$
 
-We have chosen the distance "TAE", but we could imagine to do the same with 
-other metrics.
+Note that although
+the "TAE" goodness-of-fit measure was used in this example,
+any could be used.
 
 
 ```{r, echo=FALSE}
@@ -273,18 +275,22 @@ qplot(data = opt_res, time, fit, color = algorithm, geom="line") +
   ylab("Total Absolute Error") + xlab("Time (microseconds)") + scale_color_brewer(palette = 2, type = "qual") + theme_classic() + xlim(c(0, 15000))
 ```
 
-Figure x shows that, in a first step, all algorithm reach a real improvement during the first iteration. The advantage of the IPF algorithm we have been using, which
-converges rapidly to an error very close to zero (as seen before, zero is not
-reachable with a computer performing calculus) is observable after only the first iteration.
+Figure 6. shows that all algorithms
+improve fit during the first iteration.
+The reason for using IPF
+becomes clear after only one iteration.
 On the other end of the spectrum is R's default optimization algorithm,
-the Nelder-Mead method. Although the graph shows no improvement
-from one iteration to the next, it should be stated that the algorithm
+the Nelder-Mead method, which requires many more iterations to
+converge to a value approximating zero than does
+IPF.^[Although
+the graph shows no improvement
+from one iteration to the next for the Nelder-Mead algorithm,
+it should be stated that it
 is just 'warming up' at this stage and than each iteration is very
 fast, as we shall see. After 400 iterations (which happen
 in the same time that other algorithms take for a single iteration!),
-the Nelder-Mead begins to converge: it works effectively. 
-However, it requires far more iterations to
-converge to a value approximating zero than IPF.
+the Nelder-Mead begins to converge: it works
+effectively.]
 Next best in terms of iterations is `GenSA`, the Generalized Simulated
 Annealing Function from the **GenSA** package. `GenSA`
 attained a near-perfect fit after only two full iterations.
@@ -337,8 +343,8 @@ do not represent the error as a function of the time, but the time per
 algorithm in function of the `maxit` argument (Figure xx). This figure
 demonstrates that an iteration of GenSA take a long time in comparison 
 with the other algorithm. Moreover, `"BFGS"` and `"CG"` are still following a
-similar curve under GenSA. Nelder-Mead, SANN and ipf contains iterations that 
-take less time. Until, it appears that ipf and the best in terms of iterations
+similar curve under GenSA. Nelder-Mead, SANN and IPF contains iterations that 
+take less time. Until, it appears that IPF and the best in terms of iterations
 and the time needed for few iterations is good.
 
 ```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.width=4, fig.height=4, echo=FALSE}
@@ -378,30 +384,35 @@ very large: the speed benefits of using the deterministic IPF algorithm shrink a
 the size of the survey dataset increases. As seen before, IPF creates non integer 
 weights, but we have proposed two solutions to transform them into the final 
 individual-level population. So, the proportionality of IPF is more intuitive,
-but need to calculate the whole weights matrix in each iteration, where CO
+but need to calculate the whole weight matrix in each iteration, where CO
 just proposes candidates. However, if the objective function takes a long time
 to be calculated, CO will have to perform this evaluation for each candidate.
 
 Genetic algorithms are included in this field and become popular in some 
-domains, such as industry, for the moment. These kind of algorithms can be 
-really effective when the objective function has several local minimum and
-we want to find the global one. (Hermes and Poulsen, 2012)
+domains, such as industry, for the moment. This kind of algorithm can be 
+very effective when the objective function has several local minimum and
+(Hermes and Poulsen, 2012).
 
-There are two approaches for reweighting using combinatorial optimisation
-in R: shuffling individuals in and out of each area and combinatorial optimisation,
-the *domain* of the solution space set to allow inter-only results...
+```{r}
+# No sure this section is useful; removed for now...
+# 
+# There are two approaches for reweighting using combinatorial optimisation
+# in R: shuffling individuals in and out of each area and combinatorial optimisation,
+# the *domain* of the solution space set to allow integer-only results.
+# 
+# The second approach to combinatorial optimisation in R depends on methods
+# that allow only integer solutions to the general constrained optimisation
+# formulae demonstrated in the previous section. *Integer programming* is the
+# branch of computer science dedicated to this area, and it is associated with
+# its own algorithms and approaches, some of which have been implemented in R
+# (Zubizarreta, 2012).
+```
 
-The second approach to combinatorial optimisation in R depends on methods
-that allow only integer solutions to the general constrained optimisation
-formulae demonstrated in the previous section. *Integer programming* is the
-branch of computer science dedicated to this area, and it is associated with
-its own algorithms and approaches, some of which have been implemented in R
-(Zubizarreta, 2012).
 
-To illustrate how the approach works in general terms, we can use the
+To illustrate how the integer-based
+approach works in general terms, we can use the
 `data.type.int` argument of the `genoud` function in the **rgenoud** package.
-This ensures only integer results for
-a genetic algorithm to select parameters are selected:
+This ensures only integers result from the optimisation process:
 
 ```{r, eval=FALSE}
 # Set min and maximum values of constraints with 'Domains'
@@ -411,9 +422,9 @@ genoud(nrow(ind), fn = fun, ind_num = ind, con = cons[1,],
   control = list(maxit = 1000), data.type.int = TRUE, D = m)
 ```
 
-This command, implemented in 'optim-tests-SimpleWorld.R',
+This command, implemented in the file 'R/optim-tests-SimpleWorld.R',
 results in weights for the unique individuals 1 to 4 of 1, 4, 2 and 4 respectively.
-This means a final population with aggregated data equal to
+This means a final population with aggregated data equal to the target
 (as seen in the previous section):
 
 
@@ -433,16 +444,15 @@ indu <- apply(umat[1:ncol(ind_cat)], 2, function(x) x * umat$ind_num)
 ```
 
 
-```{r}
+```{r, echo=FALSE}
 colSums(indu * c(1, 4, 2, 4))
 ```
 
-Note that we performed the test only for zone 1 and this aggregated
-data are equally the same as the first constraint. Moreover, 
-thanks to the fact that the algorithm directly consider only
+Note that we performed the test only for zone 1 and the aggregated
+results are correct for the first constraint. Moreover, 
+thanks to the fact that the algorithm only considers
 integer weights, we do not have the issue of fractional weights
-associated with IPF, 
-which only generates perfect fit for non-integer weights.
+associated with IPF.
 Combinatorial optimisation algorithms for population
 synthesis do not rely on integerisation,
 which can damage model fit. The fact that the gradient contains "NA"
@@ -458,16 +468,15 @@ Note that there can be several solutions which attain
 a perfect fit. This result depends on the random seed chosen for
 the random draw. Indeed, if we chose a seed of 0
 (by writing `set.seed(0)`), as before, we obtain the weights 
-`(0, 6, 4, 2)` which results also in a perfect fit for zone 1:
+`(0, 6, 4, 2)` which results also in a perfect fit for zone 1.
+These two potential synthetic populations reach a perfect fit, but 
+are quite different. Indeed, we can observe the two populations.
 
-```{r}
+```{r, include=FALSE}
 colSums(indu * c(0 ,6 ,4 ,2))
 ```
 
-These two potential synthetic populations reach a perfect fit, but 
-are quite different. Indeed, we can observe the two populations:
-
-```{r}
+```{r, include=FALSE}
 indu * c(1 ,4 ,2 ,4)
 indu * c(0 ,6 ,4 ,2)
 ```
@@ -479,11 +488,7 @@ over 50, because we take integer weights and there are two
 men in this category in the sample. This is the disadvantage of
 algorithms reaching directly integer weights. With IPF, if the 
 weights of this individual is between 0 and 1, there is a possibility 
-to have a person in this category.
-
-```{r, echo=FALSE}
-# I really like this description (RL)
-```
+of a person belonging to this category.
 
 `genoud` is used here only
 to provide a practical demonstration of the possibilities of
@@ -492,6 +497,6 @@ combinatorial optimisation using existing R packages.
 For combinatorial optimisation algorithms designed for spatial microsimulation
 we must, for now, look for programs outside the R 'ecosystem'.
 Harland (2013) provides a practical tutorial
-introducing the subject based on the Flexible Modelling Framework (FMF)
-Java program.
+introducing the subject based on the Java-based
+Flexible Modelling Framework (FMF).
 
