@@ -379,7 +379,8 @@ weight matrix to keep in memory each step.
 
 ```{r}
 # Create initial matrix of categorical counts from ind 
-ind_agg0 <- t(apply(cons, 1, function(x) x^0 * ind_agg))
+ind_agg0 <- t(apply(cons, 1, function(x) 1 * ind_agg))
+colnames(ind_agg0) <- names(cons)
 weights1 <- weights2 <- weights # create addition weight objects
 ```
 
