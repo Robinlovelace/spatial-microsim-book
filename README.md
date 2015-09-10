@@ -24,7 +24,8 @@ Then navigate into the downloaded folder and open the `spatial-microsim-book.Rpr
 
 ```
 pkgs <- c("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp", "rgeos", "mipfp", "rgdal", "gridExtra", "tidyr", "mlogit")
-install.packages(pkgs)
+wpacks <- pkgs %in% installed.packages()
+install.packages(pkgs[!wpacks])
 ```
 
 The GREGWT package can be installed as follows:

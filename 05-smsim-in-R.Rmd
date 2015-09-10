@@ -1189,7 +1189,7 @@ that each interval occurs more or less the same number of times.
 ```
 \begin{figure}
 \includegraphics{figures/RandomUnif100000.png}
-\caption{Distribution of a vector generated randomly (each integer between 1 and 100000 equiprobable).}
+\caption[Distribution of a vector generated randomly]{Distribution of a vector generated randomly (each integer between 1 and 100000 being equally likely).}
 \end{figure}
 
 
