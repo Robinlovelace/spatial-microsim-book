@@ -12,19 +12,18 @@ b <- gsub("subsection\\{", "section\\{", x = b)
 # Additional material to include
 # a <- "\\usepackage{hyperref}"
 
-k <- readLines("~/Desktop/Krantz_v1.11/Example/Run_This_Example.tex")
 # kp <- 9 # where do package descriptions end?
 # kf <- grep("mainmatter", k) # frontmatter up to and including here
 kf <- readLines("frontmatter/pream.tex")
-kb <- grep("printindex", k) # frontmatter up to and including here
 
 # kp <- k[1:kp]
 # kf <- k[(length(kp) + 1):kf] # frontmatter
-kb <- k[kb:length(k)]
 
 # kp <- c(kp, a)
 
-k <- c(kf, b, kb)
+k <- c(kf, b, c("\\printindex", "\\end{document}"))
+
+
 biblilines <- grep("section\\*\\{Bibliography\\}|\\{section\\}\\{Bibliography\\}", x = k)
 kbl <- k[biblilines]
 kbl <- gsub(pattern = "section", replacement = "chapter", x = kbl)

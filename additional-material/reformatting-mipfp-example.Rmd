@@ -1,3 +1,15 @@
+
+
+## Load data
+
+```{r}
+ctabs <- read.csv("additional-material/input-data-mipfp.csv")
+ctabs
+```
+
+
+
+```{r, echo=FALSE}
 pkgs <- c("readxl")
 lapply(pkgs, library, character.only = T)
 
@@ -19,12 +31,14 @@ d <- d[-1,]
 
 # convert to multi-dimensional array
 dnames <- c("age", "eth", "health")
+names
 dims <- c(8, 5, 5)
+```
 
-
-dvec <- as.numeric(d)
+```{r, eval=FALSE}
+# dvec <- as.numeric(d)
 # apply(dvec, MARGIN = 2, FUN = class)
-# d <- apply(X = d, MARGIN = 2, FUN = as.numeric)
+dvec <- apply(X = d, MARGIN = 2, FUN = as.numeric)
 
 seed <- array(data = dvec, dim = dims, dimnames = dnames)
 
@@ -43,4 +57,9 @@ for(i in 1:nrow(constraints)){
     )
   result[[i]] <- Ipfp()
 }
+
+```
+
+
+
 

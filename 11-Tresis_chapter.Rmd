@@ -140,6 +140,7 @@ length(unique(ind$hhld))
 Keep in mind that the sample() function randomly selects numbers so you will likely have a different number of households in your dataset unless you set the seed using _set.seed(99)_ as above.
 Once we have assigned each individual to a dataset we can generate the household level data.
 For this example we can simply calculate some of these household variables including the number of individuals in the household, the number of workers and the age of the oldest person living in the household. Ensure you have loaded the __dplyr__ and __stringr__ packages and then run:
+
 ```{r,results='hide',message=FALSE,warning=FALSE}
 library(dplyr)
 library(stringr)
@@ -297,9 +298,14 @@ This is generally not used but it can be useful for checking the results.
 Once we have sampled all the households we will bind the two vectors (_synhhlds_ and _synhhldweights_) into a single data frame.
 Note that the use of the sample() function means that the specific households chosen will likely differ somewhat every time unless the _set.seed()_ function is used first (as we did above).
 This is why it is important to select the correct variables because the only variables that are guaranteed to match the distribution in the population are those that are used to select the synthetic households.
-This is then repeated for each of the subsequent groups.
+This is then repeated for each of the subsequent groups.^[The
+code for this stage is over 50 lines long so is not included in
+the book. See the
+[online version](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/11-Tresis_chapter.Rmd)
+of the chapter of http://git.io/vGAEz
+for the code.]
 
-```{r}
+```{r, echo=FALSE}
 # Households with a car and no professionals
 synhhlds <- c(synhhlds,
               sample(
@@ -309,6 +315,7 @@ synhhlds <- c(synhhlds,
                       )$hhld, 
                 popdist['Car','Other'])
               )
+
 synhhldweights <- c(synhhldweights,
                     rep(popweights['Car','Other'], 
                         popdist['Car','Other']

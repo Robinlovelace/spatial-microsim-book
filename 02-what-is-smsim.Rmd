@@ -28,7 +28,7 @@ but this would not change how its methods work or what they do. However,
 it is important that the terminology we use is at least *internally consistent*
 to avoid confusion. Furthermore, it is important to understand something about
 how others have used 'spatial microsimulation' to avoid
-mis-interpretation of literature that employs the term.
+misinterpretation of literature that employs the term.
 
 There are valid reservations about the term *spatial microsimulation*, as
 described below
@@ -79,7 +79,7 @@ methods ([](#assumptions)).
 
 ## Terminology {#terminology}
 
-### Spatial microsimultion as SimCity
+### Spatial microsimulation as SimCity
 
 SimCity is
 a popular computer game series in which the player constructs urban infrastructure
@@ -120,7 +120,7 @@ the spatial microdata on which the spatial microsimulation approach depends.
 
 A subsequent section
 ([](#applications))
-outlines some of the real-world problems spatial microsimulation has
+outlines some real-world problems spatial microsimulation has
 been used to tackle. Before us pause to consider how spatial
 microsimulation is understood in the literature and how this relates to
 the definitions used in this book.
@@ -178,22 +178,22 @@ the term involves the creation individual-level data that is grouped by geograph
 
 Delving a little into the etymology and history of spatial microsimulation
 reveals the reasons behind the various meanings. Rarely will you be understood saying
-“I use *spatial microsimulation*” in everyday life. Usually it
+"I use *spatial microsimulation*" in everyday life. Usually it
 is important to add context. Below are a few hypothetical situations and
 suggested responses.
 
--   When talking to a colleague, a transport modeller: “spatial
-    microsimulation, also known as population synthesis...”
+-   When talking to a colleague, a transport modeller: spatial
+    microsimulation, also known as population synthesis..."
 
--   Speaking to agent based modellers: “we use spatial microsimulation
-    to simulate the characteristics of geo-referenced agents...”
+-   Speaking to agent based modellers: "we use spatial microsimulation
+    to simulate the characteristics of geo-referenced agents..."
 
 -   Communicating with undergraduates who are unlikely to have come
-    across the term or its analogies. “I do spatial microsimulation, a
-    way of generating individual-level data for small areas...”
+    across the term or its analogies. "I do spatial microsimulation, a
+    way of generating individual-level data for small areas..."
 
--   Chatting casually in the pub or coffee shop: “I’m using a technique
-    called spatial microsimulation to model people...”.
+-   Chatting casually in the pub or coffee shop: "I'm using a technique
+    called spatial microsimulation to model people...".
 
 The above examples illustrate potential for
 confusion: care needs to be taken to use terminology each audience understands. The transport modeller, for example, may
@@ -204,11 +204,11 @@ of transparency and reproducibility of method discussed in the previous chapter:
 avoid implying spatial microsimulation is something it is not.
 
 Faced with uncomprehending stares when describing the method, some may
-be tempted to ‘blind them with science’, relying on
-sophisticated-sounding jargon, for example by saying: “we use simulated
-annealing in our integerised spatial microsimulation model”. Such
+be tempted to 'blind them with science', relying on
+sophisticated-sounding jargon, for example by saying: "we use simulated
+annealing in our integerised spatial microsimulation model". Such
 wording obscures meaning (how many people in the room will understand
-‘integerised’, let alone ‘simulated annealing’) and makes the process
+'integerised', let alone 'simulated annealing') and makes the process
 inaccessible. Although much jargon is used in the spatial
 microsimulation literature and in this book, care must be taken to ensure
 that people understand what you are saying.
@@ -217,21 +217,21 @@ This raises the question, why use the term spatial microsimulation at
 all, if it is understood by so few people? The answer to this is that
 spatial microsimulation, defined clearly at the outset and used
 correctly, can concisely describe a technique that would otherwise need
-many more words on each use. Try replacing ‘spatial microsimulation’
-with ‘a statistical technique to allocate individuals from a survey
-dataset to administrative zones’ each time it appears in this book and
-the advantages of a simple term should become clear! ‘Population
-synthesis’ is perhaps a more accurate term but, transport modelling
-aside, the literature already uses ‘spatial microsimulation’. Rather
+many more words on each use. Try replacing 'spatial microsimulation'
+with 'a statistical technique to allocate individuals from a survey
+dataset to administrative zones' each time it appears in this book and
+the advantages of a simple term should become clear! 'Population
+synthesis' is perhaps a more accurate term but, transport modelling
+aside, the literature already uses 'spatial microsimulation'. Rather
 than create more complexity with *another* piece of jargon, we proceed
 with the term favoured by the majority of practitioners.
 
 Why has this situation, in which practitioners of a statistical method
 must tread carefully to avoid confusing their audience, come about?
-First it’s worth stating that the problem is by no means unique to this
+First it's worth stating that the problem is by no means unique to this
 field: imagine the difficulties that Bayesian statisticians must
 encounter when speaking of prior and posterior probability distributions
-to an uninitiated audience. Let alone describing Gibb’s sampling. Describing complex methods is 
+to an uninitiated audience. Let alone describing Gibb's sampling. Describing complex methods is 
 a constant challenge for the scientist. Using jargon when the audience 
 is experienced and simplifying when they are not is the art of science communication.
 
@@ -429,7 +429,7 @@ grid.raster(img)
 
 Spatial microsimulation has a wide variety of applications and there
 are many areas where the technique has been used.
-Some of the main areas of application have
+The main areas of application have
 been health, economic policy evaluation and transport. Rather than attempt
 to provide a comprehensive account of the range of current and possible
 applications, this section describes a single study in each area to exemplify

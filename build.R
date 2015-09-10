@@ -1,6 +1,5 @@
 # TODO for the book project overall
 # Individual chapters on eprints
-# Create another worked example, of variability in inequality -> paper
 # Implement regex to make bibliography happen in CRC press style
 # Add urls to all the references and packages
 # Propensity to cycle
