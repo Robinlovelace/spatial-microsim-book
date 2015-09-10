@@ -27,6 +27,12 @@ pkgs <- c("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp", "rgeos", "mipfp
 install.packages(pkgs)
 ```
 
+The GREGWT package can be installed as follows:
+
+```
+devtools::install_github("emunozh/GREGWT")
+```
+
 To install `ipfp` on Ubuntu (tested with version 14.04, the latest 'long-term support' version at the time of writing) a number of additional packages are required. These can be installed from the command line with:
 
 ```

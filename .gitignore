@@ -30,3 +30,6 @@ comments.ods
 cache-CakeMap.RData
 .~lock.book.docx#
 desktop.ini
+*.log
+book.odt
+frontmatter/rough-drafts/stackXquestion.R
