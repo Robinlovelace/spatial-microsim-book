@@ -120,7 +120,7 @@ and double click on `spatial-microsim-book.Rproj`.  This should cause RStudio to
 be opened at this location, with all the input data files easily accessible to R
 through *relative file paths* (you must have installed the RStudio software for this stage to work --- see the Appendix).
 
-```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded", echo=FALSE, message=FALSE}
+```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
 # todo: create tutorial on installing R and RStudio
 grid.raster(readPNG("figures/studio-basic.png"))
 ```
