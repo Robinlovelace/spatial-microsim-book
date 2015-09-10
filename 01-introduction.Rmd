@@ -9,7 +9,7 @@ bibliography: bibliography.bib
 library(png)
 library(grid)
 ```
-\listoffigures
+
 # Introduction {#intro}
 
 Imagine a world in which 
