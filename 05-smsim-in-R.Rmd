@@ -227,6 +227,9 @@ choose *entirely* random numbers, so algorithms to generate *pseudo-random numbe
 for more information.
 ] 
 
+\index{random number generation}
+
+
 The *reweighting* methods consists in adding a weight to each individual for the zone. This method is good if we have 
 a representative sample of the zone and the minority of the population is included in it. In contrary, if we have in
 the individual level only the majority of the population and for example, we have not an old man still working, this
