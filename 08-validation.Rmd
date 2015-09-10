@@ -428,17 +428,17 @@ TAEVec[worst_zone] / sum(TAEVec)
 The result of the above code demonstrates that more than half (56%) of the error originates
 from a single zone: 84. Therefore zone 84 certainly is anomalous and worthy of further
 investigation. An early strategy to characterise this zone and compare it to the others is to visualise it.
-To this end, Figure 7.1 places the TAE values calculated previously on a map,
+To this end, Figure 8.1 places the TAE values calculated previously on a map,
 with a base-layer supplied by Google for context --- see the book's
 [online source code](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/validation.Rmd) to see how. Zone 84 is clearly visible in this map as a ward
 just above Leeds city centre. This does not immediately solve
 the problem, but it confirms that only few zones have bigger errors.
-Note that the maps presented in Figure 7.1 looks identical for TAE and SAE values
+Note that the maps presented in Figure 8.1 looks identical for TAE and SAE values
 except for the scale; the similitude of these measures of fit can be
 verified using a simple correlation:
 
 ```{r}
-cor(TAEVec, SAEVec) # note that the two measures are very correlated
+cor(TAEVec, SAEVec) # the two measures are very correlated
 ```
 
 In this case, both are very correlated. However, when having very different zones, in term of total population,

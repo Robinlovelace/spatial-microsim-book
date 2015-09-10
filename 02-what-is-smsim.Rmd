@@ -420,7 +420,7 @@ estimates of *cross-tabulations* (contingency tables) between different variable
 and estimates of the distribution of continuous variables such as age and income.
 These estimates are useful in many applications ([](#applications)).
 
-```{r, fig.cap="Schematic of population synthesis, a critical element in spatial microsimulation", echo=FALSE}
+```{r, fig.cap="Schematic of population synthesis, a critical element in spatial microsimulation", fig.scap="Schematic of population synthesis", fig.align='center', echo=FALSE}
 img <- readPNG("figures/msim-schema.png")
 grid.raster(img)
 ```
@@ -530,7 +530,7 @@ shows that
 microsimulation can provide important new lines of evidence
 to inform national-level policies [@avram2012distributional].
 
-```{r vingtile, fig.cap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.", fig.width=5, fig.height=5, echo=FALSE}
+```{r, fig.cap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.", fig.scap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014).", fig.width=5, fig.height=5, fig.align='center', echo=FALSE}
 # A typical output from a microsimulation model for economic policy evaluation, from De Agostini et al. (2014). Each vertical bar represents the relative gains or losses of each income 'vingtile' (there are 20 equally sized groups, by income, in the model) and the black line shows that the austerity budget has been most detrimental to low income groups and most beneficial to the upper-middle classes.
 library(png)
 library(grid)

@@ -252,13 +252,13 @@ individual-level dataset. But which to use?
 Different reweighting strategies are suitable in different contexts and there
 is no clear winner for every occasion. However, testing a range of
 strategy makes it clear that certain algorithms are more efficient than
-others for spatial microsimulation. Figure x demonstrates this variability
+others for spatial microsimulation. Figure 6.1. demonstrates this variability
 by plotting total absolute error as a function of number of iterations for
 various optimization algorithms available from the base function
 `optim` and the **GenSA** package. Note that the comparisons 
 are performed only for zone 1.
 
-```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.width=4, fig.height=4, echo=FALSE}
+```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.scap="Total Absolute Error in function of iteration for several algorithms", fig.width=4, fig.height=4, fig.align='center', echo=FALSE}
 # commented as pdf version looks better! 
 img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
 grid.raster(img)
@@ -275,7 +275,7 @@ qplot(data = opt_res, time, fit, color = algorithm, geom="line") +
   ylab("Total Absolute Error") + xlab("Time (microseconds)") + scale_color_brewer(palette = 2, type = "qual") + theme_classic() + xlim(c(0, 15000))
 ```
 
-Figure 6. shows that all algorithms
+Figure 6.1. shows that all algorithms
 improve fit during the first iteration.
 The reason for using IPF
 becomes clear after only one iteration.
@@ -340,14 +340,14 @@ To overcome the caveat that the meaning of an 'iteration' changes dramatically
 from one algorithm to the next, further tests measured the time taken
 for each reweighting algorithm to run. To have a readable graph, we 
 do not represent the error as a function of the time, but the time per
-algorithm in function of the `maxit` argument (Figure xx). This figure
+algorithm in function of the `maxit` argument (Figure \ref{TimeOptim_GenSA}). This figure
 demonstrates that an iteration of GenSA take a long time in comparison 
 with the other algorithm. Moreover, `"BFGS"` and `"CG"` are still following a
 similar curve under GenSA. Nelder-Mead, SANN and IPF contains iterations that 
 take less time. Until, it appears that IPF and the best in terms of iterations
 and the time needed for few iterations is good.
 
-```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.width=4, fig.height=4, echo=FALSE}
+```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms",fig.scap="Total Absolute Error in function of processing time for several algorithms", fig.width=4, fig.height=4, fig.align='center', echo=FALSE}
 # img <- readPNG("figures/TimeOptim_GenSA_Mo.png")
 # grid.raster(img)
 # # ![](figures/optim-time.png)
@@ -356,6 +356,7 @@ and the time needed for few iterations is good.
 \begin{figure}
 \includegraphics{figures/TimeOptim_GenSA_Mo.pdf}
 \caption{Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
+\label{TimeOptim_GenSA}
 \end{figure}
 
 Nelder-Mead is fast at reaching a good

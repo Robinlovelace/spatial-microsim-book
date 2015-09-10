@@ -290,7 +290,7 @@ cor(as.numeric(cons), as.numeric(ind_agg))
 This value is very close to 1, so we can consider that there is a big linear
 correlation between the result and the constraint. We can verify it by plotting:
 
-```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis)."}
+```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis).", fig.scap="Scatter plot of simulated and desired counts (using **ipfp**)",fig.align='center'}
 plot(ind_agg, cons, pch=20, xlab="Result of the simulation",
   ylab="Constraint",
   main="Correspondance between the simulation and the constraints")
@@ -601,7 +601,7 @@ print the `tol` result by default. This was a wise decision
 by the developer of **mipfp** in this case: 
 more than 100 iterations were needed for the weights to converge.
 
-```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis)."}
+```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis).",fig.scap="Scatter plot of simulated and desired counts (using **mipfp**)", fig.align='center'}
 layout(matrix(c(1:3,3), 2, 2))
 plot(con1_convert, apply(weight_mipfp$x.hat,c(1,4,6),sum), pch=20, xlab="Result of the simulation for constraint 1",
   ylab="Constraint 1",
@@ -685,7 +685,7 @@ However, both methods seems to return very similar
 weights, since the crosses are included inside the 
 circles.
 
-```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis)."}
+```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis).", fig.scap="Scatter plot of simulated and desired counts (**ipfp** vs **mipfp**)"}
 layout(matrix(c(1:3,3), 2, 2))
 plot(con1_convert, apply(weight_mipfp$x.hat,c(1,4,6),sum), pch=4, ylab="Simulated",
   xlab="Constraint 1", main="Constraint 1")

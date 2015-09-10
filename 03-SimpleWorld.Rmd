@@ -50,7 +50,7 @@ cover the entirety of the SimpleWorld planet,
 which is a 2 dimensional
 plane split into 3 zones (see figure 3.1). 
 
-```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", echo=FALSE, message=FALSE}
+```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", fig.scap="The SimpleWorld environment", fig.align='center', echo=FALSE, message=FALSE}
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
 library(sp)
