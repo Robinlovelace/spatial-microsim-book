@@ -39,17 +39,20 @@ Available datasets often
 lack the spatial or temporal resolution required to understand complex processes.
 Publicly available datasets frequently miss key attributes, such as income.
 Even when high quality data is made available, it can be very difficult
-for others to check or *reproduce* results based on them, because of
-strict conditions of use, potentially blocking democratic and enlightened decision making.
+for others to check or *reproduce* results based on them.
+Strict conditions inhibiting data access and use are aimed to protect citizen
+privacy but can also serve to block democratic and enlightened decision making.
 The empowering potential of new information is encapsulated in the
 saying that 'knowledge is power'.
-The saying helps explain why methods such as spatial microsimulation,
+This helps explain why methods such as spatial microsimulation,
 that help represent the full complexity of reality,
 are in high demand.
 
-Spatial microsimulation is a growing approach in the social sciences
-which has already seen extensive use in fields as diverse
-as transport, health and education (see Chapter \ref{what-is}).
+Spatial microsimulation is a growing approach to studying complex issues
+in the social sciences.
+It has been used extensively in fields as diverse
+as transport, health and education (see Chapter \ref{what-is}), and
+many more applications are possible.
 Fundamental to the approach are approximations of
 individual-level data at high spatial resolution: people allocated to places.
 This *spatial microdata*, in one form or another,
