@@ -591,12 +591,12 @@ grid.raster(img)
 ```
 
 A larger and more advanced illustration of the potential for spatial microsimulation
-in transport modelling work is described by @Bathelemy2015a. This paper
+in transport modelling work is described by @Barthelemy2015a. This paper
 describes a stochastic model to allocate travel behaviours to a geo-located
 synthetic population of 10 million people, representing the entirety of
 the transport system in Belgium. By combining the synthetic microdata
 with an agent based modelling approach (described in chapter 13),
-@Bathelemy2015a are able to characterise a very large transport system
+@Barthelemy2015a are able to characterise a very large transport system
 in great detail.
 
 
