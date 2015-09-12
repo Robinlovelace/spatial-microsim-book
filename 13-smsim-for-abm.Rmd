@@ -869,14 +869,18 @@ you remove the history recording from the .nlogo file as it so no longer necessa
 ]  
 
 ```{r, eval=FALSE}
-SimpleWorld <- function(angle.of.vision=360, distance.of.vision=10,time.stable = 200) {
+SimpleWorld <- function(angle.of.vision=360,
+  distance.of.vision=10,time.stable = 200) {
   NLCommand (paste("set average-bribeability", 100))
   NLCommand (paste("set stdev-bribeability", 0))
   NLCommand (paste("set angle-of-vision", angle.of.vision))
-  NLCommand (paste("set distance-of-vision", distance.of.vision))
+  NLCommand (paste("set distance-of-vision",
+    distance.of.vision))
   NLCommand("setup")
-  NLDoCommandWhile (paste("(time-stable <= ", time.stable, ") ") , "go")
-  c(NLReport(c("ticks - time-stable", nrow(unique(NLGetAgentSet( "zone", "inhabitants"))))))
+  NLDoCommandWhile(paste("(time-stable <= ", time.stable, ") ")
+    , "go")
+  c(NLReport(c("ticks - time-stable",
+    nrow(unique(NLGetAgentSet( "zone", "inhabitants"))))))
 }
 
 ```
