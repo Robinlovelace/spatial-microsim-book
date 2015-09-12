@@ -18,7 +18,7 @@ source("R/SimpleWorld.R")
 ```{r, echo=FALSE}
 # TODO:
 # Ensure text is compatible with new use of chapter title as 'population synthesis'
-# Discuss population synthesis without an input microdataset, with reference to Bathelemy and Toint (2013)
+# Discuss population synthesis without an input microdataset, with reference to Barthelemy and Toint (2013)
 # Consider splitting this section in 2: reweighting vs CO approaches
 
 # Completed:

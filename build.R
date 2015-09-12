@@ -5,6 +5,8 @@
 # Propensity to cycle
 # IPF in R/loglin/mipfp/GREGWT
 # Reference UrbanSim
+# Chapter summaries at outset?
+# Mention of collaborative project early on
 
 # file.copy(from = "~/Documents/smr.bib", to = "bibliography.bib", overwrite = T)
 
