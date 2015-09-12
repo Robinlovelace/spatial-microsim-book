@@ -167,6 +167,8 @@ pol1$ypos <- 0
 #   coord_map() 
 ```
 
+\newpage
+
 These geographically specific datasets
 come from the SimpleWorld census. Responding to census questionnaires
 is a legal requirement in SimpleWorld so we the planet's entire
