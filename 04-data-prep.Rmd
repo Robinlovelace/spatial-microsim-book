@@ -630,7 +630,7 @@ Before removing the superfluous `income` variable, we will create a backup of
 `ind` that can be referred back-to when we have a spatial microdataset:
 
 ```{r}
-ind_orig <- ind # store the original ind dataset for future reference
+ind_orig <- ind # store the original ind dataset
 ind <- ind[, -4] # remove income variable
 ```
 
