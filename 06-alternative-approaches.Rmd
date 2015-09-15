@@ -44,6 +44,7 @@ if the output is to be used in ABM. The macro developed by ABS adds a weight
 restriction in their GREGWT macros to ensure positive weights. The ABS uses the
 Linear Truncated Method described in Singh and Mohl (1996) to enforce these
 restrictions.
+\index{GREGWT}
 
 ```{r, echo=FALSE}
 # A problem with this
@@ -111,6 +112,7 @@ the reweighing process.
 
 ## Population synthesis as an optimization problem
 
+\index{optimisation}
 In general terms, an *optimization problem* consists of a function,
 the result of which must be minimised or maximised, called an *objective function*. This function is not necessarily defined 
 for the entire domain of possible inputs. The domain where this function is defined is called
@@ -165,6 +167,7 @@ $$
 \left\{ weight_{ij} \in \mathbb{R}^+  \cup \{0\} \hspace{0.5cm} \forall i,j \right\}
 $$
 
+\index{optimisation!constrained}
 Seeing spatial microsimulation as an optimisation problem
 allows solutions to be found using established
 techniques of *constrained optimisation*.
@@ -392,6 +395,7 @@ but need to calculate the whole weight matrix in each iteration, where CO
 just proposes candidates. However, if the objective function takes a long time
 to be calculated, CO will have to perform this evaluation for each candidate.
 
+\index{genetic algorithm}
 Genetic algorithms are included in this field and become popular in some 
 domains, such as industry, for the moment. This kind of algorithm can be 
 very effective when the objective function has several local minimum and
@@ -508,6 +512,7 @@ Flexible Modelling Framework (FMF).
 
 ## simPop
 
+\index{EU-SILC}
 A new package for generating and modelling synthetic microdata is the R
 package **simPop**, available on CRAN since August 2015.
 The package contains example data from the 'EU-SILC'
@@ -529,6 +534,8 @@ head(eusilcS)[1:8]
 contingencyWt(eusilcS$pl030, eusilcS$pb220a,
   weights = eusilcS$rb050)
 ```
+
+\index{simPop}
 
 The above code shows the first 8 (of 18) variables in the `eusilcS` dataset
 provided by **simPop** and example of one of **simPop**'s functions.
