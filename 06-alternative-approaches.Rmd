@@ -531,7 +531,7 @@ contingencyWt(eusilcS$pl030, eusilcS$pb220a,
 ```
 
 The above code shows the first 8 (of 18) variables in the `eusilcS` dataset
-provided by **simPop** and example of one of **simPop*'s functions.
+provided by **simPop** and example of one of **simPop**'s functions.
 This function is useful, as it calculates the level of association between
 two categorical variables: economic status (`pl030`) and citizenship status
 (`pb220a`). The result of 0.175 shows that there is a weak association between
