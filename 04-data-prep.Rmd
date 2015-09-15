@@ -639,9 +639,8 @@ larger datasets. Starting small is sensible, providing
 opportunities for testing subsetting syntax in R. It
 is common, for example, to take a subset of the working *population base*: those
 aged between 16 and 74 in full-time employment. Methods for doing this are provided in
-the Appendix (
-[](#subsetting)
-).
+the Appendix
+([](#subsetting)).
 
 ## Re-categorising individual-level variables {#re-categorise}
 

@@ -225,7 +225,7 @@ $$
 
 Chi-squared is a commonly used test of the fit between absolute counts of categorical variables. It has the advantage of providing a *p value*, which represents the chances of obtaining a fit between observed and simulated values through chance alone. It is primarily used to test for relationships between categorical variables (e.g. socio-economic class and smoking) but has been used frequently in the spatial microsimulation literature (Voas and Williamson 2001; Wu et al. 2008).
 
-The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values [@Agresti2007]:
+The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values [@Diez2012]:
 
 $$
 \chi^2= \frac{(sim_{ij} - obs_{ij})^2}{obs_{ij}}
@@ -234,7 +234,7 @@ $$
 The *chi-squared* test is the probability of obtaining the calculated $\chi^2$ value or a worst, given the number of *degrees of freedom* (representing the number of categories) in the test.
 
 An advantage of chi-squared is that it can take matrices or vectors as inputs. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate-level data for the test 
-[@Agresti2007].
+[@Diez2012].
 
 ### Which test to use?
 
