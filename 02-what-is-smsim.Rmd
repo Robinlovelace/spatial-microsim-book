@@ -556,7 +556,10 @@ of EUROMOD into the methods outlined in the following chapters.
 Transport modelling is a mature field that increasingly uses individual-level
 data as the basis of analysis. Large scale models
 such as [MATSim](http://www.matsim.org/) rely on spatial microdata to provide
-demand for travel and individual characteristics for origins and destinations. Although the techniques for generating spatial microdata in the transport literature, the process is referred to as *population synthesis*. 
+demand for travel and individual characteristics for origins and destinations.
+The same techniques are used in spatial microsimulation and transport modelling
+ generating spatial microdata although in the transport literature,
+ the process is referred to as *population synthesis* [@Muller2010]. 
 
 Generally, little attention is paid to this process of
 synthetic population generation in transport modelling
