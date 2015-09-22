@@ -56,15 +56,14 @@ Data coming from different sources,
 sometimes implying different total populations,
 can cause this inconsistency.
 This section describes the method
-proposed by Johan Barthélemy^[This is a contributed chapter by Johan Barthélemy, 
-Associate Research Fellow (Agent-Based Modelling), SMART, University of Wollongong]
+proposed by Johan Barthélemy^[This is a contributed chapter by Johan Barthélemy, SMART Infrastructure Facility, University of Wollongong]
 for dealing with such situations.
 
 The method is to proceed in three steps. 
-First, we determine the individual distribution, 
+First, we determine the individual distribution `Indl`, 
 for example by using the package `mipfp`, as
 explained before. Second, we determine the distribution
-of characteristics for the household's data, hereafter named $Hh$. This can
+of characteristics for the household's data, hereafter named `Hh`. This can
 be done using the same technique as for the individual-level data, considering
 the households instead of the individuals in
 the previous chapters.
@@ -79,7 +78,7 @@ drawing its constituent members [@Barthelemy2012].
 
 The household type selection is performed to ensure
 the distribution of the generated synthetic households 
-is statistically similar to the previously estimated one, denoted $Hh$. 
+is statistically similar to the previously estimated one, i.e. $Hh$. 
 This is achieved by choosing the type $hh*$ such that the 
 distribution $Hh'$ of the already generated households 
 (including the household being built) minimize the 
@@ -128,15 +127,19 @@ we extract an individual from this class and add it to the household;
 the households already generated. This last individual is then replaced 
 an appropriate one drawn in `IndPool`.
 
+*Addition*
+Note if some additional data is available for instance the age difference between partners in a couple, then
+we can use it to constraint the selection of the current individual type.
+
 ### End of the household generation process
 
 The household generation process ends after any one of three conditions:
 if all households have been 
-constructed; if the pool of individual is empty; if the process fails 
+constructed; if the pool of individual is empty; or if the process fails 
 to find a member for a household in the previously generated ones.
 When the procedure stops, two types of inconsistencies
 may remain in the synthetic population: the final number of 
-households may be smaller than estimated or the number of individuals estimated
+households may be smaller than estimated and/or the number of individuals estimated
 may be less than the known population of the area.
 
 ## Cross data: individual and household level information
