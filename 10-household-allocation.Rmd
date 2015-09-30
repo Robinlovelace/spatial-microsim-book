@@ -371,13 +371,13 @@ each point corresponds to a combination of (age woman x age man) for a
 municipality. Its abscissa is the theoretical count for this category, 
 included in the database of the age distributions inside couples. 
 Its ordinate is the number of couples in this category in our 
-synthetic population. Since the dots are approximately on the line
+synthetic population. Since the dots are on the line
 formed by the points having both coordinates equal, our
 simulation worked well.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=\textwidth]{figures/HHCouplesBelgium.png}
+\includegraphics[width=\textwidth]{figures/Couple_SE.png}
 \caption{Illustration of the results for Belgium}
 \label{ResultBE}
 \end{center}
