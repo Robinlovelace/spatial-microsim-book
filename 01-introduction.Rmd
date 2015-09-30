@@ -613,10 +613,6 @@ Richard Ellison and David Hensher, demonstrates the population synthesis
 stage of the wider Transport and Environment Strategy Impact Simulator
 (TRESIS) modelling system. 
 
-- *Visualising and analysing spatial microdata*
-([](#vis))
-is dedicated to displaying the complex data generated through spatial microsimulation in a concise, compelling and beautiful way.
-
 - *Spatial microdata in agent-based models*
 ([](#ABM))
 describes how the output
