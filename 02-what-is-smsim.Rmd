@@ -510,27 +510,25 @@ Interviews helped
 
 ### Economic policy evaluation
 
-Microsimulation was originally developed for economic policy evaluation and it   
-is still one of most common applications. 'Social impact evaluation', where the
+The social-demographic distribution of impacts arising from
+economic policy evaluation is one of the most common applications of
+microsimulation (although the analysis in this area is often non-spatial).
+'Social impact evaluation', where the
 impact of policy changes on different income and socio-demographic groups is
 explored, is a classic example of applied microsimulation research. Frequently
-these simulations are undertaken by governmental departments
-for entire countries and focus on overall shifts in the population rather than
-spatial variability in the impacts. The EU funded EUROMOD project
-and software package of the same name
+these simulations are undertaken by government departments
+and focus on overall shifts in the population rather than
+spatial variability in the impacts. The EU funded EUROMOD project,
+and software package of the same name,
 is the largest of these 
 initiatives. The EUROMOD software is used by government analysts and
 research agencies in many countries to estimate the distributional impacts
-of policy reforms. In a recent example,
-EUROMOD was used to assess
-effects of austerity on different income groups in the UK
-[@de2014were].
-The finding that recent policies have been highly regressive (Figure 2.1)
-shows that
+of policy reforms (Figure 2.1).
+The resulting research demonstrates that modelling work based on
 microsimulation can provide important new lines of evidence
 to inform national-level policies [@avram2012distributional].
 
-```{r, fig.cap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.", fig.scap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014).", fig.width=5, fig.height=5, fig.align='center', echo=FALSE}
+```{r, fig.cap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.", fig.scap="Output from the EUROMOD model", fig.width=5, fig.height=5, fig.align='center', echo=FALSE}
 # A typical output from a microsimulation model for economic policy evaluation, from De Agostini et al. (2014). Each vertical bar represents the relative gains or losses of each income 'vingtile' (there are 20 equally sized groups, by income, in the model) and the black line shows that the austerity budget has been most detrimental to low income groups and most beneficial to the upper-middle classes.
 library(png)
 library(grid)
@@ -539,7 +537,8 @@ grid.raster(img)
 ```
 
 Spatial microsimulation uses very similar techniques as those employed by
-EUROMOD and other economic microsimulation models, including probability-weighted random sampling of individual-level
+EUROMOD and other economic microsimulation models,
+including probability-weighted random sampling of individual-level
 data and aggregate-level scenario development
 [@sutherland2013euromod]. The majority of microsimulation
 research for economic policy evaluation does not
@@ -547,13 +546,20 @@ disaggregate the impacts over space, however. The estimation of variability
 at the *local level* is what differentiates spatial microsimulation models
 from economic microsimulation models, although the underlying methods are
 very similar.
+This book does not cover EUROMOD, focussing instead on
+spatially disaggregated microdata. However, there is great potential for
+future work to make EUROMOD more spatially enabled and to bring elements
+of EUROMOD into the methods outlined in the following chapters.
 
 ### Transport
 
 Transport modelling is a mature field that increasingly uses individual-level
 data as the basis of analysis. Large scale models
 such as [MATSim](http://www.matsim.org/) rely on spatial microdata to provide
-demand for travel and individual characteristics for origins and destinations. Although the techniques for generating spatial microdata in the transport literature, the process is referred to as *population synthesis*. 
+demand for travel and individual characteristics for origins and destinations.
+The same techniques are used in spatial microsimulation and transport modelling
+ generating spatial microdata although in the transport literature,
+ the process is referred to as *population synthesis* [@Muller2010]. 
 
 Generally, little attention is paid to this process of
 synthetic population generation in transport modelling
@@ -580,13 +586,22 @@ illustrates the potential for the output of
 spatial microsimulation to be used as an input into agent-based
 models (ABM).
 
-```{r, echo=FALSE}
-# r transgeo, fig.cap="An illustration of spatial microdata in transport modelling. 20 people are illustrated on the map as travelling to a range of destinations, specified based on probability-weighted sampling from origin-destination tables (Lovelace et al. 2014).", fig.width=4, fig.height=4, echo=FALSE}
-# library(png)
-# library(grid)
-# img <- readPNG("figures/jtg.png")
-# grid.raster(img)
+```{r, fig.cap="An illustration of spatial microdata in transport modelling. 20 people are illustrated on the map as travelling to a range of destinations, specified based on probability-weighted sampling from origin-destination tables (Lovelace et al. 2014).", fig.scap="An illustration of spatial microdata in transport modelling", fig.width=4, fig.height=4, echo=FALSE}
+library(png)
+library(grid)
+img <- readPNG("figures/jtg.png")
+grid.raster(img)
 ```
+
+A larger and more advanced illustration of the potential for spatial microsimulation
+in transport modelling work is described by @Barthelemy2015a. This paper
+describes a stochastic model to allocate travel behaviours to a geo-located
+synthetic population of 10 million people, representing the entirety of
+the transport system in Belgium. By combining the synthetic microdata
+with an agent based modelling approach (described in chapter 13),
+@Barthelemy2015a are able to characterise a very large transport system
+in great detail.
+
 
 ## Assumptions {#assumptions}
 

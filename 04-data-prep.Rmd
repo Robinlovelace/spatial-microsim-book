@@ -56,7 +56,7 @@ that will make developing spatial microsimulation models as easy as possible.
 Correctly loading, manipulating and assessing aggregate and individual-level
 datasets will be critical to
 the performance of your models and the ease of modifying them, for example to include new
-inputs.  Fortunately R is an accomplished tool for data reformatting,
+inputs.  R is an accomplished tool for data reformatting,
 as we shall see. In addition to providing continuity from the previous chapter
 and an easily understood set of inputs, data loaded in the following steps also
 provide the basis for Chapter 5, in which we
@@ -73,6 +73,8 @@ steps here are insufficient --- if this is the case, see Wickham (2014b). Howeve
 in most cases, the input datasets will be similar to the ones presented here,
 consisting of an individual-level survey dataset consisting of categorical
 variables and aggregate-level constraints containing categorical counts.
+
+\index{target variables}
 
 Before loading the spatial microdata, you must decide on the data 
 needed for your research. Focus on "target variables" related to the research
@@ -104,6 +106,9 @@ data on the topic of interest before embarking on spatial microsimulation.
 
 ## Accessing the input data
 
+\index{input data}
+\index{example data}
+
 As with most spatial microsimulation models, the input consists of
 microdata --- a non-geographical individual-level dataset --- and the
 constraint table which represents a series of geographical zones. In some cases,
@@ -120,11 +125,14 @@ and double click on `spatial-microsim-book.Rproj`.  This should cause RStudio to
 be opened at this location, with all the input data files easily accessible to R
 through *relative file paths* (you must have installed the RStudio software for this stage to work --- see the Appendix).
 
+\index{RStudio}
+
 ```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
 # todo: create tutorial on installing R and RStudio
 grid.raster(readPNG("figures/studio-basic.png"))
 ```
 
+\index{reproducibility}
 To ease reproducibility of the analysis when working with real data, it is
 recommended that the process begins with a copy of the *raw* dataset on one's
 hard disc. Rather than modifying this file, modified ('cleaned') versions
@@ -144,6 +152,7 @@ refer to the original dataset is more important. Here the focus is on the princi
 # 2. Remove excess information
 ```
 
+\index{data cleaning}
 The process of loading, checking and preparing the input datasets for spatial
 microsimulation is generally a linear process, encapsulating the following
 stages:
@@ -171,6 +180,7 @@ rather than vice versa.
 # Reference for occam's razor!
 ```
 
+\index{linking variables}
 Spatial microsimulation involves combining
 individual and aggregate-level data. Each level should
 be given equal consideration when preparing the inputs for the
@@ -200,6 +210,7 @@ input data and constraints.
 
 ## Target and constraint variables {#Selecting}
 
+\index{target variables}
 The geographically aggregated data should be the
 first consideration when deciding on the
 input data. This is because the geographical data
@@ -397,6 +408,8 @@ the linking variable will not be effective at accurately recreating age
 distributions. More evenly distributed categories (such as
 `c(0, 20, 40, 60, 80, 120)` to continue the age example) are
 preferable.
+\index{breaks}
+\index{bins}
 
 (As an important aside for R learners, we
 use R syntax here to define the *breaks* instead of the more common
@@ -410,13 +423,15 @@ notation for defining bins of continuous data: the `(0, 20]` term means, in
 English, "any value from *greater than* zero, up to *and including* 20".
 In classic mathematical notation this reads
 $0 < x \leq 20$. Note the `]` symbol means 'including'.)
+\index{cut command}
 
+\index{number of constraints}
 Even when measuring constraint variables by categories rather
 than the cruder measure of number variables, there is still
 no consensus about the most desirable number. 
 Norman (1999) advocates
-including the ``maximum amount of
-information in the constraints'', implying that
+including the "maximum amount of
+information in the constraints", implying that
 the more constraint categories the merrier.
 Harland (2012)
 warns that over-constraining the model can cause
@@ -428,6 +443,7 @@ in the model and the fidelity of the output microdata.
 # TODO: link to the location of a discussion of the empty cell problem
 ```
 
+\index{base population}
 If constraint variables come from different sources, check the coherence 
 of these datasets. In some cases the total number of individuals will not
 be consistent between constraint variables and the procedure will
@@ -471,9 +487,11 @@ and sex, so they can by combined.
 Loading the data involves transferring information from a
 local hard disc into R's *environment*, where
 it is available in memory.
+\index{R environment}
 
 ## Loading input data {#Loading} 
 
+\index{loading data}
 Real-world individual-level data are provided in many formats.
 These ultimately need to be loaded into R as a `data.frame` object. Note 
 that there are many ways to load data into R, including `read.csv()` and
@@ -539,6 +557,7 @@ respectively, with different proportions of young and old people. Zone 2, for
 example, is heavily dominated by older people: there are 8 people over 50 whilst
 there are only 2 young people (under 49) in the zone.
 
+\index{areal data}
 Even at this stage there is a potential for errors to be introduced.  A classic
 mistake with areal (geographically aggregated) data is that the order in which zones are loaded can change from
 one table to the next. The constraint data should therefore come with some kind of *zone
@@ -548,6 +567,7 @@ verified and for data linkage using attribute joins. Moreover,
 keeping the code associated with each administrative zone
 will subsequently allow attribute data to be
 combined with polygon shapes and visualised using GIS software.
+\index{GIS software}
 
 ```{r, echo=FALSE}
 # Make the constraint data contain an 'id' column, possibly scrambled 
@@ -581,6 +601,7 @@ so the totals are equal across all categories.
 
 ## Subsetting to remove excess information {#subsetting-prep}
 
+\index{subsetting data}
 In the above code, `data.frame` objects containing precisely the information
 required for the next stage were loaded.  More often, superfluous information
 will need to be removed from the data and subsets taken. It is worth removing
@@ -609,7 +630,7 @@ Before removing the superfluous `income` variable, we will create a backup of
 `ind` that can be referred back-to when we have a spatial microdataset:
 
 ```{r}
-ind_orig <- ind # store the original ind dataset for future reference
+ind_orig <- ind # store the original ind dataset
 ind <- ind[, -4] # remove income variable
 ```
 
@@ -618,12 +639,12 @@ larger datasets. Starting small is sensible, providing
 opportunities for testing subsetting syntax in R. It
 is common, for example, to take a subset of the working *population base*: those
 aged between 16 and 74 in full-time employment. Methods for doing this are provided in
-the Appendix (
-[](#subsetting)
-).
+the Appendix
+([](#subsetting)).
 
 ## Re-categorising individual-level variables {#re-categorise}
 
+\index{recategorising data}
 Before transforming the individual-level dataset `ind` into a form that can be
 compared with the aggregate-level constraints, we must ensure that each dataset
 contains the same information. It can be more challenging to re-categorise
@@ -685,6 +706,7 @@ we will see in the next section.
 
 ## Matching individual and aggregate level data names {#matching}
 
+\index{matching variables}
 Before combining the newly re-categorised individual-level data with the
 aggregate constraints, it is useful to for the category labels to match up.
 This may seem trivial, but will save time in the long run. Here is the problem:
@@ -713,6 +735,7 @@ cons[1:2, ] # display the constraints for the first two zones
 
 ## 'Flattening' the individual level data {#flattening}
 
+\index{flattening}
 We have made steps towards combining the individual and aggregate datasets and
 now only need to deal with 2 objects (`ind` and `cons`) which now share
 category and variable names.
@@ -819,7 +842,6 @@ between cell values in the individual and aggregate level data.
 The purpose of the *reweighting* procedure in spatial microsimulation is
 to minimise this difference (as measured in TAE above)
 by adding high weights to the most representative individuals.
-
 
 ## Chapter summary
 

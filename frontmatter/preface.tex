@@ -1,12 +1,18 @@
 \chapter*{Preface}
 
+Spatial microsimulation is a set of methods for modelling phenomena operating
+at individual and geographical levels simultaneously, such as cities.
 This book is for anyone who wants to not only understand
 but to \emph{use} spatial microsimulation, for applied or academic work.
 The emphasis is therefore practical rather than theoretical.
 New R packages for easing spatial microsimulation are described in
 detail, with reference to practical examples and reproducible code.
 The aim is to enable you to implement the methods on your own
-datasets. 
+datasets to better understand the world. 
+Knowledge is power. So, combined with an understanding of the social and
+political context of spatial microsimulation models, this book should
+also encourage you to try to change the world, using the power of
+evidence-based policy.
 % and are best understood with
 % reference to my own experience of trying to learn spatial microsimulation.
 
@@ -24,10 +30,10 @@ datasets.
 % was, but not how to implement it --- that I had to learn,
 % from scratch.
 
-The motivations for writing this book go back to my own research.
-I was tasked with creating a spatial microsimulation model of transport energy use but struggled to get the project off the ground.
-Much literature mentioned the method but nothing I could find
-described \emph{how} to do spatial microsimulation
+The origins of this book go back to my PhD, when
+I was tasked using spatial microsimulation to model transport energy use.
+There was a growing academic literature on the subject,
+but seemingly nothing that explained \emph{how} to do spatial microsimulation,
 using a modern programming language.
 % A breakthrough came when I requested to see some of the
 % R code used by Malcolm Campbell, who had
@@ -36,11 +42,15 @@ using a modern programming language.
 % in Scotland.
 % Malcolm's code proved invaluable, providing a basis
 % on which I could write my own model.
-It was only when a colleague, Malcolm Campbell, shared some of his
-R code with me that I started making real progress. The experience
-of code sharing demonstrated the importance of
-reproducible research and `open science', raising the question:
-why there was no practical material on spatial microsimulation?
+It was informal communication and code-sharing from a colleague,
+Malcolm Campbell, that led to the development of my models in R.
+This experience demonstrated the importance of
+reproducible research. Following this `open science' ethic,
+the source code underlying this book is freely
+available online. Readers are encouraged to comment and contribute to
+the book's continued development via the code sharing site GitHub, where
+an up-to-date version is hosted.
+(see github.com/Robinlovelace/spatial-microsim-book).
 
 % The number of
 % hours spent dubugging and cursing the code would have been
@@ -51,31 +61,33 @@ why there was no practical material on spatial microsimulation?
 % An Introduction to Spatial Microsimulation with R,
 % held at the University
 % of Leeds in the spring of 2014.
-The opportunity to turn these thoughts into reality came in the spring
-of 2014, when I was asked to run a practical course on the topic at
+The opportunity to make the dream of this book a reality came in the spring
+of 2014, when I delivered a practical course on the topic at
 the University of Leeds.
-The high demand before the course
-and positive feedback from participants
-demonstrated that there was a concrete need for new, practical teaching materials.
+The high demand and positive feedback from participants
+showed the need for practical teaching materials in the area.
 % , it seemed there was a
 % definite need for more practical teaching material on spatial microsimulation
 % than was available at the time: many people had read the literature and had
 % a good idea about the problem that they wanted to use the method to solve.
 % Yet the majority were dissatisfied with the practical content of existing
 % work, or lack thereof.
+Four months later
+% , on the 18$^{th}$ to 19$^{th}$ of September 2014,
+I delivered another course on spatial microsimulation
+at the University of Cambridge.
+The materials had been greatly updated
+and it became apparent that there was demand for more.
 
-Four months later, on the 18$^{th}$ to 19$^{th}$ of September 2014,
-I delivered another 2 day course on spatial microsimulation
-at the University of Cambridge, UK.
-The course materials had been greatly updated
-and it was apparent that there was demand for more.
-The book plan was born.
-
-Morgane Dumont was a keen attendee on the Cambridge course, who
-maintained a keen interest in the associated teaching materials.
+Morgane Dumont, who attended the Cambridge course,
+became involved shortly after and has greatly improved the work.
 Morganes's background in Mathematics and Statistics makes her the
-ideal co-author, complementing the my own focus on practical examples
-and code.
+ideal co-author, complementing the focus on practical examples
+and code. Special mention is also in order for Maja Zaloznik
+(University of Oxford)
+and Richard Ellison (University of Sydney),
+contributed chapters on
+agent based models (ABM) and an approach known as TRESIS, respectively.
 
  % has contributed greatly to the book, including material on the core topics of the mipfp package and household allocation.
 
@@ -84,22 +96,21 @@ and code.
 % The practical nature of the content should make the content especially well-suited to educators, for example as part of a module on spatial microsimulation.
 % Spatial microsimulation with R is intended to be a clear, succinct and above all useful introduction to the field.
 
-The present book is a
-result of this long-standing international teamwork.
-\emph{Spatial microsimulation with R} is,
-to the best of our knowledge, the only practical book on in the
-field available today.
-We sincerely hope it is useful in your work.
-More widely we also help will provide a
-a solid foundation for advancement in the
+\emph{Spatial microsimulation with R} is therefore the
+result of international teamwork.
+It is, to the best of our knowledge, the only practical book in the
+field. We hope it is useful in your work.
+More widely, we hope it provides a
+a foundation for advancement in the
 field and a toolkit for solving real-world problems.
+
+If you have found any of the contents of the book useful, interesting
+or even unclear, please do get in touch.
 
 Robin Lovelace, September 2015, Leeds.
 
 
-% in which all the results are
-% reproducible using publicly available
-% code and data.
+% Something on community involvement and contributing.
 
 % The practical guidance should be applicable to a wide range of problems.
 
