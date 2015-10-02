@@ -1,8 +1,9 @@
 ---
 title: "CakeMap"
 layout: default
-output: 
-  pdf_document: 
+output:
+  word_document: default
+  pdf_document:
     fig_caption: yes
 bibliography: bibliography.bib
 ---

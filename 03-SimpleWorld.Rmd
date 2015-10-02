@@ -5,7 +5,7 @@ output: pdf_document
 bibliography: bibliography.bib
 ---
 
-# Spatial microsimulation in context {#SimpleWorld}
+# SimpleWorld: A worked example {#SimpleWorld}
 
 ```{r, echo=FALSE}
 # TODO: add more about using the spatial microdata
@@ -13,7 +13,7 @@ bibliography: bibliography.bib
 
 
 This chapter demonstrates the spatial microsimulation method on
-an extremely simple example we call SimpleWorld.
+a simple example called SimpleWorld.
 The aim is to show the link between the methodology introduced later in the
 book (see Chapter 5) and the various real-world applications. The chapter
 is also a first chance for the reader to do some basic programming in R:
@@ -24,14 +24,14 @@ subtitle of this book is "a *practical* introduction" for a reason!
 # TODO (RL): Update the above if we get a subtitle, mention in preface 
 ```
 
-Imagine a world containing only 33 persons, split across 3 zones.
+SimpleWorld is a small world, consisting of 33 persons split across 3 zones.
 We have two sources of information about these people available to us:
 
-1. aggregate counts of persons by age and sex in each zone (say from a Census)
+1. aggregate counts of persons by age and sex in each zone (from the SimpleWorld Census)
 2. survey microdata recording more detailed information (age, sex and income), for five of the world’s residents.
 
 Unfortunately the survey data lack any geography. To infer further information
-about SimpleWorld --- and more importantly to be able to model its alien
+about SimpleWorld --- and more importantly to be able to model its
 inhabitants --- we need a methodology. This is precisely the kind of situation
 where spatial microsimulation is useful. After an explanation of this
 'starting simple' approach, we describe the input data in detail, demonstrate
@@ -41,14 +41,14 @@ context.
 This SimpleWorld example is analogous to the
 'cartoon world' used by professor David MacKay (2009) to simplify the
 complexities of sustainable energy. The same principle works here:
-"a simple cartoon is the best way to capture the issues" (p. 203, Chapter 27).
-By helping us understand likely differences in income and age distributions
-in SimpleWorld, the example should also shed light on
-of the kinds of situation where spatial microsimulation is useful.
-SimpleWorld consists of 3 zones that
-cover the entirety of the SimpleWorld planet,
-which is a 2 dimensional
-plane split into 3 zones (see figure 3.1). 
+spatial microsimulation will be used to simulate
+differences in income and age distributions
+between the three zones SimpleWorld, illustrating
+the kinds of situation where spatial microsimulation can be useful.
+
+The SimpleWorld planet,
+a 2 dimensional
+plane split into 3 zones, is illustrated in figure 3.1. 
 
 ```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", fig.scap="The SimpleWorld environment", fig.align='center', echo=FALSE, message=FALSE}
 # Code to create SimpleWorld
@@ -100,8 +100,7 @@ text(seq(-120, 120, length.out = 3), 0, zt)
 
 ## SimpleWorld data {#SimpleWorldData}
 
-This is a small world, 
-containing 12, 10 and 11 individuals of its alien inhabitants
+SimpleWorld is inhabited by 12, 10 and 11 individuals of its alien inhabitants
 in zones 1 to 3, respectively: a planetary population of 33.
 From the SimpleWorld Census, we know
 how many young (under 49 space years old) and old (over 50)
