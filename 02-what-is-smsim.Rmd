@@ -1,7 +1,7 @@
 ---
 title: "What is spatial microsimulation?"
 layout: default
-output: pdf_document
+output: html_document
 bibliography: bibliography.bib
 ---
 
@@ -40,7 +40,7 @@ methods ([](#assumptions)).
 
 ## What is spatial microsimulation and why use it?
 
-For the purposes of this book spatial microsimulation is:
+For the purposes of this book spatial microsimulation is defined as:
 
 > A set of methods for the the creation, analysis and modelling of individual-level data allocated to geographical space.
 
@@ -51,10 +51,23 @@ Because it includes the creation of synthetic data, the method is well-suited
 to situations in which available data are limited.
 
 Spatial microsimulation is a way to combine the advantages of individual-level
-data with the geographical specifity of geographical data, usually administrative zones.
+data with the geographical specifity of geographical data. If used correctly,
+it can be used to provide 'the best of both worlds' of available data by
+combining them into a single analysis. Spatial microsimulation should therefore
+be used in situations where you have access to individual and area level data but
+no means of combining them. Spatial microsimulation can also be used in
+contexts where no individual-level data is available, as described in chapter 9.
 
-
-
+Typical use cases include modelling the spatial distribution of population
+growth and changes in demographics; high-level transport-modelling; scenario-based
+modelling of behavioural change; and as an input into agent based models.
+Because large individual and area level datasets have only recently become available
+and because computers have only recently become sufficiently powerful to run
+large-scale models on thousands of individuals and zones, spatial microsimulation
+is still a field in its infancy. There are many areas of application where
+the method has considerable benefits but where the method has not yet been
+used. It is hoped that this book provides sufficient guidance to enable the
+reader to use spatial microsimulation on new problems.
 
 ## Terminology {#terminology}
 
