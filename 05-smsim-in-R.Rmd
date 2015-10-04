@@ -34,7 +34,7 @@ procedure (IPF), a simple, fast and widely used method to allocate
 individuals to zones. Other methods can achieve the same result,
 as discussed in the first section of this chapter and as
 demonstrated in
-[](#alternative-reweighting}).
+[](#alternative-reweighting).
 
 This chapter moves from theory to practice. It describes the
 maths that underlies the method (section \ref{ipftheory}) before implementing
