@@ -1,7 +1,7 @@
 ---
 title: "What is spatial microsimulation?"
 layout: default
-output: pdf_document
+output: html_document
 bibliography: bibliography.bib
 ---
 
@@ -13,6 +13,63 @@ library(grid)
 ```
 
 # What is spatial microsimulation? {#what-is}
+
+The purpose of this chapter is to demystify
+the various interpretations and uses of spatial microsimulation.
+This should help understand the types of problem the approach is
+best suited to solve.
+The chapter is ordered as follows:
+
+- The first section asks 'what is spatial microsimulation and why use it?'
+to provide a no-nonsense introduction to the field.
+- The next section on terminology (\ref{terminology})
+explains the spatial microsimulation nomenclature in more detail.
+This involves an exploration of how spatial microsimulation
+can be understood as either a method or an approach
+([](#meth-approach)),
+how the methods can best be communicated to others ([](#comms)) and
+the use of the term in this book ([](#this-book)).
+- An exploration of the applications of spatial microsimulation in
+the Applications section
+ ([](#applications)).
+- The question of what spatial microsimulation is not and how
+it relates to other approaches such as ABM
+([](#is-not)).
+- The often unspoken assumptions underlying spatial microsimulation
+methods ([](#assumptions)).
+
+## What is spatial microsimulation and why use it?
+
+For the purposes of this book spatial microsimulation is defined as:
+
+> A set of methods for the the creation, analysis and modelling of individual-level data allocated to geographical space.
+
+Spatial microsimulation is therefore a *multi-level* approach.
+It is well-suited to understanding complex phenomena which play-out over
+geographical space, such as transport systems and the housing system.
+Because it includes the creation of synthetic data, the method is well-suited
+to situations in which available data are limited.
+
+Spatial microsimulation is a way to combine the advantages of individual-level
+data with the geographical specifity of geographical data. If used correctly,
+it can be used to provide 'the best of both worlds' of available data by
+combining them into a single analysis. Spatial microsimulation should therefore
+be used in situations where you have access to individual and area level data but
+no means of combining them. Spatial microsimulation can also be used in
+contexts where no individual-level data is available, as described in chapter 9.
+
+Typical use cases include modelling the spatial distribution of population
+growth and changes in demographics; high-level transport-modelling; scenario-based
+modelling of behavioural change; and as an input into agent based models.
+Because large individual and area level datasets have only recently become available
+and because computers have only recently become sufficiently powerful to run
+large-scale models on thousands of individuals and zones, spatial microsimulation
+is still a field in its infancy. There are many areas of application where
+the method has considerable benefits but where the method has not yet been
+used. It is hoped that this book provides sufficient guidance to enable the
+reader to use spatial microsimulation on new problems.
+
+## Terminology {#terminology}
 
 Like many phrases, the meaning of *spatial microsimulation*
 varies depending on context. The term is more ambiguous than most,
@@ -52,32 +109,6 @@ may seem obvious.
 However, it is important to define the term precisely at an early stage
 and understand how other people have used the term
 to avoid confusion.
-For the purposes of this book we define spatial microsimulation as:
-
-> An approach to the analysis of individual-level phenomena over geographical space that involves the creation, analysis and modelling of spatial microdata.
-
-The rest of this chapter explains this succinct definition.
-The purpose is to demystify
-the various interpretations and uses of the approach in applied settings.
-The chapter is ordered as follows:
-
-- The next section on terminology (\ref{terminology})
-explains the spatial microsimulation nomenclature in more detail.
-This involves an exploration of how spatial microsimulation
-can be understood as either a method or an approach
-([](#meth-approach)),
-how the methods can best be communicated to others ([](#comms)) and
-the use of the term in this book ([](#this-book)).
-- An exploration of the applications of spatial microsimulation in
-the Applications section
- ([](#applications)).
-- The question of what spatial microsimulation is not and how
-it relates to other approaches such as ABM
-([](#is-not)).
-- The often unspoken assumptions underlying spatial microsimulation
-methods ([](#assumptions)).
-
-## Terminology {#terminology}
 
 ### Spatial microsimulation as SimCity
 
