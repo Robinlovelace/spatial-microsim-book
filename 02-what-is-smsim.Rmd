@@ -20,11 +20,11 @@ This should help understand the types of problem the approach is
 best suited to solve.
 The chapter is ordered as follows:
 
-- The first section asks 'what is spatial microsimulation and why use it?'
+- Answers to the question 'what is spatial microsimulation and why use it?',
 to provide a no-nonsense introduction to the field.
-- The next section on terminology (\ref{terminology})
-explains the spatial microsimulation nomenclature in more detail.
-This involves an exploration of how spatial microsimulation
+- A description of spatial microsimulation terminology (\ref{terminology}),
+to explain the spatial microsimulation nomenclature in more detail.
+This section shows how spatial microsimulation
 can be understood as either a method or an approach
 ([](#meth-approach)),
 how the methods can best be communicated to others ([](#comms)) and
@@ -42,10 +42,10 @@ methods ([](#assumptions)).
 
 For the purposes of this book spatial microsimulation is defined as:
 
-> A set of methods for the the creation, analysis and modelling of individual-level data allocated to geographical space.
+> A set of methods for the creation, analysis and modelling of individual-level data allocated to geographical space.
 
 Spatial microsimulation is therefore a *multi-level* approach.
-It is well-suited to understanding complex phenomena which play-out over
+It is well-suited to the analysis of complex phenomena which play-out over
 geographical space, such as transport systems and the housing system.
 Because it includes the creation of synthetic data, the method is well-suited
 to situations in which available data are limited.
