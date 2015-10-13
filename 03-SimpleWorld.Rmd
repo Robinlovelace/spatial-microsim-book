@@ -298,18 +298,22 @@ in detail in Chapter 5.
 
 ## Spatial microdata {#spatial-microdata}
 
-A more useful output from spatial microsimulation is what we refer to as
-*spatial microdata*.  This is dataset that contains a single row per individual
-(as with the input microdata) but also an additional variable indicating where
-each individual lives. The challenge is to ensure that the spatial microdataset
-is as representative as possible of the aggregate constraints, while only
-sampling from a realistic baseline population. A feasible combination of
-individuals sampled from the microdata that represent zone 2 is presented in the
-table below. The complete spatial microdataset allocates whole individuals to
-each zone, resulting in a more or less realistic insight into the inhabitants of
-SimpleWorld. This spatial microdataset is also useful
-for the purposes of modelling. We will create this
-table at the end of Chapter 4.
+A useful output from spatial microsimulation is what we refer to as
+*spatial microdata*.  This is a dataset that contains a single row per individual
+(as with the input microdata) but also an additional variable on geographical location.
+The ideal spatial microdataset
+selects individuals representative of the aggregate constraints for each zone,
+while containing the diversity of information present in the individual-level
+non-spatial input population. In Chapter 4 we will explore all the steps needed
+to produce a spatial microdataset for SimpleWold. A subset of such spatial microdataset
+is presented in Table 3.5 below.
+
+The complete spatial microdataset allocates whole individuals to
+provides an insight into the nature and spatial distribution of the
+inhabitants of SimpleWorld. This spatial microdataset is also useful
+for the purposes of modelling, as described in Chapter 13.
+
+\pagebreak
 
 | id| zone| age|sex | income|
 |--:|----:|---:|:---|------:|
@@ -324,9 +328,9 @@ table at the end of Chapter 4.
 |  5|    2|  49|f   |   2473|
 |  2|    2|  54|m   |   2474|
 
-Table: Spatial microdata generated for SimpleWorld zone 2.
+Table: Spatial microdata generated for SimpleWorld zone 2. Each row represents an individual taken from the individual-level sample and the 'zone' column represents in where in geographical space they reside.
 
-The table is a reasonable approximation of the inhabitants of zone 2: older
+The Table 3.5 is a reasonable approximation of the inhabitants of zone 2: older
 females dominate in both the aggregate (which contains 8 older people and 6
 females) and the simulated spatial microdata (which contains 8 older people and
 6 females). Note that in addition the constraint variables, we also have
