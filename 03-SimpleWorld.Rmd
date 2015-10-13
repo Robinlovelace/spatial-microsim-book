@@ -103,10 +103,12 @@ text(seq(-120, 120, length.out = 3), 0, zt)
 SimpleWorld is inhabited by 12, 10 and 11 individuals of its alien inhabitants
 in zones 1 to 3, respectively: a planetary population of 33.
 From the SimpleWorld Census, we know
-how many young (under 49 space years old) and old (over 50)
+how many young (under 49 space years old) and old (50 and over)
 residents live in each
 zone, as well their genders: male and female.
 This information is displayed in the tables below.
+
+\newpage
 
 Table: Aggregate-level age counts for SimpleWorld.
 
@@ -165,8 +167,6 @@ pol1$ypos <- 0
 #     name = "% Male") +
 #   coord_map() 
 ```
-
-\newpage
 
 These geographically specific datasets
 come from the SimpleWorld census. Responding to census questionnaires
