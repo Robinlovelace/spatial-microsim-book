@@ -38,11 +38,11 @@ it relates to other approaches such as ABM
 - The often unspoken assumptions underlying spatial microsimulation
 methods ([](#assumptions)).
 
-## What is spatial microsimulation and why use it?
+## What is spatial microsimulation and who should use it?
 
-For the purposes of this book spatial microsimulation is defined as:
+For the purposes of this book spatial microsimulation was defined in Chapter 1 as:
 
-> A set of methods for the creation, analysis and modelling of individual-level data allocated to geographical space.
+> **The creation, analysis and modelling of individual-level data allocated to geographic zones.**
 
 Spatial microsimulation is therefore a *multi-level* approach.
 It is well-suited to the analysis of complex phenomena which play-out over

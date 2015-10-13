@@ -12,6 +12,12 @@ library(grid)
 
 # Introduction {#intro}
 
+## Who this book is for and how to use it
+
+
+
+## Motivations
+
 Imagine a world in which 
 data on companies, households and governments
 were widely available. Imagine, further, that researchers
@@ -112,6 +118,8 @@ without any need to describe, or more importantly make reproducible, the
 methods underlying the black box. This book is therefore also about
 demystifying spatial microsimulation.
 
+## A definition of spatial microsimulation
+
 At this early stage, it is worth considering how spatial microsimulation
 has been interpreted in past work and how we define the term for the book.
 Depending on the available data, the aim of the research, and the
@@ -143,7 +151,7 @@ Throughout this book we use the term in the wider sense of the term.
 We thus define spatial microsimulation broadly, as follows: 
 \index{spatial microsimulation!definition of}
 
-> **The creation, analysis or modelling of individual-level data allocated to geographic zones.**
+> **The creation, analysis and modelling of individual-level data allocated to geographic zones.**
 
 To further clarify the distinction between the methodology and
 the approach, we use term *population synthesis* to describe the narrower
