@@ -22,18 +22,16 @@ The chapter is ordered as follows:
 
 - Answers to the question 'what is spatial microsimulation and why use it?',
 to provide a no-nonsense introduction to the field.
-- A description of spatial microsimulation terminology (\ref{terminology}),
-to explain the spatial microsimulation nomenclature in more detail.
+- A description of spatial microsimulation terminology (\ref{terminology}).
 This section shows how spatial microsimulation
 can be understood as either a method or an approach
-([](#meth-approach)) and
-- the use of the term in this book ([](#this-book)).
-An exploration of the applications of spatial microsimulation in 
-the Applications section
- ([](#applications)).
+([](#meth-approach)).
 - The question of what spatial microsimulation is not and how
 it relates to other approaches such as ABM
 ([](#is-not)).
+- An exploration of the applications of spatial microsimulation in 
+the Applications section
+ ([](#applications)).
 - The often unspoken assumptions underlying spatial microsimulation
 methods ([](#assumptions)).
 
