@@ -56,7 +56,7 @@ it can be used to provide 'the best of both worlds' of available data by
 combining them into a single analysis. Spatial microsimulation should therefore
 be used in situations where you have access to individual and area level data but
 no means of combining them. Spatial microsimulation can also be used in
-contexts where no individual-level data is available, as described in chapter 9.
+contexts where no individual-level data is available, as described in Chapter 9.
 
 Typical use cases include modelling the spatial distribution of population
 growth and changes in demographics; high-level transport-modelling; scenario-based
@@ -231,7 +231,7 @@ confusion: care needs to be taken to use terminology each audience understands. 
 already know that the term 'population synthesis' means creating an individual-level
 dataset of real areas, whereas more basic terms need to be used when communicating
 the method to policy makers. All this links back to the importance
-of transparency and reproducibility of method discussed in the previous chapter:
+of transparency and reproducibility of method discussed in the previous Chapter:
 avoid implying spatial microsimulation is something it is not.
 
 Faced with uncomprehending stares when describing the method, some may
@@ -535,7 +535,7 @@ leading to the adoption of a spatial microsimulation approach.
 Deetjen and Powell (forthcoming) is notable for its use of
 external validation and qualitative data alongside spatial
 microsimulation. The results were compared with the results
-from 3 other data sources (see chapter 9 of this book).
+from 3 other data sources (see Chapter 9 of this book).
 Interviews helped
 'ground-truth' the quantitative findings against real-world experience.
 
@@ -629,7 +629,7 @@ in transport modelling work is described by @Barthelemy2015a. This paper
 describes a stochastic model to allocate travel behaviours to a geo-located
 synthetic population of 10 million people, representing the entirety of
 the transport system in Belgium. By combining the synthetic microdata
-with an agent based modelling approach (described in chapter 13),
+with an agent based modelling approach (described in Chapter 12),
 @Barthelemy2015a are able to characterise a very large transport system
 in great detail.
 

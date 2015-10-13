@@ -116,7 +116,7 @@ you may have geographical information in your microdata, but not at the
 required level of detail.
 For example, you may have a variable on the province of each individual
 but need its municipality, a lower geographical level.
-The data used in this Chapter and throughout the book can be
+The data used in this chapter and throughout the book can be
 downloaded from the book's [GitHub repository](https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
 'Download ZIP' button to the right and extract the folder into a
 sensible place on your computer, such as the Desktop.  From there, you will want
@@ -140,7 +140,7 @@ should be saved as separate files. This ensures that after any mistakes, one can
 always recover information that otherwise could have been lost and makes the
 project fully reproducible. In this chapter, a relatively clean and
 very tiny dataset from SimpleWorld is used, but we still create a backup of the
-original dataset. We will see in Chapter
+original dataset. We will see in chapter
 \ref{CakeMap} how to deal with larger and more messy data, where being able to
 refer to the original dataset is more important. Here the focus is on the principles.
 
@@ -596,7 +596,7 @@ constraints.  If the total populations between constraint variables do not match
 (e.g. because the *population bases* are different) this is problematic (see
 the Glossary for a description of the population base).
 Appropriate steps to normalise the errant constraint variables are described in
-the CakeMap Chapter (\ref{CakeMap}). This involves scaling the category totals
+the CakeMap chapter (\ref{CakeMap}). This involves scaling the category totals
 so the totals are equal across all categories.
 
 ## Subsetting to remove excess information {#subsetting-prep}

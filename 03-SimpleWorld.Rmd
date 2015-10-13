@@ -5,7 +5,7 @@ output: pdf_document
 bibliography: bibliography.bib
 ---
 
-# SimpleWorld: A worked example {#SimpleWorld}
+# SimpleWorld: A worked example of spatial microsimulation {#SimpleWorld}
 
 ```{r, echo=FALSE}
 # TODO: add more about using the spatial microdata
@@ -311,7 +311,7 @@ is presented in Table 3.5 below.
 The complete spatial microdataset allocates whole individuals to
 provides an insight into the nature and spatial distribution of the
 inhabitants of SimpleWorld. This spatial microdataset is also useful
-for the purposes of modelling, as described in Chapter 13.
+for the purposes of modelling, as described in Chapter 12.
 
 \pagebreak
 

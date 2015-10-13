@@ -82,7 +82,7 @@ Poor external validation results can come from everywhere, so are harder to fix
 (internal validation can rule out faulty methods however). Thus internal and
 external validation complement each other.
 
-This Chapter explains how to undertake routine checks on spatial microsimulation
+This chapter explains how to undertake routine checks on spatial microsimulation
 procedures, how to
 identify outlying variables and zones which are simply not performing well
 (internal validation) and
@@ -114,7 +114,7 @@ defining the model, incorrect use of available algorithms for population
 synthesis and, to a lesser extent, integerisation (Lovelace et al. 2015).
 
 Because internal validation is so widely used in the literature
-there are a number of established measures of internal fit that have been used. Yet there is little consistency in the measures that are used. This makes it difficult to assess which models are performing best across different studies, a major problem in spatial microsimulation research. If one study reports only *r* values, whereas another reports only *TAE* (each measure will be described shortly), there is no way to assess which is performing better. There is a need for more consistency is reporting of internal validation. Hopefully this Chapter, which provides descriptions of each of the commonly used and recommended measures of *goodness-of-fit* as well as guidance on which to use --- is a step in the right direction.
+there are a number of established measures of internal fit that have been used. Yet there is little consistency in the measures that are used. This makes it difficult to assess which models are performing best across different studies, a major problem in spatial microsimulation research. If one study reports only *r* values, whereas another reports only *TAE* (each measure will be described shortly), there is no way to assess which is performing better. There is a need for more consistency is reporting of internal validation. Hopefully this chapter, which provides descriptions of each of the commonly used and recommended measures of *goodness-of-fit* as well as guidance on which to use --- is a step in the right direction.
 
 Several metrics of model fit exist. We will look at some commonly used measures and define them
 mathematically before defining them in R and, in the subsequent section, implementing them to evaluate the CakeMap spatial microsimulation model. The measures developed in the section are:
