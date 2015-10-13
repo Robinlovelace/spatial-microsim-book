@@ -14,7 +14,35 @@ library(grid)
 
 ## Who this book is for and how to use it
 
+This book is for anyone who wants to learn how to *do* spatial microsimualtion.
+By that we mean taking individual-level and geographical data and
+processing them to solve real-world problems. This is a practical book.
 
+There is no single 'target audience'. The book serves as a general-purpose introduction
+to the field and its implementation in a modern programming language. However,
+there are three groups of people for whom the book is expected to be
+especially beneficial:
+
+- Practitioners: because of the applied nature of the method and its utility for
+modelling people, it is useful in a wide range of sectors. Planning for the
+future of educational, health and transport services at the local level,
+for example, could benefit from spatial microdata on the inhabitants of the study area.
+The future is of course uncertain and spatial microsimulation can provide tools
+for scenario-based planning to explore various visions of the future.
+In this context spatial microsimulation can be especially useful for designing
+local policies to assist with the global transition away from
+fossil fuels [@Lovelace2014-vul].
+
+- Academics: spatial microsimulation originated in academic research, building on
+the work of early pioneers such as @Deming1940 and @Holm1987. With recent advances in
+computer power, open source software and data accessibility, spatial microsimulation
+can now answer a greater range of questions than ever before. Because spatial
+microsimulation and associated methods are still in their infancy, there are
+still many areas of research where the approach has yet to be used. This
+makes spatial microsimulation an ideal method for doing new research,
+for example as part of a PhD.
+
+- Educators.
 
 ## Motivations
 
