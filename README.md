@@ -23,7 +23,7 @@ git clone https://github.com/Robinlovelace/spatial-microsim-book.git
 Then navigate into the downloaded folder and open the `spatial-microsim-book.Rproj` RStudio project file. The [build.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/build.R) file should contain everything you need to build the book, although you'll need to have installed a number of packages. These can be installed with the following command:
 
 ```
-pkgs <- c("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp", "rgeos", "mipfp", "rgdal", "gridExtra", "tidyr", "mlogit")
+pkgs <- c("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp", "rgeos", "mipfp", "rgdal", "gridExtra", "tidyr", "mlogit", "simPop")
 wpacks <- pkgs %in% installed.packages()
 install.packages(pkgs[!wpacks])
 ```
@@ -40,10 +40,14 @@ To install `ipfp` on Ubuntu (tested with version 14.04, the latest 'long-term su
 sudo apt-get install liblapack-dev liblapack3 libopenblas-base libopenblas-dev
 ```
 
-The book build also requires an up-to-date version of pandoc - install with:
+The book build also requires up-to-dates version of pandoc and
+latex, with dependencies. On Ubuntu, these can be installed with:
 
 ```
 sudo apt-get install pandoc
+sudo apt-get install texlive
+sudo apt-get install texlive-extra
+sudo apt-get install lmodern
 ```
 
 **Building the website**
