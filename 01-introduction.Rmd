@@ -77,7 +77,8 @@ spatial microsimulation, bear with us.
 The remainder of this chapter explains the thinking behind the book,
 including the reasons for focussing on spatial microsimulation in R
 rather than in another language and the motivations for doing spatial
-microsimulation in the first place. Chapter 2, by contrast, brings the
+microsimulation in the first place. The next chapter is practical.
+Chapter 3, by contrast, brings the
 reader up-to-date on what spatial microsimulation is and how it is currently
 used.
 
@@ -612,12 +613,19 @@ practical. Because we'll be making heavy use of terminology specific to
 spatial microsimulation, it is recommended that you read these introductory
 chapters before tackling the practical section that follow although this is
 not essential. If any of the words do not make sense, the
-Glossary at the end of the book may help to clarify what they mean. Chapters
-4, 5, 6 and 7 encapsulate the process of *population synthesis* which
-generates spatial microdata and which is
-key to much spatial microsimulation work. They should be read together in that order.
+Glossary at the end of the book may help to clarify what they mean.
+
+In Part II, chapters
+4, 5, 6 and 7 cover in detail the process of *population synthesis* whereby
+spatial microdata is generated. This process is
+key to much spatial microsimulation work. These chapters
+should ideally be read together in that order, although Chapter 5 is the
+most important and provides the basics needed to create spatial microdata.
 Chapters 8 introduces the important step of model validation.
-Chapter 9 and 10 cover more advanced methods for generating spatial microdata when
+
+
+In Part III, chapters 9 and 10 cover more
+advanced methods for generating spatial microdata when
 no individual-level data is available and when household-level data are required.
 These chapters are more
 self-standing and can be read in any order. The chapter titles and brief

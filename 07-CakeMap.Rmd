@@ -160,7 +160,7 @@ loading the data into R, dealing with missing values,
 re-coding categorical variables and column
 names, binning continuous variables and subsetting from the microdataset. In a
 typical project, data preparation can take as long as the analysis
-stage.  This section builds on Chapter 3 to illustrate strategies for data
+stage.  This section builds on Chapter 2 to illustrate strategies for data
 cleaning on a complex project. To learn about the data cleaning steps that may
 be useful to your data, we start from the beginning in this section, with a real
 (anonymised) dataset that was downloaded from the internet.
@@ -329,7 +329,7 @@ of the results is present in the next chapter.
 ### Integerisation {#CakeINT}
 
 As before, weights of the IPF procedure are fractional, so must be *integerised*
-to create whole individuals. The code presented in chapter 4 requires little
+to create whole individuals. The code presented in Chapter 4 requires little
 modification to do this: it is your task to convert the weight matrix generated
 by the above lines of code into a spatial microdataset called, as before,
 `ints_df` (hint: the `int_trs` function in 'R/functions.R' file will help).
