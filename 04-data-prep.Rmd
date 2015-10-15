@@ -96,28 +96,16 @@ data on the topic of interest before embarking on spatial microsimulation.
 \index{input data}
 \index{example data}
 
-As with most spatial microsimulation models, the input consists of
+As with most spatial microsimulation models, the input data in SimpleWorld consists of
 microdata --- a non-geographical individual-level dataset --- and the
 constraint table which represents a series of geographical zones. In some cases,
 you may have geographical information in your microdata, but not at the
 required level of detail.
 For example, you may have a variable on the province of each individual
 but need its municipality, a lower geographical level.
-The data used in this chapter and throughout the book can be
-downloaded from the book's [GitHub repository](https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
-'Download ZIP' button to the right and extract the folder into a
-sensible place on your computer, such as the Desktop.  From there, you will want
-to run R from the project's root directory: open the folder in a file browser
-and double click on `spatial-microsim-book.Rproj`.  This should cause RStudio to
-be opened at this location, with all the input data files easily accessible to R
-through *relative file paths* (you must have installed the RStudio software for this stage to work --- see the Appendix).
+The input data can be accessed from the RStudio book project, as described
+in [](#SimpleWorld) .
 
-\index{RStudio}
-
-```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
-# todo: create tutorial on installing R and RStudio
-grid.raster(readPNG("figures/studio-basic.png"))
-```
 
 \index{reproducibility}
 To ease reproducibility of the analysis when working with real data, it is
