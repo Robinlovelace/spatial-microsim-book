@@ -627,16 +627,18 @@ descriptions of their contents are as follows:
 # Idea: the book could be easily split into 3 parts. Worth it?
 ```
 
+- *SimpleWorld* 
+([](#SimpleWorld))
+is a simple and reproducible
+explanation of spatial microsimulation with reference to an imaginary planet.
+It's also a chance to set-up your system and RStudio settings to
+get the most out of the subsequent chapters.
+
 - *What is spatial microsimulation?*
 ([](#what-is))
 introduces the concepts and applications of spatial 
 microsimulation not only as a narrow methodology
 but as an *approach* to understanding real-world phenomena.
-
-- *SimpleWorld* 
-([](#SimpleWorld))
-is a simple and reproducible
-explanation of spatial microsimulation method with reference to an imaginary planet.
 
 - *Data preparation*
 ([](#data-prep))
