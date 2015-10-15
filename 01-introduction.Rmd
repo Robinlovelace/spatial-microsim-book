@@ -16,7 +16,7 @@ library(grid)
 
 This book is for anyone who wants to learn how to *do* spatial microsimualtion.
 By that we mean taking individual-level and geographical data and
-processing them to solve real-world problems. This is a practical book.
+processing them to solve real-world problems.
 
 This book is a general-purpose introduction
 to the field and its implementation in a modern programming language. As such

@@ -11,12 +11,28 @@ bibliography: bibliography.bib
 # TODO: add more about using the spatial microdata
 ```
 
+This chapter focuses on the minimum input datasets needed for spatial
+microsimulation. We will use input data on
+the inhabitants of an imaginary world
+(geographical individual-level) called SimpleWorld to demonstrate
+the basic concepts and techniqes to perform spatial micrsomulation with R.
 
-This chapter demonstrates the spatial microsimulation method on
-a simple example called SimpleWorld.
-The aim is to show the link between the methodology introduced later in the
-book (see Chapter 5) and the various real-world applications. The chapter
-is also a first chance for the reader to do some basic programming in R:
+This is the
+first practical chapter, so it will also get you up-to-speed with
+using R via RStudio. The aim is twofold: 1) to explain key
+concepts in spatial microsimulation with reference to a practical example and 2) to
+demonstrate the software and a workflow
+that will make developing spatial microsimulation models as easy as possible.
+
+```{r, echo=FALSE}
+# TODO: do we talk enough about RStudio projects?
+```
+
+The chapter also serves to highlight the links between the methodology
+presented in-depth later in the book (see Chapter 5)
+and the various real-world applications presented in Chapter 3.
+For R 'newbies' it also provides a chance
+for the reader to do some basic programming in R:
 the unwritten
 subtitle of this book is "a *practical* introduction" for a reason!
 

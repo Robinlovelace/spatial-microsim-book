@@ -38,21 +38,6 @@ library(grid)
 # could be the beginning of part 2 if the book's divided into parts. 
 ```
 
-This chapter focuses on the minimum input datasets needed for spatial
-microsimulation. We will build on the SimpleWorld example by demonstrating how
-the inputs about its inhabitants, in terms of geographical constraints and
-individual-level survey data, can be loaded and 'cleaned' in R. It is the
-first practical chapter, so it will also get you up-to-speed with
-using R via RStudio. The aim is twofold: 1) to produce
-data that is ready for population synthesis and 2) to acquaint
-demonstrate the software and a workflow
-that will make developing spatial microsimulation models as easy as possible.
-
-```{r, echo=FALSE}
-# TODO: do we talk enough about RStudio projects?
-```
-
-
 Correctly loading, manipulating and assessing aggregate and individual-level
 datasets will be critical to
 the performance of your models and the ease of modifying them, for example to include new
