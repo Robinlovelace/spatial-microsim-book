@@ -39,24 +39,26 @@ library(grid)
 ```
 
 Correctly loading, manipulating and assessing aggregate and individual-level
-datasets will be critical to
-the performance of your models and the ease of modifying them, for example to include new
-inputs.  R is an accomplished tool for data reformatting,
-as we shall see. In addition to providing continuity from the previous chapter
-and an easily understood set of inputs, data loaded in the following steps also
-provide the basis for Chapter 5, in which we
-undertake spatial microsimulation.
-Of course, the datasets you use in real applications will be much larger than
-those that represent SimpleWorld, which contains only 33 individuals on the
-entire planet! 
+datasets is critical for effectively modelling real-world data.
+Getting the data into the right shape has the potential
+to make your models run quicker and increase the ease of modifying them,
+for example to include newly available
+input data.  R is an accomplished tool for data reformatting,
+so it can be used as an integrated solution
+for both preparing the data and running the model.
 
-The focus of this chapter is on the methods and underlying principles
-of data preparation for spatial microsimulation and these will be the same
-regardless of the size of your datasets.
-Each usage case is different and you may have input for which the processing
-steps here are insufficient --- if this is the case, see Wickham (2014b). However, 
-in most cases, the input datasets will be similar to the ones presented here,
-consisting of an individual-level survey dataset consisting of categorical
+In addition to providing a primer on data manipulation,
+the objects loaded in this chapter also
+provide the basis for Chapter 5, which covers the
+process of population synthesis in detail.
+Of course, the datasets you use in real applications will be much larger than
+those in SimpleWorld, but the concepts and commands will be largely the same. 
+
+Each project is different and data can be very
+diverse.^[In
+cases where the steps mentioned here are insufficient --- if this is the case, see Wickham (2014b).]
+However, in most cases, the input datasets will be similar to the ones presented here:
+an individual-level dataset consisting of categorical
 variables and aggregate-level constraints containing categorical counts.
 
 \index{target variables}
