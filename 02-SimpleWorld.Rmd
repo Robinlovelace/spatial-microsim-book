@@ -7,10 +7,6 @@ bibliography: bibliography.bib
 
 # SimpleWorld: A worked example of spatial microsimulation {#SimpleWorld}
 
-```{r, echo=FALSE}
-# TODO: add more about using the spatial microdata
-```
-
 This chapter focuses on the minimum input datasets needed for spatial
 microsimulation. We will use input data on
 the inhabitants of an imaginary world
