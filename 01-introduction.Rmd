@@ -12,6 +12,78 @@ library(grid)
 
 # Introduction {#intro}
 
+## Who this book is for and how to use it
+
+This book is for anyone who wants to learn how to *do* spatial microsimualtion.
+By that we mean taking individual-level and geographical data and
+processing them to solve real-world problems.
+
+This book is a general-purpose introduction
+to the field and its implementation in a modern programming language. As such
+there is no single target audience, although
+the book was written with the following people in mind:
+
+- Practitioners: because of the applied nature of the method and its utility for
+modelling people, it is useful in a wide range of sectors. Planning for the
+future of educational, health and transport services at the local level,
+for example, could benefit from spatial microdata on the inhabitants of the study area.
+The future is of course uncertain and spatial microsimulation can provide tools
+for scenario-based planning to explore various visions of the future.
+In this context spatial microsimulation can be especially useful for designing
+local policies to assist with the global transition away from
+fossil fuels [@Lovelace2014-vul].
+
+- Academics: spatial microsimulation originated in academic research, building on
+the work of early pioneers such as @Deming1940 and @Holm1987. With recent advances in
+computer power, open source software and data accessibility, spatial microsimulation
+can now answer a greater range of questions than ever before. Because spatial
+microsimulation and associated methods are still in their infancy, there are
+still many areas of research where the approach has yet to be used. This
+makes spatial microsimulation an ideal method for doing new research,
+for example as part of a PhD.
+
+- Educators: although spatial microsimulation has become more accessible over the
+last few years, it is still out of reach for the majority of people.
+Yet the potential benefits are large. This book provides example data and
+code that can be used as part of a course involving the analysis of spatial
+microdata, for example in a module contributing to an MSc in Transport Modelling,
+Economics or Geography.
+
+The book has a definite progression from easier content to more advanced
+topics, especially those in Chapters 11 and 12, which deal with spatial microsimulation
+for transport modelling and agent-based modelling (ABM), respectively.
+The book can be read in order from front to back for a detailed overview
+of the field, its applications and its concepts (Part I);
+the practicalities and software decisions involved in generating
+spatial microdata (Part II); and issues around the modelling of spatial microdata
+(Part III).
+
+Equally, the book can be used as a reference volume, to be dipped-into as and when
+particular topics arise. There is a path dependency in the book however: Part II
+assumes that the reader is familiar with the concepts introduced in Part I and
+the two chapters in
+Part III assumes that the reader is competent with generating and handling spatial
+microdata, as introduced in chapters 4 and 5. These are the central Chapters in
+the book in terms of generating spatial microdata with R and are probably the
+most important for people who simply want to generate spatial microdata rapidly.
+Chapter 6 provides insight into more experimental approaches for generating spatial
+microdata, while Chapter 7 provides a comprehensive worked example of the methods
+used 'in the wild'. A more detailed overview is provided in [](#overview).
+
+If you can't wait to get your hands dirty with code and example data for
+doing spatial microsimulation, please skip to Chapter 3.
+For other readers who want a little more background on this book and
+spatial microsimulation, bear with us.
+The remainder of this chapter explains the thinking behind the book,
+including the reasons for focussing on spatial microsimulation in R
+rather than in another language and the motivations for doing spatial
+microsimulation in the first place. The next chapter is practical.
+Chapter 3, by contrast, brings the
+reader up-to-date on what spatial microsimulation is and how it is currently
+used.
+
+## Motivations
+
 Imagine a world in which 
 data on companies, households and governments
 were widely available. Imagine, further, that researchers
@@ -112,6 +184,8 @@ without any need to describe, or more importantly make reproducible, the
 methods underlying the black box. This book is therefore also about
 demystifying spatial microsimulation.
 
+## A definition of spatial microsimulation
+
 At this early stage, it is worth considering how spatial microsimulation
 has been interpreted in past work and how we define the term for the book.
 Depending on the available data, the aim of the research, and the
@@ -143,7 +217,7 @@ Throughout this book we use the term in the wider sense of the term.
 We thus define spatial microsimulation broadly, as follows: 
 \index{spatial microsimulation!definition of}
 
-> **The creation, analysis or modelling of individual-level data allocated to geographic zones.**
+> **The creation, analysis and modelling of individual-level data allocated to geographic zones.**
 
 To further clarify the distinction between the methodology and
 the approach, we use term *population synthesis* to describe the narrower
@@ -155,8 +229,8 @@ enough to have access to real spatial microdata, a scarce but increasingly
 available commodity, spatial microdata must be generated by combining
 zone-level and individual-level data.
 Throughout the course of the book the emphasis shifts:
-the focus in chapters 4 to 6 is on generating spatial microdata
-while chapters 7 onwards focus on how to use this rich data type.
+the focus in Chapters 4 to 6 is on generating spatial microdata
+while Chapters 7 onwards focus on how to use this rich data type.
 
 ## Learning by doing
 
@@ -539,12 +613,21 @@ practical. Because we'll be making heavy use of terminology specific to
 spatial microsimulation, it is recommended that you read these introductory
 chapters before tackling the practical section that follow although this is
 not essential. If any of the words do not make sense, the
-Glossary at the end of the book may help to clarify what they mean. Chapters
-4, 5, 6 and 7 encapsulate the process of *population synthesis* which
-generates spatial microdata and which is
-key to much spatial microsimulation work. They should be read together in that order.
-Chapters 8 9 and 10 explain and demonstrate methods of using 
-spatial microdata to better understand the world. These chapters are more
+Glossary at the end of the book may help to clarify what they mean.
+
+In Part II, chapters
+4, 5, 6 and 7 cover in detail the process of *population synthesis* whereby
+spatial microdata is generated. This process is
+key to much spatial microsimulation work. These chapters
+should ideally be read together in that order, although Chapter 5 is the
+most important and provides the basics needed to create spatial microdata.
+Chapters 8 introduces the important step of model validation.
+
+
+In Part III, chapters 9 and 10 cover more
+advanced methods for generating spatial microdata when
+no individual-level data is available and when household-level data are required.
+These chapters are more
 self-standing and can be read in any order. The chapter titles and brief
 descriptions of their contents are as follows:
 
@@ -552,16 +635,18 @@ descriptions of their contents are as follows:
 # Idea: the book could be easily split into 3 parts. Worth it?
 ```
 
+- *SimpleWorld* 
+([](#SimpleWorld))
+is a simple and reproducible
+explanation of spatial microsimulation with reference to an imaginary planet.
+It's also a chance to set-up your system and RStudio settings to
+get the most out of the subsequent chapters.
+
 - *What is spatial microsimulation?*
 ([](#what-is))
 introduces the concepts and applications of spatial 
 microsimulation not only as a narrow methodology
 but as an *approach* to understanding real-world phenomena.
-
-- *SimpleWorld* 
-([](#SimpleWorld))
-is a simple and reproducible
-explanation of spatial microsimulation method with reference to an imaginary planet.
 
 - *Data preparation*
 ([](#data-prep))
@@ -622,12 +707,6 @@ stage of the wider Transport and Environment Strategy Impact Simulator
 ([](#ABM))
 describes how the output
 from spatial microsimulation can be used as an input into more complex models.
-
-- *Additional tools and techniques*
-([](#additional))
-introduces further methods
-and applications, including a description of R packages for spatial
-microsimulation.
 
 # References
 

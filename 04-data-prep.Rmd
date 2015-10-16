@@ -38,40 +38,27 @@ library(grid)
 # could be the beginning of part 2 if the book's divided into parts. 
 ```
 
-This chapter focuses on the minimum input datasets needed for spatial
-microsimulation. We will build on the SimpleWorld example by demonstrating how
-the inputs about its inhabitants, in terms of geographical constraints and
-individual-level survey data, can be loaded and 'cleaned' in R. It is the
-first practical chapter, so it will also get you up-to-speed with
-using R via RStudio. The aim is twofold: 1) to produce
-data that is ready for population synthesis and 2) to acquaint
-demonstrate the software and a workflow
-that will make developing spatial microsimulation models as easy as possible.
-
-```{r, echo=FALSE}
-# TODO: do we talk enough about RStudio projects?
-```
-
-
 Correctly loading, manipulating and assessing aggregate and individual-level
-datasets will be critical to
-the performance of your models and the ease of modifying them, for example to include new
-inputs.  R is an accomplished tool for data reformatting,
-as we shall see. In addition to providing continuity from the previous chapter
-and an easily understood set of inputs, data loaded in the following steps also
-provide the basis for Chapter 5, in which we
-undertake spatial microsimulation.
-Of course, the datasets you use in real applications will be much larger than
-those that represent SimpleWorld, which contains only 33 individuals on the
-entire planet! 
+datasets is critical for effectively modelling real-world data.
+Getting the data into the right shape has the potential
+to make your models run quicker and increase the ease of modifying them,
+for example to include newly available
+input data.  R is an accomplished tool for data reformatting,
+so it can be used as an integrated solution
+for both preparing the data and running the model.
 
-The focus of this chapter is on the methods and underlying principles
-of data preparation for spatial microsimulation and these will be the same
-regardless of the size of your datasets.
-Each usage case is different and you may have input for which the processing
-steps here are insufficient --- if this is the case, see Wickham (2014b). However, 
-in most cases, the input datasets will be similar to the ones presented here,
-consisting of an individual-level survey dataset consisting of categorical
+In addition to providing a primer on data manipulation,
+the objects loaded in this chapter also
+provide the basis for Chapter 5, which covers the
+process of population synthesis in detail.
+Of course, the datasets you use in real applications will be much larger than
+those in SimpleWorld, but the concepts and commands will be largely the same. 
+
+Each project is different and data can be very
+diverse.^[In
+cases where the steps mentioned here are insufficient --- if this is the case, see Wickham (2014b).]
+However, in most cases, the input datasets will be similar to the ones presented here:
+an individual-level dataset consisting of categorical
 variables and aggregate-level constraints containing categorical counts.
 
 \index{target variables}
@@ -109,28 +96,16 @@ data on the topic of interest before embarking on spatial microsimulation.
 \index{input data}
 \index{example data}
 
-As with most spatial microsimulation models, the input consists of
+As with most spatial microsimulation models, the input data in SimpleWorld consists of
 microdata --- a non-geographical individual-level dataset --- and the
 constraint table which represents a series of geographical zones. In some cases,
 you may have geographical information in your microdata, but not at the
 required level of detail.
 For example, you may have a variable on the province of each individual
 but need its municipality, a lower geographical level.
-The data used in this Chapter and throughout the book can be
-downloaded from the book's [GitHub repository](https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
-'Download ZIP' button to the right and extract the folder into a
-sensible place on your computer, such as the Desktop.  From there, you will want
-to run R from the project's root directory: open the folder in a file browser
-and double click on `spatial-microsim-book.Rproj`.  This should cause RStudio to
-be opened at this location, with all the input data files easily accessible to R
-through *relative file paths* (you must have installed the RStudio software for this stage to work --- see the Appendix).
+The input data can be accessed from the RStudio book project, as described
+in [](#SimpleWorld) .
 
-\index{RStudio}
-
-```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
-# todo: create tutorial on installing R and RStudio
-grid.raster(readPNG("figures/studio-basic.png"))
-```
 
 \index{reproducibility}
 To ease reproducibility of the analysis when working with real data, it is
@@ -140,7 +115,7 @@ should be saved as separate files. This ensures that after any mistakes, one can
 always recover information that otherwise could have been lost and makes the
 project fully reproducible. In this chapter, a relatively clean and
 very tiny dataset from SimpleWorld is used, but we still create a backup of the
-original dataset. We will see in Chapter
+original dataset. We will see in chapter
 \ref{CakeMap} how to deal with larger and more messy data, where being able to
 refer to the original dataset is more important. Here the focus is on the principles.
 
@@ -596,7 +571,7 @@ constraints.  If the total populations between constraint variables do not match
 (e.g. because the *population bases* are different) this is problematic (see
 the Glossary for a description of the population base).
 Appropriate steps to normalise the errant constraint variables are described in
-the CakeMap Chapter (\ref{CakeMap}). This involves scaling the category totals
+the CakeMap chapter (\ref{CakeMap}). This involves scaling the category totals
 so the totals are equal across all categories.
 
 ## Subsetting to remove excess information {#subsetting-prep}
