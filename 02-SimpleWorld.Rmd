@@ -11,8 +11,8 @@ bibliography: bibliography.bib
 # TODO: add more about using the spatial microdata
 ```
 
-This chapter focuses on the minimum input datasets needed for spatial
-microsimulation. We will use input data on
+This chapter focuses on the minimum input datasets needed for the classical type
+of spatial microsimulation. We will use input data on
 the inhabitants of an imaginary world
 (geographical individual-level) called SimpleWorld to demonstrate
 the basic concepts and techniqes to perform spatial micrsomulation with R.
@@ -47,7 +47,8 @@ We have two sources of information about these people available to us:
 1. aggregate counts of persons by age and sex in each zone (from the SimpleWorld Census)
 2. survey microdata recording more detailed information (age, sex and income), for five of the world’s residents.
 
-Unfortunately the survey data lack any geography. To infer further information
+Unfortunately the survey data lack any geography and include only 
+a little part of the population (5 out of 33). To infer further information
 about SimpleWorld --- and more importantly to be able to model its
 inhabitants --- we need a methodology. This is precisely the kind of situation
 where spatial microsimulation is useful. After an explanation of this
@@ -124,7 +125,7 @@ text(seq(-120, 120, length.out = 3), 0, zt)
 SimpleWorld is inhabited by 12, 10 and 11 individuals of its alien inhabitants
 in zones 1 to 3, respectively: a planetary population of 33.
 From the SimpleWorld Census, we know
-how many young (under 49 space years old) and old (50 and over)
+how many young (strictly under 50 space years old) and old (50 and over)
 residents live in each
 zone, as well their genders: male and female.
 This information is displayed in the tables below.
