@@ -17,7 +17,14 @@ library(grid)
 # Household allocation {#ha}
 
 So far the book has explored data on 2 levels: the individual level and
-the level of administrative zones. The household is another
+the level of administrative zones. The household^[This
+chapter is based on a research made by Dumont Morgane (UNamur) and funded by the 
+Wallonia Region of Belgium. Timoteo Carletti (UNamur),
+Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
+Eggericks (UCL Louvain-La-Neuve) were involved in the research.
+The academic groups of DEMO from UCL-Louvain-La-Neuve and the
+OWS (Observatoire Wallon de la Santé) also provided
+support.] is another
 fundamental building block of human organisation around which key decision-making,
 economic and data-collecting activities are centered.
 
@@ -47,6 +54,9 @@ In this chapter, we focus on the two cases
 where you have no microdata for the households
 (one row of data per household). We begin by considering the
 case in which data on households and individuals remain completely separate.
+Note that the first section explains a method of the litterature only 
+theoretically, whereas the second sections is developped more in details
+and present results for Belgium.
 
 ## Independent data (individuals and households) {#IndData}
 
@@ -145,14 +155,7 @@ may be less than the known population of the area.
 ## Cross data: individual and household level information
 
 In some cases, information about households is included in the
-individual datasets.^[This
-section is based on research by Dumont Morgane (UNamur) and funded by the 
-Wallonia Region of Belgium. Timoteo Carletti (UNamur),
-Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
-Eggericks (UCL Louvain-La-Neuve) were involved in the research.
-The academic groups of DEMO from UCL-Louvain-La-Neuve and the
-OWS (Observatoire Wallon de la Santé) also provided
-support.]
+individual datasets.
 For example, individual-level data
 may include variables on type of household or/and
 the number of cohabitants in addition to gender and age. This provides cross-tabulated information between
@@ -377,11 +380,46 @@ simulation worked well.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[width=\textwidth]{figures/Couple_SE.png}
-\caption{Illustration of the results for Belgium}
+\includegraphics[width=\textwidth]{figures/Belgium/Couples.png}
+\caption{Illustration of the results for the couples in Belgium}
 \label{ResultBE}
 \end{center}
 \end{figure}
+
+The assembling of children to the head has been made by a similar process
+and gives as good results in terms of distribution of ages. However, 
+when no new combination is still possible, some individuals could remain
+without an assigned household. To improve the spatial microsimulation here, we 
+have chosen to join remaining individuals without regarding at their size
+of household if this improves the age distribution. This implies less people
+without an household, but some individuals are in a household not
+corresponding to its size.
+
+Figure \ref{NonAssigne} indicates that the
+worst municipality has only 0.5\% of non assigned individuals. The vast majority 
+of the Belgian municipalities has less than 0.1\% of these individuals.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/Belgium/NonAssigne.png}
+\caption{Illustration of the non assigned individuals in Belgium}
+\label{NonAssigne}
+\end{center}
+\end{figure}
+
+Figure \ref{BadSize} illustrates the proportion of individuals living 
+with a wrong number of cohabitants. In the different municipalities, 
+the proportion varies from 0.7\% to 1.05\%.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/Belgium/BadSize.png}
+\caption{Illustration of the individuals in a household of a different size for Belgium}
+\label{BadSize}
+\end{center}
+\end{figure}
+
+
 
 Note that we could make a simulated annealing to resolve these kind of problems.
 In our case, we have tested it, but it is very long to obtain a result
