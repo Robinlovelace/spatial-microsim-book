@@ -28,6 +28,8 @@ support.] is another
 fundamental building block of human organisation around which key decision-making,
 economic and data-collecting activities are centered.
 
+\index{household}
+
 This chapter explains how to take spatial microdata, of the type
 we have generated in the previous chapters, and allocate the resulting
 individuals into household units.
@@ -306,6 +308,8 @@ it means that in the total of women having 20-25 years old
 (57 individuals), $\frac{4}{57}=0.07=7$\% are married with a 
 man of age 15-20. With this reasoning, we can have the new table \ref{fictivageDistrib2}, 
 with a supplementary column considering the proportions.
+
+\index{age distribution}
 
 \begin{table}[h!]
 \begin{center}

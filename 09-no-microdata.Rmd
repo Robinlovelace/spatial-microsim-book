@@ -26,9 +26,11 @@ could correspond to these distributions. Depending on the aim
 of the spatial microsimulation model, simply finding a reasonable fit
 can be sufficient.
 
+\index{sample-free methods}
+
 In other cases a fit based on *entropy maximisation* may be required.
 This concept involves finding the population that is most likely to
-represent the micro-level populations (Bierlaire, 1991).
+represent the micro-level populations (Bierlaire, 1991).  \index{entropy maximisation}
 This chapter demonstrates
 two options for population synthesis when
 real individual-level or aggregate-level data is unavailable.
