@@ -114,6 +114,36 @@ text(seq(-120, 120, length.out = 3), 0, zt)
 
 ## Getting set-up with the RStudio environment
 
+Before progressing further, it is important to ensure that R is set-up correctly
+and working on your computer, so you can follow the practical examples.
+This section will not go into much detail. Further resources are provided in
+the Appendix at the end of the book to provide insight into how R
+works as a programming language.
+
+The majority of the help that you need to install and set-up R on your computer
+can be found online, so it is recommended that you consult this section with
+reference to online searches and help pages. As with all open source software
+projects R evolves over time so it is important to keep up-to-date with
+any changes, which may not be accounted for in this book.
+
+### Installing R
+
+This section assumes that you already have R installed on your computer.
+If you have not, please refer to the documentation on the Comprehensive R Archive Network
+(CRAN):
+
+- For Windows, see [cran.r-project.org/bin/windows/base/](https://cran.r-project.org/bin/windows/base/)
+- For Mac, see [cran.r-project.org/bin/macosx/](https://cran.r-project.org/bin/macosx/)
+- For Linux, see [cran.r-project.org/doc/manuals/r-release/R-admin.html](https://cran.r-project.org/doc/manuals/r-release/R-admin.html).
+On Debian-based systems such as Ubuntu, the following bash command should be sufficient to install R.
+
+```
+sudo apt-get install r-base
+```
+
+### Installing RStudio
+
+RStudio is ...
 
 
 ## SimpleWorld data {#SimpleWorldData}
