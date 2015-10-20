@@ -68,9 +68,9 @@ needed for your research. Focus on "target variables" related to the research
 question will help decide on the constraint variables, as we will see
 below 
 ([](#Selecting)).
-selecting only on variables of interest will ensure you do not
+Selecting only on variables of interest will ensure you do not
 waste time thinking about and processing 
-additional variables that you will be of little use in the future.
+additional variables that will be of little use in the future.
 Regardless of the research question it is clear that the methodology depends
 on the availability of data. If the problem relates to variables that are simply
 unavailable at any level (e.g. hair length, if your research question related
@@ -97,8 +97,8 @@ data on the topic of interest before embarking on spatial microsimulation.
 \index{example data}
 
 As with most spatial microsimulation models, the input data in SimpleWorld consists of
-microdata --- a non-geographical individual-level dataset --- and the
-constraint table which represents a series of geographical zones. In some cases,
+microdata --- a non-geographical individual-level dataset --- and a
+constraint table which represents aggregate counts for a series of geographical zones. In some cases,
 you may have geographical information in your microdata, but not at the
 required level of detail.
 For example, you may have a variable on the province of each individual
@@ -109,7 +109,7 @@ in [](#SimpleWorld) .
 
 \index{reproducibility}
 To ease reproducibility of the analysis when working with real data, it is
-recommended that the process begins with a copy of the *raw* dataset on one's
+recommended that the process begins with a copy of the *raw* dataset on your
 hard disc. Rather than modifying this file, modified ('cleaned') versions
 should be saved as separate files. This ensures that after any mistakes, one can
 always recover information that otherwise could have been lost and makes the
@@ -159,7 +159,7 @@ rather than vice versa.
 Spatial microsimulation involves combining
 individual and aggregate-level data. Each level should
 be given equal consideration when preparing the inputs for the
-modelling process. The limiting factor for model fit in many cases will
+modelling process. In many cases, the limiting factor for model fit will
 be the number of *linking variables*, 
 variables shared between the individual and aggregate level
 datasets which are used to calculate the
@@ -381,7 +381,7 @@ contain 5 categories may look good on paper. However, if those categories are
 defined by the breaks `c(0, 5, 10, 15, 20, 90)`, 
 the linking variable will not be effective at accurately recreating age
 distributions. More evenly distributed categories (such as
-`c(0, 20, 40, 60, 80, 120)` to continue the age example) are
+`c(0, 20, 40, 60, 80, 110)` to continue the age example) are
 preferable.
 \index{breaks}
 \index{bins}
@@ -391,13 +391,14 @@ use R syntax here to define the *breaks* instead of the more common
 '0 to 5', 6 to 10' age category notation because this is how
 numerical variables are best categorised in R. To see how this works,
 try entering the following into R's command line:
-`cut(x = c(20, 21, 90, 35), breaks = c(0, 20, 40, 60, 80, 120))`. The result
+`cut(x = c(20, 21, 90, 35), breaks = c(0, 20, 40, 60, 80, 110))`. The result
 is a `factor` variable
-as follows: `(0,20]   (20,40]  (80,120] (20,40] `. This output uses standard
+as follows: `(0,20]   (20,40]  (80,110] (20,40] `. This output uses standard
 notation for defining bins of continuous data: the `(0, 20]` term means, in
 English, "any value from *greater than* zero, up to *and including* 20".
 In classic mathematical notation this reads
-$0 < x \leq 20$. Note the `]` symbol means 'including'.)
+$0 < x \leq 20$. Note the `]` symbol means 'including'.^[This `[a,b)` category notation follows the International Organization for Standardization (ISO) 80000-2:2009 standard for mathematical notation: Square brackets indicate that the endpoint is included in the set, curved brackets indicate that the endpoint is not included.
+])
 \index{cut command}
 
 \index{number of constraints}
@@ -478,8 +479,9 @@ More time consuming is cleaning the data and there are also many ways to do this
 In the following example we present 
 steps needed to load the data underlying the SimpleWorld
 example into R.^[All
-data and code to replicate the procedures outlined in the book are available
-publicly from the spatial-microsimulation-book GitHub repository, as described above. We recommend loading the input data and playing
+data and code to replicate the procedures outlined in the explicative chapters of the book are available
+publicly from the spatial-microsimulation-book GitHub repository, as described above. 
+We recommend loading the input data and playing
 around with it.]
 Some parts of the following explanation are specific to the example data and the
 use of Iterative Proportional Fitting (IPF) as a reweighting procedure
@@ -568,8 +570,8 @@ rowSums(con_age) == rowSums(con_sex)
 The results of the previous operations are encouraging. The total population is
 the same for each constraint overall and for each area (row) for both
 constraints.  If the total populations between constraint variables do not match
-(e.g. because the *population bases* are different) this is problematic (see
-the Glossary for a description of the population base).
+(e.g. because the *population bases*^[see
+the Glossary for a description of the population base] are different) this is problematic.
 Appropriate steps to normalise the errant constraint variables are described in
 the CakeMap chapter (\ref{CakeMap}). This involves scaling the category totals
 so the totals are equal across all categories.
@@ -602,7 +604,9 @@ to ensure individuals do not get mixed-up by a function that changes their
 order (`merge()`, for example, is a function that can cause havoc by changing
 the order of rows).
 Before removing the superfluous `income` variable, we will create a backup of
-`ind` that can be referred back-to when we have a spatial microdataset:
+`ind` that can be referred back-to if necessary^[For example, when we will have a 
+spatial microdataset replicating the individuals, we will be able to re-assign 
+the income to each generated individual]:
 
 ```{r}
 ind_orig <- ind # store the original ind dataset
@@ -646,9 +650,7 @@ cut(ind$age, breaks = brks) # bin the age variable
 Note that the output of the above `cut()` command is correct,
 with individuals binned into one of two bins, but that the labels
 are rather
-strange.^[This `[a,b)` category notation follows the International Organization for Standardization (ISO) 80000-2:2009 standard for mathematical notation: Square brackets indicate that the endpoint is included in the set, curved brackets indicate that the endpoint is not included. Hence `(49,120]` means
-'any number greater than 49 but less than *or equal to* 120'.
-]
+strange.
 To change these category labels to something more readable
 for people who do not read ISO standards for mathematical notation
 (most people!),
@@ -683,7 +685,7 @@ we will see in the next section.
 
 \index{matching variables}
 Before combining the newly re-categorised individual-level data with the
-aggregate constraints, it is useful to for the category labels to match up.
+aggregate constraints, it is useful for the category labels to match up.
 This may seem trivial, but will save time in the long run. Here is the problem:
 
 ```{r}
@@ -748,8 +750,8 @@ each variable becomes a column containing Boolean numbers
 (either 1 or 0, representing whether the individual belongs to each
 category or not).
 Note that each row in `ind_cat` must contain a one for each constraint variable;
-the sum of every row in `ind_cat` should be equal to the number of constraints.
-(This can be verified with `rowSums(ind_cat)`.)
+the sum of every row in `ind_cat` should be equal to the number of constraints
+(this can be verified with `rowSums(ind_cat)`).
 
 To undertake this 'flattening' process the
 `model.matrix()` function is used to expand each variable in turn.
@@ -798,16 +800,17 @@ or number of columns,
 `cons`. This means that the individual-level data can now be compared with
 the aggregate-level data. We can check this by inspecting
 each object (e.g. via `View(ind_agg)`). A more rigorous test is to see
-if `ind_agg` can be combined with `ind_agg`, using `rbind`:
+if `cons` can be combined with `ind_agg`, using `rbind`:
 
 ```{r}
 rbind(cons[1,], ind_agg) # test compatibility of ind_agg and cons
 ```
 
-If no error message is displayed on you computer, the answer is yes.
+If no error message is displayed on your computer, the answer is yes.
 This shows us a direct comparison between the number of people in each
-category of the constraint variables in zone and and in the individual level
-dataset overall. Clearly, the fit is not very good, with only 5 individuals
+category of the constraint variables in zone and in the individual level
+dataset overall. Clearly, this is a very small example
+ with only 5 individuals
 in total existing in `ind_agg` (the total for each constraint) and 12
 in zone 1. We can measure the size of this difference using measures of
 *goodness of fit*. A simple measure is total absolute error (TAE), calculated in this

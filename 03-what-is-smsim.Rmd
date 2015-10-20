@@ -84,7 +84,7 @@ to avoid confusion. Furthermore, it is important to understand something about
 how others have used 'spatial microsimulation' to avoid
 misinterpretation of literature that employs the term.
 
-There are valid reservations about the term *spatial microsimulation*, as
+There are some issues with term *spatial microsimulation*, as
 described below
 (see [](#is-not)).
 However, *spatial microsimulation* is an appropriate label for the material covered in this
