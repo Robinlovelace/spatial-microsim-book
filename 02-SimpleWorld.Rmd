@@ -7,8 +7,8 @@ bibliography: bibliography.bib
 
 # SimpleWorld: A worked example of spatial microsimulation {#SimpleWorld}
 
-This chapter focuses on the minimum input datasets needed for spatial
-microsimulation. We will use input data on
+This chapter focuses on the minimum input datasets needed for the classical type
+of microsimulation. We will use input data on
 the inhabitants of an imaginary world
 (geographical individual-level) called SimpleWorld to demonstrate
 the basic concepts and techniqes to perform spatial micrsomulation with R.
@@ -43,7 +43,7 @@ We have two sources of information about these people available to us:
 1. aggregate counts of persons by age and sex in each zone (from the SimpleWorld Census)
 2. survey microdata recording more detailed information (age, sex and income), for five of the world’s residents.
 
-Unfortunately the survey data lack any geography and include only 
+Unfortunately the survey data lack geographical information, and include only 
 a small subset of the population (5 out of 33). To infer further information
 about SimpleWorld --- and more importantly to be able to model its
 inhabitants --- we need a methodology. This is precisely the kind of situation
