@@ -7,8 +7,8 @@ bibliography: bibliography.bib
 
 # SimpleWorld: A worked example of spatial microsimulation {#SimpleWorld}
 
-This chapter focuses on the minimum input datasets needed for spatial
-microsimulation. We will use input data on
+This chapter focuses on the minimum input datasets needed for the classical type
+of microsimulation. We will use input data on
 the inhabitants of an imaginary world
 (geographical individual-level) called SimpleWorld to demonstrate
 the basic concepts and techniqes to perform spatial micrsomulation with R.
@@ -43,7 +43,7 @@ We have two sources of information about these people available to us:
 1. aggregate counts of persons by age and sex in each zone (from the SimpleWorld Census)
 2. survey microdata recording more detailed information (age, sex and income), for five of the world’s residents.
 
-Unfortunately the survey data lack any geography and include only 
+Unfortunately the survey data lack geographical information, and include only 
 a small subset of the population (5 out of 33). To infer further information
 about SimpleWorld --- and more importantly to be able to model its
 inhabitants --- we need a methodology. This is precisely the kind of situation
@@ -114,7 +114,127 @@ text(seq(-120, 120, length.out = 3), 0, zt)
 
 ## Getting set-up with the RStudio environment
 
+Before progressing further, it is important to ensure that R is set-up correctly
+and working on your computer, so you can follow the practical examples.
+This section will not go into much detail. Further resources are provided in
+the Appendix at the end of the book to provide insight into how R
+works as a programming language.
 
+The majority of the help that you need to install and set-up R on your computer
+can be found online, so it is recommended that you consult this section with
+reference to online searches and help pages. As with all open source software
+projects R evolves over time so it is important to keep up-to-date with
+any changes, which may not be accounted for in this book.
+
+### Installing R
+
+This section assumes that you already have R installed on your computer.
+If you have not, please refer to the documentation on the Comprehensive R Archive Network
+(CRAN):
+
+- For Windows, see https://cran.r-project.org/bin/windows/base/
+- For Mac, see https://cran.r-project.org/bin/macosx/
+- For Linux, see https://cran.r-project.org/doc/manuals/r-release/R-admin.html.
+On Debian-based systems such as Ubuntu, the following bash command should be sufficient to install R.
+
+```
+sudo apt-get install r-base
+```
+
+### RStudio
+
+RStudio is an Integrated Development Environment (IDE) for R.
+It provides an advance Graphical User Interface (GUI) that makes it easier not only to write R code, but to install packages, manage R's graphical outputs and work effectively on mulitple projects.
+If you are an R beginner, it is highly recommended that you use RStudio for the work presented in this book because it will enable you to spend less time worrying about how to write R code and set-up R correctly and more time focussed on spatial microsimulation.
+One example of how RStudio saves time is its tab autocompletion functionality.
+Type the beginning of any object or function stored in R's environment,
+hit the `Tab` button, and the name should auto-complete, as illustrated below.
+
+```{r rstudio,  fig.cap="Autocompletion in RStudio", fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
+# todo: create tutorial on installing R and RStudio
+grid.raster(readPNG("figures/rstudio-autocomplete.png"))
+```
+
+To test this functionality, download and install RStudio if you have not already.
+The installation process is simple on Linux, Mac and Windows platforms:
+simply follow the instructions provided here at rstudio.com/products/rstudio/download/.
+
+There are many other advantages of using
+RStudio.^[For
+more information about RStudio, please see the RStudio website:
+https://www.rstudio.com/products/rstudio/features/ and search for
+other on-line resources.
+There is even an entire book dedicated to the subject
+[@verzani2011getting].
+]
+The next section focuses on one particular advantage that we recommend you
+make use of whilst working through the book: RStudio projects.
+
+### Projects
+
+RStudio provides a neat system for creating, managing and even sharing your projects.
+This functionality merits a section of its own, because spatial microsimulation
+projects are likely to be large and complex, requiring collaboration with
+other people. If you are not careful the projects can become over-complex
+and un-manageable. RStudio projects can prevent this from happening and
+lead to improved workflow.
+
+To set-up a new project click on the drop-down menu in the top-right
+section of RStudio. If you are work in a project the name of the
+project will appear in this dropdown menu (see Fig. 2.3).
+When a project is loaded, the following things happen:
+
+- The files open in the script panel (top left) last time your worked on the project will open.
+- R's working directory (set and checked with `setwd()` and `getwd()` respectively) will change.
+- Any R objects saved in the `.RData` file in the project will be automatically loaded, saving your working.
+- If you are using `git` to manage your project's development and sharing, you'll have options to commit code and 'push' new work, e.g. to GitHub.
+
+In fact, this entire book was written as an RStudio project.
+This allowed us to work from the same system and share code easily, by pushing our
+code frequently to the book's online repository: https://github.com/Robinlovelace/spatial-microsim-book .
+This online repository will allow you to access all of the example code and data for the book.
+It will also allow you to contribute to the book as an evolving project.
+The next section explains how to download and use the data stored in the `spatial-microsim-book`
+GitHub repository to access the code and data resources associated with the book.
+
+### Downloading data for the book
+
+There are two main ways to download the code and data associated with this book onto your computer:
+by 'cloning' the repository and by downloading and extracting its contents in a .zip file.
+We will only cover the second option as it's simpler. For details on how to fork, clone
+and potentially contribute to the book project, see
+[@lima_coding_2014].
+
+To simply download the code and data, first navigate to
+https://github.com/Robinlovelace/spatial-microsim-book in your browser. From this page, click on the
+'Download ZIP' button to the right and extract the folder into a
+sensible place on your computer, such as the Desktop.  From there, you will want
+to run R from the project's root directory: open the folder in a file browser
+and double click on `spatial-microsim-book.Rproj`.
+Alternatively, start RStudio and click on 'Open Project' from the dropdown menu above the top-right panel
+(you can also open the project file with File > Open).
+This should cause RStudio to
+be opened at this location, with all the input data files easily accessible to R
+through *relative file paths* (you must have installed the RStudio software for this stage to work --- see the Appendix).
+
+\index{RStudio}
+
+```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded, with objects loaded in the Environment after running SimpleWorld.R",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
+# todo: create tutorial on installing R and RStudio
+grid.raster(readPNG("figures/rstudio-environment.png"))
+```
+
+To check if the project has been downloaded and opened correctly, try running the following code.
+
+```{r}
+source("R/SimpleWorld.R")
+```
+
+You should see some output in red. Further, some new objects should appear in the Environment tab in the top-right panel (Figure 2.3).
+This is the result of running the code located in a script file called `SimpleWorld.R`, using the `source()` function.
+
+Now we have an understanding of RStudio and the project loaded, it's time to 'get our hands dirty'
+with the SimpleWorld example.
 
 ## SimpleWorld data {#SimpleWorldData}
 
@@ -125,8 +245,6 @@ how many young (strictly under 50 space years old) and old (50 and over)
 residents live in each
 zone, as well their genders: male and female.
 This information is displayed in the tables below.
-
-\newpage
 
 Table: Aggregate-level age counts for SimpleWorld.
 
@@ -144,11 +262,20 @@ Table: Aggregate sex counts for SimpleWorld.
 |2  |  4|  6|
 |3  |  3|  8|
 
+The following commands load-in this data.
+Play with the R objects you have loaded: try printing
+them to screen, plotting them and even-subsetting them.
+If you cannot, it may be worth consulting the Appendix
+on using R.
 
-```{r fig = "Mercator maps of the zones in SimpleWorld", echo=FALSE, message=FALSE}
+```{r}
+# Load the constraint data
 con_age <- read.csv("data/SimpleWorld/age.csv")
 con_sex <- read.csv("data/SimpleWorld/sex.csv")
 cons <- cbind(con_age, con_sex)
+```
+
+```{r fig = "Mercator maps of the zones in SimpleWorld", echo=FALSE, message=FALSE}
 
 # library(knitr)
 # kable(con_age, row.names = T)
@@ -224,7 +351,13 @@ aggregate-level data described above: age
 (as an integer variable, rather than the
 broad categories used in the zone data) and sex. The individual-level
 data also provides information about a *target variable* not included
-in the geographical constraints: income.
+in the geographical constraints: income. To load the individual-level data,
+enter the following:
+
+```{r}
+ind <- read.csv("data/SimpleWorld/ind-full.csv")
+```
+
 
 ```{r, echo=FALSE}
 # ind <- read.csv("data/SimpleWorld/ind.csv")
@@ -232,11 +365,10 @@ in the geographical constraints: income.
 # ind$income <- ind$income + 30 * ind$age
 # ind$income[ ind$age == "f"] <- ind$income + 1000
 # write.csv(ind, "data/SimpleWorld/ind-full.csv", row.names = F)
-ind <- read.csv("data/SimpleWorld/ind-full.csv")
 # kable(ind)
 ```
 
-Table x: Individual-level survey data from SimpleWorld.
+Table: Individual-level survey data from SimpleWorld.
 
 | id| age|sex | income|
 |--:|---:|:---|------:|
