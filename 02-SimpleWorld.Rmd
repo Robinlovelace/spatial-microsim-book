@@ -141,30 +141,100 @@ On Debian-based systems such as Ubuntu, the following bash command should be suf
 sudo apt-get install r-base
 ```
 
-### Installing RStudio
+### RStudio
 
-RStudio is ...
+RStudio is an Integrated Development Environment (IDE) for R.
+It provides an advance Graphical User Interface (GUI) that makes it easier not only to write R code, but to install packages, manage R's graphical outputs and work effectively on mulitple projects.
+If you are an R beginner, it is highly recommended that you use RStudio for the work presented in this book because it will enable you to spend less time worrying about how to write R code and set-up R correctly and more time focussed on spatial microsimulation.
+One example of how RStudio saves time is its tab autocompletion functionality.
+Type the beginning of any object or function stored in R's environment,
+hit the `Tab` button, and the name should auto-complete, as illustrated below.
+
+```{r rstudio,  fig.cap="Autocompletion in RStudio", fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
+# todo: create tutorial on installing R and RStudio
+grid.raster(readPNG("figures/rstudio-autocomplete.png"))
+```
+
+To test this functionality, download and install RStudio if you have not already.
+The installation process is simple on Linux, Mac and Windows platforms:
+simply follow the instructions provided here at rstudio.com/products/rstudio/download/.
+
+There are many other advantages of using
+RStudio.^[For
+more information about RStudio, please see the RStudio website:
+https://www.rstudio.com/products/rstudio/features/ and search for
+other on-line resources.
+There is even an entire book dedicated to the subject
+[@verzani2011getting].
+]
+The next section focuses on one particular advantage that we recommend you
+make use of whilst working through the book: RStudio projects.
 
 ### Projects
 
+RStudio provides a neat system for creating, managing and even sharing your projects.
+This functionality merits a section of its own, because spatial microsimulation
+projects are likely to be large and complex, requiring collaboration with
+other people. If you are not careful the projects can become over-complex
+and un-manageable. RStudio projects can prevent this from happening and
+lead to improved workflow.
+
+To set-up a new project click on the drop-down menu in the top-right
+section of RStudio. If you are work in a project the name of the
+project will appear in this dropdown menu (see Fig. 2.3).
+When a project is loaded, the following things happen:
+
+- The files open in the script panel (top left) last time your worked on the project will open.
+- R's working directory (set and checked with `setwd()` and `getwd()` respectively) will change.
+- Any R objects saved in the `.RData` file in the project will be automatically loaded, saving your working.
+- If you are using `git` to manage your project's development and sharing, you'll have options to commit code and 'push' new work, e.g. to GitHub.
+
+In fact, this entire book was written as an RStudio project.
+This allowed us to work from the same system and share code easily, by pushing our
+code frequently to the book's online repository: https://github.com/Robinlovelace/spatial-microsim-book .
+This online repository will allow you to access all of the example code and data for the book.
+It will also allow you to contribute to the book as an evolving project.
+The next section explains how to download and use the data stored in the `spatial-microsim-book`
+GitHub repository to access the code and data resources associated with the book.
 
 ### Downloading data for the book
 
-The data used in this chapter and throughout the book can be
-downloaded from the book's [GitHub repository](https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
+There are two main ways to download the code and data associated with this book onto your computer:
+by 'cloning' the repository and by downloading and extracting its contents in a .zip file.
+We will only cover the second option as it's simpler. For details on how to fork, clone
+and potentially contribute to the book project, see
+[@lima_coding_2014].
+
+To simply download the code and data, first navigate to
+https://github.com/Robinlovelace/spatial-microsim-book in your browser. From this page, click on the
 'Download ZIP' button to the right and extract the folder into a
 sensible place on your computer, such as the Desktop.  From there, you will want
 to run R from the project's root directory: open the folder in a file browser
-and double click on `spatial-microsim-book.Rproj`.  This should cause RStudio to
+and double click on `spatial-microsim-book.Rproj`.
+Alternatively, start RStudio and click on 'Open Project' from the dropdown menu above the top-right panel
+(you can also open the project file with File > Open).
+This should cause RStudio to
 be opened at this location, with all the input data files easily accessible to R
 through *relative file paths* (you must have installed the RStudio software for this stage to work --- see the Appendix).
 
 \index{RStudio}
 
-```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
+```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded, with objects loaded in the Environment after running SimpleWorld.R",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
 # todo: create tutorial on installing R and RStudio
-grid.raster(readPNG("figures/studio-basic.png"))
+grid.raster(readPNG("figures/rstudio-environment.png"))
 ```
+
+To check if the project has been downloaded and opened correctly, try running the following code.
+
+```{r}
+source("R/SimpleWorld.R")
+```
+
+You should see some output in red. Further, some new objects should appear in the Environment tab in the top-right panel (Figure 2.3).
+This is the result of running the code located in a script file called `SimpleWorld.R`, using the `source()` function.
+
+Now we have an understanding of RStudio and the project loaded, it's time to 'get our hands dirty'
+with the SimpleWorld example.
 
 ## SimpleWorld data {#SimpleWorldData}
 
