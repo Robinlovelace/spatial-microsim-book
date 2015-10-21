@@ -132,9 +132,9 @@ This section assumes that you already have R installed on your computer.
 If you have not, please refer to the documentation on the Comprehensive R Archive Network
 (CRAN):
 
-- For Windows, see [cran.r-project.org/bin/windows/base/](https://cran.r-project.org/bin/windows/base/)
-- For Mac, see [cran.r-project.org/bin/macosx/](https://cran.r-project.org/bin/macosx/)
-- For Linux, see [cran.r-project.org/doc/manuals/r-release/R-admin.html](https://cran.r-project.org/doc/manuals/r-release/R-admin.html).
+- For Windows, see https://cran.r-project.org/bin/windows/base/
+- For Mac, see https://cran.r-project.org/bin/macosx/
+- For Linux, see https://cran.r-project.org/doc/manuals/r-release/R-admin.html.
 On Debian-based systems such as Ubuntu, the following bash command should be sufficient to install R.
 
 ```
@@ -145,6 +145,26 @@ sudo apt-get install r-base
 
 RStudio is ...
 
+### Projects
+
+
+### Downloading data for the book
+
+The data used in this chapter and throughout the book can be
+downloaded from the book's [GitHub repository](https://github.com/Robinlovelace/spatial-microsim-book). From this page, click on the
+'Download ZIP' button to the right and extract the folder into a
+sensible place on your computer, such as the Desktop.  From there, you will want
+to run R from the project's root directory: open the folder in a file browser
+and double click on `spatial-microsim-book.Rproj`.  This should cause RStudio to
+be opened at this location, with all the input data files easily accessible to R
+through *relative file paths* (you must have installed the RStudio software for this stage to work --- see the Appendix).
+
+\index{RStudio}
+
+```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
+# todo: create tutorial on installing R and RStudio
+grid.raster(readPNG("figures/studio-basic.png"))
+```
 
 ## SimpleWorld data {#SimpleWorldData}
 
