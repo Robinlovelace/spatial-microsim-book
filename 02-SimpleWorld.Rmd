@@ -246,8 +246,6 @@ residents live in each
 zone, as well their genders: male and female.
 This information is displayed in the tables below.
 
-\newpage
-
 Table: Aggregate-level age counts for SimpleWorld.
 
 |zone   | 0-49 yrs| 50 + yrs|
@@ -264,11 +262,20 @@ Table: Aggregate sex counts for SimpleWorld.
 |2  |  4|  6|
 |3  |  3|  8|
 
+The following commands load-in this data.
+Play with the R objects you have loaded: try printing
+them to screen, plotting them and even-subsetting them.
+If you cannot, it may be worth consulting the Appendix
+on using R.
 
-```{r fig = "Mercator maps of the zones in SimpleWorld", echo=FALSE, message=FALSE}
+```{r}
+# Load the constraint data
 con_age <- read.csv("data/SimpleWorld/age.csv")
 con_sex <- read.csv("data/SimpleWorld/sex.csv")
 cons <- cbind(con_age, con_sex)
+```
+
+```{r fig = "Mercator maps of the zones in SimpleWorld", echo=FALSE, message=FALSE}
 
 # library(knitr)
 # kable(con_age, row.names = T)
@@ -344,7 +351,13 @@ aggregate-level data described above: age
 (as an integer variable, rather than the
 broad categories used in the zone data) and sex. The individual-level
 data also provides information about a *target variable* not included
-in the geographical constraints: income.
+in the geographical constraints: income. To load the individual-level data,
+enter the following:
+
+```{r}
+ind <- read.csv("data/SimpleWorld/ind-full.csv")
+```
+
 
 ```{r, echo=FALSE}
 # ind <- read.csv("data/SimpleWorld/ind.csv")
@@ -352,11 +365,10 @@ in the geographical constraints: income.
 # ind$income <- ind$income + 30 * ind$age
 # ind$income[ ind$age == "f"] <- ind$income + 1000
 # write.csv(ind, "data/SimpleWorld/ind-full.csv", row.names = F)
-ind <- read.csv("data/SimpleWorld/ind-full.csv")
 # kable(ind)
 ```
 
-Table x: Individual-level survey data from SimpleWorld.
+Table: Individual-level survey data from SimpleWorld.
 
 | id| age|sex | income|
 |--:|---:|:---|------:|
