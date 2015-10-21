@@ -113,8 +113,9 @@ cons[1, ]
 ## ------------------------------------------------------------------------
 for(j in 1:n_zone){
   for(i in 1:n_sex + n_age){
-weights2[ind_cat[, i] == 1, j] <- cons[j , i] / ind_agg1[j, i]
+weights2[ind_cat[, i] == 1, j] <- weights1[ind_cat[, i] == 1, j] * cons[j , i] / ind_agg1[j, i]
     }
+print(weights2)
   }
 
 ## ------------------------------------------------------------------------
@@ -122,7 +123,7 @@ weights2
 
 ## ------------------------------------------------------------------------
 for(i in 1:n_zone){
-ind_agg2[i, ] <- colSums(ind_cat * weights1[, i] * weights2[, i])
+ind_agg2[i, ] <- colSums(ind_cat  * weights2[, i])
 }
 
 ## ----valit_plot1, echo=FALSE, fig.cap="Fit between observed and simulated values for age and sex categories (column facets) after constraining a first time by age and sex constraints (iterations 1.1 and 1.2, plot rows). The dotted line in each plot represents perfect fit between the simulated and observed cell values. The overall fit in each case would be found by combining the left and right-hand plots. Each symbol correspond to a category and each category has a couple (observed, simulated) for each zone."----
