@@ -475,11 +475,6 @@ non-spatial input population. In Chapter 4 we will explore all the steps needed
 to produce a spatial microdataset for SimpleWold. A subset of such spatial microdataset
 is presented in Table 3.5 below.
 
-The complete spatial microdataset allocates whole individuals to
-provides an insight into the nature and spatial distribution of the
-inhabitants of SimpleWorld. This spatial microdataset is also useful
-for the purposes of modelling, as described in Chapter 12.
-
 \pagebreak
 
 | id| zone| age|sex | income|
@@ -519,8 +514,8 @@ useful output. We can estimate, for example, the average income in each zone.
 Furthermore, we could create an estimate of the *distribution* of income in each
 area. Although these estimates are unlikely to be very accurate due to the
 paucity of data, the methods could be very useful if performed on larger
-datasets from 'RealWorld' (planet Earth).  Finally, the spatial microdata
-presented in the above table can be used as an input into an agent-based model
+datasets from 'RealWorld' (planet Earth).  The spatial microdata
+presented in the above table could be used as an input into an agent-based model
 (ABM). Assuming the inhabitants of SimpleWorld are more predictable than those
 of RealWorld, the outputs from such a model could be very useful indeed, for
 example for predicting future outcomes of current patterns of behaviour.
@@ -534,5 +529,5 @@ global averages of the input data, for example, our estimates could be way out.
 Using such a small sample, one could rightly argue, how could the diversity of
 33 inhabitants of SimpleWorld be represented by our simulated spatial microdata?
 This question is equally applicable to larger simulations. These issues are
-important and will be tackled in a subsequent Section (\ref{svalidation}) on
-validation.
+important and will be tackled in
+[](#svalidation).
