@@ -563,7 +563,8 @@ in the code block below.
 for(j in 1:n_zone){
   for(i in 1:n_sex + n_age){
     index <- ind_cat[, i] == 1
-    weights2[index, j] <- weights1[index, j] * cons[j , i] / ind_agg1[j, i]
+    weights2[index, j] <- weights1[index, j] * cons[j , i] /
+      ind_agg1[j, i]
     }
 }
 ```
@@ -887,7 +888,7 @@ as described in a subsequent section
 on 'integerisation'. 
 
 
-### IPF with the R package  **mipfp** {#mipfp}
+### IPF with **mipfp** {#mipfp}
 
 \index{mipfp}
 \index{IPF!with mipfp}
@@ -1033,7 +1034,7 @@ colnames (cross) <- names(age)
 cross
 ```
 
-When having several constraints concerning the same variable, we have to insure 
+When having several constraints concerning the same variable, we have to ensure 
 the consistency across these targets (otherwise convergence might not be reached). 
 For instance, we can display the margins of `cross` along with `diploma` and `age`
 to validate the consistency assumption. There are
@@ -1064,7 +1065,7 @@ result <- Ipfp(weight_init, descript, target, iter = 50,
                print = TRUE, tol = 1e-5)
 ```
 
-The addition of a constraint leave less freedom to 
+The addition of a constraint leaves less freedom to 
 the algorithm, implying that the algorithm 
 converges faster. By printing the results, we see 
 that all constraints are respected and
@@ -1235,15 +1236,16 @@ to all other 81 ($3^4$) permutations.
 To overcome this issue Lovelace and Ballas (2012) developed a method which
 ensures that any individual with a weight above 1 would be sampled at least once,
 making the result $(4,0,0)$ impossible in both cases.  This method is
-*truncate, replicate, sample* (TRS) integerisation:
+*truncate, replicate, sample* (TRS) integerisation, described in the following function:
 \index{truncate, replicate sample (TRS)}
 \index{integerisation!TRS}
+
+\newpage
 
 ```{r}
 int_trs <- function(x){
   # For generalisation purpose, x becomes a vector
-  # This allow the function to work with matrix also
-  xv <- as.vector(x)
+  xv <- as.vector(x) # allows trs to work on matrices
   xint <- floor(xv) # integer part of the weight
   r <- xv - xint # decimal part of the weight
   def <- round(sum(r)) # the deficit population
