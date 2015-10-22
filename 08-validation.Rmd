@@ -707,31 +707,37 @@ $$
 This means simply that the missing cells are defined as individuals with constraint categories
 that are present in the complete dataset but absent from the input data.
 
-
 ## External validation
 
-Beyond typos or simple conceptual errors in model code, more fundamental
-questions should be asked of spatial microsimulation models. The validity of the
-assumptions on which they are built and the confidence one should have in the
-results are important. For this we need external datasets.  Validation is
-therefore a tricky topic, something not covered here but which is discussed in
-Edwards et al. (2010). For more on this and  for (an albeit unreliable)
-comparison between estimated cake consumption and external income estimates.
+Beyond mistakes in the code, more fundamental
+questions should be asked of results based on spatial microsimulation. The validity of the
+assumptions affect confidence one should have in the
+results. For this we need external datasets. External validation is
+therefore a tricky topic which is highly dependent on the available data
+[@Clarke2010-valid]. 
 
-## Individual-level external validation
+Geocoded survey data, *real* spatial microdata, is the
+'gold standard' when it comes to official data.
+Small representative samples of the population for small areas
+can be used as a basis for individual-level validation. 
 
-Geocoded survey data or 'real spatial microdata' is the
-'gold standard' when it comes to official data. It is
-a scarce resource, but may become increasingly available. In cases where even a small representative sample of the population is available for a small geographic area, this can be used as a basis for individual-level validation. 
+## Chapter summary
 
-## Evaluating the CakeMap model
+We have explored methods of checking that the results of the
+CakeMap spatial microsimulation model correspond to reality.
+This has primarily involved checking
+that the results are internally consistent: that the output
+spatial microdata correspond with the geographical constraints.
 
-In practice the term 'validation' is misleading as it can
-imply that the model is in some way 'valid'. 
+This process, generally reffered to as 'internal validation',
+is important because it ensures that the model is internally consistent
+and contains no obvious errors.
+However, the term 'validation' can be misleading as it
+implies that the model is in some way 'valid'. 
 A model is only as good as its underlying assumptions,
 which may involve some degree of subjectivity.
 We therefore advocate talking about this phase as 'evaluation'
-or simply 'model checking' if all we are doing is internal
+or simply 'model checking', if all we are doing is internal
 validation.
 
 In the example of CakeMap, no datasets are available to check if the
@@ -743,4 +749,4 @@ This helps explain why internal validation is far more common in spatial
 microsimulation studies than external validation, although the latter is
 generally more important.
 
-
+# References
