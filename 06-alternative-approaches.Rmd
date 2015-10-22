@@ -6,6 +6,7 @@ bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}
+# TODO: Something on urbansim?
 library(png)
 library(grid)
 load("cache-smsim-in-R.RData")
@@ -401,7 +402,7 @@ domains, such as industry, for the moment. This kind of algorithm can be
 very effective when the objective function has several local minimum and
 (Hermes and Poulsen, 2012).
 
-```{r}
+```{r, echo=FALSE}
 # No sure this section is useful; removed for now...
 # 
 # There are two approaches for reweighting using combinatorial optimisation
@@ -522,7 +523,7 @@ to datasets from the developing world.
 An example of the individual-level data provided by the package,
 and the function `contingencyWt`, is demonstrated below.
 
-```{r}
+```{r, message=FALSE}
 # install.packages("simPop")
 library(simPop)
 
