@@ -487,9 +487,12 @@ wards$`Sqrt(SAE)` <- sqrt(wards$SAEVec)
 # p2 <- tm_shape(wards) +
 #   tm_fill("Sqrt(SAE)", n = 3) +
 #   tm_borders()
+osm_tiles <- read_osm(bbox(wards))
 
+tm_shape(osm_tiles) +
+  tm_raster() +
 tm_shape(wards) +
-  tm_fill(c("Sqrt(TAE)", "Sqrt(SAE)"), n = 3) +
+  tm_fill(c("Sqrt(TAE)", "Sqrt(SAE)"), n = 3, alpha = 0.5) +
   tm_borders()
 
 # Add SAE map - commented out due to error with scale_transform
