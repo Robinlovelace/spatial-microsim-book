@@ -6,6 +6,7 @@ bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}
+# TODO: Something on urbansim?
 library(png)
 library(grid)
 load("cache-smsim-in-R.RData")
@@ -74,12 +75,14 @@ age = read.csv("data/SimpleWorld/age.csv")
 sex = read.csv("data/SimpleWorld/sex.csv")
 ind = read.csv("data/SimpleWorld/ind-full.csv")
 # Make categories for age
-ind$age <- cut(ind$age, breaks=c(0,49,Inf), labels = c("a0.49", "a.50."))
+ind$age <- cut(ind$age, breaks=c(0, 49, Inf),
+               labels = c("a0.49", "a.50."))
 # Add initial weights to survey
 ind$w <- vector(mode = "numeric", length=dim(ind)[1]) + 1
 
 # prepare simulation data using GREGWT::prepareData
-data_in <- prepareData(cbind(age, sex), ind, census_area_id = F, breaks = c(3))
+data_in <- prepareData(cbind(age, sex),
+                  ind, census_area_id = F, breaks = c(3))
 
 # prepare a data.frame to store the result
 fweights <- NULL
@@ -401,7 +404,7 @@ domains, such as industry, for the moment. This kind of algorithm can be
 very effective when the objective function has several local minimum and
 (Hermes and Poulsen, 2012).
 
-```{r}
+```{r, echo=FALSE}
 # No sure this section is useful; removed for now...
 # 
 # There are two approaches for reweighting using combinatorial optimisation
@@ -522,13 +525,13 @@ to datasets from the developing world.
 An example of the individual-level data provided by the package,
 and the function `contingencyWt`, is demonstrated below.
 
-```{r}
+```{r, message=FALSE}
 # install.packages("simPop")
 library(simPop)
 
 # Load individual-level data
 data("eusilcS")
-head(eusilcS)[1:8]
+head(eusilcS)[2:8]
 
 # Compute contingency coefficient between two variables
 contingencyWt(eusilcS$pl030, eusilcS$pb220a,
