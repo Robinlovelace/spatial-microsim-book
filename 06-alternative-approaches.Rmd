@@ -550,4 +550,20 @@ the two variables.
 it is worth considering for its provision of example datasets alone.
 considering 
 
+## The Urban Data Science Toolkit (UDST)
+
+The UDST provides an even more ambitious approach to modelling
+cities that contains a population synthesis component.
+An online overview of the project - http://www.udst.org/ -
+shows that the developers of the UDST are interested in visualisation
+and modelling, not just population synthesis. The project is an
+evolving open source project hosted on GitHub.
+It is outside the scope of this book to comment on the performance
+of the tools within the UDST (which is written in Python). Suffice
+to flag the project and suggest readers investigate the
+[Synthpop](https://github.com/UDST/synthpop)
+software as alternative synthetic population generator.
+
+\index{Synthpop}
+\index{Urban Data Science Toolkit}
 
