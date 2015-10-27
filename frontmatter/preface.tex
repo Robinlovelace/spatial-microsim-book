@@ -2,38 +2,33 @@
 
 Spatial microsimulation is a set of methods for modelling phenomena which operate
 at individual and geographical levels simultaneously.
-The city is a classic case of a system that the techniques
-presented in this book can help to understand: Shanghai
-(depicted on the front cover), for example, is a complex metropolis with a
-population of more than 10 million incessantly interacting people. Such a system is clearly hard
-to simulate. Yet, by breaking the problem up into its
-constituent parts --- discrete geographic areas and a sample of the human
-population --- spatial microsimulation can be used to model key aspects of the city system
-an everyday laptop computer. Of course there are dangers associated with reductionism.
-However, the advantages of condensing a problem down to its fundamentals
-should be clear to the reader:
-we could simulate population growth, increased energy efficiency or even
-a ban on cars. Moreover, by linking the synthetic population
-to an agent-based model, complex
-behaviours such as social segregation could also be simulated.
+For example the functioning of a modern city (Shanghai is illustrated on the front cover)
+involves an overwhelmingly complex web of human interactions.
+Simulating such complexity may seem impossible.
+Yet, by breaking the problem up into its
+constituent parts --- discrete geographic areas and a sample of the
+population --- spatial microsimulation can be used to model key aspects of the city system on
+an everyday laptop computer.
+There are dangers associated with reductionism, but
+condensing a problem down to its fundamentals has many advantages. 
+Using the techniques described we can simulate scenarios such as population growth, increased energy efficiency and major shifts in transport technologies and modes.
+By linking the synthetic population
+to an agent-based model, in which individuals interact over time with each other and their environment, complex
+behaviours such as social segregation could also be simulated, as illustrated in Chapter 12.
 
 This book is for anyone who wants to not only understand
 but to \emph{use} spatial microsimulation.
-The emphasis is practical rather than theoretical.
-New R packages for assisting with the generation of spatial microdata are described in
+The emphasis is on the practical rather than theoretical aspects of the field.
+R packages such as \textbf{mipfp}, for enabling the generation of synthetic populations, are described in
 detail, with reference to practical examples and reproducible code.
 The aim is to enable you to implement the methods on your own
-datasets to better understand the world. 
+data. 
 
 By explaining how to use tools for modelling
 phenomena that vary over space,
 this book should help enhance your knowledge of
-complex systems such as Shanghai.
-We hope the book empowers the reader with the confidence and know-how
+complex systems. We hope the book empowers the reader with the confidence and know-how
 needed to provide evidence-based policy guidance.
-In other words, we believe that spatial microsimulation can change the world.
-% and are best understood with
-% reference to my own experience of trying to learn spatial microsimulation.
 
 % Like many PhD students
 % and researchers, I was tasked with implementing a method that
@@ -65,11 +60,9 @@ It was informal communication and code-sharing with a colleague,
 Malcolm Campbell, that led to the development of my models in R.
 This experience demonstrated the importance of
 reproducible research. Following this `open science' ethic,
-the source code underlying this book is freely
-available online. Readers are encouraged to comment on and contribute to
-the book's continued development via the code sharing site GitHub, where
-an up-to-date version is hosted.
-(see github.com/Robinlovelace/spatial-microsim-book).
+readers are encouraged to comment on and contribute to
+the book's continued development via the code sharing site GitHub
+(see \url{https://github.com/Robinlovelace/spatial-microsim-book}).
 
 % The number of
 % hours spent dubugging and cursing the code would have been
@@ -80,11 +73,11 @@ an up-to-date version is hosted.
 % An Introduction to Spatial Microsimulation with R,
 % held at the University
 % of Leeds in the spring of 2014.
-The opportunity to make the dream of this book a reality came in the spring
+The opportunity turn the idea for this book into reality came in the spring
 of 2014, when I delivered a practical course on the topic at
 the University of Leeds.
-The high demand and positive feedback from participants
-showed the need for practical teaching materials in the area.
+The high demand for and positive feedback after the course
+suggested the need for practical teaching materials in the area.
 % , it seemed there was a
 % definite need for more practical teaching material on spatial microsimulation
 % than was available at the time: many people had read the literature and had
@@ -96,17 +89,24 @@ Four months later
 I delivered another course on spatial microsimulation
 at the University of Cambridge.
 The materials had been greatly updated
-and it became apparent that there was demand for more.
+and, thanks to the involvement of CRC Press, these
+provided the foundation for a book on the subject.
 
 Morgane Dumont, who attended the Cambridge course,
 became involved shortly after and has greatly improved the work.
-Morganes's background in Mathematics and Statistics makes her the
+Morganes's background in Mathematics and Statistics made her the
 ideal co-author, complementing the focus on practical examples
-and code. Special mention is also in order for Maja Zaloznik
+and code.
+
+Maja Zaloznik
 (University of Oxford)
-and Richard Ellison (University of Sydney),
-contributed chapters on
-agent based models (ABM) and an approach known as TRESIS, respectively.
+and Richard Ellison (University of Sydney) have also greatly improved the book
+through their contributed chapters.
+Richard's chapter (11) illustrates how R can be used as the basis for transport
+demand modelling, using an approach known as TRESIS. Maja's chapter (12)
+is the most advanced in the book and demonstrates how spatial microsimulation
+can be used in parallel with agent-based modelling, with an implementation in the
+NetLogo language.
 
  % has contributed greatly to the book, including material on the core topics of the mipfp package and household allocation.
 
@@ -117,17 +117,17 @@ agent based models (ABM) and an approach known as TRESIS, respectively.
 
 \emph{Spatial microsimulation with R} is therefore the
 result of international teamwork.
-It is, to the best of our knowledge, the only practical book in the
-field. We hope it is useful in your work.
+It is, to the best of our knowledge, the only practical book on the subject.
+We hope it is useful in your work.
 More widely, we hope it provides a
 a foundation for advancement in the
 field and a toolkit for solving real-world problems.
 
-If you have found any of the contents of the book useful, interesting
-or even unclear, please do get in touch via email (r.lovelace@leeds.ac.uk),
-Twitter (@robinlovelace) or github.com/robinlovelace.
+% If you have found any of the contents of the book useful, interesting
+% or even unclear, please do get in touch via email (r.lovelace@leeds.ac.uk)
+% or github.com/robinlovelace.
 
-Robin Lovelace, October 2015, Leeds.
+Robin Lovelace, October 2015.
 
 
 % Something on community involvement and contributing.
