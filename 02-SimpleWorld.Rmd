@@ -385,7 +385,7 @@ another.
 
 ## Generating a weight matrix {#weight-matrix}
 
-The to generating spatial microdata is allocating *weights*
+The process to generate spatial microdata is allocating *weights*
 to each individual for each zone. The higher the weight for a particular
 individual-zone combination, the more representative the individual is of that
 zone. This information can be represented as a *weight matrix*.
