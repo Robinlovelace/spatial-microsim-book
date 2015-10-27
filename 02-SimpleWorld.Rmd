@@ -11,7 +11,7 @@ This chapter focuses on the minimum input datasets needed for the classical type
 of microsimulation. We will use input data on
 the inhabitants of an imaginary world
 (geographical individual-level) called SimpleWorld to demonstrate
-the basic concepts and techniqes to perform spatial micrsomulation with R.
+the basic concepts and techniques to perform spatial microsimulation with R.
 
 This is the
 first practical chapter, so it also aims get a good 'work-flow'.
@@ -550,5 +550,11 @@ Using such a small sample, one could rightly argue, how could the diversity of
 This question is equally applicable to larger simulations. These issues are
 important and will be tackled in
 [](#svalidation).
+
+## Chapter summary
+
+In summary, we have seen how to install RStudio and the basic use of this
+tool. Then, we have fast developed all steps of a spatial microsimulation 
+process for the little example *SimpleWorld*.
 
 # References
