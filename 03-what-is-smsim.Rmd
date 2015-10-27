@@ -682,8 +682,11 @@ based on a microdataset of only 5 individuals and two constraint variables.
 
 ## Chapter summary
 
-In this chapter, we have clearly defined what spatial microsimulation is
-and what it is not. Then, we have mentioned some already developed applications.
-Finally, we have quoted the underlying assumptions.
+In this chapter we have defined what spatial microsimulation is
+and what it is not. Some research and real-world applications were
+described, with comments on areas for further work.
+The final section on assumptions underlying spatial microsimulation work
+shows the importance of understanding the input data and the dangers associated
+with drawing conclusions for simulated data.
 
 # References
