@@ -37,10 +37,11 @@ demonstrated in
 [](#alternative-reweighting).
 
 This chapter moves from theory to practice. It describes the
-maths that underlie the method (section \ref{ipftheory}) before implementing
-the algorithm in base R (section \ref{ipfinr}). Then, two packages that automate
-IPF, **ipfp** and **mipfp** in subsequent sections
-([](#ipfp) and [](#mipfp) respectively). The chapter also introduces the important concepts of 
+process underlying the method of population synthesis (section \ref{ipftheory}) before implementing
+the IPF algorithm in base R (section \ref{ipfinr}). In the following sections two packages that automate
+IPF, **ipfp** and **mipfp**, are introduced
+([](#ipfp) and [](#mipfp) respectively).
+The chapter also introduces the important concepts of 
 *integerisation* and *expansion*. These methods are introduced
 towards the end of each package-specific section. The final
 section
@@ -345,10 +346,6 @@ of the individual 'i' for the variable 'c'. The denominator corresponds
 to the sum of the actual weights of all individuals having the same category
 in this variable as 'i'. We simply redistribute the weights so that the 
 data follows the constraint concerning this variable.
-
-Don't worry if this theory doesn't really make sense for you 
-for the moment. The next section will develop an example and
-will help you to understand the process.
 
 ### IPF in R {#ipfinr}
 
