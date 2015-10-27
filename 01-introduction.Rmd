@@ -82,6 +82,11 @@ Chapter 3, by contrast, brings the
 reader up-to-date on what spatial microsimulation is and how it is currently
 used.
 
+For the structure, each chapter begins with an introduction and ends with a
+summary of what has been done in the chapter. Last section
+of this chapter contains an overview of the book.
+
+
 ## Motivations
 
 Imagine a world in which 

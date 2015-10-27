@@ -11,7 +11,7 @@ This chapter focuses on the minimum input datasets needed for the classical type
 of microsimulation. We will use input data on
 the inhabitants of an imaginary world
 (geographical individual-level) called SimpleWorld to demonstrate
-the basic concepts and techniqes to perform spatial micrsomulation with R.
+the basic concepts and techniques to perform spatial microsimulation with R.
 
 This is the
 first practical chapter, so it also aims get a good 'work-flow'.
@@ -37,82 +37,25 @@ subtitle of this book is "a *practical* introduction" for a reason!
 # TODO (RL): Update the above if we get a subtitle, mention in preface 
 ```
 
-SimpleWorld is a small world, consisting of 33 persons split across 3 zones.
-We have two sources of information about these people available to us:
+This chapter is ordered as follows:
 
-1. aggregate counts of persons by age and sex in each zone (from the SimpleWorld Census)
-2. survey microdata recording more detailed information (age, sex and income), for five of the world’s residents.
+- *Getting set-up with the RStudio environment* ([](#rstudioUpSpeed)) contains
+the basic explanation of RStudio to enable you to code the examples of this 
+book on your own computer.
+- *SimpleWorld data* ([](#SimpleWorldData)) describes the context and the
+data of this little illustrative example.
+-*Generating a weight matrix* ([](#weight-matrix)) contains the code and the description of 
+the role of a weight matrix in a spatial microsimulation.
+-*Spatial microdata* ([](#spatial-microdata)) shows the typically useful output 
+of a spatial microsimulation.
+-*SimpleWorld in context* ([](#SimpleWorldContext)) mentions the kind of
+context where the output could be use.
 
-Unfortunately the survey data lack geographical information, and include only 
-a small subset of the population (5 out of 33). To infer further information
-about SimpleWorld --- and more importantly to be able to model its
-inhabitants --- we need a methodology. This is precisely the kind of situation
-where spatial microsimulation is useful. After an explanation of this
-'starting simple' approach, we describe the input data in detail, demonstrate
-what spatial microdata look like and, finally, place the example in its wider
-context.
 
-This SimpleWorld example is analogous to the
-'cartoon world' used by professor David MacKay (2009) to simplify the
-complexities of sustainable energy. The same principle works here:
-spatial microsimulation will be used to simulate
-differences in income and age distributions
-between the three zones SimpleWorld, illustrating
-the kinds of situation where spatial microsimulation can be useful.
 
-The SimpleWorld planet,
-a 2 dimensional
-plane split into 3 zones, is illustrated in figure 3.1. 
 
-```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", fig.scap="The SimpleWorld environment", fig.align='center', echo=FALSE, message=FALSE}
-# Code to create SimpleWorld
-# Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
-library(sp)
-library(ggplot2)
-xpol <- c(-180, -60, -60, -180, -180)
-ypol <- c(-70, -70, 70, 70, -70)
-pol = SpatialPolygons(list(
-  Polygons(list(Polygon(cbind(xpol, ypol))), ID="x1"),
-  Polygons(list(Polygon(cbind(xpol + 120, ypol))), ID="x2"),
-  Polygons(list(Polygon(cbind(xpol + 240, ypol))), ID="x3")
-  ))
-# plot(pol)
-proj4string(pol) <- CRS("+init=epsg:4326")
-pol1 <- fortify(pol)
 
-theme_space_map <- theme_bw() +
-  theme(
-#     rect = element_blank(),
-    axis.title = element_blank(),
-    axis.text = element_blank(),
-    axis.ticks = element_blank(),
-    panel.grid.major = element_line(size = 3)
-  )
-# 
-# ggplot(pol1) + geom_path(aes(long, lat, group, fill = group)) +
-#     coord_map("ortho", orientation=c(41, -74, 52)) + 
-#   theme_space_map
-b <- matrix(c(-180, 180, 180, -180, -180, 90, 90, -90, -90, 90), ncol = 2)
-library(sp)
-l <- Line(coords = b)
-l <- Lines(list(l), ID = "a")
-l <- SpatialLines(list(l))
-library(rgeos)
-p <- gPolygonize(l)
-plot(p)
-l1 <- Line(matrix(c(-60, -60, 90, -90), ncol = 2))
-l1 <- Lines(list(l1), "a")
-l1 <- SpatialLines(list(l1))
-lines(l1)
-l2 <- Line(matrix(c(60, 60, 90, -90), ncol = 2))
-l2 <- Lines(list(l2), "a")
-l2 <- SpatialLines(list(l2))
-lines(l2)
-zt <- paste0("Zone ", 1:3)
-text(seq(-120, 120, length.out = 3), 0, zt)
-```
-
-## Getting set-up with the RStudio environment
+## Getting set-up with the RStudio environment {#rstudioUpSpeed}
 
 Before progressing further, it is important to ensure that R is set-up correctly
 and working on your computer, so you can follow the practical examples.
@@ -246,6 +189,82 @@ Now we have an understanding of RStudio and the project loaded, it's time to 'ge
 with the SimpleWorld example, and run some of the contents of `SimpleWorld.R` line by line.
 
 ## SimpleWorld data {#SimpleWorldData}
+
+SimpleWorld is a small world, consisting of 33 persons split across 3 zones.
+We have two sources of information about these people available to us:
+
+1. aggregate counts of persons by age and sex in each zone (from the SimpleWorld Census)
+2. survey microdata recording more detailed information (age, sex and income), for five of the world’s residents.
+
+Unfortunately the survey data lack geographical information, and include only 
+a small subset of the population (5 out of 33). To infer further information
+about SimpleWorld --- and more importantly to be able to model its
+inhabitants --- we need a methodology. This is precisely the kind of situation
+where spatial microsimulation is useful. After an explanation of this
+'starting simple' approach, we describe the input data in detail, demonstrate
+what spatial microdata look like and, finally, place the example in its wider
+context.
+
+This SimpleWorld example is analogous to the
+'cartoon world' used by professor David MacKay (2009) to simplify the
+complexities of sustainable energy. The same principle works here:
+spatial microsimulation will be used to simulate
+differences in income and age distributions
+between the three zones SimpleWorld, illustrating
+the kinds of situation where spatial microsimulation can be useful.
+
+The SimpleWorld planet,
+a 2 dimensional
+plane split into 3 zones, is illustrated in figure 3.1. 
+
+```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", fig.scap="The SimpleWorld environment", fig.align='center', echo=FALSE, message=FALSE}
+# Code to create SimpleWorld
+# Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
+library(sp)
+library(ggplot2)
+xpol <- c(-180, -60, -60, -180, -180)
+ypol <- c(-70, -70, 70, 70, -70)
+pol = SpatialPolygons(list(
+  Polygons(list(Polygon(cbind(xpol, ypol))), ID="x1"),
+  Polygons(list(Polygon(cbind(xpol + 120, ypol))), ID="x2"),
+  Polygons(list(Polygon(cbind(xpol + 240, ypol))), ID="x3")
+  ))
+# plot(pol)
+proj4string(pol) <- CRS("+init=epsg:4326")
+pol1 <- fortify(pol)
+
+theme_space_map <- theme_bw() +
+  theme(
+#     rect = element_blank(),
+    axis.title = element_blank(),
+    axis.text = element_blank(),
+    axis.ticks = element_blank(),
+    panel.grid.major = element_line(size = 3)
+  )
+# 
+# ggplot(pol1) + geom_path(aes(long, lat, group, fill = group)) +
+#     coord_map("ortho", orientation=c(41, -74, 52)) + 
+#   theme_space_map
+b <- matrix(c(-180, 180, 180, -180, -180, 90, 90, -90, -90, 90), ncol = 2)
+library(sp)
+l <- Line(coords = b)
+l <- Lines(list(l), ID = "a")
+l <- SpatialLines(list(l))
+library(rgeos)
+p <- gPolygonize(l)
+plot(p)
+l1 <- Line(matrix(c(-60, -60, 90, -90), ncol = 2))
+l1 <- Lines(list(l1), "a")
+l1 <- SpatialLines(list(l1))
+lines(l1)
+l2 <- Line(matrix(c(60, 60, 90, -90), ncol = 2))
+l2 <- Lines(list(l2), "a")
+l2 <- SpatialLines(list(l2))
+lines(l2)
+zt <- paste0("Zone ", 1:3)
+text(seq(-120, 120, length.out = 3), 0, zt)
+```
+
 
 SimpleWorld is inhabited by 12, 10 and 11 individuals of its alien inhabitants
 in zones 1 to 3, respectively: a planetary population of 33.
@@ -385,7 +404,7 @@ another.
 
 ## Generating a weight matrix {#weight-matrix}
 
-The to generating spatial microdata is allocating *weights*
+The process to generate spatial microdata is allocating *weights*
 to each individual for each zone. The higher the weight for a particular
 individual-zone combination, the more representative the individual is of that
 zone. This information can be represented as a *weight matrix*.
@@ -473,7 +492,7 @@ selects individuals representative of the aggregate constraints for each zone,
 while containing the diversity of information present in the individual-level
 non-spatial input population. In Chapter 4 we will explore all the steps needed
 to produce a spatial microdataset for SimpleWold. A subset of such spatial microdataset
-is presented in Table 3.5 below.
+is presented in Table 2.5 below.
 
 \pagebreak
 
@@ -492,7 +511,7 @@ is presented in Table 3.5 below.
 
 Table: Spatial microdata generated for SimpleWorld zone 2. Each row represents an individual taken from the individual-level sample and the 'zone' column represents in where in geographical space they reside.
 
-The Table 3.5 is a reasonable approximation of the inhabitants of zone 2: older
+The Table 2.5 is a reasonable approximation of the inhabitants of zone 2: older
 females dominate in both the aggregate (which contains 8 older people and 6
 females) and the simulated spatial microdata (which contains 8 older people and
 6 females). Note that in addition the constraint variables, we also have
@@ -531,5 +550,11 @@ Using such a small sample, one could rightly argue, how could the diversity of
 This question is equally applicable to larger simulations. These issues are
 important and will be tackled in
 [](#svalidation).
+
+## Chapter summary
+
+In summary, we have seen how to install RStudio and the basic use of this
+tool. Then, we have fast developed all steps of a spatial microsimulation 
+process for the little example *SimpleWorld*.
 
 # References
