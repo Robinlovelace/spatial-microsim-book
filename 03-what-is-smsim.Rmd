@@ -680,4 +680,10 @@ a hypothetical scenario where 33 inhabitants of an imaginary land
 are simulated and allocated to three zones
 based on a microdataset of only 5 individuals and two constraint variables.
 
+## Chapter summary
+
+In this chapter, we have clearly defined what spatial microsimulation is
+and what it is not. Then, we have mentioned some already developed applications.
+Finally, we have quoted the underlying assumptions.
+
 # References
