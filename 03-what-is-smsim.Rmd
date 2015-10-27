@@ -20,12 +20,12 @@ and to define clearly what we mean by it in this book.
 Following the brief introduction to the field in this first section,
 the chapter is ordered as follows:
 
-- *Terminology* (Section \ref{terminology}).
-shows how spatial microsimulation
+- *Terminology* (Section \ref{terminology}) explains the basis of the concept ([](#SimCity))
+and shows how spatial microsimulation
 can be understood as either a method or an approach
 ([](#meth-approach)).
-- *What spatial microsimulation is not* ([](#is-not)) describes how the approach
-relates to other approaches such as ABM.
+- *What spatial microsimulation is not* ([](#is-not)) describes the differences between 
+spatial microsimulation and other fields that could seem similar.
 - *Applications* ([](#applications)) explores various academic and real-world
 applications.
 - *Assumptions* ([](#assumptions)) addresses
@@ -110,7 +110,7 @@ However, it is important to define the term precisely at an early stage
 and understand how other people have used the term
 to avoid confusion.
 
-### Spatial microsimulation as SimCity
+### Spatial microsimulation as SimCity {#SimCity}
 
 SimCity is
 a popular computer game series in which the player constructs urban infrastructure
@@ -312,6 +312,21 @@ what it is not. This is partly due to the close association between spatial
 microsimulation and other methods, but also because there is a tendency
 for people to think that spatial microsimulation is more complicated than
 it is.
+
+**Spatial microsimulation is not small area estimation**
+
+Small area estimation consists in estimating aggregate counts for
+a small area. For example, in this field, we can forecast 
+the total population of a zone for a future year. However, 
+we have no information about each individual, it is restricted
+to statistics on the area. On the other hand, spatial microsimulation
+really focuses on the *micro* level. Thus, we estimate the population
+individual per individual. 
+
+Note that, thanks to spatial microsimulation, 
+we are able to aggregate counts and deduce the *macro* level
+per municipality, which corresponds to small area estimation. 
+
 
 **Spatial microsimulation is not (quite) agent-based modelling**
 
@@ -543,7 +558,7 @@ and software package of the same name,
 is the largest of these 
 initiatives. The EUROMOD software is used by government analysts and
 research agencies in many countries to estimate the distributional impacts
-of policy reforms (Figure 3.1).
+of policy reforms (Figure 3.2).
 The resulting research demonstrates that modelling work based on
 microsimulation can provide important new lines of evidence
 to inform national-level policies [@avram2012distributional].
@@ -590,7 +605,7 @@ and there is much potential to integrate spatial microsimulation
 with existing transport modelling methods.
 
 An example of the potential uses of spatial microsimulation
-in transport models is illustrated in Figure 2.2. This
+in transport models is illustrated in Figure 3.3. This
 shows the simulated commuting behaviour of 20 randomly
 selected individuals from a large scale spatial microdataset
 of Sheffield. Because the constraints used in this model
