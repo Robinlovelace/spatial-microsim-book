@@ -471,7 +471,8 @@ create an array with the correct cells and names.
 init_cells <- rep(weight_init_1zone, each = nrow(cons))
 
 # Define the names
-names <- c(list(rownames(cons)), as.list(dimnames(weight_init_1zone)))
+names <- c(list(rownames(cons)),
+           as.list(dimnames(weight_init_1zone)))
 
 # Structure the data
 weight_init <- array(init_cells, dim = 
@@ -640,7 +641,8 @@ the default tolerance argument used in the `mipfp` function
 ```{r}
 # Re-running ipfp with the rescaled constraints
 cons_prop <- cbind(con1, con2, con3_prop)
-weights <- apply(cons_prop, 1, function(x) ipfp(x, ind_catt, x0, tol = 1e-10))
+weights <- apply(cons_prop, 1,
+                 function(x) ipfp(x, ind_catt, x0, tol = 1e-10))
 
 # Convert back to aggregates
 ind_agg <- t(apply(weights, 2, function(x) colSums(x * ind_cat)))

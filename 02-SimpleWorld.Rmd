@@ -141,6 +141,15 @@ On Debian-based systems such as Ubuntu, the following bash command should be suf
 sudo apt-get install r-base
 ```
 
+Once R is installed, new packages are easy to install from within R using
+`install.packages("package_name")`. To install the **mipfp** package, for example,
+we would use:
+
+```{r, eval=FALSE}
+install.packages("mipfp")
+```
+
+
 ### RStudio
 
 RStudio is an Integrated Development Environment (IDE) for R.
@@ -202,8 +211,8 @@ GitHub repository to access the code and data resources associated with the book
 There are two main ways to download the code and data associated with this book onto your computer:
 by 'cloning' the repository and by downloading and extracting its contents in a .zip file.
 We will only cover the second option as it's simpler. For details on how to fork, clone
-and potentially contribute to the book project, see
-[@lima_coding_2014].
+and potentially contribute to the book project, see the GitHub website. There is also a
+growing literature on GitHub [@lima_coding_2014].
 
 To simply download the code and data, first navigate to
 https://github.com/Robinlovelace/spatial-microsim-book in your browser. From this page, click on the
@@ -219,7 +228,7 @@ through *relative file paths* (you must have installed the RStudio software for 
 
 \index{RStudio}
 
-```{r studio,  fig.cap="The RStudio interface with the 'spatial-microsim-book' project loaded, with objects loaded in the Environment after running SimpleWorld.R",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
+```{r studio,  fig.cap="The RStudio interface with the spatial-microsim-book project loaded and objects loaded in the Environment after running SimpleWorld.R",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
 # todo: create tutorial on installing R and RStudio
 grid.raster(readPNG("figures/rstudio-environment.png"))
 ```
@@ -234,7 +243,7 @@ You should see some output in red. Further, some new objects should appear in th
 This is the result of running the code located in a script file called `SimpleWorld.R`, using the `source()` function.
 
 Now we have an understanding of RStudio and the project loaded, it's time to 'get our hands dirty'
-with the SimpleWorld example.
+with the SimpleWorld example, and run some of the contents of `SimpleWorld.R` line by line.
 
 ## SimpleWorld data {#SimpleWorldData}
 
@@ -261,6 +270,8 @@ Table: Aggregate sex counts for SimpleWorld.
 |1  |  6|  6|
 |2  |  4|  6|
 |3  |  3|  8|
+
+\newpage
 
 The following commands load-in this data.
 Play with the R objects you have loaded: try printing
@@ -326,30 +337,17 @@ But we currently lack information about the number
 of young females, young males, and so on. Also note that we have no information
 about other important variables such as income.
 
-Clearly, this geographic count data lacks detail on SimpleWorld's
-inhabitants and is therefore unsuitable for many purposes. 
-It is precisely such situations, where we have access to geographical count data
-(usually from a census of population) on the one hand and a more
-detailed and a non-geographical individual-level dataset on the other,
-that spatial microsimulation is most useful.
-It is in this context, where we would like to impute missing information
-about the individuals in specific geographic zones,
-that we turn to spatial microsimulation. In this 'cartoon' case study we
-will see how spatial microsimulation can be used to better understand the
+Spatial microsimulation can be used to better understand the
 population of SimpleWorld. To do this, we need some additional information:
 an individual-level *microdataset*.
 
 This is provided in an individuals-level dataset on 5 of SimpleWorld's
-inhabitants, recorded from a survey. Note that this data has a different
-form from the aggregate-level data presented in the above tables.
-The individual-level data has, for now, different dimensions than the
+inhabitants. Note that the individual-level data has different dimensions than the
 aggregate data presented above.
-This *microdata* survey contains one row per individual, in contrast
-to the *aggregate constraints*, which have one row per zone.
+The individual-level *microdata* survey has one row per individual whereas
+the *constraints* have one row per zone.
 This individual-level data includes two variables that *link* it to the
-aggregate-level data described above: age
-(as an integer variable, rather than the
-broad categories used in the zone data) and sex. The individual-level
+aggregate-level data described above: age and sex. The individual-level
 data also provides information about a *target variable* not included
 in the geographical constraints: income. To load the individual-level data,
 enter the following:
@@ -385,32 +383,51 @@ individual-level survey data.  Spatial microsimulation tackles this issue by
 allocating individuals from a non-geographical dataset to geographical zones in
 another.
 
-## Practical: generating a weight matrix {#weight-matrix}
+## Generating a weight matrix {#weight-matrix}
 
-The procedures we will learn to use in this book do this by allocating *weights*
+The to generating spatial microdata is allocating *weights*
 to each individual for each zone. The higher the weight for a particular
-individual-zone combination, the more representative that individual is of that
+individual-zone combination, the more representative the individual is of that
 zone. This information can be represented as a *weight matrix*.
 
-The first practical challenge in this book is to generate a weight matrix.
-Usually, the input data for such procedures are read in from a file.
-However, to get acquainted with typing R code and to 'get your hands dirty'
-we type in the data. Then the **ipfp** package is used to convert these
-inputs into a matrix of weights. Don't worry if this makes little sense:
-it looks like gobbledygook to most people! Just type it in and observe the
+The subsequent code block uses the **mipfp** package to convert these
+inputs into a matrix of weights. Just type it in and observe the
 result. If it works, congratulations! You have generated your first
-weight matrix using Iterative Proportional Fitting (IPF). The nuts and
-bolts of this process are described in the next chapter.
+weight matrix using Iterative Proportional Fitting (IPF). The
+details of this process are described in subsequent chapters.
 
-```{r, eval=FALSE}
+```{r}
+target <- list(as.matrix(con_age[1,]), as.matrix(con_sex[1,]))
+descript <- list(1, 2)
+ind$age_cat <- cut(ind$age, breaks = c(0, 50, 100))
+seed <- table(ind[c("age_cat", "sex")])
+
+library(mipfp) # install.packages("mipfp") is a prerequisite
+res <- Ipfp(seed, descript, target)
+res$x.hat # the result for the first zone
+```
+
+Note that the output of the above command is only for the first zone.
+It suggests that in zone 1, younger females are far more (nearly 4.5 times more)
+numerous than would be expected based on the individual level data alone.
+This makes sense because `con_age[1,]` contains many young people and `ind`
+contains only one young female. At this stage you may be wondering: what just
+happened? This is explained in detail in the subsequent chapters.
+
+An alternative approach to arriving at the same result, for all zones,
+is demonstrated in the code chunk below using another package: **ipfp**.
+Again, the reader is not expected to understand what has just happened.
+This will be explained in subsequent chapters.
+
+```{r}
+A <- t(cbind(model.matrix(~ ind$age_cat - 1),
+           model.matrix(~ ind$sex - 1)[, c(2, 1)]))
 cons <- matrix(c(8,2,7,4,8,4,6,4,3,6,6,8), nrow = 3)
-
-A <- matrix(c(0,1,1,0,0,1,1,0,1,0,1,0,0,1,0,1,1,0,0,1), nrow = 4)
-
 library(ipfp) # install.packages("ipfp") is a prerequisite
 weights <- apply(cons, 1, function(x) ipfp(x, A, x0 = rep(1, 5)))
-weights
+weights[,1] # result for the first zone
 ```
+
 
 Table: A 'weight matrix' linking the microdata (rows) to the zones (columns)
 of SimpleWorld.
@@ -458,11 +475,6 @@ non-spatial input population. In Chapter 4 we will explore all the steps needed
 to produce a spatial microdataset for SimpleWold. A subset of such spatial microdataset
 is presented in Table 3.5 below.
 
-The complete spatial microdataset allocates whole individuals to
-provides an insight into the nature and spatial distribution of the
-inhabitants of SimpleWorld. This spatial microdataset is also useful
-for the purposes of modelling, as described in Chapter 12.
-
 \pagebreak
 
 | id| zone| age|sex | income|
@@ -486,8 +498,8 @@ females) and the simulated spatial microdata (which contains 8 older people and
 6 females). Note that in addition the constraint variables, we also have
 an estimate the income distribution in SimpleWorld's second zone.
 
-Towards the end of Chapter 4 we will learn how to generate
-this table from first principles. The remainder of this section
+Towards the end of Chapter 5 we will learn how to generate
+this table. The remainder of this section
 considers how the outputs of spatial microsimulation, in the context of
 SimpleWorld, can be useful before progressing to the practicalities.
 
@@ -502,8 +514,8 @@ useful output. We can estimate, for example, the average income in each zone.
 Furthermore, we could create an estimate of the *distribution* of income in each
 area. Although these estimates are unlikely to be very accurate due to the
 paucity of data, the methods could be very useful if performed on larger
-datasets from 'RealWorld' (planet Earth).  Finally, the spatial microdata
-presented in the above table can be used as an input into an agent-based model
+datasets from 'RealWorld' (planet Earth).  The spatial microdata
+presented in the above table could be used as an input into an agent-based model
 (ABM). Assuming the inhabitants of SimpleWorld are more predictable than those
 of RealWorld, the outputs from such a model could be very useful indeed, for
 example for predicting future outcomes of current patterns of behaviour.
@@ -517,5 +529,7 @@ global averages of the input data, for example, our estimates could be way out.
 Using such a small sample, one could rightly argue, how could the diversity of
 33 inhabitants of SimpleWorld be represented by our simulated spatial microdata?
 This question is equally applicable to larger simulations. These issues are
-important and will be tackled in a subsequent Section (\ref{svalidation}) on
-validation.
+important and will be tackled in
+[](#svalidation).
+
+# References
