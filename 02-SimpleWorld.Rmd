@@ -553,8 +553,16 @@ important and will be tackled in
 
 ## Chapter summary
 
-In summary, we have seen how to install RStudio and the basic use of this
-tool. Then, we have fast developed all steps of a spatial microsimulation 
-process for the little example *SimpleWorld*.
+In this chapter we have learned how to set-up the R/RStudio environment for running
+the example code provided in this book. This involved installing the software,
+understanding projects in RStudio and setting up the `spatial-microsim-book`
+project so that data can be accessed easily.
+This was the first practical chapter and it involved basic commands for loading
+data and creating a weight matrix. The process of running and playing with the
+code should have helped get acquainted with the 'workflow' associated with
+developing and running spatial microsimulation models in R.
+Discussion of the results, which represent the inhabitants of the imaginary
+system *SimpleWorld*, create the backdrop for the rest of the book which
+we will return to in [](#ABM).
 
 # References
