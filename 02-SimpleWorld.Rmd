@@ -51,10 +51,6 @@ of a spatial microsimulation.
 -*SimpleWorld in context* ([](#SimpleWorldContext)) mentions the kind of
 context where the output could be use.
 
-
-
-
-
 ## Getting set-up with the RStudio environment {#rstudioUpSpeed}
 
 Before progressing further, it is important to ensure that R is set-up correctly
@@ -178,7 +174,7 @@ grid.raster(readPNG("figures/rstudio-environment.png"))
 
 To check if the project has been downloaded and opened correctly, try running the following code.
 
-```{r}
+```{r, message=FALSE}
 source("R/SimpleWorld.R")
 ```
 
@@ -415,7 +411,7 @@ result. If it works, congratulations! You have generated your first
 weight matrix using Iterative Proportional Fitting (IPF). The
 details of this process are described in subsequent chapters.
 
-```{r}
+```{r, message=FALSE}
 target <- list(as.matrix(con_age[1,]), as.matrix(con_sex[1,]))
 descript <- list(1, 2)
 ind$age_cat <- cut(ind$age, breaks = c(0, 50, 100))
@@ -563,6 +559,7 @@ code should have helped get acquainted with the 'workflow' associated with
 developing and running spatial microsimulation models in R.
 Discussion of the results, which represent the inhabitants of the imaginary
 system *SimpleWorld*, create the backdrop for the rest of the book which
-we will return to in [](#ABM).
+we will return to,
+in [](#ABM).
 
 # References
