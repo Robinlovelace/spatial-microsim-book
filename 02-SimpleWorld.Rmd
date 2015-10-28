@@ -488,7 +488,9 @@ selects individuals representative of the aggregate constraints for each zone,
 while containing the diversity of information present in the individual-level
 non-spatial input population. In Chapter 4 we will explore all the steps needed
 to produce a spatial microdataset for SimpleWold. A subset of such spatial microdataset
-is presented in Table 2.5 below.
+is presented in Table 2.5, where each row represents an individual taken from the 
+individual-level sample and the 'zone' column represents in where in 
+geographical space they reside.
 
 \pagebreak
 
@@ -505,7 +507,7 @@ is presented in Table 2.5 below.
 |  5|    2|  49|f   |   2473|
 |  2|    2|  54|m   |   2474|
 
-Table: Spatial microdata generated for SimpleWorld zone 2. Each row represents an individual taken from the individual-level sample and the 'zone' column represents in where in geographical space they reside.
+Table: Spatial microdata generated for SimpleWorld zone 2. 
 
 The Table 2.5 is a reasonable approximation of the inhabitants of zone 2: older
 females dominate in both the aggregate (which contains 8 older people and 6
