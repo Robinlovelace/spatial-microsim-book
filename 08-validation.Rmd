@@ -246,7 +246,7 @@ An advantage of chi-squared is that it can take matrices or vectors as inputs. A
 The aforementioned tests are just some of the most commonly
 used and most useful *goodness of fit* measures for internal validation in spatial microsimulation. The differences
 between different measures are quite subtle.
-Voas and Williamson (2001) investigated the matter more
+@Voas2001 investigated the matter more
 than 10 years ago and found no consensus
 on the measures that are appropriate for different situations.
 10 years later and we are no nearer consensus.
@@ -262,7 +262,8 @@ Our view is that all the measures
 outlined above are useful and rough analogous (a perfect fit
 will mean that measures of error evaluate to zero
 and that $r = 1$). However, some are better than others.
-Based on the discussion in Chai and Draxler (2014), we would recommend using *r* as a 'quick and dirty' test of fit and reporting *RMSE*, as it is a standard test used across the sciences. *RMSE* is robust to the number of observations and, using *NRMSE*, to the average size of zones also. Chi-squared also a good option as it is very mature, provides *p values* and is well known. However, chi-squared is a more complex measure of fit and does not perform well when the table contains cells with less than 5 observations, as will be common in spatial microsimulation models of small areas and many constraint categories.
+Following @Chai2014, we recommend using *r* as a simple test of fit and reporting *RMSE*,
+as it is a standard test used across the sciences. *RMSE* is robust to the number of observations and, using *NRMSE*, to the average size of zones also. Chi-squared also a good option as it is very mature, provides *p values* and is well known. However, chi-squared is a more complex measure of fit and does not perform well when the table contains cells with less than 5 observations, as will be common in spatial microsimulation models of small areas and many constraint categories.
 
 We recommend reporting more than one metric, while focussing
 on measures that you and your colleagues

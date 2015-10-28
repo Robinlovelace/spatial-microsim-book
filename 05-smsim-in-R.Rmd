@@ -307,9 +307,8 @@ of spatial microsimulation.
 In spatial microsimulation, IPF is used to allocate individuals to zones.
 The subsequent section implements IPF to create *spatial microdata* for
 SimpleWorld, using the data loaded in the previous chapter as a basis. 
-Overviews of the use of spatial microsimulation method for spatial microsimulation
-are provided recent papers by Lovelace and Ballas (2012) and, in the
-context of transport modelling, by Pritchard and Miller (2012).
+An overview of the paper from the
+perspective of transport modelling is provided by @Pritchard2012.
 
 ```{r, echo=FALSE}
 # TODO (MD): add reference above
@@ -1131,7 +1130,7 @@ the synthetic and constraint data for each zone.
 
 \index{integerisation, proportional probabilities}
 There are a number of integerisation strategies available.
-Lovelace and Ballas (2012) tested 5 of these and found that the probabilistic
+@Lovelace2013-trs tested 5 of these and found that the probabilistic
 methods of *proportional probabilities* and *TRS* outperformed their deterministic
 rivals. The first of these
 integerisation strategies can be written as an R functions as follows:
@@ -1226,7 +1225,7 @@ The general rule governing the number of permutations is *$p = n^r$ where $n$ is
 the number of options and $r$ is the number of repetitions.
 ]
 
-To overcome this issue Lovelace and Ballas (2012) developed a method which
+To overcome this issue Lovelace and Ballas (2013) developed a method which
 ensures that any individual with a weight above 1 would be sampled at least once,
 making the result $(4,0,0)$ impossible in both cases.  This method is
 *truncate, replicate, sample* (TRS) integerisation, described in the following function:

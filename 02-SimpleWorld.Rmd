@@ -202,7 +202,7 @@ what spatial microdata look like and, finally, place the example in its wider
 context.
 
 This SimpleWorld example is analogous to the
-'cartoon world' used by professor David MacKay (2009) to simplify the
+'cartoon world' used by professor @mackay2008sustainable to simplify the
 complexities of sustainable energy. The same principle works here:
 spatial microsimulation will be used to simulate
 differences in income and age distributions

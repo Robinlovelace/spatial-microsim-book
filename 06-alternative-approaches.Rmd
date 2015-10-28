@@ -54,8 +54,7 @@ restrictions.
 ```
 
 A simplified version of this algorithm (and other algorithms) is provided in
-by Rahman (2009).  Tanton et al. (2011)
-describe of the algorithm in full.
+by @Rahman2009.  The the algorithm is described in more detail in @Tanton2011.
 An R implementation of GREGWT can be found in the GitHub repository
 [GREGWT](https://github.com/emunozh/GREGWT) and installed using
 the function `install_github()` from the **devtools** package.

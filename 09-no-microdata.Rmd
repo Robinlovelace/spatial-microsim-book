@@ -277,12 +277,11 @@ having only aggregated data, but in two different levels of aggregation.
 For example, we have some data for the municipalities and other for
 the districts. A first proposition can be to use a genetic algorithm that 
 minimise the distance between the constraint and the simulation.
-The solution proposed by Barthélemy and Toint (2013) is intuitive and we 
-develop here the method. In such cases, they propose to generate 
-a 'seed' before to execute IPF. 
+The solution proposed by Barthélemy and Toint (2013), and used in this book,
+is to generate a 'seed' before before the execution of IPF. 
 
-In their case, they wanted to simulate a population with four characteristics
-per individual : the gender, the age class, the diploma level and the
+This paper demonstrates the simulation of a population with four characteristics
+per individual: the gender, the age class, the diploma level and the
 activity status and at the municipality level. Their available
 data was: 
 
@@ -362,14 +361,9 @@ With this initial point, an IPF can be perform to fit the two
 previously determined 3 dimensional tables. The result 
 is a table with the four variables per district. 
 
-Finally, the easiest step, we can make as explained in 
+The final step is explained in 
 the previous section. Indeed, we have a contingency table
 in the district level and the zone margins. 
-
-Note that you can imagine a lot of combinations 
-of IPF and other techniques to perform to a 
-synthesis population thanks to the data 
-you own.
 
 
 

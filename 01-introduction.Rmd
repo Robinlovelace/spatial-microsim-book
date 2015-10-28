@@ -46,8 +46,8 @@ for example as part of a PhD.
 last few years, it is still out of reach for the majority of people.
 Yet the potential benefits are large. This book provides example data and
 code that can be used as part of a course involving the analysis of spatial
-microdata, for example in a module contributing to an MSc in Transport Modelling,
-Economics or Geography.
+microdata, for example in a module contributing to an undergraduate or MSc
+course on Transport Modelling, Spatial Economics or Quantitative Geography.
 
 The book has a definite progression from easier content to more advanced
 topics, especially those in Chapters 11 and 12, which deal with spatial microsimulation
