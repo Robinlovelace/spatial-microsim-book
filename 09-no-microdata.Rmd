@@ -278,7 +278,7 @@ For example, we have some data for the municipalities and other for
 the districts. A first proposition can be to use a genetic algorithm that 
 minimise the distance between the constraint and the simulation.
 The solution proposed by Barthélemy and Toint (2013), and used in this book,
-is to generate a 'seed' before before the execution of IPF. 
+is to generate a 'seed' before the execution of IPF. 
 
 This paper demonstrates the simulation of a population with four characteristics
 per individual: the gender, the age class, the diploma level and the
