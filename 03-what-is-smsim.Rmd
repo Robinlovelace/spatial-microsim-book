@@ -35,7 +35,7 @@ For the purposes of this book spatial microsimulation was defined in Chapter 1 a
 
 > **The creation, analysis and modelling of individual-level data allocated to geographic zones.**
 
-Spatial microsimulation is is well-suited to the analysis of complex phenomena which play-out over
+Spatial microsimulation is well-suited to the analysis of complex phenomena which play-out over
 geographical space, such as transport systems and the housing system.
 Because it includes the creation of synthetic data, the method is well-suited
 to situations in which available data are limited. Figure 3.1 illustrates how

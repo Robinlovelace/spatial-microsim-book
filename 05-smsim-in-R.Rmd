@@ -436,7 +436,7 @@ by a coefficient to respect the desired proportions (age constraints).
 These coefficients are the divisions of each cell in
 the census constraint (`con_age`) by the equivalent cell
 aggregated version of the individual level data. In the first step, 
-all weigths were initialised to 1 and the new weights equal
+all weights were initialised to 1 and the new weights equal
 the coefficients.
 The weight matrix is critical to the spatial microsimulation procedure because
 it describes how representative each individual is of each zone. To see the
@@ -595,7 +595,7 @@ ind_agg2
 
 Note that even after constraining by age and sex, there
 is still not a perfect fit between observed and simulated cell values
-(Figure 5.2). After constrainint only by age, the simulated cell counts 
+(Figure 5.2). After constraining only by age, the simulated cell counts 
 for the sex categories are far from
 the observed, whilst the cell counts for the age categories fit perfectly.
 On the other hand, after constraining by age *and* sex, the fit is still not
@@ -878,9 +878,8 @@ required, which can be generated through the process of integerisation.
 Two methods of integerisation are explored:
 The first randomly choses the individuals, with a probability proportional
 to the weights.
-The second is 'Truncate Replicate Sample' [@Lovelace2013-trs]
-and is described in
-([](#sintegerisation)).
+The second is to define a rounding method. A good method is 
+'Truncate Replicate Sample' [@Lovelace2013-trs], described in ([](#sintegerisation)).
 
 
 ### IPF with **mipfp** {#mipfp}
@@ -1084,10 +1083,11 @@ methods to solve the problem such as the maximum likelihood, minimum chi-square 
 ### Concept of integerisation
 
 The weights generated in the previous section are fractional,
-making the results difficult to use as an input to agent-based models.
+making the results difficult to use as a final table of individuals, 
+needed as input to agent-based models.
 *Integerisation* refers to methods for converting these fractional weights
 into integers, with a minimum loss of information [@Lovelace2013-trs].
-Simply rounding the the weights is one integerisation method,
+Simply rounding the weights is one integerisation method,
 but the results are very poor. This process can also be referred to as
 'weighted sampling without replacement', as illustrated by the R package
 [wrswoR](https://github.com/krlmlr/wrswoR).
@@ -1095,7 +1095,7 @@ but the results are very poor. This process can also be referred to as
 Two integerisation methods are tackled in this chapter.
 The first treats weights as simple probabilities. The second
 constrains the maximum and minimum integer weight that can result from
-each fractional weight to plus or minus one, and is known as TRS:
+the integer just above and just under each fractional weight, and is known as TRS:
 'Truncate Replicate Sample'.
 
 Integerisation is the process by which a vector of real numbers
@@ -1190,13 +1190,13 @@ The result for `xint1` is now not so intuitive: one would expect
 having 3 times the third individual and 1 time the first or second one.
 But, you have to be aware that a random choice means that 
 even the cell with low probability can be chosen, but not so many times.
-This also implies the possibility to chose an individuals more times than
+This also implies the possibility to chose an individual more times than
 intuitively though, since the weights are not adapted during the sampling. Here, we 
 draw only very few numbers, thus it is normal that the resulting distribution is not
 exactly the same as the wanted. However, probabilities mean that if you have a very
 large dataset, your random choice will result in a distribution very close to the
 desired one. We can generate 100.000 integers between 1 and 100.000 and see the 
-distribution. The next figure contains the associated histogram and we can see
+distribution. Figure 5.3 contains the associated histogram and we can see
 that each interval occurs more or less the same number of times.
 
 ```{r, echo=FALSE}
@@ -1251,7 +1251,7 @@ int_trs <- function(x){
 ```
 
 This method consists of 3 steps : truncate all weights by keeping only the
-integer part and forget the decimals. Then, to replicate by considering these 
+integer part and forget the decimals. Then, replicate by considering these 
 integers as the number of each type of individuals in the zone. And finally, 
 sample to reach the good number of people in the zone.
 This stage is using a sampling with the probability corresponding to the 
@@ -1364,7 +1364,7 @@ step missing is the expansion.
 
 \index{expansion}
 
-As illustrated in figure 5.1., the remaining step to 
+As illustrated in Figure 5.1., the remaining step to 
 create the spatial microdata is expansion. Depending
 on the chosen method, you can have as result either 
 a vector of weights per individual (for example with **ipfp**), 
@@ -1424,14 +1424,14 @@ the category names to recreate the individuals.
 
 This process is included inside the 
 function `int_expand_array`. This little
-function first save a data frame version 
+function first saves a data frame version 
 of the integerised matrix. Then, the 
 `count_data` contains a line for each
 different combination of categories 
 (gender, sex, diploma) and the corresponding 
 number of individuals. Having this, 
 the remaining task is to consider only
-categories have more than 0 counts and
+categories having more than 0 counts and
 repeat them the right number of times.
 
 
@@ -1470,8 +1470,8 @@ zones as you want.
 ## Integerisation and expansion 
 
 The process to transform the weights into
-spatial microdata is performed
-for all zones below. This section demonstrates two ways
+spatial microdata is now performed
+for all zones. This section demonstrates two ways
 to generate spatial
 microdata.^[Note that if you skipped the
 detailed previous sections, you will need 
@@ -1505,7 +1505,7 @@ that Method 1 is perhaps more explicit and easier to understand whilst Method 2
 is more concise.
 
 `ints_df` represents the final spatial microdataset, representing the entirety
-of SimpleWorld's population of 33 (this can be confirmed with `nrow(ints_df)`).
+of SimpleWorld's population of 33 (this can be confirmed with `nrow(ints_df)` individuals).
 To select individuals from one zone only is simple using R's subsetting
 notation. To select all individuals generated for zone 2, for example, the
 following code is used. Note that this is the same as the output generated in
@@ -1643,7 +1643,7 @@ This ends the first iteration of ipfp, illustrated
 in the form of contingency table. **mipfp** 
 simply automates the logic, but by watching populations in terms of tables.
 When the contingency table is complete,
-completely, we know how many
+ we know how many
 individuals we need in each category. As with the **ipfp** method,
 the weights are fractional.
 To reach a final individual-level dataset, we can consider the weights as
@@ -1774,7 +1774,7 @@ for (zone in 1:n_zone){
 ```
 
 The above code executes IPF for each zone. 
-We can print the result for zone 1:2 and observe that it correspond
+We can print the result for zone 1:2 and observe that it corresponds
 to the weights previously determined.
 
 ```{r}
@@ -1782,7 +1782,7 @@ to the weights previously determined.
 Mipfp_Tab[1:2,,]
 ```
 
-Cross-tabulated constraints can be used **mipfp**.
+Cross-tabulated constraints can be used with **mipfp**.
 This means that we can consider the zone as a variable, allowing
 population synthesis to be performed with no `for` loop,
 to generate a result for every zone. This could seem analogous to the use of
@@ -1956,7 +1956,7 @@ algorithms do not consider the same form of input. For **ipfp**
 you need constraints and an initial individual level data, coming for example from 
 a survey. For **mipfp** the constraints and a contingency table of 
 a survey is enough. Thus, in the absence of microdata, 
-**mipfp** must be used (described in a subsequent chapter). Moreover, 
+**mipfp** must be used (described in ([](#nomicrodata))). Moreover, 
 their results are in different structures. Weights are created for each 
 individual with **ipfp** and weights for the contingency table with **mipfp**.
 The results can be transformed from one to the other form if needs be.
@@ -2107,7 +2107,7 @@ for small problems and faster for bigger problems.
 In all cases, they calculate the same results. Importantly for agent-based
 modelling, the weight matrices generated by both methods must undergo
 processes of *expansion* and *integerisation* to be converted into
-spatial microdata. These processes are covered in the next two sections.
+spatial microdata. 
 
 ```{r, echo=FALSE}
 # Comments (JB)
