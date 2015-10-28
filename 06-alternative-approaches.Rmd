@@ -54,8 +54,7 @@ restrictions.
 ```
 
 A simplified version of this algorithm (and other algorithms) is provided in
-by Rahman (2009).  Tanton et al. (2011)
-describe of the algorithm in full.
+by @Rahman2009.  The the algorithm is described in more detail in @Tanton2011.
 An R implementation of GREGWT can be found in the GitHub repository
 [GREGWT](https://github.com/emunozh/GREGWT) and installed using
 the function `install_github()` from the **devtools** package.
@@ -516,11 +515,12 @@ Flexible Modelling Framework (FMF).
 ## simPop
 
 \index{EU-SILC}
-A new package for generating and modelling synthetic microdata is the R
-package **simPop**, available on CRAN since August 2015.
-The package contains example data from the 'EU-SILC'
-database (EU statistics on income and living conditions), in addition
-to datasets from the developing world.
+The **simPop** package provides alternative methods for
+generating and modelling synthetic microdata.
+A useful feature of the package is its inclusion of
+example data. Datasets from the 'EU-SILC'
+database (EU statistics on income and living conditions)
+and the developing world are included to demonstrate the methods.
 
 An example of the individual-level data provided by the package,
 and the function `contingencyWt`, is demonstrated below.

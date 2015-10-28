@@ -35,8 +35,7 @@ For the purposes of this book spatial microsimulation was defined in Chapter 1 a
 
 > **The creation, analysis and modelling of individual-level data allocated to geographic zones.**
 
-Spatial microsimulation is therefore a *multi-level* approach.
-It is well-suited to the analysis of complex phenomena which play-out over
+Spatial microsimulation is is well-suited to the analysis of complex phenomena which play-out over
 geographical space, such as transport systems and the housing system.
 Because it includes the creation of synthetic data, the method is well-suited
 to situations in which available data are limited. Figure 3.1 illustrates how
@@ -682,8 +681,12 @@ based on a microdataset of only 5 individuals and two constraint variables.
 
 ## Chapter summary
 
-In this chapter, we have clearly defined what spatial microsimulation is
-and what it is not. Then, we have mentioned some already developed applications.
-Finally, we have quoted the underlying assumptions.
+In this chapter we have defined what spatial microsimulation is
+and what it is not. Some research and real-world applications were
+described, with comments on areas for further work.
+The final section on assumptions underlying spatial microsimulation
+is in some ways the most important: it
+shows the importance of understanding the limitations associated with the method and
+the dangers of drawing conclusions from simulated data.
 
 # References

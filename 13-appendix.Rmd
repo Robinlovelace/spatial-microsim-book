@@ -65,7 +65,7 @@ different objects depending on their class.
 
 To illustrate the point, let's create two objects, each with a different class
 and see how the function `summarise` behaves differently, depending on the type.
-This behaviour is *polymorphism* (Matloff, 2011):
+This behaviour is *polymorphism*  [@Matloff2011]:
 
 ```{r}
 # Create a character and a vector object

@@ -55,8 +55,7 @@ Of course, the datasets you use in real applications will be much larger than
 those in SimpleWorld, but the concepts and commands will be largely the same. 
 
 Each project is different and data can be very
-diverse.^[In
-cases where the steps mentioned here are insufficient --- if this is the case, see Wickham (2014b).]
+diverse. For more on data cleaning and 'tidying', see @tidy-data.
 However, in most cases, the input datasets will be similar to the ones presented here:
 an individual-level dataset consisting of categorical
 variables and aggregate-level constraints containing categorical counts.
@@ -405,11 +404,11 @@ $0 < x \leq 20$. Note the `]` symbol means 'including'.^[This `[a,b)` category n
 Even when measuring constraint variables by categories rather
 than the cruder measure of number variables, there is still
 no consensus about the most desirable number. 
-Norman (1999) advocates
+@Norman1999a advocates
 including the "maximum amount of
 information in the constraints", implying that
 the more constraint categories the merrier.
-Harland (2012)
+@harland2012
 warns that over-constraining the model can cause
 problems. In any case, there is a clear link between
 the quality and quantity of constraint variables used
@@ -759,7 +758,7 @@ The result for each variable is a new matrix with the same number of columns as
 there are categories in the variable. Note that the order of columns is usually
 alphabetical: this can cause problems if the columns in the constraint tables
 are not ordered in this way.  
-Knoblauch and Maloney (2012) provide a lengthier description of this
+@knoblauch2012modeling provide a lengthier description of this
 flattening process.
 
 The second stage is to use the `colSums()` function 

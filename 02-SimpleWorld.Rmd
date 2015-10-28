@@ -51,10 +51,6 @@ of a spatial microsimulation.
 -*SimpleWorld in context* ([](#SimpleWorldContext)) mentions the kind of
 context where the output could be use.
 
-
-
-
-
 ## Getting set-up with the RStudio environment {#rstudioUpSpeed}
 
 Before progressing further, it is important to ensure that R is set-up correctly
@@ -178,7 +174,7 @@ grid.raster(readPNG("figures/rstudio-environment.png"))
 
 To check if the project has been downloaded and opened correctly, try running the following code.
 
-```{r}
+```{r, message=FALSE}
 source("R/SimpleWorld.R")
 ```
 
@@ -206,7 +202,7 @@ what spatial microdata look like and, finally, place the example in its wider
 context.
 
 This SimpleWorld example is analogous to the
-'cartoon world' used by professor David MacKay (2009) to simplify the
+'cartoon world' used by professor @mackay2008sustainable to simplify the
 complexities of sustainable energy. The same principle works here:
 spatial microsimulation will be used to simulate
 differences in income and age distributions
@@ -415,7 +411,7 @@ result. If it works, congratulations! You have generated your first
 weight matrix using Iterative Proportional Fitting (IPF). The
 details of this process are described in subsequent chapters.
 
-```{r}
+```{r, message=FALSE}
 target <- list(as.matrix(con_age[1,]), as.matrix(con_sex[1,]))
 descript <- list(1, 2)
 ind$age_cat <- cut(ind$age, breaks = c(0, 50, 100))
@@ -553,8 +549,17 @@ important and will be tackled in
 
 ## Chapter summary
 
-In summary, we have seen how to install RStudio and the basic use of this
-tool. Then, we have fast developed all steps of a spatial microsimulation 
-process for the little example *SimpleWorld*.
+In this chapter we have learned how to set-up the R/RStudio environment for running
+the example code provided in this book. This involved installing the software,
+understanding projects in RStudio and setting up the `spatial-microsim-book`
+project so that data can be accessed easily.
+This was the first practical chapter and it involved basic commands for loading
+data and creating a weight matrix. The process of running and playing with the
+code should have helped get acquainted with the 'workflow' associated with
+developing and running spatial microsimulation models in R.
+Discussion of the results, which represent the inhabitants of the imaginary
+system *SimpleWorld*, create the backdrop for the rest of the book which
+we will return to,
+in [](#ABM).
 
 # References

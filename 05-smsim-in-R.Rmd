@@ -37,10 +37,11 @@ demonstrated in
 [](#alternative-reweighting).
 
 This chapter moves from theory to practice. It describes the
-maths that underlie the method (section \ref{ipftheory}) before implementing
-the algorithm in base R (section \ref{ipfinr}). Then, two packages that automate
-IPF, **ipfp** and **mipfp** in subsequent sections
-([](#ipfp) and [](#mipfp) respectively). The chapter also introduces the important concepts of 
+process underlying the method of population synthesis (section \ref{ipftheory}) before implementing
+the IPF algorithm in base R (section \ref{ipfinr}). In the following sections two packages that automate
+IPF, **ipfp** and **mipfp**, are introduced
+([](#ipfp) and [](#mipfp) respectively).
+The chapter also introduces the important concepts of 
 *integerisation* and *expansion*. These methods are introduced
 towards the end of each package-specific section. The final
 section
@@ -306,9 +307,8 @@ of spatial microsimulation.
 In spatial microsimulation, IPF is used to allocate individuals to zones.
 The subsequent section implements IPF to create *spatial microdata* for
 SimpleWorld, using the data loaded in the previous chapter as a basis. 
-Overviews of the use of spatial microsimulation method for spatial microsimulation
-are provided recent papers by Lovelace and Ballas (2012) and, in the
-context of transport modelling, by Pritchard and Miller (2012).
+An overview of the paper from the
+perspective of transport modelling is provided by @Pritchard2012.
 
 ```{r, echo=FALSE}
 # TODO (MD): add reference above
@@ -346,10 +346,6 @@ to the sum of the actual weights of all individuals having the same category
 in this variable as 'i'. We simply redistribute the weights so that the 
 data follows the constraint concerning this variable.
 
-Don't worry if this theory doesn't really make sense for you 
-for the moment. The next section will develop an example and
-will help you to understand the process.
-
 ### IPF in R {#ipfinr}
 
 \index{IPF!in R}
@@ -369,14 +365,16 @@ in R and must be adapted to each new application (unlike the generalized 'ipfp' 
 which works unmodified on any reweighting problem).
 IPFinR works by saving the weight
 matrix after every constraint for each iteration. We here develop first IPFinR to 
-give you an idea of the algorithm. Indeed, 'ipfp' and 'mipfp' packages are more general, but
-are like a "black box", so we can use it without being sure of what it performs.
+give you an idea of the algorithm. Without reading the *source code* in the
+**ipfp** and **mipfp** packages (which is available on-line: all R packages are open source),
+they can at first seem like "black boxes" which
+magically generate answers without explanation of *how* answer was created.
 
-The aim is to obtain the final weight matrix that will represent how well each individual 
-fits each zone in terms of their characteristics. Each row of this matrix is an individual and each column 
-is a zone. The algorithm will operate zone per zone. Thus the weight matrix will be filled in
-column per column. To help the understanding of this section, we can rename the totals with 
-a more intuitive name.
+By the end of this section you will have generated a weight matrix representing how representative each individual 
+is of each zone.
+The algorithm operates zone per zone and the weight matrix will be filled in
+column per column. For convenience, we begin by assigning some of the basic parameters
+of the input data to intuitive names, for future reference.
 
 ```{r}
 # Create intuitive names for the totals
@@ -628,7 +626,7 @@ The aim is to make spatial microsimulation as easy and accessible as possible.
 ```{r valit_plot1, echo=FALSE, fig.cap="Fit between observed and simulated values for age and sex categories (column facets) after constraining a first time by age and sex constraints (iterations 1.1 and 1.2, plot rows). The dotted line in each plot represents perfect fit between the simulated and observed cell values. The overall fit in each case would be found by combining the left and right-hand plots. Each symbol correspond to a category and each category has a couple (observed, simulated) for each zone.", fig.scap="Fit between observed and simulated values after one iteration of IPF",fig.align='center'}
 # Make data long it with tidyr
 library(tidyr)
-library(dplyr) # a package required by tidyr functions
+library(dplyr) # a package for manipulating data
 x <- gather(cons, Category, Observed, a0_49:f)
 y <- gather(as.data.frame(ind_agg1), cat, Simulated, a0_49:f)
 z <- gather(as.data.frame(ind_agg2), cat, Simulated, a0_49:f)
@@ -871,21 +869,18 @@ More sophisticated ways of evaluating model fit are
 presented in Section \ref{svalidation}.
 As mentioned at the beginning of this chapter there are alternative methods
 for allocating individuals to zones. These are discussed in a subsequent section
-[](#alternative-reweighting)
-.
+[](#alternative-reweighting).
 
-For some applications, fractional weight matrices are sufficient for analysis.
-Often, however, an individual level resulting dataset is required. To estimate the individual-level
-variability in target variables such as income, or for agent-based modelling
-applications, a full spatial microdataset, composed of whole individuals is
-required. For this, we have two possibilities.
-First, we can consider the weights as
-probabilities and randomly chose the individuals in a distribution corresponding to the weights.
-Second, we can consider the weights as the number of individuals
-in this category and create integer weights [@Lovelace2013-trs],
-as described in a subsequent section
-([](#sintegerisation))
-on 'integerisation'. 
+Note that the weights generated in this section are fractional.
+For agent-based modelling
+applications integer weights are
+required, which can be generated through the process of integerisation.
+Two methods of integerisation are explored:
+The first randomly choses the individuals, with a probability proportional
+to the weights.
+The second is 'Truncate Replicate Sample' [@Lovelace2013-trs]
+and is described in
+([](#sintegerisation)).
 
 
 ### IPF with **mipfp** {#mipfp}
@@ -1088,28 +1083,20 @@ methods to solve the problem such as the maximum likelihood, minimum chi-square 
 
 ### Concept of integerisation
 
-Note that if you are not 
-interested in knowing all details of
-the process to transform the weight table into 
-the final data, you can go directly to the sub section
-called "Integerisation and expansion", where the process
-to execute it for all zones is explained.
+The weights generated in the previous section are fractional,
+making the results difficult to use as an input to agent-based models.
+*Integerisation* refers to methods for converting these fractional weights
+into integers, with a minimum loss of information [@Lovelace2013-trs].
+Simply rounding the the weights is one integerisation method,
+but the results are very poor. This process can also be referred to as
+'weighted sampling without replacement', as illustrated by the R package
+[wrswoR](https://github.com/krlmlr/wrswoR).
 
-The weight matrix contains doubles, so non-integer weights.
-Simply rounding the function often results in an undervalued population.
-Thus, we need to integerise the matrix, but by staying as close as possible
-to the constraints.
-Two main approaches are possible to obtain a resulting integer matrix.
-First, we can consider the weights as probabilities and inside each zone
-we can randomly draw the number of individuals needed (constraint of
-the zone). This randomly draw is made inside a distribution defined
-by the weights of each individual in this zone. The second possibility
-is to consider the weight matrix as the final contingency table. Then,
-it contains the number of individuals of this type in this zone.
-For this, we need to have integer weights, so there is a need to
-transform the matrix in another similar, but with only integers. 
-These processes are `Integerisation`. We propose here one way to
-do this.
+Two integerisation methods are tackled in this chapter.
+The first treats weights as simple probabilities. The second
+constrains the maximum and minimum integer weight that can result from
+each fractional weight to plus or minus one, and is known as TRS:
+'Truncate Replicate Sample'.
 
 Integerisation is the process by which a vector of real numbers
 is converted into a vector of integers corresponding to the number of
@@ -1142,13 +1129,11 @@ process of *integerisation* systematically to maximize the fit between
 the synthetic and constraint data for each zone.
 
 \index{integerisation, proportional probabilities}
-In fact there are a number of integerisation strategies available.
-Lovelace and Ballas (2012) tested 5 of these and found that probabilistic
-integerisation methods consistently outperformed deterministic rivals.
-The details of these algorithms are described in the aforementioned paper
-and code is provided in the Supplementary Information. For the purposes of
-this book we will create a function to undertake the simplest of these,
-*proportional probabilities*:
+There are a number of integerisation strategies available.
+@Lovelace2013-trs tested 5 of these and found that the probabilistic
+methods of *proportional probabilities* and *TRS* outperformed their deterministic
+rivals. The first of these
+integerisation strategies can be written as an R functions as follows:
 
 ```{r}
 int_pp <- function(x){
@@ -1231,9 +1216,16 @@ combinations of individuals have a non-zero probability of being sampled. The
 method will output $(4,0,0)$
 once in every 21 thousand runs for $w_1$ and
 once every $81$ runs for $w_2$. The same probability is allocated
-to all other 81 ($3^4$) permutations.
+to all other 81 ($3^4$) permutations.^[There
+are $3^4$ possibilities because
+3 options are allocated to 4 'spaces', due to the total population being 4.
+If the total population in this example were 2, there would be 9 ways of
+allocating the indices 1, 2 and 3: there are 9 *permutations*.
+The general rule governing the number of permutations is *$p = n^r$ where $n$ is
+the number of options and $r$ is the number of repetitions.
+]
 
-To overcome this issue Lovelace and Ballas (2012) developed a method which
+To overcome this issue Lovelace and Ballas (2013) developed a method which
 ensures that any individual with a weight above 1 would be sampled at least once,
 making the result $(4,0,0)$ impossible in both cases.  This method is
 *truncate, replicate, sample* (TRS) integerisation, described in the following function:
@@ -1258,7 +1250,7 @@ int_trs <- function(x){
 }
 ```
 
-This method consists in 3 steps : truncate all weights by keeping only the
+This method consists of 3 steps : truncate all weights by keeping only the
 integer part and forget the decimals. Then, to replicate by considering these 
 integers as the number of each type of individuals in the zone. And finally, 
 sample to reach the good number of people in the zone.
