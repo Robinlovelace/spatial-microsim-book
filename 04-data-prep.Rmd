@@ -60,13 +60,39 @@ However, in most cases, the input datasets will be similar to the ones presented
 an individual-level dataset consisting of categorical
 variables and aggregate-level constraints containing categorical counts.
 
+The process of loading, checking and preparing the input datasets for spatial
+microsimulation is generally a linear process, encapsulating the following
+stages, corresponding to the sections of this chapter:
+
+- *Accessing the input data* ([](#accessing)) provides advice on
+ways to collect and chose data.
+-*Target and constraint variables* ([](#Selecting)) explains the
+different types of data you can have and how to define the targets
+and the constraints.
+-*Loading input data* ([](#Loading)) contains the R code to load
+the input data.
+-*Subsetting to remove excess information* ([](#subsetting-prep)) 
+gives the R code to not consider all variables.
+-*Re-categorising individual-level variables* ([](#re-categorise))
+develops the R code to have pertinent categories in all variables.
+-*Matching individual and aggregate level data names* ([](#matching))
+makes the data names correspond to avoid problems when executing the 
+spatial microsimulation.
+-*'Flattening' the individual level data* ([](#flattening)) explains
+a way to transform the data into a boolean matrices.
+
+
+
+## Accessing the input data {#accessing}
+
+
+
 \index{target variables}
 
 Before loading the spatial microdata, you must decide on the data 
 needed for your research. Focus on "target variables" related to the research
 question will help decide on the constraint variables, as we will see
-below 
-([](#Selecting)).
+below ([](#Selecting)).
 Selecting only on variables of interest will ensure you do not
 waste time thinking about and processing 
 additional variables that will be of little use in the future.
@@ -86,11 +112,6 @@ and a non-spatial survey.
 In any case, you should have a clear idea about the range of available
 data on the topic of interest before embarking on spatial microsimulation.
 
-```{r, echo=FALSE}
-## Accessing the input data
-```
-
-## Accessing the input data
 
 \index{input data}
 \index{example data}
@@ -127,19 +148,13 @@ refer to the original dataset is more important. Here the focus is on the princi
 ```
 
 \index{data cleaning}
-The process of loading, checking and preparing the input datasets for spatial
-microsimulation is generally a linear process, encapsulating the following
-stages:
 
-1. Decide on the constraint and target variables
-2. Loading the data 
-3. Re-categorise individual-level data
-4. Set variable and value names
-5. 'Flatten' individual-level data 
 
 'Stripping down' the datasets so that they only contain the bare essential
-information will enable focus on the information that really matters. The input datasets in the example used for this chapter
-are already bare, but in real world surveys there may be literally hundreds of variables clogging up the analysis and your mind.
+information will enable focus on the information that really matters. The input 
+datasets in the example used for this chapter
+are already bare, but in real world surveys there may be literally hundreds 
+of variables clogging up the analysis and your mind.
 It is good practice to remove
 excess data at the outset. Provided you have a good workflow,
 keeping all original data files unmodified for future
@@ -185,6 +200,8 @@ input data and constraints.
 ## Target and constraint variables {#Selecting}
 
 \index{target variables}
+
+
 The geographically aggregated data should be the
 first consideration when deciding on the
 input data. This is because the geographical data
@@ -721,12 +738,6 @@ the value that each individual takes for a range of variables, whereas
 `cons` counts the number of individuals in different groups at
 the geographical level. These datasets are have different dimensions:
 
-```{r, echo=FALSE}
-# (Dumont, 2014) I don't like the previous sentence, because even if it is the same dimension
-# the real problem is that it does not represent the same thing. So, the dimension is not
-# the real reason of it
-# Think I've corrected this issue! (RL)
-```
 
 ```{r}
 dim(ind)
