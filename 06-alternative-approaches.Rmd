@@ -14,6 +14,17 @@ load("cache-smsim-in-R.RData")
 
 # Alternative approaches to population synthesis {#alternative-reweighting}
 
+This chapter describes briefly other techniques for spatial microsimulation.
+We have different methods, each corresponing to a section : 
+
+-*GREGWT* ([](#is-not)) contains a method based on a Generalized Regression Weighting 
+procedure.
+-*Population synthesis as an optimization problem* ([](#asOptim)) explains
+how we can make spatial microsimulation thanks to optimization algorithms.
+-*simPop* ([](#SimPop)) mentions another package to make spatial microsimulation.
+-*The Urban Data Science Toolkit (UDST)* ([](#UDST)) shortly describes another
+technique, coded in python.
+
 ## GREGWT
 
 ```{r, echo=FALSE}
@@ -112,17 +123,18 @@ for(area in seq(dim(age)[1])){
 In the last step we transform the vector into a matrix and see the results from
 the reweighing process. 
 
-## Population synthesis as an optimization problem
+## Population synthesis as an optimization problem {#asOptim}
 
 \index{optimisation}
 In general terms, an *optimization problem* consists of a function,
 the result of which must be minimised or maximised, called an *objective function*. This function is not necessarily defined 
 for the entire domain of possible inputs. The domain where this function is defined is called
 the *solution space* (or the *feasible space* in formal mathematics).
-This implies that optimization problems can be *unconstrained* or *constrained*, by
+Moreover, optimization problems can be *unconstrained* or *constrained*, by
 limits on the values that arguments (or that a function of the arguments) of the function can take
-([Boyd 2004](http://stanford.edu/~boyd/cvxbook/)). If there are constraints, the solution space
-include only a part of the domain of the objective function. The constraints define the
+([Boyd 2004](http://stanford.edu/~boyd/cvxbook/)). If there are constraints, the solution space could
+include only a part of the image of the objective function. The objective function and the constraints 
+are both necessary to define the
 solution space. Under this framework,
 population synthesis can be seen as a *constrained optimisation* problem.
 Suppose $x$ is a vector of length $n$ $(x_1,x_2,..,x_n)$ whose values are to be adjusted. In this case
@@ -136,17 +148,16 @@ $$\left\{
 \begin{array}{l}
   min \hspace{0.2cm}f_0(x_1,x_2,..,x_n) \\
   \\
-  s.c. \hspace{0.2cm} f_i(x) \leq par_i,\  i = 1, ..., m
+  s.c. \hspace{0.2cm} f_i(x) \geq par_i,\  i = 1, ..., m
 \end{array}
 \right.$$
 
 Applying this to the problem of population synthesis,
-the parameters $par_i$ represent 0, since all cells have to be positive.
+the parameters $par_i$ represent 0 and $f_i(x)=x$, since all cells have to be positive.
 The $f_0(x)$, to be minimised, is the distance between the actual weight matrix and
 the aggregate constraint variable
 `cons`. $x$ represents the weights which will
-be calculated
-to minimise $f_0(x)$.
+be calculated to minimise $f_0(x)$.
 
 To illustrate the concept further, consider the case of aircraft design.
 Imagine that the aim (the objective function) is to minimise
@@ -179,13 +190,16 @@ is that it allows any optimisation algorithm to perform the reweighting.
 To see population synthesis as a constrained optimization problem analogous to
 aircraft design, we must define the problem to optimise, the variable $x$ and then
 set the constraints.  
-Intuitively, we search the number of occurrences we want of each individual to take
+
+Intuitively, we search the number of occurrences we want of each individual to
 form the final population that fits the best the constraints. We could take
 the weight matrix as $x$ and as the objective function the difference between the 
 population with this weight matrix and the constraint. However, we want to include
 the information of the distribution of the sample. 
 Thus, we want to find a vector of parameters `par` that will multiply the `indu` matrix,
-which is similar to `ind_cat`, but with only different rows and the cells contain
+which is similar to `ind_cat`, but each row of `ind_cat` represents an individual of the sample,
+whereas each row of `indu` concerns a type of individual (if 2 persons in the sample has the
+same characteristics, the line will appear only once). The cells of `indu` contain
 the number of time that this kind of individual appears in the sample. We want the result
 of this multiplication to be as close as possible to the constraints.
 
@@ -246,7 +260,7 @@ by the number of other individuals who share the same combination of attributes.
 This may sound quite simple, so let's use the example of SimpleWorld to
 illustrate the point.
 
-## Reweighting with optim and GenSA
+### Reweighting with optim and GenSA
 
 The base R function `optim` provides a general purpose optimization framework
 for numerically solving objective functions. Based on the objective function
@@ -374,7 +388,7 @@ despite only requiring 2 iterations to arrive at a good level of fit.
 Note that these results are biased by the example that is pretty small 
 and runs only for the first zone.
 
-## Combinatorial optimisation
+### Combinatorial optimisation
 
 \index{combinatorial optimisation}
 Combinatorial optimisation is a complete field consisting in a different
@@ -465,7 +479,7 @@ integer weights, we do not have the issue of fractional weights
 associated with IPF.
 Combinatorial optimisation algorithms for population
 synthesis do not rely on integerisation,
-which can damage model fit. The fact that the gradient contains "NA"
+which can damage model fit. The fact that the gradient contains "NA"^[We mean that instead of having a numerical value in each cells, some cells contain the value 'NA'(Non Applicable). This value appears when this cell has not been defined]
 in the end of the algorithm is not a problem, because it just means
 that they have not been calculated.
 
@@ -512,7 +526,7 @@ Flexible Modelling Framework (FMF).
 \index{Java}
 \index{flexible modelling framework (FMF)}
 
-## simPop
+## simPop {#SimPop}
 
 \index{EU-SILC}
 The **simPop** package provides alternative methods for
@@ -548,9 +562,12 @@ two categorical variables: economic status (`pl030`) and citizenship status
 the two variables.
 **simPop** is a new package so we have not covered it in detail. However,
 it is worth considering for its provision of example datasets alone.
-considering 
 
-## The Urban Data Science Toolkit (UDST)
+Note that this package gives several alternatives. It contains "model-based methods,
+calibration and combinatorial optimization algorithms" 
+(as we can see on the help of this package).
+
+## The Urban Data Science Toolkit (UDST) {#UDST}
 
 The UDST provides an even more ambitious approach to modelling
 cities that contains a population synthesis component.
