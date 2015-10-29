@@ -567,9 +567,10 @@ the two variables.
 **simPop** is a new package so we have not covered it in detail. However,
 it is worth considering for its provision of example datasets alone.
 
-Note that this package gives several alternatives. It contains "model-based methods,
+Note that this package provides several alternative methods for population
+synthesis, including "model-based methods,
 calibration and combinatorial optimization algorithms" 
-(as we can see on the help of this package).
+[@simPop].
 
 ## The Urban Data Science Toolkit (UDST) {#UDST}
 
