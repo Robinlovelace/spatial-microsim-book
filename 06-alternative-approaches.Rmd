@@ -15,7 +15,7 @@ load("cache-smsim-in-R.RData")
 # Alternative approaches to population synthesis {#alternative-reweighting}
 
 This chapter describes briefly other techniques for spatial microsimulation.
-We have different methods, each corresponing to a section : 
+We have different methods, each corresponding to a section : 
 
 -*GREGWT* ([](#is-not)) contains a method based on a Generalized Regression Weighting 
 procedure.
@@ -196,7 +196,7 @@ form the final population that fits the best the constraints. We could take
 the weight matrix as $x$ and as the objective function the difference between the 
 population with this weight matrix and the constraint. However, we want to include
 the information of the distribution of the sample. 
-Thus, we want to find a vector of parameters `par` that will multiply the `indu` matrix,
+Thus, we want to find a vector of parameters `w` that will multiply the `indu` matrix,
 which is similar to `ind_cat`, but each row of `ind_cat` represents an individual of the sample,
 whereas each row of `indu` concerns a type of individual (if 2 persons in the sample has the
 same characteristics, the line will appear only once). The cells of `indu` contain
@@ -208,14 +208,14 @@ optimization problem for the first zone can be written as follows:
 
 $$\left\{
 \begin{array}{l}
-  min \hspace{0.2cm} f(par_1,..,par_m) = DIST(sim, cons[1,]) \\
-  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(indu * par)\\
+  min \hspace{0.2cm} f(w_1,..,w_m) = DIST(sim, cons[1,]) \\
+  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(indu * w)\\
   \\
-  s.c. \hspace{0.2cm} par_i \geq 0,\  i = 1, ..., m
+  s.c. \hspace{0.2cm} w_i \geq 0,\  i = 1, ..., m
 \end{array}
 \right.$$
 
-Key to this is interpreting individual weights as parameters (the vector $par$,
+Key to this is interpreting individual weights as parameters (the vector $w=(w_1,...,w_m)$,
 of length $m$ above)
 that are iteratively modified to optimise the fit between individual and
 aggregate-level data. Remarks that in comparison with the theoretical 
@@ -225,10 +225,10 @@ Total Absolute Error (TAE).
 
 $$\left\{
 \begin{array}{l}
-  min \hspace{0.2cm} f(par_1,..,par_m) = TAE(sim, cons[1,]) \\
-  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(ind\_cat * par)\\
+  min \hspace{0.2cm} f(w_1,..,w_m) = TAE(sim, cons[1,]) \\
+  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(ind\_cat * w)\\
   \\
-  s.c. \hspace{0.2cm} par_i \geq 0,\  i = 1, ..., m
+  s.c. \hspace{0.2cm} w_i \geq 0,\  i = 1, ..., m
 \end{array}
 \right.$$
 
@@ -241,7 +241,7 @@ any could be used.
 # (MD) Compare with different metrics?
 ```
 
-Note that in the above, $par$ is equivalent to the `weights` object
+Note that in the above, $w$ is equivalent to the `weights` object
 we have created in previous sections to represent how representative
 each individual is of each zone. 
 The main issue with this definition of reweighting is therefore the large
@@ -320,7 +320,8 @@ The remaining algorithms shown are, like Nelder-Mead, available from within R's
 default optimisation function `optim`. The implementations with `method =` set
 to `"BFGS"` (short for the Broyden–Fletcher–Goldfarb–Shanno algorithm),
 `"CG"` ('conjugate gradients') performed roughly the same, steadily approaching
-zero error and fitting to `"IPF"` and `"GenSA"` after 10 iterations. Finally, the `SANN` method,
+zero error and fitting to `"IPF"` and `"GenSA"` after 10 iterations. Finally, the `SANN` method
+(a variant of a Simulated ANNealing),
 also available in `optim`, performed most erratically of the methods tested.
 This is another implementation of simulated annealing which demonstrates that
 optimisation functions that depend on random numbers do not always lead to
@@ -346,9 +347,9 @@ such as the problem of 'empty cells'.
 ```
 
 Therefore these results, as with any modelling exercise,
-should be interpreted with a healthy dose of scepticism: just because an
+should be interpreted with a healthy dose of skepticism: just because an
 algorithm converges after few 'iterations' this does not mean it is
-inherently any faster or more useful than another. The results are context
+inherently faster or more useful than another. The results are context
 specific, so it is recommended that the tested framework
 in 'R/optim-tests-SimpleWorld.R' is used as a basis for further tests
 on algorithm performance on the datasets you are using.
@@ -361,11 +362,11 @@ To overcome the caveat that the meaning of an 'iteration' changes dramatically
 from one algorithm to the next, further tests measured the time taken
 for each reweighting algorithm to run. To have a readable graph, we 
 do not represent the error as a function of the time, but the time per
-algorithm in function of the `maxit` argument (Figure \ref{TimeOptim_GenSA}). This figure
+algorithm in function of the number of iterations (Figure \ref{TimeOptim_GenSA}). This figure
 demonstrates that an iteration of GenSA take a long time in comparison 
 with the other algorithm. Moreover, `"BFGS"` and `"CG"` are still following a
 similar curve under GenSA. Nelder-Mead, SANN and IPF contains iterations that 
-take less time. Until, it appears that IPF and the best in terms of iterations
+take less time. Until, it appears that IPF is the best in terms of iterations
 and the time needed for few iterations is good.
 
 ```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms",fig.scap="Total Absolute Error in function of processing time for several algorithms", fig.scap="Relationship between processing time and goodness-of-fit", fig.width=4, fig.height=4, fig.align='center', echo=FALSE}
@@ -391,12 +392,13 @@ and runs only for the first zone.
 ### Combinatorial optimisation
 
 \index{combinatorial optimisation}
-Combinatorial optimisation is a complete field consisting in a different
-method to result optimisation problem. Instead of having one candidate that
+Combinatorial optimisation (CO) is a complete field consisting in a different kind of
+methods to result optimisation problem. Instead of having one candidate that
 evolve through the iterations, combinatorial optimisation forms a set
 of feasible candidates and then evaluate them thanks to the objective
 function to be minimised. There are several types of combinatorial optimisation
-depending on how we chose the combination of candidates.
+depending on how we chose the combination of candidates and how we determine
+what happened after evaluation.
 
 This technique can be seen as an alternative to IPF for allocating individuals
 to zones. This strategy is *probabilistic*
@@ -407,14 +409,16 @@ very large: the speed benefits of using the deterministic IPF algorithm shrink a
 the size of the survey dataset increases. As seen before, IPF creates non integer 
 weights, but we have proposed two solutions to transform them into the final 
 individual-level population. So, the proportionality of IPF is more intuitive,
-but need to calculate the whole weight matrix in each iteration, where CO
+but need to calculate the whole weight matrix at each iteration, where CO
 just proposes candidates. However, if the objective function takes a long time
-to be calculated, CO will have to perform this evaluation for each candidate.
+to be calculated, CO having to perform an evaluation for each candidate,
+the algorithm can take a long time to run.
 
 \index{genetic algorithm}
 Genetic algorithms are included in this field and become popular in some 
 domains, such as industry, for the moment. This kind of algorithm can be 
 very effective when the objective function has several local minimum and
+we want to find the global one
 (Hermes and Poulsen, 2012).
 
 ```{r, echo=FALSE}
@@ -481,7 +485,7 @@ Combinatorial optimisation algorithms for population
 synthesis do not rely on integerisation,
 which can damage model fit. The fact that the gradient contains "NA"^[We mean that instead of having a numerical value in each cells, some cells contain the value 'NA'(Non Applicable). This value appears when this cell has not been defined]
 in the end of the algorithm is not a problem, because it just means
-that they have not been calculated.
+that this cell has not been calculated.
 
 ```{r, echo=FALSE}
 # Not entirely sure what is meant by "the gradient contains "NA""
@@ -583,4 +587,12 @@ software as alternative synthetic population generator.
 
 \index{Synthpop}
 \index{Urban Data Science Toolkit}
+
+## Chapter summary
+
+In summary, this chapter presented several alternative to IPF
+to perform to a spatial microsimulation. We mentioned a regression
+method : GREWT, ways using the optimization theory, an R package
+containing several procedures : *simPop* and the UDST, currently
+developed in python.
 
