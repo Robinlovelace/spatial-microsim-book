@@ -2117,4 +2117,21 @@ spatial microdata.
 # I am not too sure if it easily possible with ipfp.
 ```
 
+## Chapter summary
+
+In this chapter we have first seen what are weighting algorithms and
+the similarities between these
+algorithms and combinatorial optimisation (even if the underlying
+method is completely different). Then, we explained in detail what Iterative
+Proportional Fitting
+is, how it works and several ways to code in R. We continued by explaining how
+to have more realistic weights : integers. After that, a section contains
+the process to transform the weights into a final table containing
+all generated individuals with their characteristics.
+
+Finally, we compared the two current developed packages to do IPF and 
+conclude that **mipfp** is more general and which one to use will
+depend on the context and the kind of input you have.
+
+
 # References
