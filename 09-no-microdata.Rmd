@@ -6,7 +6,6 @@ bibliography: bibliography.bib
 ---
 
 ```{r, echo=FALSE}
-# packages to allow 'knitting' the chapter to html
 library(png)
 library(grid)
 ```
