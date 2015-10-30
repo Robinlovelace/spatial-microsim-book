@@ -15,8 +15,9 @@ library(grid)
 
 # Spatial microsimulation in the wild {#CakeMap}
 
-By now we have developed a good understanding of what spatial microsimulation
-is, its applications and how it works. We have seen something of its
+So for the book has explained what spatial microsimulation
+is, described its applications and demonstrated how it works.
+We have seen something of its
 underlying theory and its implementation in R. But how can
 the method be applied 'in the wild', on real datasets?
 
