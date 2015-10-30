@@ -372,9 +372,10 @@ tae <- function(observed, simulated){
 
 By applying this function to CakeMap, we find a TAE of 26445.57, as calculated below. This may
 sound very big, but remember that this measure is very dependent on the scale of the problem.
-Indeed, an error for 26445 persons multiplied by variables out of 4,871,397 is not a so big error. For this reason, 
+26,445 may seem like a large number but it is small compared with the total population multiplied by
+the number of constraints: 4,871,397. For this reason, 
 the relative error RE (also called the standardised absolute error) is often preferable. We observe a RE of 
-only 0.54%. Note that RE is simply TAE divided by the total of all observed cell
+0.54%. Note that RE is simply TAE divided by the total of all observed cell
 values (that is, the total population of the study area multiplied by the number of
 constraints).
 
