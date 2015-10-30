@@ -39,12 +39,16 @@ These strategies are described below:
 1. *Model checking* --- also called *internal validation*
 (Edwards et al. 2010) ---
 is comparing model results against a priori knowledge of how they *should*
-be. This level of model checking usually takes place only at the aggregate level of the constraint variables.
+be. This level of model checking usually takes place only at the aggregate 
+level of the constraint variables ([](#Internal)).
 2. *Model evaluation* --- also known as *external validation* --- is the
 process of comparing model results with external data. This approach to
 verification relies on good 'ground-truth data' and can take place at either
 the individual level (if geo-coded survey data are available) or (more
-commonly) at the aggregate level.
+commonly) at the aggregate level ([](#External)).
+
+The chapter develops these two possible validations and
+explains the problem of the zero cells ([](#empty-cells)).
 
 Internal validation is the most common form model evaluation. In some cases
 this type of validation is the only available test of the model's output,
@@ -94,7 +98,7 @@ undertaken. As we will see with the CakeMap example (where income is used as a
 proxy variable for external validation purposes) this can involve the creation of
 new target variables, purely for the purposes of validation.
 
-## Internal validation
+## Internal validation {#Internal}
 
 Internal validation is the process of comparing the model's output against data that is internal to the model itself. In practice this means converting the synthetic spatial microdata into a form that is commensurate with the constraint variables and comparing the two geographically aggregated datasets: the observed vs simulated values. Every spatial microsimulation model will have access to the data needed for this comparison. Internal validation should therefore be seen as **the bare minimum** in terms of model evaluation, to be conducted as a standard procedure on all spatial microsimulation runs. When authors refer to this procedure as "result validation" they are being misleading. Internal validation tells us simply that the results are internally consistent; it should always be conducted. The two main causes of
 poor model fit in terms of internal validation are:
@@ -121,11 +125,13 @@ Several metrics of model fit exist. We will look at some commonly used measures 
 mathematically before coding them in R and, in the subsequent section, implementing them to evaluate the CakeMap spatial microsimulation model. The measures developed in the section are:
 
 - Pearson's correlation (*r*), a formula to quantify the linear correlation between the observed and final counts in each of the categories for every zone.
-- Total absolute error (TAE), simply the sum of absolute (positive) differences between the observed and final counts in each of the categories for every zone.
-- Standardised absolute error (SAE), the TAE divided by the total observed population.
-- Mean absolute error (MAE), the TAE divided by *n*, the number of observations.
-- Root mean squared error (RMSE), the square root of the sum of all errors. This metric emphasises the relative importance of a few large errors over the build-up of many small errors.
-- Chi-squared, a test that the predicted and observed values for categorical values match.
+- Total absolute error (TAE), also know as the sum of absolute error (SAE), simply the sum of absolute (positive) differences between the observed and final counts in each of the categories for every zone.
+- Relative error (RE), the TAE divided by the total concerned population.
+- Mean relative error (MRE), the sum of RE calculated per category and per zone.
+- Root mean squared error (RMSE), the square root of the mean of all squared errors. This metric emphasises the relative importance of a few large errors over the build-up of many small errors.
+- Chi-squared, a statistical hypothesis test that compare two hypothesis and determine which one is more
+probable. First hypothesis is that the final and the observed counts follow the same distribution. Second
+hypothesis is the opposite.
 
 Often, to illustrate the internal quality of the model, we add some representations.
 Those can be maps or graphs. We will proceed to some representation for the example of CakeMap.
@@ -139,18 +145,24 @@ in many cases $r$ values exceeding 0.99 are possible, even after integerisation.
 
 $r$ is a measure of the linear correlation between to vectors or matrices. In spatial microsimulation,
 if the model works, the observed and final counts in each of the categories for every zone are equal.
-So, the measure of a *linear* correlation is the one needed. The formula to calculate the Pearson's correlation between the vectors (or matrices) $x$ and $y$ is:
+This means that, when plotting, for each category, the observed counts versus the final counts, we have 
+a perfect line where abscissa and ordinates are equal.
+Thus, the measure of a *linear* correlation is the one needed. 
+The formula to calculate the Pearson's correlation between the vectors (or matrices) $x$ and $y$ is:
 
 $$ r=\frac{s_{XY}}{S_X S_Y}=\frac{\frac{1}{n}\displaystyle\sum_{i=1}^n x_iy_i -\bar{x}\bar{y}}{\sqrt{\frac{1}{n}\displaystyle\sum_{i=1}^n x_i^2-\bar{x}^2}\sqrt{\frac{1}{n}\displaystyle\sum_{i=1}^n y_i^2-\bar{y}^2}}$$
 
-This corresponds to the covariance divided by the product of the variance of each vector. This 
+This corresponds to the covariance divided by the product of the standard deviation of each vector. This 
 can sound complicated, but it is just a standardized covariance. If the fit is perfect,
-both vectors (simulated and constraint) will have a high covariance
-and the $r$ is then close to 1.
+both vectors (simulated and constraint) have the same values and the covariance is
+equal to the product of the standard deviations. Thus, the $r$ is then close to 1.
+
+Note that this measure is very influenced by outliers in the vectors. This means that if only one 
+category has a bad fit, the $r$ value is very affected.
 
 ### Absolute error measures
 
-TAE and SAE are crude yet effective measures of overall
+TAE and RE are crude yet effective measures of overall
 model fit. TAE has the additional advantage of
 being very easily understood as simply the sum of errors:
 
@@ -173,24 +185,32 @@ the number of differences.
 # : $|-1| = 1$ and $|1| = 1$.
 ```
 
-SAE is the TAE divided by the total
-population of the study area. TAE is
-sensitive to the number of people
-within the model, while SAE is not.
+RE is the TAE divided by the total
+population of the study area. This means that
+if we compare the results for all variables simultaneously,
+we divide the TAE by the total population multiplied by
+the number of variable^[This is very intuitive, since
+by considering all constraint variables together, we have taken
+the whole population once for each variable]. Thus, TAE is
+sensitive to the number of people and of categories
+within the model, while RE is not. RE can be interpreted as
+the percentage of error and corresponds just
+to the standardised version of TAE.
 
 $$
-SAE = TAE / pop
+RE = TAE / (total_pop*n_var)
 $$
 
-Mean absolute error (MAE) is the same as SAE, except the denominator is the *number* of observations that are being compared (the number of categories in the constraints multiplied by the number of zones under investigation).
+Mean relative error (MRE) needs first to calculate RE per variable and 
+per zone
 
 $$
-MAE = TAE / n
+MRE = sum_{i=1}^{n_var*n_zones}RE_{restricted to iteration i (defining zone and var)}
 $$
 
 Before seeing how these metrics can easily be implemented in code, we will
 define the other metrics defined in the above bullet points. Of the three
-'absolute error' measures, we recommend reporting SAE, as it scales with the
+'absolute error' measures, we recommend reporting RE or MRE, as it scales with the
 population of the study area.
 
 ### Root mean squared error
@@ -203,11 +223,11 @@ $$
 RMSE = \sqrt{\frac{1}{n} \sum_i^n e^2_i}
 $$
 
-RMSE is an interesting measure of the error, since SAE would be the same if the errors are $(1,1,1,1)$ or
+RMSE is an interesting measure of the error, since TAE and RE would be the same if the errors are $(1,1,1,1)$ or
 $(0,0,0,4)$. However, we consider the fit as globally better if it contains several few errors than if it is perfect for 3 zones and a higher error for the fourth. In this case, RMSE will detect this difference. 
 For the first case, RMSE is $\sqrt{\frac{4}{4}}$. For the second case, RMSE equals $\sqrt{\frac{4^2}{4}}=2$.
 
-As with TAE, there is also a standardised version of RMSE (), normalised root mean error squared (NRMSE). This is calculated by dividing RMSE by the range of the observed values:
+As with TAE, there is also a standardised version of RMSE, normalised root mean error squared (NRMSE). This is calculated by dividing RMSE by the range of the observed values:
 
 $$
 NRMSE = \frac{RMSE}{max(obs) - min(obs)} 
@@ -226,16 +246,19 @@ $$
 
 Chi-squared is a commonly used test of the fit between absolute counts of categorical variables. It has the advantage of providing a *p value*, which represents the chances of obtaining a fit between observed and simulated values through chance alone. It is primarily used to test for relationships between categorical variables (e.g. socio-economic class and smoking) but has been used frequently in the spatial microsimulation literature (Voas and Williamson 2001; Wu et al. 2008).
 
-The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values [@Diez2012]:
+The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values [@Diez2012].
+Suppose we have a simulated matrix $sim$ (for example, simulated counts) and an observed matrix $obs$, the
+chi-squared is calculated by:
 
 $$
-\chi^2= \frac{(sim_{ij} - obs_{ij})^2}{obs_{ij}}
+\chi^2= \sum_{i=1}^{n_line}\sum_{j=1}^{n_column}\frac{(sim_{ij} - obs_{ij})^2}{obs_{ij}}
 $$
 
-The *chi-squared* test is the probability of obtaining the calculated $\chi^2$ value or a worst, given the number of *degrees of freedom* (representing the number of categories) in the test.
+The *chi-squared* test is the probability of obtaining the calculated $\chi^2$ value or a worst
+(in terms of validating models, worst means a bigger difference), given the number of *degrees of freedom* 
+(representing the number of categories) in the test.
 
-An advantage of chi-squared is that it can take matrices or vectors as inputs. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate-level data for the test 
-[@Diez2012].
+An advantage of chi-squared is that it can compare as well vectors as matrices. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate-level data for the test [@Diez2012].
 
 ### Which test to use?
 
@@ -247,8 +270,7 @@ An advantage of chi-squared is that it can take matrices or vectors as inputs. A
 The aforementioned tests are just some of the most commonly
 used and most useful *goodness of fit* measures for internal validation in spatial microsimulation. The differences
 between different measures are quite subtle.
-@Voas2001 investigated the matter more
-than 10 years ago and found no consensus
+@Voas2001 investigated the matter and found no consensus
 on the measures that are appropriate for different situations.
 10 years later and we are no nearer consensus.
 
@@ -264,9 +286,9 @@ outlined above are useful and rough analogous (a perfect fit
 will mean that measures of error evaluate to zero
 and that $r = 1$). However, some are better than others.
 Following @Chai2014, we recommend using *r* as a simple test of fit and reporting *RMSE*,
-as it is a standard test used across the sciences. *RMSE* is robust to the number of observations and, using *NRMSE*, to the average size of zones also. Chi-squared also a good option as it is very mature, provides *p values* and is well known. However, chi-squared is a more complex measure of fit and does not perform well when the table contains cells with less than 5 observations, as will be common in spatial microsimulation models of small areas and many constraint categories.
+as it is a standard test used across the sciences. *RMSE* is robust to the number of observations and, using *NRMSE*, to the average size of zones also. Chi-squared is also a good option as it is very mature, provides *p values* and is well known. However, chi-squared is a more complex measure of fit and does not perform well when the table contains cells with less than 5 observations, as will be common in spatial microsimulation models of small areas and many constraint categories.
 
-We recommend reporting more than one metric, while focussing
+We recommend reporting more than one metric, while focusing
 on measures that you and your colleagues
 understand well. Comparing the results
 with one or more alternative measures will add robustness.
@@ -296,7 +318,7 @@ whole population for each variable. This implies that the sum of all cells equal
 number of people in the area by the number of variable. Our choice here is the second alternative. Then, 
 if we need more details on the fit in one zone, we can proceed to an analysis per variable for this specific case.
 
-We can also calculate the correlation of these two variables zone per zone. By this way, 
+We can also calculate the correlation of these two vectors zone per zone. By this way, 
 we will be able to notify for which zones our simulation could be less representative.
 A vector of the correlation per zone, called `CorVec` is calculated:
 
@@ -316,7 +338,7 @@ In the code below, the summary of the vector of correlation is performed. The mi
 but still close to 1. We can also observe that the first quartile is already 1. This means
 that for more than 75% of the zones, the correlation is perfect (at least with an approximation
 to 4 decimals). Moreover, by identifying the second worst zone, we can see that its correlation
-is around 0.9816. This value becomes closer to 1.
+is around 0.9816. This value becomes already very closer to 1.
 
 ```{r}
 # summary of the correlations per zone 
@@ -350,9 +372,9 @@ tae <- function(observed, simulated){
 
 By applying this function to CakeMap, we find a TAE of 26445.57, as calculated below. This may
 sound very big, but remember that this measure is very dependent on the scale of the problem.
-Indeed, an error for 26445 persons*variables out of 4,871,397 is not a so big. For this reason, 
-the standardised absolute error (SAE) is often preferable. We observe a SAE of 
-only 0.54%. Note that SAE is simply TAE divided by the total of all observed cell
+Indeed, an error for 26445 persons multiplied by variables out of 4,871,397 is not a so big error. For this reason, 
+the relative error RE (also called the standardised absolute error) is often preferable. We observe a RE of 
+only 0.54%. Note that RE is simply TAE divided by the total of all observed cell
 values (that is, the total population of the study area multiplied by the number of
 constraints).
 
@@ -363,52 +385,52 @@ tae(cons, ind_agg)
 # Total population (constraint)
 sum(cons)
 
-# SAE
+# RE
 tae(cons, ind_agg) / sum(cons) 
 ```
 
-As with all test of goodness of fit, we can perform to the analyses zone per zone. 
-For the example, we call the vector of TAE and SAE per zone respectively `TAEVec`
-and `SAEVec`.
+As with all tests of goodness of fit, we can perform the analyses zone per zone. 
+For the example, we call the vector of TAE and RE per zone respectively `TAEVec`
+and `REVec`.
 
 ```{r}
 # Initialize the vectors
 TAEVec <- rep(0, nrow(cons))
-SAEVec <- rep(0, nrow(cons))
+REVec <- rep(0, nrow(cons))
 
 # calculate the correlation for each zone
 for (i in 1:nrow(cons)){
   TAEVec[i] <- tae (cons[i,], ind_agg[i,])
-  SAEVec[i] <- TAEVec[i] / sum(cons[i,])
+  REVec[i] <- TAEVec[i] / sum(cons[i,])
 }
 ```
 
 The next step is to interpret these results. The summary of each vector will help us.
-Note that in the best case, the correlation is high, but the SAE and TAE are small.
-The zone with the highest error is also the number 84, which has a TAE of 14710 individuals*variables
-and a SAE of 21,3%. This zone seems to have a simulation a bit distant from the 
-constraint. By watching the second and third worst zone, we can see that its SAE is
+Note that in the best case, the correlation is high, but the RE and TAE are small.
+The zone with the highest error is also the number 84, which has a TAE of 14710 individuals times variables
+and a RE of 21,3%. This zone seems to have a simulation a bit distant from the 
+constraint. By watching the second and third worst zone, we can see that its RE is
 respectively around 12,5% and 7,0%. The third quartile is of order $10^{-5}$ ($10^{-3}$%). This is pretty
-close to 0. Thus, 75% of the zones has a SAE smaller than the third quartile. The maximum values aside,
-it appears that for the majority of the zones, the SAE is small.
+close to 0. Thus, 75% of the zones has a RE smaller than the third quartile. The maximum values aside,
+it appears that for the majority of the zones, the RE is small.
 
 ```{r}
 # Summary of the TAE per zone 
 summary (TAEVec)
 
-# Summary of the SAE per zone 
-summary (SAEVec)
+# Summary of the RE per zone 
+summary (REVec)
 
 # Identify the worst zone
 which.max(TAEVec)
-which.max(SAEVec)
+which.max(REVec)
 
 # Maximal value
 tail(order(TAEVec), n = 3)
-tail(order(SAEVec), n = 3)
+tail(order(REVec), n = 3)
 ```
 
-Similar analyses can be applied for the other test of goodness of fit.
+Similar analyses can be applied for the other tests of goodness of fit.
 In all cases, it is very important to have an idea of the internal validation
 of your model. For example, if we want to analyse the cake consumption by
 using your synthetic population created here, we have to be aware that for
@@ -419,7 +441,7 @@ If a single zone is responsible for the majority of error, this would suggest
 that action needs to be taken (e.g. by removing the offending zone
 or by identifying which variable is causing the error).
 To answer the previous question numerically, we can rephrase it in technical
-term: "what proportion of error in the model arises from the worst zone?"
+terms: "which proportion of error in the model arises from the worst zone?"
 This is a question we can answer with a simple R query:
 
 ```{r}
@@ -435,21 +457,23 @@ with a base-layer supplied by Google for context --- see the book's
 [online source code](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/validation.Rmd) to see how. Zone 84 is clearly visible in this map as a ward
 just above Leeds city centre. This does not immediately solve
 the problem, but it confirms that only few zones have bigger errors.
-Note that the maps presented in Figure 8.1 looks identical for TAE and SAE values
+Note that the maps presented in Figure 8.1 look identical for TAE and RE values
 except for the scale; the similitude of these measures of fit can be
 verified using a simple correlation:
 
 ```{r}
-cor(TAEVec, SAEVec) # the measures are highly correlated
+cor(TAEVec, REVec) # the measures are highly correlated
 ```
 
-In this case, both are very correlated. However, when having very different zones, in term of total population,
-it can happen having more differences on the two maps. Indeed, with the same TAE, if the zone 84 had contain
-a total population two times bigger, the SAE would be very smaller. Thus, SAE would be divided by the multiplication
-of 2 by the number of variables.
+In this case, both are quite well correlated. However, when having very different zones, 
+in term of total population,
+it can happen having more differences between the two maps. Indeed, with the same 
+TAE, if the zone 84 had contained
+a total population two times bigger, the RE would be very smaller. Thus, RE would be 
+divided by the multiplication of 2 and the number of variables.
 
 
-```{r, echo=FALSE, fig.cap="Geographical distribution of Total Absolute Error (TAE) and Standardised Absolute Error (SAE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population.", message=FALSE, warning=FALSE, results=F, fig.height=14, fig.width=9}
+```{r, echo=FALSE, fig.cap="Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population.", message=FALSE, warning=FALSE, results=F, fig.height=14, fig.width=9}
 cons_codes <- read.csv("data/CakeMap/cars-raw.csv")
 cons_codes <- as.character(cons_codes$GEO_CODE)[3:126]
 cons_codes <- data.frame(CODE = cons_codes, TAEVec)
@@ -480,28 +504,28 @@ wards$`Sqrt(TAE)` <- sqrt(wards$TAEVec)
 
 cons_codes <- read.csv("data/CakeMap/cars-raw.csv")
 cons_codes <- as.character(cons_codes$GEO_CODE)[3:126]
-cons_codes <- data.frame(CODE = cons_codes, SAEVec)
+cons_codes <- data.frame(CODE = cons_codes, REVec)
 
 cons_codes <- inner_join(wards@data[1:3], cons_codes)
 wards@data <- cbind(wards@data, cons_codes)
 
-wards$`Sqrt(SAE)` <- sqrt(wards$SAEVec)
+wards$`Sqrt(RE)` <- sqrt(wards$REVec)
 # p2 <- tm_shape(wards) +
-#   tm_fill("Sqrt(SAE)", n = 3) +
+#   tm_fill("Sqrt(RE)", n = 3) +
 #   tm_borders()
 osm_tiles <- read_osm(bbox(wards))
 
 tm_shape(osm_tiles) +
   tm_raster() +
 tm_shape(wards) +
-  tm_fill(c("Sqrt(TAE)", "Sqrt(SAE)"), n = 3, alpha = 0.5) +
+  tm_fill(c("Sqrt(TAE)", "Sqrt(RE)"), n = 3, alpha = 0.5) +
   tm_borders()
 
-# Add SAE map - commented out due to error with scale_transform
+# Add RE map - commented out due to error with scale_transform
 # bmap <- ggmap(get_map(bbbig, maptype = "terrain"))
 # bmap2 <- ggplot()
 # p2 <- bmap2 +
-#   geom_polygon(data = fwards, aes(long, lat, group = group, fill = SAEVec)
+#   geom_polygon(data = fwards, aes(long, lat, group = group, fill = REVec)
 #     , alpha = 0.4
 #     ) +
 #   geom_path(data = fwards, aes(long, lat, group = group), color = "white", size = 0.1) +
@@ -509,8 +533,8 @@ tm_shape(wards) +
 #   scale_fill_gradient(low = "green", high = "red", trans = "sqrt") 
 
 # gridExtra::grid.arrange(p1, p2)
-# SAEVec_standard <- SAEVec * (mean(SAEVec) / mean(TAEVec))
-# cons_codes <- cbind(cons_codes, SAEVec = SAEVec_standard)
+# REVec_standard <- REVec * (mean(REVec) / mean(TAEVec))
+# cons_codes <- cbind(cons_codes, REVec = REVec_standard)
 # cons_codes_molten <- gather(cons_codes, variable, value, -CODE, -OLDCODE, -NAME)
 # head(cons_codes_molten)
 # fwards <- inner_join(fwards, cons_codes_molten, by = "CODE")
@@ -525,15 +549,15 @@ tm_shape(wards) +
 #   facet_wrap(~ variable, scales = "free") +
 #   scale_fill_gradient(low = "green", high = "red", trans = "sqrt")
 
-# Plot SAEVec
+# Plot REVec
 # fwards <- fortify(wards, region = "CODE")
 # fwards <- rename(fwards, CODE = id)
 # # head(fwards)
-# tmp_df <- data.frame(CODE = cons_codes$CODE, SAEVec)
+# tmp_df <- data.frame(CODE = cons_codes$CODE, REVec)
 # fwards <- inner_join(fwards, tmp_df)
 # 
 # ggmap(get_map(bbbig, maptype = "terrain")) +
-#   geom_polygon(data = fwards, aes(long, lat, group = group, fill = SAEVec)
+#   geom_polygon(data = fwards, aes(long, lat, group = group, fill = REVec)
 #     , alpha = 0.4
 #     ) +
 #   geom_path(data = fwards, aes(long, lat, group = group), color = "white", size = 0.1) +
@@ -563,15 +587,15 @@ for this variable inside the three worst zones and the marginals of the
 observed individuals :
 
 ```{r}
-worst <- tail(order(SAEVec), n = 3)
+worst <- tail(order(REVec), n = 3)
 cons[worst, c("Car", "NoCar")] # constraint for 3 worst zones
 
 table( ind[,2] ) # individuals to weight (1 = Car ; 2= NoCar)
 ```
 
-Only few observed individuals were owning a car. Thus, for zones needing a lot of persons
-that have no car, the weight of only 178 individuals out of 916 possible can be adapted.
-The possibility of having an individual that has the whole range of characteristics needed
+Only few observed individuals were not owning a car. Thus, for zones needing a lot of persons
+that have no car, the weight of only 178 individuals out of 916 can be adapted.
+The possibility of having an individual that has the whole range of possible characteristics
 is then lower. The individuals without a car are saved in the `NoCar` variable. The contingency 
 table of these people for the number of cakes and the age shows that we have nobody of age 55-64
 eating more than 6 cakes.
@@ -586,6 +610,12 @@ The three zones with the worst simulation needed a lot of people without a car. 
 below, we print the constraint of car of the three best zones. They needed less people of this category.
 This is the risk by generating a population of 1,623,800 of inhabitants and having a survey including 
 only 916 persons.
+
+
+```{r}
+best <- head(order(REVec), n = 3)
+cons[best, c("Car", "NoCar")] # constraint for 3 best zones
+```
 
 In conclusion, the simulation runs well for all zone excepts few ones. This is due to the individuals
 present in the sample. This could be explained by a survey that was not uniformly distributed through
@@ -647,7 +677,7 @@ Table: Individual-level data from SimpleWorld with empty cells. Note there are n
 |5  |a0_49 |f   |
 
 
-Table:  Contingency table of the SimpleWorld microdata with no young males. Not the zero: this is the empty cell.
+Table:  Contingency table of the SimpleWorld microdata with no young males. Note the zero: this is the empty cell.
 
 |      |  f|  m|
 |:-----|--:|--:|
@@ -656,7 +686,7 @@ Table:  Contingency table of the SimpleWorld microdata with no young males. Not 
 
 The importance of empty cells and methods
 for identifying whether or not they exist in the
-individual-level is explained in a recent paper @Lovelace-ipfinr.
+individual-level is explained in a recent paper (@Lovelace-ipfinr).
 The number of different constraint variable permutations ($Nperm$)
 increases rapidly with the number of constraints (see
 equation \ref{eqempty} below),
@@ -709,7 +739,7 @@ $$
 This means simply that the missing cells are defined as individuals with constraint categories
 that are present in the complete dataset but absent from the input data.
 
-## External validation
+## External validation {#External}
 
 Beyond mistakes in the code, more fundamental
 questions should be asked of results based on spatial microsimulation. The validity of the
@@ -731,7 +761,7 @@ This has primarily involved checking
 that the results are internally consistent: that the output
 spatial microdata correspond with the geographical constraints.
 
-This process, generally reffered to as 'internal validation',
+This process, generally referred to as 'internal validation',
 is important because it ensures that the model is internally consistent
 and contains no obvious errors.
 However, the term 'validation' can be misleading as it
