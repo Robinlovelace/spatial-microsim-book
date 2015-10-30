@@ -557,7 +557,7 @@ more difficult-to-solve issue with the input data.
 The second and third constraints are simple marginals per zone with
 a single, clearly-defined variable each. The first constraint (`con1`),
 by contrast, is cross-tabulated, a combination of two variables
-(sex and age^[or age $\cross$ sex, as cross-tabulations are often represented].
+(sex and age^[or age $\times$ sex, as cross-tabulations are often represented]).
 We must change structure of the first constraint
 to execute `mipfp`. 
 
