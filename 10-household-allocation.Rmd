@@ -16,17 +16,19 @@ library(grid)
 
 # Household allocation {#ha}
 
-So far the book has explored data on 2 levels: the individual level and
-the level of administrative zones. The household^[This
+So far, this book has explored data on 2 levels: the individual level and
+the level of administrative zones. The household is another
+fundamental building block of human organisation around which key decision-making,
+economic and data-collecting activities are centered. We will here develop results 
+for Belgium in a specific study. Note that this
 chapter is based on a research made by Dumont Morgane (UNamur) and funded by the 
 Wallonia Region of Belgium. Timoteo Carletti (UNamur),
 Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
 Eggericks (UCL Louvain-La-Neuve) were involved in the research.
 The academic groups of DEMO from UCL-Louvain-La-Neuve and the
 OWS (Observatoire Wallon de la Santé) also provided
-support.] is another
-fundamental building block of human organisation around which key decision-making,
-economic and data-collecting activities are centered.
+support.^[More precisely, we can cite Dominique Dubourg (OWS), Véronique Tellier (OWS),
+Luc Dal (DEMO), Mélanie Bourguignon (DEMO) and Jean-Paul Sanderson (DEMO)]
 
 \index{household}
 
@@ -42,22 +44,29 @@ in descending order of detail, include:
 - Access to a sample of 
 households for which you have information about 
 each member.
-- Access to a separate datasets about individuals and households, stored in independent
+- Access to separate datasets about individuals and households, stored in independent
 data tables that are not linked by household ID.
--  No access to aggregate data relating to households, but access some
-individual-level variables related to the household of which they are a part
-(e.g. number of people living with, type of households).
+-  No access to aggregate data relating to households, but access to some
+individual-level variables related to the household of which they belong
+(e.g. number of people living with, type of household).
 
 This chapter explains methods
-for household-level data generation for the latter two cases. The first
+for household-level data generation in the latter two cases. The first
 possibility, having a sample of households,
 is the topic of next chapter (Chapter 11) on the TRESIS method.
 In this chapter, we focus on the two cases
 where you have no microdata for the households
-(one row of data per household). We begin by considering the
+(meaning data with one row per household). 
+
+The chapter is structured as followed:
+
+-*Independent data (individuals and households)* ([](#IndData)) considers the
 case in which data on households and individuals remain completely separate.
+-*With additional household's data* ([](#AddData)) presents a strategy when
+having additional data to the individual data.
+
 Note that the first section explains a method of the litterature only 
-theoretically, whereas the second sections is developped more in details
+theoretically, whereas the second sections is developed more in details
 and present results for Belgium.
 
 ## Independent data (individuals and households) {#IndData}
@@ -101,16 +110,16 @@ $$d_{\chi^2}=\sum_{i} \frac{(hh'_i-hh_i)^2}{hh_i^2} $$
 where $hh_i$ and $hh_i'$ respectively denote the number 
 of households of type $i$ in the estimated and generated 
 synthetic population. Note that this optimization is simple 
-as the number of household type is limited.
+as the number of household types is limited.
 
 ### Constituent members selection
 
 Now that a household type has been determined, we can 
 detail the members selection process. First a household 
-head is draw from the pool of individual `IndPool` defined 
+head is drawn from the pool of individuals `IndPool` defined 
 by the estimated individuals distribution `Ind`. Then, 
-depending on the household type a partner, children 
-and additional adults are also draw if necessary. 
+depending on the household types, a partner, children 
+and additional adults are also drawn if necessary. 
 This process is illustrated in Figure 10.1.
 
 ```{r, fig.cap="Constituent members selection process", fig.height=6, echo=FALSE}
@@ -123,11 +132,11 @@ obtained from their household type (for instance
 the gender of the head for an household of the type 
 `Isolated Man`). The remaining missing attributes are then:
 
-- either randomly draw according to some known distributions 
+- either randomly drawn according to some known distributions 
 (e.g. the household type x head's gender x head's age x mate's age);
 - or, if different values are feasible and equally likely, 
 retained from the distribution which minimizes $\chi^2$ between generated 
-and the estimated distributions.
+and estimated distributions.
 This is similar to what is done for the household type selection.
 
 After an individual type has been determined, then the 
@@ -136,7 +145,7 @@ corresponding member is added to the household being generated:
 - if the selected class is still populated in the `IndPool`,
 we extract an individual from this class and add it to the household;
 - else we find a suitable member by searching in the members of 
-the households already generated. This last individual is then replaced 
+the households already generated. This last individual is then replaced thanks to
 an appropriate one drawn in `IndPool`.
 
 *Addition*
@@ -145,19 +154,25 @@ we can use it to constraint the selection of the current individual type.
 
 ### End of the household generation process
 
-The household generation process ends after any one of three conditions:
+The household generation process ends after any one of these three conditions:
 if all households have been 
 constructed; if the pool of individual is empty; or if the process fails 
 to find a member for a household in the previously generated ones.
 When the procedure stops, two types of inconsistencies
 may remain in the synthetic population: the final number of 
 households may be smaller than estimated and/or the number of individuals estimated
-may be less than the known population of the area.
+may be less than the known population of the area. In this case, 
+we can form households with the remaining individuals even if 
+they are not probable and then try to make exchanges to improve
+the fit. In the research of Johan Barthelemy, they executed these
+exchanges by following the principles of a `tabu search`. This
+consists in an algorithm that try exchanges and remember the last tries
+to avoid making always the same exchange. For more information about `tabu search`: [@tabuSearch].
 
 ## Cross data: individual and household level information
 
 In some cases, information about households is included in the
-individual datasets.
+individual dataset.
 For example, individual-level data
 may include variables on type of household or/and
 the number of cohabitants in addition to gender and age. This provides cross-tabulated information between
@@ -171,7 +186,7 @@ The first is to aggregate the information concerning the individuals and
 the households independently. By this way, we build two independent 
 tables and we can use an algorithm similar to the one in [](#IndData).
 The second possibility aims in preserving the full potential of the data.
-This means that individuals are joined with the constraint to follow
+This means that individuals are joined with the constraints to follow
 as well as possible their characteristics. For example, two people
 being head can not live together; if a person has 3 cohabitants,
 he needs to be in a household of 4 individuals. 
@@ -192,10 +207,10 @@ For this process there are two possible methods. One assumes
 access to household-level variables only in the individual-level
 data. The other assumes
 access to additional data concerning the structure of the
-households such as the age difference between a married couple.
+households such as the age difference amongst a married couple.
 These options are described below. Note that in both 
 situations, the aim is to form households where each individual
-is contained in one and only one households. Each individual must respect,
+is contained in one and only one household. Moreover, each individual must respect,
 as well as possible, its household's attributes.
 
 ### Without additional household's data  {#WithoutHHdata}
@@ -210,8 +225,8 @@ size and type of households and link
 with the household head (e.g. wife, child). A good grouping is one that 
 maximises the number of well-fitted constraints.
 The perfect
-grouping would be one in which each individual respects its size,
-type of household and link with the head. In general, it
+grouping would be one in which each individual respects its household size and its
+type of household, as well as his link with the head. In general, it
 is impossible to reach a perfect grouping, since the data are not 
 perfect. Indeed, it can happen, for example, that there are an odd number
 of people who need to live in couple, making it impossible
@@ -220,14 +235,14 @@ to find a perfect coupling.
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/HH-CO.png}
-\caption{Illustration of the combinatorial problem: How to group individuals into households.}
+\caption{Illustration the problem of grouping members of married couples with children.}
 \end{center}
 \end{figure}
 
 As illustrated
-in figure 10.2, the individuals can be categorised first by
+in Figure 10.2, the individuals can be categorised first by
 type of household ("married couples with children"" in this case)
-and then by size of households. 
+and then by size of household. 
 This household type has a size of at least 3
 (two parents and at least a child).
 Inside this restricted set of households, the next step is to
@@ -244,69 +259,73 @@ a household with head 1, who is a woman; partner 2, who is a man;
 and two children: (with ids 2 and 5).
 
 The main sources of error with this method are incoherence 
-of the data and the error caused by the process of the IPF before the grouping. The method implicitly assumes that each couple is equally likely to occur, independent
-of their characteristics.
+in the data and error caused by the IPF process before the grouping. 
+The method implicitly assumes that each household is equally likely to occur, independent
+of its characteristics.
 
 
-### With additional household's data
+### With additional household's data {#AddData}
 
 Without additional data on household structure, the only
 possible method is the one described in [](#WithoutHHdata). 
 However, this allows improbable households, such as 
-couples between an individual of 18 years old and
-another of 81. For this reason, when we create households,
+a couple formed by an individual of 18 years old and
+another of 81 years. For this reason, when we create households,
 it is often very useful to take into account
-the age distributions (when these data are available).
-We can consider the ages of a
+the differences between age distributions (when these data are available).
+We can consider the ages within a
 couple, but also of parents and children.
 
-To do this, we need tables of age differences,
-with the same categories as in 
-the characteristics of the individuals. To explain 
+To do this, we need tables of age differences. These tables are pertinent only when 
+considering variables already included in the simulation (for example, it is
+unpossible to consider a table of age differences per hair color if this
+variable is not in the model). To explain 
 the process, we develop here the methodology used 
 for the creation of the couples. This means that we have 
-men and women of different ages and role in the household (head or spouse)
-and that we need to form the couples. The random draw executed when not 
-having additional data will be improved by considering the
+men and women of different ages and roles in the household (head or spouse)
+and that we need to form the couples. The random draw executed when 
+having no additional data will be improved by considering the
 real age distributions. Imagine that a part of the additional data is 
-the one in table \ref{fictivageDistrib}.
+the one in Table \ref{fictivageDistrib}.
 
 \begin{table}[h!]
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
-Municipality & Age woman & Age man & Count\\
+Municipality & Woman's age & Man's age & Count\\
 \hline
 \hline
-Namur & 20-25 & 15-20 & 4\\
+TestCity & 20-25 & 15-20 & 4\\
 \hline
-Namur & 20-25 & 20-25 & 25\\
+TestCity & 20-25 & 20-25 & 25\\
 \hline
-Namur & 20-25 & 25-30 & 18\\
+TestCity & 20-25 & 25-30 & 18\\
 \hline
-Namur & 20-25 & 30-35 & 8\\
+TestCity & 20-25 & 30-35 & 8\\
 \hline
-Namur & 20-25 & 35-40 & 2\\
+TestCity & 20-25 & 35-40 & 2\\
 \hline 
 ... & ... & ... & ...\\
 \hline
 \end{tabular}
-\caption{Example of an age distribution table for the couple without children}
+\caption{Example of an age distribution table for couples without children}
 \label{fictivageDistrib}
 \end{center}
 \end{table}
 
-Note that this is a fictive table, non corresponding to the 
-Namur data, just to explain the reasoning. Thanks to this
+Note that this is a fictive table, non corresponding to any real
+data, just to explain the reasoning. Thanks to this
 table, we know that to fit the real population, we will need 25 
-couples of man and woman in the same age class 20-25, etc.
+couples with a man and a woman, both in the same age class 20-25, etc.
 
-However, these data being not perfect, the marginals are incoherent 
-with the current synthetic population. For this reason, we will consider 
-the new data only as proportions. For our example, 
+However, these data being not perfect (because coming from different sources with 
+very little variations in the counts or because the synthetic population is not perfect), 
+the marginals could be incoherent 
+with the ones from current synthetic population. For this reason, we will consider 
+the new information only as proportions. For our example, 
 it means that in the total of women having 20-25 years old 
 (57 individuals), $\frac{4}{57}=0.07=7$\% are married with a 
-man of age 15-20. With this reasoning, we can have the new table \ref{fictivageDistrib2}, 
+man of age 15-20. With this reasoning, we can calculate the new Table \ref{fictivageDistrib2}, 
 with a supplementary column considering the proportions.
 
 \index{age distribution}
@@ -315,19 +334,19 @@ with a supplementary column considering the proportions.
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
 \hline
-Municipality & Age woman & Age man & Count & Proportion of men married \\
+Municipality & Woman's age & Man's age & Count & Proportion of men married \\
 &&&&with a woman of this age\\
 \hline
 \hline
-Namur & 20-25 & 15-20 & 4 & 7\% \\
+TestCity & 20-25 & 15-20 & 4 & 7\% \\
 \hline
-Namur & 20-25 & 20-25 & 25 & 43,9\% \\
+TestCity & 20-25 & 20-25 & 25 & 43,9\% \\
 \hline
-Namur & 20-25 & 25-30 & 18 & 31,6\% \\
+TestCity & 20-25 & 25-30 & 18 & 31,6\% \\
 \hline
-Namur & 20-25 & 30-35 & 8 & 14\% \\
+TestCity & 20-25 & 30-35 & 8 & 14\% \\
 \hline
-Namur & 20-25 & 35-40 & 2 & 3,5\% \\
+TestCity & 20-25 & 35-40 & 2 & 3,5\% \\
 \hline 
 ... & ... & ... & ... & ...\\
 \hline
@@ -337,31 +356,31 @@ Namur & 20-25 & 35-40 & 2 & 3,5\% \\
 \end{center}
 \end{table}
 
-These proportions will be useful in one step of the global process.
+These proportions will be useful in next step of the global process.
 
-The methodology for the male heads is illustrated in figure 
+The methodology for the couples with male heads is illustrated in Figure 
 \ref{AlgoCouple}. For
 female heads, the process is totally similar. First, 
-we separate the set of 
+we split the set of 
 individuals depending on their role and gender. 
 This forms male heads and female 
 partners to join on one hand; and female heads 
 with male partners on the other hand. We consider
-each head turn by turn. For each head, we
+each male head turn by turn. For each head, we
 determine the theoretical distributions of each women ages, 
-depending in the age of the head
+depending on the age of the head
 (thanks to the additional age distribution table). 
 Out of this distribution, we 
 remove the ages that are no more available in the set of 
 possible partners. Indeed, at the end of the process, 
-we have only few partners to assign. Thus, 
+it will remain only few partners to assign. Thus, 
 all ages will not be represented any more.
 Out of this distribution of ages, we calculate the
 proportions, whose will be used as probabilities in the random draw.
 Then, thanks to this, we draw an age. Finally, knowing
 the age of his partner, we choose a wife randomly. This
-process is repeated until a set of remaining individuals
-is empty, or no remaining partner is the possible age for the
+process is repeated until the set of remaining individuals
+is empty, or there are no remaining partnerin the possible ages for the
 remaining heads.
 
 \begin{figure}[h!]
@@ -372,14 +391,14 @@ remaining heads.
 \end{center}
 \end{figure}
 
-This algorithm has been applied to all municipalities in Belgium.
-The final result is illustrated in figure \ref{ResultBE}. On this graph, 
+In our research, this algorithm has been applied to all municipalities in Belgium.
+The final result is illustrated in Figure \ref{ResultBE}. On this graph, 
 each point corresponds to a combination of (age woman x age man) for a 
 municipality. Its abscissa is the theoretical count for this category, 
 included in the database of the age distributions inside couples. 
 Its ordinate is the number of couples in this category in our 
 synthetic population. Since the dots are on the line
-formed by the points having both coordinates equal, our
+formed by the points having both coordinates equal, we can argue that our
 simulation worked well.
 
 \begin{figure}[h!]
@@ -425,13 +444,21 @@ the proportion varies from 0.7\% to 1.05\%.
 
 
 
-Note that we could make a simulated annealing to resolve these kind of problems.
-In our case, we have tested it, but it is very long to obtain a result
-as good as the one shown above. However, in cases where 
+Note that a simulated annealing could be another method to resolve this kind of problems.
+In our case, we have tested it, but it takes very long CPU time to obtain a result
+as accurate as the one shown above. However, in cases where 
 the objectives are different, it is possible that a simulated annealing becomes
-better. Indeed, for our purpose, it worked, but only the computational time
-was not sufficient. If you would like to fit age distributions, 
+better. Indeed, for our purpose, it worked well, but only the computational time
+was a major drawback. If you would like to fit age distributions, 
 diploma distributions, and more complicated cases, the simulated annealing could
-be a good option.
+become a good option.
+
+## Chapter summary
+
+
+To summarise, we can group the individuals into households in all cases.
+However, depending on the precision of the available data, these allocations
+to households can be more or less close to the real population. The more pertinent information you
+have, the more your algorithm can be adapted to generate more realistic households.
 
 # References
