@@ -2,9 +2,9 @@
 title: "CakeMap"
 layout: default
 output:
-  word_document: default
   pdf_document:
     fig_caption: yes
+  word_document: default
 bibliography: bibliography.bib
 ---
 
@@ -53,15 +53,30 @@ individual-level survey, DHS --- the *microdata*.
 2. Geographically
 aggregated categorical count data from the census --- the *constraint tables*.
 
-As discussed in ([](#data-prep)), we must first decide which variables 
-should be used to link the two. We must
-select the constraints from available linking variables.
+This chapter is structured as follow: 
+-*Selection of constraint variables* ([](#CakeMapConVar)) describes and justifies
+the choice of the constraint variables on this specific example.
+-*Preparing the input data* ([](#CakePrep)) contains the pieces of code
+necessary to load and prepare the data, before to perform the spatial microsimulation.
+-*Using the `ipfp` package* ([](#CakeMapIPFP)) develops the whole process
+to create a synthetic population thanks to the R package **ipfp**.
+-*Using the `mipfp` package* ([](#CakeMIPF)) includes also the whole
+process, but with the R package **mipfp**.
+-*Comparing methods of reweighting large datasets* ([](#CompareMeth)) compares
+the different results and describes briefly how to transform one type of result
+in the other type.
 
-## Selection of constraint variables 
+
+## Selection of constraint variables {#CakeMapConVar}
 
 ```{r, echo=FALSE}
 # Reference discussion of this in C4. Is there overlap? (RL)
 ```
+
+
+As discussed in ([](#data-prep)), we must first decide which variables 
+should be used to link the two. We must
+select the constraints from available linking variables.
 
 The selection of linking variables should not be arbitrary pre-ordained
 by preconceptions. The decision of which constraints to use to
@@ -247,7 +262,7 @@ of IPF. First, weights are assigned to each individual for each zone (`ipfp` pac
 Second, weights are assigned to each possible category of individuals for each zone 
 (`mipfp` package). The next sections develop the whole procedure with each package.
 
-## Using the `ipfp` package
+## Using the `ipfp` package {#CakeMapIPFP}
 ### Performing IPF on CakeMap data {#CakeIPF}
 
 The `ipfp` reweighting strategy is concise, generalisable and computationally
@@ -401,7 +416,7 @@ save.image("cache-CakeMap.RData")
 # (MD) explain better the integerisation and the reason why you calculate the things here above
 ```
 
-## Using the `mipfp` package
+## Using the `mipfp` package {#CakeMIPF}
 
 ### Performing IPF on CakeMap data {#CakeIPF}
 
@@ -628,7 +643,7 @@ In the next section we focus on comparing **ipfp** and
 **mipfp** for real-world microsimulation applications involving
 large datasets, such as CakeMap.
 
-## Comparing methods of reweighting large datasets
+## Comparing methods of reweighting large datasets {#CompareMeth}
 
 We mentioned in the **ipfp** part of this chapter that the three constraints
 do not contain the same number of individuals. To compare 
@@ -789,3 +804,24 @@ have exactly the same probability of being in the
 sample. For example, if you make your survey in a university, 
 old people have less chance to be inside that younger. In 
 this case, the sample is not representative. 
+
+## Chapter summary
+
+In summary, this chapter has coded the whole population synthesis for the
+CakeMap example. This reasoning has been developed with two R packages : **ipfp** and
+**mipfp**. This allowed us to observe the differences in the structure of the
+input data :
+
+1. **ipfp** takes as input the individual data of the sample and the counts
+of the constraints included in a two dimensional array (even if we have several 
+constraint variables)
+2. **mipfp** considers input in contingency tables. This means that if you have 
+5 different table of constraints, each included cross tabulated variables, **mipfp**
+will take into account the 5 tables.
+
+As illustrated in the chapter, we can transform the input of one algorithm into
+the input of the other, but **mipfp** is really simpler to use when having several
+and cross-tabulated constraints.
+
+We have also seen that **ipfp** is faster for very small problems, but **mipfp**
+rapidly have better performances.
