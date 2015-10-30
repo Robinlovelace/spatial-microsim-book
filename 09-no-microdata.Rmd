@@ -23,19 +23,26 @@ that fits all the constraint tables, but based on a purely synthetic
 'seed' input cross-tabulated contingency table. Many
 combinations of individual-level data
 could correspond to these distributions. Depending on the aim
-of the spatial microsimulation model, simply finding a reasonable fit
+of the spatial microsimulation model, simply finding one reasonable fit
 can be sufficient.
 
 \index{sample-free methods}
 
 In other cases a fit based on *entropy maximisation* may be required.
 This concept involves finding the population that is most likely to
-represent the micro-level populations (Bierlaire, 1991).  \index{entropy maximisation}
+represent the micro-level populations (Bierlaire, 1991) [@Bierlaire].  \index{entropy maximisation}
 This chapter demonstrates
 two options for population synthesis when
-real individual-level or aggregate-level data is unavailable.
+real individual-level data is unavailable:
 
-## Global cross-tables and local marginal distributions
+-*Global cross-tables and local marginal distributions* ([](#CrossGlobLocalMarg)) 
+explains a method for cases where the constraints consist in cross-tables not spatially located
+and local marginal distributions.
+-*Two-level aggregated data* ([](#twoLevelData)) contains a procedure to 
+make a spatial microsimulation when having data at different aggregated level, 
+for example, one for the provinces and one for the districts.
+
+## Global cross-tables and local marginal distributions {#CrossGlobLocalMarg}
 
 Assume we have a contingency table of constraint variables
 for the entire study area (but not at the local level) in the 
@@ -48,15 +55,16 @@ re-weight individual-level data to fit the case-study area of interest.
 If the marginal distributions for small areas are known, 
 we can use the **mipfp** function as previously shown. If, however,
 the only information about the zones is the total population living
-there, the function is unusable. In this specific case, having 
-no additional data, the only option is to 
+there, the function is usable only when considering the zone as
+a variable. In this specific case, having 
+no additional data, the only option corresponds to 
 rescale the global cross-table for each zone. Note that this
 implies that the correlations between the variables
-is independent of the zone in question. 
+are independent of the zone in question. 
 
 To illustrate, we will develop the SimpleWorld example
 (which can be loaded from the book's data directory by entering
-`source("R/SimpleWorld.R")`) with 
+`source("R/SimpleWorld.R")` or was previously loaded if you as followed ([](#data-prep))) with 
 adapted constraints. When watching the available data in an aggregated level, 
 we have for the moment:
 
@@ -247,15 +255,15 @@ while (sum(total_pop) - sum(resTruncate) > 0){
 ```
 
 The new values in `res_trs` follow all constraints. 
-The adaptation of TRS could be to avoid by making a combinatorial
+The adaptation of TRS could be avoid by making a combinatorial
 optimization to decide in which zone and category
-we add individuals. However, the TRS method is 
+we add individuals, after having truncated. However, the TRS method is 
 faster and requires fewer lines of code [see @Lovelace2013-trs for more detail].
 
 After the integerisation, the last step to 
 get the final individual dataset is the 
 expansion. This stage is intuitive, since
-we have know a table containing the number of
+we have now a table containing the number of
 individuals in each category. Thus, we simply
 need to replicate the combination of categories
 the right number of times.
@@ -270,15 +278,18 @@ indices <- rep(1:nrow(countData), countData$Freq)
 ind_data <- countData[indices,]
 ```
 
-## Two-level aggregated data 
+## Two-level aggregated data {#twoLevelData}
 
 We present here how to find a possible distribution per zone when 
 having only aggregated data, but in two different levels of aggregation.
 For example, we have some data for the municipalities and other for
 the districts. A first proposition can be to use a genetic algorithm that 
-minimise the distance between the constraint and the simulation.
-The solution proposed by Barthélemy and Toint (2013), and used in this book,
-is to generate a 'seed' before the execution of IPF. 
+minimise the distance between the constraint and the simulation. This 
+can give very good solutions, but need a high level understand of
+optimisation and is rare in the literature for the moment. For classical
+problems, a simpler method is available. The basis of this method is
+explained here. The solution proposed by Barthélemy and Toint (2013), and used in this book,
+is to generate a 'seed' before executing IPF. 
 
 This paper demonstrates the simulation of a population with four characteristics
 per individual: the gender, the age class, the diploma level and the
@@ -292,7 +303,16 @@ Note that a district contains several municipalities, but
 each municipality is associated to only one district. 
 We consider the marginals of the tables being consistent. If not, 
 a preliminary step is necessary to rescale the data 
-to avoid shifting to probabilities.
+to avoid shifting to probabilities. We chose to do this to
+have the best chance to fit the data well. When shifting to
+probabilities, it is more difficult to adapt the distributions during
+the iteration. Indeed, when considering the theoretical counts, 
+if you create a young women, you just need to take the
+cell 'young' and 'women' and make minus one. When considering
+probabilities, when you create a young women, you have to recalculate all
+probabilities, because you still need less women and proportionally, more men
+than before. This is the reason why we prefer to adapt the distributions
+to the one we are the more confident.
 
 The global idea of their method is to proceed in two steps. 
 First, they simulate the cross table  of the 
@@ -306,15 +326,15 @@ The point here is to develop the process, per district,
 to simulate the four dimensional cross table, 
 with the available data. This is also done in two steps :
 
-1. Generate Age x gender x diploma level and Age x gender x professional status;
-2. Generate Age x gender x diploma level x professional status.
+1. Generate age x gender x diploma level and age x gender x professional status;
+2. Generate age x gender x diploma level x professional status.
 
 For the first step, we will explain only the 
 creation of the first cross table, since the second
 reasoning is similar. The idea is simply to proceed 
-proportionally to respect both available table.
+proportionally to respect both available tables.
 The pseudo-code below corresponds to the code 
-done by Barthélemy and Toint (2013).
+provided by Barthélemy and Toint (2013).
 
 For the clarity of the formal formula, we rename
 gender (A), age (B) and diploma level (C). To create
@@ -331,8 +351,8 @@ $$ABC(g,a,d)=\frac{AC(g,d)}{margin(d)}BC(a,d)$$
 The formula is intuitive. The fraction gives the proportion 
 of each gender inside the considered
 category of diploma level. Then, this proportion splits 
-the number of persons having characteristics b and c
-into the category of a. 
+the number of persons having characteristics a and d
+into the category of g. 
 For example, in the specific case of defining 
 (Male, Young, Academics), we will have :
 
@@ -344,31 +364,37 @@ Suppose, we have 50 young academics out of
 $$ABC(Male, Young, Aca)=\frac{60}{150}*50=20$$
 $$ABC(Female, Young, Aca)=\frac{90}{150}*50=30$$
 
-Thus, the tables Age x gender x diploma level
-and Age x gender x professional status are simulated. 
+Thus, the tables age x gender x diploma level
+and age x gender x professional status are simulated. 
 The seed for the IPF function can now be
 established, with help of the two contingencies. 
 These initial weights will be the distribution of the four
 variables inside the whole district. 
 
 This seed is generated by several iterations. The initialisation 
-of the cross table is simply a matrix of the good dimensions, 
+of the cross table is simply a matrix with the right number of dimensions, 
 with "0" in impossible cells and "1" in potentially 
 non empty cases. For example, individuals of less than 
-10 years old can not hold a diploma from university. 
+10 years can not hold a diploma from university. 
 
-With this initial point, an IPF can be perform to fit the two
+With this initial point, an IPF can be performed to fit the two
 previously determined 3 dimensional tables. The result 
 is a table with the four variables per district. 
 
 The final step is explained in 
 the previous section. Indeed, we have a contingency table
-in the district level and the zone margins. 
+at the district level and the zone margins. 
 
 
+Note that you can imagine a lot of
+combinations of IPF to perform a population
+synthesis adapted to your own data.
 
-```{r, echo=FALSE}
-# TODO (MD) : continue this way to explain how to calculate the seed
-# Please demonstrate the calculation of spatial microdata for SimpleWorld with 
-# no input microdata
-```
+# Chapter summary
+
+In summary, if you have no sample data, it is not such a big problem. 
+The techniques can be adapted and you can nevertheless create a synthetic population.
+We presented in this chapter two different methods, depending on the type of 
+possible constrain input data. First, we developed a procedure when 
+having global cross tables and local marginals. Secondly, we went through
+a spatial microsimulation when having aggregate data at different aggregation levels.
