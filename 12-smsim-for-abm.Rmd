@@ -14,6 +14,17 @@ bibliography: bibliography.bib
 # http://www.geog.leeds.ac.uk/courses/other/crime/abm/general-modelling/index.html
 ```
 
+This is the final and most advanced chapter of the book.
+It covers one of the most enticing and potentially useful extensions
+of the methods developed in the book: the modelling of complex
+agent-environment interactions whereby agents generally represent people and
+the environment tends to represent the settlements in which they live.
+The chapter is heavily reliant on the NetLogo language, which will be
+introduced in due course. This is no longer an introductory chapter:
+following the worked examples will be hard. However, when you do,
+you should have an understanding of the potential for ABM to solve a
+range of real-world issues.
+
 # Spatial microdata in agent-based models {#ABM}
 
 Agent-based modelling is a powerful and flexible approach for
@@ -983,6 +994,8 @@ library(grid)
 img <- readPNG("figures/nl-ticks.png")
 grid.raster(img)
 ```
+
+## Chapter summary
 
 This is of course only a taster of the numerous options for agent-based modelling exploration you now have at your disposal having integrated NetLogo with R. For an excellent overview with practical examples see in particular Thiele et al.(2014), which covers a variety of parameter estimation and optimisation methods as well as a comprehensive set of approaches to sensitivity analysis using the RNetLogo setup described here. 
 
