@@ -389,11 +389,12 @@ Note that you can imagine a lot of
 combinations of IPF to perform a population
 synthesis adapted to your own data.
 
-# Chapter summary
+## Chapter summary
 
-In summary, if you have no sample data, it is not such a big problem. 
-The techniques can be adapted and you can nevertheless create a synthetic population.
-We presented in this chapter two different methods, depending on the type of 
-possible constrain input data. First, we developed a procedure when 
-having global cross tables and local marginals. Secondly, we went through
-a spatial microsimulation when having aggregate data at different aggregation levels.
+In summary spatial microsimulation can be used in situations where no sample data is available.
+The techniques can be adapted to work with a synthetic population.
+This chapter presented two methods for creating synthetic populations in R, the selection
+of which should depend on the type of 
+input constraint data available. The first method assumed access to
+global cross tables and local marginals. The second
+assuming having aggregate data at different levels.
