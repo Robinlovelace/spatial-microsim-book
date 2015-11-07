@@ -124,7 +124,7 @@ for (zone in 1:length(total_pop)){ # loop over the zones
   res[zone,,] <- global_cons * total_pop[zone] / sum(global_cons)
 }
 
-# printing the cross-table for zone 1
+# Print the cross-table for zone 1
 res[1,,]
 ```
 
@@ -140,13 +140,12 @@ for (zone in 1:length(total_pop)){
  print( sum(round(res[zone,,])) == total_pop[zone] )
 }
 
-# Sav the global final table
+# Save the global final table
 SimTot <- apply(res,c(2,3),sum)
 
 # Check the global constraint (should be 0)
 sum(SimTot - global_cons)
 ```
-
 
 As with IPF, the fractional result needs to be integerised to create
 spatial microdata. The `round()` function generally provides a reasonable approximation, in terms
@@ -160,9 +159,10 @@ the round function, as shown in the code below.
 ```{r}
 # Integerisation by simply using round
 resRound <- round(res)
+resTruncate <- floor(res) # take the minimum integer value
 
 # Zero error achieved by rounding for global constraint
-apply(resRound,c(2,3),sum) - global_cons
+apply(resRound, c(2,3), sum) - global_cons
 
 # Zero error achieved by rounding for local constraint
 apply(resRound,c(1),sum) - local_cons
@@ -181,16 +181,13 @@ truncate the data and identify the missing individuals.
 
 ```{r}
 # Integerisation by adapting TRS
-# TODO: create new trs function (e.g. int_trs2)
-
 set.seed(14)
 res_trs <- res_pp <- array(dim = dim(res))
 # Apply trs (see R/functions.R to see how int_trs works)
 res_trs[] <- summary(as.factor(int_trs(res))) 
 ```
 
-```{r, echo=FALSE}
-# TODO remove or tidy this (RL)
+```{r, echo=FALSE, eval=FALSE}
 zeros <- rep(0, length(res))
 
 pp_weight <- summary(as.factor(int_pp(res))) 
@@ -203,7 +200,7 @@ res_pp[] <- summary(as.factor(int_pp(res)))
 
 
 
-```{r, echo=FALSE}
+```{r, echo=FALSE, eval=FALSE}
 # This means 4 individuals are missing
 # after we have truncated. We need to 
 # observe in which category and in which zone 
@@ -254,9 +251,8 @@ while (sum(total_pop) - sum(resTruncate) > 0){
 ```
 
 The new values in `res_trs` follow all constraints. 
-The adaptation of TRS could be avoid by making a combinatorial
-optimization to decide in which zone and category
-we add individuals, after having truncated. However, the TRS method is 
+The adaptation of TRS could be avoided by using combinatorial
+optimization to allocated individuals to zones. We use TRS here because it is 
 faster and requires fewer lines of code [see @Lovelace2013-trs for more detail].
 
 After the integerisation, the last step to 
