@@ -17,12 +17,13 @@ library(knitr) # Needed for the kable function used in this chapter.
 
 This chapter presents an alternative approach to spatial microsimulation that involves both the
 generation and simulation of individuals in household units. The method, known as TRESIS, has
-been developed for many years at the University of Sydney. TRESIS is mature and well-tested and,
-in-line with its development at the Institute for Transport and Logistics Studies (ITLS), is especially
+been developed for many years at The University of Sydney. TRESIS is mature and well-tested and,
+in-line with its development at the Institute of Transport and Logistics Studies (ITLS), is especially
 well-suited to solving transport-related problems.
 
-This is the first published implementation of TRESIS in R. It does not use a package of its own
-(although the development of a **TRESIS** package in R would be possible, building on the following code).
+This is the first published implementation of one component of TRESIS in R. 
+It does not use a package of its own
+(although the development of a **TRESIS** package implementing the TRESIS approach in R would be possible, building on the following code).
 Except for **dplyr**, **stringr** and **mlogit** (for data manipulation, string processing and
 multinomial logit models, respectively), the methods are written entirely in base R.
 Therefore, if you understand the R language well, this chapter can also be seen as a stand-alone introduction
@@ -31,7 +32,7 @@ to the TRESIS method, from a technical standpoint.
 The chapter is divided into four sections: an overview of the method with, reference to academic
 research ([](#tresis-over)); a demonstration of the generation of realistic households used in
 TRESIS, building on CakeMap input data ([](#tresis-house)); and an illustration of how demand
-models can be used to allocate these synthetic households to geographical zones ([](#tresis-alloc)).
+models can be used to allocate these synthetic households to geographic zones ([](#tresis-alloc)).
 The work concludes with a brief discussion of the merits of the approach and directions that one
 could develop the methods highlighted.
 
@@ -791,10 +792,10 @@ In particular, implementing full network assignment in R is likely to be particu
 ### Summary
 
 This chapter has provided an introduction to the TRESIS approach to population synthesis through the use of synthetic households and demand models. In it we learned to generate, allocate and model household-level
-data. TRESIS is a relative simple approach. This, combined with
+data. TRESIS is an approach that is relatively simply conceptually but that incorporates powerful behavioural features. This, combined with
 its ability to model a wide range of phenomena and behaviours in
 the synthetic households makes TRESIS well-suited to implementation in R
-(subject to data requirements). TRESIS
-and can be used for a variety of applications not limited to those involving transport models.
+(subject to data requirements). 
+It can also be applied to a variety of other applications not limited to those involving transport models.
 
 # References
