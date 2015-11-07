@@ -252,7 +252,7 @@ while (sum(total_pop) - sum(resTruncate) > 0){
 
 The new values in `res_trs` follow all constraints. 
 The adaptation of TRS could be avoided by using combinatorial
-optimization to allocated individuals to zones. We use TRS here because it is 
+optimization to allocate individuals to zones. We use TRS here because it is 
 faster and requires fewer lines of code [see @Lovelace2013-trs for more detail].
 
 After the integerisation, the last step to 
