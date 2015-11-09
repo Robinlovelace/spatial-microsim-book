@@ -455,10 +455,10 @@ become a good option.
 
 ## Chapter summary
 
-
-To summarise, we can group the individuals into households in all cases.
-However, depending on the precision of the available data, these allocations
-to households can be more or less close to the real population. The more pertinent information you
-have, the more your algorithm can be adapted to generate more realistic households.
+This chapter has described methods for allocating individuals into households.
+Depending on the precision of the available data, the process can result in
+synthetic households that are more or less representative of the real population.
+The more pertinent information available, the more realistic will be the resulting
+households.
 
 # References

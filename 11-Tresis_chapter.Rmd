@@ -15,6 +15,28 @@ library(knitr) # Needed for the kable function used in this chapter.
 
 # The TRESIS approach to spatial microsimulation {#tresis}
 
+This chapter presents an alternative approach to spatial microsimulation that involves both the
+generation and simulation of individuals in household units. The method, known as TRESIS, has
+been developed for many years at The University of Sydney. TRESIS is mature and well-tested and,
+in-line with its development at the Institute of Transport and Logistics Studies (ITLS), is especially
+well-suited to solving transport-related problems.
+
+This is the first published implementation of one component of TRESIS in R. 
+It does not use a package of its own
+(although the development of a **TRESIS** package implementing the TRESIS approach in R would be possible, building on the following code).
+Except for **dplyr**, **stringr** and **mlogit** (for data manipulation, string processing and
+multinomial logit models, respectively), the methods are written entirely in base R.
+Therefore, if you understand the R language well, this chapter can also be seen as a stand-alone introduction
+to the TRESIS method, from a technical standpoint.
+
+The chapter is divided into four sections: an overview of the method with, reference to academic
+research ([](#tresis-over)); a demonstration of the generation of realistic households used in
+TRESIS, building on CakeMap input data ([](#tresis-house)); and an illustration of how demand
+models can be used to allocate these synthetic households to geographic zones ([](#tresis-alloc)).
+The work concludes with a brief discussion of the merits of the approach and directions that one
+could develop the methods highlighted.
+
+## Overview of TRESIS modelling system {#tresis-over}
 
 TRESIS^[This is a contributed chapter by Richard B. Ellison and David A. Hensher, Institute of Transport and Logistics Studies, The University of Sydney Business School, The University of Sydney]
 is a Transport and Environment Strategy Impact Simulator originally developed by Professor David Hensher and others at the 
@@ -25,16 +47,17 @@ the environment, user expenditure and government revenue.
 TRESIS incorporates an extensive model system including discrete and continuous choice models. These are combined with a process of population (or more accurately, household) synthesis and a set of equilibration criteria.
 TRESIS provides a powerful alternative to some more widely used microsimulation implementations for evaluating strategic projects [@Hidas2005].
 
-This chapter introduces the TRESIS model system from a spatial microsimulation perspective. 
-The bulk of substantive material focusses on the generation of synthetic households, which is described in detail. 
-This is the first time that a method for implementing TRESIS' synthetic households in R has been published. 
-The methods and code blocks outlined below could therefore provide a stepping stone towards further transport modelling work in R, which is currently under-used in transport research. 
+Building on the practical focus of the book, the bulk of the substantive material
+focusses on the generation of synthetic households, which is described in detail. 
+The methods and code blocks outlined below are not provided as 'production ready' methods
+but stepping stones towards further transport modelling work in R.
+Notwithstanding recent efforts such as the **stplanr** package,^[See
+https://github.com/ropensci/stplanr for more information.]
+R is currently little-used in transport research, despite its power and flexibility.
 The chapter demonstrates how the synthetic populations generated through TRESIS can be used to identify where different types of households live using a residential location model. 
 The chapter concludes with discussion of other important aspects of transport modelling that could be integrated into R, building on this work.
 
-## Overview of TRESIS modelling system
-
-The TRESIS model system was designed to cover many of the long and short-term decisions made by individuals and households that affect how they travel.
+Overall, the TRESIS model system was designed to cover many of the long and short-term decisions made by individuals and households that affect how they travel.
 These range from the very long-term (e.g., where to live and where to work) to the very short-term (e.g., departure time and travel mode).
 When used together, the TRESIS models predict households' long-term decisions and how these decisions then affect how individuals within that household travel given user-specified transport and land-use policies.
 Although in this chapter we discuss how to implement a stand-alone residential location model, the full power of the TRESIS system is only available when the whole set of demand models is estimated and run together.
@@ -57,7 +80,7 @@ Instead, the TRESIS system estimates travel demand based on separate travel dema
 Although this means that link-level travel times for a specific individual can not be determined, it provides more reliable aggregate estimates of travel time across the whole network. 
 These are needed for the efficient running of the TRESIS models.
 
-## Synthetic households
+## Synthetic households {#tresis-house}
 
 ### What are synthetic households?
 
@@ -768,7 +791,11 @@ In particular, implementing full network assignment in R is likely to be particu
 
 ### Summary
 
-This chapter has provided an introduction to the TRESIS approach to population synthesis through the use of synthetic households and demand models.
-The relative simplicity, yet behavioural richness, of the synthetic households means they are relatively straightforward to implement in R (subject to data requirements) and can be used for a variety of applications not limited to those involving transport models.
+This chapter has provided an introduction to the TRESIS approach to population synthesis through the use of synthetic households and demand models. In it we learned to generate, allocate and model household-level
+data. TRESIS is an approach that is relatively simply conceptually but that incorporates powerful behavioural features. This, combined with
+its ability to model a wide range of phenomena and behaviours in
+the synthetic households makes TRESIS well-suited to implementation in R
+(subject to data requirements). 
+It can also be applied to a variety of other applications not limited to those involving transport models.
 
 # References

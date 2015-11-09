@@ -756,15 +756,15 @@ can be used as a basis for individual-level validation.
 
 ## Chapter summary
 
-We have explored methods of checking that the results of the
-CakeMap spatial microsimulation model correspond to reality.
-This has primarily involved checking
+This chapter explored methods for checking the results of
+spatial microsimulation, building on the CakeMap example presented in the
+previous chapter. This primarily involved checking
 that the results are internally consistent: that the output
 spatial microdata correspond with the geographical constraints.
-
 This process, generally referred to as 'internal validation',
 is important because it ensures that the model is internally consistent
 and contains no obvious errors.
+
 However, the term 'validation' can be misleading as it
 implies that the model is in some way 'valid'. 
 A model is only as good as its underlying assumptions,
