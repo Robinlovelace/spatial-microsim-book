@@ -16,7 +16,9 @@ bibliography: bibliography.bib
 
 # Spatial microsimulation for agent-based models
 
-This is the final and most advanced chapter of the book.
+This chapter, contributed by Maja Založnik, is the most advanced chapter of the
+book.^[Maja
+is based at the Oxford Institute of Population Ageing in the University of Oxford.]
 It covers one of the most enticing and potentially useful extensions
 of the methods developed in the book: agent-based modelling (ABM).
 ABM models generally consist of interacting agents representing people and

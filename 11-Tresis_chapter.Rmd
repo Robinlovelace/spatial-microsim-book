@@ -15,7 +15,10 @@ library(knitr) # Needed for the kable function used in this chapter.
 
 # The TRESIS approach to spatial microsimulation {#tresis}
 
-This chapter presents an alternative approach to spatial microsimulation that involves both the
+This chapter, by Richard Ellison and David Hensher,^[Richard B. Ellison and David A. Hensher
+are based at Institute of Transport and Logistics Studies, The University of Sydney Business School, The University of Sydney.
+]
+presents an alternative approach to spatial microsimulation that involves both the
 generation and simulation of individuals in household units. The method, known as TRESIS, has
 been developed for many years at The University of Sydney. TRESIS is mature and well-tested and,
 in-line with its development at the Institute of Transport and Logistics Studies (ITLS), is especially
@@ -38,7 +41,7 @@ could develop the methods highlighted.
 
 ## Overview of TRESIS modelling system {#tresis-over}
 
-TRESIS^[This is a contributed chapter by Richard B. Ellison and David A. Hensher, Institute of Transport and Logistics Studies, The University of Sydney Business School, The University of Sydney]
+TRESIS
 is a Transport and Environment Strategy Impact Simulator originally developed by Professor David Hensher and others at the 
 Institute of Transport and Logistics Studies (ITLS). TRESIS evolved from an earlier project for the Bureau of Transport and Communications Economics [@HensherD2002;@Hensher2002a]. 
 The TRESIS software provides users with the ability to assess the impacts of a large number of transport and land-use policies
