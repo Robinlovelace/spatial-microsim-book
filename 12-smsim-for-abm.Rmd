@@ -14,7 +14,7 @@ bibliography: bibliography.bib
 # http://www.geog.leeds.ac.uk/courses/other/crime/abm/general-modelling/index.html
 ```
 
-# Spatial microsimulation for agent-based models
+# Spatial microsimulation for agent-based models {#ABM}
 
 This chapter, contributed by Maja Založnik, is the most advanced chapter of the
 book.^[Maja
