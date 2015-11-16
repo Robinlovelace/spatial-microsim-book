@@ -30,26 +30,12 @@ ind_catt <- t(ind_cat) # save transposed version of ind_cat
 x0 <- rep(1, nrow(ind)) # save the initial vector
 weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
 
-int_pp <- function(x){
-  sample(length(x), size = round(sum(x)), prob = x, replace = T)
-}
+source('R/functions.R')
 
 set.seed(0)
 int_pp(x = c(0.333, 0.667, 3))
 int_pp(x = c(1.333, 1.333, 1.333))
 
-int_trs <- function(x){
-  truncated <- which(x >= 1)
-  replicated <- rep(truncated, floor(x[truncated]))
-  r <- x - floor(x)
-  def <- round(sum(x)) - length(replicated) # the deficit population
-  if(def == 0){
-    out <- replicated
-  } else {
-    out <- c(replicated, sample(length(x), size = def, prob = r, replace = F))
-  }
-  out
-}
 
 # Method 2: using apply
 ints <- unlist(apply(weights, 2, int_trs)) # generate integerised result
