@@ -30,7 +30,7 @@ ind_catt <- t(ind_cat) # save transposed version of ind_cat
 x0 <- rep(1, nrow(ind)) # save the initial vector
 weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
 
-source('R/functions.R')
+source("R/functions.R")
 
 set.seed(0)
 int_pp(x = c(0.333, 0.667, 3))
@@ -38,8 +38,13 @@ int_pp(x = c(1.333, 1.333, 1.333))
 
 
 # Method 2: using apply
-ints <- unlist(apply(weights, 2, int_trs)) # generate integerised result
-ints_df <- data.frame(id = ints, zone = rep(1:nrow(cons), colSums(weights)))
+ints <- apply(weights, 2, int_trs) # generate integerised result
+indices <- NULL
+ints <- for(i in 1:ncol(ints)){
+  indices <- c(indices, int_expand_vector(ints[,i]))
+}
+
+ints_df <- data.frame(id = indices, zone = rep(1:nrow(cons), colSums(weights)))
 
 ind_full <- read.csv("data/SimpleWorld/ind-full.csv")
 library(dplyr) # install.packages(dplyr) if not installed
