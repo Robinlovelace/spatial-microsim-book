@@ -175,62 +175,100 @@ If a zone had 4 individuals and three categories, for example,
 the resulting weights could be
 $(\frac{4}{3},\frac{4}{3},\frac{4}{3})$. Then, 
 the rounding gives $(1,1,1)$ and one individual 
-would be missing.
-To adapt the method to use TRS, the first stage is to 
-truncate the data and identify the missing individuals.
+would be missing. We can try the algorithms proposed
+in ([](#sintegerisation)). However, as we
+can see with the two little following codes, this leads to
+some errors regarding to the constraints.
 
 ```{r}
-# Integerisation by adapting TRS
-set.seed(14)
+# Integerisation with pp
+res_pp[] <- int_pp(res)
+
+apply(res_pp, c(2,3), sum) - global_cons
+```
+
+This little errors are often very small and if
+you model a whole country, the relative error is
+small. Note that this little error comes from the
+random draw at last stage of the algorithm.
+Here, TRS is better than PP, as explained
+in Chapter 5.
+
+```{r}
+# Integerisation with trs
+set.seed(17)
 res_trs <- res_pp <- array(dim = dim(res))
 # Apply trs (see R/functions.R to see how int_trs works)
-res_trs[] <- summary(as.factor(int_trs(res))) 
-```
+res_trs[] <- int_trs(res)
 
-```{r, echo=FALSE, eval=FALSE}
-zeros <- rep(0, length(res))
-
-pp_weight <- summary(as.factor(int_pp(res))) 
-
-zeros[as.numeric(names(pp_weight))] <- pp_weight
-pp_weight[1:length(res)]
-summary(as.factor(int_pp(res))) 
-res_pp[] <- summary(as.factor(int_pp(res))) 
+# Print the errors
+apply(res_trs, c(2,3), sum) - global_cons
 ```
 
 
+If desired, we can adapt TRS to make sure to 
+fit the constraints at the end.
+To adapt the method to use TRS, the first stage is to 
+truncate^[Note that truncate means 
+round each weight to the first integer under the weight. This implies
+that we underevaluate the population.] the data and identify the missing individuals, in 
+terms of constraints.
 
-```{r, echo=FALSE, eval=FALSE}
-# This means 4 individuals are missing
-# after we have truncated. We need to 
-# observe in which category and in which zone 
-# we have to add individuals.
 
+```{r}
+# Truncate
 resTruncate <- floor(res)
 
 # number of missing individuals
 sum(total_pop) - sum(resTruncate)
+```
+
+This means that, in total, 4 individuals are missing
+after we have truncated. We will have to chose which categories
+will be incremented. For this, the basic TRS take the decimal parts
+of the weights (that were forgotten when truncate) and
+make a random draw inside this distribution. This is in this step that
+we can add an error in terms of the constraints. To make a better fit after
+integerisation, we need to 
+observe in which category and in which zone 
+we have to add individuals.
+
+```{r}
 # Calculate the total simulated cross-table
+# After truncate
 SimTotTruncate <- apply(resTruncate,c(2,3),sum)
 
-# number of missing individuals per category
+# Number of missing individuals per category
+# After truncate
 ToAdd <- global_cons - SimTotTruncate
 ToAdd
 
-# number of missing individuals per zone
+# Number of missing individuals per zone
+# After truncate
 ToComplete <- local_cons - apply(resTruncate,c(1),sum)
 ToComplete
+```
 
-# The principle is to add people in the not completed zones and
-# categories. The cells to be implemented are always chosen as the one
-# with the bigger decimal parts. Note that we chose
-# to adapt the `resTruncate` instead of defining
-# another tabular.
+We observe that the individuals to add are one per
+category of age and sex. In terms of zones, one individual is
+missing in zone one and three, whereas two persons will have to
+be added in zone 2.
 
+
+The principle now is to add people in the not completed zones and
+categories. The cells to be incremented are always chosen as the one
+with the bigger decimal parts (as in TRS). Note that we chose
+to adapt the `resTruncate` instead of defining
+another tabular. The code works as followed: As long as there are missing
+individuals in the matrix, we look at next biggest decimal and add
+an individual in the corresponding cell if someone is missing in this 
+category and in this zone.
+
+```{r}
 # Calculate the decimals left by truncate
 decimals <- res - resTruncate
 
-# Adapting resTruncate to fit all constraints # NB - this is counter-weight
+# Adapting resTruncate to fit all constraints
 while (sum(total_pop) - sum(resTruncate) > 0){
   # find the biggest decimals
   i <- which( decimals == max(decimals), arr.ind = TRUE)
@@ -250,7 +288,7 @@ while (sum(total_pop) - sum(resTruncate) > 0){
 }
 ```
 
-The new values in `res_trs` follow all constraints. 
+The new values in `resTruncate` follow all constraints. 
 The adaptation of TRS could be avoided by using combinatorial
 optimization to integerise. Indeed, this process could choose for 
 each cell to take the integer just under or just above the weight by
