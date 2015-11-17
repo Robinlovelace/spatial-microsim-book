@@ -57,7 +57,7 @@ the only information about the zones is the total population living
 there, the function is usable only when considering the zone as
 a variable. In this specific case, having 
 no additional data, the only option corresponds to 
-rescale the global cross-table for each zone. Note that this
+re-scale the global cross-table for each zone. Note that this
 implies that the correlations between the variables
 are independent of the zone in question. 
 
@@ -95,7 +95,7 @@ local_cons <- total_pop
 ```
 
 When only the total population is known for each zone, the best way to 
-create a synthetic population is to simply rescale the cross-table.
+create a synthetic population is to simply re-scale the cross-table.
 For each zone, a table proportional to the global one is created.
 The results are stored in a three dimensional array, which first
 dimension represents the zone. The initialisation of the resulting
@@ -111,7 +111,7 @@ res <- array(0, dim=c(nrow(cons), dim(global_cons)),
 ```
 
 Now the final weight table is calculated, simply by 
-taking the global matrix and rescaling it to fit the 
+taking the global matrix and re-scaling it to fit the 
 the desired marginals. In this way we keep the global
 proportions, but with the correct total per zone.
 Note that making this process is exactly the same as 
@@ -169,25 +169,25 @@ apply(resRound,c(1),sum) - local_cons
 ```
 
 It is due to luck (and the small size of the SimpleWorld example)
-that the `round` method works in this case. In most 
-cases, however, there will be errors due to rounding. 
+that the `round` method works in this case: in most 
+cases there will be errors due to rounding. 
 If a zone had 4 individuals and three categories, for example,
 the resulting weights could be
 $(\frac{4}{3},\frac{4}{3},\frac{4}{3})$. Then, 
-the rounding gives $(1,1,1)$ and one individual 
-would be missing. We can try the algorithms proposed
-in ([](#sintegerisation)). However, as we
-can see with the two little following codes, this leads to
-some errors regarding to the constraints.
+the rounding gives $(1,1,1)$ and there would be too
+few individuals in the synthetic population (3 not 4). We can try the algorithms proposed
+in ([](#sintegerisation)). However, as illustrated
+by the following code chunks, these integerisation methods lead to
+errors in relation to the constraints.
 
 ```{r}
 # Integerisation with pp
-res_pp[] <- int_pp(res)
+res_pp <- int_pp(res)
 
 apply(res_pp, c(2,3), sum) - global_cons
 ```
 
-This little errors are often very small and if
+These errors are often very small and if
 you model a whole country, the relative error is
 small. Note that this little error comes from the
 random draw at last stage of the algorithm.
@@ -205,15 +205,13 @@ res_trs[] <- int_trs(res)
 apply(res_trs, c(2,3), sum) - global_cons
 ```
 
-
-If desired, we can adapt TRS to make sure to 
-fit the constraints at the end.
-To adapt the method to use TRS, the first stage is to 
+If desired, we can adapt TRS to ensure it fits 
+fit the constraints at the end of the process.
+To adapt the method to use TRS, we first 
 truncate^[Note that truncate means 
 round each weight to the first integer under the weight. This implies
-that we underevaluate the population.] the data and identify the missing individuals, in 
+that we underestimated the population.] the data and identify the missing individuals, in 
 terms of constraints.
-
 
 ```{r}
 # Truncate
@@ -254,7 +252,6 @@ category of age and sex. In terms of zones, one individual is
 missing in zone one and three, whereas two persons will have to
 be added in zone 2.
 
-
 The principle now is to add people in the not completed zones and
 categories. The cells to be incremented are always chosen as the one
 with the bigger decimal parts (as in TRS). Note that we chose
@@ -292,7 +289,7 @@ The new values in `resTruncate` follow all constraints.
 The adaptation of TRS could be avoided by using combinatorial
 optimization to integerise. Indeed, this process could choose for 
 each cell to take the integer just under or just above the weight by
-optimasing the fit to the constraints. We use TRS here because it is 
+optimising the fit to the constraints. We use TRS here because it is 
 faster and requires fewer lines of code [see @Lovelace2013-trs for more detail].
 
 After the integerisation, the last step to 
@@ -337,7 +334,7 @@ data was:
 Note that a district contains several municipalities, but 
 each municipality is associated to only one district. 
 We consider the marginals of the tables being consistent. If not, 
-a preliminary step is necessary to rescale the data 
+a preliminary step is necessary to re-scale the data 
 to avoid shifting to probabilities. We chose to do this to
 have the best chance to fit the data well. When shifting to
 probabilities, it is more difficult to adapt the distributions during
