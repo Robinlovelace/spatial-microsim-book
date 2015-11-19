@@ -1374,7 +1374,7 @@ one or the other structure of weights.
 
 ### Weights per individual
 
-In this case, each integerised weight correspond
+In this case, each integerised weight corresponds
 to the number of needed repetitions for each individual.
 For this purpose, we will first generate a 
 vector of IDs of the sampled individuals. This can be achieved 
