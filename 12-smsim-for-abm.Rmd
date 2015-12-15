@@ -371,7 +371,7 @@ The model will have the following adjustable parameters:
 1. The field of vision has two parameters: the viewing angle and the distance
 2. Average level of *bribeability* of inhabitants: if their level is less than 100%, a random number generator will be used to determine whether the agent accepts the bribe or not. The distribution of bribeability is approximately normal with a mean and a standard deviation.
 
-### More Variable Definitions
+### Variable Definitions
 
 We first need to define these four global variables using settings widgets. To do this use the add button to add the following four sliders to the model:
 
@@ -406,7 +406,7 @@ inhabitants-own [
   in-negotiations]
 ```
 
-### More Setup Procedures
+### Setup procedures
 
 Before we start constructing the `Go` procedure, we need to add one more setup procedure: one that assigns each agent a random level of bribeability. We will sample from a normal distribution with the mean and standard deviation defined using the sliders. One way of doing that is with the following 
 line:^[You
@@ -445,7 +445,7 @@ end
 
 Try it out with different values for the average and standard deviation of bribeability and make sure it never goes outside the bounds of meaningfulness. 
 
-### The Main Go Procedure
+### The go procedure
 
 We are now ready to write the main action procedure, normally labelled the `go` procedure. To do that we create a button in the same manner as before, this time running the command `go`, and make sure we tick the `Forever` tickbox in the dialogue box. This means clicking the 'go' button (with a circular arrow on the face) will execute the command *repeatedly*, until we stop it manually or until an end condition is met. Let's first set up the bare bones of the go procedure: in each time step we want the inhabitants to `reposition` themselves, to `engage` in the bribery negotiations and we want to `record` their states in their `history` variables. Finally we want the tick counter to advance by a single time step:
 

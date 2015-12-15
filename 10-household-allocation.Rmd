@@ -419,13 +419,13 @@ without an household, but some individuals are in a household not
 corresponding to its size.
 
 Figure \ref{NonAssigne} indicates that the
-worst municipality has only 0.5\% of non assigned individuals. The vast majority 
+worst municipality has only 0.5\% of non-assigned individuals. The vast majority 
 of the Belgian municipalities has less than 0.1\% of these individuals.
 
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=\textwidth]{figures/Belgium/NonAssigne.png}
-\caption{Illustration of the non assigned individuals in Belgium}
+\caption{Illustration of the non-assigned individuals in Belgium}
 \label{NonAssigne}
 \end{center}
 \end{figure}
