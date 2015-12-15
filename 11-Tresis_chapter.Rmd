@@ -35,7 +35,7 @@ to the TRESIS method, from a technical standpoint.
 The chapter is divided into four sections: an overview of the method with, reference to academic
 research ([](#tresis-over)); a demonstration of the generation of realistic households used in
 TRESIS, building on CakeMap input data ([](#tresis-house)); and an illustration of how demand
-models can be used to allocate these synthetic households to geographic zones ([](#tresis-alloc)).
+models can be used to allocate these synthetic households to geographic zones (Section 11.3).
 The work concludes with a brief discussion of the merits of the approach and directions that one
 could develop the methods highlighted.
 
@@ -64,7 +64,7 @@ Overall, the TRESIS model system was designed to cover many of the long and shor
 These range from the very long-term (e.g., where to live and where to work) to the very short-term (e.g., departure time and travel mode).
 When used together, the TRESIS models predict households' long-term decisions and how these decisions then affect how individuals within that household travel given user-specified transport and land-use policies.
 Although in this chapter we discuss how to implement a stand-alone residential location model, the full power of the TRESIS system is only available when the whole set of demand models is estimated and run together.
-The figure below shows an overview of the high-level TRESIS model structure [@Hensher2008].
+The figure below shows an overview of the high level TRESIS model structure [@Hensher2008].
 ![Overview of TRESIS model structure](figures/TRESISModels.png)
 
 The TRESIS demand models have been estimated from a combination of stated preference (SP) and revealed preference (RP) data using the NLOGIT software (see @Hensher2015 for details of the software and estimation models).
@@ -80,7 +80,7 @@ In contrast, standard micro-simulation techniques commonly used in transport are
 TRESIS tends to operate at higher geographical levels than micro-simulation systems. 
 Individuals in the household are not run through a micro-simulation model to determine specific routes.
 Instead, the TRESIS system estimates travel demand based on separate travel demand models within a network assignment model.
-Although this means that link-level travel times for a specific individual can not be determined, it provides more reliable aggregate estimates of travel time across the whole network. 
+Although this means that link level travel times for a specific individual can not be determined, it provides more reliable aggregate estimates of travel time across the whole network. 
 These are needed for the efficient running of the TRESIS models.
 
 ## Synthetic households {#tresis-house}
@@ -109,12 +109,12 @@ It must be emphasised that household weights do not change when they are assigne
 
 ### Required data for generating synthetic households
 
-Like IPF and other population synthesis methods discussed previously, the generation of synthetic households in TRESIS requires a combination of micro-level census data and aggregate population statistics.
+Like IPF and other population synthesis methods discussed previously, the generation of synthetic households in TRESIS requires a combination of micro level census data and aggregate population statistics.
 
 The microdata needs to include matched household and individual level data. These are retained within the synthetic households.
 The aggregate population data should include the variables that are of most
 relevance to the research question for selecting synthetic households.
-The only *requirement* from the aggregate-level data is that it includes 
+The only *requirement* from the aggregate level data is that it includes 
 a total count for the whole study area.
 The census data should ideally be available as a multi-way cross-tabulation for each combination of variables that are desired for representing the households in the target population.
 The reasons for this are explained further later in this chapter.
@@ -128,7 +128,7 @@ if the variables are comparable.
 
 Generating synthetic households in R, using the TRESIS method, requires three stages.
 The first involves ensuring that the variables in the micro-data sample are compatible with those used in the demand models.
-Where variables used in the demand models or in the aggregate population-level data are derived from one (or more) of the original micro-data variables, then these variables must be defined for each of the households in the micro-data sample.
+Where variables used in the demand models or in the aggregate population level data are derived from one (or more) of the original micro-data variables, then these variables must be defined for each of the households in the micro-data sample.
 The second stage involves selecting variables on which to base the synthetic households and then calculating their weights and required sample.
 Third, the micro-data is sampled to generate the final synthetic households each with an individual weight based on their incidence in the population.
 
@@ -200,10 +200,10 @@ hhlds[,c("hhld","numres","numworkers","nummanager",
          "numprof","numrout","numcars")]
 ```
 
-This code uses __dplyr__'s group_by() and summarise() functions to generate the household-level data from the individual-level data.
-Generally, some household-level data is already provided in the micro-data sample from the census but it may be necessary to add additional summary variables using the individual-level micro-data.
+This code uses __dplyr__'s group_by() and summarise() functions to generate the household level data from the individual level data.
+Generally, some household level data is already provided in the micro-data sample from the census but it may be necessary to add additional summary variables using the individual level micro-data.
 
-The _cons_ data frame from the CakeMap dataset contains the aggregate population-level data we need for generating the weights and identifying the required sample.
+The _cons_ data frame from the CakeMap dataset contains the aggregate population level data we need for generating the weights and identifying the required sample.
 However, since the _cons_ data frame is at the Ward level, we need to aggregate to get a total for all the wards.
 This is easy to accomplish by using the colSums() function:
 
@@ -402,7 +402,7 @@ synhhldDF <- data.frame(hhld=synhhlds,
                        )
 ```
 
-Once this has been done generating the synthetic household dataset is relatively straightforward requiring us to merge the individual and household-level data for our desired households.
+Once this has been done generating the synthetic household dataset is relatively straightforward requiring us to merge the individual and household level data for our desired households.
 In TRESIS itself, this is followed by some additional work to ensure that any variables not required for the models are removed as well as making any necessary changes to ensure confidentiality of the micro-data is retained.
 
 ```{r}
@@ -446,7 +446,7 @@ However, the TRESIS approach can be used even with a single stand-alone resident
 At its most basic, a residential location model as used with the TRESIS synthetic households is a discrete choice model that predicts, up to a probability, in which area each household will choose to live given their unique set of socio-demographic characteristics and the characteristics of the different zones.
 Although the full details of the estimation of discrete choice models is outside the scope of this book, it is worth briefly discussing how the models used for TRESIS can be estimated.
 The discrete choice models used for residential location in TRESIS have been estimated from disaggregate choice data collected using a combination of revealed preference and stated preference surveys.
-It is also possible to estimate discrete choice models using micro-level data provided sufficient spatial detail is available for your purposes.
+It is also possible to estimate discrete choice models using micro level data provided sufficient spatial detail is available for your purposes.
 The models in TRESIS were estimated using the NLOGIT software package because it provides features needed for advanced models unavailable in most other packages.
 However, many discrete choice models as would be used by those developing residential location models can also be estimated in R using the __mlogit__ and __mnlogit__ packages.
 
@@ -524,7 +524,7 @@ In this model, the subscript on _U_ indicates the zone, _mgmt_ is the number of 
 
 Applying the model requires the values of each of the synthetic households to be run through the utility equations to calculate the probabilities of the households living in each of the four zones.
 The easiest way to calculate the utilities for each synthetic household is to make use of R's vector functionality.
-Since our model includes only household-level characteristics, we begin by simplifying the synthetic household data to one row per household with only the variables necessary for our model, making sure to rename them to match the variable names in our utility expressions:
+Since our model includes only household level characteristics, we begin by simplifying the synthetic household data to one row per household with only the variables necessary for our model, making sure to rename them to match the variable names in our utility expressions:
 
 ```{r}
 synrun <- unique(synhhlddata[,c("hhld","nummanager","numprof",
@@ -761,7 +761,7 @@ Although TRESIS is a land-use and transport simulator, the approach described he
 ### Limitations
 
 The primary limitation of the TRESIS approach to population synthesis is 
-its heavy reliance on detailed disaggregate household and population-level data.
+its heavy reliance on detailed disaggregate household and population level data.
 This means that acquiring the necessary data needed for generating the synthetic households, and estimating and calibrating the models is frequently a time-consuming and sometimes expensive undertaking. In many contexts
 such data simply does not exist.
 
@@ -775,14 +775,14 @@ As such, the methods developed for TRESIS have been optimised for passenger tran
 However, there is ongoing development within the Institute of Transport and Logistics Studies to develop freight and light commercial vehicle models.
 These models, although different in some ways to the passenger models, have been found fit in well with the concept of synthetic households.
 In contrast to the passenger models that rely on synthetic households, the freight and commercial vehicle models have applied the concept used for generating synthetic households, to firms resulting in the development of "synthetic firms".
-Just as synthetic households are a collection of socio-demographic variables, synthetic firms are a collection of firm-level (and worker) characteristics.
+Just as synthetic households are a collection of socio-demographic variables, synthetic firms are a collection of firm level (and worker) characteristics.
 The data requirements of synthetic households are however also problematic for synthetic firms.
 
 ### MetroScan-TI
 TRESIS, although extremely powerful in many ways, has lacked some features that are increasingly being needed for a full assessment of potential transport and infrastructure projects.
 MetroScan-TI is the latest evolution of the TRESIS model system that is currently being developed and incorporates all the behavioural richness of the original TRESIS models and extends this to include a much more detailed zone structure, a fully integrated network assignment model, freight models, models for firm location and modules for cost-benefit analysis and wider economy impact assessments.
 MetroScan-TI is intended to provide users with the ability to quickly and easily prioritise a large number of potential projects on a wide range of variables.
-These projects include the standard transport infrastructure (new railway lines, roads and service improvements) as well as other infrastructure and strategic-level property development (the mix and number of flats, semi-detached and detached houses).
+These projects include the standard transport infrastructure (new railway lines, roads and service improvements) as well as other infrastructure and strategic level property development (the mix and number of flats, semi-detached and detached houses).
 
 ### Extending residential location to transport models in R
 Residential location models are an important component of any fully integrated transport model because they provide the "productions" (i.e., demand) for travel.
@@ -794,7 +794,7 @@ In particular, implementing full network assignment in R is likely to be particu
 
 ### Summary
 
-This chapter has provided an introduction to the TRESIS approach to population synthesis through the use of synthetic households and demand models. In it we learned to generate, allocate and model household-level
+This chapter has provided an introduction to the TRESIS approach to population synthesis through the use of synthetic households and demand models. In it we learned to generate, allocate and model household level
 data. TRESIS is an approach that is relatively simply conceptually but that incorporates powerful behavioural features. This, combined with
 its ability to model a wide range of phenomena and behaviours in
 the synthetic households makes TRESIS well-suited to implementation in R

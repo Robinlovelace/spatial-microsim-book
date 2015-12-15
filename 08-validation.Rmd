@@ -138,7 +138,7 @@ Those can be maps or graphs. We will proceed to some representation for the exam
 
 ### Pearson's *r*
 
-Pearson's coefficient of correlation ($r$) is the most commonly used measure of aggregate-level model fit for internal validation. *r* is popular because it provides a fast and simple insight
+Pearson's coefficient of correlation ($r$) is the most commonly used measure of aggregate level model fit for internal validation. *r* is popular because it provides a fast and simple insight
 into the fit between the simulated data and the constraints at an aggregate level. In most cases
 $r$ values greater than 0.9 should be sought in spatial microsimulation and
 in many cases $r$ values exceeding 0.99 are possible, even after integerisation.
@@ -258,7 +258,7 @@ The *chi-squared* test is the probability of obtaining the calculated $\chi^2$ v
 (in terms of validating models, worst means a bigger difference), given the number of *degrees of freedom* 
 (representing the number of categories) in the test.
 
-An advantage of chi-squared is that it can compare as well vectors as matrices. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate-level data for the test [@Diez2012].
+An advantage of chi-squared is that it can compare as well vectors as matrices. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate level data for the test [@Diez2012].
 
 ### Which test to use?
 
@@ -277,7 +277,7 @@ on the measures that are appropriate for different situations.
 Such measures, that compare aggregate
 count datasets, are *not* sufficient to ensure that the results of
 spatial microsimulation are reliable: they are methods of *internal validation*.
-They simply show that the individual-level dataset has
+They simply show that the individual level dataset has
 been reweighted to fit with a handful of constraint variables: i.e. that the
 process has work under on its own terms.
 
@@ -293,7 +293,7 @@ on measures that you and your colleagues
 understand well. Comparing the results
 with one or more alternative measures will add robustness.
 However, a more important
-issue is external validation: how well our individual-level
+issue is external validation: how well our individual level
 results correspond with the real world.
 
 ### Internal validation of CakeMap
@@ -635,7 +635,7 @@ Roughly speaking, 'empty cells' refer to individuals who are absent from
 the input microdata. More specifically, empty cells represent
 individuals with a combination of attributes in the constraint variables
 that are likely to be present in the real spatial microdata but are known not
-to exist in the individual-level data. Empty cells are easiest to envision
+to exist in the individual level data. Empty cells are easiest to envision
 when the 'seed' is represented as a contingency table. Imagine, for example,
 if the microdata from SimpleWorld contained no young males:
 
@@ -662,13 +662,13 @@ table(ind_nym)
 
 # xtable way
 # library(xtable)
-# xt <- xtable(ind_nym, caption = "Individual-level data from SimpleWorld with empty cells. Note there are no young males.")
+# xt <- xtable(ind_nym, caption = "Individual level data from SimpleWorld with empty cells. Note there are no young males.")
 # print(xt, caption.placement = "top", type = "latex", comment = FALSE)
 # xt <- xtable(table(ind_nym), "Contingency table of the SimpleWorld microdata with no young males. Not the zero: this is the empty cell.")
 # print(xt, caption.placement = "top", comment = FALSE, type = "latex", booktabs = TRUE)
 ```
 
-Table: Individual-level data from SimpleWorld with empty cells. Note there are no young males.
+Table: Individual level data from SimpleWorld with empty cells. Note there are no young males.
 
 |   |age   |sex |
 |:--|:-----|:---|
@@ -687,7 +687,7 @@ Table:  Contingency table of the SimpleWorld microdata with no young males. Note
 
 The importance of empty cells and methods
 for identifying whether or not they exist in the
-individual-level is explained in a recent paper (@Lovelace-ipfinr).
+individual level is explained in a recent paper (@Lovelace-ipfinr).
 The number of different constraint variable permutations ($Nperm$)
 increases rapidly with the number of constraints (see
 equation \ref{eqempty} below),
@@ -721,7 +721,7 @@ is.complete =
 
 Once the presence of empty cells is determined, the next
 stage is to identify which types of individuals
-are missing from the individual-level input
+are missing from the individual level input
 dataset ($Ind$).
 
 ```{r, echo=FALSE}
@@ -752,7 +752,7 @@ therefore a tricky topic which is highly dependent on the available data
 Geocoded survey data, *real* spatial microdata, is the
 'gold standard' when it comes to official data.
 Small representative samples of the population for small areas
-can be used as a basis for individual-level validation. 
+can be used as a basis for individual level validation. 
 
 ## Chapter summary
 

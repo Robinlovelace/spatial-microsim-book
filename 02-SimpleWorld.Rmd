@@ -10,7 +10,7 @@ bibliography: bibliography.bib
 This chapter focuses on the minimum input datasets needed for the classical type
 of microsimulation. We will use input data on
 the inhabitants of an imaginary world
-(geographical individual-level) called SimpleWorld to demonstrate
+(geographical individual level) called SimpleWorld to demonstrate
 the basic concepts and techniques to perform spatial microsimulation with R.
 
 This is the
@@ -39,7 +39,7 @@ subtitle of this book is "a *practical* introduction" for a reason!
 
 This chapter is ordered as follows:
 
-- *Getting set-up with the RStudio environment* ([](#rstudioUpSpeed)) contains
+- *Getting setup with the RStudio environment* ([](#rstudioUpSpeed)) contains
 the basic explanation of RStudio to enable you to code the examples of this 
 book on your own computer.
 - *SimpleWorld data* ([](#SimpleWorldData)) describes the context and the
@@ -51,15 +51,15 @@ of a spatial microsimulation.
 -*SimpleWorld in context* ([](#SimpleWorldContext)) mentions the kind of
 context where the output could be use.
 
-## Getting set-up with the RStudio environment {#rstudioUpSpeed}
+## Getting setup with the RStudio environment {#rstudioUpSpeed}
 
-Before progressing further, it is important to ensure that R is set-up correctly
+Before progressing further, it is important to ensure that R is setup correctly
 and working on your computer, so you can follow the practical examples.
 This section will not go into much detail. Further resources are provided in
 the Appendix at the end of the book to provide insight into how R
 works as a programming language.
 
-The majority of the help that you need to install and set-up R on your computer
+The majority of the help that you need to install and setup R on your computer
 can be found online, so it is recommended that you consult this section with
 reference to online searches and help pages. As with all open source software
 projects R evolves over time so it is important to keep up-to-date with
@@ -93,7 +93,7 @@ install.packages("mipfp")
 
 RStudio is an Integrated Development Environment (IDE) for R.
 It provides an advance Graphical User Interface (GUI) that makes it easier not only to write R code, but to install packages, manage R's graphical outputs and work effectively on mulitple projects.
-If you are an R beginner, it is highly recommended that you use RStudio for the work presented in this book because it will enable you to spend less time worrying about how to write R code and set-up R correctly and more time focussed on spatial microsimulation.
+If you are an R beginner, it is highly recommended that you use RStudio for the work presented in this book because it will enable you to spend less time worrying about how to write R code and setup R correctly and more time focussed on spatial microsimulation.
 One example of how RStudio saves time is its tab autocompletion functionality.
 Type the beginning of any object or function stored in R's environment,
 hit the `Tab` button, and the name should auto-complete, as illustrated below.
@@ -127,7 +127,7 @@ other people. If you are not careful the projects can become over-complex
 and un-manageable. RStudio projects can prevent this from happening and
 lead to improved workflow.
 
-To set-up a new project click on the drop-down menu in the top-right
+To setup a new project click on the drop-down menu in the top-right
 section of RStudio. If you are work in a project the name of the
 project will appear in this dropdown menu (see Fig. 2.3).
 When a project is loaded, the following things happen:
@@ -270,7 +270,7 @@ residents live in each
 zone, as well their genders: male and female.
 This information is displayed in the tables below.
 
-Table: Aggregate-level age counts for SimpleWorld.
+Table: Aggregate level age counts for SimpleWorld.
 
 |zone   | 0-49 yrs| 50 + yrs|
 |:--|-----:|-----:|
@@ -354,17 +354,17 @@ about other important variables such as income.
 
 Spatial microsimulation can be used to better understand the
 population of SimpleWorld. To do this, we need some additional information:
-an individual-level *microdataset*.
+an individual level *microdataset*.
 
-This is provided in an individuals-level dataset on 5 of SimpleWorld's
-inhabitants. Note that the individual-level data has different dimensions than the
+This is provided in an individuals level dataset on 5 of SimpleWorld's
+inhabitants. Note that the individual level data has different dimensions than the
 aggregate data presented above.
-The individual-level *microdata* survey has one row per individual whereas
+The individual level *microdata* survey has one row per individual whereas
 the *constraints* have one row per zone.
-This individual-level data includes two variables that *link* it to the
-aggregate-level data described above: age and sex. The individual-level
+This individual level data includes two variables that *link* it to the
+aggregate level data described above: age and sex. The individual level
 data also provides information about a *target variable* not included
-in the geographical constraints: income. To load the individual-level data,
+in the geographical constraints: income. To load the individual level data,
 enter the following:
 
 ```{r}
@@ -381,7 +381,7 @@ ind <- read.csv("data/SimpleWorld/ind-full.csv")
 # kable(ind)
 ```
 
-Table: Individual-level survey data from SimpleWorld.
+Table: individual level survey data from SimpleWorld.
 
 | id| age|sex | income|
 |--:|---:|:---|------:|
@@ -394,7 +394,7 @@ Table: Individual-level survey data from SimpleWorld.
 Note that although the microdataset contains additional information about the
 inhabitants of SimpleWorld, it lacks geographical information about where each
 inhabitant lives or even which zone they are from.  This is typical of
-individual-level survey data.  Spatial microsimulation tackles this issue by
+individual level survey data.  Spatial microsimulation tackles this issue by
 allocating individuals from a non-geographical dataset to geographical zones in
 another.
 
@@ -469,7 +469,7 @@ sums is equal to the total population in each zone.
 We will discover different ways of generating such weight matrices
 in subsequent chapters.
 For now it is sufficient to know
-that they matrices link individual-level data to geographically aggregated
+that they matrices link individual level data to geographically aggregated
 data and that there are multiple techniques to generate them. The techniques are sometimes
 referred to as *reweighting algorithms* in the literature (Tanton et al. 2011).
 These include deterministic methods such as Iterative Proportional
@@ -485,11 +485,11 @@ A useful output from spatial microsimulation is what we refer to as
 (as with the input microdata) but also an additional variable on geographical location.
 The ideal spatial microdataset
 selects individuals representative of the aggregate constraints for each zone,
-while containing the diversity of information present in the individual-level
+while containing the diversity of information present in the individual level
 non-spatial input population. In Chapter 4 we will explore all the steps needed
 to produce a spatial microdataset for SimpleWold. A subset of such spatial microdataset
 is presented in Table 2.5, where each row represents an individual taken from the 
-individual-level sample and the 'zone' column represents in where in 
+individual level sample and the 'zone' column represents in where in 
 geographical space they reside.
 
 \pagebreak
@@ -551,7 +551,7 @@ important and will be tackled in
 
 ## Chapter summary
 
-In this chapter we have learned how to set-up the R/RStudio environment for running
+In this chapter we have learned how to setup the R/RStudio environment for running
 the example code provided in this book. This involved installing the software,
 understanding projects in RStudio and setting up the `spatial-microsim-book`
 project so that data can be accessed easily.
