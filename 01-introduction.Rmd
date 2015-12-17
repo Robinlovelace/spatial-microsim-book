@@ -218,7 +218,7 @@ img <- readPNG("figures/msim-flow.png")
 grid.raster(img)
 ```
 
-Throughout this book we use a broad definition of term spatial microsimulation, as:
+Throughout this book we use a broad definition of the term spatial microsimulation:
 \index{spatial microsimulation!definition of}
 
 > **The creation, analysis and modelling of individual level data allocated to geographic zones.**
