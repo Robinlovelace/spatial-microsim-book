@@ -35,8 +35,8 @@ For the purposes of this book spatial microsimulation was defined in Chapter 1 a
 
 > **The creation, analysis and modelling of individual level data allocated to geographic zones.**
 
-Spatial microsimulation is well-suited to the analysis of complex phenomena which playout over
-geographical space, such as transport systems and the housing system.
+Spatial microsimulation is well-suited to the analysis of complex phenomena which happen over
+geographical space, such as transport systems and housing markets.
 Because it includes the creation of synthetic data, the method is well-suited
 to situations in which available data are limited. Figure 3.1 illustrates how
 the process of *population synthesis* can be used to impute missing data,
@@ -60,7 +60,7 @@ contexts where no individual level data is available, as described in Chapter 9.
 
 Typical use cases include modelling the spatial distribution of population
 growth and changes in demographics; high level transport-modelling; scenario-based
-modelling of behavioural change; and as an input into agent based models.
+modelling of behavioural change; and as an input into agent-based models.
 Because large individual and area level datasets have only recently become available
 and because computers have only recently become sufficiently powerful to run
 large-scale models on thousands of individuals and zones, spatial microsimulation
@@ -160,7 +160,7 @@ allocated to geographical zones. Population synthesis is an important
 the aim of which is to
 generate a realistic sample for each area that is as similar as possible to
 aggregate level constraints. Population synthesis usually involves the allocation of individuals from a survey dataset
-to administrative zones, based on shared variables between the areal and
+to administrative zones, based on shared variables between the areal (where each unit is a zone) and
 individual level data. When
 additional *target variables* exist in the microdata inputs for population synthesis (which are not present in the aggregate level data), the process
 can be used to simulate information that is not otherwise available at the local
@@ -215,7 +215,7 @@ geographic zone via some kind of approximation method.
 # -   When talking to a colleague, a transport modeller: spatial
 #     microsimulation, also known as population synthesis..."
 # 
-# -   Speaking to agent based modellers: "we use spatial microsimulation
+# -   Speaking to agent-based modellers: "we use spatial microsimulation
 #     to simulate the characteristics of geo-referenced agents..."
 # 
 # -   Communicating with undergraduates who are unlikely to have come
@@ -516,30 +516,29 @@ to tackle physical inactivity, maximising the benefits of public health
 initiatives.
 
 ```{r, echo=FALSE}
-# TODO: link the reader here to a chapter where smsim models are linked to geo-data
+# # TODO: link the reader here to a chapter where smsim models are linked to geo-data
+# Another health-related example in which spatial microsimulation serves to link
+# different secondary data sources to generate new insight for health applications
+# is Deetjen and Powell (forthcoming).
+# This model combines individual level survey data on Internet use with census
+# data and hospital episode statistics for all of England.
+# The aim was to explore the relationship between Internet use, perceived health
+# and health service provision.
+# 
+# The simulated dataset was analysed using hierarchical linear modelling,
+# structural equation modelling and cluster analysis. 
+# Internet use is often assumed to
+# reduce inequalities in access to health services and reduce costs.
+# However, quantitative evidence to support this hypothesis is been lacking,
+# leading to the adoption of a spatial microsimulation approach.
+#  
+# Deetjen and Powell (forthcoming) is notable for its use of
+# external validation and qualitative data alongside spatial
+# microsimulation. The results were compared with the results
+# from 3 other data sources (see Chapter 9 of this book).
+# Interviews helped
+# 'ground-truth' the quantitative findings against real-world experience.
 ```
-
-Another health-related example in which spatial microsimulation serves to link
-different secondary data sources to generate new insight for health applications
-is Deetjen and Powell (forthcoming).
-This model combines individual level survey data on Internet use with census
-data and hospital episode statistics for all of England.
-The aim was to explore the relationship between Internet use, perceived health
-and health service provision.
-
-The simulated dataset was analysed using hierarchical linear modelling,
-structural equation modelling and cluster analysis. 
-Internet use is often assumed to
-reduce inequalities in access to health services and reduce costs.
-However, quantitative evidence to support this hypothesis is been lacking,
-leading to the adoption of a spatial microsimulation approach.
- 
-Deetjen and Powell (forthcoming) is notable for its use of
-external validation and qualitative data alongside spatial
-microsimulation. The results were compared with the results
-from 3 other data sources (see Chapter 9 of this book).
-Interviews helped
-'ground-truth' the quantitative findings against real-world experience.
 
 ### Economic policy evaluation
 
