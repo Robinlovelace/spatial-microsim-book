@@ -13,7 +13,7 @@ bibliography: bibliography.bib
 -   **Constraints** are variables used to estimate the number (or weight)
     of individuals in each zone. Also referred to by the longer name of
     **constraint variable**. We tend to use the term **linking variable**
-    in this book because they *link* aggregate and individual-level datasets.
+    in this book because they *link* aggregate and individual level datasets.
 
 -   **Combinatorial optimisation** is an approach to spatial
     microsimulation that generates spatial microdata by randomly
@@ -64,13 +64,13 @@ bibliography: bibliography.bib
     output weights are real (not integer) numbers.
     
 -   A **linking variable** is a variable that is shared between individual and 
-    aggregate-level data. Common examples include age and sex (the linking variables
+    aggregate level data. Common examples include age and sex (the linking variables
     used in the SimpleWorld example): questions that are commonly asked in all
     kinds of survey. Linking variables are also referred to as 
     **constraint variables** because they *constrain* the weights for individuals
     in each zone.
     
--   **Microdata** is the non-geographical individual-level dataset from which
+-   **Microdata** is the non-geographical individual level dataset from which
     synthetic **spatial microdata** are usually derived. This sample of the
     target population has also been labelled as the 'seed'
     (e.g. Barthelemy and Toint, 2012) and simply the 'survey data' in the academic
@@ -81,8 +81,8 @@ bibliography: bibliography.bib
     used by statisticians to describe the population about whom they wish to
     draw conclusions based on a 'sample population'.
     The sample population, is the group of individuals who
-    we have individual-level data for.
-    In aggregate-level data, the **population base** is the
+    we have individual level data for.
+    In aggregate level data, the **population base** is the
     complete set of individuals represented by the counts.
     A common example is the variable "Hours worked":
     only people aged 16 to 74 are generally thought of as working, so, if there is
@@ -95,18 +95,18 @@ bibliography: bibliography.bib
     non-geographical **microda** and geographically aggregated 
     **constraint variables**) into **spatial microdata**.
     
--   **Spatial microdata** is the name given to individual-level data allocated
+-   **Spatial microdata** is the name given to individual level data allocated
     to mutually exclusive geographical zones (see Figure 5.1 above). Spatial
-    microdata is useful because it provides multi-level information, about the
+    microdata is useful because it provides multi level information, about the
     relationships between individuals and where they live. However, due to the
     high costs of large surveys and restrictions on the release of geocoded
-    individual-level data, spatial microdata is rarely available to researchers.
+    individual level data, spatial microdata is rarely available to researchers.
     To overcome this issue, most spatial microsimulation research employs methods
     of **population synthesis** to generate representative spatial microdata.
     
 -    **Spatial microsimulation** is the name given to an approach to modelling that
     comprises a series of techniques that
-    generate, analyse and model individual-level data allocated to small
+    generate, analyse and model individual level data allocated to small
     administrative zones. Spatial microsimulation is an approach for
     understanding processes that operate on individual and geographical levels.
     

@@ -47,11 +47,11 @@ each member.
 - Access to separate datasets about individuals and households, stored in independent
 data tables that are not linked by household ID.
 -  No access to aggregate data relating to households, but access to some
-individual-level variables related to the household of which they belong
+individual level variables related to the household of which they belong
 (e.g. number of people living with, type of household).
 
 This chapter explains methods
-for household-level data generation in the latter two cases. The first
+for household level data generation in the latter two cases. The first
 possibility, having a sample of households,
 is the topic of next chapter (Chapter 11) on the TRESIS method.
 In this chapter, we focus on the two cases
@@ -71,8 +71,8 @@ and present results for Belgium.
 
 ## Independent data (individuals and households) {#IndData}
 
-When the individual-level data are
-independent from the household-level data, they can rarely be linked.
+When the individual level data are
+independent from the household level data, they can rarely be linked.
 Data coming from different sources,
 sometimes implying different total populations,
 can cause this inconsistency.
@@ -85,7 +85,7 @@ First, we determine the individual distribution `Indl`,
 for example by using the package `mipfp`, as
 explained before. Second, we determine the distribution
 of characteristics for the household's data, hereafter named `Hh`. This can
-be done using the same technique as for the individual-level data, considering
+be done using the same technique as for the individual level data, considering
 the households instead of the individuals in
 the previous chapters.
 
@@ -173,13 +173,13 @@ to avoid making always the same exchange. For more information about `tabu searc
 
 In some cases, information about households is included in the
 individual dataset.
-For example, individual-level data
+For example, individual level data
 may include variables on type of household or/and
 the number of cohabitants in addition to gender and age. This provides cross-tabulated information between
 the households and the individuals. Considering the microdataset,
 IPF can help to obtain, per zone, inhabitants
-described by individual-level variables (such as sex, age and income) and some
-household-level information (such as household type and household's size).
+described by individual level variables (such as sex, age and income) and some
+household level information (such as household type and household's size).
 
 To form the households with this resulting data, we have two possible alternatives.
 The first is to aggregate the information concerning the individuals and 
@@ -194,7 +194,7 @@ The former solution is simpler and
 requires only the first chapters of the book. However it results in
 a loss of possible precision.
 The second possibility, which preserves all the information in individual and
-household-level tables, is explained in this section.
+household level tables, is explained in this section.
 
 With cross data, we usually proceed in two stages. First, we create
 the individuals with all their characteristics.
@@ -204,7 +204,7 @@ person must be matched to
 one and only one household.
 
 For this process there are two possible methods. One assumes
-access to household-level variables only in the individual-level
+access to household level variables only in the individual level
 data. The other assumes
 access to additional data concerning the structure of the
 households such as the age difference amongst a married couple.
@@ -215,11 +215,11 @@ as well as possible, its household's attributes.
 
 ### Without additional household's data  {#WithoutHHdata}
 
-When household-level constraints are only
+When household level constraints are only
 contained in the individual's characteristics, 
 they are often several possible grouping.
 
-Consider the case of our Belgium study where the individual-level variables are
+Consider the case of our Belgium study where the individual level variables are
 age, gender, municipality, education level, professional status,
 size and type of households and link
 with the household head (e.g. wife, child). A good grouping is one that 

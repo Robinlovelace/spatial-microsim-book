@@ -78,7 +78,7 @@ widely used for model prototyping, development and communication
 [@Thiele2012]. Alternative open source options include **Repast**
 and **MASON**. Both
 are written in Java, although Repast also includes optional
-graphical development and some higher-level language support. Due to its
+graphical development and some higher level language support. Due to its
 excellent documentation, ease of learning and integration with R, NetLogo is the
 tool of choice in this book and should be sufficiently powerful for many
 applications.
@@ -87,7 +87,7 @@ applications.
 mature and widely used tool-kit for agent-based models. It is written in
 Java, but uses a derivation of the Logo language to develop models.
 The recently published **RNetLogo** package provides an interface between
-R and NetLogo, allowing for model runs to be set-up and run directly from within R
+R and NetLogo, allowing for model runs to be setup and run directly from within R
 (Theile 2014). 
 This allows the outputs of agent based models to be loaded directly into
 your R environment. Using R to run a separate programme may seem overly complicated
@@ -137,7 +137,7 @@ before undertaking the practical elements of this chapter.
 Section introduces the basics of NetLogo's functionality
 to create an ABM of SimpleWorld --- we will cover RNetLogo later.
 
-In NetLogo the design of the model's graphical user interface (GUI) is handled separately from the model procedures. This is analogous to the separation in R's [**shiny**](http://shiny.rstudio.com/) package between the user interface and the 'server side'. The latter are constructed in code using the NetLogo programming language in the Code tab (discussed below). The graphical interface, which includes the environment and the control *widgets*, is set-up using the drop-down menus located in the Interface toolbar. 
+In NetLogo the design of the model's graphical user interface (GUI) is handled separately from the model procedures. This is analogous to the separation in R's [**shiny**](http://shiny.rstudio.com/) package between the user interface and the 'server side'. The latter are constructed in code using the NetLogo programming language in the Code tab (discussed below). The graphical interface, which includes the environment and the control *widgets*, is setup using the drop-down menus located in the Interface toolbar. 
 
 The whole model is saved as a .nlogo file. This text file includes code, GUI parameters and the contents of the (optional) Info tab. Although .nlogo files are human readable, most of the information relating to the GUI is difficult to manipulate. We advise against modifying the .nlogo file
 directly.
@@ -312,7 +312,7 @@ to read-agent-data
 end
 ```
 
-Making sure that we add the `read-agent-data` procedure to the setup procedure, we can now test our code simply by clicking the setup button on the graphic interface tab. We still have the monitor there counting the patches, let's edit it to change the reporter instead to something more informative: `count inhabitants` should do it. Hopefully there are 33 (see figure 13.4)!
+Making sure that we add the `read-agent-data` procedure to the setup procedure, we can now test our code simply by clicking the setup button on the graphic interface tab. We still have the monitor there counting the patches, let's edit it to change the reporter instead to something more informative: `count inhabitants` should do it. Hopefully there are 33 (see Figure 13.4)!
 
 ```{r fig4, fig.cap="SimpleWorld populated with 33 inhabitants", fig.width=4, fig.height=4, echo=FALSE}
 library(png)

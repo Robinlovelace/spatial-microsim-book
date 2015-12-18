@@ -100,7 +100,7 @@ weights <- matrix(data = 1, nrow = nrow(ind), ncol = nrow(cons))
 dim(weights) # dimension of weight matrix: 5 rows by 3 columns
 ```
 
-The weight matrix links individual-level data to aggregate-level data.
+The weight matrix links individual level data to aggregate level data.
 A weight matrix value of 0 in cell `[i,j]`, for example, suggests that
 the individual `i` is not representative of
 zone `j`.
@@ -237,7 +237,7 @@ The *reweighting* methods consists in adding a weight to each individual for the
 a representative sample of the zone and the minority of the population is included in it. In contrary, if we have in
 the individual level only the majority of the population and for example, we have not an old man still working, this
 kind of individual will not appear in the final data. A proposal to avoid this is to either modify the sample to include those outliers or use a different approach such as a *genetic algorithm*
-to allow mixing some individual-level variables to create a new individuals (mutation). 
+to allow mixing some individual level variables to create a new individuals (mutation). 
 We are not aware of the latter technique being used at present,
 although it could be used in future microsimulation work. An other useful alternative to solve this issue is given by the *tabu-search algorithm*, an heuristic for integer programming method. (Glover 1986, 1989, 1990 and Glover and Laguna, 1997). This heuristic can be used to improve an initial solution produced by the IPF.
 
@@ -473,7 +473,7 @@ integer weights to generate a synthetic small-area population ready for
 agent-based modelling applications. 
 
 The next step in IPF, however, is to
-re-aggregate the results from individual-level data after they have been
+re-aggregate the results from individual level data after they have been
 reweighted. For the first zone, the weights of each individual are in the
 first column of the weight matrix. Moreover, the characteristics of each
 individual are inside the matrix `ind_cat`. When multiplying `ind_cat` by 
@@ -481,7 +481,7 @@ the first column of `weights1` we obtain a vector, the values of which
 correspond to the number of people in each category for zone 1.
 To aggregate all individuals this for the
 first zone, we just sum the values in each category. The following `for` loop
-re-aggregates the individual-level data, with the new weights for each zone:
+re-aggregates the individual level data, with the new weights for each zone:
 
 ```{r}
 # Create additional ind_agg objects
@@ -494,7 +494,7 @@ for(i in 1:n_zone){
 ```
 
 Congratulations. Assuming you are running the code on you own computer, you
-have just reweighted your first individual-level dataset to a geographical
+have just reweighted your first individual level dataset to a geographical
 constraint (the age) and have aggregated the results.
 At this early stage it is important to do some preliminary checks
 to ensure that the code is working correctly. First, are the resulting
@@ -513,7 +513,7 @@ the technique. But what about the fit between the observed and simulated
 results after constraining by age? We will cover goodness of fit in more
 detail in subsequent sections. For now, suffice to know that the simplest
 way to test the fit is by using the `cor` function on a 1d representation of the
-aggregate-level data:
+aggregate level data:
 
 ```{r}
 vec <- function(x) as.numeric(as.matrix(x))
@@ -543,13 +543,13 @@ cons[1, ]
 ```
 
 Note there are 8 individuals under 50 years old in zone 1, but only 2 individuals
-with this age in the individual-level survey dataset. This explains why the
+with this age in the individual level survey dataset. This explains why the
 weights allocated to these individuals is 4: 8 divided by 2 = 4.
 
-So far we have only constrained by age. This results in aggregate-level results
+So far we have only constrained by age. This results in aggregate level results
 that fit the age constraint but not the sex constraint (Figure 5.2). The reason
 for this should be obvious: weights are selected such that
-the aggregated individual-level data fits the age constraint perfectly, but
+the aggregated individual level data fits the age constraint perfectly, but
 no account is taken of the sex constraint. This is why IPF must constrain for
 multiple constraint variables.
 
@@ -752,7 +752,7 @@ Usually, we use the precision of the computer that is of order $10^{-16}$
 machine by typing `.Machine$double.eps`). 
 
 Notice also that for the function to work
-a *transposed* (via the `t()` function) version of the individual-level
+a *transposed* (via the `t()` function) version of the individual level
 data (`ind_cat`) was used. This differs from the
 `ind_agg` object used in the pure R version. To prevent having to transpose
 `ind_cat` every time `ipfp` is called, we save the transposed version:
@@ -910,7 +910,7 @@ In this sense **mipfp** is more advanced than
 
 The main function of **mipfp** is `Ipfp()`, which
 fills a $N$-dimensional weight 
-matrix based on a range of aggregate-level constraint table options. 
+matrix based on a range of aggregate level constraint table options. 
 Let's test the package on some example data.
 The first step is to load the package into the workspace:
 
@@ -1589,7 +1589,7 @@ Table: Unknown constraints Mipfp estimates for SimpleWorld.
 From this contingency table, and respecting the known marginal constraints,
 the individual dataset must be generated.
 For SimpleWorld, input microdata is available. While **ipfp** uses the
-individual-level microdata directly, the 'seed' used in **mipfp** must also be
+individual level microdata directly, the 'seed' used in **mipfp** must also be
 a contingency table. This table is then used to generate the final contingency table
 (sex/age) thanks to the theory underlying IPF. 
 
@@ -1646,7 +1646,7 @@ When the contingency table is complete,
  we know how many
 individuals we need in each category. As with the **ipfp** method,
 the weights are fractional.
-To reach a final individual-level dataset, we can consider the weights as
+To reach a final individual level dataset, we can consider the weights as
 probabilities
 or transform the weight into integers and obtain a final contingency table. 
 From this, it is easy to generate the individual dataset.
@@ -1696,7 +1696,7 @@ descript <- list (1, 2)
 ```
 
 The available sample establishes the seed of the algorithm. This is also known as 
-the *initial weight matrix*. This represents the entire individual-level
+the *initial weight matrix*. This represents the entire individual level
 input microdata (`ind`), converted into the same categories as in the constraints
 (50 is still the break point for ages in SimpleWorld).
 We also consider income, so that it is stored in the format required by **mipfp**.
@@ -1791,7 +1791,7 @@ Indeed, the version with `apply()` calls `n_zone` times the function
 `ipfp()`, where the **mipfp** is called only one time with the here 
 proposed abbreviation. 
 
-Only one aspect of our model set-up needs to be modified:
+Only one aspect of our model setup needs to be modified:
 the number of the zone needs to be included as an additional dimension
 in the weight matrix. This allows us to access the table for one
 particular zone and obtain exactly the same result 

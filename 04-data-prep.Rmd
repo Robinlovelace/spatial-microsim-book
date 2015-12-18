@@ -38,7 +38,7 @@ library(grid)
 # could be the beginning of part 2 if the book's divided into parts. 
 ```
 
-Correctly loading, manipulating and assessing aggregate and individual-level
+Correctly loading, manipulating and assessing aggregate and individual level
 datasets is critical for effectively modelling real-world data.
 Getting the data into the right shape has the potential
 to make your models run quicker and increase the ease of modifying them,
@@ -57,8 +57,8 @@ those in SimpleWorld, but the concepts and commands will be largely the same.
 Each project is different and data can be very
 diverse. For more on data cleaning and 'tidying', see @tidy-data.
 However, in most cases, the input datasets will be similar to the ones presented here:
-an individual-level dataset consisting of categorical
-variables and aggregate-level constraints containing categorical counts.
+an individual level dataset consisting of categorical
+variables and aggregate level constraints containing categorical counts.
 
 The process of loading, checking and preparing the input datasets for spatial
 microsimulation is generally a linear process, encapsulating the following
@@ -73,7 +73,7 @@ and the constraints.
 the input data.
 -*Subsetting to remove excess information* ([](#subsetting-prep)) 
 gives the R code to not consider all variables.
--*Re-categorising individual-level variables* ([](#re-categorise))
+-*Re-categorising individual level variables* ([](#re-categorise))
 develops the R code to have pertinent categories in all variables.
 -*Matching individual and aggregate level data names* ([](#matching))
 makes the data names correspond to avoid problems when executing the 
@@ -117,7 +117,7 @@ data on the topic of interest before embarking on spatial microsimulation.
 \index{example data}
 
 As with most spatial microsimulation models, the input data in SimpleWorld consists of
-microdata --- a non-geographical individual-level dataset --- and a
+microdata --- a non-geographical individual level dataset --- and a
 constraint table which represents aggregate counts for a series of geographical zones. In some cases,
 you may have geographical information in your microdata, but not at the
 required level of detail.
@@ -171,7 +171,7 @@ rather than vice versa.
 
 \index{linking variables}
 Spatial microsimulation involves combining
-individual and aggregate-level data. Each level should
+individual and aggregate level data. Each level should
 be given equal consideration when preparing the inputs for the
 modelling process. In many cases, the limiting factor for model fit will
 be the number of *linking variables*, 
@@ -182,7 +182,7 @@ These are also referred to as *constraint variables*, as they
 *constrain* the individual weights per zone (Ballas et al. 2005).
 
 If there are no shared variables between the aggregate and
-individual-level data generating an accurate synthetic population is impossible. 
+individual level data generating an accurate synthetic population is impossible. 
 In this case, your only alternative is to consider only the
 marginal distribution of the variable and make a random selection with 
 the distribution used as a probability. However, this implicitly assumes
@@ -271,7 +271,7 @@ questions.
 
 How does income inequality vary from place to place?
 To answer this question it is not sufficient to have
-aggregate-level statistics (e.g. average household income).
+aggregate level statistics (e.g. average household income).
 So income per person must be simulated for each zone, using
 spatial microsimulation. Sampling from a national population
 provides a more realistic distribution than simply assuming
@@ -296,15 +296,15 @@ vary greatly from country to country so selection of
 appropriate datasets is highly context dependent.
 
 The following considerations should inform the selection of
-individual-level microdata:
+individual level microdata:
 
 - Linking variables: are there enough
-variables in the individual-level data that are
+variables in the individual level data that are
 also present in the geographically aggregated constraints?
 Even when many linking variables are available, it is
 important to determine the fit between the categories in each.
-If age is reported in five year bands in the aggregate-level
-data, but only in 20 year bands in the individual-level data,
+If age is reported in five year bands in the aggregate level
+data, but only in 20 year bands in the individual level data,
 for example,
 this could be problematic if the research question is highly
 age-dependent.
@@ -313,7 +313,7 @@ age-dependent.
 - Target variables: are these, or proxies for them, included in the dataset?
 
 In addition to these essential characteristics of the
-individual-level dataset, there are qualities that are desirable but not  required. These include:
+individual level dataset, there are qualities that are desirable but not  required. These include:
 
 - Continuity of the survey: will the survey be repeated on
 a regular basis into the future? If so, the analysis can form
@@ -321,7 +321,7 @@ the basis of ongoing work to track change over time, perhaps
 as part of a *dynamic microsimulation model*.
 - Geographic variables: although it is the purpose of spatial
 microsimulation to allocate geographic variables to
-individual-level data, it is still useful to have some
+individual level data, it is still useful to have some
 geographic information. In many national UK surveys, for
 example, the region (the coarsest geographical level)
 of the respondent is reported. This information can be useful in
@@ -449,7 +449,7 @@ amount. However, caution should be taken when using this approach because
 it assumes that the relationship between categories is the same
 across all level or base populations. In the case of car ownership, where
 larger households are likely to own more cars, this assumption clearly
-would not hold: inferring individual-level marginals from household-level
+would not hold: inferring individual level marginals from household level
 data would in this case lead to an underestimate of car availability.
 
 ```{r, echo=FALSE}
@@ -461,11 +461,11 @@ and remember that the constraints can be changed at a later
 stage to improve the model or for testing ---
 the next stage is to load the data.
 Following the SimpleWorld example, we
-load the individual-level dataset first. This
-is because individual-level data from surveys
+load the individual level dataset first. This
+is because individual level data from surveys
 is often
 more difficult
-to format. Individual-level datasets are often larger
+to format. individual level datasets are often larger
 and more complex than the constraint data, which
 are simply integer counts of different categories.
 Of course, it is possible that the
@@ -473,7 +473,7 @@ data you have are not suitable for
 spatial microsimulation because they lack linking variables.
 We assume that you have already checked this. The
 checking process for the datasets used in this chapter is simple: both aggregate
-and individual-level tables contain age (in continuous form
+and individual level tables contain age (in continuous form
 in the microdata, as two categories in the aggregate data)
 and sex, so they can by combined. 
 Loading the data involves transferring information from a
@@ -484,7 +484,7 @@ it is available in memory.
 ## Loading input data {#Loading} 
 
 \index{loading data}
-Real-world individual-level data are provided in many formats.
+Real-world individual level data are provided in many formats.
 These ultimately need to be loaded into R as a `data.frame` object. Note 
 that there are many ways to load data into R, including `read.csv()` and
 `read.table()` from base R. Useful commands for loading proprietary data formats
@@ -514,18 +514,18 @@ the last section of this chapter provides
 a check-list of items to ensure that the data has been adequately cleaned
 ready for the next phase.
 
-In the SimpleWorld example, the individual-level dataset is loaded
+In the SimpleWorld example, the individual level dataset is loaded
 from a 'plain text' (human readable) `.csv` file:
 
 ```{r}
-# Load the individual-level data
+# Load the individual level data
 ind <- read.csv("data/SimpleWorld/ind-full.csv") 
 class(ind) # verify the data type of the object
-ind # print the individual-level data
+ind # print the individual level data
 ```
 
 ```{r, echo=FALSE}
-### Loading and checking aggregate-level data
+### Loading and checking aggregate level data
 ```
 
 Constraint data are usually made available one variable at a time,
@@ -637,13 +637,13 @@ aged between 16 and 74 in full-time employment. Methods for doing this are provi
 the Appendix
 ([](#subsetting)).
 
-## Re-categorising individual-level variables {#re-categorise}
+## Re-categorising individual level variables {#re-categorise}
 
 \index{recategorising data}
-Before transforming the individual-level dataset `ind` into a form that can be
-compared with the aggregate-level constraints, we must ensure that each dataset
+Before transforming the individual level dataset `ind` into a form that can be
+compared with the aggregate level constraints, we must ensure that each dataset
 contains the same information. It can be more challenging to re-categorise
-individual-level variables than to re-name or combine aggregate-level variables,
+individual level variables than to re-name or combine aggregate level variables,
 so the former should usually be set first.  An obvious difference between the
 individual and aggregate versions of the `age` variable is that the former is of
 type `integer` whereas the latter is composed of discrete bins: 0 to 49 and 50+.
@@ -700,7 +700,7 @@ we will see in the next section.
 ## Matching individual and aggregate level data names {#matching}
 
 \index{matching variables}
-Before combining the newly re-categorised individual-level data with the
+Before combining the newly re-categorised individual level data with the
 aggregate constraints, it is useful for the category labels to match up.
 This may seem trivial, but will save time in the long run. Here is the problem:
 
@@ -718,7 +718,7 @@ names(con_age) <- levels(ind$age) # rename aggregate variables
 ```
 
 With both the age and sex constraint variable names now matching the
-category labels of the individual-level data, we can proceed to create a
+category labels of the individual level data, we can proceed to create a
 single constraint object we label `cons`. We do this with `cbind()`:
 
 ```{r}
@@ -744,14 +744,14 @@ dim(ind)
 dim(cons)
 ```
 
-The above code confirms this: we have one individual-level dataset comprising 5
+The above code confirms this: we have one individual level dataset comprising 5
 individuals with 3 variables (2 of which are constraint variables and the other an ID) and one
-aggregate-level constraint table called `cons`, representing 3 zones
+aggregate level constraint table called `cons`, representing 3 zones
 with count data for 4 categories across 2 variables.
 
 The dimensions of at least one of these objects must change
 before they can be correctly easily compared. To do this
-we 'flatten' the individual-level dataset.
+we 'flatten' the individual level dataset.
 This means increasing its width so each column becomes a category
 name. This allows the individual data to be matched
 to the geographical constraint data. In this new dataset (which we
@@ -807,8 +807,8 @@ The sum of both age and sex variables is 5
 (the total number of individuals): it worked! 
 Looking at `ind_agg`, it is also clear that the object has the same 'width',
 or number of columns,
-`cons`. This means that the individual-level data can now be compared with
-the aggregate-level data. We can check this by inspecting
+`cons`. This means that the individual level data can now be compared with
+the aggregate level data. We can check this by inspecting
 each object (e.g. via `View(ind_agg)`). A more rigorous test is to see
 if `cons` can be combined with `ind_agg`, using `rbind`:
 
@@ -843,19 +843,19 @@ to ensure they are ready for reweighting, covered in the next chapter:
     in the former rows correspond to
     individuals; in the latter rows correspond to a 
     spatial zone.
-2. The categories of the constraint variables in the individual-level dataset
+2. The categories of the constraint variables in the individual level dataset
     are identical to the column names of the constraint
     variables.
     (An example of the process needed to arrive at this state is the
     conversion of a continuous ages variable in
-    the individual-level dataset into a categorical variable to match the
+    the individual level dataset into a categorical variable to match the
     constraint data.)
-3. The structure of the individual and aggregate-level datasets must
+3. The structure of the individual and aggregate level datasets must
     eventually be the same: the column names of `cons` and `ind_cat` in the above
     example are the categories
     of the constraint variables. `ind_cat` is the
-    binary (or Boolean, containing 0s and 1s) version of the individual-level dataset.
-    This allows creation of an aggregated version of the individual-level
+    binary (or Boolean, containing 0s and 1s) version of the individual level dataset.
+    This allows creation of an aggregated version of the individual level
     data that has the same dimensions (and is comparable with)
     the constraint data for each zone.
 4. The total population of each zone is represented as the sum counts for

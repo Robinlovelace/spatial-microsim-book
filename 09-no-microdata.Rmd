@@ -12,7 +12,7 @@ library(grid)
 
 # Population synthesis without microdata {#nomicrodata}
 
-Sometimes no representative individual-level
+Sometimes no representative individual level
 dataset is available as an input for population synthesis.
 In this case, the methods described in the previous
 chapters must be adapted accordingly.
@@ -20,7 +20,7 @@ The challenge
 is still to generate spatial microdata 
 that fits all the constraint tables, but based on a purely synthetic
 'seed' input cross-tabulated contingency table. Many
-combinations of individual-level data
+combinations of individual level data
 could correspond to these distributions. Depending on the aim
 of the spatial microsimulation model, simply finding one reasonable fit
 can be sufficient.
@@ -29,15 +29,15 @@ can be sufficient.
 
 In other cases a fit based on *entropy maximisation* may be required.
 This concept involves finding the population that is most likely to
-represent the micro-level populations (Bierlaire, 1991) [@Bierlaire].  \index{entropy maximisation}
+represent the micro level populations (Bierlaire, 1991) [@Bierlaire].  \index{entropy maximisation}
 This chapter demonstrates
 two options for population synthesis when
-real individual-level data is unavailable:
+real individual level data is unavailable:
 
 -*Global cross-tables and local marginal distributions* ([](#CrossGlobLocalMarg)) 
 explains a method for cases where the constraints consist in cross-tables not spatially located
 and local marginal distributions.
--*Two-level aggregated data* ([](#twoLevelData)) contains a procedure to 
+-*Two level aggregated data* ([](#twoLevelData)) contains a procedure to 
 make a spatial microsimulation when having data at different aggregated level, 
 for example, one for the provinces and one for the districts.
 
@@ -45,11 +45,11 @@ for example, one for the provinces and one for the districts.
 
 Assume we have a contingency table of constraint variables
 for the entire study area (but not at the local level) in the 
-aggregate-level data. This multi-dimensional
+aggregate level data. This multi-dimensional
 cross-table (the seed) could be the result of a 
 previous step such as the implementation of
 IPF
-re-weight individual-level data to fit the case-study area of interest.
+re-weight individual level data to fit the case-study area of interest.
 
 If the marginal distributions for small areas are known, 
 we can use the **mipfp** function as previously shown. If, however,
@@ -72,7 +72,7 @@ source("R/SimpleWorld.R")
 ```
 
 ```{r}
-# Cross-tabulation of individual-level dataset
+# Cross-tabulation of individual level dataset
 table(ind$age, ind$sex)
 
 (total_pop <- rowSums(con_sex)) # total population of each zone
@@ -310,7 +310,7 @@ indices <- rep(1:nrow(countData), countData$Freq)
 ind_data <- countData[indices,]
 ```
 
-## Two-level aggregated data {#twoLevelData}
+## Two level aggregated data {#twoLevelData}
 
 We present here how to find a possible distribution per zone when 
 having only aggregated data, but in two different levels of aggregation.

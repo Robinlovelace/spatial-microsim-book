@@ -49,7 +49,7 @@ level in the UK. Thus the 'domain' of available input data,
 related to our research question involves two sources:
 
 1. Non-geographical
-individual-level survey, DHS --- the *microdata*.
+individual level survey, DHS --- the *microdata*.
 2. Geographically
 aggregated categorical count data from the census --- the *constraint tables*.
 
@@ -137,10 +137,10 @@ without making the population synthesis process too complex
 (see [](#Selecting)).
 
 To exemplify these principles, let us consider the constraint variables available
-in the CakeMap datasets. Clearly only variables available both in the individual-level and 
-aggregate-level datasets can be chosen from. Suppose our aim is to analyse the consumption 
+in the CakeMap datasets. Clearly only variables available both in the individual level and 
+aggregate level datasets can be chosen from. Suppose our aim is to analyse the consumption 
 of cakes depending on socio-demographic variables. Five interesting variables assigned to each
-of the 916 individuals are available from the individual-level data :
+of the 916 individuals are available from the individual level data :
 
 - 'Car': The number of working cars in the person's household.
 - 'Sex' and 'ageband4': Gender and age group, in two separate variables. 
@@ -192,11 +192,11 @@ Figure 7.1 illustrates, these datasets are rather verbose and
 require pre-processing. The resulting 'clean' constraints are saved in files such as
 'con1.csv', which stands for 'constraint 1'.
 
-```{r, fig.align='center', fig.cap="Example of raw aggregate-level input data for CakeMap aggregate data, downloaded from http://infuse.mimas.ac.uk/.", fig.scap="Example of raw aggregate-level input data", echo=FALSE}
+```{r, fig.align='center', fig.cap="Example of raw aggregate level input data for CakeMap aggregate data, downloaded from http://infuse.mimas.ac.uk/.", fig.scap="Example of raw aggregate level input data", echo=FALSE}
 library(jpeg)
 img <- readJPEG("figures/raw-data-screenshot.jpeg")
 grid.raster(img)
-# ![Example of raw aggregate-level input data for CakeMap aggregate data, downloaded from
+# ![Example of raw aggregate level input data for CakeMap aggregate data, downloaded from
 # http://infuse.mimas.ac.uk/.](figures/raw-data-screenshot.jpeg)
 ```
 
@@ -222,7 +222,7 @@ age bands into larger groups such as 16--24.
 The end result of 'process-age.R' is a 'clean' .csv file, ready to be loaded and
 used as the input of our spatial microsimulation model. Note that the last
 line of 'process-age.R' is `write.csv(con1, "con1.csv", row.names = F)`.  This
-is the first constraint that we load into R to reweight the individual-level
+is the first constraint that we load into R to reweight the individual level
 data in the next section.
 The outputs from these data preparation steps are named
 'con1.csv' to 'con3.csv'. For simplicity, all these were merged (by
@@ -351,7 +351,7 @@ modification to do this: it is your task to convert the weight matrix generated
 by the above lines of code into a spatial microdataset called, as before,
 `ints_df` (hint: the `int_trs` function in 'R/functions.R' file will help).
 The spatial microdata generated in 'R/CakeMapInts.R' contains the same information
-as the individual-level dataset, but with the addition of the 'zone' variable,
+as the individual level dataset, but with the addition of the 'zone' variable,
 which specifies which zone each individual inhabits.
 
 The spatial microdata is thus *multilevel* data, operating at one level on
@@ -426,7 +426,7 @@ of `cons` and `ind` correspond. In the variable associated with car ownership,
 `ind` contains "1" and "2", but `cons` contains "Car" and "NoCar".
 
 To undertake this operation, we convert the category labels
-in the individual-level variable `ind` so that they conform to the
+in the individual level variable `ind` so that they conform to the
 variable names of the count data contained in constraint data `cons`. 
 Continuing with the car ownership example,
 every "1" in `ind$Car` should be converted to "Car" and every "2" to "NoCar".
@@ -436,7 +436,7 @@ The code that performs this operation is included in the R file
 `CakeMapMipfpData.R` file. Take a look at this file (e.g. by typing
 `file.edit("R/CakeMapMipfpData.R")` from RStudio) and note the use of the
 `switch` function in combination with the recursive function
-`sapply` to *switch* the values of the individual-level variables.
+`sapply` to *switch* the values of the individual level variables.
 The entire script is run below using the `source` command.
 
 ```{r}
@@ -444,7 +444,7 @@ source("R/CakeMapMipfpData.R")
 ```
 
 The data are now loaded correctly. This can be verified by
-printing the first lines of the individual-level data and comparing
+printing the first lines of the individual level data and comparing
 this with `colnames(con1)`. Note that this step was not 
 necessary for the **ipfp** package. To use **ipfp** the user must encode
 the constraints in the right order and only the order counts.
@@ -456,7 +456,7 @@ as input a table of $n_var$ dimensions, whereas **ipfp** takes as input
 a 2-dimensional dimension, whose columns describe variables) and 
 this process will be easier if the names are the same.
 To re-affirm our starting point, a sample of the
-new individual-level data is displayed below.
+new individual level data is displayed below.
 
 ```{r}
 head(ind)

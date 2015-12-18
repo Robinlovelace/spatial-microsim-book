@@ -141,7 +141,7 @@ Let us select query the gender of the 4th individual, as an example
 ind[4, 3] # The attribute of the 4th individual in column 3
 ```
 
-A commonly used trick in R that helps with the analysis of individual-level data
+A commonly used trick in R that helps with the analysis of individual level data
 is to subset a data frame based on one or more of its variables. Let's subset
 first all females in our dataset and then all females over 50:
 

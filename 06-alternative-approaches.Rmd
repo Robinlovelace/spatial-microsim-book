@@ -51,7 +51,7 @@ weights using a Generalized Regression Weighting procedure (hence the name
 GREGWT).  The resulting weights ensure that, when aggregated, the individuals
 selected for each small area fit the constraint variables. Like IPF, the GREGWT
 results in non-integer weights, meaning some kind of integerisation algorithm
-will be needed to obtain a final individual-level population, so for example,
+will be needed to obtain a final individual level population, so for example,
 if the output is to be used in ABM. The macro developed by ABS adds a weight
 restriction in their GREGWT macros to ensure positive weights. The ABS uses the
 Linear Truncated Method described in Singh and Mohl (1996) to enforce these
@@ -219,7 +219,7 @@ $$\left\{
 Key to this is interpreting individual weights as parameters (the vector $w=(w_1,...,w_m)$,
 of length $m$ above)
 that are iteratively modified to optimise the fit between individual and
-aggregate-level data. Remarks that in comparison with the theoretical 
+aggregate level data. Remarks that in comparison with the theoretical 
 definition of an optimisation problem, our `par` are the theoretical $x$. 
 The measure of fit, so the distance, we use in this context is
 Total Absolute Error (TAE).
@@ -246,14 +246,14 @@ Note that in the above, $w$ is equivalent to the `weights` object
 we have created in previous sections to represent how representative
 each individual is of each zone. 
 The main issue with this definition of reweighting is therefore the large
-number of free parameters: equal to the number of individual-level dataset.
+number of free parameters: equal to the number of individual level dataset.
 Clearly this can be very very large. To overcome this issue,
 we must 'compress' the individual level dataset to its essence, to contain
 only unique individuals with respect to the constraint variables
 (*constraint-unique* individuals).
 
 The challenge is to convert the binary 'model matrix' form of the
-individual-level data (`ind_cat` in the previous examples) into
+individual level data (`ind_cat` in the previous examples) into
 a new matrix (`indu`) that has fewer rows of data. Information about the
 frequency of each constraint-unique individual is kept by increasing the
 value of the '1' entries for each column for the replicated individuals
@@ -267,7 +267,7 @@ The base R function `optim` provides a general purpose optimization framework
 for numerically solving objective functions. Based on the objective function
 for spatial microsimulation described above,
 we can use any general optimization algorithm for reweighting the
-individual-level dataset. But which to use?
+individual level dataset. But which to use?
 
 Different reweighting strategies are suitable in different contexts and there
 is no clear winner for every occasion. However, testing a range of
@@ -412,7 +412,7 @@ may be more appropriate for applications where input individual microdatasets ar
 very large: the speed benefits of using the deterministic IPF algorithm shrink as 
 the size of the survey dataset increases. As seen before, IPF creates non integer 
 weights, but we have proposed two solutions to transform them into the final 
-individual-level population. So, the proportionality of IPF is more intuitive,
+individual level population. So, the proportionality of IPF is more intuitive,
 but need to calculate the whole weight matrix at each iteration, where CO
 just proposes candidates. If the objective function takes a long time
 to be calculated CO can be computationally intensive because the
@@ -545,14 +545,14 @@ example data. Datasets from the 'EU-SILC'
 database (EU statistics on income and living conditions)
 and the developing world are included to demonstrate the methods.
 
-An example of the individual-level data provided by the package,
+An example of the individual level data provided by the package,
 and the function `contingencyWt`, is demonstrated below.
 
 ```{r, message=FALSE}
 # install.packages("simPop")
 library(simPop)
 
-# Load individual-level data
+# Load individual level data
 data("eusilcS")
 head(eusilcS)[2:8]
 

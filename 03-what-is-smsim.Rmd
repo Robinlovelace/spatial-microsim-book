@@ -33,14 +33,14 @@ the often unspoken assumptions underlying spatial microsimulation results.
 
 For the purposes of this book spatial microsimulation was defined in Chapter 1 as:
 
-> **The creation, analysis and modelling of individual-level data allocated to geographic zones.**
+> **The creation, analysis and modelling of individual level data allocated to geographic zones.**
 
 Spatial microsimulation is well-suited to the analysis of complex phenomena which play-out over
 geographical space, such as transport systems and the housing system.
 Because it includes the creation of synthetic data, the method is well-suited
 to situations in which available data are limited. Figure 3.1 illustrates how
 the process of *population synthesis* can be used to impute missing data,
-by approximating the original geo-referenced individual-level data
+by approximating the original geo-referenced individual level data
 [@Lovelace-ipfinr]. It is important to note that the process does not stop with the
 generation of spatial microdata: it involves *doing stuff* with the spatial microdata
 to better understand the world.
@@ -50,16 +50,16 @@ img <- readPNG("figures/msim-schema.png")
 grid.raster(img)
 ```
 
-Spatial microsimulation is a way to combine the advantages of individual-level
+Spatial microsimulation is a way to combine the advantages of individual level
 data with the geographical specifity of geographical data. If used correctly,
 it can be used to provide 'the best of both worlds' of available data by
 combining them into a single analysis. Spatial microsimulation should therefore
 be used in situations where you have access to individual and area level data but
 no means of combining them. Spatial microsimulation can also be used in
-contexts where no individual-level data is available, as described in Chapter 9.
+contexts where no individual level data is available, as described in Chapter 9.
 
 Typical use cases include modelling the spatial distribution of population
-growth and changes in demographics; high-level transport-modelling; scenario-based
+growth and changes in demographics; high level transport-modelling; scenario-based
 modelling of behavioural change; and as an input into agent based models.
 Because large individual and area level datasets have only recently become available
 and because computers have only recently become sufficiently powerful to run
@@ -79,7 +79,7 @@ Of course, the label attributed to the method is less important than the
 method itself. As eminent physicist Richard Feynman
 put it, "the difference between knowing the name of something and
 knowing something" is vital to understand the world. The
-methods used in this book could equally be "multi-level modelling" or 
+methods used in this book could equally be "multi level modelling" or 
 "real-world SimCity",
 but this would not change how its methods work or what they do. However,
 it is important that the terminology we use is at least *internally consistent*
@@ -98,7 +98,7 @@ succinctly conveys the main elements of the approach:
 - **Spatial** microsimulation is inherently concerned with how things vary
 over space, not just between individuals, groups or periods of time: this is
 what distinguishes *spatial* microsimulation from the wider field of microsimulation.
-- Spatial **micro**simulation explores issues at the individual-level, as implied
+- Spatial **micro**simulation explores issues at the individual level, as implied
 by the word *micro*.
 - Spatial micro**simulation** involves the creation of fictitious data for
 modelling purposes, captured by the word *simulation*.
@@ -154,12 +154,12 @@ microsimulation is understood in the literature and how this relates to
 the definitions used in this book.
 
 **Population synthesis**
-is a set of techniques for generating individual-level data
+is a set of techniques for generating individual level data
 allocated to geographical zones. Population synthesis is an important
 (and often crucial) component of the spatial microsimulation approach,
 aim of which is to
 generate a realistic sample for each area that is as similar as possible to
-aggregate-level constraints. Population synthesis usually involves the allocation of individuals from a survey dataset
+aggregate level constraints. Population synthesis usually involves the allocation of individuals from a survey dataset
 to administrative zones, based on shared variables between the areal and
 individual level data. When
 additional *target variables* exist in the microdata inputs for population synthesis (which are not present in the aggregate level data), the process
@@ -193,7 +193,7 @@ planner, the term may imply simulating the precise movements of vehicles on
 the transport network. To your next door neighbour it may mean you have
 started speaking gobbledygook! Hence the need to consider what spatial
 microsimulation is, and what it is not, at the outset. However, every case, 
-the term involves the creation of individual-level data that is grouped by 
+the term involves the creation of individual level data that is grouped by 
 geographic zone via some kind of approximation method.
 
 
@@ -220,14 +220,14 @@ geographic zone via some kind of approximation method.
 # 
 # -   Communicating with undergraduates who are unlikely to have come
 #     across the term or its analogies. "I do spatial microsimulation, a
-#     way of generating individual-level data for small areas..."
+#     way of generating individual level data for small areas..."
 # 
 # -   Chatting casually in the pub or coffee shop: "I'm using a technique
 #     called spatial microsimulation to model people...".
 # 
 # The above examples illustrate potential for
 # confusion: care needs to be taken to use terminology each audience understands. The transport modeller, for example, may
-# already know that the term 'population synthesis' means creating an individual-level
+# already know that the term 'population synthesis' means creating an individual level
 # dataset of real areas, whereas more basic terms need to be used when communicating
 # the method to policy makers. All this links back to the importance
 # of transparency and reproducibility of method discussed in the previous Chapter:
@@ -294,7 +294,7 @@ geographic zone via some kind of approximation method.
 # most used part of this branch, called reweighting: the process of generating the spatial microdata. From 
 # [](#CakeMap)
 # onward, we also explain what can be done with the spatial microdata that we have generated in the preceding chapters. The technique described in this book will be most useful in contexts where you
-# have categorical geographically aggregated count data about the entire target population (these are the *constraint variables*, often taken from a national census) and an individual-level survey based on a sample of the target population (the non-spatial *microdata*).
+# have categorical geographically aggregated count data about the entire target population (these are the *constraint variables*, often taken from a national census) and an individual level survey based on a sample of the target population (the non-spatial *microdata*).
 ```
 
 To avoid confusion regarding the terminology used in this book,
@@ -370,7 +370,7 @@ illustrates how the outputs of spatial
 microsimulation can form an empirical basis for ABM.
 
 In summary, ABM and spatial microsimulation are closely related, overlapping and
-complementary approaches to the analysis of individual-level processes
+complementary approaches to the analysis of individual level processes
 operating over geographical space and time. A main conceptual difference is
 that the spans of space and time tend to be larger in spatial microsimulation
 work, for reasons relating to computing power and model complexity.
@@ -403,10 +403,10 @@ During spatial microsimulation, apparently new individuals are created and
 placed into zones. It would be tempting to think that new information
 about the world is somehow
 being created. This is not the case: the 'new' individuals are simply repeats
-of individuals we already knew about from the individual-level data, albeit
+of individuals we already knew about from the individual level data, albeit
 in a different order and in different combinations. 
 Thus we are not increasing the diversity of the dataset,
-simply changing its aggregate-level characteristics. 
+simply changing its aggregate level characteristics. 
 Spatial microsimulation creates a complete data that take into
 accounts all other data you included in the process. It
 is just a way to put all information together to approximate
@@ -442,7 +442,7 @@ of microsimulation.
 
 A common use of spatial microsimulation (at least the population synthesis aspect)
 is simply to create model estimates of data which does not exist. This 
-usage case is represented in Figure 2.1, whereby individual-level data from
+usage case is represented in Figure 2.1, whereby individual level data from
 a survey is 'scaled down' to the local level using population synthesis algorithms.
 As illustrated in Figure 2.1, the process of population synthesis can be seen
 as an attempt to reproduce the real spatial microdata collected during the
@@ -476,7 +476,7 @@ is a study which estimated the rate of smoking at the
 small area level in the city of Leeds UK
 [@Tomintz2008].
 Smoking is a classic 'target variable' in spatial microsimulation:
-it is reported in a number of individual-level surveys but there is surprisingly
+it is reported in a number of individual level surveys but there is surprisingly
 little information about how smoking rates vary from place to place.
 Thus it is difficult to where to locate services that depend on the rate of smoking.
 The synthetic spatial microdata could thus be used to help identify new clinics
@@ -560,7 +560,7 @@ research agencies in many countries to estimate the distributional impacts
 of policy reforms (Figure 3.2).
 The resulting research demonstrates that modelling work based on
 microsimulation can provide important new lines of evidence
-to inform national-level policies [@avram2012distributional].
+to inform national level policies [@avram2012distributional].
 
 ```{r, fig.cap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.", fig.scap="Output from the EUROMOD model", fig.width=5, fig.height=5, fig.align='center', echo=FALSE}
 # A typical output from a microsimulation model for economic policy evaluation, from De Agostini et al. (2014). Each vertical bar represents the relative gains or losses of each income 'vingtile' (there are 20 equally sized groups, by income, in the model) and the black line shows that the austerity budget has been most detrimental to low income groups and most beneficial to the upper-middle classes.
@@ -572,8 +572,8 @@ grid.raster(img)
 
 Spatial microsimulation uses very similar techniques as those employed by
 EUROMOD and other economic microsimulation models,
-including probability-weighted random sampling of individual-level
-data and aggregate-level scenario development
+including probability-weighted random sampling of individual level
+data and aggregate level scenario development
 [@sutherland2013euromod]. The majority of microsimulation
 research for economic policy evaluation does not
 disaggregate the impacts over space, however. The estimation of variability
@@ -587,7 +587,7 @@ of EUROMOD into the methods outlined in the following chapters.
 
 ### Transport
 
-Transport modelling is a mature field that increasingly uses individual-level
+Transport modelling is a mature field that increasingly uses individual level
 data as the basis of analysis. Large scale models
 such as [MATSim](http://www.matsim.org/) rely on spatial microdata to provide
 demand for travel and individual characteristics for origins and destinations.
@@ -657,7 +657,7 @@ the results depend on and the extent to which these assumptions can be expected
 to hold in practice. Roughly speaking there are four main assumptions underlying
 all spatial microsimulation models:
 
-1. The individual-level microdata are representative of the study area.
+1. The individual level microdata are representative of the study area.
 2. The target variable is dependent on the constraint variables and their
 interactions in a way that is relatively constant over space and time.
 3. The relationships between the constraint variables are not spatially dependent.
