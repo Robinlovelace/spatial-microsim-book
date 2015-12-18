@@ -554,7 +554,7 @@ females) and the simulated spatial microdata (which contains 8 older people and
 6 females). Note that in addition to the constraint variables, we also have
 an estimate of the income distribution in SimpleWorld's second zone.
 
-By the end of Chapter 5, you should how to generate
+By the end of Chapter 5, you should learn how to generate
 this table and understand each of the steps involved.
 The remainder of this section
 considers how the outputs of spatial microsimulation, in the context of
