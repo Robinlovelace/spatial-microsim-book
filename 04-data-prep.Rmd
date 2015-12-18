@@ -465,7 +465,7 @@ load the individual level dataset first. This
 is because individual level data from surveys
 is often
 more difficult
-to format. individual level datasets are often larger
+to format. Individual level datasets are often larger
 and more complex than the constraint data, which
 are simply integer counts of different categories.
 Of course, it is possible that the
