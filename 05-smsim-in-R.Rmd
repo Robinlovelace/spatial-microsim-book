@@ -1726,11 +1726,11 @@ weight_mipfp <- Ipfp(weight_init, descript, target,
 
 
 Convergence was achieved after only 5 iterations.
-The result, stored in `weight_mipfp`, is a `data.frame` including
-the final weight matrix.
-We can check the margins and print the final 
-weights. Note that income is still not present in the matrix.
-We look at the result for the aggregate
+The result, stored in the `weight_mipfp` is a `data.frame` containing
+the final weight matrix, as well as additional outputs from
+the algorithm. We can check the margins and print the final
+weights. Note that we still have the income into the matrix. For the
+comparison, we look only at the result for the aggregate
 table of age and sex.
 
 ```{r}
