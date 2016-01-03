@@ -189,7 +189,7 @@ the distribution used as a probability. However, this implicitly assumes
 that there are no correlations between the available variables.
 If there are only a few shared variables (e.g. age, sex,
 employment status), your options are limited. Increasingly,
-however, there are many linking variables to choo se from
+however, there are many linking variables to choose from
 as questionnaires become broader and more available. In this
 case the choice of constraints becomes important: which and
 how many to use,
