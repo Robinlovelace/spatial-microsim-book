@@ -14,10 +14,10 @@ load("cache-smsim-in-R.RData")
 
 # Alternative approaches to population synthesis {#alternative-reweighting}
 
-This chapter describes briefly other techniques for spatial microsimulation.
+This chapter briefly describes other techniques for spatial microsimulation.
 We have different methods, each corresponding to a section : 
 
--*GREGWT* ([](#is-not)) contains a method based on a Generalized Regression Weighting 
+-*GREGWT* ([](#GREGWT)) contains a method based on a Generalized Regression Weighting 
 procedure.
 -*Population synthesis as an optimization problem* ([](#asOptim)) explains
 how we can make spatial microsimulation thanks to optimization algorithms.
@@ -25,7 +25,7 @@ how we can make spatial microsimulation thanks to optimization algorithms.
 -*The Urban Data Science Toolkit (UDST)* ([](#UDST)) shortly describes another
 technique, coded in python.
 
-## GREGWT
+## GREGWT {#GREGWT}
 
 ```{r, echo=FALSE}
 # TODO: make reproducible example, compare performance with IPF
@@ -33,8 +33,8 @@ technique, coded in python.
 
 As described in the Introduction, IPF is just one strategy for obtaining a
 spatial microdataset. However, researchers tend to select one method that they
-are comfortable and stick with that for their models. This is understandable
-because setting-up the method is usually time consuming: most researchers
+are comfortable with and stick with that for their models. This is understandable
+because setting up the method is usually time consuming: most researchers
 rightly focus on applying the methods to the real world rather than fretting
 about the details. On the other hand, if alternative methods work better for a
 particular application, resistance to change can result in poor model fit. In
@@ -51,8 +51,8 @@ weights using a Generalized Regression Weighting procedure (hence the name
 GREGWT).  The resulting weights ensure that, when aggregated, the individuals
 selected for each small area fit the constraint variables. Like IPF, the GREGWT
 results in non-integer weights, meaning some kind of integerisation algorithm
-will be needed to obtain a final individual level population, so for example,
-if the output is to be used in ABM. The macro developed by ABS adds a weight
+will be needed to obtain a final individual level population. For example,
+if the output is to be used in ABM, the macro developed by ABS adds a weight
 restriction in their GREGWT macros to ensure positive weights. The ABS uses the
 Linear Truncated Method described in Singh and Mohl (1996) to enforce these
 restrictions.
@@ -64,14 +64,14 @@ restrictions.
 # restrictions, this leads to the generation of negative weights.
 ```
 
-A simplified version of this algorithm (and other algorithms) is provided in
-by @Rahman2009.  The the algorithm is described in more detail in @Tanton2011.
+A simplified version of this algorithm (and other algorithms) is provided
+by @Rahman2009.  The algorithm is described in more detail in @Tanton2011.
 An R implementation of GREGWT can be found in the GitHub repository
 [GREGWT](https://github.com/emunozh/GREGWT) and installed using
 the function `install_github()` from the **devtools** package.
 
 The code below
-uses this implementation of the GREGWT algorithm, with the data from the
+uses this implementation of the GREGWT algorithm, with the data from
 Chapter 3.
 
 ```{r, fig.cap="Load and prepare the data.", message=FALSE}
@@ -100,7 +100,7 @@ Result <- as.data.frame(matrix(NA, ncol=3, nrow=dim(age)[1]))
 names(Result) <- c("area", "income", "cap.income")
 ```
 
-The code presented above loads the SimpleWorld data and created a new
+The code presented above loads the SimpleWorld data and creates a new
 data.frame with this data. Version 1.4 of the R library requires the data to be
 in binary form. The require input for the R function is `X` representing the
 individual level survey, `dx` representing the initial weights of the survey
@@ -142,7 +142,7 @@ the value of the objective function is $f_0(x)$, depends on $x$. The possible va
 thanks to *par*, a vector of predefined arguments or parameters of length $m$ ($m$ is the number of constraints)
 ($par_1,par_2,..,par_m$). 
 This
-kind of problems can be expressed as:
+kind of problem can be expressed as:
 
 $$\left\{
 \begin{array}{l}
@@ -154,7 +154,7 @@ $$\left\{
 
 Applying this to the problem of population synthesis,
 the parameters $par_i$ represent 0 and $f_i(x)=x$, since all cells have to be positive.
-The $f_0(x)$, to be minimised, is the distance between the actual weight matrix and
+The $f_0(x)$, to be minimised is the distance between the actual weight matrix and
 the aggregate constraint variable
 `cons`. $x$ represents the weights which will
 be calculated to minimise $f_0(x)$.
@@ -170,8 +170,8 @@ the weight (the result of $f_0$, is a single value depending on $x$). This searc
 must take place under constraints relating to
 volume (depending on the shape) and safety
 ($par_1$ and $par_2$ in the above notation). Thus $par$ values
-define the domain of the *solution space*. We search inside this domain
-the combination of $x_i$ that minimise weight.
+define the domain of the *solution space*. We search inside this domain for
+the combination of $x_i$ that minimises weight.
 
 The case of spatial microsimulation has relatively
 simple constraints: all weights must be positive or zero:
@@ -184,11 +184,11 @@ $$
 Seeing spatial microsimulation as an optimisation problem
 allows solutions to be found using established
 techniques of *constrained optimisation*.
-The main advantage of this re-framing
+The main advantage of this reframing
 is that it allows any optimisation algorithm to perform the reweighting.
 
 To see population synthesis as a constrained optimization problem analogous to
-aircraft design, we must define the problem to optimise, the variable $x$ and then
+aircraft design, we must define the problem to optimise the variable $x$ and then
 set the constraints.  
 
 Intuitively, the weight (or number of occurrences) for each individual
@@ -219,8 +219,8 @@ $$\left\{
 Key to this is interpreting individual weights as parameters (the vector $w=(w_1,...,w_m)$,
 of length $m$ above)
 that are iteratively modified to optimise the fit between individual and
-aggregate level data. Remarks that in comparison with the theoretical 
-definition of an optimisation problem, our `par` are the theoretical $x$. 
+aggregate level data. Note that in comparison with the theoretical 
+definition of an optimisation problem, our parameters to determine (`par`) are the theoretical $x$. 
 The measure of fit, so the distance, we use in this context is
 Total Absolute Error (TAE).
 
@@ -272,7 +272,7 @@ individual level dataset. But which to use?
 Different reweighting strategies are suitable in different contexts and there
 is no clear winner for every occasion. However, testing a range of
 strategy makes it clear that certain algorithms are more efficient than
-others for spatial microsimulation. Figure 6.1. demonstrates this variability
+others for spatial microsimulation. Figure 6.1 demonstrates this variability
 by plotting total absolute error as a function of number of iterations for
 various optimization algorithms available from the base function
 `optim` and the **GenSA** package. Note that the comparisons 
@@ -280,7 +280,7 @@ are performed only for zone 1.
 \index{benchmarking}
 \index{speed}
 
-```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.scap="Total Absolute Error results for several algorithms", fig.width=4, fig.height=4, fig.align='center', echo=FALSE}
+```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.", fig.scap="Total Absolute Error results for several algorithms", fig.width=4, fig.height=4, fig.align='center', echo=FALSE}
 # commented as pdf version looks better! 
 img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
 grid.raster(img)
@@ -297,7 +297,7 @@ qplot(data = opt_res, time, fit, color = algorithm, geom="line") +
   ylab("Total Absolute Error") + xlab("Time (microseconds)") + scale_color_brewer(palette = 2, type = "qual") + theme_classic() + xlim(c(0, 15000))
 ```
 
-Figure 6.1. shows that all algorithms
+Figure 6.1 shows that all algorithms
 improve fit during the first iteration.
 The reason for using IPF
 becomes clear after only one iteration.
@@ -367,7 +367,8 @@ algorithm in function of the number of iterations (Figure \ref{TimeOptim_GenSA})
 demonstrates that an iteration of GenSA take a long time in comparison 
 with the other algorithm. Moreover, `"BFGS"` and `"CG"` are still following a
 similar curve under GenSA. Nelder-Mead, SANN and IPF contains iterations that 
-take less time. Until, it appears that IPF is the best in terms of iterations
+take less time. By observing Figures 6.1 and 6.2 simultaneously , it appears that IPF is the best 
+in terms of convergence (little TAE after few iterations)
 and the time needed for few iterations is good.
 
 ```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms",fig.scap="Total Absolute Error in function of processing time for several algorithms", fig.scap="Relationship between processing time and goodness-of-fit", fig.width=4, fig.height=4, fig.align='center', echo=FALSE}
@@ -422,7 +423,7 @@ population is proposed with one or several swapped individuals.
 \index{genetic algorithm}
 Genetic algorithms are included in this field and become popular in some 
 domains, such as industry, for the moment. This kind of algorithm can be 
-very effective when the objective function has several local minimum and
+very effective when the objective function has several local minimums and
 we want to find the global one
 (Hermes and Poulsen, 2012).
 
@@ -488,7 +489,7 @@ integer weights, we do not have the issue of fractional weights
 associated with IPF.
 Combinatorial optimisation algorithms for population
 synthesis do not rely on integerisation,
-which can damage model fit. The fact that the gradient contains "NA"^[We mean that instead of having a numerical value in each cells, some cells contain the value 'NA'(Non Applicable). This value appears when this cell has not been defined]
+which can damage model fit. The fact that the gradient contains "NA"^[We mean that instead of having a numerical value in each cells, some cells contain the value 'NA'(Non Applicable). This value appears when this cell has not been defined.]
 in the end of the algorithm is not a problem, because it just means
 that this cell has not been calculated.
 
@@ -520,7 +521,7 @@ With this method, there cannot be a population with 1 male of
 over 50, because we take integer weights and there are two 
 men in this category in the sample. This is the disadvantage of
 algorithms reaching directly integer weights. With IPF, if the 
-weights of this individual is between 0 and 1, there is a possibility 
+weights of this individual are between 0 and 1, there is a possibility 
 of a person belonging to this category.
 
 `genoud` is used here only
@@ -564,7 +565,7 @@ contingencyWt(eusilcS$pl030, eusilcS$pb220a,
 \index{simPop}
 
 The above code shows the first 8 (of 18) variables in the `eusilcS` dataset
-provided by **simPop** and example of one of **simPop**'s functions.
+provided by **simPop** and an example of one of **simPop**'s functions.
 This function is useful, as it calculates the level of association between
 two categorical variables: economic status (`pl030`) and citizenship status
 (`pb220a`). The result of 0.175 shows that there is a weak association between
@@ -589,16 +590,16 @@ It is outside the scope of this book to comment on the performance
 of the tools within the UDST (which is written in Python). Suffice
 to flag the project and suggest readers investigate the
 [Synthpop](https://github.com/UDST/synthpop)
-software as alternative synthetic population generator.
+software as an alternative synthetic population generator.
 
 \index{Synthpop}
 \index{Urban Data Science Toolkit}
 
 ## Chapter summary
 
-In summary, this chapter presented several alternative to IPF
-to perform to a spatial microsimulation. We mentioned a regression
-method : GREWT, ways using the optimization theory, an R package
-containing several procedures : *simPop* and the UDST, currently
+In summary, this chapter presented several alternatives to IPF
+to perform a spatial microsimulation. We mentioned a regression
+method: GREWT, ways using the optimization theory, an R package
+containing several procedures: *simPop* and the UDST, currently
 developed in python.
 
