@@ -124,7 +124,7 @@ required level of detail.
 For example, you may have a variable on the province of each individual
 but need its municipality, a lower geographical level.
 The input data can be accessed from the RStudio book project, as described
-in [](#SimpleWorld) .
+in [](#SimpleWorld).
 
 
 \index{reproducibility}
@@ -136,7 +136,7 @@ always recover information that otherwise could have been lost and makes the
 project fully reproducible. In this chapter, a relatively clean and
 very tiny dataset from SimpleWorld is used, but we still create a backup of the
 original dataset. We will see in chapter
-\ref{CakeMap} how to deal with larger and more messy data, where being able to
+\ref{CakeMap} how to deal with larger and messier data, where being able to
 refer to the original dataset is more important. Here the focus is on the principles.
 
 ```{r, echo=FALSE}
@@ -182,14 +182,14 @@ These are also referred to as *constraint variables*, as they
 *constrain* the individual weights per zone (Ballas et al. 2005).
 
 If there are no shared variables between the aggregate and
-individual level data generating an accurate synthetic population is impossible. 
+individual level data, generating an accurate synthetic population is impossible. 
 In this case, your only alternative is to consider only the
 marginal distribution of the variable and make a random selection with 
 the distribution used as a probability. However, this implicitly assumes
 that there are no correlations between the available variables.
 If there are only a few shared variables (e.g. age, sex,
 employment status), your options are limited. Increasingly,
-however, there are many linking variables to chose from
+however, there are many linking variables to choo se from
 as questionnaires become broader and more available. In this
 case the choice of constraints becomes important: which and
 how many to use,
@@ -227,7 +227,7 @@ state of Victoria, from the 2011 VicHealth Indicators
 [Survey](http://data.aurin.org.au/dataset?q=sleep),
 is not a suitable constraint variable.
 
-**Constraint variables should be integer counts**,
+Constraint variables should be integer counts,
 and should contain a sufficient number
 categories for each variable. Ideally, each relevant
 category and cross-tabulation should be represented.
@@ -275,7 +275,7 @@ aggregate level statistics (e.g. average household income).
 So income per person must be simulated for each zone, using
 spatial microsimulation. Sampling from a national population
 provides a more realistic distribution than simply assuming
-every person of a given income band earns a certain amount:
+every person of a given income band earns a certain amount;
 this is clearly not the case as income distributions are
 not flat (they tend to have positive skew). 
 
@@ -303,11 +303,11 @@ variables in the individual level data that are
 also present in the geographically aggregated constraints?
 Even when many linking variables are available, it is
 important to determine the fit between the categories in each.
-If age is reported in five year bands in the aggregate level
-data, but only in 20 year bands in the individual level data,
+If age is reported in five-year bands in the aggregate level
+data, but only in 20-year bands in the individual level data,
 for example,
-this could be problematic if the research question is highly
-age-dependent.
+this could be problematic for highly
+age-dependent research.
 - Representiveness: is the sample population representative of the areas under investigation?
 - Sample size and diversity: the input dataset must be sufficiently large and diverse to mitigate the *empty cell* problem.
 - Target variables: are these, or proxies for them, included in the dataset?
@@ -374,9 +374,9 @@ but the result may not converge
 to a single answer because the gender distribution may
 be disrupted by the age/income constraint. Further work
 is needed to test this but from theory we can be sure:
-a three way cross-tabulated constraint (age/sex/income)
+a 3-way cross-tabulated constraint (age/sex/income)
 would be ideal in this case because it 
-provides more information than two-way marginal distributions.
+provides more information than 2-way marginal distributions.
 
 ```{r, echo=FALSE}
 # Todo: define/write-about marginal distributions
@@ -393,7 +393,7 @@ and the more measure of the number of categories within all linking variables
 is preferable as it provides a closer indication of the 'bin size' used to
 categorise individuals during population synthesis. Still, the nature of both
 linking variables and their categories should be considered: an age variable
-contain 5 categories may look good on paper. However, if those categories are
+containing 5 categories may look good on paper. However, if those categories are
 defined by the breaks `c(0, 5, 10, 15, 20, 90)`, 
 the linking variable will not be effective at accurately recreating age
 distributions. More evenly distributed categories (such as
@@ -449,7 +449,7 @@ amount. However, caution should be taken when using this approach because
 it assumes that the relationship between categories is the same
 across all level or base populations. In the case of car ownership, where
 larger households are likely to own more cars, this assumption clearly
-would not hold: inferring individual level marginals from household level
+would not hold; inferring individual level marginals from household level
 data would in this case lead to an underestimate of car availability.
 
 ```{r, echo=FALSE}
@@ -489,7 +489,7 @@ These ultimately need to be loaded into R as a `data.frame` object. Note
 that there are many ways to load data into R, including `read.csv()` and
 `read.table()` from base R. Useful commands for loading proprietary data formats
 include `read_excel` and  `read.spss()` from **readxl** and **foreign**
-packages respectively.
+packages, respectively.
 
 More time consuming is cleaning the data and there are also many ways to do this.
 In the following example we present 
@@ -587,7 +587,7 @@ The results of the previous operations are encouraging. The total population is
 the same for each constraint overall and for each area (row) for both
 constraints.  If the total populations between constraint variables do not match
 (e.g. because the *population bases*^[see
-the Glossary for a description of the population base] are different) this is problematic.
+the Glossary for a description of the population base.] are different) this is problematic.
 Appropriate steps to normalise the errant constraint variables are described in
 the CakeMap chapter (\ref{CakeMap}). This involves scaling the category totals
 so the totals are equal across all categories.
@@ -602,7 +602,7 @@ superfluous variables early, to avoid over-complicating and slowing-down the
 analysis.  For example, if `ind` had 100 variables of which only the 1st, 3rd and 19th were of
 interest, the following command could be used to update the object. Note that
 only the relevant variables, corresponding to the first, third and nineteenth
-columns are
+columns, are
 retained:^[An
 alternative way to remove excess variables is to use `NULL` assignment to remove columns. `ind$age <- NULL`, for example,
 would remove the age 
@@ -620,9 +620,9 @@ to ensure individuals do not get mixed-up by a function that changes their
 order (`merge()`, for example, is a function that can cause havoc by changing
 the order of rows).
 Before removing the superfluous `income` variable, we will create a backup of
-`ind` that can be referred back-to if necessary^[For example, when we will have a 
+`ind` that can be referred back to if necessary^[For example, when we will have a 
 spatial microdataset replicating the individuals, we will be able to re-assign 
-the income to each generated individual]:
+the income to each generated individual.]:
 
 ```{r}
 ind_orig <- ind # store the original ind dataset
@@ -647,15 +647,20 @@ individual level variables than to re-name or combine aggregate level variables,
 so the former should usually be set first.  An obvious difference between the
 individual and aggregate versions of the `age` variable is that the former is of
 type `integer` whereas the latter is composed of discrete bins: 0 to 49 and 50+.
-We can categories the variable into these bins using 
-`cut()`:^[The
-combination of curved and square brackets in the output from the `cut` function
-may seem strange but this is
-an International Standard: curved brackets mean 'excluding' and square brackets
-mean 'including'. The output `(49, 120]`, for example, means 'from
-49 (excluding 49, but including 49.001) to 120 (including the exact value 120)'.
-See http://en.wikipedia.org/wiki/ISO_31-11 for more
-on international standards on mathematical notation.]
+We can categorise the variable into these bins using 
+`cut()`:
+
+```{r, echo=FALSE}
+# ^[The
+# combination of curved and square brackets in the output from the `cut` function
+# may seem strange but this is
+# an International Standard: curved brackets mean 'excluding' and square brackets
+# mean 'including'. The output `(49, 120]`, for example, means 'from
+# 49 (excluding 49, but including 49.001) to 120 (including the exact value 120)'.
+# See http://en.wikipedia.org/wiki/ISO_31-11 for more
+# on international standards on mathematical notation.]
+```
+
 
 ```{r}
 # Test binning the age variable
@@ -680,7 +685,7 @@ cut(ind$age, breaks = brks, labels = labs)
 
 The factor generated now has satisfactory labels: they match the column headings
 of the age constraint, so we will save the result. (Note, we are not
-loosing any information at this stage because we have saved the original
+losing any information at this stage because we have saved the original
 `ind` object as `ind_orig` for future reference.)
 
 ```{r}
@@ -768,8 +773,7 @@ To undertake this 'flattening' process the
 The result for each variable is a new matrix with the same number of columns as
 there are categories in the variable. Note that the order of columns is usually
 alphabetical: this can cause problems if the columns in the constraint tables
-are not ordered in this way.  
-@knoblauch2012modeling provide a lengthier description of this
+are not ordered in this way. @knoblauch2012modeling provide a lengthier description of this
 flattening process.
 
 The second stage is to use the `colSums()` function 
@@ -836,7 +840,7 @@ by adding high weights to the most representative individuals.
 To summarise, we have learned about and implemented
 methods for loading and preparing input data for spatial microsimulation
 in this chapter.
-The following check-list outlines the main features of the input datasets
+The following checklist outlines the main features of the input datasets
 to ensure they are ready for reweighting, covered in the next chapter:
 
 1. Both constraint and target variables are loaded in R:

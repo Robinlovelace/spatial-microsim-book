@@ -83,9 +83,17 @@ on your computer. This will allow you to type test the code as you learn the met
 To install R, we recommend you refer to documentation provided
 online, on the Comprehensive R Archive Network (CRAN):
 
-- For Windows, see [cran.r-project.org/bin/windows/base](https://cran.r-project.org/bin/windows/base/)
-- For Mac, see [cran.r-project.org/bin/macosx/](https://cran.r-project.org/bin/macosx/)
-- For Linux, see [cran.r-project.org/doc/manuals/r-release/R-admin.html](https://cran.r-project.org/doc/manuals/r-release/R-admin.html)
+- For Windows, see https://cran.r-project.org/bin/windows/base/
+- For Mac, see https://cran.r-project.org/bin/macosx/
+- For Linux, see https://cran.r-project.org/doc/manuals/r-release/R-admin.html
+
+```{r, echo=FALSE}
+# The linked way:
+# - For Windows, see [cran.r-project.org/bin/windows/base](https://cran.r-project.org/bin/windows/base/)
+# - For Mac, see [cran.r-project.org/bin/macosx/](https://cran.r-project.org/bin/macosx/)
+# - For Linux, see [cran.r-project.org/doc/manuals/r-release/R-admin.html](https://cran.r-project.org/doc/manuals/r-release/R-admin.html)
+```
+
 
 On Debian-based systems such as Ubuntu, the following bash command should be sufficient to install R.
 
