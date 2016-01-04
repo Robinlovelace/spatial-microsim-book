@@ -51,7 +51,7 @@ weights using a Generalized Regression Weighting procedure (hence the name
 GREGWT).  The resulting weights ensure that, when aggregated, the individuals
 selected for each small area fit the constraint variables. Like IPF, the GREGWT
 results in non-integer weights, meaning some kind of integerisation algorithm
-will be needed to obtain a final individual level population. For example,
+will be needed to obtain individual level microdata. For example,
 if the output is to be used in ABM, the macro developed by ABS adds a weight
 restriction in their GREGWT macros to ensure positive weights. The ABS uses the
 Linear Truncated Method described in Singh and Mohl (1996) to enforce these
@@ -154,7 +154,7 @@ $$\left\{
 
 Applying this to the problem of population synthesis,
 the parameters $par_i$ represent 0 and $f_i(x)=x$, since all cells have to be positive.
-The $f_0(x)$, to be minimised is the distance between the actual weight matrix and
+The $f_0(x)$ to be minimised is the distance between the actual weight matrix and
 the aggregate constraint variable
 `cons`. $x$ represents the weights which will
 be calculated to minimise $f_0(x)$.
@@ -423,7 +423,7 @@ population is proposed with one or several swapped individuals.
 \index{genetic algorithm}
 Genetic algorithms are included in this field and become popular in some 
 domains, such as industry, for the moment. This kind of algorithm can be 
-very effective when the objective function has several local minimums and
+very effective when the objective function has several local minima and
 we want to find the global one
 (Hermes and Poulsen, 2012).
 
@@ -598,8 +598,6 @@ software as an alternative synthetic population generator.
 ## Chapter summary
 
 In summary, this chapter presented several alternatives to IPF
-to perform a spatial microsimulation. We mentioned a regression
-method: GREWT, ways using the optimization theory, an R package
-containing several procedures: *simPop* and the UDST, currently
-developed in python.
-
+to generate spatial microdata. We explored a regression
+method (GREGWT), combinatorial optimization and the R package
+*simPop*. Finally we looked at the Python-based Urban Data Science Toolkit.
