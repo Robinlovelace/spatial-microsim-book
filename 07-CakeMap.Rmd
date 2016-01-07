@@ -823,4 +823,4 @@ the input of the other, but **mipfp** is really simpler to use when having sever
 and cross-tabulated constraints.
 
 We have also seen that **ipfp** is faster for very small problems, but **mipfp**
-have better performances for problems of consequent sizes.
+performs better on large datasets.
