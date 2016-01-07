@@ -15,7 +15,7 @@ library(grid)
 
 # Spatial microsimulation in the wild {#CakeMap}
 
-So for the book has explained what spatial microsimulation
+So far the book has explained what spatial microsimulation
 is, described its applications and demonstrated how it works.
 We have seen something of its
 underlying theory and its implementation in R. But how can
@@ -54,17 +54,18 @@ individual level survey, DHS --- the *microdata*.
 aggregated categorical count data from the census --- the *constraint tables*.
 
 This chapter is structured as follow: 
+
 -*Selection of constraint variables* ([](#CakeMapConVar)) describes and justifies
 the choice of the constraint variables on this specific example.
 -*Preparing the input data* ([](#CakePrep)) contains the pieces of code
-necessary to load and prepare the data, before to perform the spatial microsimulation.
+necessary to load and prepare the data, before performing the spatial microsimulation.
 -*Using the `ipfp` package* ([](#CakeMapIPFP)) develops the whole process
 to create a synthetic population thanks to the R package **ipfp**.
--*Using the `mipfp` package* ([](#CakeMIPF)) includes also the whole
+-*Using the `mipfp` package* ([](#CakeMIPF)) also includes the whole
 process, but with the R package **mipfp**.
 -*Comparing methods of reweighting large datasets* ([](#CompareMeth)) compares
 the different results and describes briefly how to transform one type of result
-in the other type.
+to the other type.
 
 
 ## Selection of constraint variables {#CakeMapConVar}
@@ -73,7 +74,7 @@ As discussed in ([](#data-prep)), we must first decide which variables
 should be used to link the two. We must
 select the constraints from available linking variables.
 
-The selection of linking variables should not be arbitrary pre-ordained
+The selection of linking variables should not be arbitrarily preordained
 by preconceptions. The decision of which constraints to use to
 allocate individuals to zones should be context dependent.
 If the research is on social exclusion, for example,
@@ -84,7 +85,7 @@ would be ideal, but which datasets are available. The selection criteria
 will vary from one project to the next, but there are some overriding
 principles that apply to most projects:
 
-1. **More the merrier**: each additional constraint used for
+1. **More the merrier**: each additional constraint used
 will further differentiate the spatial microdata from the input microdata.
 If gender is the only constraint used, for example, the spatial microdata will
 simply be a repetition of the input microdata but with small differences in
@@ -133,9 +134,9 @@ without making the population synthesis process too complex
 
 To exemplify these principles, let us consider the constraint variables available
 in the CakeMap datasets. Clearly only variables available both in the individual level and 
-aggregate level datasets can be chosen from. Suppose our aim is to analyse the consumption 
+aggregate level datasets can be chosen. Suppose our aim is to analyse the consumption 
 of cakes depending on socio-demographic variables. Five interesting variables assigned to each
-of the 916 individuals are available from the individual level data :
+of the 916 individuals are available from the individual level data:
 
 - 'Car': The number of working cars in the person's household.
 - 'Sex' and 'ageband4': Gender and age group, in two separate variables. 
@@ -144,7 +145,7 @@ This information can be seen, once the dataset is loaded, by entering
 `unique(ind$ageband4)` or, to see the counts in each category,
 `summary(ind$ageband4)`. Because the variable is of type `factor`,
 `levels(ind$ageband4)` will also provide this information.]
-- 'NSSEC': National Statistics Socio-economic Classification: an categorical
+- 'NSSEC': National Statistics Socio-economic Classification: a categorical
 variable classifying the individual's work into one of 10 groups including '97',
 which means 'no answer' (`NA`).
 - 'NCakes': the target variable, reported number of times that the respondent
@@ -167,7 +168,7 @@ for the project are stored.
 
 Often spatial microsimulation is presented in a way that suggests the data
 arrived in a near perfect state, ready to be inserted directly into the model.
-This is rarely the case: usually, one must spend time 
+This is rarely the case; usually, one must spend time 
 loading the data into R, dealing with missing values,
 re-coding categorical variables and column
 names, binning continuous variables and subsetting from the microdataset. In a
@@ -181,7 +182,7 @@ The raw constraint variables for CakeMap were downloaded from
 the Infuse website (http://infuse.mimas.ac.uk/).
 These, logically enough, are stored in the 'cakeMap/data/' directory
 as .csv files and contain the word 'raw' in the file name
-to identify the original data. The file 'age-sex-raw.csv', for example is the raw
+to identify the original data. The file 'age-sex-raw.csv', for example, is the raw
 age and sex data that was downloaded. As the screenshot in
 Figure 7.1 illustrates, these datasets are rather verbose and
 require pre-processing. The resulting 'clean' constraints are saved in files such as
@@ -198,7 +199,7 @@ grid.raster(img)
 To ensure reproducibility in the process of converting the raw data into
 a form ready for spatial microsimulation, all the steps have been saved.
 Take a look at the R script files 'process-age.R', 'process-nssec.R' and
-'process-car.R'. The contents of these scripts should provide an insight
+'process-car.R'. The contents of these scripts should provide insight
 into methods for data preparation in R. Wickham
 (2014b) provides a more
 general introduction to data reformatting.
@@ -299,7 +300,8 @@ cor(as.numeric(cons), as.numeric(ind_agg))
 ```
 
 This value is very close to 1, so we can consider that there is a big linear
-correlation between the results and the constraints. We can verify it by plotting:
+correlation between the results and the constraints. We can verify it by plotting
+the graph on Figure 7.2.
 
 ```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis).", fig.scap="Scatter of simulated and desired counts with ipfp",fig.align='center'}
 plot(ind_agg, cons, pch=20, xlab="Result of the simulation",
@@ -332,10 +334,10 @@ max(abs(ind_agg-cons))
 which(abs(ind_agg-cons) == max(abs(ind_agg-cons)), arr.ind = TRUE)
 ```
 
-The maximum error is now know and corresponds to the zone 84 and 13 
+The maximum error is now known and corresponds to the zone 84 and 13 
 columns of the constraints, which is `Car`. 
 
-This is for the basic validation, a more detailed analysis of the quality 
+This is for the basic validation; a more detailed analysis of the quality 
 of the results is present in the next chapter.
 
 ### Integerisation {#CakeINT}
@@ -411,6 +413,8 @@ save.image("cache-CakeMap.RData")
 # (MD) explain better the integerisation and the reason why you calculate the things here above
 ```
 
+\newpage
+
 ## Using the `mipfp` package {#CakeMIPF}
 
 ### Performing IPF on CakeMap data {#CakeIPF}
@@ -450,7 +454,7 @@ the structure of some constraints will have to change (**mipfp** takes
 as input a table of $n_var$ dimensions, whereas **ipfp** takes as input
 a 2-dimensional dimension, whose columns describe variables) and 
 this process will be easier if the names are the same.
-To re-affirm our starting point, a sample of the
+To reaffirm our starting point, a sample of the
 new individual level data is displayed below.
 
 ```{r}
@@ -499,7 +503,7 @@ library(mipfp)
 ```
 
 An advantage of **mipfp** over **ipfp** is that the algorithm
-first checks the consistency of the constraints, before reweighting. If 
+first checks the consistency of the constraints before reweighting. If 
 the total number of individuals in a zone is not exactly
 the same from one constraint to another, `mipfp` will
 return the following warning:
@@ -509,7 +513,7 @@ such as the sum of all cells is 1. This means that the algorithm does not
 know how many people per zone you want.
 This is a very useful feature of **mipfp**: creating weights corresponding to
 the correct total population is as simple as
-multiply the probabilities by this number.
+multiplying the probabilities by this number.
 
 An alternative to this is to verify by your own 
 the totals per zone and re-scale the constraints that are 
@@ -537,7 +541,7 @@ important to find the reason of the differences in totals.
 For `con3`, the individual could give no answer. This explains
 why we have a smaller population in this variable.
 To perform (non-probabilistic) reweighting with **mipfp**,
-we must first re-scale `con3` to keep its proportions but
+we must first rescale `con3` to keep its proportions but
 with updated totals per zone. 
 
 ```{r}
@@ -553,8 +557,8 @@ more difficult-to-solve issue with the input data.
 The second and third constraints are simple marginals per zone with
 a single, clearly-defined variable each. The first constraint (`con1`),
 by contrast, is cross-tabulated, a combination of two variables
-(sex and age^[or age $\times$ sex, as cross-tabulations are often represented]).
-We must change structure of the first constraint
+(sex and age^[or age $\times$ sex, as cross-tabulations are often represented.]).
+We must change the structure of the first constraint
 to execute `mipfp`. 
 
 ```{r}
@@ -562,15 +566,15 @@ to execute `mipfp`.
 con1[1:3, 1:8]
 ```
 
-The result of the above command show that `con1` is, like the other constraints,
-a two dimensional table. 
+The results of the above command show that `con1` is, like the other constraints,
+a two–dimensional table. 
 Because it actually contains 2 constraints per zone, the information contained within
-needs to be represented as a three dimensional array (a cube),
+needs to be represented as a three–dimensional array (a cube),
 the dimensions of which are zone, sex and age.
 This conversion is done by
 taking the cells of `con1` and putting them
-to a three dimensional array in the correct order
-(corresponding to the order of the 2 dimensional table). The code to
+to a three–dimensional array in the correct order
+(corresponding to the order of the 2–dimensional table). The code to
 do this is included into the 
 file `R/CakeMapMipfpCon1Convert.R` and the resulting array is called
 `con1_convert`.
@@ -584,7 +588,7 @@ source("R/CakeMapMipfpCon1Convert.R")
 ```
 
 All constraints being converted and all the margins being
-re-scaled, the target and its 'description'
+rescaled, the target and its 'description'
 are ready to be used in `Ipfp()`.
 The target is the set of constraints and the description 
 is the figures of the corresponding dimensions into the weight matrix.
@@ -603,7 +607,7 @@ target <- list(con1_convert,
 descript <- list(c(1,4,6), c(1,3), c(1,5))
 ```
 
-The remaining step involves in executing the `Ipfp` function 
+The remaining step involves executing the `Ipfp` function 
 on these data.
 
 ```{r}
@@ -630,7 +634,7 @@ plot(as.matrix(con3_prop), apply(weight_mipfp$x.hat,c(1,5),sum), pch=20, xlab="R
 # to remove 'echo=FALSE' if need's be (RL)
 ```
 
-The third constraint is perfectly fitted. The first and second 
+We can see on Figure 7.3 that the third constraint is perfectly fitted. The first and second 
 constraints are globally well fitted, but some points, representing
 a specific category in the specific zone, are not so good. Analysis of 
 quality of fit is provided in the next chapter.
@@ -662,7 +666,7 @@ weights <- apply(cons_prop, 1,
 ind_agg <- t(apply(weights, 2, function(x) colSums(x * ind_cat)))
 ```
 
-This section is divided in two parts. One that analyses 
+This section is divided in two parts, one that analyses 
 the distance between the results generated by the two
 packages and the other that focus on the
 time differences.
@@ -693,7 +697,7 @@ max( apply(weight_mipfp$x.hat, 1, sum)
 ```
 
 To visualize all the weights, we plot 
-the different counts per constraint. We observe
+the different counts per constraint at Figure 7.4. We observe
 that the constraint 3 is very well fitted with 
 both methods. For the two other constraints, 
 some categories in some zones are more apart.
@@ -701,7 +705,7 @@ However, both methods seems to return very similar
 weights, since the crosses are included inside the 
 circles.
 
-```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis).", fig.scap="Scatter plot of simulated and desired counts (ipfp vs mipfp)", fig.align='center'}
+```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis) (ipfp vs mipfp).", fig.scap="Scatter plot of simulated and desired counts (ipfp vs mipfp)", fig.align='center'}
 layout(matrix(c(1:3,3), 2, 2))
 plot(con1_convert, apply(weight_mipfp$x.hat,c(1,4,6),sum), pch=4, ylab="Simulated",
   xlab="Constraint 1", main="Constraint 1")
@@ -726,8 +730,8 @@ By analysing the absolute differences between the two
 resulting weights, we discover that the largest
 absolute distance is 3.45608e-11.
 
-We can consider that both methods give very similar results.
-However, there are both distant from the constraints
+We can consider that both methods give very similar results, even if
+there are both distant from the constraints
 for few zones and categories. A longer analysis 
 of this is done in the next chapter.
 
@@ -738,7 +742,7 @@ packages are the same. Thus, we must use other criteria to assess
 which is more appropriate in different settings.
 For applications involving very large microdatasets and numbers of zones,
 the speed of execution may be an important criterion. For this reason, 
-the time is an important characteristics to compare
+the time is an important characteristic to compare
 the packages. However, other considerations such as flexibility and
 user-friendliness should also be taken into account. The question of
 'scalability' (how large can the simulation be before the software crashes)
@@ -765,7 +769,7 @@ grid.raster(img)
 
 Figure 7.5 confirms that for problems with few individuals in the microdata, 
 `ipfp` is better. However, having few people means the increase
-of the probability to have non represented categories.
+of the probability to have non–represented categories.
 Of course, we can optimise `ipfp` to take only one 
 time the individuals that appear several times and add a count 
 in the `ind_cat` instead of a "1" (as made in the `indu` variable of SimpleWorld).
@@ -773,7 +777,7 @@ However, this process is
 possible only if the added persons are with the same characteristics
 as a previous one.
 
-In conclusion, `mipfp` is more flexible and could be use
+In conclusion, `mipfp` is more flexible and could be used
 without microdata, but `ipfp` is faster for problems with
 less individuals in the microdata.
 
@@ -791,27 +795,27 @@ dependent on the extent to which the microdata are representative of the
 study area
 [@Lenormand2012].
 If the used sample 
-is too small, or if the sample, for example, contains a 90%
-of female, whereas the whole population has only 51%, the
+is too small, or if the sample, for example, contains 90%
+female, whereas the whole population has only 51%, the
 microdata will not be representative. Usually, to consider a 
 sample as representative, each individual should
 have exactly the same probability of being in the 
 sample. For example, if you make your survey in a university, 
-old people have less chance to be inside that younger. In 
+older people have less chance to be inside than younger. In 
 this case, the sample is not representative. 
 
 ## Chapter summary
 
 In summary, this chapter has coded the whole population synthesis for the
-CakeMap example. This reasoning has been developed with two R packages : **ipfp** and
+CakeMap example. This reasoning has been developed with two R packages: **ipfp** and
 **mipfp**. This allowed us to observe the differences in the structure of the
-input data :
+input data:
 
 1. **ipfp** takes as input the individual data of the sample and the counts
-of the constraints included in a two dimensional array (even if we have several 
+of the constraints included in a two–dimensional array (even if we have several 
 constraint variables)
 2. **mipfp** considers input in contingency tables. This means that if you have 
-5 different table of constraints, each included cross tabulated variables, **mipfp**
+5 different table of constraints, each included cross–tabulated variables, **mipfp**
 will take into account the 5 tables.
 
 As illustrated in the chapter, we can transform the input of one algorithm into
@@ -819,4 +823,4 @@ the input of the other, but **mipfp** is really simpler to use when having sever
 and cross-tabulated constraints.
 
 We have also seen that **ipfp** is faster for very small problems, but **mipfp**
-rapidly have better performances.
+have better performances for problems of consequent sizes.
