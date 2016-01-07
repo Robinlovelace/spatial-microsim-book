@@ -69,11 +69,6 @@ in the other type.
 
 ## Selection of constraint variables {#CakeMapConVar}
 
-```{r, echo=FALSE}
-# Reference discussion of this in C4. Is there overlap? (RL)
-```
-
-
 As discussed in ([](#data-prep)), we must first decide which variables 
 should be used to link the two. We must
 select the constraints from available linking variables.
