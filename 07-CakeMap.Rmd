@@ -70,12 +70,7 @@ to the other type.
 
 ## Selection of constraint variables {#CakeMapConVar}
 
-```{r, echo=FALSE}
-# Reference discussion of this in C4. Is there overlap? (RL)
-```
-
-
-As discussed in Chapter 4, we must first decide which variables 
+As discussed in ([](#data-prep)), we must first decide which variables 
 should be used to link the two. We must
 select the constraints from available linking variables.
 
@@ -828,4 +823,4 @@ the input of the other, but **mipfp** is really simpler to use when having sever
 and cross-tabulated constraints.
 
 We have also seen that **ipfp** is faster for very small problems, but **mipfp**
-have better performances for problems of consequent sizes.
+performs better on large datasets.
