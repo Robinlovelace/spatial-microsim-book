@@ -70,7 +70,7 @@ to the other type.
 
 ## Selection of constraint variables {#CakeMapConVar}
 
-As discussed in ([](#data-prep)), we must first decide which variables 
+As discussed in Chapter 4, we must first decide which variables 
 should be used to link the two. We must
 select the constraints from available linking variables.
 
