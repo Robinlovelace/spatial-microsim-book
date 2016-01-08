@@ -130,7 +130,7 @@ Pressing the down arrow allows the user to select the correct input.
 Auto-completion allows fast typing, easy recollection of function/object names.
 It also prevents errors cause by typos in your code.
 
-```{r rstudio,  fig.cap="Autocompletion in RStudio", fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
+```{r rstudio,  fig.cap="Autocompletion in RStudio", fig.scap="Autocompletion in RStudio", fig.align='center', echo=FALSE, message=FALSE}
 # todo: create tutorial on installing R and RStudio
 grid.raster(readPNG("figures/rstudio-autocomplete.png"))
 ```

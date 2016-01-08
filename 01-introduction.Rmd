@@ -440,7 +440,7 @@ relying on a "black box".
 
 A recent development that has made R far more accessible is
 RStudio, an Integrated Development Environment (IDE) for R that helps
-new users become familiar with the language (see Figure 4.1). 
+new users become familiar with the language (see Figure 2.2). 
 Further information about why R is a good choice for spatial microsimulation
 is provided in the Appendix, a tutorial introduction to R for spatial
 microsimulation applications. The next section describes approaches

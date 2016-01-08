@@ -290,7 +290,7 @@ to read-agent-data
 end
 ```
 
-Making sure that we add the `read-agent-data` procedure to the setup procedure, we can now test our code simply by clicking the setup button on the graphic interface tab. We still have the monitor there counting the patches, let's edit it to change the reporter instead to something more informative: `count inhabitants` should do it. Hopefully there are 33 (see figure 12.4)!
+Making sure that we add the `read-agent-data` procedure to the setup procedure, we can now test our code simply by clicking the setup button on the graphic interface tab. We still have the monitor there counting the patches, let's edit it to change the reporter instead to something more informative: `count inhabitants` should do it. Hopefully there are 33 (see Figure 12.4)!
 
 ```{r fig4, fig.cap="SimpleWorld populated with 33 inhabitants", fig.width=4, fig.height=4, echo=FALSE}
 library(png)
@@ -361,7 +361,7 @@ We first need to define these four global variables using settings widgets. To d
  `stdev-bribeability`  | 0 | 1 | 20 | 0 |
 
 The graphic interface area with the aforementioned
-widget settings should now look approximately like figure 12.5. 
+widget settings should now look approximately like Figure 12.5. 
 
 ```{r fig5, fig.cap="New global variables defined using sliders", fig.width=2, fig.height=2, echo=FALSE}
 library(png)
@@ -931,7 +931,7 @@ head(zones) # show the output
 # 6    60     3     3      0.10
 ```
 
-We can see that in the first set of simulations with angle of vision being 60 and the distance of vision only 1, all of the simulations ended with a three way draw. In the next set, where the distance was set to 2, 85 % of the simulations still ended in a three way draw, while the remaining 15 % were a two way draw. Figure 10 summarises the data for all 2200 simulations. While there is a clear cluster of three-way ties in the bottom left hand corner, which corresponds to the simulations with the smallest field of vision, there is interestingly no observable pattern to distinguish the two-way ties and single zone simulations. 
+We can see that in the first set of simulations with angle of vision being 60 and the distance of vision only 1, all of the simulations ended with a three way draw. In the next set, where the distance was set to 2, 85 % of the simulations still ended in a three way draw, while the remaining 15 % were a two way draw. Figure 12.10 summarises the data for all 2200 simulations. While there is a clear cluster of three-way ties in the bottom left hand corner, which corresponds to the simulations with the smallest field of vision, there is interestingly no observable pattern to distinguish the two-way ties and single zone simulations. 
 
 ```{r fig10, fig.cap="Number of zones occupied at end of simulation (20 repetitions)", fig.width=8, fig.height=4, echo=FALSE}
 library(png)
@@ -961,7 +961,7 @@ head(av.ticks) # display the results
 # 5    60     7   265.6000
 ```
 
-The average tick counts for all the 2200 simulations (or rather in this case only the 989 that ended with a winning zone) can be plotted as a heatmap (Figure 11). 
+The average tick counts for all the 2200 simulations (or rather in this case only the 989 that ended with a winning zone) can be plotted as a heatmap (Figure 12.11). 
 
 ```{r fig11, fig.cap="Average number of ticks in simulations with single zone winning", fig.width=8, fig.height=4, echo=FALSE}
 library(png)

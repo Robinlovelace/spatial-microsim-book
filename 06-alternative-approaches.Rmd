@@ -363,7 +363,7 @@ To overcome the caveat that the meaning of an 'iteration' changes dramatically
 from one algorithm to the next, further tests measured the time taken
 for each reweighting algorithm to run. To have a readable graph, we 
 do not represent the error as a function of the time, but the time per
-algorithm in function of the number of iterations (Figure \ref{TimeOptim_GenSA}). This figure
+algorithm in function of the number of iterations (Figure 6.2). This figure
 demonstrates that an iteration of GenSA take a long time in comparison 
 with the other algorithm. Moreover, `"BFGS"` and `"CG"` are still following a
 similar curve under GenSA. Nelder-Mead, SANN and IPF contains iterations that 
@@ -371,7 +371,7 @@ take less time. By observing Figures 6.1 and 6.2 simultaneously , it appears tha
 in terms of convergence (little TAE after few iterations)
 and the time needed for few iterations is good.
 
-```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms",fig.scap="Total Absolute Error in function of processing time for several algorithms", fig.scap="Relationship between processing time and goodness-of-fit", fig.width=4, fig.height=4, fig.align='center', echo=FALSE}
+```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.scap="Relationship between processing time and goodness-of-fit", fig.width=4, fig.height=4, fig.align='center', echo=FALSE}
 # img <- readPNG("figures/TimeOptim_GenSA_Mo.png")
 # grid.raster(img)
 # # ![](figures/optim-time.png)
