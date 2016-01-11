@@ -18,10 +18,10 @@ bibliography: bibliography.bib
 
 This chapter, contributed by Maja Založnik, is the most advanced chapter of the
 book.^[Maja
-is based at the Oxford Institute of Population Ageing in the University of Oxford.]
+is based at the Oxford Institute of Population Ageing, University of Oxford.]
 It covers one of the most enticing and potentially useful extensions
 of the methods developed in the book: agent-based modelling (ABM).
-ABM models generally consist of interacting agents representing people and
+Agent-based models consist of interacting agents (frequently - but not necessarily - representing people) and
 an environment that they inhabit.
 The chapter uses NetLogo, a language designed for ABM. This will be
 introduced in due course, but prior knowledge of it would be advantageous.
@@ -69,7 +69,7 @@ widely used for model prototyping, development and communication
 [@Thiele2012]. Alternative open source options include **Repast**
 and **MASON**. Both
 are written in Java, although Repast also includes optional
-graphical development and some higher level language support. Due to its
+graphical development and some higher-level language support. Due to its
 excellent documentation, ease of learning and integration with R, NetLogo is the
 tool of choice in this book and should be sufficiently powerful for many
 applications.
@@ -78,25 +78,15 @@ applications.
 mature and widely used tool-kit for agent-based models. It is written in
 Java, but uses a derivation of the Logo language to develop models.
 The recently published **RNetLogo** package provides an interface between
-R and NetLogo, allowing for model runs to be setup and run directly from within R
+R and NetLogo, allowing for model runs to be set-up and run directly from within R
 (Theile 2014). 
 This allows the outputs of agent based models to be loaded directly into
 your R environment. Using R to run a separate programme may seem overly complicated
-for very simply models. For setting-up and testing we recommend using 
+for very simply models. For setting-up and testing your model we recommend using 
 NetLogo, with its intuitive graphical interface. However, there are many advantages
 of using NetLogo from within R, the foremost being R's analysis capabilities:
 "it is much more time consuming and complicated to analyse ABMs than to
 formulate and implement them" (Theile et al. 2012).
-
-```{r, echo=FALSE}
-# Note above:
-#"For setting-up and testing we recommend using  ABM,"
-# Do you mean 'AMB' here? Sentence doesn't make sense to me.
-```
-
-```{r,echo=FALSE}
-# TODO: Batty reference below on abm design
-```
 
 ABMs commonly represent unpredictable behaviour through probabilistic agent
 rules. This means that two model runs are unlikely to lead to identical results.
@@ -110,25 +100,13 @@ provides a much more comprehensive suite of data analysis
 tools, making the integration of R
 and NetLogo an obvious choice.
 
-```{r, echo=FALSE}
-
-# 
-# Watch this space for more on this!
-# 
-# https://github.com/Robinlovelace/spatial-microsim-book
-```
-
 
 ## Setting up SimpleWorld in NetLogo 
 
 The NetLogo programming language is a well-developed and thoroughly
-documented modelling environment. We expect the reader to have some working
-knowledge of the language, e.g. through an exploration of the numerous [tutorials](http://ccl.northwestern.edu/netlogo/docs/tutorial1.html) and the rich library of pre-written models that come with the programme (File > Model Library)
-before undertaking the practical elements of this chapter.
-Section introduces the basics of NetLogo's functionality
-to create an ABM of SimpleWorld --- we will cover RNetLogo later.
+documented modelling environment. We advise you familiarise yourself with the language, e.g. through an exploration of the numerous [tutorials](http://ccl.northwestern.edu/netlogo/docs/tutorial1.html) and the rich library of pre-written models that come with the programme (File > Model Library) before undertaking the practical elements of this chapter. This chapter is not meant as a NetLogo primer, however following the step-by-step instructios will result in a fully functioning AMB, one which can furthermore be controlled and alaysed in the R environment. The following sections introduce the basics of NetLogo's functionality to create an ABM of SimpleWorld --- we will cover RNetLogo later.
 
-In NetLogo the design of the model's graphical user interface (GUI) is handled separately from the model procedures. This is analogous to the separation in R's [**shiny**](http://shiny.rstudio.com/) package between the user interface and the 'server side'. The latter are constructed in code using the NetLogo programming language in the Code tab (discussed below). The graphical interface, which includes the environment and the control *widgets*, is setup using the drop-down menus located in the Interface toolbar. 
+In NetLogo the design of the model's graphical user interface (GUI) is handled separately from the model procedures. This is analogous to the separation in R's [**shiny**](http://shiny.rstudio.com/) package between the user interface and the 'server side'. The latter are constructed in code using the NetLogo programming language in the Code tab (discussed below). The graphical interface, which includes the environment and the control *widgets*, is set-up using the drop-down menus located in the Interface toolbar. 
 
 The whole model is saved as a .nlogo file. This text file includes code, GUI parameters and the contents of the (optional) Info tab. Although .nlogo files are human readable, most of the information relating to the GUI is difficult to manipulate. We advise against modifying the .nlogo file
 directly.
@@ -145,8 +123,6 @@ The main elements of the NetLogo GUI are described below, along with their setup
 
 #### Views
 
-In addition to the main view of our agents' world, the other optional views are monitors, plots and an output window. 
-
 As already mentioned, the Graphical window is the most important --- mandatory --- part of the GUI. We will adjust it to suit SimpleWorld with the Settings button on the right-hand side of the Interface tab toolbar. First change the default location of origin from "Center" to "Corner". Then set the value of max-pxcor to 35 and max-pycor to 17. With [0 0] describing the coordinates of the bottom left patch, this means we now have a 36 by 18 size world. Untick both the world wrapping boxes and click Apply. You may find the size inappropriate for your screen in which case adjust the value of Patch size until you are happy with the interface size. Right-clicking on a patch and selecting the bottom option "inspect patch x y" will open a patch monitor where you can inspect the values of all the patch's variables, currently only the default ones: its coordinates, colour, label and label colour. These can be changed in the monitor, but we will change them programmatically below.
 
 ```{r fig1, fig.cap="Setting the world size and resolution", fig.width=4, fig.height=4, echo=FALSE}
@@ -155,6 +131,8 @@ library(grid)
 img <- readPNG("figures/nl-graphics-window.png")
 grid.raster(img)
 ```
+
+In addition to the main view of our agents' world, the other optional views are monitors, plots and an output window. 
 
 Monitors report the values of variables. Our model currently has no variables. To demonstrate, add a monitor --- either by right-clicking somewhere on the empty interface or by clicking the Add button on the toolbar and selecting Monitor from the dropdown menu next to it. In the dialogue box that appears type `count patches` in the reporter field and click OK. 
 
@@ -208,7 +186,7 @@ end
 The definition of the `setup` procedure, like all procedures, requires a `to` opening call and an `end` to close. All the commands within these two lines will be executed whenever we click on the setup button. The first and last lines are standard in any setup procedure as it will normally be called after a previous model run, so we want to make sure the world is back in starting position and the time or tick counter is set back to zero. The third line calls the `create-zones` procedure, which is defined underneath. We could have put all the zone-creation commands directly into the setup procedure. But in order to keep the code nicely organized and easier to read, we follow this structure, and separate out logical blocks of code. We can now test the setup button. Note that this procedure is now saved as part of the model. 
 
 #### Settings 
-There are four types of settings widgets: sliders, choosers, switches and input text boxes. These can be used by the user to change specific variables' values. By adding one of the types of settings widgets we define the *global variable* that the slider or other type of input modifies, and these variables can then be called in the code. We do not really need to define any selectable inputs at the moment, but let us assume we might want to populate the agents with attributes from different files, and create a *chooser* that can be used to select the .csv data file. In the dialogue that opens when we add the chooser we define the global variable `csv` and give it (for now only) a single possible value "agents.csv" (see Figure 13.3). 
+There are four types of settings widgets: sliders, choosers, switches and input text boxes. These can be used by the user to change specific variables' values. By adding one of the types of settings widgets we define the *global variable* that the slider or other type of input modifies, and these variables can then be called in the code. We do not really need to define any selectable inputs at the moment, but let us assume we might want to populate the agents with attributes from different files, and create a *chooser* that can be used to select the .csv data file. In the dialogue that opens when we add the chooser we define the global variable `csv` and give it (for now only) a single possible value "agents.csv" (see Figure 12.3). 
 
 ```{r fig3, fig.cap="SimpleWorld in NetLogo", fig.width=4, fig.height=4, echo=FALSE}
 library(png)
@@ -268,17 +246,17 @@ Local variables are defined and accessible only within procedures. For clarity -
 
 Now we need to create a procedure to read the agent data. The `read-agent-data` procedure needs to: 
 
-- open the file, read a single line of data-
-- create an `inhabitant`
-- correctly assign the five values to the five inhabitants-own variables
-- and place the agent into the correct zone.
+1. open the file, read a single line of data-
+2. create an `inhabitant`
+3. correctly assign the five values to the five inhabitants-own variables
+4. and place the agent into the correct zone.
 
 We will also assign the agent a colour based on their gender. Then the procedure must repeat this until all the lines of data are read.
 The first option for accomplishing this is a simple construction, relying on the fact that our current .csv file has a fixed width file format. We know the exact position of each value, because each variable has a constant number of characters. 
 
-The NetLogo procedure therefore begins and ends with the `file-open` and `file-close` commands, which opens a connection to the file in question and allows us to read the data from it. We also use this opportunity to set the default shape of the agents as *person*. The main loop is a `while` construction, reading through each individual line and saving it into a local variable (only available within the procedure) 
+The NetLogo procedure therefore begins and ends with the `file-open` and `file-close` commands, thus opening a connection to the file in question and allowing us to read the data from it. We also use this opportunity to set the default shape of the agents as *person*. The main loop is a `while` construction, reading through each individual line and saving it into a local variable (only available within the procedure) 
 `%line`.^[Using
-a dollar sign in front of the names of local variable is a purely stylistic decision and makes the code easier to read. It makes it immediately obvious what the scope of each variable is. In NetLogo local variables are created on-the-fly using the `let` command, while agent and global variables need to be declared explicitly. The values of all variables are changed using the `set`
+a percentage sign in front of the names of local variable is a purely stylistic decision and makes the code easier to read. It makes it immediately obvious what the scope of each variable is. In NetLogo local variables are created on-the-fly using the `let` command, while agent and global variables need to be declared explicitly. The values of all variables are changed using the `set`
 command.]
 We then create a single inhabitant and assign the substrings from `%line`, based on the position of each value, to the appropriate inhabitant's variables. We also initialize the agent's history as an empty list: `[]` and at the end we set the agent's colour based on their sex and position them on an unoccupied patch in the correct zone.  
 
@@ -303,7 +281,7 @@ to read-agent-data
 end
 ```
 
-Making sure that we add the `read-agent-data` procedure to the setup procedure, we can now test our code simply by clicking the setup button on the graphic interface tab. We still have the monitor there counting the patches, let's edit it to change the reporter instead to something more informative: `count inhabitants` should do it. Hopefully there are 33 (see Figure 13.4)!
+Making sure that we add the `read-agent-data` procedure to the setup procedure, we can now test our code simply by clicking the setup button on the graphic interface tab. We still have the monitor there counting the patches, let's edit it to change the reporter instead to something more informative: `count inhabitants` should do it. Hopefully there are 33 (see Figure 12.4)!
 
 ```{r fig4, fig.cap="SimpleWorld populated with 33 inhabitants", fig.width=4, fig.height=4, echo=FALSE}
 library(png)
@@ -362,7 +340,7 @@ The model will have the following adjustable parameters:
 1. The field of vision has two parameters: the viewing angle and the distance
 2. Average level of *bribeability* of inhabitants: if their level is less than 100%, a random number generator will be used to determine whether the agent accepts the bribe or not. The distribution of bribeability is approximately normal with a mean and a standard deviation.
 
-### Variable Definitions
+### More Variable Definitions
 
 We first need to define these four global variables using settings widgets. To do this use the add button to add the following four sliders to the model:
 
@@ -374,9 +352,9 @@ We first need to define these four global variables using settings widgets. To d
  `stdev-bribeability`  | 0 | 1 | 20 | 0 |
 
 The graphic interface area with the aforementioned
-widget settings should now look approximately like figure 5. 
+widget settings should now look approximately like Figure 12.5. 
 
-```{r fig5, fig.cap="SimpleWorld populated with 33 inhabitants", fig.width=2, fig.height=2, echo=FALSE}
+```{r fig5, fig.cap="New global variables defined using sliders", fig.width=2, fig.height=2, echo=FALSE}
 library(png)
 library(grid)
 img <- readPNG("figures/nl-sliders.png")
@@ -397,7 +375,7 @@ inhabitants-own [
   in-negotiations]
 ```
 
-### Setup procedures
+### More Setup Procedures
 
 Before we start constructing the `Go` procedure, we need to add one more setup procedure: one that assigns each agent a random level of bribeability. We will sample from a normal distribution with the mean and standard deviation defined using the sliders. One way of doing that is with the following 
 line:^[You
@@ -408,7 +386,7 @@ can try it out simply by typing it into the command centre. Seemingly nothing wi
 ask inhabitants [set bribeability random-normal 
   average-bribeability stdev-bribeability ]
 ```
-The problem with this command, is that the normal distribution is unbounded. But bribeability values below 0% or above 100% makes no practical sense. We therefore use the following little trick to force the values into the correct interval:
+The problem with this command, is that the normal distribution is unbounded. But bribeability values below 0% or above 100% make no practical sense. We therefore use the following little trick to force the values into the correct interval:
 
 ```
 to determine-bribeability
@@ -436,7 +414,7 @@ end
 
 Try it out with different values for the average and standard deviation of bribeability and make sure it never goes outside the bounds of meaningfulness. 
 
-### The go procedure
+### The Main Go Procedure
 
 We are now ready to write the main action procedure, normally labelled the `go` procedure. To do that we create a button in the same manner as before, this time running the command `go`, and make sure we tick the `Forever` tickbox in the dialogue box. This means clicking the 'go' button (with a circular arrow on the face) will execute the command *repeatedly*, until we stop it manually or until an end condition is met. Let's first set up the bare bones of the go procedure: in each time step we want the inhabitants to `reposition` themselves, to `engage` in the bribery negotiations and we want to `record` their states in their `history` variables. Finally we want the tick counter to advance by a single time step:
 
@@ -449,9 +427,9 @@ to go
 end
 ```
 
-Because we haven't defined the first two procedures yet, we are keeping them commented out, as soon as we define them, delete the semicolon and test the code. 
+Because we haven't defined the first three procedures yet, we are keeping them commented out, as soon as we define them, you should delete the semicolon and test the code. 
 
-For repositioning the inhabitants we can in fact use a very similar line of code used to first position the inhabitants in SimpleWorld. To reposition all agents we can use the `ask` command. NetLogo implements all `ask` commands sequentially, going through all agents or patches in *random order*.
+For repositioning the inhabitants we can use a very similar line of code used to first position the inhabitants in SimpleWorld. To reposition all agents we can use the `ask` command. NetLogo implements all `ask` commands sequentially, going through all agents or patches in *random order*.
 
 ```
 to reposition
@@ -464,12 +442,12 @@ end
 
 If we now uncomment `reposition` in the `go` procedure, we can test it out. You can adjust the speed of the command execution with the slider on the toolbar at the top of the window. 
 
-The construction of the `engage` procedure is a bit more complex, so let's break it down into steps 2.1 and 2.2 clarity. But steps 1 and 2 must be separated because all agents must complete the first step before the second. This is crucial because of the in-negotiations variable, which we are using to keep track of who is available - if we implemented them as one step, then every inhabitant would always be available:
+The construction of the `engage` procedure is a bit more complex, so let's break it down into steps:
 
 1. `reset:` first we must reset everyone's `in-negotiations` variable to `false`
 
 2. `find-pairs-and-negotiate:`
-+ 2.1 find all viable negotiating pairs: ask each inhabitant (not already in negotiations) if there are any viable candidates in their field of vision that are in a different zone. And if so, defining both inhabitants as `party` and `counter-party` respectively.
++ 2.1 find all viable negotiating pairs: ask each inhabitant (not already in negotiations) if there are any viable candidates in their field of vision that are in a different zone. And if so, define these two inhabitants as `party` and `counter-party` respectively.
 
 + 2.2 then such pairs must `negotiate` i.e. compare incomes, determine the winner, transfer the funds and reposition the loosing inhabitant into the winner's zone. 
 
@@ -505,12 +483,12 @@ end
 
 The final procedure is `find-pairs-and-negotiate` which relies on several local variables (prefixed by the `%` symbol). The pseudo code is as follows:
 
-* for each inhabitant that is not already in negotiations
-* define `%field-of-vision` as the patches in their sight and also in a neighbouring zone
-* define `%viable-partners` as the all the inhabitants on %field-of-vision, who are available for negotiations
-* if there is at least one inhabitant in `%viable-partners`, we have a match!
-* define the active inhabitant as `%party` and the closest one of the the possible viable partners as `%counter-party`
-* now that we have both parties to the negotiations, we can run the `negotiate` procedure on them
+1. for each inhabitant that is not already in negotiations
+  * define `%field-of-vision` as the patches in their sight and also in a neighbouring zone
+  * define `%viable-partners` as the all the inhabitants on %field-of-vision, who are available for negotiations
+2. if there is at least one inhabitant in `%viable-partners`, we have a match!
+  * define the active inhabitant as `%party` and the closest one of the the possible viable partners as `%counter-party`
+  * now that we have both parties to the negotiations, we can run the `negotiate` procedure on them
 
 The NetLogo code is as follows:
 
@@ -546,13 +524,13 @@ img <- readPNG("figures/nl-simpleworld-negotiating.png")
 grid.raster(img)
 ```
 
-Figure 13.6 is a screenshot of of a state of SimpleWorld with 8 inhabitants engaged in active negotiations. Only they are not actually negotiating yet. That is the procedure we left unfinished before and need to rewrite now that we have everything else working. We will break it down into pseudo-code again, in each negotiation we :
+Figure 12.6 is a screenshot of a state of SimpleWorld with 8 inhabitants engaged in active negotiations. Only they are not actually negotiating yet. That is the procedure we left unfinished before and need to rewrite now that we have everything else working. We will break it down into pseudo-code again, in each negotiation we :
 
-* first establish who is the winner and who is the looser using `sort-on` on their incomes (if there is a tie, `sort-on` selects a random winner)
-* using the loser's `bribeability` level and a random number generator determine if they will accept the bribe
-* if so, then transfer 10% of the winner's income to the looser, and transport the looser into the winner's zone. 
+1. first establish who is the winner and who is the looser using `sort-on` on their incomes (if there is a tie, `sort-on` selects a random winner)
+2. using the loser's `bribeability` level and a random number generator determine if they will accept the bribe
+3. if so, then transfer 10% of the winner's income to the looser, and transport the looser into the winner's zone. 
 
-Let's return to the `to negotiate` procedure we created above as a place-holder and add the actual negotiation to it. We will leave the first three lines from before setting both parties `in-negotiations` switch to true and colouring them red. The next three lines sort them by income and assign them to either `loser` or `winner`. This is followed by an `if` construct, that only executes if the loser's bribeability is larger than a random number between 0 and 100. In this case the looser takes the bribe, is moved into the winner's zone and their colour changes to brown. At the same time the bribe must also be subtracted from the winner's income. 
+Let's return to the `negotiate` procedure we created above as a place-holder and add the actual negotiation to it. We will leave the first three lines from before setting both parties `in-negotiations` switch to true and colouring them red. The next three lines sort them by income and assign them to either `loser` or `winner`. This is followed by an `if` construct, that only executes if the loser's bribeability is larger than a random number between 0 and 100. In this case the looser takes the bribe, is moved into the winner's zone and their colour changes to brown. At the same time the bribe must also be subtracted from the winner's income. 
 
 ```
 to negotiate [ parties ]
@@ -586,7 +564,7 @@ to record
 end
 ```
 
-Add this procedure to the code and make sure you uncomment `record` in the `go` procedure. We will return to the history variable in the final section of this chapter. )
+Add this procedure to the code and make sure you uncomment `record` in the `go` procedure. We will return to the history variable in the final section of this chapter.
 
 ### Adding plots to the model
 
@@ -605,30 +583,29 @@ The plotting options in NetLogo are not very extensive. It is possible to create
 * `plot-pen-up` and `plot-pen-down` lift or lower the pen from the plotting area - where pen is by default set down
 * `plotxy "value1" "value2"` moves the pen to the position determined by the x and y coordinates - depending on whether the pen is down or up, it will either draw or not draw. 
 
-In addition we will use a local variable, `total`, to keep track of the cumulative total of inhabitants as we go through the three zones, starting from zone 3:
+In addition we will use a local variable, `%total`, to keep track of the cumulative total of inhabitants as we go through the three zones, starting from zone 3:
 
 ```
-let total 0
+let %total 0
 set-current-plot-pen "zone 3"
 plot-pen-up 
-plotxy ticks total
-set total total + count inhabitants with [ zone = 3 ]
+plotxy ticks %total
+set %total %total + count inhabitants with [ zone = 3 ]
 plot-pen-down 
-plotxy ticks total
+plotxy ticks %total
 set-current-plot-pen "zone 2"
 plot-pen-up 
-plotxy ticks total
-set total total + count inhabitants with [ zone = 2 ]
+plotxy ticks %total
+set %total %total + count inhabitants with [ zone = 2 ]
 plot-pen-down 
-plotxy ticks total 
+plotxy ticks %total 
 set-current-plot-pen "zone 1"
 plot-pen-up 
-plotxy ticks total
-set total total + count inhabitants with [ zone = 1 ]
+plotxy ticks %total
+set %total %total + count inhabitants with [ zone = 1 ]
 plot-pen-down 
-plotxy ticks total
+plotxy ticks %total
 ```
-
 
 ```{r fig7, fig.cap="Plotting SimpleWorld", fig.width=6, fig.height=4, echo=FALSE}
 library(png)
@@ -700,7 +677,7 @@ if (count inhabitants with [zone = 1] = 33) or
 
 Now we have a working model to explore. You can try running it with different parameters to see how they affect the behaviour of the model, and you can also try expanding the model to add more. For example a simple way of doing that is by making the 10 % bribe a parameter of the model that can be adjusted by the user. But to systematically investigate the model, we must explore the *parameter space* by carefully varying all the parameters and recording the results. 
 
-NetLogo provides a tool for this called *Behaviour Space*, which can be found in the *Tools* menu. It allows you to specify how to vary the variables, how many times to repeat each experiment and which measures to report after each run. Additionally, the tool offers the possibility of running many simultaneously, taking advantage of multi-core processors. Unfortunately this way of doing a parameter sweep is not codeable --- the commands defining the *experiment* are entered in a dialogue box, and the outputs are saved as .csv files, which require further handling for analysis. There are other extensions for NetLogo, such as BehaviourSearch, which can search the parameter space using various search algorithms to optimize an objective function. These and other tools may meet your requirements and/or fit with your workflow. But we will return full circle now back to R and use it to run SimpleWorld and analyse the model results using RNetLogo. 
+NetLogo provides a tool for this called *Behaviour Space*, which can be found in the *Tools* menu. It allows you to specify how to vary the variables, how many times to repeat each experiment and which measures to report after each run. Additionally, the tool offers the possibility of running many experiments simultaneously, taking advantage of multi-core processors. Unfortunately this way of doing a parameter sweep is not codeable --- the commands defining the *experiment* are entered in a dialogue box, and the outputs are saved as .csv files, which require further handling for analysis. There are other extensions for NetLogo, such as BehaviourSearch, which can search the parameter space using various search algorithms to optimize an objective function. These and other tools may meet your requirements and/or fit with your workflow. But we will return full circle now back to R and use it to run SimpleWorld and analyse the model results using RNetLogo. 
 
 ## Control the ABM from R
 
@@ -732,7 +709,7 @@ NLCommand("go")
 NLReport("ticks")
 ```
 
-The first reporter should have reported the number of ticks to be 0 and the second one should 1, demonstrating that the tick counter has advanced by one. To repeatedly issue a command or report request we use instead `NLDoCommand()`, so for example:
+The first reporter should have reported the number of ticks to be 0 and the second one should 1, demonstrating that the tick counter has advanced by one. To repeatedly issue a command or report request we can use the `NLDoCommand()`, so for example:
 
 ```{r, eval=FALSE}
 NLDoCommand(50,"go")
@@ -763,7 +740,7 @@ test # show the resulting data frame
 # 10 61 12  9 12
 ```
 
-Finally we can also extract the current variable values from an agentset. For example the incomes and current zones of all inhabitants, which we can then visualize using a simple boxplot (Figure 8):
+Finally we can also extract the current variable values from an agentset. For example the incomes and current zones of all inhabitants, which we can then visualize using a simple boxplot (Figure 12.8):
 
 ```{r, eval=FALSE}
 current.state <- NLGetAgentSet(c("who","income", "zone"), 
@@ -782,8 +759,7 @@ grid.raster(img)
 ```
 
 The `NLCommand` and `NLReport` functions can therefore be executed either singly or repeatedly using their "`Do`" versions. For ultimate control there are also "`Do-While`" versions of the functions which take as an argument a condition and keep executing until the condition is 
-met.^[To
-prevent NetLogo from getting stuck in an endless loop if you inadvertently set a condition that is never met, the both of these commands have a `max.minutes` argument, the default value of which is 10. The execution will halt after this time has passed before the condition was met. This may be relevant especially if you are expecting to run a long simulation in which case you should increase the value - of course if you are absolutely certain that the condition will be met, then you can also set `max.minutes` to 0 and the command will be executed for as long as it takes. In fact for testing your code, when you might be prone to inadvertently writing endless loops, it will make your life easier to change the value to 1 and avoid waiting the 10 minutes it takes for R to stop execution.
+met.^[To prevent NetLogo from getting stuck in an endless loop if you inadvertently set a condition that is never met,both of these commands have a `max.minutes` argument, the default value of which is 10. The execution will halt after this time has passed before the condition was met. This may be relevant especially if you are expecting to run a long simulation in which case you should increase the value - of course if you are absolutely certain that the condition will be met, then you can also set `max.minutes` to 0 and the command will be executed for as long as it takes. In fact for testing your code, when you might be prone to inadvertently writing endless loops, it will make your life easier to change the value to 1 and avoid waiting the 10 minutes it takes for R to stop execution.
 ]
 
 To continue with our simple example the `NLDoCommandWhile` function could be used simply end the simulation after a certain number of ticks:
@@ -797,7 +773,7 @@ NLReport("ticks")
 
 We now have all the ingredients to run our model from R, and probably do not need to observe the running model in the graphical interface any more. RNetLogo allows us to run the NetLogo silently in the background (in so called *headless mode*), which runs quite a bit faster than using the GUI. We can also wrap all our NetLogo commands in an R function and make further simulation more modular. 
 
-We will set up a single simulation where we open NetLogo silently, load the model, run the simulation until one zone wins or there is a definite tie, all then collect the `history` of all inhabitants at the end. There is one thing we need to keep in mind running the simulation from R though: we are repeatedly calling a *single* `go` procedure. This means we can still continue to call `go` even if the stopping conditions in the procedure have been met - it simple means the call does nothing. Because there is no warning (or error - nothing went wrong) we have no way of knowing from R that we are continuing to call `go` which is not doing anything - unless we check the tick counter every time and make sure it has advanced by one. 
+We will set up a single simulation where we open NetLogo silently, load the model, run the simulation until one zone wins or there is a definite tie, all then collect the `history` of all inhabitants at the end. There is one thing we need to keep in mind running the simulation from R though: we are repeatedly calling a *single* `go` procedure. This means we can still continue to call `go` even if the stopping conditions in the procedure have been met - it simply means the call does nothing. Because there is no warning (or error - nothing went wrong) we have no way of knowing from R that we are continuing to call `go` which is not doing anything - unless we check the tick counter every time and make sure it has advanced by one. 
 
 To run the simulation in R as we had designed it in NetLogo we simply use the same stopping conditions we used in the `go` procedure. In fact, if you plan to only run your model from R it is a good idea to delete the stopping conditions from the NetLogo code completely and make sure you always define them in the call from R. That way you can avoid setting stopping conditions in R that are less strict than the ones in the model, which would again mean R calling a `go` procedure that is not doing anything. And be careful: in NetLogo they were *stopping conditions*, but in `NLDoCommandWhile` they are exactly the inverse, so make sure you rewrite them appropriately!
 
@@ -946,7 +922,7 @@ head(zones) # show the output
 # 6    60     3     3      0.10
 ```
 
-We can see that in the first set of simulations with angle of vision being 60 and the distance of vision only 1, all of the simulations ended with a three way draw. In the next set, where the distance was set to 2, 85 % of the simulations still ended in a three way draw, while the remaining 15 % were a two way draw. Figure 10 summarises the data for all 2200 simulations. While there is a clear cluster of three-way ties in the bottom left hand corner, which corresponds to the simulations with the smallest field of vision, there is interestingly no observable pattern to distinguish the two-way ties and single zone simulations. 
+We can see that in the first set of simulations with angle of vision being 60 and the distance of vision only 1, all of the simulations ended with a three way draw. In the next set, where the distance was set to 2, 85 % of the simulations still ended in a three way draw, while the remaining 15 % were a two way draw. Figure 12.10 summarises the data for all 2200 simulations. While there is a clear cluster of three-way ties in the bottom left hand corner, which corresponds to the simulations with the smallest field of vision, there is interestingly no observable pattern to distinguish the two-way ties and single zone simulations. 
 
 ```{r fig10, fig.cap="Number of zones occupied at end of simulation (20 repetitions)", fig.width=8, fig.height=4, echo=FALSE}
 library(png)
@@ -976,7 +952,7 @@ head(av.ticks) # display the results
 # 5    60     7   265.6000
 ```
 
-The average tick counts for all the 2200 simulations (or rather in this case only the 989 that ended with a winning zone) can be plotted as a heatmap (Figure 11). 
+The average tick counts for all the 2200 simulations (or rather in this case only the 989 that ended with a winning zone) can be plotted as a heatmap (Figure 12.11). 
 
 ```{r fig11, fig.cap="Average number of ticks in simulations with single zone winning", fig.width=8, fig.height=4, echo=FALSE}
 library(png)
@@ -988,6 +964,3 @@ grid.raster(img)
 ## Chapter summary
 
 This is of course only a taster of the numerous options for agent-based modelling exploration you now have at your disposal having integrated NetLogo with R. For an excellent overview with practical examples see in particular Thiele et al.(2014), which covers a variety of parameter estimation and optimisation methods as well as a comprehensive set of approaches to sensitivity analysis using the RNetLogo setup described here. 
-
-# References
-
