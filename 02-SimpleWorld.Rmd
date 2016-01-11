@@ -12,7 +12,6 @@ library(grid)
 library(png)
 ```
 
-
 # SimpleWorld: A worked example of spatial microsimulation {#SimpleWorld}
 
 This chapter focuses on the minimum input datasets needed for the classical type

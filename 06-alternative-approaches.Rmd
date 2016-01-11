@@ -27,10 +27,6 @@ technique, coded in python.
 
 ## GREGWT {#GREGWT}
 
-```{r, echo=FALSE}
-# TODO: make reproducible example, compare performance with IPF
-```
-
 As described in the Introduction, IPF is just one strategy for obtaining a
 spatial microdataset. However, researchers tend to select one method that they
 are comfortable with and stick with that for their models. This is understandable

@@ -19,7 +19,7 @@ library(grid)
 So far, this book has explored data on 2 levels: the individual level and
 the level of administrative zones. The household is another
 fundamental building block of human organisation around which key decision-making,
-economic and data-collecting activities are centered. We will here develop results 
+economic and data-collecting activities are centred. We will here develop results 
 for Belgium in a specific study. Note that this
 chapter is based on a research made by Dumont Morgane (UNamur) and funded by the 
 Wallonia Region of Belgium. Timoteo Carletti (UNamur),
@@ -65,7 +65,7 @@ case in which data on households and individuals remain completely separate.
 -*With additional household's data* ([](#AddData)) presents a strategy when
 having additional data to the individual data.
 
-Note that the first section explains a method of the litterature only 
+Note that the first section explains a method of the literature only 
 theoretically, whereas the second sections is developed more in details
 and present results for Belgium.
 
@@ -164,10 +164,10 @@ households may be smaller than estimated and/or the number of individuals estima
 may be less than the known population of the area. In this case, 
 we can form households with the remaining individuals even if 
 they are not probable and then try to make exchanges to improve
-the fit. In the research of Johan Barthelemy, they executed these
-exchanges by following the principles of a `tabu search`. This
-consists in an algorithm that try exchanges and remember the last tries
-to avoid making always the same exchange. For more information about `tabu search`: [@tabuSearch].
+the fit. These
+exchanges can be made by following the principles of a `tabu search`. This
+consists in an algorithm that remembers the last tries
+to avoid repeating the same exchange many times [@tabuSearch].
 
 ## Cross data: individual and household level information
 
@@ -278,7 +278,7 @@ couple, but also of parents and children.
 
 To do this, we need tables of age differences. These tables are pertinent only when 
 considering variables already included in the simulation (for example, it is
-unpossible to consider a table of age differences per hair color if this
+impossible to consider a table of age differences per hair color if this
 variable is not in the model). To explain 
 the process, we develop here the methodology used 
 for the creation of the couples. This means that we have 

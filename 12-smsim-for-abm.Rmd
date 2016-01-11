@@ -61,15 +61,6 @@ represent the individuals and their characteristics, and allocate them to zones
 input into ABM. If your aim is to use spatial microdata as an input into agent
 based models, you may already be more than half way there!
 
-```{r, echo=FALSE}
-# # Commented out: we can re-include at some point
-# Before describing the transition from the
-# spatial microdata to ABM based on a simple example (you guessed it --- SimpleWorld),
-# it is worth mentioning some applications of ABMs built on spatial microdata
-# and some of the tools that will be useful for the job.
-# ## ABM applications
-```
-
 ## ABM software
 
 A wide range of software is available for ABM. Of these, **NetLogo**
