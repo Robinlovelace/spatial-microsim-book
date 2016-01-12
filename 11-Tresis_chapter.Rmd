@@ -9,8 +9,9 @@ bibliography: bibliography.bib
 ---
 
 ```{r echo=FALSE, warning=FALSE, message=FALSE, results='hide'}
-library(knitr) # Needed for the kable function used in this chapter.
-# TODO explain what a discrete choice model
+library(knitr) # Needed for the kable function used in this chapter
+library(png)
+library(grid)
 ```
 
 # The TRESIS approach to spatial microsimulation {#tresis}
@@ -20,9 +21,8 @@ are based at Institute of Transport and Logistics Studies, The University of Syd
 ]
 presents an alternative approach to spatial microsimulation that involves both the
 generation and simulation of individuals in household units. The method, known as TRESIS, has
-been developed for many years at The University of Sydney. TRESIS is mature and well-tested and,
-in-line with its development at the Institute of Transport and Logistics Studies (ITLS), is especially
-well-suited to solving transport-related problems.
+been developed for many years at The University of Sydney. TRESIS is mature, well tested and
+has been designed at the Institute of Transport and Logistics Studies (ITLS) to help solve transport-related problems.
 
 This is the first published implementation of one component of TRESIS in R. 
 It does not use a package of its own
@@ -65,7 +65,10 @@ These range from the very long-term (e.g., where to live and where to work) to t
 When used together, the TRESIS models predict households' long-term decisions and how these decisions then affect how individuals within that household travel given user-specified transport and land-use policies.
 Although in this chapter we discuss how to implement a stand-alone residential location model, the full power of the TRESIS system is only available when the whole set of demand models is estimated and run together.
 The figure below shows an overview of the high level TRESIS model structure [@Hensher2008].
-![Overview of TRESIS model structure](figures/TRESISModels.png)
+
+```{r, echo=FALSE, fig.cap="Overview of TRESIS model structure", fig.align='center'}
+grid.raster(readPNG("figures/TRESISModels.png"))
+```
 
 The TRESIS demand models have been estimated from a combination of stated preference (SP) and revealed preference (RP) data using the NLOGIT software (see @Hensher2015 for details of the software and estimation models).
 The model system provides for feedback between the different models using inclusive value parameters.
@@ -80,7 +83,7 @@ In contrast, standard micro-simulation techniques commonly used in transport are
 TRESIS tends to operate at higher geographical levels than micro-simulation systems. 
 Individuals in the household are not run through a micro-simulation model to determine specific routes.
 Instead, the TRESIS system estimates travel demand based on separate travel demand models within a network assignment model.
-Although this means that link level travel times for a specific individual can not be determined, it provides more reliable aggregate estimates of travel time across the whole network. 
+Although this means that link level travel times for a specific individual cannot be determined, it provides more reliable aggregate estimates of travel time across the whole network. 
 These are needed for the efficient running of the TRESIS models.
 
 ## Synthetic households {#tresis-house}
@@ -97,7 +100,7 @@ There are fundamental differences between the populations generated through trad
 First is that synthetic households retain their original composition and characteristics from the source sample. 
 Rather than assigning sample individuals to households, in TRESIS individuals remain linked to their original households.
 Households are seen as a single entity, and used as the unit of analysis for many of the models, including the residential location model, within TRESIS.
-This has the side-effect that each household is not simply a sum of its members but may also be considered to have its own characteristics.
+This has the side effect that each household is not simply a sum of its members but may also be considered to have its own characteristics.
 
 Second is that synthetic households in TRESIS are not assigned to a unique geographic zone.
 Instead, the sample from which the synthetic households are drawn is limited to those households that are resident in the whole of the study area (generally a city's Greater Metropolitan Area). 
@@ -319,7 +322,7 @@ synhhldtypes <- rep(
 ```
 
 The second line takes the calculated weights for that group of synthetic households and repeats it for the required number of households using the _rep()_ function.
-The third line is used just to help identify in which group each household was sampled from.
+The third line is used just to help identify from which group each household was sampled.
 This is generally not used but it can be useful for checking the results.
 Once we have sampled all the households we will bind the two vectors (_synhhlds_ and _synhhldweights_) into a single data frame.
 Note that the use of the sample() function means that the specific households chosen will likely differ somewhat every time unless the _set.seed()_ function is used first (as we did above).
@@ -440,7 +443,7 @@ save(synhhlddata,file="output/synhhlddata.RData")
 ## Using demand models to allocate synthetic households to zones using R
 The key to the TRESIS system are its demand models.
 As discussed earlier in this chapter, the models used in TRESIS include a variety of discrete choice models covering many of the travel-related decisions made by individuals and households.
-The models used in TRESIS are linked meaning the model for residential location can not be completely separated out from the rest of the models.
+The models used in TRESIS are linked meaning the model for residential location cannot be completely separated out from the rest of the models.
 However, the TRESIS approach can be used even with a single stand-alone residential location choice model and given its (potential) simplicity, it is this approach that will be discussed here.
 
 At its most basic, a residential location model as used with the TRESIS synthetic households is a discrete choice model that predicts, up to a probability, in which area each household will choose to live given their unique set of socio-demographic characteristics and the characteristics of the different zones.
@@ -460,7 +463,7 @@ The discrete choice model that is needed is one where each alternative (zones in
 The utility functions for each alternative can include either the same independent variables or different independent variables as well as common parameters or alternative-specific parameters.
 Since our dataset contains 124 wards, we will simplify our example by reducing these to 4 larger zones of 31 wards each.
 Zone 1 will include wards 1-31, zone 2 will include wards 32-62, etc.
-The model below was estimated based on using average values for each ward using a very simple model and can not be regarded as a "good" model.
+The model below was estimated based on using average values for each ward using a very simple model and cannot be regarded as a "good" model.
 However, it fits the required structure for the utility expressions and in the absence of disaggregate data for estimating the model we will use it for this example.
 
 ```{r, echo=FALSE,results='hide',warning=FALSE,message=FALSE}
@@ -618,7 +621,7 @@ kable(synresults, digits=0)
 
 The second reason for the difference is that the model we used was not calibrated on the population shares.
 The TRESIS models are calibrated to ensure they reproduce the shares in the base period before being used to run any analysis.
-Calibration is not a straight-forward process but involves adjusting the alternative-specific constants in the model until the estimated shares match the population shares within an acceptable level of tolerance.
+Calibration is not a straightforward process but involves adjusting the alternative-specific constants in the model until the estimated shares match the population shares within an acceptable level of tolerance.
 
 Although we will not run the calibration procedure here, to illustrate the sensitivity of the results to the quality of the model and the need for calibration, we will re-run the calculations with small changes to the alternative-specific constants of the utility expressions. If we decrease the value of the alternative-specific constant of zone 2 so that the utility expressions become:
 
@@ -685,7 +688,7 @@ synresults <- synrun %>%
 kable(synresults, digits=0)
 ```
 
-Decreasing the constant for zone 2 further, results in more changes.
+Decreasing the constant for zone 2 further results in more changes.
 It is important to understand that the probabilities do not change linearly in response to an equal change in the value of the alternative-specific constant.
 Furthermore, the switch between zones is not equal across the groups.
 As a result, calibration involves the incremental changes of more than one alternative-specific constant until the shares are reproduced.
@@ -762,11 +765,11 @@ Although TRESIS is a land-use and transport simulator, the approach described he
 
 The primary limitation of the TRESIS approach to population synthesis is 
 its heavy reliance on detailed disaggregate household and population level data.
-This means that acquiring the necessary data needed for generating the synthetic households, and estimating and calibrating the models is frequently a time-consuming and sometimes expensive undertaking. In many contexts
+This means that acquiring the necessary data needed for generating the synthetic households and estimating and calibrating the models is frequently a time-consuming and sometimes expensive undertaking. In many contexts
 such data simply does not exist.
 
 However, once the data has been collected, the resulting model system is very powerful, allowing predictions not only of the current state, but also of future forecasts of decisions under uncertainty. Provided the variables on which the forecasts rely are available in the synthetic households and models and are
-trust-worthy, the TRESIS approach provides an integrated framework for
+trustworthy, the TRESIS approach provides an integrated framework for
 modelling transport decisions.
 
 #### Freight models
@@ -789,7 +792,7 @@ Residential location models are an important component of any fully integrated t
 However, at a minimum transport models also require a method of estimating the likely destinations (or "attractions") of trips, as well as the mode used for these trips.
 The TRESIS approach uses the same synthetic households, and the individuals within those households, as were used in this chapter for the residential location model, to estimate the destinations and modes of trips.
 This means the development of a full transport model in R can apply the synthetic household method described in this chapter.
-Although developing the full set of models can not be described as a simple process, as demonstrated in this chapter, the functionality of R, and some of its packages, makes it well suited to applying transport models.
+Although developing the full set of models cannot be described as a simple process, as demonstrated in this chapter, the functionality of R, and some of its packages, makes it well suited to applying transport models.
 In particular, implementing full network assignment in R is likely to be particularly challenging, but its data structures and rapidly improving GIS functionality, some of which has been demonstrated in this chapter, means these are also likely to be possible.
 
 ### Summary
@@ -797,7 +800,7 @@ In particular, implementing full network assignment in R is likely to be particu
 This chapter has provided an introduction to the TRESIS approach to population synthesis through the use of synthetic households and demand models. In it we learned to generate, allocate and model household level
 data. TRESIS is an approach that is relatively simply conceptually but that incorporates powerful behavioural features. This, combined with
 its ability to model a wide range of phenomena and behaviours in
-the synthetic households makes TRESIS well-suited to implementation in R
+the synthetic households, makes TRESIS well suited to implementation in R
 (subject to data requirements). 
 It can also be applied to a variety of other applications not limited to those involving transport models.
 
