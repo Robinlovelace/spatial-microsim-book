@@ -414,10 +414,11 @@ previous chapter.
 for(j in 1:n_zone){
   for(i in 1:n_age){
     index <- ind_cat[, i] == 1
-    weights1[index, j] <- weights[index, j] * con_age[j, i] / ind_agg0[j, i]
+    weights1[index, j] <- weights[index, j] * con_age[j, i] 
+    weights1[index, j] <- weights1[index, j] / ind_agg0[j, i]
     }
-print(weights1)
-  }
+  print(weights1)
+}
 ```
 
 The above code updates the weight matrix by multiplying each weight
@@ -426,7 +427,9 @@ These coefficients are the divisions of each cell in
 the census constraint (`con_age`) by the equivalent cell
 aggregated version of the individual level data. In the first step, 
 all weights were initialised to 1 and the new weights equal
-the coefficients.
+the coefficients. Note that the two lines changing `weights1` could
+be joined to form only one line (we split it into two lines
+to respect the margins of the book).
 The weight matrix is critical to the spatial microsimulation procedure because
 it describes how representative each individual is of each zone. To see the
 weights that have been allocated to individuals to populate, for example  zone 2,
@@ -1134,7 +1137,8 @@ int_pp <- function(x){
   # Initialisation of the resulting vector
   xint <- rep(0, length(x))
   # Sample the individuals
-  xs <- sample(length(x), size = round(sum(x)), prob = x, replace = T)
+  rsum <- round(sum(x))
+  xs <- sample(length(x), size = rsum, prob = x, replace = T)
   # Aggregate the result into a weight vector
   xsumm <- summary(as.factor(xs))
   # To deal with empty category, we restructure
@@ -1223,7 +1227,6 @@ making the result $(4,0,0)$ impossible in both cases.  This method is
 \index{truncate, replicate sample (TRS)}
 \index{integerisation!TRS}
 
-\newpage
 
 ```{r}
 int_trs <- function(x){
@@ -1473,7 +1476,8 @@ for(i in 1:nrow(cons)){
   # Integerise and expand
   ints <- int_expand_vector(int_trs(weights[, i]))
   # Take the right individuals
-  ints_df <- rbind(ints_df, data.frame(ind_full[ints,], zone = i))
+  data_frame <- data.frame(ind_full[ints,]
+  ints_df <- rbind(ints_df, data_frame, zone = i))
 }
 
 # Method 2: using apply

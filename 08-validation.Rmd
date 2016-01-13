@@ -198,7 +198,7 @@ the percentage of error and corresponds just
 to the standardised version of TAE.
 
 $$
-RE = TAE / (total\_pop*n\_var)
+RE = TAE / (total\_pop * n\_var)
 $$
 
 Mean relative error (MRE) needs first to calculate RE per variable and 
@@ -251,7 +251,7 @@ Suppose we have a simulated matrix $sim$ (for example, simulated counts) and an 
 chi-squared is calculated by:
 
 $$
-\chi^2= \sum_{i=1}^{n_line}\sum_{j=1}^{n_column}\frac{(sim_{ij} - obs_{ij})^2}{obs_{ij}}
+\chi^2= \sum_{i=1}^{n\_line}\sum_{j=1}^{n\_column}\frac{(sim_{ij} - obs_{ij})^2}{obs_{ij}}
 $$
 
 The *chi-squared* test is the probability of obtaining the calculated $\chi^2$ value or a worst
@@ -330,7 +330,9 @@ CorVec <- rep (0, dim(cons)[1])
 
 # calculate the correlation for each zone
 for (i in 1:dim(cons)[1]){
-  CorVec[i] <- cor (as.numeric(cons[i,]), as.numeric(ind_agg[i,]))
+  num_cons <- as.numeric(cons[i,])
+  num_ind_agg <- as.numeric(ind_agg[i,])
+  CorVec[i] <- cor (num_cons, num_ind_agg)
 }
 ```
 
