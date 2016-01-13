@@ -286,32 +286,19 @@ men and women of different ages and roles in the household (head or spouse)
 and that we need to form the couples. The random draw executed when 
 having no additional data will be improved by considering the
 real age distributions. Imagine that a part of the additional data is 
-the one in Table \ref{fictivageDistrib}.
+the one in Table 10.1.
 
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{|c|c|c|c|}
-\hline
-Municipality & Woman's age & Man's age & Count\\
-\hline
-\hline
-TestCity & 20-25 & 15-20 & 4\\
-\hline
-TestCity & 20-25 & 20-25 & 25\\
-\hline
-TestCity & 20-25 & 25-30 & 18\\
-\hline
-TestCity & 20-25 & 30-35 & 8\\
-\hline
-TestCity & 20-25 & 35-40 & 2\\
-\hline 
-... & ... & ... & ...\\
-\hline
-\end{tabular}
-\caption{Example of an age distribution table for couples without children}
-\label{fictivageDistrib}
-\end{center}
-\end{table}
+
+Table: Example of an age distribution table for couples without children.
+
+Municipality  | Woman's age | Man's age | Count |
+|:--|:-----:|:------:|:------:|
+TestCity | 20-25 | 15-20 | 4|
+TestCity | 20-25 | 20-25 | 25|
+TestCity | 20-25 | 25-30 | 18|
+TestCity | 20-25 | 30-35 | 8|
+TestCity | 20-25 | 35-40 | 2|
+... | ... | ... | ... |
 
 Note that this is a fictive table, non corresponding to any real
 data, just to explain the reasoning. Thanks to this
@@ -325,36 +312,23 @@ with the ones from current synthetic population. For this reason, we will consid
 the new information only as proportions. For our example, 
 it means that in the total of women having 20-25 years old 
 (57 individuals), $\frac{4}{57}=0.07=7$\% are married with a 
-man of age 15-20. With this reasoning, we can calculate the new Table \ref{fictivageDistrib2}, 
+man of age 15-20. With this reasoning, we can calculate the new Table 10.2, 
 with a supplementary column considering the proportions.
 
 \index{age distribution}
 
-\begin{table}[h!]
-\begin{center}
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-Municipality & Woman's age & Man's age & Count & Proportion of men married \\
-&&&&with a woman of this age\\
-\hline
-\hline
-TestCity & 20-25 & 15-20 & 4 & 7\% \\
-\hline
-TestCity & 20-25 & 20-25 & 25 & 43,9\% \\
-\hline
-TestCity & 20-25 & 25-30 & 18 & 31,6\% \\
-\hline
-TestCity & 20-25 & 30-35 & 8 & 14\% \\
-\hline
-TestCity & 20-25 & 35-40 & 2 & 3,5\% \\
-\hline 
-... & ... & ... & ... & ...\\
-\hline
-\end{tabular}
-\caption{Example of an age distribution table with the proportions per women's age}
-\label{fictivageDistrib2}
-\end{center}
-\end{table}
+
+
+Table: Example of an age distribution table with the proportions per women's age.
+
+Municipality   | Woman's age | Man's age | Count  | Proportion of men married with a women of this age |
+|:--|:-----:|:------:|:------:| :------: |
+TestCity | 20-25 | 15-20 | 4| 7\% |
+TestCity | 20-25 | 20-25 | 25| 43,9\%  |
+TestCity | 20-25 | 25-30 | 18| 31,6\% |
+TestCity | 20-25 | 30-35 | 8| 14\% |
+TestCity | 20-25 | 35-40 | 2| 3,5\% |
+... | ... | ... | ... | ... |
 
 These proportions will be useful in next step of the global process.
 
@@ -389,6 +363,8 @@ remaining heads.
 \label{AlgoCouple}
 \end{center}
 \end{figure}
+
+\newpage
 
 In our research, this algorithm has been applied to all municipalities in Belgium.
 The final result is illustrated in Figure 10.4. On this graph, 
@@ -442,7 +418,7 @@ the proportion varies from 0.7\% to 1.05\%.
 \end{figure}
 
 
-
+\newpage
 Note that a simulated annealing could be another method to resolve this kind of problems.
 In our case, we have tested it, but it takes very long CPU time to obtain a result
 as accurate as the one shown above. However, in cases where 
