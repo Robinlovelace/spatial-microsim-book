@@ -15,18 +15,6 @@ source("R/SimpleWorld.R")
 
 # Population synthesis {#smsimr}
 
-```{r, echo=FALSE}
-# TODO:
-# Ensure text is compatible with new use of chapter title as 'population synthesis'
-# Discuss population synthesis without an input microdataset, with reference to Barthelemy and Toint (2013)
-# Consider splitting this section in 2: reweighting vs CO approaches
-
-# Completed:
-# Change integerisation section so it's part of IPF (RL)
-# Add IPF theory from Cambridge handout.pdf (mostly done)
-# update Figure with expansion
-```
-
 In this chapter we progress from loading and preparing the input data to
 running a spatial microsimulation model. The focus is on
 Iterative Proportional Fitting
