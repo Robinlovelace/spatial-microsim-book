@@ -12,16 +12,16 @@ teach the basics of R, from the perspective of spatial microsimulation research.
 It should also be useful to people with existing R skills, to re-affirm their
 knowledge base and see how it is applicable to spatial microsimulation.
 
-R's design is built on the idea that "everything is an object and everything
-that happens is a function". It is a *vectorised*, *object orientated* and
-*functional* programming language (Wickham, 2014).  This means that R
+R's design is built on the idea that everything that exists is an object and everything
+that happens is a function. It is a *vectorised*, *object orientated* and
+*functional* programming language (Wickham 2014). This means that R
 understands vector algebra, all data accessible to R resides in a number of
-named objects and that a function must be used to modify any object. We will
+named objects and functions must be used to modify objects. We will
 look at each of these in some code below.
 
 ## R understands vector algebra {#vector-alg}
 
-A vector is simply an ordered list of numbers (Beezer, 2008).
+A vector is simply an ordered list of numbers (Beezer 2008).
 Imagine two vectors, each consisting of 3 elements:
 
 $$a = (1,2,3); b = (9,8,6) $$
@@ -163,32 +163,32 @@ the following: `ind[c(F, T, F)]`! Here, `T` and `F` are shorthand for "TRUE" and
 The above tutorial should provide a sufficient grounding in R for beginners to
 understand the practical examples in the book.  However, R is a deep language
 and there is much else to learn that will be of benefit to your modelling
-skills. There are many books excellent and tutorials that teach the fundamentals
+skills. There are many excellent books and tutorials that teach the fundamentals
 of R for a variety of applications.
 The following resources, in ascending order of difficulty,
 are highly recommended:
 
-- *Introduction to visualising spatial data in R* (Lovelace and Cheshire, 2014)
+- *Introduction to visualising spatial data in R* (Lovelace and Cheshire 2014)
 provides an introductory tutorial on handling spatial data in R, including the
 administrative zone data which often form the building blocks of spatial microsimulation
 models in R.
 - *Introduction to scientific programming and simulation using R*
-(Jones et al., 2014) is an
+(Jones et al. 2014) is an
 accessible and highly practical course that will form a solid foundation
 for a range of modelling applications, including spatial microsimulation.
-- *An Introduction to R* (Venables et al., 2014)
+- *An Introduction to R* (Venables et al. 2014)
 is the foundational introductory R manual, written by the
 software's core developers and is available on-line for free.
 It is terse and covers some advanced topics, but
 provides a useful reference on the fundamentals of R as a language.
 - *Advanced R* 
-(Wickham, 2014) (http://www.crcpress.com/product/isbn/9781466586963)
+(Wickham 2014) (http://www.crcpress.com/product/isbn/9781466586963)
 delves into the heart
 of the R language. It contains many advanced topics, but the introductory
 chapters are straightforward. Browsing some of the pages on
 Advanced R's website (http://adv-r.had.co.nz/) and
 trying to answer the questions that open each chapter
-provides a taster of the book and an excellent
+provides a taste of the book and an excellent
 way of testing and improving one's understanding of the R language.
 
 ```{r, echo=F}
