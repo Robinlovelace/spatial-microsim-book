@@ -1476,8 +1476,8 @@ for(i in 1:nrow(cons)){
   # Integerise and expand
   ints <- int_expand_vector(int_trs(weights[, i]))
   # Take the right individuals
-  data_frame <- data.frame(ind_full[ints,]
-  ints_df <- rbind(ints_df, data_frame, zone = i))
+  data_frame <- data.frame(ind_full[ints,])
+  ints_df <- rbind(ints_df, data_frame, zone = i)
 }
 
 # Method 2: using apply
