@@ -311,7 +311,7 @@ the marginals could be incoherent
 with the ones from current synthetic population. For this reason, we will consider 
 the new information only as proportions. For our example, 
 it means that in the total of women having 20-25 years old 
-(57 individuals), $\frac{4}{57}=0.07=7$\% are married with a 
+(57 individuals), $\frac{4}{57}=0.07=7$% are married with a 
 man of age 15-20. With this reasoning, we can calculate the new Table 10.2, 
 with a supplementary column considering the proportions.
 
@@ -321,13 +321,13 @@ with a supplementary column considering the proportions.
 
 Table: Example of an age distribution table with the proportion of men married with a woman of each age.
 
-Municipality   | Woman's age | Man's age | Count  | Proportion |
+Municipality   | Woman's age | Man's age | Count  | Proportion (%) |
 |:--|:-----:|:------:|:------:| :------: |
-TestCity | 20-25 | 15-20 | 4| 7\% |
-TestCity | 20-25 | 20-25 | 25| 43,9\%  |
-TestCity | 20-25 | 25-30 | 18| 31,6\% |
-TestCity | 20-25 | 30-35 | 8| 14\% |
-TestCity | 20-25 | 35-40 | 2| 3,5\% |
+TestCity | 20-25 | 15-20 | 4| 7|
+TestCity | 20-25 | 20-25 | 25| 43.9 |
+TestCity | 20-25 | 25-30 | 18| 31.6 |
+TestCity | 20-25 | 30-35 | 8| 14 |
+TestCity | 20-25 | 35-40 | 2| 3.5 |
 ... | ... | ... | ... | ... |
 
 These proportions will be useful in next step of the global process. 
@@ -396,8 +396,8 @@ corresponding to its size.
 \newpage
 
 Figure 10.5 indicates that the
-worst municipality has only 0.5\% of non-assigned individuals. The vast majority 
-of the Belgian municipalities has less than 0.1\% of these individuals.
+worst municipality has only 0.5% of non-assigned individuals. The vast majority 
+of the Belgian municipalities has less than 0.1% of these individuals.
 
 \begin{figure}[h!]
 \begin{center}
@@ -409,8 +409,8 @@ of the Belgian municipalities has less than 0.1\% of these individuals.
 
 Figure 10.6 illustrates the proportion of individuals living 
 with a wrong number of cohabitants. In the different municipalities, 
-the proportion varies from 0.7\% to 1.05\%. These very little errors affect 
-only a little proportion of each municipality 
+the proportion varies from 0.7 to 1.05%. These errors affect 
+only a small proportion of each municipality 
 and concern only the size of household (the type of household is always respected).
 
 We can consider the synthetic population acceptable. Thanks to spatial microsimulation, these new synthetic data
