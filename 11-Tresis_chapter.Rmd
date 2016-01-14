@@ -628,13 +628,13 @@ Although we will not run the calibration procedure here, to illustrate the sensi
 $$
 \begin{aligned}
 U_1 &= \\
-&3.2989*mgmt + 1.8519*rout + 1.733*numCars \\
+&3.299*mgmt + 1.852*rout + 1.73*numCars \\
 U_2 &= \\
-&5.5633 - 1.3535*prof + 26.8106*mgmt - 0.8307*rout - 3.1094*numCars \\
+&5.56 - 1.35*prof + 26.8*mgmt - 0.830*rout - 3.11*numCars \\
 U_3 &= \\
-&0.115 - 1.0771*prof + 1.3984*mgmt + 1.781*rout + 1.9871*numCars \\
+&0.115 - 1.08*prof + 1.40*mgmt + 1.78*rout + 1.99*numCars \\
 U_4 &= \\
-&3.7052 - 8.0874*prof + 33.2434*mgmt + 1.8073*rout - 1.291*numCars
+&3.705 - 8.09*prof + 33.2*mgmt + 1.81*rout - 1.29*numCars
 \end{aligned}
 $$
 
@@ -696,13 +696,13 @@ As a result, calibration involves the incremental changes of more than one alter
 $$
 \begin{aligned}
 U_1 &= \\
-&3.2989*mgmt + 1.8519*rout + 1.733*numCars \\
+&3.30*mgmt + 1.85*rout + 1.73*numCars \\
 U_2 &= \\
-&4.5633 - 1.3535*prof + 26.8106*mgmt - 0.8307*rout - 3.1094*numCars \\
+&4.56 - 1.35*prof + 26.8*mgmt - 0.830*rout - 3.11*numCars \\
 U_3 &= \\
-&0.115 - 1.0771*prof + 1.3984*mgmt + 1.781*rout + 1.9871*numCars \\
+&0.115 - 1.078*prof + 1.40*mgmt + 1.78*rout + 1.99*numCars \\
 U_4 &= \\
-&3.7052 - 8.0874*prof + 33.2434*mgmt + 1.8073*rout - 1.291*numCars
+&3.71 - 8.09*prof + 33.2*mgmt + 1.81*rout - 1.29*numCars
 \end{aligned}
 $$
 
