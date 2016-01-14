@@ -506,7 +506,7 @@ warddata <- warddata[,c("id","zoneid","chosen","numCars","prof","mgmt","rout")]
 zonedataml <- mlogit.data(warddata, shape="long",choice = "chosen", alt.var = "zoneid")
 
 resmodel <- mlogit(chosen ~ 1 | prof | mgmt + rout + numCars, data = zonedataml)
-resmodelout <- round(resmodel$coefficients,4)
+resmodelout <- round(resmodel$coefficients,2)
 
 ```
 
