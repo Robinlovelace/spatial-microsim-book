@@ -319,7 +319,7 @@ with a supplementary column considering the proportions.
 
 \newpage
 
-Table: Example of an age distribution table with the proportion of men married with a women of each age.
+Table: Example of an age distribution table with the proportion of men married with a woman of each age.
 
 Municipality   | Woman's age | Man's age | Count  | Proportion |
 |:--|:-----:|:------:|:------:| :------: |
