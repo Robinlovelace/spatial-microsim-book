@@ -319,7 +319,7 @@ with a supplementary column considering the proportions.
 
 \newpage
 
-Table: Example of an age distribution table with the proportion of men married with a women of each age.
+Table: Example of an age distribution table with the proportion of men married with a woman of each age.
 
 Municipality   | Woman's age | Man's age | Count  | Proportion |
 |:--|:-----:|:------:|:------:| :------: |
@@ -330,11 +330,20 @@ TestCity | 20-25 | 30-35 | 8| 14\% |
 TestCity | 20-25 | 35-40 | 2| 3,5\% |
 ... | ... | ... | ... | ... |
 
-These proportions will be useful in next step of the global process.
+These proportions will be useful in next step of the global process. 
 
 The methodology for the couples with male heads is illustrated in Figure 10.3. For
-female heads, the process is totally similar. First, 
-we split the set of 
+female heads, the process is totally similar. 
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[width=\textwidth]{figures/IllustrationCouples.png}
+\caption{Illustration of the algorithm to form the couples}
+\label{AlgoCouple}
+\end{center}
+\end{figure}
+
+First, we split the set of 
 individuals depending on their role and gender. 
 This forms male heads and female 
 partners to join on one hand, and female heads 
@@ -356,15 +365,6 @@ process is repeated until the set of remaining individuals
 is empty, or there are no remaining partners in the possible ages for the
 remaining heads.
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=\textwidth]{figures/IllustrationCouples.png}
-\caption{Illustration of the algorithm to form the couples}
-\label{AlgoCouple}
-\end{center}
-\end{figure}
-
-\newpage
 
 In our research, this algorithm has been applied to all municipalities in Belgium.
 The final result is illustrated in Figure 10.4. On this graph, 
@@ -392,6 +392,8 @@ have chosen to join remaining individuals without regarding at their size
 of household if this improves the age distribution. This implies less people
 without an household, but some individuals are in a household not
 corresponding to its size.
+
+\newpage
 
 Figure 10.5 indicates that the
 worst municipality has only 0.5\% of non-assigned individuals. The vast majority 
