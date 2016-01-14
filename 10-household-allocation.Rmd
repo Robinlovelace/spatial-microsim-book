@@ -409,7 +409,14 @@ of the Belgian municipalities has less than 0.1\% of these individuals.
 
 Figure 10.6 illustrates the proportion of individuals living 
 with a wrong number of cohabitants. In the different municipalities, 
-the proportion varies from 0.7\% to 1.05\%.
+the proportion varies from 0.7\% to 1.05\%. These very little errors affect 
+only a little proportion of each municipality 
+and concern only the size of household (the type of household is always respected).
+
+We can consider the synthetic population acceptable. Thanks to spatial microsimulation, these new synthetic data
+are statistically very similar to the real Belgian population. 
+Since these individuals are 'synthetic', the resulting population doesn't
+suffer of privacy law problems.
 
 \begin{figure}[h!]
 \begin{center}
