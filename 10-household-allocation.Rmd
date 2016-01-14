@@ -317,11 +317,11 @@ with a supplementary column considering the proportions.
 
 \index{age distribution}
 
+\newpage
 
+Table: Example of an age distribution table with the proportion of men married with a women of each age.
 
-Table: Example of an age distribution table with the proportions per women's age.
-
-Municipality   | Woman's age | Man's age | Count  | Proportion of men married with a women of this age |
+Municipality   | Woman's age | Man's age | Count  | Proportion |
 |:--|:-----:|:------:|:------:| :------: |
 TestCity | 20-25 | 15-20 | 4| 7\% |
 TestCity | 20-25 | 20-25 | 25| 43,9\%  |
