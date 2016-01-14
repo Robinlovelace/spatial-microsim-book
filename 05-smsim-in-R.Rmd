@@ -381,7 +381,8 @@ weight matrix to keep in memory each step.
 ```{r}
 # Create initial matrix of categorical counts from ind 
 weights <- matrix(data = 1, nrow = nrow(ind), ncol = nrow(cons))
-weights1 <- weights2 <- weights # create additional weight objects
+# create additional weight objects
+weights1 <- weights2 <- weights 
 ind_agg0 <- t(apply(cons, 1, function(x) 1 * ind_agg))
 colnames(ind_agg0) <- names(cons)
 ```
@@ -1468,7 +1469,7 @@ detailed previous sections, you will need
 to load the functions by executing `source("R/functions.R")`.] 
 
 
-```{r}
+```{r, warning=FALSE}
 # Method 1: using a for loop
 ints_df <- NULL
 set.seed(42)
