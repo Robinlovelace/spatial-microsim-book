@@ -331,7 +331,8 @@ category and zone will be the maximum of this matrix.
 max(abs(ind_agg-cons))
 
 # Index of the maximum error
-which(abs(ind_agg-cons) == max(abs(ind_agg-cons)), arr.ind = TRUE)
+which(abs(ind_agg-cons) == max(abs(ind_agg-cons)), 
+      arr.ind = TRUE)
 ```
 
 The maximum error is now known and corresponds to the zone 84 and 13 
