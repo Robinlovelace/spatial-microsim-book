@@ -582,14 +582,14 @@ options(scipen=100,digits=3) #to avoid scientific notation
 RudeDiff <- cons[84,] - ind_agg[84,] # differences for zone 84
 diff <- round( abs(RudeDiff) ) # interesting differences
 
-diff[diff>0] # printing the differences bigger than 0
+diff[diff > 1000] # printing the differences bigger than 1000
 ```
 
 The responsible variable seems to be the car ownership. We have made
 a similar check for the three worst zones and this variable is always the one with the
-biggest difference. To investigate the reasons for this, we print the constraints
+largest difference. To investigate the reasons for this, we print the constraints
 for this variable inside the three worst zones and the marginals of the
-observed individuals :
+observed individuals:
 
 ```{r}
 worst <- tail(order(REVec), n = 3)
