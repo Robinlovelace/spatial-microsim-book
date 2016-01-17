@@ -231,6 +231,8 @@ ind <- read.csv("data/CakeMap/ind.csv")
 cons <- read.csv("data/CakeMap/cons.csv")
 ```
 
+\enlargethispage*{\baselineskip}
+
 Take a look at these input data using the techniques learned in the previous
 section. To test your understanding, try to answer the following questions:
 
@@ -811,6 +813,8 @@ In summary, this chapter has coded the whole population synthesis for the
 CakeMap example. This reasoning has been developed with two R packages: **ipfp** and
 **mipfp**. This allowed us to observe the differences in the structure of the
 input data:
+
+\pagebreak
 
 1. **ipfp** takes as input the individual data of the sample and the counts
 of the constraints included in a two–dimensional array (even if we have several 

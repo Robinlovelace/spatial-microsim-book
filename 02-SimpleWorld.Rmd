@@ -47,6 +47,8 @@ subtitle of this book is "a *practical* introduction" for a reason!
 # TODO (RL): Update the above if we get a subtitle, mention in preface 
 ```
 
+\pagebreak
+
 This chapter is ordered as follows:
 
 - *Getting setup with the RStudio environment* ([](#rstudioUpSpeed)) contains
@@ -54,8 +56,7 @@ the basic explanation of RStudio to enable you to code the examples of this
 book on your own computer.
 - *SimpleWorld data* ([](#SimpleWorldData)) describes the context and the
 data of this little illustrative example.
--*Generating a weight matrix* ([](#weight-matrix)) contains the code and the description of 
-the role of a weight matrix in a spatial microsimulation.
+- *Generating a weight matrix* ([](#weight-matrix)) contains the code and the description of the role of a weight matrix in a spatial microsimulation.
 -*Spatial microdata* ([](#spatial-microdata)) shows the typically useful output 
 of a spatial microsimulation.
 -*SimpleWorld in context* ([](#SimpleWorldContext)) mentions the kind of
@@ -225,7 +226,7 @@ In the subsequent section we will type and run some of the contents of the
 
 ## SimpleWorld data {#SimpleWorldData}
 
-SimpleWorld is a small world, consisting of 33 persons split across 3 zones.
+SimpleWorld is a small world, consisting of 33 persons split across 3 zones, as illustrated in Figure 2.3.
 We have two sources of information about these people available to us:
 
 1. aggregate counts of persons by age and sex in each zone (from the SimpleWorld Census)
@@ -240,16 +241,7 @@ where spatial microsimulation is useful. After an explanation of this
 what spatial microdata look like and, finally, place the example in its wider
 context.
 
-This SimpleWorld example is analogous to the
-'cartoon world' used by professor @mackay2008sustainable to simplify the
-complexities of sustainable energy. The same principle works here:
-we will generate a synthetic population for the imaginary SimpleWorld to
-illustrate how spatial microsimulation works and how it can be useful.
-
-The SimpleWorld planet, a 2 dimensional
-plane split into 3 zones, is illustrated in Figure 2.3. 
-
-```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", fig.scap="The SimpleWorld environment", fig.align='center', echo=FALSE, message=FALSE}
+```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", fig.scap="The SimpleWorld environment", fig.align='center', echo=FALSE, message=FALSE, fig.width=4}
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
 library(sp)
@@ -297,7 +289,14 @@ zt <- paste0("Zone ", 1:3)
 text(seq(-120, 120, length.out = 3), 0, zt)
 ```
 
+This SimpleWorld example is analogous to the
+'cartoon world' used by professor @mackay2008sustainable to simplify the
+complexities of sustainable energy. The same principle works here:
+we will generate a synthetic population for the imaginary SimpleWorld to
+illustrate how spatial microsimulation works and how it can be useful.
 
+The SimpleWorld planet, a 2 dimensional
+plane split into 3 zones, is illustrated in Figure 2.3. 
 SimpleWorld is inhabited by 12, 10 and 11 individuals of its alien inhabitants
 in zones 1 to 3, respectively: a planetary population of 33.
 From the SimpleWorld Census, we know
@@ -321,8 +320,6 @@ Table: Aggregate sex counts for SimpleWorld.
 |1  |  6|  6|
 |2  |  4|  6|
 |3  |  3|  8|
-
-\newpage
 
 The following commands load-in this data.
 
@@ -522,7 +519,7 @@ These include deterministic methods such as Iterative Proportional
 Fitting (IPF) and
 probabilistic methods that rely on a pseudo-random number generator such as
 simulated annealing (SA). These and other reweighting algorithms are described
-in detail in Chapter 5.
+in detail in Chapter~5.
 
 ## Spatial microdata {#spatial-microdata}
 
@@ -537,8 +534,6 @@ to produce a spatial microdataset for SimpleWorld. A subset of such spatial micr
 is presented in Table 2.5, where each row represents an individual taken from the 
 individual level sample and the 'zone' column represents the 
 geographical zone in which they reside.
-
-\pagebreak
 
 | id| zone| age|sex | income|
 |--:|----:|---:|:---|------:|

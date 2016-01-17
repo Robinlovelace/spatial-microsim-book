@@ -28,6 +28,7 @@ output:
 \ \ \ \ number_sections: yes
 \ \ \ \ toc: yes
 bibliography: bibliography.bib
+csl: elsevier-harvard.csl
 layout: default
 ---'))
 
@@ -44,9 +45,16 @@ library(rmarkdown)
 # Build the book:
 render("book.Rmd", output_format = "pdf_document")
 
+
 # Build the CRC-formated version - requires local files
 # need to build the .tex manually for references to compile
-# source("R/build-CRC-version.R")
+source("R/build-CRC-version.R")
+# Make latex-specific changes automated
+booktex <- readLines("spatial-microsim-book.tex")
+booktex[grep("\\{Glossary\\}", booktex)]
+booktex <- gsub(pattern = "chapter\\{Glossary\\}", "chapter*\\{Glossary\\}\n\\\\addcontentsline{toc}{chapter}{Glossary}
+", booktex)
+writeLines(booktex, "spatial-microsim-book.tex")
 # in case index does not build - run again!
 # system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
 

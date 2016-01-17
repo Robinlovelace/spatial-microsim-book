@@ -438,6 +438,8 @@ you would query the second column of the weights: `weights1[, 2]`. Conversely,
 to see the weight allocated for individual 3 for each for the 3 zones, you
 need to look at the 3rd column of the weight matrix: `weights1[3, ]`. 
 
+\pagebreak
+
 Note that we asked R to write the resulting matrix after the completion of each zone.
 As said before, the algorithm proceeds zone per zone and each column of the matrix
 corresponds to a zone. This explains why the matrix is filled in per column. We can now 
@@ -486,7 +488,9 @@ for(i in 1:n_zone){
 }
 ```
 
-Congratulations, you
+\pagebreak
+
+If you are new to IPF, congratulations: you
 have just reweighted your first individual level dataset to a geographical
 constraint (the age) and have aggregated the results.
 At this early stage it is important to do some preliminary checks
@@ -609,6 +613,8 @@ is perfect, because, as seen in theory, it is a proportional reallocation.
 Then, we repeat for another constraint and the first one can diverge from this
 perfect fit. However, when  operating this process several times, we always
 refit to the next constraint and we can converge to a unique weight matrix.
+
+\pagebreak
 
 These results show that IPF requires multiple *iterations* before converging on
 a single weight matrix. It is relatively simple to iterate the procedure

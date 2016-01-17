@@ -426,7 +426,6 @@ suffer of privacy law problems.
 \end{center}
 \end{figure}
 
-
 \newpage
 Note that a simulated annealing could be another method to resolve this kind of problems.
 In our case, we have tested it, but it takes very long CPU time to obtain a result
