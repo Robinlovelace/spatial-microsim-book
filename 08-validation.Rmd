@@ -7,7 +7,7 @@ bibliography: bibliography.bib
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 load("cache-CakeMap.RData")
-map_pack <- c("ggmap", "rgdal", "maptools", "rgeos", "dplyr", "tidyr", "gridExtra", "knitr")
+map_pack <- c("rgdal", "maptools", "rgeos", "dplyr", "tidyr", "gridExtra", "knitr")
 lapply(map_pack, library, character.only = T)
 # Todo: add figure comparing various goodness-of-fit measures from JASSS paper
 ```
@@ -478,7 +478,7 @@ a total population two times bigger, the RE would be very smaller. Thus, RE woul
 divided by the multiplication of 2 and the number of variables.
 
 
-```{r, echo=FALSE, fig.cap="Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population.", message=FALSE, warning=FALSE, results=F, fig.height=14, fig.width=9}
+```{r, echo=FALSE, fig.cap="Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population.", message=FALSE, warning=FALSE, results=F, fig.height=6, fig.width=5, fig.align='center'}
 cons_codes <- read.csv("data/CakeMap/cars-raw.csv")
 cons_codes <- as.character(cons_codes$GEO_CODE)[3:126]
 cons_codes <- data.frame(CODE = cons_codes, TAEVec)
