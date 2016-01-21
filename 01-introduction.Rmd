@@ -82,6 +82,8 @@ Chapter 3, by contrast, brings the
 reader up-to-date on what spatial microsimulation is and how it is currently
 used.
 
+\pagebreak
+
 For the structure, each chapter begins with an introduction and ends with a
 summary of what has been done in the chapter. The last section
 of this chapter contains an overview of the book.
@@ -119,6 +121,7 @@ Even when high quality data is made available, it can be very difficult
 for others to check or *reproduce* results based on them.
 Strict conditions inhibiting data access and use are aimed at protecting citizen
 privacy but can also serve to block democratic and enlightened decision making.
+
 The empowering potential of new information is encapsulated in the
 saying that 'knowledge is power'.
 This helps explain why methods such as spatial microsimulation,
@@ -152,6 +155,7 @@ processes are in operation. Spatial microsimulation
 enables modelling and analysis on multiple levels.
 Spatial microsimulation also overlaps with (and provides useful
 initial conditions for) agent-based models (see Chapter 12).
+
 Despite its utility, spatial microsimulation
 is little known outside the fields of human geography and regional
 science. The methods taught in this book
@@ -188,6 +192,8 @@ treats spatial microsimulation as a magical black box that just 'works'
 without any need to describe, or more importantly make reproducible, the
 methods underlying the black box. This book is therefore also about
 demystifying spatial microsimulation.
+
+\pagebreak
 
 ## A definition of spatial microsimulation
 
@@ -302,6 +308,7 @@ All these reasons inform the book's practical nature.
 # [2011](http://www.manning.com/kabacoff/)
 ```
 
+\pagebreak
 This book presents spatial microsimulation as a living, evolving set of
 techniques rather than a prescriptive formula for arriving at the 'right'
 answer.  Spatial microsimulation is largely defined by its user-community, made
