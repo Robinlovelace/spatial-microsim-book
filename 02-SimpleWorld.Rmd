@@ -440,6 +440,7 @@ individual level survey data.  Spatial microsimulation tackles this issue by
 allocating individuals from a non-geographical dataset to geographical zones in
 another.
 
+
 ## Generating a weight matrix {#weight-matrix}
 
 The process to generate spatial microdata is allocating *weights*
@@ -450,7 +451,7 @@ zone. This information can be represented as a *weight matrix*.
 The subsequent code block uses the **mipfp** package to convert these
 inputs into a matrix of weights. Just type it in and observe the
 result. If it works, congratulations! You have generated your first
-weight matrix using Iterative Proportional Fitting (IPF) (see Table 2.4). The
+weight matrix using Iterative Proportional Fitting (IPF) (see code output). The
 details of this process are described in subsequent chapters.
 
 ```{r, message=FALSE}
@@ -471,8 +472,9 @@ This makes sense because `con_age[1,]` contains many young people and `ind`
 contains only one young female. At this stage you may be wondering: what just
 happened? This is explained in detail in the subsequent chapters.
 
-An alternative approach to arriving at the same result, for all zones,
+An alternative approach to arriving at a similar result, for all zones,
 is demonstrated in the code chunk below using another package: **ipfp**.
+The result of this code is illustated in Table 2.4.
 Again, the reader is not expected to understand what has just happened.
 This will be explained in subsequent chapters.
 
@@ -509,6 +511,11 @@ microdataset is a young male yet there are only 2 young people and 4 males in
 zone 2. A special feature of the weight matrix above is that each of the column
 sums is equal to the total population in each zone.
 
+Note that the first method gives weights to categories (for example young female),
+whereas the second method gives weights to each individual. This is normal and
+equivalent, we can easily transform one type of output in the other type. The details 
+are explained further.
+
 We will discover different ways of generating such weight matrices
 in subsequent chapters.
 For now it is sufficient to know
@@ -526,6 +533,7 @@ in detail in Chapter~5.
 A useful output from spatial microsimulation is what we refer to as
 *spatial microdata*.  This is a dataset that contains a single row per individual
 (as with the input microdata) but also an additional variable on geographical location.
+
 The ideal spatial microdataset
 selects individuals representative of the aggregate constraints for each zone,
 while containing the diversity of information present in the individual level
@@ -603,6 +611,6 @@ code should have helped get acquainted with the 'workflow' associated with
 developing and running spatial microsimulation models in R.
 Discussion of the results, which represent the inhabitants of the imaginary
 system *SimpleWorld*, create the backdrop for the rest of the book, which
-we will return to in Chapter 12.
+we will return to in Chapter~12.
 
 # References

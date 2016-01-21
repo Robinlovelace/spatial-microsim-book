@@ -208,7 +208,9 @@ access to household level variables only in the individual level
 data. The other assumes
 access to additional data concerning the structure of the
 households such as the age difference amongst a married couple.
-These options are described below. Note that in both 
+These options are described below. 
+
+Note that in both 
 situations, the aim is to form households where each individual
 is contained in one and only one household. Moreover, each individual must respect,
 as well as possible, its household's attributes.
@@ -235,7 +237,7 @@ to find a perfect coupling.
 \begin{figure}[h!]
 \begin{center}
 \includegraphics[width=0.7\textwidth]{figures/HH-CO.png}
-\caption{Illustration the problem of grouping members of married couples with children.}
+\caption{Illustration of the problem of grouping members of married couples with children.}
 \end{center}
 \end{figure}
 
@@ -249,6 +251,7 @@ Inside this restricted set of households, the next step is to
 look at the link that each individual has with the household head
 and again split the pool of individuals, per link. It is only after this classification
 that we proceed to the random draw, respecting the links.
+
 For example, for the married couples, we first draw randomly a head
 and then a partner of the opposite gender (the national register
 of Belgium for 2011 doesn't contain homosexual couples). Then, depending
@@ -317,7 +320,7 @@ with a supplementary column considering the proportions.
 
 \index{age distribution}
 
-\newpage
+\pagebreak
 
 Table: Example of an age distribution table with the proportion of men married with a woman of each age.
 
@@ -393,11 +396,11 @@ of household if this improves the age distribution. This implies less people
 without an household, but some individuals are in a household not
 corresponding to its size.
 
-\newpage
-
 Figure 10.5 indicates that the
 worst municipality has only 0.5% of non-assigned individuals. The vast majority 
 of the Belgian municipalities has less than 0.1% of these individuals.
+
+\pagebreak
 
 \begin{figure}[h!]
 \begin{center}
@@ -413,7 +416,13 @@ the proportion varies from 0.7 to 1.05%. These errors affect
 only a small proportion of each municipality 
 and concern only the size of household (the type of household is always respected).
 
-We can consider the synthetic population acceptable. Thanks to spatial microsimulation, these new synthetic data
+In conclusion, the simulation fits well the strong contraints
+(age distributions inside couples and between head and children). 
+The individuals assigned to a household have the right link with the head
+and most of them live with the right number of cohabitants. Only few 
+individuals has not been chosen to form an household.
+Thus, we can consider the synthetic population acceptable. 
+Thanks to spatial microsimulation, these new synthetic data
 are statistically very similar to the real Belgian population. 
 Since these individuals are 'synthetic', the resulting population doesn't
 suffer of privacy law problems.
@@ -426,7 +435,7 @@ suffer of privacy law problems.
 \end{center}
 \end{figure}
 
-\newpage
+
 Note that a simulated annealing could be another method to resolve this kind of problems.
 In our case, we have tested it, but it takes very long CPU time to obtain a result
 as accurate as the one shown above. However, in cases where 
