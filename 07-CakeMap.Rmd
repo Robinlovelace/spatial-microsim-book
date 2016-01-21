@@ -55,15 +55,15 @@ aggregated categorical count data from the census --- the *constraint tables*.
 
 This chapter is structured as follow: 
 
--*Selection of constraint variables* ([](#CakeMapConVar)) describes and justifies
+- *Selection of constraint variables* ([](#CakeMapConVar)) describes and justifies
 the choice of the constraint variables on this specific example.
--*Preparing the input data* ([](#CakePrep)) contains the pieces of code
+- *Preparing the input data* ([](#CakePrep)) contains the pieces of code
 necessary to load and prepare the data, before performing the spatial microsimulation.
--*Using the `ipfp` package* ([](#CakeMapIPFP)) develops the whole process
+- *Using the `ipfp` package* ([](#CakeMapIPFP)) develops the whole process
 to create a synthetic population thanks to the R package **ipfp**.
--*Using the `mipfp` package* ([](#CakeMIPF)) also includes the whole
+- *Using the `mipfp` package* ([](#CakeMIPF)) also includes the whole
 process, but with the R package **mipfp**.
--*Comparing methods of reweighting large datasets* ([](#CompareMeth)) compares
+- *Comparing methods of reweighting large datasets* ([](#CompareMeth)) compares
 the different results and describes briefly how to transform one type of result
 to the other type.
 
