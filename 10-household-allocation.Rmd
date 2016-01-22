@@ -261,7 +261,7 @@ and respect the constraints. Figure 10.2 shows that we have
 a household with head 1, who is a woman; partner 2, who is a man;
 and two children (with ids 2 and 5).
 
-\pagebreak
+
 The main sources of error with this method are incoherence 
 in the data and error caused by the IPF process before the grouping. 
 The method implicitly assumes that each household is equally likely to occur, independent
@@ -334,7 +334,6 @@ TestCity | 20-25 | 35-40 | 2| 3.5 |
 ... | ... | ... | ... | ... |
 
 These proportions will be useful in next step of the global process. 
-
 The methodology for the couples with male heads is illustrated in Figure 10.3. For
 female heads, the process is totally similar. 
 

@@ -130,7 +130,7 @@ Pressing the down arrow allows the user to select the correct input.
 Auto-completion allows fast typing, easy recollection of function/object names.
 It also prevents errors cause by typos in your code.
 
-```{r rstudio,  fig.cap="Autocompletion in RStudio", fig.scap="Autocompletion in RStudio", fig.align='center', echo=FALSE, message=FALSE}
+```{r rstudio,  fig.cap="Autocompletion in RStudio", fig.scap="Autocompletion in RStudio", echo=FALSE, message=FALSE}
 # todo: create tutorial on installing R and RStudio
 grid.raster(readPNG("figures/rstudio-autocomplete.png"))
 ```
@@ -175,6 +175,7 @@ code frequently to the book's online repository: https://github.com/Robinlovelac
 This online repository will allow you to access all of the example code and data for the book.
 It will also allow you to contribute to the book as an evolving project.
 
+\pagebreak
 The next section explains how to download and use the data stored in the `spatial-microsim-book`
 GitHub repository to access the code and data resources associated with the book.
 
@@ -204,7 +205,7 @@ bottom right panel.
 
 \index{RStudio}
 
-```{r studio,  fig.cap="The RStudio interface with the spatial-microsim-book project loaded and objects loaded in the Environment after running SimpleWorld.R",fig.scap="The RStudio interface", fig.align='center',fig.pos='!h', echo=FALSE, message=FALSE}
+```{r studio,  fig.cap="The RStudio interface with the spatial-microsim-book project loaded and objects loaded in the Environment after running SimpleWorld.R",fig.scap="The RStudio interface",fig.pos='!h', echo=FALSE, message=FALSE}
 # todo: create tutorial on installing R and RStudio
 grid.raster(readPNG("figures/rstudio-environment.png"))
 ```
@@ -233,7 +234,7 @@ We have two sources of information about these people available to us:
 1. aggregate counts of persons by age and sex in each zone (from the SimpleWorld Census)
 2. survey microdata recording more detailed information (age, sex and income), for five of the world’s residents.
 
-```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", fig.scap="The SimpleWorld environment", fig.align='center', fig.pos='!h', echo=FALSE, message=FALSE, fig.width=4}
+```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", fig.scap="The SimpleWorld environment", fig.pos='!h', echo=FALSE, message=FALSE, fig.width=4}
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
 library(sp)
@@ -405,6 +406,17 @@ This is provided in an individuals level dataset on 5 of SimpleWorld's
 inhabitants (Table 2.3).
 Note that the individual level data has different dimensions than the
 aggregate data presented above.
+
+Table: individual level survey data from SimpleWorld.
+
+| id| age|sex | income|
+|--:|---:|:---|------:|
+|  1|  59|m   |   2868|
+|  2|  54|m   |   2474|
+|  3|  35|m   |   2231|
+|  4|  73|f   |   3152|
+|  5|  49|f   |   2473|
+
 The individual level *microdata* survey has one row per individual whereas
 the *constraints* have one row per zone.
 This individual level data includes two variables that *link* it to the
@@ -427,15 +439,7 @@ ind <- read.csv("data/SimpleWorld/ind-full.csv")
 # kable(ind)
 ```
 
-Table: individual level survey data from SimpleWorld.
 
-| id| age|sex | income|
-|--:|---:|:---|------:|
-|  1|  59|m   |   2868|
-|  2|  54|m   |   2474|
-|  3|  35|m   |   2231|
-|  4|  73|f   |   3152|
-|  5|  49|f   |   2473|
 
 Note that although the microdataset contains additional information about the
 inhabitants of SimpleWorld, it lacks geographical information about where each
@@ -469,6 +473,7 @@ res <- Ipfp(seed, descript, target)
 res$x.hat # the result for the first zone
 ```
 
+\pagebreak
 Note that the output of the above command is only for the first zone.
 It suggests that in zone 1, younger females are far more (nearly 4.5 times more)
 numerous than would be expected based on the individual level data alone.
@@ -530,7 +535,7 @@ These include deterministic methods such as Iterative Proportional
 Fitting (IPF) and
 probabilistic methods that rely on a pseudo-random number generator such as
 simulated annealing (SA). These and other reweighting algorithms are described
-in detail in Chapter~5.
+in detail in Chapter&nbsp;5.
 
 ## Spatial microdata {#spatial-microdata}
 
@@ -615,6 +620,6 @@ code should have helped get acquainted with the 'workflow' associated with
 developing and running spatial microsimulation models in R.
 Discussion of the results, which represent the inhabitants of the imaginary
 system *SimpleWorld*, create the backdrop for the rest of the book, which
-we will return to in Chapter~12.
+we will return to in Chapter&nbsp;12.
 
 # References
