@@ -74,6 +74,8 @@ excellent documentation, ease of learning and integration with R, NetLogo is the
 tool of choice in this book and should be sufficiently powerful for many
 applications.
 
+\pagebreak
+
 [NetLogo](https://ccl.northwestern.edu/netlogo/) is a
 mature and widely used tool-kit for agent-based models. It is written in
 Java, but uses a derivation of the Logo language to develop models.
@@ -531,7 +533,6 @@ Figure 12.6 is a screenshot of a state of SimpleWorld with 8 inhabitants engaged
 
 Let's return to the `negotiate` procedure we created above as a place-holder and add the actual negotiation to it. We will leave the first three lines from before setting both parties `in-negotiations` switch to true and colouring them red. The next three lines sort them by income and assign them to either `loser` or `winner`. This is followed by an `if` construct, that only executes if the loser's bribeability is larger than a random number between 0 and 100. In this case the loser takes the bribe, is moved into the winner's zone and their colour changes to brown. At the same time the bribe must also be subtracted from the winner's income. 
 
-\pagebreak
 ```
 to negotiate [ parties ]
   ask parties [

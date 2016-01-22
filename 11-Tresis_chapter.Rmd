@@ -795,7 +795,7 @@ This means the development of a full transport model in R can apply the syntheti
 Although developing the full set of models cannot be described as a simple process, as demonstrated in this chapter, the functionality of R, and some of its packages, makes it well suited to applying transport models.
 In particular, implementing full network assignment in R is likely to be particularly challenging, but its data structures and rapidly improving GIS functionality, some of which has been demonstrated in this chapter, means these are also likely to be possible.
 
-### Summary
+## Chapter summary
 
 This chapter has provided an introduction to the TRESIS approach to population synthesis through the use of synthetic households and demand models. In it we learned to generate, allocate and model household level
 data. TRESIS is an approach that is relatively simply conceptually but that incorporates powerful behavioural features. This, combined with
