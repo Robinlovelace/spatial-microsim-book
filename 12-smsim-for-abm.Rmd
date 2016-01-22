@@ -686,7 +686,7 @@ The RNetLogo package [@thiele2014r] allows us to control a NetLogo model directl
 RNetLogo allows us to issue commands, set global values, repeatedly run the model and collect the results directly from R.
 
 The RNetLogo package is installed in R like any other package using `install.packages("RNetLogo")`. Note that RNetLogo depends on rJava [@rjava], which may require some extra configuration of Java, depending on your setup. The basic code for opening and running a model in R is then:
-
+\enlargethispage*{\baselineskip}
 ```{r, eval=FALSE}
 library(RNetLogo)
 nldir <- "C:/Program Files (x86)/NetLogo 5.1.0" # program dir

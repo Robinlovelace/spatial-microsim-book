@@ -400,12 +400,6 @@ Figure 10.5 indicates that the
 worst municipality has only 0.5% of non-assigned individuals. The vast majority 
 of the Belgian municipalities has less than 0.1% of these individuals.
 
-Figure 10.6 illustrates the proportion of individuals living 
-with a wrong number of cohabitants. In the different municipalities, 
-the proportion varies from 0.7 to 1.05%. These errors affect 
-only a small proportion of each municipality 
-and concern only the size of household (the type of household is always respected).
-
 
 \begin{figure}[h!]
 \begin{center}
@@ -415,6 +409,11 @@ and concern only the size of household (the type of household is always respecte
 \end{center}
 \end{figure}
 
+Figure 10.6 illustrates the proportion of individuals living 
+with a wrong number of cohabitants. In the different municipalities, 
+the proportion varies from 0.7 to 1.05%. These errors affect 
+only a small proportion of each municipality 
+and concern only the size of household (the type of household is always respected).
 
 In conclusion, the simulation fits well the strong contraints
 (age distributions inside couples and between head and children). 
@@ -435,6 +434,7 @@ suffer of privacy law problems.
 \end{center}
 \end{figure}
 
+\pagebreak
 
 Note that a simulated annealing could be another method to resolve this kind of problems.
 In our case, we have tested it, but it takes very long CPU time to obtain a result
