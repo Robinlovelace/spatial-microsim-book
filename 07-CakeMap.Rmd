@@ -138,6 +138,8 @@ aggregate level datasets can be chosen. Suppose our aim is to analyse the consum
 of cakes depending on socio-demographic variables. Five interesting variables assigned to each
 of the 916 individuals are available from the individual level data:
 
+\pagebreak
+
 - 'Car': The number of working cars in the person's household.
 - 'Sex' and 'ageband4': Gender and age group, in two separate variables. 
 Age is divided into 6 groups ranging from '16--24' to '65--74'.^[R tip:
@@ -416,7 +418,6 @@ save.image("cache-CakeMap.RData")
 # (MD) explain better the integerisation and the reason why you calculate the things here above
 ```
 
-\newpage
 
 ## Using the `mipfp` package {#CakeMIPF}
 

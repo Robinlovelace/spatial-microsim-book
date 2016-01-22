@@ -274,6 +274,7 @@ between different measures are quite subtle.
 on the measures that are appropriate for different situations.
 Ten years later, we are no nearer consensus.
 
+\pagebreak
 Such measures, that compare aggregate
 count datasets, are *not* sufficient to ensure that the results of
 spatial microsimulation are reliable; they are methods of *internal validation*.
@@ -314,6 +315,7 @@ it has internal consistency and could be described as 'internally valid'.
 Note that we have calculated the correlation 
 before integerisation here. In the perfect fit, we would have a linear correlation of exactly 1.
 
+\pagebreak
 In micro-simulation, we have the whole population with all characteristics of each individual, only after the simulation. 
 For this reason, we have to aggregate the simulated population to have a matrix comparable with the constraint. In this sense, 
 there are two ways to proceed. First, we can make the comparison variable per variable and the total number of individuals is the constraint number of people in the area. Secondly, we can take all variables together, meaning having a matrix including the whole population for each variable. This implies that the sum of all cells equals to the multiplication of the 

@@ -261,6 +261,7 @@ and respect the constraints. Figure 10.2 shows that we have
 a household with head 1, who is a woman; partner 2, who is a man;
 and two children (with ids 2 and 5).
 
+\pagebreak
 The main sources of error with this method are incoherence 
 in the data and error caused by the IPF process before the grouping. 
 The method implicitly assumes that each household is equally likely to occur, independent
@@ -320,7 +321,6 @@ with a supplementary column considering the proportions.
 
 \index{age distribution}
 
-\pagebreak
 
 Table: Example of an age distribution table with the proportion of men married with a woman of each age.
 
@@ -400,7 +400,12 @@ Figure 10.5 indicates that the
 worst municipality has only 0.5% of non-assigned individuals. The vast majority 
 of the Belgian municipalities has less than 0.1% of these individuals.
 
-\pagebreak
+Figure 10.6 illustrates the proportion of individuals living 
+with a wrong number of cohabitants. In the different municipalities, 
+the proportion varies from 0.7 to 1.05%. These errors affect 
+only a small proportion of each municipality 
+and concern only the size of household (the type of household is always respected).
+
 
 \begin{figure}[h!]
 \begin{center}
@@ -410,11 +415,6 @@ of the Belgian municipalities has less than 0.1% of these individuals.
 \end{center}
 \end{figure}
 
-Figure 10.6 illustrates the proportion of individuals living 
-with a wrong number of cohabitants. In the different municipalities, 
-the proportion varies from 0.7 to 1.05%. These errors affect 
-only a small proportion of each municipality 
-and concern only the size of household (the type of household is always respected).
 
 In conclusion, the simulation fits well the strong contraints
 (age distributions inside couples and between head and children). 

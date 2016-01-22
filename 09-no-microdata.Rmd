@@ -413,6 +413,7 @@ with "0" in impossible cells and "1" in potentially
 non empty cases. For example, individuals of less than 
 10 years cannot hold a diploma from university. 
 
+\pagebreak
 With this initial point, an IPF can be performed to fit the two
 previously determined three–dimensional tables. The result 
 is a table with the four variables per district. 

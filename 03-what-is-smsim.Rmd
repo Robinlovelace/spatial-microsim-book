@@ -572,7 +572,9 @@ Spatial microsimulation uses very similar techniques as those employed by
 EUROMOD and other economic microsimulation models,
 including probability-weighted random sampling of individual level
 data and aggregate level scenario development
-[@sutherland2013euromod]. The majority of microsimulation
+[@sutherland2013euromod]. 
+
+The majority of microsimulation
 research for economic policy evaluation does not
 disaggregate the impacts over space, however. The estimation of variability
 at the *local level* is what differentiates spatial microsimulation models
