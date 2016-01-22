@@ -31,7 +31,7 @@ applications.
 - *Assumptions* ([](#assumptions)) addresses
 the often unspoken assumptions underlying spatial microsimulation results.
 
-For the purposes of this book spatial microsimulation was defined in Chapter~1 as:
+For the purposes of this book spatial microsimulation was defined in Chapter&nbsp;1 as:
 
 > **The creation, analysis and modelling of individual level data allocated to geographic zones.**
 
@@ -45,7 +45,7 @@ by approximating the original geo-referenced individual level data
 generation of spatial microdata: it involves *doing stuff* with the spatial microdata
 to better understand the world.
 
-```{r, fig.cap="Schematic of population synthesis, a critical element in spatial microsimulation", fig.scap="Schematic of population synthesis", fig.align='center', echo=FALSE}
+```{r, fig.cap="Schematic of population synthesis, a critical element in spatial microsimulation", fig.scap="Schematic of population synthesis", fig.align='center', fig.pos='!h', echo=FALSE}
 img <- readPNG("figures/msim-schema.png")
 grid.raster(img)
 ```
@@ -574,6 +574,7 @@ including probability-weighted random sampling of individual level
 data and aggregate level scenario development
 [@sutherland2013euromod]. 
 
+\pagebreak
 The majority of microsimulation
 research for economic policy evaluation does not
 disaggregate the impacts over space, however. The estimation of variability

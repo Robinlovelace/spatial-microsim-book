@@ -276,7 +276,7 @@ are performed only for zone 1.
 \index{benchmarking}
 \index{speed}
 
-```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.", fig.scap="Total Absolute Error results for several algorithms", fig.width=4.2, fig.height=4.2, fig.align='center', echo=FALSE}
+```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.", fig.scap="Total Absolute Error results for several algorithms", fig.width=4.2, fig.height=4.2, fig.align='center',fig.pos='!h', echo=FALSE}
 # commented as pdf version looks better! 
 img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
 grid.raster(img)

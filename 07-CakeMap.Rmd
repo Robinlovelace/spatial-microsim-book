@@ -190,7 +190,7 @@ Figure 7.1 illustrates, these datasets are rather verbose and
 require pre-processing. The resulting 'clean' constraints are saved in files such as
 'con1.csv', which stands for 'constraint 1'.
 
-```{r, fig.align='center', fig.cap="Example of raw aggregate level input data for CakeMap aggregate data, downloaded from http://infuse.mimas.ac.uk/.", fig.scap="Example of raw aggregate level input data", echo=FALSE}
+```{r, fig.align='center', fig.cap="Example of raw aggregate level input data for CakeMap aggregate data, downloaded from http://infuse.mimas.ac.uk/.", fig.scap="Example of raw aggregate level input data", fig.pos='!h' , echo=FALSE}
 library(jpeg)
 img <- readJPEG("figures/raw-data-screenshot.jpeg")
 grid.raster(img)
@@ -623,7 +623,7 @@ print the `tol` result by default. This was a wise decision
 by the developer of **mipfp** in this case: 
 more than 100 iterations were needed for the weights to converge.
 
-```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis).", fig.scap="Scatter plot of simulated and desired counts with mipfp", fig.align='center'}
+```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis).", fig.scap="Scatter plot of simulated and desired counts with mipfp", fig.pos='!h', fig.align='center'}
 layout(matrix(c(1:3,3), 2, 2))
 plot(con1_convert, apply(weight_mipfp$x.hat,c(1,4,6),sum), pch=20, xlab="Result of the simulation for constraint 1",
   ylab="Constraint 1",
@@ -709,7 +709,7 @@ However, both methods seems to return very similar
 weights, since the crosses are included inside the 
 circles.
 
-```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis) (ipfp vs mipfp).", fig.scap="Scatter plot of simulated and desired counts (ipfp vs mipfp)", fig.align='center'}
+```{r, echo=FALSE, fig.cap="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis) (ipfp vs mipfp).", fig.scap="Scatter plot of simulated and desired counts (ipfp vs mipfp)", fig.pos='!h', fig.align='center'}
 layout(matrix(c(1:3,3), 2, 2))
 plot(con1_convert, apply(weight_mipfp$x.hat,c(1,4,6),sum), pch=4, ylab="Simulated",
   xlab="Constraint 1", main="Constraint 1")
@@ -814,8 +814,6 @@ In summary, this chapter has coded the whole population synthesis for the
 CakeMap example. This reasoning has been developed with two R packages: **ipfp** and
 **mipfp**. This allowed us to observe the differences in the structure of the
 input data:
-
-\pagebreak
 
 1. **ipfp** takes as input the individual data of the sample and the counts
 of the constraints included in a two–dimensional array (even if we have several 

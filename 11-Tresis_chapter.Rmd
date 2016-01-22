@@ -158,8 +158,7 @@ set.seed(99) # This line sets the seed for the random number
 # Randomly select the sizes of the households and then assign 
 # the unique IDs of each household to sequential individuals 
 # in the dataset.
-ind$hhld <- rep(1:1000, 
-                times=sample(c(1:6), 1000, replace=TRUE)
+ind$hhld <- rep(1:1000, times=sample(c(1:6), 1000, replace=TRUE)
                 )[1:nrow(ind)]
 
 # Check how many households we have in our dataset:

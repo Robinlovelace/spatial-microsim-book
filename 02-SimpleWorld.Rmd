@@ -204,7 +204,7 @@ bottom right panel.
 
 \index{RStudio}
 
-```{r studio,  fig.cap="The RStudio interface with the spatial-microsim-book project loaded and objects loaded in the Environment after running SimpleWorld.R",fig.scap="The RStudio interface", fig.align='center', echo=FALSE, message=FALSE}
+```{r studio,  fig.cap="The RStudio interface with the spatial-microsim-book project loaded and objects loaded in the Environment after running SimpleWorld.R",fig.scap="The RStudio interface", fig.align='center',fig.pos='!h', echo=FALSE, message=FALSE}
 # todo: create tutorial on installing R and RStudio
 grid.raster(readPNG("figures/rstudio-environment.png"))
 ```
@@ -233,7 +233,7 @@ We have two sources of information about these people available to us:
 1. aggregate counts of persons by age and sex in each zone (from the SimpleWorld Census)
 2. survey microdata recording more detailed information (age, sex and income), for five of the world’s residents.
 
-```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", fig.scap="The SimpleWorld environment", fig.align='center', echo=FALSE, message=FALSE, fig.width=4}
+```{r simpleworld,  fig.cap="The SimpleWorld environment, consisting of individuals living in 3 zones.", fig.scap="The SimpleWorld environment", fig.align='center', fig.pos='!h', echo=FALSE, message=FALSE, fig.width=4}
 # Code to create SimpleWorld
 # Builds on this vignette: http://cran.r-project.org/web/packages/sp/vignettes/over.pdf
 library(sp)
@@ -384,8 +384,6 @@ pol1$ypos <- 0
 ```{r}
 cons # print the constraint data to screen
 ```
-
-\pagebreak
 
 Each row represents a new zone (see also Tables 2.1 and 2.1).
 The planet's entire
