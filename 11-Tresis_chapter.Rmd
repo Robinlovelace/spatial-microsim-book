@@ -66,7 +66,7 @@ When used together, the TRESIS models predict households' long-term decisions an
 Although in this chapter we discuss how to implement a stand-alone residential location model, the full power of the TRESIS system is only available when the whole set of demand models is estimated and run together.
 The figure below shows an overview of the high level TRESIS model structure [@Hensher2008].
 
-```{r, echo=FALSE, fig.cap="Overview of TRESIS model structure", fig.align='center'}
+```{r, echo=FALSE, fig.cap="Overview of TRESIS model structure"}
 grid.raster(readPNG("figures/TRESISModels.png"))
 ```
 

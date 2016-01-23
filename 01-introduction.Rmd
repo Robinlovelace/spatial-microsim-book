@@ -138,6 +138,7 @@ individual level data at high spatial resolution: people allocated to places.
 This *spatial microdata*, in one form or another,
 provides the basis for all spatial microsimulation research.
 
+\pagebreak
 The purpose of this book is to teach methods for *doing* (not reading about!)
 spatial microsimulation. This involves techniques for generating and analysing
 spatial microdata to get the 'best of both worlds'
@@ -219,7 +220,7 @@ seeks to overcome some of these limitations, creating new outputs that
 are useful for a number of research applications and as inputs to
 more sophisticated models.
 
-```{r, fig.cap="Schematic diagram contrasting conventional official data (above) against spatial microdata produced during *population synthesis* (below). Note that for brevity the geographically aggregated data are called *constraints* and the individual level survey data are called *microdata* in this book.", fig.scap="Schematic diagram of spatial microdata", fig.height=6, fig.align='center', echo=FALSE}
+```{r, fig.cap="Schematic diagram contrasting conventional official data (above) against spatial microdata produced during *population synthesis* (below). Note that for brevity the geographically aggregated data are called *constraints* and the individual level survey data are called *microdata* in this book.", fig.scap="Schematic diagram of spatial microdata", fig.height=6, echo=FALSE}
 img <- readPNG("figures/msim-flow.png")
 grid.raster(img)
 ```

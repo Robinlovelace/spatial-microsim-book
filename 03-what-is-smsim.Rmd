@@ -45,7 +45,7 @@ by approximating the original geo-referenced individual level data
 generation of spatial microdata: it involves *doing stuff* with the spatial microdata
 to better understand the world.
 
-```{r, fig.cap="Schematic of population synthesis, a critical element in spatial microsimulation", fig.scap="Schematic of population synthesis", fig.align='center', fig.pos='!h', echo=FALSE}
+```{r, fig.cap="Schematic of population synthesis, a critical element in spatial microsimulation", fig.scap="Schematic of population synthesis", fig.pos='!h', echo=FALSE}
 img <- readPNG("figures/msim-schema.png")
 grid.raster(img)
 ```
@@ -56,7 +56,7 @@ it can be used to provide 'the best of both worlds' of available data by
 combining them into a single analysis. Spatial microsimulation should therefore
 be used in situations where you have access to individual and area level data but
 no means of combining them. Spatial microsimulation can also be used in
-contexts where no individual level data is available, as described in Chapter~9.
+contexts where no individual level data is available, as described in Chapter&nbsp;9.
 
 Typical use cases include modelling the spatial distribution of population
 growth and changes in demographics; high level transport-modelling; scenario-based
@@ -560,7 +560,7 @@ The resulting research demonstrates that modelling work based on
 microsimulation can provide important new lines of evidence
 to inform national level policies [@avram2012distributional].
 
-```{r, fig.cap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.", fig.scap="Output from the EUROMOD model", fig.width=5, fig.height=5, fig.align='center', echo=FALSE}
+```{r, fig.cap="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.", fig.scap="Output from the EUROMOD model", fig.width=5, fig.height=5, echo=FALSE}
 # A typical output from a microsimulation model for economic policy evaluation, from De Agostini et al. (2014). Each vertical bar represents the relative gains or losses of each income 'vingtile' (there are 20 equally sized groups, by income, in the model) and the black line shows that the austerity budget has been most detrimental to low income groups and most beneficial to the upper-middle classes.
 library(png)
 library(grid)
