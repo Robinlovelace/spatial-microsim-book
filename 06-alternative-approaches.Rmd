@@ -15,7 +15,7 @@ load("cache-smsim-in-R.RData")
 # Alternative approaches to population synthesis {#alternative-reweighting}
 
 This chapter briefly describes other techniques for spatial microsimulation.
-We have different methods, each corresponding to a section : 
+We have different methods, each corresponding to a section: 
 
 -*GREGWT* ([](#GREGWT)) contains a method based on a Generalized Regression Weighting 
 procedure.

@@ -407,7 +407,7 @@ inhabitants (Table 2.3).
 Note that the individual level data has different dimensions than the
 aggregate data presented above.
 
-Table: individual level survey data from SimpleWorld.
+Table: Individual level survey data from SimpleWorld.
 
 | id| age|sex | income|
 |--:|---:|:---|------:|
