@@ -1,3 +1,9 @@
+
+
+[![DOI](https://zenodo.org/badge/20914/Robinlovelace/spatial-microsim-book.svg)](https://zenodo.org/badge/latestdoi/20914/Robinlovelace/spatial-microsim-book)
+
+
+
 Spatial microsimulation with R book project
 =====================
 
