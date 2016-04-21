@@ -1,7 +1,8 @@
 ---
 title: "Spatial microsimulation for agent-based models"
+author: Maja Založnik
 layout: default
-output: word_document
+output: pdf_document
 bibliography: bibliography.bib
 ---
 
@@ -13,6 +14,11 @@ bibliography: bibliography.bib
 # Java about half way down ABM "details" page:
 # http://www.geog.leeds.ac.uk/courses/other/crime/abm/general-modelling/index.html
 ```
+
+## Note
+
+This is a preview version of a chapter in the book *Spatial Microsimulation with R* [@lovelace_spatial_2016], published by
+[CRC Press](https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/9781498711548).
 
 # Spatial microsimulation for agent-based models {#ABM}
 
@@ -963,3 +969,5 @@ grid.raster(img)
 ## Chapter summary
 
 This is chapter provides a worked example of the numerous options for agent-based modelling building on microsimulation. You have at your disposal a powerful modelling combination when combining NetLogo with R. For an excellent overview with more practical examples see Thiele et al.(2014), which covers a variety of parameter estimation and optimisation methods as well as a comprehensive set of approaches to sensitivity analysis using the RNetLogo setup described here. 
+
+## References
