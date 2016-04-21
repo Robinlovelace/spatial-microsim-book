@@ -1,3 +1,9 @@
+
+
+[![DOI](https://zenodo.org/badge/20914/Robinlovelace/spatial-microsim-book.svg)](https://zenodo.org/badge/latestdoi/20914/Robinlovelace/spatial-microsim-book)
+
+
+
 Spatial microsimulation with R book project
 =====================
 
@@ -23,7 +29,7 @@ git clone https://github.com/Robinlovelace/spatial-microsim-book.git
 Then navigate into the downloaded folder and open the `spatial-microsim-book.Rproj` RStudio project file. The [build.R](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/build.R) file should contain everything you need to build the book, although you'll need to have installed a number of packages. These can be installed with the following command:
 
 ```
-pkgs <- c("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp", "rgeos", "mipfp", "rgdal", "gridExtra", "tidyr", "mlogit", "simPop")
+pkgs <- c("knitr", "rmarkdown", "png", "ggmap", "dplyr", "ipfp", "rgeos", "mipfp", "rgdal", "gridExtra", "maptools", "jpeg", "tmap", "tidyr", "mlogit", "simPop")
 wpacks <- pkgs %in% installed.packages()
 install.packages(pkgs[!wpacks])
 ```

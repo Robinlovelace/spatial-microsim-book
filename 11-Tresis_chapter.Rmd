@@ -66,7 +66,7 @@ When used together, the TRESIS models predict households' long-term decisions an
 Although in this chapter we discuss how to implement a stand-alone residential location model, the full power of the TRESIS system is only available when the whole set of demand models is estimated and run together.
 The figure below shows an overview of the high level TRESIS model structure [@Hensher2008].
 
-```{r, echo=FALSE, fig.cap="Overview of TRESIS model structure", fig.align='center'}
+```{r, echo=FALSE, fig.cap="Overview of TRESIS model structure"}
 grid.raster(readPNG("figures/TRESISModels.png"))
 ```
 
@@ -158,8 +158,7 @@ set.seed(99) # This line sets the seed for the random number
 # Randomly select the sizes of the households and then assign 
 # the unique IDs of each household to sequential individuals 
 # in the dataset.
-ind$hhld <- rep(1:1000, 
-                times=sample(c(1:6), 1000, replace=TRUE)
+ind$hhld <- rep(1:1000, times=sample(c(1:6), 1000, replace=TRUE)
                 )[1:nrow(ind)]
 
 # Check how many households we have in our dataset:
@@ -795,7 +794,7 @@ This means the development of a full transport model in R can apply the syntheti
 Although developing the full set of models cannot be described as a simple process, as demonstrated in this chapter, the functionality of R, and some of its packages, makes it well suited to applying transport models.
 In particular, implementing full network assignment in R is likely to be particularly challenging, but its data structures and rapidly improving GIS functionality, some of which has been demonstrated in this chapter, means these are also likely to be possible.
 
-### Summary
+## Chapter summary
 
 This chapter has provided an introduction to the TRESIS approach to population synthesis through the use of synthetic households and demand models. In it we learned to generate, allocate and model household level
 data. TRESIS is an approach that is relatively simply conceptually but that incorporates powerful behavioural features. This, combined with

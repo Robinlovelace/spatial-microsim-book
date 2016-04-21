@@ -82,6 +82,8 @@ Chapter 3, by contrast, brings the
 reader up-to-date on what spatial microsimulation is and how it is currently
 used.
 
+\pagebreak
+
 For the structure, each chapter begins with an introduction and ends with a
 summary of what has been done in the chapter. The last section
 of this chapter contains an overview of the book.
@@ -119,6 +121,7 @@ Even when high quality data is made available, it can be very difficult
 for others to check or *reproduce* results based on them.
 Strict conditions inhibiting data access and use are aimed at protecting citizen
 privacy but can also serve to block democratic and enlightened decision making.
+
 The empowering potential of new information is encapsulated in the
 saying that 'knowledge is power'.
 This helps explain why methods such as spatial microsimulation,
@@ -135,6 +138,7 @@ individual level data at high spatial resolution: people allocated to places.
 This *spatial microdata*, in one form or another,
 provides the basis for all spatial microsimulation research.
 
+\pagebreak
 The purpose of this book is to teach methods for *doing* (not reading about!)
 spatial microsimulation. This involves techniques for generating and analysing
 spatial microdata to get the 'best of both worlds'
@@ -152,6 +156,7 @@ processes are in operation. Spatial microsimulation
 enables modelling and analysis on multiple levels.
 Spatial microsimulation also overlaps with (and provides useful
 initial conditions for) agent-based models (see Chapter 12).
+
 Despite its utility, spatial microsimulation
 is little known outside the fields of human geography and regional
 science. The methods taught in this book
@@ -189,6 +194,8 @@ without any need to describe, or more importantly make reproducible, the
 methods underlying the black box. This book is therefore also about
 demystifying spatial microsimulation.
 
+\pagebreak
+
 ## A definition of spatial microsimulation
 
 At this early stage, it is worth considering how spatial microsimulation
@@ -213,7 +220,7 @@ seeks to overcome some of these limitations, creating new outputs that
 are useful for a number of research applications and as inputs to
 more sophisticated models.
 
-```{r, fig.cap="Schematic diagram contrasting conventional official data (above) against spatial microdata produced during *population synthesis* (below). Note that for brevity the geographically aggregated data are called *constraints* and the individual level survey data are called *microdata* in this book.", fig.scap="Schematic diagram of spatial microdata", fig.height=6, fig.align='center', echo=FALSE}
+```{r, fig.cap="Schematic diagram contrasting conventional official data (above) against spatial microdata produced during *population synthesis* (below). Note that for brevity the geographically aggregated data are called *constraints* and the individual level survey data are called *microdata* in this book.", fig.scap="Schematic diagram of spatial microdata", fig.height=6, echo=FALSE}
 img <- readPNG("figures/msim-flow.png")
 grid.raster(img)
 ```
@@ -302,6 +309,7 @@ All these reasons inform the book's practical nature.
 # [2011](http://www.manning.com/kabacoff/)
 ```
 
+\pagebreak
 This book presents spatial microsimulation as a living, evolving set of
 techniques rather than a prescriptive formula for arriving at the 'right'
 answer.  Spatial microsimulation is largely defined by its user-community, made

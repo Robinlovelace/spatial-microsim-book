@@ -15,14 +15,14 @@ load("cache-smsim-in-R.RData")
 # Alternative approaches to population synthesis {#alternative-reweighting}
 
 This chapter briefly describes other techniques for spatial microsimulation.
-We have different methods, each corresponding to a section : 
+We have different methods, each corresponding to a section: 
 
--*GREGWT* ([](#GREGWT)) contains a method based on a Generalized Regression Weighting 
+- *GREGWT* ([](#GREGWT)) contains a method based on a Generalized Regression Weighting 
 procedure.
--*Population synthesis as an optimization problem* ([](#asOptim)) explains
+- *Population synthesis as an optimization problem* ([](#asOptim)) explains
 how we can make spatial microsimulation thanks to optimization algorithms.
--*simPop* ([](#SimPop)) mentions another package to make spatial microsimulation.
--*The Urban Data Science Toolkit (UDST)* ([](#UDST)) shortly describes another
+- *simPop* ([](#SimPop)) mentions another package to make spatial microsimulation.
+- *The Urban Data Science Toolkit (UDST)* ([](#UDST)) shortly describes another
 technique, coded in python.
 
 ## GREGWT {#GREGWT}
@@ -241,6 +241,7 @@ any could be used.
 Note that in the above, $w$ is equivalent to the `weights` object
 we have created in previous sections to represent how representative
 each individual is of each zone. 
+
 The main issue with this definition of reweighting is therefore the large
 number of free parameters: equal to the number of individual level dataset.
 Clearly this can be very very large. To overcome this issue,
@@ -276,7 +277,7 @@ are performed only for zone 1.
 \index{benchmarking}
 \index{speed}
 
-```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.", fig.scap="Total Absolute Error results for several algorithms", fig.width=4, fig.height=4, fig.align='center', echo=FALSE}
+```{r, fig.cap="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.", fig.scap="Total Absolute Error results for several algorithms", fig.width=4.2, fig.height=4.2,fig.pos='!h', echo=FALSE}
 # commented as pdf version looks better! 
 img <- readPNG("figures/TAEOptim_GenSA_Mo.png")
 grid.raster(img)
@@ -312,6 +313,8 @@ effectively.]
 Next best in terms of iterations is `GenSA`, the Generalized Simulated
 Annealing Function from the **GenSA** package. `GenSA`
 attained a near-perfect fit after only two full iterations.
+
+\pagebreak
 
 The remaining algorithms shown are, like Nelder-Mead, available from within R's
 default optimisation function `optim`. The implementations with `method =` set
@@ -367,7 +370,7 @@ take less time. By observing Figures 6.1 and 6.2 simultaneously , it appears tha
 in terms of convergence (little TAE after few iterations)
 and the time needed for few iterations is good.
 
-```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.scap="Relationship between processing time and goodness-of-fit", fig.width=4, fig.height=4, fig.align='center', echo=FALSE}
+```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms", fig.scap="Relationship between processing time and goodness-of-fit", fig.width=4, fig.height=4, echo=FALSE}
 # img <- readPNG("figures/TimeOptim_GenSA_Mo.png")
 # grid.raster(img)
 # # ![](figures/optim-time.png)
@@ -378,6 +381,8 @@ and the time needed for few iterations is good.
 \caption{Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
 \label{TimeOptim_GenSA}
 \end{figure}
+
+\pagebreak
 
 Nelder-Mead is fast at reaching a good
 approximation of the constraint data, despite taking many iterations.
@@ -511,6 +516,7 @@ indu * c(1 ,4 ,2 ,4)
 indu * c(0 ,6 ,4 ,2)
 ```
 
+\pagebreak
 An example of comparison is that the second proposition contains 
 no male being more than 50 years old, but the first one has 2.
 With this method, there cannot be a population with 1 male of

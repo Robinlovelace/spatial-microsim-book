@@ -254,12 +254,16 @@ be added in zone 2.
 
 The principle now is to add people in the not completed zones and
 categories. The cells to be incremented are always chosen as the one
-with the bigger decimal parts (as in TRS). Note that we chose
+with the bigger decimal parts (whereas in TRS, these decimals act as probabilities). Note that we chose
 to adapt the `resTruncate` instead of defining
-another tabular. The code works as followed: As long as there are missing
+another tabular. 
+
+The code works as followed: As long as there are missing
 individuals in the matrix, we look at next biggest decimal and add
 an individual in the corresponding cell if someone is missing in this 
 category and in this zone.
+
+\pagebreak
 
 ```{r}
 # Calculate the decimals left by truncate
@@ -409,6 +413,7 @@ with "0" in impossible cells and "1" in potentially
 non empty cases. For example, individuals of less than 
 10 years cannot hold a diploma from university. 
 
+\pagebreak
 With this initial point, an IPF can be performed to fit the two
 previously determined three–dimensional tables. The result 
 is a table with the four variables per district. 

@@ -7,7 +7,7 @@ bibliography: bibliography.bib
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 load("cache-CakeMap.RData")
-map_pack <- c("ggmap", "rgdal", "maptools", "rgeos", "dplyr", "tidyr", "gridExtra", "knitr")
+map_pack <- c("rgdal", "maptools", "rgeos", "dplyr", "tidyr", "gridExtra", "knitr")
 lapply(map_pack, library, character.only = T)
 # Todo: add figure comparing various goodness-of-fit measures from JASSS paper
 ```
@@ -281,6 +281,7 @@ They simply show that the individual level dataset has
 been reweighted to fit with a handful of constraint variables: i.e. that the
 process has worked under its own terms.
 
+\pagebreak
 Our view is that all the measures
 outlined above are useful and roughly analogous (a perfect fit
 will mean that measures of error evaluate to zero
@@ -313,6 +314,7 @@ The high correlation suggests that the model is working:
 it has internal consistency and could be described as 'internally valid'. 
 Note that we have calculated the correlation 
 before integerisation here. In the perfect fit, we would have a linear correlation of exactly 1.
+
 
 In micro-simulation, we have the whole population with all characteristics of each individual, only after the simulation. 
 For this reason, we have to aggregate the simulated population to have a matrix comparable with the constraint. In this sense, 
@@ -445,6 +447,7 @@ Knowing that zone 84 is problematic, the next stage is to ask "how problematic?"
 If a single zone is responsible for the majority of error, this would suggest
 that action needs to be taken (e.g. by removing the offending zone
 or by identifying which variable is causing the error).
+
 To answer the previous question numerically, we can rephrase it in technical
 terms: "Which proportion of error in the model arises from the worst zone?"
 This is a question we can answer with a simple R query:
@@ -457,28 +460,15 @@ TAEVec[worst_zone] / sum(TAEVec)
 The result of the above code demonstrates that more than half (56%) of the error originates
 from a single zone: 84. Therefore zone 84 certainly is anomalous and worthy of further
 investigation. An early strategy to characterise this zone and compare it to the others is to visualise it.
+
 To this end, Figure 8.1 places the TAE values calculated previously on a map,
 with a base-layer supplied by Google for context --- see the book's
 [online source code](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/validation.Rmd) to see how. Zone 84 is clearly visible in this map as a ward
 just above Leeds city centre. This does not immediately solve
 the problem, but it confirms that only few zones have bigger errors.
-Note that the maps presented in Figure 8.1 look identical for TAE and RE values
-except for the scale; the similitude of these measures of fit can be
-verified using a simple correlation:
-
-```{r}
-cor(TAEVec, REVec) # the measures are highly correlated
-```
-
-In this case, both are quite well correlated. However, when having very different zones, 
-in terms of total population,
-it can have more differences between the two maps. Indeed, with the same 
-TAE, if the zone 84 had contained
-a total population two times bigger, the RE would be very smaller. Thus, RE would be 
-divided by the multiplication of 2 and the number of variables.
 
 
-```{r, echo=FALSE, fig.cap="Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population.", message=FALSE, warning=FALSE, results=F, fig.height=14, fig.width=9}
+```{r, echo=FALSE, fig.cap="Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population.", message=FALSE, warning=FALSE, results=F, fig.pos='!h',fig.height=6, fig.width=5}
 cons_codes <- read.csv("data/CakeMap/cars-raw.csv")
 cons_codes <- as.character(cons_codes$GEO_CODE)[3:126]
 cons_codes <- data.frame(CODE = cons_codes, TAEVec)
@@ -570,6 +560,24 @@ tm_shape(wards) +
 #   scale_fill_gradient(low = "green", high = "red", trans = "sqrt")  
 ```
 
+\pagebreak
+Note that the maps presented in Figure 8.1 look identical for TAE and RE values
+except for the scale; the similitude of these measures of fit can be
+verified using a simple correlation:
+
+```{r}
+cor(TAEVec, REVec) # the measures are highly correlated
+```
+
+In this case, both are quite well correlated. However, when having very different zones, 
+in terms of total population,
+it can have more differences between the two maps. Indeed, with the same 
+TAE, if the zone 84 had contained
+a total population two times bigger, the RE would be very smaller. Thus, RE would be 
+divided by the multiplication of 2 and the number of variables.
+
+
+
 Having identified a zone that is particularly problematic (the 84), we will look at the responsible 
 variables. We focus on the zone 84 and calculate the number of differences between the constraint
 and the simulation for each category:
@@ -606,9 +614,11 @@ table of these people for the number of cakes and the age shows that we have nob
 eating more than 6 cakes.
 
 ```{r}
-NoCar <- ind[ind$Car==2,] # individuals not owning a car
+# individuals not owning a car
+NoCar <- ind[ind$Car==2,] 
 
-table(NoCar$NCakes,NoCar$ageband4) # Cross table
+# Cross table
+table(NoCar$NCakes,NoCar$ageband4) 
 ```
 
 The three zones with the worst simulation needed a lot of people without a car. On the contrary, 
@@ -619,7 +629,8 @@ only 916 persons.
 
 ```{r}
 best <- head(order(REVec), n = 3)
-cons[best, c("Car", "NoCar")] # constraint for 3 best zones
+ # constraint for 3 best zones
+cons[best, c("Car", "NoCar")]
 ```
 
 In conclusion, the simulation runs well for all zone excepts few ones. This is due to the individuals

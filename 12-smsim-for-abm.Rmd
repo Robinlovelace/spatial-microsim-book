@@ -80,6 +80,8 @@ excellent documentation, ease of learning and integration with R, NetLogo is the
 tool of choice in this book and should be sufficiently powerful for many
 applications.
 
+\pagebreak
+
 [NetLogo](https://ccl.northwestern.edu/netlogo/) is a
 mature and widely used tool-kit for agent-based models. It is written in
 Java, but uses a derivation of the Logo language to develop models.
@@ -690,7 +692,7 @@ The RNetLogo package [@thiele2014r] allows us to control a NetLogo model directl
 RNetLogo allows us to issue commands, set global values, repeatedly run the model and collect the results directly from R.
 
 The RNetLogo package is installed in R like any other package using `install.packages("RNetLogo")`. Note that RNetLogo depends on rJava [@rjava], which may require some extra configuration of Java, depending on your setup. The basic code for opening and running a model in R is then:
-
+\enlargethispage*{\baselineskip}
 ```{r, eval=FALSE}
 library(RNetLogo)
 nldir <- "C:/Program Files (x86)/NetLogo 5.1.0" # program dir
@@ -704,6 +706,8 @@ NLLoadModel(mdir)
 
 NLQuit()
 ```
+
+\pagebreak
 
 In the above code `NLStart` initiates an instance of NetLogo (in this case in headless mode, since the `gui` argument is set to `FALSE` --- try with `gui = TRUE`) and `NLLoadModel` loads the model. Make sure you have the correct paths to the folders where you have installed NetLogo and where the model is saved. Some example directories are commented out for Linux users. The main commands we will want to run in the main code are `NLCommand()` which simply sends a command for NetLogo to execute, and `NLReport()`, which also returns a reporter (value). The commands work the same way as if we were entering them in the command center. This also means that the command `go` is only executed once i.e. not forever as it can be using the GUI button. For example, now that we have opened the model, we can run the following code from R:
 
