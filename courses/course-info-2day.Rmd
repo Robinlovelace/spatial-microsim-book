@@ -44,6 +44,21 @@ knitr::opts_chunk$set(echo = TRUE)
 
 - Spatial micro-data for agent-based models
 
+## Day 3
+    
+- Spatial microsimulation without micro-data
+    - Methods
+    - Quality of the microsimulation
+    
+- Adding the household information
+    - Depending on the databases
+    - Several studied cases
+    
+- Adapt the method to the aim of the simulation
+    - Choice of data
+    - Choice of methods
+        
+
 
 
 
