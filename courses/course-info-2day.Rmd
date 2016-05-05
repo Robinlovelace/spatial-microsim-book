@@ -1,0 +1,64 @@
+---
+title: "Course information"
+author: "Robin Lovelace and Morgane Dumont"
+date: "22 April 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Day 1
+
+- Introduction to spatial microsimulation in R
+    - Course overview, aims and objectives
+
+- Applications (with an emphasis on EU projects)
+    - Fiscal policy (distributional impacts)
+    - Transport
+    - Health
+    - Agriculture
+    - Other
+
+- Using R and RStudio for spatial microsimulation
+    - The RStudio Graphical User Interface (GUI)
+    - Project management
+    - GitHub
+
+- Create spatial microdata in R
+    - Loading the data
+    - Preparing the data
+    - Reweighting procedures
+  
+## Day 2
+
+- Applying the methods of IPF and Combinatorial Optimisation
+    - Analysis of spatial microdata
+    - Internal and External Validation
+    - Population synthesis with integerisation
+
+- Testing between different models
+
+- Visualising and analysing spatial micro-data
+
+- Spatial micro-data for agent-based models
+
+## Day 3
+    
+- Spatial microsimulation without micro-data
+    - Methods
+    - Quality of the microsimulation
+    
+- Adding the household information
+    - Depending on the databases
+    - Several studied cases
+    
+- Adapt the method to the aim of the simulation
+    - Choice of data
+    - Choice of methods
+        
+
+
+
+
