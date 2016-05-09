@@ -897,7 +897,7 @@ The second is to define a rounding method. A good method is
 \index{mipfp}
 \index{IPF!with mipfp}
 The R package **mipfp** is a more generalized implementation of the IPF algorithm
-than **ipfp**, and was designed for population synthesis.
+than **ipfp**, and was designed for population synthesis [@barthelemy_mipfp:_2016].
 **ipfp** generates a two-dimensional weight matrix based on mutually
 exclusive (non cross-tabulated) constraint tables.
 This is useful for applications using constraints, which are only marginals and 
