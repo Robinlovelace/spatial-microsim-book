@@ -15,49 +15,46 @@ knitr::opts_chunk$set(echo = TRUE)
     - Course overview, aims and objectives (RL)
 
 - Applications (with an emphasis on EU projects)
-    - Fiscal policy (distributional impacts)
-    - Transport
-    - Health
     - Agriculture
-    - Other
+    - Transport (MD - I can present the Jojo's microsimulation)
+    
 
 - Using R and RStudio for spatial microsimulation
     - The RStudio Graphical User Interface (GUI)
     - Project management
     - GitHub
 
-- Create spatial microdata in R
+- Create spatial microdata in R 
     - Loading the data
     - Preparing the data
-    - Reweighting procedures
+    - Reweighting procedures (MD - I can explain the logic behind the reweighting methods and explain how to code it)
   
 ## Day 2
 
 - Applying the methods of IPF and Combinatorial Optimisation
     - Analysis of spatial microdata
-    - Internal and External Validation
-    - Population synthesis with integerisation
+    - Internal and External Validation (MD)
+    - Population synthesis with integerisation (MD)
 
 - Testing between different models
 
 - Visualising and analysing spatial micro-data
 
-- Spatial micro-data for agent-based models
+- Spatial micro-data for agent-based models (MD)
 
 ## Day 3
     
 - Spatial microsimulation without micro-data
-    - Methods
-    - Quality of the microsimulation
+    - Methods (MD)
+    - Quality of the microsimulation (MD)
     
 - Adding the household information
-    - Depending on the databases
-    - Several studied cases
+    - Depending on the databases (MD)
+    - Several studied cases (MD)
     
 - Adapt the method to the aim of the simulation
-    - Choice of data
-    - Choice of methods
-        
+    - Choice of data (MD)
+    - Choice of methods (MD)
 
 
 
