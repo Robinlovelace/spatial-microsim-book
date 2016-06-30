@@ -9,14 +9,15 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## Day 1
+## Day 1 (9:30 to 17:30 with one hour break)
 
 - Introduction to spatial microsimulation in R
     - Course overview, aims and objectives (RL)
+    - Ask if they have special objectives to reach thanks to this course
 
 - Applications (with an emphasis on EU projects)
     - Agriculture
-    - Transport (MD - I can present the Jojo's microsimulation)
+    - Transport (MD - I can present the Jojo's microsimulation - 30 min)
     
 
 - Using R and RStudio for spatial microsimulation
@@ -27,34 +28,35 @@ knitr::opts_chunk$set(echo = TRUE)
 - Create spatial microdata in R 
     - Loading the data
     - Preparing the data
-    - Reweighting procedures (MD - I can explain the logic behind the reweighting methods and explain how to code it)
+    - Reweighting procedures (MD - I can explain the logic behind the reweighting methods and explain how to code it - 1h)
+    - Combinatorial optimisation (introduction - 20 min)
   
 ## Day 2
 
 - Applying the methods of IPF and Combinatorial Optimisation
     - Analysis of spatial microdata
-    - Internal and External Validation (MD)
-    - Population synthesis with integerisation (MD)
+    - Internal and External Validation (MD - 1h)
+    - Population synthesis with integerisation (MD - 1h)
 
 - Testing between different models
 
 - Visualising and analysing spatial micro-data
 
-- Spatial micro-data for agent-based models (MD)
+- Spatial micro-data for agent-based models (30 min)
 
 ## Day 3
     
 - Spatial microsimulation without micro-data
-    - Methods (MD)
-    - Quality of the microsimulation (MD)
+    - Methods (MD - 1h)
+    - Quality of the microsimulation (MD - 1h)
     
 - Adding the household information
-    - Depending on the databases (MD)
-    - Several studied cases (MD)
+    - Depending on the databases (MD - 30 min)
+    - Several studied cases (MD - 1h30)
     
 - Adapt the method to the aim of the simulation
-    - Choice of data (MD)
-    - Choice of methods (MD)
+    - Choice of data and methods (MD - 30 min)
+    - Application to prepared examples or their own data and aims (MD - 2h)
 
 - Conclusion to the course
 
