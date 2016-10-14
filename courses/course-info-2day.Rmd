@@ -19,7 +19,7 @@ knitr::opts_chunk$set(echo = TRUE)
     - Transport (MD - I can present the Jojo's microsimulation)
     
 
-- Using R and RStudio for spatial microsimulation
+- Using R and RStudio for spatial microsimulation (RL)
     - The RStudio Graphical User Interface (GUI)
     - Project management
     - GitHub
