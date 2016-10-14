@@ -1,13 +1,14 @@
 ---
 title: "Course information"
 author: "Robin Lovelace and Morgane Dumont"
-date: "22 April 2016"
 output: html_document
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
+Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ November.
 
 ## Day 1 (9:30 to 17:30 with one hour break)
 
@@ -19,7 +20,6 @@ knitr::opts_chunk$set(echo = TRUE)
     - Agriculture
     - Transport (MD - I can present the Jojo's microsimulation - 30 min)
     
-
 - Using R and RStudio for spatial microsimulation (RL)
     - The RStudio Graphical User Interface (GUI)
     - Project management
@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = TRUE)
     - Loading the data
     - Preparing the data
     - Reweighting procedures (MD - I can explain the logic behind the reweighting methods and explain how to code it - 1h)
-    - Combinatorial optimisation (introduction - 20 min)
+    - simPop (introduction - 20 min)
   
 ## Day 2
 
