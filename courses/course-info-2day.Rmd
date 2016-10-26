@@ -14,35 +14,35 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
 
 - Introduction to spatial microsimulation in R
     - Course overview, aims and objectives (RL)
-    - Ask if they have special objectives to reach thanks to this course
+    - Ask if they have special objectives to reach thanks to this course (RL)
 
 - Applications (with an emphasis on EU projects)
-    - Agriculture
+    - Agriculture (RL)
     - Transport (MD - I can present the Jojo's microsimulation - 30 min)
     
-- Using R and RStudio for spatial microsimulation (RL)
+- Using R and RStudio for spatial microsimulation (RL : all subsections)
     - The RStudio Graphical User Interface (GUI)
     - Project management
     - GitHub
 
 - Create spatial microdata in R 
-    - Loading the data
-    - Preparing the data
+    - Loading the data (RL)
+    - Preparing the data (RL)
     - Reweighting procedures (MD - I can explain the logic behind the reweighting methods and explain how to code it - 1h)
-    - simPop (introduction - 20 min)
+    - simPop (RL - introduction - 20 min)
   
 ## Day 2
 
 - Applying the methods of IPF and Combinatorial Optimisation
-    - Analysis of spatial microdata
+    - Analysis of spatial microdata (RL)
     - Internal and External Validation (MD - 1h)
     - Population synthesis with integerisation (MD - 1h)
 
-- Testing between different models
+- Testing between different models (RL)
 
-- Visualising and analysing spatial micro-data
+- Visualising and analysing spatial micro-data (RL)
 
-- Spatial micro-data for agent-based models (30 min)
+- Spatial micro-data for agent-based models (MD - 30 min)
 
 ## Day 3
     
@@ -58,7 +58,7 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
     - Choice of data and methods (MD - 30 min)
     - Application to prepared examples or their own data and aims (MD - 2h)
 
-- Conclusion to the course
+- Conclusion to the course (RL)
 
 
 
