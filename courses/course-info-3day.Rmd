@@ -42,7 +42,7 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
 
 - Testing between different models (RL 11:30 - 13:00) 
 
-- Visualising and analysing spatial micro-data (RL 13:00 - 17:00)
+- Visualising and analysing spatial micro-data (RL 14:00 - 17:00)
 
 - Spatial micro-data for agent-based models (MD 17:00 - 17:30)
 
@@ -58,7 +58,7 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
     
 - Adapt the method to the aim of the simulation (14:00 - 17:00)
     - Choice of data and methods (MD - 30 min)
-    - Application to prepared examples or their own data and aims (RL - 2h30)
+    - Application to prepared examples or their own data and aims (RL AND MD - 2h30)
 
 - Conclusion to the course (RL 17:00 - 17:30)
 
