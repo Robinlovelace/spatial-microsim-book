@@ -19,48 +19,48 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
 - Applications (with an emphasis on EU projects) (10:30 - 11:30)
     - Agriculture (RL)
     - Wealth distribution (RL)
-    - Transport (MD)
+    - Transport (MD - 20 min)
     
-- Using R and RStudio for spatial microsimulation (RL 11:30 - See book appendix)
+- Using R and RStudio for spatial microsimulation (RL 11:30 - 13:00 See book appendix)
     - The RStudio Graphical User Interface (GUI)
     - Using R
     - Project management
     - GitHub
 
-- Creating spatial microdata in R (MD)
+- Creating spatial microdata in R (MD 14:00 - 17:10)
     - Loading the data
     - Preparing the data 
     - Reweighting procedures
-    - simPop (RL - introduction - 20 min)
+    - simPop (RL - introduction - 17:10 - 17:30)
   
 ## Day 2
 
-- Applying the methods of IPF and Combinatorial Optimisation
-    - Analysis of spatial microdata (RL)
-    - Internal and External Validation (MD - 1h)
-    - Population synthesis with integerisation (MD - 1h)
+- Applying the methods of IPF and Combinatorial Optimisation (9:30 - 11:30)
+    - Internal and External Validation (MD - 45min)
+    - Population synthesis with integerisation (MD - 45min)
+    - Introduction to Combinatorial Optimisation (MD - 30min)
 
-- Testing between different models (RL)
+- Testing between different models (RL 11:30 - 13:00) 
 
-- Visualising and analysing spatial micro-data (RL)
+- Visualising and analysing spatial micro-data (RL 13:00 - 17:00)
 
-- Spatial micro-data for agent-based models (MD - 30 min)
+- Spatial micro-data for agent-based models (MD 17:00 - 17:30)
 
 ## Day 3
     
-- Spatial microsimulation without micro-data
+- Spatial microsimulation without micro-data (9:30 - 11:30)
     - Methods (MD - 1h)
     - Quality of the microsimulation (MD - 1h)
     
-- Adding the household information
+- Adding the household information (11:30 - 13:00)
     - Depending on the databases (MD - 30 min)
-    - Several studied cases (MD - 1h30)
+    - Several studied cases (MD - 1h00)
     
-- Adapt the method to the aim of the simulation
+- Adapt the method to the aim of the simulation (14:00 - 17:00)
     - Choice of data and methods (MD - 30 min)
-    - Application to prepared examples or their own data and aims (MD - 2h)
+    - Application to prepared examples or their own data and aims (RL - 2h30)
 
-- Conclusion to the course (RL)
+- Conclusion to the course (RL 17:00 - 17:30)
 
 
 
