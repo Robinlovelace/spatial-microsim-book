@@ -16,7 +16,7 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
     - Course overview, aims and objectives (RL 9:30 - 10:00)
     - Go-round of participants: course aspirations (RL 10:00 - 10:30)
 
-- Applications (with an emphasis on EU projects) (10:30 - 11:30)
+- What is Spatial Microsimulation and its applications (with an emphasis on EU projects) (10:30 - 11:30)
     - Agriculture (RL)
     - Wealth distribution (RL)
     - Transport (MD - 20 min)
