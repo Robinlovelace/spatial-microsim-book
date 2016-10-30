@@ -3,6 +3,7 @@ title: "Introduction to Spatial Microsimulation with R"
 author: "Robin Lovelace"
 date: "`r Sys.Date()`"
 output: ioslides_presentation
+bibliography: ../bibliography.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -49,7 +50,7 @@ Aims:
 
 ## The course materials
 
-- Based on our book - digital versions available on-line
+- Based on our book, [@lovelace_spatial_2016]. Digital versions available on-line
 - Slides available on-line
 - We'll be making small 'code chunks' and scripts available during the course
 - Any feedback welcome
@@ -87,15 +88,36 @@ Morgane Dumont
 - Wide variety of potential applications
 - So far main applications have been in health, poverty mapping and transport
 - What do you want to use spatial microsimulation for?
-- Tomintz et al. (2008). The geography of smoking in Leeds: estimating individual smoking rates and the implications for the location of stop smoking services. Area, 40(3), 341–353. 
-- Gleeson (2014)
-- My research
+- @tomintz_geography_2008 The geography of smoking in Leeds: estimating individual smoking rates and the implications for the location of stop smoking services. 
+- Exploration of the energy costs of transport [@lovelace_oil_2014]
 
-# Agriculture
+## Agriculture
 
-# Tax policy
+@hynes_modelling_2008 is a classic example
 
-# Transport
+Had 2 datasets:
+
+- Individual level data on farmers participating in agri-environment scheme
+- Farm level data with many attributes about the farms
+- Geographical data on farms at the Enumeration District (ED) level
+
+For confidentiallity reasons, the individual-level datasets could not be linked
+
+Spatial microsimulation used to create a synthetic dataset
+
+## Agriculture II
+
+Results show the probability of participation across Ireland:
+
+![](../figures/agri-example-hynes-2008.png)
+
+## Tax policy
+
+Commonly used to evaluate distributional impacts of tax policies [@agostini_were_2014]
+
+![](../figures/austerity.png)
+
+## Transport
 
 ## What's next:
 
@@ -103,3 +125,5 @@ Morgane Dumont
   - Using R
   - Project management
   - GitHub
+  
+## References
