@@ -1,8 +1,8 @@
 ---
 title: "Introduction to Spatial Microsimulation with R"
 author: "Robin Lovelace"
-date: "`r Sys.Date()`"
-output: ioslides_presentation
+date: '`r Sys.Date()`'
+output: beamer_presentation
 bibliography: ../bibliography.bib
 ---
 
@@ -66,6 +66,10 @@ Robin Lovelace
 > - Lead developer of the [Propensity to Cycle Tool](http://www.pct.bike/) (PCT)
 
 Morgane Dumont
+
+> - Applied Mathematician with coding, algorithmic and statistics background
+> - Now on a project of the Wallonia Region developping an evolutionary spatial microsimulation to forecast health needs of elderly in 2030 for Belgium
+
 
 ## A bit about you
 
