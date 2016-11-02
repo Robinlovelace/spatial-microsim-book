@@ -66,16 +66,20 @@ Robin Lovelace
 > - Creator of the [**stplanr**](https://github.com/ropensci/stplanr) package
 > - Lead developer of the [Propensity to Cycle Tool](http://www.pct.bike/) (PCT)
 
+## A bit about us
+
 Morgane Dumont
 
 > - Applied Mathematician with coding, algorithmic and statistics background
 > - Now on a project of the Wallonia Region developping an evolutionary spatial microsimulation to forecast health needs of elderly in 2030 for Belgium
+> - Teach statistics in R to the master's student in applied mathematics at university of Namur
 
 
 ## A bit about you
 
 - Go-around - who you are, interests in the course
 - With your neighbour:
+
     > - Experience with R
     > - Geographical data
 
@@ -123,6 +127,14 @@ Commonly used to evaluate distributional impacts of tax policies [@agostini_were
 ![](../figures/austerity.png)
 
 ## Transport
+
+A simulation of the car's traffic for Namur [@barthelemy_parallelized_2014]
+
+\includegraphics[width=0.5\textwidth]{../figures/Trafic_jojo.png}
+\includegraphics[width=0.5\textwidth]{../figures/Trafic_Jojo2.png}
+
+
+Used tools : spatial microsimulation, agent based modelling, activity chains,...
 
 ## What's next:
 
