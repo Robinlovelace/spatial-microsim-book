@@ -1,0 +1,149 @@
+---
+title: "Creating spatial microdata in R"
+author: "Morgane Dumont"
+date: "4 novembre 2016"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+library(grid)
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## The plan for this afternoon
+
+- General statements on spatial microsimulation
+- Reweighting procedures
+- The CakeMap example
+  - Context
+  - Defining the target and the constraints
+  - Loading the data
+  - Preparing the data 
+  - IPF 
+- simPop
+
+## General statements on spatial microsimulation
+
+```{r, out.width = "340px",fig.align='center'}
+knitr::include_graphics("../figures/msim-schema.png")
+```
+
+## 
+
+The aim is to use available data (at different level of aggregation) to create a synthetic population statistically similar to the real one. 
+
+Note that population is here the statistical term, meaning that it can be a set of objects or animals also.
+
+Depending on the target population and the availability of data, we can use several methods and obtain different level of quality.
+
+We often have two types of data: 
+
+  - Microdata for only a sample of the population
+  - Aggregated data of the whole population (called the *constraint*)
+  
+## Reweighting procedures
+
+Having constraints (per zone) and a sample, we would like to :
+
+  - determine the representativness of each person for each zone
+  - replicate each individual the number of times that allows to respect the constraint for the zone
+  - by trying at each step to keep proportions similar
+  
+For SimpleWorld for example, we have constraints on age and sex for each zone. Remember these data.
+
+## 
+
+Cross table of the sample
+
+|sex - age| 0-49 yrs| 50 + yrs| Total|
+|:-------------|-----:|-----:|-----:|
+|m             |     1|     2|     3|
+|f             |     1|     1|     2|
+|Total         |     2|     3|      |
+
+
+Constraints for zone 1:
+
+|modality| 0-49 yrs| 50 + yrs| m | f |
+|:-------------|----:|----:|----:|----:|
+|Target total  |     8|     4| 6 | 6 |
+
+
+
+
+##
+
+Aim: complete this table by using IPF and the sample
+
+sex - age  | 0-49 yrs | 50 + years | Total
+------------- | ------------- | -------------
+m  | ? | ? | 6
+f  | ? | ? | 6
+Total | 8 |4 | 12
+
+
+## 
+
+Initial table
+
+|sex - age| 0-49 yrs| 50 + yrs| Total| Target total |
+|:-------------|-----:|-----:|-----:|-----:|
+|m             |     1|     2|     3|     6|
+|f             |     1|     1|     2|     6|
+|Total         |     2|     3|      |      |
+|Target total  |     8|     4|      |      |
+
+##
+
+Iteration 1 : fit age constraints
+
+|sex - age| 0-49 yrs| 50 + yrs| Past total| Target total |
+|:-------------|-----:|-----:|-----:|-----:|
+|m             |     $1*\frac{8}{2}=4$|     $2*\frac{4}{3}=2.667$|     3|     6|
+|f             |     $1*\frac{8}{2}=4$|     $1*\frac{4}{3}=1.333$|     2|     6|
+|Past total         |     2|     3|      |      |
+|Target total  |     8|     4|      |      |
+
+##
+
+Iteration 1 : fit age constraints : update the totals
+
+|sex - age| 0-49 yrs| 50 + yrs| Current total| Target total |
+|:-------------|-----:|-----:|-----:|-----:|
+|m             |     $1*\frac{8}{2}=4$|     $2*\frac{4}{3}=2.667$|     6.667|     6|
+|f             |     $1*\frac{8}{2}=4$|     $1*\frac{4}{3}=1.333$|     5.333|     6|
+|Current total         |     8|     4|      |      |
+|Target total  |     8|     4|      |      |
+
+##
+
+Iteration 1 : fit sex constraints 
+
+|sex - age| 0-49 yrs| 50 + yrs| Current total| Target total |
+|:-------------|-----:|-----:|-----:|-----:|
+|m             |     $4*?$|    $2.667*?$|     6.667|     6|
+|f             |     $4*?$|    $1.333*?$|     5.333|     6|
+|Current total         |     8|     4|      |      |
+|Target total  |     8|     4|      |      |
+
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  
+## The CakeMap example
+
+This example consists in estimating cake consumption in different parts of Leeds, UK.
+
+For this, we have two different data sources: 
+
+  1. Non-geographical individual level survey, DHS [Dental Health Survey - 2009] --- the *microdata*.
+  2. Geographically aggregated categorical count data from the census --- the *constraint tables*.
+
+## Defining the target and the constraints
+
+## Loading the data
+
+## Preparing the data
+
+The DHS covers England, Northern Ireland and Wales and 1173 variables are available.
+
+## Reweighting procedures
