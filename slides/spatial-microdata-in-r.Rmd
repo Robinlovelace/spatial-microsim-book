@@ -127,8 +127,8 @@ Iteration 1 : fit sex constraints
 |Target total  |     8|     4|      |      |
 
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  
+## continue here
+
 ## The CakeMap example
 
 This example consists in estimating cake consumption in different parts of Leeds, UK.
