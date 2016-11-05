@@ -1,7 +1,7 @@
 ---
 title: "Creating spatial microdata in R"
 author: "Morgane Dumont"
-date: "4 novembre 2016"
+date: '`r Sys.Date()`'
 output:
   ioslides_presentation: default
   beamer_presentation: default
@@ -364,6 +364,88 @@ Final table is in *res$x.hat*. We can aggregate the final table to check the con
 ```{r, echo=TRUE, eval=TRUE}
 con1_convert
 apply(res$x.hat,c(3,5),sum)
+```
+
+## CakeMap for all zones
+
+
+Adding the spatial dimension: repeat the initial matrix
+
+```{r, echo=TRUE, eval=TRUE}
+init_cells <- rep(weight_init_1zone, each = nrow(cons))
+
+# Define the names
+names <- c(list(rownames(cons)),
+           as.list(dimnames(weight_init_1zone)))
+
+# Structure the data
+weight_all <- array(init_cells, dim = 
+                       c(nrow(cons), dim(weight_init_1zone)),
+                     dimnames = names)
+```
+
+##
+Need to convert con1 for each zone
+
+```{r, echo=TRUE, eval=TRUE}
+names <- c(list(rownames(cons)),dimnames(weight_all)[c(4,6)])
+con1_convert <- array(NA, dim=c(nrow(cons),2,6), dimnames = names)
+
+for(zone in rownames(cons)){
+  for (sex in dimnames(con1_convert)$Sex){
+    for (age in dimnames(con1_convert)$ageband4){
+      con1_convert[zone,sex,age] <- con1[zone,paste(sex,age,sep="")]
+    }
+  }
+}
+```
+
+##
+
+Execute the ipf for each zone
+
+```{r, echo=TRUE, eval=FALSE}
+for (i in 1:nrow(cons)){
+  target <- list(con1_convert[i,,],as.matrix(con2[i,]),as.matrix(con3[i,]))
+  descript <- list(c(3,5),2,4)
+  res <- Ipfp(weight_init_1zone,descript,target)
+  weight_all[i,,,,,] <- res$x.hat
+}
+```
+
+Question : how can you explain and resolve the warning?
+
+##
+
+```{r, echo=TRUE, eval=TRUE}
+# Check the constraint's totals per zone
+table(rowSums(con2) == rowSums(con1))
+table(rowSums(con3) == rowSums(con1))
+table(rowSums(con2) == rowSums(con3))
+```
+
+##
+
+```{r, echo=TRUE, eval=TRUE}
+con3_prop <- con3*rowSums(con2)/rowSums(con3)
+
+# Check the new marginals per zone
+table(rowSums(con2)==rowSums(con3_prop))
+
+```
+
+##
+
+Definition of the target and descript
+for the execution of the mipfp
+
+```{r, echo=TRUE, eval=TRUE}
+for (i in 1:nrow(cons)){
+  target <- list(con1_convert[i,,],as.matrix(con2[i,]),as.matrix(con3_prop[i,]))
+  descript <- list(c(3,5),2,4)
+  res <- Ipfp(weight_init_1zone,descript,target)
+  weight_all[i,,,,,] <- res$x.hat
+}
 ```
 
 ## SimPop
