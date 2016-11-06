@@ -349,3 +349,4 @@ Advantages :
 These kind of methods doesn't need an integerisation step since it directly gives the number of times to replicate each individual.
 
 Some functions to optimise in R: *genoud*, *optim*, *genSA*,...
+
