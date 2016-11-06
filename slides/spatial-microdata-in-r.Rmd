@@ -18,11 +18,11 @@ knitr::opts_chunk$set(echo = FALSE)
 - General statements on spatial microsimulation
 - Reweighting procedures
 - The CakeMap example
-  - Context
-  - Defining the target and the constraints
-  - Loading the data
-  - Preparing the data 
-  - IPF 
+    - Context
+    - Defining the target and the constraints
+    - Loading the data
+    - Preparing the data 
+    - IPF 
 - simPop
 
 ## General statements on spatial microsimulation
@@ -39,10 +39,11 @@ Note that population is here the statistical term, meaning that it can be a set 
 
 Depending on the target population and the availability of data, we can use several methods and obtain different level of quality.
 
+##
 We often have two types of data: 
 
-  - Microdata for only a sample of the population
-  - Aggregated data of the whole population (called the *constraint*)
+>  - Microdata for only a sample of the population
+>  - Aggregated data of the whole population (called the *constraint*)
   
 ## Reweighting procedures
 
@@ -155,11 +156,11 @@ This is how one iteration works.
 
 This iteration is repeated until a stopping criterion that could be: 
 
-  - a maximum number of iteration;
-  - an acceptable distance (very small) between to consecutive tables;
-  - a combination of both : stop when one of the two is completed.
+>  - a maximum number of iteration;
+>  - an acceptable distance (very small) between to consecutive tables;
+>  - a combination of both : stop when one of the two is completed.
 
-The good practice is the combination of both.
+The good practice is the last one.
 
 ## The CakeMap example
 
@@ -203,6 +204,9 @@ aggregate level datasets can be chosen.
 
 You can download the data on https://github.com/modumont/spatial-microsim-book
 
+Try to load *ind.csv* and *cons.csv* in your R environment and print the first lines of the data.
+
+##
 To load the data into R:
 ```{r, echo=TRUE}
 ind <- read.csv("../data/CakeMap/ind.csv")
@@ -235,9 +239,11 @@ Try to answer the following questions:
 - How many individuals are in the survey microdataset?
 - How many zones will we generate spatial microdata for?
 
-We will focus here on zone 1 (all zones working in a similar way).
 
 ## Preparing the data
+
+We will first focus on zone 1 (all zones working in a similar way).
+
 
 You need to check several points: 
 
@@ -276,6 +282,18 @@ levels(ind$NSSEC8) <- colnames(con3)
 ind$ageband4 <- 
   gsub(pattern = "-", replacement = "_", x = ind$ageband4)
 ```
+
+
+## Initialisation - zone 1
+
+Initialise the table to the cross-table of the individual level data.
+
+
+Check levels order for each variable of *ind*.
+
+
+Does it correspond with the order of each variable in the table?
+
 
 ## Initialisation - zone 1
 
@@ -322,6 +340,8 @@ help('Ipfp')
 
 Constraint 1 concerns two variables but is not a two-dimensional crosstable.
 
+##
+
 ```{r, echo=TRUE, eval=TRUE}
 # Transform con1 into an 3D-array : con1_convert
 names <- c(dimnames(weight_init_1zone)[c(3,5)])
@@ -346,6 +366,8 @@ con1[1,]
 ##
 
 We need to define a list of the constraints and a list telling the corresponding dimensions in the weight matrix.
+
+##
 ```{r, echo=TRUE, eval=TRUE}
 target <- list(con1_convert,as.matrix(con2[1,]),as.matrix(con3[1,]))
 descript <- list(c(3,5),2,4)
@@ -368,6 +390,13 @@ apply(res$x.hat,c(3,5),sum)
 
 ## CakeMap for all zones
 
+> - Adding the spatial dimension: repeat the initial matrix for each zone.
+
+> - Need to convert con1 for each zone.
+
+> - Ipfp for each zone.
+
+## CakeMap for all zones
 
 Adding the spatial dimension: repeat the initial matrix
 
@@ -441,7 +470,8 @@ for the execution of the mipfp
 
 ```{r, echo=TRUE, eval=TRUE}
 for (i in 1:nrow(cons)){
-  target <- list(con1_convert[i,,],as.matrix(con2[i,]),as.matrix(con3_prop[i,]))
+  target <- list(con1_convert[i,,],as.matrix(con2[i,]),
+                 as.matrix(con3_prop[i,]))
   descript <- list(c(3,5),2,4)
   res <- Ipfp(weight_init_1zone,descript,target)
   weight_all[i,,,,,] <- res$x.hat
