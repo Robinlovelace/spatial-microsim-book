@@ -96,6 +96,10 @@ points(rsynth, pch = 3)
 text(1:length(rsurv), y = pmin(rsurv, rcons), labels = names(rcons))
 ```
 
+## Visualisation | source: [publik.tuwien.ac.at](http://publik.tuwien.ac.at/files/PubDat_238106.pdf) 
+
+![](../figures/simPop-results-eg.png)
+
 ## Tasks
 
 - Practical (30 minutes)
