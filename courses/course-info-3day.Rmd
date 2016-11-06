@@ -37,8 +37,8 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
 
 - Applying the methods of IPF and Combinatorial Optimisation (9:30 - 11:30)
     - Internal and External Validation (MD - 45min)
-    - Population synthesis with integerisation (MD - 45min)
-    - Introduction to Combinatorial Optimisation (MD - 30min)
+    - Population synthesis with integerisation (MD - 45 min)
+    - Introduction to Combinatorial Optimisation (MD - 30 min)
 
 - Testing between different models (RL 11:30 - 13:00) 
 

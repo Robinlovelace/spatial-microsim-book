@@ -478,6 +478,15 @@ for (i in 1:nrow(cons)){
 }
 ```
 
-## SimPop
+## Options for next few days
 
+There are many aspects vital for spatial microsimulation with R:
 
+- Efficient programming (the foundations of the language)
+- Continuing with the methods presented in the book
+- Exploring the **simPop** package
+- Validation and testing
+- Household generation and no individual sample
+- Visualisation
+
+By default we will cover a little on each but we can shift the focus
