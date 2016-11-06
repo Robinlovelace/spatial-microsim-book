@@ -448,43 +448,14 @@ for (i in 1:nrow(cons)){
 }
 ```
 
-## SimPop
+# Options for next few days
 
-- simPop is a package for creating, analysing and modelling synthetic microdata
-- It is powerful and integrates a number of beneficial features:
-    - Parallel processing
-    - Real (EU SILC and other) test datasets
-    - Wide range of functionality
-- Funded by respected organisations and implemented by skilled programmers
+There are many aspects vital for spatial microsimulation with R:
 
-## Basic use
+- Efficient programming (the foundations of the language)
+- Continuing to consolidate knowledge of the **mipfp** way
+- Exploring the **simPop** package
+- Validation and testing
+- Visualisation
 
-```{r}
-library(simPop) # loads lots of packages
-```
-
-## simPop data
-
-```{r}
-data(eusilcS)
-dplyr::glimpse(eusilcS[1:5])
-```
-
-## Create dataObj
-
-```{r}
-inp = specifyInput(data = eusilcS,
-                   hhid = "db030",
-                   hhsize = "hsize",
-                   strata = "db040",
-                   weight = "rb050")
-class(inp)
-inp
-```
-
-## simPop resources:
-
-- Slides by Matthias Templ: http://publik.tuwien.ac.at/files/PubDat_238106.pdf
-- A youtube video on the topic: https://www.youtube.com/watch?v=fjZhAUq3JZ0
-- The package's documentation
-
+By default we will cover a little on each but we can shift the focus
