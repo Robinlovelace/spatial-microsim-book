@@ -1,0 +1,76 @@
+---
+title: "Spatial Microsimulation without microdata"
+author: "Morgane Dumont"
+date: '`r Sys.Date()`'
+output:
+  beamer_presentation: default
+  ioslides_presentation: default
+  slidy_presentation: default
+bibliography: ../bibliography.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Without microdata?
+
+If you have no microdata, but you would like to generate a microsimulation, you can use a wide range of methods, depending on the data you have.
+
+For example:
+
+> - Global cross-tables and local marginal distributions 
+
+> - Two level aggregated data 
+
+> - Only a cross-table, but also mean, standard deviation,... of the caracteristics you would like to add
+
+## Global cross-tables and local marginal distributions 
+
+The global cross-table can be the initial weight matrix.
+
+## Two level aggregated data 
+
+For example (Barthélemy and Toint - 2013): 
+
+At municipality level: 
+
+>  - the cross table gender x age 
+>  - and the marginals of diploma level and activity status;
+          
+          
+          
+At district level: 
+
+>  - gender x activity status, 
+>  - gender x diploma level, 
+>  - age x activity status 
+>  - and age x diploma level.
+
+## Several steps
+
+> 1. Create at district level gender x activity status x age 
+> 2. Create at district level gender x diploma level x age 
+> 3. Create at district level gender x activity status x age x diploma level
+> 4. Use this data as seed for IPF and the two municipality level databases as constraints
+
+## Coding
+
+Imagine that the aim is to create a population for a Belgian province (Namur) characterised by: 
+
+> - A municipality (code INS),
+> - a diploma level,
+> - a professional status level,
+> - an age category (0.5 meaning from 0 to 5 years old),
+> - a gender.
+
+##
+The data you have are stored in the *Belgium* folder. You have : 
+
+> - ContrainteStatut.txt: per municipality and professional status, you have a count;
+> - ContrainteGenre.txt: per municipality and gender, you have a count;
+> - ContrainteDipl.txt: per municipality and diploma level, you have a count;
+> - ContrainteAge.txt: per municipality and age classes, you have a count;
+> - BelgiqueConting.txt : per age classes, gender, diploma and status, you have a count.
+
+## References
