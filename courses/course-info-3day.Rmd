@@ -21,28 +21,33 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
     - Wealth distribution (RL)
     - Transport (MD - 20 min)
     
-- Using R and RStudio for spatial microsimulation (RL 11:30 - 13:00 See book appendix)
-    - The RStudio Graphical User Interface (GUI)
-    - Using R
+- [Using R and RStudio](http://rpubs.com/RobinLovelace/146447) for spatial microsimulation (RL 11:30 - 13:00 See book appendix)
     - Project management
     - GitHub
+    - The RStudio Graphical User Interface (GUI)
+    - Using R
 
 - [Creating spatial microdata in R](http://robinlovelace.net/spatial-microsim-book/slides/spatial-microdata-in-r.html) (MD 14:00 - 17:10)
     - Loading the data
     - Preparing the data 
     - Reweighting procedures
-    - simPop (RL - introduction - 17:10 - 17:30)
   
 ## Day 2
 
-- Applying the methods of IPF and Combinatorial Optimisation (9:30 - 11:30)
+- [Applying the methods of IPF and Combinatorial Optimisation](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/slides/Applying-IPF-and-CO.Rmd) (9:30 - 11:15)
     - Internal and External Validation (MD - 45min)
     - Population synthesis with integerisation (MD - 45 min)
     - Introduction to Combinatorial Optimisation (MD - 30 min)
 
-- Testing between different models (RL 11:30 - 13:00) 
+- [simPop](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/slides/simpop-intro.Rmd) (RL 11:30 - 13:00)
 
-- Visualising and analysing spatial micro-data (RL 14:00 - 17:00)
+- Spatial data with R (14:00 - 16:00)
+    - [Spatial data classes](http://rpubs.com/RobinLovelace/217921) (30 min)
+    - Practical working on the [Creating-maps-in-R](https://github.com/Robinlovelace/Creating-maps-in-R) (45 min Q & A)
+    - [Visualisation](https://github.com/Robinlovelace/Creating-maps-in-R/blob/master/vignettes/vspd-base-shiny.md) (30 min)
+    - [Simple features](https://github.com/edzer/sfr) (**sf** package) (15 min if time)
+
+- [Interactive mapping](https://github.com/Robinlovelace/Creating-maps-in-R/blob/master/vignettes/vspd-base-shiny.md) with **tmap**, **leaflet** and **shiny** (if time) (RL 16:00 - 17:00)
 
 - Spatial micro-data for agent-based models (MD 17:00 - 17:30)
 
@@ -61,6 +66,3 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
     - Application to prepared examples or their own data and aims (RL AND MD - 2h30)
 
 - Conclusion to the course (RL 17:00 - 17:30)
-
-
-
