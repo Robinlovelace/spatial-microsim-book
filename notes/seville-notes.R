@@ -13,6 +13,11 @@ tmap_mode("view")
 example(qtm)
 
 # downloading and unzipping data
+u = "https://github.com/Robinlovelace/spatial-microsim-book/archive/master.zip"
+download.file(u, destfile = "master.zip")
+unzip("master.zip")
+
+# for spatial data
 u = "https://github.com/Robinlovelace/vspd-base-shiny-data/archive/master.zip"
 download.file(u, destfile = "master.zip")
 unzip("master.zip")
@@ -21,9 +26,4 @@ f = list.files(path = "vspd-base-shiny-data-master/",
                full.names = T)
 file.copy(f, "data")
 
-
-
 # spatial data with R
-
-
-
