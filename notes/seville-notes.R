@@ -17,6 +17,9 @@ u = "https://github.com/Robinlovelace/spatial-microsim-book/archive/master.zip"
 download.file(u, destfile = "master.zip")
 unzip("master.zip")
 
+# Notes on project management:
+# https://csgillespie.github.io/efficientR/
+
 # for spatial data
 u = "https://github.com/Robinlovelace/vspd-base-shiny-data/archive/master.zip"
 download.file(u, destfile = "master.zip")
