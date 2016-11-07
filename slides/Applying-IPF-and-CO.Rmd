@@ -66,6 +66,7 @@ for (i in 1:nrow(cons)){
   res <- Ipfp(weight_init_1zone,descript,target)
   weight_all[i,,,,,] <- res$x.hat
 }
+weight_init_1zone <- weight_all[1,,,,,]
 ```
 
 ## Plan for this part
@@ -296,6 +297,24 @@ A proposed method to fix this is the TRS [@lovelace_truncate_2013]:
 
 Try to code this method and save the individual level result in a file.
         
+##
+
+```{r, echo=TRUE,eval=TRUE}
+flat_weights <- as.data.frame.table(weight_init_1zone, 
+                                    responseName = "COUNT") 
+```
+
+
+```{r, echo=TRUE,eval=TRUE}
+truncated <- flat_weights
+truncated$COUNT <- floor(truncated$COUNT)
+p <- flat_weights$COUNT - truncated$COUNT
+n_missing <- sum(p)
+index <- sample(1:nrow(truncated),size = n_missing, replace=F)
+flat_weights$COUNT[index] <- flat_weights$COUNT[index]+1
+```
+
+
 ## Alternative approach: optimisation
 
 Classic optimisation problem:
@@ -312,13 +331,12 @@ $$\left\{
 
 In spatial microsimulation:
 
-$$\left\{
-\begin{array}{l}
-  min \hspace{0.2cm} f(w_1,..,w_m) = DIST(ind_agg, cons) \\
 
+$$ \left\{ \begin{array}{l}
+  min \hspace{0.2cm} f(w_1,..,w_m) = DIST(ind_agg, cons) \\
+  \\
   s.c. \hspace{0.2cm} w_i \geq 0,\  i = 1, ..., m
-\end{array}
-\right.$$
+\end{array} \right. $$
 
 ## Combinatorial Optimisation
 
