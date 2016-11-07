@@ -12,7 +12,7 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
 
 ## Day 1 (9:30 to 17:30 with one hour break)
 
-- Introduction to spatial microsimulation in R (RL 09:30 - 10:30)
+- [Introduction to spatial microsimulation in R](http://robinlovelace.net/spatial-microsim-book/slides/introduction.pdf) (RL 09:30 - 10:30)
     - Course overview, aims and objectives (RL 9:30 - 10:00)
     - Go-round of participants: course aspirations (RL 10:00 - 10:30)
 
@@ -27,7 +27,7 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
     - Project management
     - GitHub
 
-- Creating spatial microdata in R (MD 14:00 - 17:10)
+- [Creating spatial microdata in R](http://robinlovelace.net/spatial-microsim-book/slides/spatial-microdata-in-r.html) (MD 14:00 - 17:10)
     - Loading the data
     - Preparing the data 
     - Reweighting procedures
