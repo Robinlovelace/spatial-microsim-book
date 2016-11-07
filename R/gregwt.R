@@ -12,7 +12,7 @@ ind$age <- cut(ind$age, breaks=c(0,49,Inf), labels = c("a0.49", "a.50."))
 ind$w <- vector(mode = "numeric", length=dim(ind)[1]) + 1
 
 # prepare simulation data using GREGWT::prepareData
-data_in <- prepareData(cbind(age, sex), ind, census_area_id = F, breaks = c(3))
+data_in <- prepareData(cbind(age, sex), ind, census_area_id = F, breaks = c(2))
 
 # prepare a data.frame to store the result
 fweights <- NULL
