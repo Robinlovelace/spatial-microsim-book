@@ -73,7 +73,7 @@ Chapter 3.
 ```{r, fig.cap="Load and prepare the data.", message=FALSE}
 # Install GREGWT (uncomment/alter as appropriate)
 # devtools::install_github("emunozh/GREGWT")
-# load the library (0.7.0)
+# load the library (0.7.3)
 library('GREGWT')
 
 # Load the data from csv files stored under data
@@ -88,7 +88,7 @@ ind$w <- vector(mode = "numeric", length=dim(ind)[1]) + 1
 
 # prepare simulation data using GREGWT::prepareData
 data_in <- prepareData(cbind(age, sex),
-                  ind, census_area_id = F, breaks = c(3))
+                  ind, census_area_id = F, breaks = c(2))
 
 # prepare a data.frame to store the result
 fweights <- NULL
@@ -475,7 +475,7 @@ umat_count <- function(x) {
 }
 
 umat <- umat_count(ind_cat)
-indu <- apply(umat[1:ncol(ind_cat)], 2, function(x) x * umat$ind_num)
+indu <- apply(umat[1:ncol(ind_cat)], 2, function(x) x * umat$ind_num.Freq)
 ```
 
 
