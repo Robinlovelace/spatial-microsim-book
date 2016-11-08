@@ -129,3 +129,35 @@ for (i in 1:nrow(cons)){
 
 # Results for zone 1
 weight_init_1zone <- weight_all[1,,,,,]
+
+# Validation
+aggr <- apply(weight_all,c(1,6,4),sum)
+aggr <- aggr[,,c(2,1)] # order of sex to fit cons
+aggr1 = as.data.frame(aggr)
+con2 = apply(weight_all,c(1,3),sum)
+con3 = apply(weight_all,c(1,5),sum)
+ind_agg <- cbind(aggr1,con2,con3)
+
+plot(as.matrix(ind_agg[1,]), as.matrix(cons[1,]), xlab = 'Simulated', ylab='Theoretical', main =' Validation for zone 1')
+
+cor(as.vector(as.matrix(ind_agg)),as.vector(as.matrix(cons)))
+
+
+CorVec <- rep (0, nrow(cons))
+
+for (i in 1:nrow(cons)){
+  CorVec[i] = cor(as.numeric(ind_agg[i,]),as.numeric(cons[i,]))
+}
+
+which(CorVec< 0.99)
+
+# integerisation
+expa = as.data.frame.table(weight_init_1zone, responseName = 'COUNT')
+
+truncated = expa
+truncated$COUNT = floor(expa$COUNT)
+p = expa$COUNT - truncated$COUNT
+n_missing = sum(p)
+index = sample(1:nrow(truncated), size = n_missing, prob = p,replace=FALSE)
+truncated$COUNT[index] = truncated$COUNT[index]+1
+
