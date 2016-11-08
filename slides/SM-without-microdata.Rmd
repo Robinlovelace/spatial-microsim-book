@@ -27,7 +27,9 @@ For example:
 
 ## Global cross-tables and local marginal distributions 
 
-The global cross-table can be the initial weight matrix.
+The global cross-table can be the initial weight matrix. 
+
+Or, thanks to *mipfp* it can be the initial matrix AND a constraint.
 
 ## Two level aggregated data 
 
@@ -54,6 +56,56 @@ At district level:
 > 3. Create at district level gender x activity status x age x diploma level
 > 4. Use this data as seed for IPF and the two municipality level databases as constraints
 
+
+## Only a cross-table, but also mean, standard deviation,...
+
+First, created the constraints by knowing:
+
+- the distribution of you variable
+- the total number of individuals you need at the end.
+
+
+
+## Addition of the household level 
+
+Depending on the data you have, they are several possibilities. One method is :
+
+> - Run a IPF to create an individual pool.
+> - Run a IPF to create an household pool.
+> - Try to complete the household with individuals (depending on the variable of both)
+
+##
+
+If you have more precise data, such as age differences in couples, type of household of each individual, their civil status, ... you can make a combinatorial optimization to constraint the households.
+
+In the case of my current research, the data are: 
+
+> - for each individual, a zone, age, sex, some characteristics AND size and type of household;
+> - the age distribution between couples and between mother and child;
+
+##
+
+![](../figures/HH-CO.png)
+
+##
+
+![](../figures/IllustrationCouples.png)
+
+##
+
+[@lenormand_generating_2012]
+https://arxiv.org/pdf/1208.6403v2.pdf
+
+IPU (Guo and Bhat, 2007)
+
+## Choice of data and methods 
+
+> - Major tip : first 'make a plan' before beginning to code.
+> - Checking the source of the data and the way it was collected.
+> - Does it represent your target data?
+> - Choice of method is important. What are the hypothesis of the method? The underlying assumptions? What are the strengths and weaknesses of the method?
+> - Spatial microsimulation is an approximation, so you need to be aware of the biais that the method could have. 
+
 ## Coding
 
 Imagine that the aim is to create a population for a Belgian province (Namur) characterised by: 
@@ -72,5 +124,6 @@ The data you have are stored in the *Belgium* folder. You have :
 > - ContrainteDipl.txt: per municipality and diploma level, you have a count;
 > - ContrainteAge.txt: per municipality and age classes, you have a count;
 > - BelgiqueConting.txt : per age classes, gender, diploma and status, you have a count.
+
 
 ## References
