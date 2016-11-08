@@ -119,17 +119,16 @@ con3_prop <- con3*rowSums(con2)/rowSums(con3)
 # Load mipfp package
 library(mipfp)
 
-# definig target.list for mipfp
-descript <- list(c(3,5),2,4)
-
-# converting the constraints into matrices
-con2m = as.matrix(con2)
-con3m = as.matrix(con3_prop)
-
 # Loop on the zones and make each time the mipfp
+# To run in parallel: use foreach package
+con1m = con1_convert
+con2m = as.matrix(con2)
+con3m = con3_prop
+
 for (i in 1:nrow(cons)){
-  target <- list(con1_convert[i,,],con2m[i,],con3m[i,])
-  res <- Ipfp(weight_init_1zone,descript,target)
+  target <- list(con1m[i,,], con2m[i,], con3m[i,])
+  descript <- list(c(3,5),2,4)
+  res <- Ipfp(weight_init_1zone, descript,target)
   weight_all[i,,,,,] <- res$x.hat
 }
 
@@ -167,3 +166,44 @@ n_missing = sum(p)
 index = sample(1:nrow(truncated), size = n_missing, prob = p,replace=FALSE)
 truncated$COUNT[index] = truncated$COUNT[index]+1
 
+# see simPop-notes.R for notes on simPop
+
+
+# spatial data - using this repo
+# https://github.com/Robinlovelace/Creating-maps-in-R
+
+url_maps = 
+  unzip()
+library(raster)
+system.time(
+  lnd <- shapefile("data/london_sport.shp")
+)
+class(lnd)  
+plot(lnd)
+library(sf)
+system.time(
+  lnd_sf <- st_read("data/london_sport.shp")
+)
+plot(lnd_sf)
+
+r = raster(lnd)
+values(r) = 1:100
+plot(r)
+plot(lnd, add = T)
+proj4string(lnd)
+lnd_geo = spTransform(lnd, CRS("+proj=longlat +datum=WGS84"))
+proj4string(lnd_geo)
+spDists(lnd_geo[1:3,])
+spDists(lnd[1:3,])
+raster::res(r)
+res(r)
+detach("package:raster")
+raster::res(r)
+res(r)
+library(raster)
+r_highes = r
+raster::res(r_highes) <- 1000
+values(r_highes) = 1:ncell(r_highes)
+plot(r_highes)
+
+# further resources: http://geostat-course.org/node
