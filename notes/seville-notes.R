@@ -123,11 +123,11 @@ library(mipfp)
 # To run in parallel: use foreach package
 con1m = con1_convert
 con2m = as.matrix(con2)
-con3m = con3_prop
+con3m = as.matrix(con3_prop)
+descript <- list(c(3,5),2,4)
 
 for (i in 1:nrow(cons)){
   target <- list(con1m[i,,], con2m[i,], con3m[i,])
-  descript <- list(c(3,5),2,4)
   res <- Ipfp(weight_init_1zone, descript,target)
   weight_all[i,,,,,] <- res$x.hat
 }

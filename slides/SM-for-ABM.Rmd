@@ -93,6 +93,10 @@ If your aim is to make an ABM and you have not enough input data, you can genera
 
 But, first you need to be sure of what will be needed.
 
+[A good introduction to agent-based modelling](http://link.springer.com/article/10.1057/jos.2010.3)
+
+An example of a combination of spatial microsimulation and agent based modelling : Virtual Belgium In Health
+
 ## References
 
 

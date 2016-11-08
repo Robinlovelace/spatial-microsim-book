@@ -47,23 +47,22 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
     - [Visualisation](https://github.com/Robinlovelace/Creating-maps-in-R/blob/master/vignettes/vspd-base-shiny.md) (30 min)
     - [Simple features](https://github.com/edzer/sfr) (**sf** package) (15 min if time)
 
-- [Interactive mapping](https://github.com/Robinlovelace/Creating-maps-in-R/blob/master/vignettes/vspd-base-shiny.md) with **tmap**, **leaflet** and **shiny** (if time) (RL 16:00 - 17:00)
 
-- Spatial micro-data for agent-based models (MD 17:00 - 17:30)
 
 ## Day 3
-    
-- Spatial microsimulation without micro-data (9:30 - 11:30)
-    - Methods (MD - 1h)
-    - Quality of the microsimulation (MD - 1h)
-    
-- Adding the household information (11:30 - 13:00)
-    - Depending on the databases (MD - 30 min)
-    - Several studied cases (MD - 1h00)
-    
-- Adapt the method to the aim of the simulation (14:00 - 17:00)
-    - Choice of data and methods (MD - 30 min)
-    - Application to prepared examples or their own data and aims (RL AND MD - 2h30)
 
-- Conclusion to the course (RL 17:00 - 17:30)
+
+- Related topics (MD 9:30 - 11:00)
+  - Spatial micro-data for agent-based models 
+  - Spatial microsimulation without micro-data 
+  - Adding the household information 
+  - Choice of data and methods 
+
+- Practical application (MD - 11:00 - 12:30)
+    
+- [Interactive mapping](https://github.com/Robinlovelace/Creating-maps-in-R/blob/master/vignettes/vspd-base-shiny.md) with **tmap**, **leaflet** and **shiny** (if time) (RL 12:30 - 13:00)
+
+- Apply what you've learn on your own data (14:00 - 16:45)
+
+- Conclusion to the course (16:45 - 17:00)
 
