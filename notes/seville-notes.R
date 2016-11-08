@@ -73,8 +73,8 @@ class(ind_mat[1,])
 ####################################################
 # spatial data with R - CakeMap for all zones
 
-ind <- read.csv("../data/CakeMap/ind.csv")
-cons <- read.csv("../data/CakeMap/cons.csv")
+ind <- read.csv("data/CakeMap/ind.csv")
+cons <- read.csv("data/CakeMap/cons.csv")
 # Load constraints separately - normally this would be first stage
 con1 <- cons[1:12] # load the age/sex constraint
 con2 <- cons[13:14] # load the car/no car constraint
@@ -119,10 +119,16 @@ con3_prop <- con3*rowSums(con2)/rowSums(con3)
 # Load mipfp package
 library(mipfp)
 
+# definig target.list for mipfp
+descript <- list(c(3,5),2,4)
+
+# converting the constraints into matrices
+con2m = as.matrix(con2)
+con3m = as.matrix(con3_prop)
+
 # Loop on the zones and make each time the mipfp
 for (i in 1:nrow(cons)){
-  target <- list(con1_convert[i,,],as.matrix(con2[i,]),as.matrix(con3_prop[i,]))
-  descript <- list(c(3,5),2,4)
+  target <- list(con1_convert[i,,],con2m[i,],con3m[i,])
   res <- Ipfp(weight_init_1zone,descript,target)
   weight_all[i,,,,,] <- res$x.hat
 }

@@ -27,7 +27,7 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
     - The RStudio Graphical User Interface (GUI)
     - Using R
 
-- [Creating spatial microdata in R](http://robinlovelace.net/spatial-microsim-book/slides/spatial-microdata-in-r.html) (MD 14:00 - 17:10)
+- [Creating spatial microdata in R](http://robinlovelace.net/spatial-microsim-book/slides/spatial-microdata-in-r.html) (MD 14:00 - 17:30)
     - Loading the data
     - Preparing the data 
     - Reweighting procedures
