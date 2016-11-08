@@ -73,8 +73,8 @@ class(ind_mat[1,])
 ####################################################
 # spatial data with R - CakeMap for all zones
 
-ind <- read.csv("../data/CakeMap/ind.csv")
-cons <- read.csv("../data/CakeMap/cons.csv")
+ind <- read.csv("data/CakeMap/ind.csv")
+cons <- read.csv("data/CakeMap/cons.csv")
 # Load constraints separately - normally this would be first stage
 con1 <- cons[1:12] # load the age/sex constraint
 con2 <- cons[13:14] # load the car/no car constraint
@@ -120,10 +120,15 @@ con3_prop <- con3*rowSums(con2)/rowSums(con3)
 library(mipfp)
 
 # Loop on the zones and make each time the mipfp
+# To run in parallel: use foreach package
+con1m = con1_convert
+con2m = as.matrix(con2)
+con3m = con3_prop
+
 for (i in 1:nrow(cons)){
-  target <- list(con1_convert[i,,],as.matrix(con2[i,]),as.matrix(con3_prop[i,]))
+  target <- list(con1m[i,,], con2m[i,], con3m[i,])
   descript <- list(c(3,5),2,4)
-  res <- Ipfp(weight_init_1zone,descript,target)
+  res <- Ipfp(weight_init_1zone, descript,target)
   weight_all[i,,,,,] <- res$x.hat
 }
 
