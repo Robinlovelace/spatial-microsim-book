@@ -30,11 +30,10 @@ ind$NSSEC8 <- as.factor(ind$NSSEC8)
 levels(ind$NSSEC8) <- colnames(con3)
 ind$ageband4 <- 
   gsub(pattern = "-", replacement = "_", x = ind$ageband4)
+
+# Initialise weights
 weight_init_1zone <- table(ind)
 init_cells <- rep(weight_init_1zone, each = nrow(cons))
-
-
-
 
 # Define the names
 names <- c(list(rownames(cons)),
@@ -44,8 +43,8 @@ names <- c(list(rownames(cons)),
 weight_all <- array(init_cells, dim = 
                        c(nrow(cons), dim(weight_init_1zone)),
                      dimnames = names)
-# Transform con1 into an 3D-array : con1_convert
 
+# Transform con1 into an 3D-array : con1_convert
 names <- c(list(rownames(cons)),dimnames(weight_all)[c(4,6)])
 con1_convert <- array(NA, dim=c(nrow(cons),2,6), dimnames = names)
 
@@ -57,15 +56,21 @@ for(zone in rownames(cons)){
   }
 }
 
-
+# Rescale con3 since it has some inconsistent constraints
 con3_prop <- con3*rowSums(con2)/rowSums(con3)
+
+# Load mipfp package
 library(mipfp)
+
+# Loop on the zones and make each time the mipfp
 for (i in 1:nrow(cons)){
   target <- list(con1_convert[i,,],as.matrix(con2[i,]),as.matrix(con3_prop[i,]))
   descript <- list(c(3,5),2,4)
   res <- Ipfp(weight_init_1zone,descript,target)
   weight_all[i,,,,,] <- res$x.hat
 }
+
+# Results for zone 1
 weight_init_1zone <- weight_all[1,,,,,]
 ```
 
@@ -108,6 +113,14 @@ We first need to aggregate the result to obtain a table similar to *cons*.
 aggr <- apply(weight_all,c(1,6,4),sum)
 aggr <- aggr[,,c(2,1)] # order of sex to fit cons
 ind_agg <- cbind(as.data.frame(aggr),con2,con3)
+```
+
+##
+
+Plot the simulated and target counts
+
+```{r, echo=TRUE,eval=TRUE}
+plot(as.matrix(ind_agg[1,]),as.matrix(cons[1,]))
 ```
 
 ##
@@ -354,7 +367,9 @@ When they are a wide range of possible combinations, we have heuristic methods:
 - Tabu search
 
 ##
-As an example, we will explain how a genetic algorithm works.
+
+As an example, we will explain how a genetic algorithms works.
+
 > - initialisation : we have a population of possible candidates (combinations of the individuals in the sample)
 > - evaluation: we calculate the distance between agregated counts and constraints for each candidate
 > - selection: we keep only a part of the population and the probability of each candidates to be selected is his evaluation
@@ -368,3 +383,4 @@ These kind of methods doesn't need an integerisation step since it directly give
 
 Some functions to optimise in R: *genoud*, *optim*, *genSA*,...
 
+## References
