@@ -70,5 +70,94 @@ select(ind, sex)
 ind_mat = as.matrix(ind)
 class(ind_mat[1,])
 
+####################################################
+# spatial data with R - CakeMap for all zones
 
-# spatial data with R
+ind <- read.csv("../data/CakeMap/ind.csv")
+cons <- read.csv("../data/CakeMap/cons.csv")
+# Load constraints separately - normally this would be first stage
+con1 <- cons[1:12] # load the age/sex constraint
+con2 <- cons[13:14] # load the car/no car constraint
+con3 <- cons[15:24] # socio-economic class
+
+# Rename the categories in "ind" to correspond to the one of cons
+ind$Car <- sapply(ind$Car, FUN = switch, "Car", "NoCar")
+ind$Sex <- sapply(ind$Sex, FUN = switch, "m", "f")
+ind$NSSEC8 <- as.factor(ind$NSSEC8)
+levels(ind$NSSEC8) <- colnames(con3)
+ind$ageband4 <- 
+  gsub(pattern = "-", replacement = "_", x = ind$ageband4)
+
+# Initialise weights
+weight_init_1zone <- table(ind)
+init_cells <- rep(weight_init_1zone, each = nrow(cons))
+
+# Define the names
+names <- c(list(rownames(cons)),
+           as.list(dimnames(weight_init_1zone)))
+
+# Structure the data
+weight_all <- array(init_cells, dim = 
+                      c(nrow(cons), dim(weight_init_1zone)),
+                    dimnames = names)
+
+# Transform con1 into an 3D-array : con1_convert
+names <- c(list(rownames(cons)),dimnames(weight_all)[c(4,6)])
+con1_convert <- array(NA, dim=c(nrow(cons),2,6), dimnames = names)
+
+for(zone in rownames(cons)){
+  for (sex in dimnames(con1_convert)$Sex){
+    for (age in dimnames(con1_convert)$ageband4){
+      con1_convert[zone,sex,age] <- con1[zone,paste(sex,age,sep="")]
+    }
+  }
+}
+
+# Rescale con3 since it has some inconsistent constraints
+con3_prop <- con3*rowSums(con2)/rowSums(con3)
+
+# Load mipfp package
+library(mipfp)
+
+# Loop on the zones and make each time the mipfp
+for (i in 1:nrow(cons)){
+  target <- list(con1_convert[i,,],as.matrix(con2[i,]),as.matrix(con3_prop[i,]))
+  descript <- list(c(3,5),2,4)
+  res <- Ipfp(weight_init_1zone,descript,target)
+  weight_all[i,,,,,] <- res$x.hat
+}
+
+# Results for zone 1
+weight_init_1zone <- weight_all[1,,,,,]
+
+# Validation
+aggr <- apply(weight_all,c(1,6,4),sum)
+aggr <- aggr[,,c(2,1)] # order of sex to fit cons
+aggr1 = as.data.frame(aggr)
+con2 = apply(weight_all,c(1,3),sum)
+con3 = apply(weight_all,c(1,5),sum)
+ind_agg <- cbind(aggr1,con2,con3)
+
+plot(as.matrix(ind_agg[1,]), as.matrix(cons[1,]), xlab = 'Simulated', ylab='Theoretical', main =' Validation for zone 1')
+
+cor(as.vector(as.matrix(ind_agg)),as.vector(as.matrix(cons)))
+
+
+CorVec <- rep (0, nrow(cons))
+
+for (i in 1:nrow(cons)){
+  CorVec[i] = cor(as.numeric(ind_agg[i,]),as.numeric(cons[i,]))
+}
+
+which(CorVec< 0.99)
+
+# integerisation
+expa = as.data.frame.table(weight_init_1zone, responseName = 'COUNT')
+
+truncated = expa
+truncated$COUNT = floor(expa$COUNT)
+p = expa$COUNT - truncated$COUNT
+n_missing = sum(p)
+index = sample(1:nrow(truncated), size = n_missing, prob = p,replace=FALSE)
+truncated$COUNT[index] = truncated$COUNT[index]+1
+

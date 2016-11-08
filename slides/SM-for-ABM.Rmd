@@ -17,7 +17,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 It consists of :
 
-> - Agents with characteristics;
+> - Agents with characteristics (Agents Are Autonomous Decision-making Units with Diverse Characteristics (Heterogeneous));
 > - their environment;
 > - relations between agents;
 > - AND possibly relations between the agents and their environment.
@@ -27,6 +27,7 @@ It consists of :
 
 "Agent-based modelling can find new, better solutions to many
 problems important to our environment, health, and economy" (Grimm and Railsback 2011)
+
 
 ##
 
@@ -85,7 +86,7 @@ Need of spatial microsimulation:
 If you want to create your own code for ABM, think of :
 
 - Object oriented programming (such as C++)
-- Repast (http://repast.sourceforge.net/repast_3/tutorials.html)
+- Repast (https://repast.github.io/index.html)
 
 ##
 If your aim is to make an ABM and you have not enough input data, you can generate a spatial microsimulation.
