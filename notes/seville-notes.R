@@ -161,27 +161,4 @@ n_missing = sum(p)
 index = sample(1:nrow(truncated), size = n_missing, prob = p,replace=FALSE)
 truncated$COUNT[index] = truncated$COUNT[index]+1
 
-## Notes on simPop
-library(simPop)
-install.packages("simPop")
-data(eusilcS)
-dplyr::glimpse(eusilcS[1:5])
-
-inp = specifyInput(data = eusilcS,
-                   hhid = "db030",
-                   hhsize = "hsize",
-                   strata = "db040",
-                   weight = "rb050")
-
-addWeights(inp) = calibSample(inp = inp, totals = totalsRGtab)
-class(inp)
-inp
-head(eusilcS$db030)
-head(eusilcS$hsize)
-nrow(eusilcS) /
-  length(unique(eusilcS$db030))
-
-
-synthP = simStructure(dataS = inp,
-                      method = "direct",
-                      basicHHvars = c("age", "rb090", "db040"))
+# see simPop-notes.R for notes on simPop
