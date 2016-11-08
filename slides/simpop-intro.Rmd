@@ -108,6 +108,7 @@ text(1:length(rsurv), y = pmin(rsurv, rcons), labels = names(rcons))
     - Advanced: take a look at the package's source code
     
 - Challenge (20 minutes)
+    - Beginner: try to create a synthetic microdataset of [SimpleWorld](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/02-SimpleWorld.Rmd) using **simPop**
     - Explore how to use `simContinuous()` to estimate mean income in the regions of Austria
 
 - Discussion: how could these methods be useful in your work?
