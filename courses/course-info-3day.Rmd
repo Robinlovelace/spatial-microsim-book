@@ -66,3 +66,4 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
     - Application to prepared examples or their own data and aims (RL AND MD - 2h30)
 
 - Conclusion to the course (RL 17:00 - 17:30)
+
