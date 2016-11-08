@@ -27,19 +27,19 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
     - The RStudio Graphical User Interface (GUI)
     - Using R
 
-- [Creating spatial microdata in R](http://robinlovelace.net/spatial-microsim-book/slides/spatial-microdata-in-r.html) (MD 14:00 - 17:10)
+- [Creating spatial microdata in R](http://robinlovelace.net/spatial-microsim-book/slides/spatial-microdata-in-r.html) (MD 14:00 - 17:30)
     - Loading the data
     - Preparing the data 
     - Reweighting procedures
   
 ## Day 2
 
-- [Applying the methods of IPF and Combinatorial Optimisation](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/slides/Applying-IPF-and-CO.Rmd) (9:30 - 11:15)
-    - Internal and External Validation (MD - 45min)
-    - Population synthesis with integerisation (MD - 45 min)
-    - Introduction to Combinatorial Optimisation (MD - 30 min)
+- [Applying the methods of IPF and Combinatorial Optimisation](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/slides/Applying-IPF-and-CO.Rmd) (9:30 - 12:00)
+    - Internal and External Validation (MD)
+    - Population synthesis with integerisation (MD)
+    - Introduction to Combinatorial Optimisation (MD)
 
-- [simPop](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/slides/simpop-intro.Rmd) (RL 11:30 - 13:00)
+- [simPop](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/slides/simpop-intro.Rmd) (RL 12:00 - 13:00)
 
 - Spatial data with R (14:00 - 16:00)
     - [Spatial data classes](http://rpubs.com/RobinLovelace/217921) (30 min)

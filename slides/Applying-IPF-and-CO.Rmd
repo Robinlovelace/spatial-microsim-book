@@ -112,7 +112,9 @@ We first need to aggregate the result to obtain a table similar to *cons*.
 ```{r, echo=TRUE,eval=TRUE}
 aggr <- apply(weight_all,c(1,6,4),sum)
 aggr <- aggr[,,c(2,1)] # order of sex to fit cons
-ind_agg <- cbind(as.data.frame(aggr),con2,con3)
+con2_sim = apply(weight_all,c(1,3),sum)
+con3_sim = apply(weight_all,c(1,5),sum)
+ind_agg <- cbind(as.data.frame(aggr),con2_sim,con3_sim)
 ```
 
 ##

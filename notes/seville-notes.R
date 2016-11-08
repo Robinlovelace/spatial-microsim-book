@@ -173,7 +173,7 @@ truncated$COUNT[index] = truncated$COUNT[index]+1
 # https://github.com/Robinlovelace/Creating-maps-in-R
 
 url_maps = 
-unzip()
+  unzip()
 library(raster)
 system.time(
   lnd <- shapefile("data/london_sport.shp")
