@@ -52,13 +52,13 @@ Course overview for Spatial Microsimulation course in Seville, 7^th^ - 9^th^ Nov
 ## Day 3
 
 
-- Related topics (MD 9:30 - 11:00)
+- Related topics (MD 9:30 - 10:30)
   - Spatial micro-data for agent-based models 
   - Spatial microsimulation without micro-data 
   - Adding the household information 
   - Choice of data and methods 
 
-- Practical application (MD - 11:00 - 12:30)
+- Practical application (MD - 10:45 - 12:30)
     
 - [Interactive mapping](https://github.com/Robinlovelace/Creating-maps-in-R/blob/master/vignettes/vspd-base-shiny.md) with **tmap**, **leaflet** and **shiny** (if time) (RL 12:30 - 13:00)
 
