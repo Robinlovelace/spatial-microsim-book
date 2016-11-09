@@ -35,3 +35,8 @@ exp_indices = int_expand_vector(expa$int)
 synth = expa[exp_indices,]
 
 # for many zones
+list_output = vector(mode = "list", length = length(uz))
+for(i in 1:length(uz)) {
+  ...
+  list_output[[i]] = 
+}
