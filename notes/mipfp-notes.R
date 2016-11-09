@@ -30,13 +30,28 @@ expa = as.data.frame.table(res$x.hat)
 # https://github.com/Robinlovelace/spatial-microsim-book/blob/master/R/functions.R
 source("R/functions.R") # loads functions into memory
 expa$int = int_trs(expa$Freq)
-
 exp_indices = int_expand_vector(expa$int)
 synth = expa[exp_indices,]
 
 # for many zones
 list_output = vector(mode = "list", length = length(uz))
 for(i in 1:length(uz)) {
-  ...
-  list_output[[i]] = 
+  z = uz[i]
+  # data preparation
+  age = in_age$COUNT[in_age$com == z]
+  edu = in_dip$COUNT[in_dip$com == z]
+  ocu = in_sta$COUNT[in_sta$com == z]
+  sex = in_sex$COUNT[in_sex$com == z]
+  target = list(age, edu, ocu, sex)
+  res = mipfp::Ipfp(global_cons, descript, target)
+  expa = as.data.frame.table(res$x.hat)
+  expa$int = rakeR::integerise(expa$Freq)[,1]
+  exp_indices = int_expand_vector(expa$int)
+  list_output[[i]] = expa[exp_indices,]
 }
+
+synth_namur = dplyr::bind_rows(list_output, .id = "id")
+library(dplyr)
+pmale = group_by(synth_namur, id) %>% 
+  summarise(pmale = sum(sex == "Hommes") /
+              n())
