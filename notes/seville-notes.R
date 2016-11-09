@@ -236,3 +236,9 @@ qtm(nam, "pmale", n = 3)
 tm_shape(nam) +
   tm_fill(col = "pmale",
           breaks = c(0, 0.5, 1))
+
+# Challenges:
+# 1: Write a for loop to create a spatial microdataset
+# for all zones in namur (don't just copy my code!)
+# 2: Create a map of a different variable (not % male)
+# 3: Implement the methods on your own data
