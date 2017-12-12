@@ -1,5 +1,5 @@
 #library(devtools)
-#install_github("emunozh/GREGWT")
+devtools::install_github("emunozh/GREGWT")
 library('GREGWT')
 
 # Load the data from csv files stored under ../data
