@@ -2,6 +2,7 @@ language: r
 cache: packages
 dist: trustys
 sudo: required
+warnings_are_errors: false
 before_install:
   - sudo add-apt-repository ppa:ubuntugis/ubuntugis-unstable --yes
   - sudo add-apt-repository ppa:opencpu/jq --yes
