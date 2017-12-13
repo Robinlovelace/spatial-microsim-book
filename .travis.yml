@@ -15,7 +15,7 @@ r_packages:
   - devtools
 
 script:
-  - R CMD INSTALL ../geocompr/
+  - R CMD BATCH build.R 
   - make html
 
 after_success:

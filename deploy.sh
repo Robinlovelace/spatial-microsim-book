@@ -8,7 +8,7 @@ update_website() {
   git config user.name "Robin Lovelace"
   git config user.email "rob00x@gmail.com"
   git config --global push.default simple
-  git remote add upstream "https://$GH_TOKEN@github.com/Robinlovelace/geocompr.git"
+  git remote add upstream "https://$GH_TOKEN@github.com/Robinlovelace/spatial-microsim-book.git"
   git fetch upstream 2>err.txt
   git checkout gh-pages
   
