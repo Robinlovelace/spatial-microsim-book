@@ -1,4 +1,4 @@
-Package: spatial_microsim_book
+Package: smsbook
 Title: Spatial Microsimulation with R: a book
 Version: 0.0.1
 Authors@R: c(person("Robin", "Lovelace", role = c("aut", "cre"), email = "rob00x@gmail.com"), 

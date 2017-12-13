@@ -1,6 +1,6 @@
 language: r
 cache: packages
-dist: trustys
+dist: trusty
 sudo: required
 warnings_are_errors: false
 before_install:
