@@ -1,17 +1,3 @@
----
-title: "SimpleWorld"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
-graphics: yes
----
-
-```{r, echo=FALSE, message=FALSE}
-library(raster)
-library(grid)
-library(png)
-```
-
 # SimpleWorld: A worked example of spatial microsimulation {#SimpleWorld}
 
 This chapter focuses on the minimum input datasets needed for the classical type

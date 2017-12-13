@@ -1,16 +1,10 @@
----
-title: "Introduction"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
----
+# Introduction {#intro}
 
 ```{r, echo=FALSE}
 library(png)
 library(grid)
 ```
 
-# Introduction {#intro}
 
 ## Who this book is for and how to use it
 
@@ -723,6 +717,3 @@ clarity of explanation will therefore be gratefully
 received.^[Feedback can be left via email to
 r.lovelace@leeds.ac.uk or via the project's GitHub page
 (http://github.com/Robinlovelace/spatial-microsim-book).]
-
-# References
-

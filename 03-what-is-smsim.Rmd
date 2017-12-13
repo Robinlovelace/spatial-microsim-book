@@ -1,17 +1,3 @@
----
-title: "What is spatial microsimulation?"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
----
-
-```{r, echo=FALSE}
-# TODO:
-# Add literature on spatial microsimulation as an approach
-library(png)
-library(grid)
-```
-
 # What is spatial microsimulation? {#what-is}
 
 The purpose of this chapter is to demystify

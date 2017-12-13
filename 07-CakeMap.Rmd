@@ -1,18 +1,3 @@
----
-title: "CakeMap"
-layout: default
-output:
-  pdf_document:
-    fig_caption: yes
-  word_document: default
-bibliography: bibliography.bib
----
-
-```{r, echo=FALSE}
-library(png)
-library(grid)
-```
-
 # Spatial microsimulation in the wild {#CakeMap}
 
 So far the book has explained what spatial microsimulation

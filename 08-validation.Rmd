@@ -1,9 +1,4 @@
----
-title: "Validation"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
----
+# Model checking and evaluation {#svalidation}
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 load("cache-CakeMap.RData")
@@ -11,8 +6,6 @@ map_pack <- c("rgdal", "maptools", "rgeos", "dplyr", "tidyr", "gridExtra", "knit
 lapply(map_pack, library, character.only = T)
 # Todo: add figure comparing various goodness-of-fit measures from JASSS paper
 ```
-
-# Model checking and evaluation {#svalidation}
 
 In food safety, openness about mistakes is
 a vital ingredient for high standards.^[This seems to be

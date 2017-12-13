@@ -1,10 +1,4 @@
----
-title: "Spatial microsimulation for agent-based models"
-author: Maja Založnik
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
----
+# Spatial microsimulation for agent-based models {#ABM}
 
 ```{r, echo=FALSE}
 # Resources:
@@ -19,8 +13,6 @@ bibliography: bibliography.bib
 
 This is a preview version of a chapter in the book *Spatial Microsimulation with R* [@lovelace_spatial_2016], published by
 [CRC Press](https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/9781498711548).
-
-# Spatial microsimulation for agent-based models {#ABM}
 
 This chapter, contributed by Maja Založnik, is the most advanced chapter of the
 book.^[Maja

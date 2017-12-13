@@ -1,15 +1,3 @@
----
-title: "Population synthesis without microdata"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
----
-
-```{r, echo=FALSE}
-library(png)
-library(grid)
-```
-
 # Population synthesis without microdata {#nomicrodata}
 
 Sometimes no representative individual level

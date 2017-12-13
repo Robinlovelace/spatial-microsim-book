@@ -1,13 +1,19 @@
 --- 
 title: 'Spatial Microsimulation with R'
-author: 'Robin Lovelace and Morgane Dumond'
+author: 'Robin Lovelace and Morgane Dumont'
 date: '`r Sys.Date()`'
-knit: bookdown::render_book
-site: bookdown::bookdown_site
+site: "bookdown::bookdown_site"
+# rmd_files: ["index.Rmd", "01-introduction.Rmd"]
+output:
+  bookdown::gitbook: default
 documentclass: book
 link-citations: yes
+biblio-style: apalike
 github-repo: "Robinlovelace/spatial-microsim-book"
 url: 'https\://spatial-microsim-book.robinlovelace.net'
+bibliography: bibliography.bib
 ---
   
-Welcome
+# Welcome {-}
+
+Welcome to Spatial Microsimulation with R!

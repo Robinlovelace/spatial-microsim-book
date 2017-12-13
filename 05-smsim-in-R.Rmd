@@ -1,9 +1,4 @@
----
-title: "Population synthesis"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
----
+# Population synthesis {#smsimr}
 
 ```{r, include=FALSE}
 # packages to allow 'knitting' the chapter to html
@@ -12,8 +7,6 @@ library(grid)
 source("R/functions.R")
 source("R/SimpleWorld.R")
 ```
-
-# Population synthesis {#smsimr}
 
 In this chapter we progress from loading and preparing the input data to
 running a spatial microsimulation model. The focus is on

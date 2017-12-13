@@ -1,9 +1,4 @@
----
-title: "Alternative approaches to population synthesis"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
----
+# Alternative approaches to population synthesis {#alternative-reweighting}
 
 ```{r, echo=FALSE}
 # TODO: Something on urbansim?
@@ -11,8 +6,6 @@ library(png)
 library(grid)
 load("cache-smsim-in-R.RData")
 ```
-
-# Alternative approaches to population synthesis {#alternative-reweighting}
 
 This chapter briefly describes other techniques for spatial microsimulation.
 We have different methods, each corresponding to a section: 

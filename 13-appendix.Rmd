@@ -1,9 +1,3 @@
----
-title: "Appendix"
-layout: default
-bibliography: bibliography.bib
----
-
 # Appendix: Getting up-to-speed with R {#apR}
 
 As mentioned in Chapter 1, R is a general purpose programming
