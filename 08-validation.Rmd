@@ -502,10 +502,9 @@ wards$`Sqrt(RE)` <- sqrt(wards$REVec)
 # p2 <- tm_shape(wards) +
 #   tm_fill("Sqrt(RE)", n = 3) +
 #   tm_borders()
-osm_tiles <- read_osm(bbox(wards))
-
-tm_shape(osm_tiles) +
-  tm_raster() +
+# osm_tiles <- read_osm(bbox(wards))
+# tm_shape(osm_tiles) +
+#   tm_raster() +
 tm_shape(wards) +
   tm_fill(c("Sqrt(TAE)", "Sqrt(RE)"), n = 3, alpha = 0.5) +
   tm_borders()
