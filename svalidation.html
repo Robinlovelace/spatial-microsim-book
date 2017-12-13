@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial Microsimulation with R</title>
+  <meta name="description" content="Spatial Microsimulation with R">
+  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial Microsimulation with R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
+  
+  
+  <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial Microsimulation with R" />
+  
+  
+  
+
+<meta name="author" content="Robin Lovelace and Morgane Dumont">
+
+
+<meta name="date" content="2017-12-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="CakeMap.html">
+<link rel="next" href="nomicrodata.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#a-definition-of-spatial-microsimulation"><i class="fa fa-check"></i><b>1.3</b> A definition of spatial microsimulation</a></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#learning-by-doing"><i class="fa fa-check"></i><b>1.4</b> Learning by doing</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#whyR"><i class="fa fa-check"></i><b>1.5</b> Why spatial microsimulation with R?</a></li>
+<li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#learningR"><i class="fa fa-check"></i><b>1.6</b> Learning the R language</a></li>
+<li class="chapter" data-level="1.7" data-path="intro.html"><a href="intro.html#typographic"><i class="fa fa-check"></i><b>1.7</b> Typographic conventions</a></li>
+<li class="chapter" data-level="1.8" data-path="intro.html"><a href="intro.html#overview"><i class="fa fa-check"></i><b>1.8</b> An overview of the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="SimpleWorld.html"><a href="SimpleWorld.html"><i class="fa fa-check"></i><b>2</b> SimpleWorld: A worked example of spatial microsimulation</a><ul>
+<li class="chapter" data-level="2.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudioUpSpeed"><i class="fa fa-check"></i><b>2.1</b> Getting setup with the RStudio environment</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#installing-r"><i class="fa fa-check"></i><b>2.1.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudio"><i class="fa fa-check"></i><b>2.1.2</b> RStudio</a></li>
+<li class="chapter" data-level="2.1.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#projects"><i class="fa fa-check"></i><b>2.1.3</b> Projects</a></li>
+<li class="chapter" data-level="2.1.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#downloading-data-for-the-book"><i class="fa fa-check"></i><b>2.1.4</b> Downloading data for the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldData"><i class="fa fa-check"></i><b>2.2</b> SimpleWorld data</a></li>
+<li class="chapter" data-level="2.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#weight-matrix"><i class="fa fa-check"></i><b>2.3</b> Generating a weight matrix</a></li>
+<li class="chapter" data-level="2.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#spatial-microdata"><i class="fa fa-check"></i><b>2.4</b> Spatial microdata</a></li>
+<li class="chapter" data-level="2.5" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldContext"><i class="fa fa-check"></i><b>2.5</b> SimpleWorld in context</a></li>
+<li class="chapter" data-level="2.6" data-path="SimpleWorld.html"><a href="SimpleWorld.html#chapter-summary"><i class="fa fa-check"></i><b>2.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="what-is.html"><a href="what-is.html"><i class="fa fa-check"></i><b>3</b> What is spatial microsimulation?</a><ul>
+<li class="chapter" data-level="3.1" data-path="what-is.html"><a href="what-is.html#terminology"><i class="fa fa-check"></i><b>3.1</b> Terminology</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="what-is.html"><a href="what-is.html#SimCity"><i class="fa fa-check"></i><b>3.1.1</b> Spatial microsimulation as SimCity</a></li>
+<li class="chapter" data-level="3.1.2" data-path="what-is.html"><a href="what-is.html#meth-approach"><i class="fa fa-check"></i><b>3.1.2</b> Spatial microsimulation: method or approach?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="what-is.html"><a href="what-is.html#is-not"><i class="fa fa-check"></i><b>3.2</b> What spatial microsimulation is not</a></li>
+<li class="chapter" data-level="3.3" data-path="what-is.html"><a href="what-is.html#applications"><i class="fa fa-check"></i><b>3.3</b> Applications</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="what-is.html"><a href="what-is.html#health-applications"><i class="fa fa-check"></i><b>3.3.1</b> Health applications</a></li>
+<li class="chapter" data-level="3.3.2" data-path="what-is.html"><a href="what-is.html#economic-policy-evaluation"><i class="fa fa-check"></i><b>3.3.2</b> Economic policy evaluation</a></li>
+<li class="chapter" data-level="3.3.3" data-path="what-is.html"><a href="what-is.html#transport"><i class="fa fa-check"></i><b>3.3.3</b> Transport</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="what-is.html"><a href="what-is.html#assumptions"><i class="fa fa-check"></i><b>3.4</b> Assumptions</a></li>
+<li class="chapter" data-level="3.5" data-path="what-is.html"><a href="what-is.html#chapter-summary-1"><i class="fa fa-check"></i><b>3.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="data-prep.html"><a href="data-prep.html"><i class="fa fa-check"></i><b>4</b> Data preparation</a><ul>
+<li class="chapter" data-level="4.1" data-path="data-prep.html"><a href="data-prep.html#accessing"><i class="fa fa-check"></i><b>4.1</b> Accessing the input data</a></li>
+<li class="chapter" data-level="4.2" data-path="data-prep.html"><a href="data-prep.html#Selecting"><i class="fa fa-check"></i><b>4.2</b> Target and constraint variables</a></li>
+<li class="chapter" data-level="4.3" data-path="data-prep.html"><a href="data-prep.html#Loading"><i class="fa fa-check"></i><b>4.3</b> Loading input data</a></li>
+<li class="chapter" data-level="4.4" data-path="data-prep.html"><a href="data-prep.html#subsetting-prep"><i class="fa fa-check"></i><b>4.4</b> Subsetting to remove excess information</a></li>
+<li class="chapter" data-level="4.5" data-path="data-prep.html"><a href="data-prep.html#re-categorise"><i class="fa fa-check"></i><b>4.5</b> Re-categorising individual level variables</a></li>
+<li class="chapter" data-level="4.6" data-path="data-prep.html"><a href="data-prep.html#matching"><i class="fa fa-check"></i><b>4.6</b> Matching individual and aggregate level data names</a></li>
+<li class="chapter" data-level="4.7" data-path="data-prep.html"><a href="data-prep.html#flattening"><i class="fa fa-check"></i><b>4.7</b> ‘Flattening’ the individual level data</a></li>
+<li class="chapter" data-level="4.8" data-path="data-prep.html"><a href="data-prep.html#chapter-summary-2"><i class="fa fa-check"></i><b>4.8</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="smsimr.html"><a href="smsimr.html"><i class="fa fa-check"></i><b>5</b> Population synthesis</a><ul>
+<li class="chapter" data-level="5.1" data-path="smsimr.html"><a href="smsimr.html#weighting"><i class="fa fa-check"></i><b>5.1</b> Weighting algorithms</a></li>
+<li class="chapter" data-level="5.2" data-path="smsimr.html"><a href="smsimr.html#iterative-proportional-fitting"><i class="fa fa-check"></i><b>5.2</b> Iterative Proportional Fitting</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="smsimr.html"><a href="smsimr.html#ipftheory"><i class="fa fa-check"></i><b>5.2.1</b> IPF in theory</a></li>
+<li class="chapter" data-level="5.2.2" data-path="smsimr.html"><a href="smsimr.html#ipfinr"><i class="fa fa-check"></i><b>5.2.2</b> IPF in R</a></li>
+<li class="chapter" data-level="5.2.3" data-path="smsimr.html"><a href="smsimr.html#ipfp"><i class="fa fa-check"></i><b>5.2.3</b> IPF with <strong>ipfp</strong></a></li>
+<li class="chapter" data-level="5.2.4" data-path="smsimr.html"><a href="smsimr.html#mipfp"><i class="fa fa-check"></i><b>5.2.4</b> IPF with <strong>mipfp</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="smsimr.html"><a href="smsimr.html#sintegerisation"><i class="fa fa-check"></i><b>5.3</b> Integerisation</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="smsimr.html"><a href="smsimr.html#concept-of-integerisation"><i class="fa fa-check"></i><b>5.3.1</b> Concept of integerisation</a></li>
+<li class="chapter" data-level="5.3.2" data-path="smsimr.html"><a href="smsimr.html#example-of-integerisation"><i class="fa fa-check"></i><b>5.3.2</b> Example of integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="smsimr.html"><a href="smsimr.html#expansion"><i class="fa fa-check"></i><b>5.4</b> Expansion</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="smsimr.html"><a href="smsimr.html#weights-per-individual"><i class="fa fa-check"></i><b>5.4.1</b> Weights per individual</a></li>
+<li class="chapter" data-level="5.4.2" data-path="smsimr.html"><a href="smsimr.html#weightpc"><i class="fa fa-check"></i><b>5.4.2</b> Weights per category</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="smsimr.html"><a href="smsimr.html#integerisation-and-expansion"><i class="fa fa-check"></i><b>5.5</b> Integerisation and expansion</a></li>
+<li class="chapter" data-level="5.6" data-path="smsimr.html"><a href="smsimr.html#compareipf"><i class="fa fa-check"></i><b>5.6</b> Comparing <strong>ipfp</strong> with <strong>mipfp</strong></a><ul>
+<li class="chapter" data-level="5.6.1" data-path="smsimr.html"><a href="smsimr.html#comparing-the-methods"><i class="fa fa-check"></i><b>5.6.1</b> Comparing the methods</a></li>
+<li class="chapter" data-level="5.6.2" data-path="smsimr.html"><a href="smsimr.html#comparing-the-weights-for-simpleworld"><i class="fa fa-check"></i><b>5.6.2</b> Comparing the weights for SimpleWorld</a></li>
+<li class="chapter" data-level="5.6.3" data-path="smsimr.html"><a href="smsimr.html#comparing-the-results-for-simpleworld"><i class="fa fa-check"></i><b>5.6.3</b> Comparing the results for SimpleWorld</a></li>
+<li class="chapter" data-level="5.6.4" data-path="smsimr.html"><a href="smsimr.html#speed-comparisons"><i class="fa fa-check"></i><b>5.6.4</b> Speed comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="smsimr.html"><a href="smsimr.html#chapter-summary-3"><i class="fa fa-check"></i><b>5.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html"><i class="fa fa-check"></i><b>6</b> Alternative approaches to population synthesis</a><ul>
+<li class="chapter" data-level="6.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#GREGWT"><i class="fa fa-check"></i><b>6.1</b> GREGWT</a></li>
+<li class="chapter" data-level="6.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#asOptim"><i class="fa fa-check"></i><b>6.2</b> Population synthesis as an optimization problem</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#reweighting-with-optim-and-gensa"><i class="fa fa-check"></i><b>6.2.1</b> Reweighting with optim and GenSA</a></li>
+<li class="chapter" data-level="6.2.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#combinatorial-optimisation"><i class="fa fa-check"></i><b>6.2.2</b> Combinatorial optimisation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#SimPop"><i class="fa fa-check"></i><b>6.3</b> simPop</a></li>
+<li class="chapter" data-level="6.4" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#UDST"><i class="fa fa-check"></i><b>6.4</b> The Urban Data Science Toolkit (UDST)</a></li>
+<li class="chapter" data-level="6.5" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#chapter-summary-4"><i class="fa fa-check"></i><b>6.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="CakeMap.html"><a href="CakeMap.html"><i class="fa fa-check"></i><b>7</b> Spatial microsimulation in the wild</a><ul>
+<li class="chapter" data-level="7.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapConVar"><i class="fa fa-check"></i><b>7.1</b> Selection of constraint variables</a></li>
+<li class="chapter" data-level="7.2" data-path="CakeMap.html"><a href="CakeMap.html#CakePrep"><i class="fa fa-check"></i><b>7.2</b> Preparing the input data</a></li>
+<li class="chapter" data-level="7.3" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapIPFP"><i class="fa fa-check"></i><b>7.3</b> Using the <code>ipfp</code> package</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>7.3.1</b> Performing IPF on CakeMap data</a></li>
+<li class="chapter" data-level="7.3.2" data-path="CakeMap.html"><a href="CakeMap.html#CakeINT"><i class="fa fa-check"></i><b>7.3.2</b> Integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="CakeMap.html"><a href="CakeMap.html#CakeMIPF"><i class="fa fa-check"></i><b>7.4</b> Using the <code>mipfp</code> package</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>7.4.1</b> Performing IPF on CakeMap data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="CakeMap.html"><a href="CakeMap.html#CompareMeth"><i class="fa fa-check"></i><b>7.5</b> Comparing methods of reweighting large datasets</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-results"><i class="fa fa-check"></i><b>7.5.1</b> Comparison of results</a></li>
+<li class="chapter" data-level="7.5.2" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-times"><i class="fa fa-check"></i><b>7.5.2</b> Comparison of times</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="CakeMap.html"><a href="CakeMap.html#chapter-summary-5"><i class="fa fa-check"></i><b>7.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="svalidation.html"><a href="svalidation.html"><i class="fa fa-check"></i><b>8</b> Model checking and evaluation</a><ul>
+<li class="chapter" data-level="8.1" data-path="svalidation.html"><a href="svalidation.html#Internal"><i class="fa fa-check"></i><b>8.1</b> Internal validation</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="svalidation.html"><a href="svalidation.html#pearsons-r"><i class="fa fa-check"></i><b>8.1.1</b> Pearson’s <em>r</em></a></li>
+<li class="chapter" data-level="8.1.2" data-path="svalidation.html"><a href="svalidation.html#absolute-error-measures"><i class="fa fa-check"></i><b>8.1.2</b> Absolute error measures</a></li>
+<li class="chapter" data-level="8.1.3" data-path="svalidation.html"><a href="svalidation.html#root-mean-squared-error"><i class="fa fa-check"></i><b>8.1.3</b> Root mean squared error</a></li>
+<li class="chapter" data-level="8.1.4" data-path="svalidation.html"><a href="svalidation.html#chi-squared"><i class="fa fa-check"></i><b>8.1.4</b> Chi-squared</a></li>
+<li class="chapter" data-level="8.1.5" data-path="svalidation.html"><a href="svalidation.html#which-test-to-use"><i class="fa fa-check"></i><b>8.1.5</b> Which test to use?</a></li>
+<li class="chapter" data-level="8.1.6" data-path="svalidation.html"><a href="svalidation.html#internal-validation-of-cakemap"><i class="fa fa-check"></i><b>8.1.6</b> Internal validation of CakeMap</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="svalidation.html"><a href="svalidation.html#empty-cells"><i class="fa fa-check"></i><b>8.2</b> Empty cells</a></li>
+<li class="chapter" data-level="8.3" data-path="svalidation.html"><a href="svalidation.html#External"><i class="fa fa-check"></i><b>8.3</b> External validation</a></li>
+<li class="chapter" data-level="8.4" data-path="svalidation.html"><a href="svalidation.html#chapter-summary-6"><i class="fa fa-check"></i><b>8.4</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="nomicrodata.html"><a href="nomicrodata.html"><i class="fa fa-check"></i><b>9</b> Population synthesis without microdata</a><ul>
+<li class="chapter" data-level="9.1" data-path="nomicrodata.html"><a href="nomicrodata.html#CrossGlobLocalMarg"><i class="fa fa-check"></i><b>9.1</b> Global cross-tables and local marginal distributions</a></li>
+<li class="chapter" data-level="9.2" data-path="nomicrodata.html"><a href="nomicrodata.html#twoLevelData"><i class="fa fa-check"></i><b>9.2</b> Two level aggregated data</a></li>
+<li class="chapter" data-level="9.3" data-path="nomicrodata.html"><a href="nomicrodata.html#chapter-summary-7"><i class="fa fa-check"></i><b>9.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ha.html"><a href="ha.html"><i class="fa fa-check"></i><b>10</b> Household allocation</a><ul>
+<li class="chapter" data-level="10.1" data-path="ha.html"><a href="ha.html#IndData"><i class="fa fa-check"></i><b>10.1</b> Independent data (individuals and households)</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="ha.html"><a href="ha.html#household-type-selection"><i class="fa fa-check"></i><b>10.1.1</b> Household type selection</a></li>
+<li class="chapter" data-level="10.1.2" data-path="ha.html"><a href="ha.html#constituent-members-selection"><i class="fa fa-check"></i><b>10.1.2</b> Constituent members selection</a></li>
+<li class="chapter" data-level="10.1.3" data-path="ha.html"><a href="ha.html#end-of-the-household-generation-process"><i class="fa fa-check"></i><b>10.1.3</b> End of the household generation process</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="ha.html"><a href="ha.html#cross-data-individual-and-household-level-information"><i class="fa fa-check"></i><b>10.2</b> Cross data: individual and household level information</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="ha.html"><a href="ha.html#WithoutHHdata"><i class="fa fa-check"></i><b>10.2.1</b> Without additional household’s data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="ha.html"><a href="ha.html#AddData"><i class="fa fa-check"></i><b>10.2.2</b> With additional household’s data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="ha.html"><a href="ha.html#chapter-summary-8"><i class="fa fa-check"></i><b>10.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="tresis.html"><a href="tresis.html"><i class="fa fa-check"></i><b>11</b> The TRESIS approach to spatial microsimulation</a><ul>
+<li class="chapter" data-level="11.1" data-path="tresis.html"><a href="tresis.html#tresis-over"><i class="fa fa-check"></i><b>11.1</b> Overview of TRESIS modelling system</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="tresis.html"><a href="tresis.html#differences-between-tresis-and-other-microsimulation-systems"><i class="fa fa-check"></i><b>11.1.1</b> Differences between TRESIS and other microsimulation systems</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="tresis.html"><a href="tresis.html#tresis-house"><i class="fa fa-check"></i><b>11.2</b> Synthetic households</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="tresis.html"><a href="tresis.html#what-are-synthetic-households"><i class="fa fa-check"></i><b>11.2.1</b> What are synthetic households?</a></li>
+<li class="chapter" data-level="11.2.2" data-path="tresis.html"><a href="tresis.html#required-data-for-generating-synthetic-households"><i class="fa fa-check"></i><b>11.2.2</b> Required data for generating synthetic households</a></li>
+<li class="chapter" data-level="11.2.3" data-path="tresis.html"><a href="tresis.html#synthetic-households-in-r"><i class="fa fa-check"></i><b>11.2.3</b> Synthetic households in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="tresis.html"><a href="tresis.html#using-demand-models-to-allocate-synthetic-households-to-zones-using-r"><i class="fa fa-check"></i><b>11.3</b> Using demand models to allocate synthetic households to zones using R</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="tresis.html"><a href="tresis.html#simple-discrete-choice-model-for-residential-location"><i class="fa fa-check"></i><b>11.3.1</b> Simple discrete choice model for residential location</a></li>
+<li class="chapter" data-level="11.3.2" data-path="tresis.html"><a href="tresis.html#results"><i class="fa fa-check"></i><b>11.3.2</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="tresis.html"><a href="tresis.html#conclusions"><i class="fa fa-check"></i><b>11.4</b> Conclusions</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="tresis.html"><a href="tresis.html#limitations"><i class="fa fa-check"></i><b>11.4.1</b> Limitations</a></li>
+<li class="chapter" data-level="11.4.2" data-path="tresis.html"><a href="tresis.html#metroscan-ti"><i class="fa fa-check"></i><b>11.4.2</b> MetroScan-TI</a></li>
+<li class="chapter" data-level="11.4.3" data-path="tresis.html"><a href="tresis.html#extending-residential-location-to-transport-models-in-r"><i class="fa fa-check"></i><b>11.4.3</b> Extending residential location to transport models in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="tresis.html"><a href="tresis.html#chapter-summary-9"><i class="fa fa-check"></i><b>11.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="ABM.html"><a href="ABM.html"><i class="fa fa-check"></i><b>12</b> Spatial microsimulation for agent-based models</a><ul>
+<li class="chapter" data-level="12.1" data-path="ABM.html"><a href="ABM.html#note"><i class="fa fa-check"></i><b>12.1</b> Note</a></li>
+<li class="chapter" data-level="12.2" data-path="ABM.html"><a href="ABM.html#abm-software"><i class="fa fa-check"></i><b>12.2</b> ABM software</a></li>
+<li class="chapter" data-level="12.3" data-path="ABM.html"><a href="ABM.html#setting-up-simpleworld-in-netlogo"><i class="fa fa-check"></i><b>12.3</b> Setting up SimpleWorld in NetLogo</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="ABM.html"><a href="ABM.html#graphical-user-interface-in-netlogo"><i class="fa fa-check"></i><b>12.3.1</b> Graphical User Interface in NetLogo</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="ABM.html"><a href="ABM.html#allocating-attributes-to-agents"><i class="fa fa-check"></i><b>12.4</b> Allocating attributes to agents</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="ABM.html"><a href="ABM.html#defining-variables"><i class="fa fa-check"></i><b>12.4.1</b> Defining variables</a></li>
+<li class="chapter" data-level="12.4.2" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-1"><i class="fa fa-check"></i><b>12.4.2</b> Reading agent data - Option 1</a></li>
+<li class="chapter" data-level="12.4.3" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-2"><i class="fa fa-check"></i><b>12.4.3</b> Reading agent data - Option 2</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="ABM.html"><a href="ABM.html#running-simpleworld"><i class="fa fa-check"></i><b>12.5</b> Running SimpleWorld</a><ul>
+<li class="chapter" data-level="12.5.1" data-path="ABM.html"><a href="ABM.html#more-variable-definitions"><i class="fa fa-check"></i><b>12.5.1</b> More variable definitions</a></li>
+<li class="chapter" data-level="12.5.2" data-path="ABM.html"><a href="ABM.html#more-setup-procedures"><i class="fa fa-check"></i><b>12.5.2</b> More setup procedures</a></li>
+<li class="chapter" data-level="12.5.3" data-path="ABM.html"><a href="ABM.html#the-main-go-procedure"><i class="fa fa-check"></i><b>12.5.3</b> The main Go procedure</a></li>
+<li class="chapter" data-level="12.5.4" data-path="ABM.html"><a href="ABM.html#adding-plots-to-the-model"><i class="fa fa-check"></i><b>12.5.4</b> Adding plots to the model</a></li>
+<li class="chapter" data-level="12.5.5" data-path="ABM.html"><a href="ABM.html#stopping-behavior"><i class="fa fa-check"></i><b>12.5.5</b> Stopping behavior</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="ABM.html"><a href="ABM.html#control-the-abm-from-r"><i class="fa fa-check"></i><b>12.6</b> Control the ABM from R</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="ABM.html"><a href="ABM.html#running-a-single-netlogo-simulation"><i class="fa fa-check"></i><b>12.6.1</b> Running a single NetLogo simulation</a></li>
+<li class="chapter" data-level="12.6.2" data-path="ABM.html"><a href="ABM.html#running-multiple-netlogo-simulations"><i class="fa fa-check"></i><b>12.6.2</b> Running multiple NetLogo simulations</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ABM.html"><a href="ABM.html#chapter-summary-10"><i class="fa fa-check"></i><b>12.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="apR.html"><a href="apR.html"><i class="fa fa-check"></i><b>13</b> Appendix: Getting up-to-speed with R</a><ul>
+<li class="chapter" data-level="13.1" data-path="apR.html"><a href="apR.html#vector-alg"><i class="fa fa-check"></i><b>13.1</b> R understands vector algebra</a></li>
+<li class="chapter" data-level="13.2" data-path="apR.html"><a href="apR.html#R-object"><i class="fa fa-check"></i><b>13.2</b> R is object orientated</a></li>
+<li class="chapter" data-level="13.3" data-path="apR.html"><a href="apR.html#subsetting"><i class="fa fa-check"></i><b>13.3</b> Subsetting in R</a></li>
+<li class="chapter" data-level="13.4" data-path="apR.html"><a href="apR.html#further"><i class="fa fa-check"></i><b>13.4</b> Further R resources</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
+<li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial Microsimulation with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="svalidation" class="section level1">
+<h1><span class="header-section-number">8</span> Model checking and evaluation</h1>
+<p>In food safety, openness about mistakes is a vital ingredient for high standards.<a href="#fn30" class="footnoteRef" id="fnref30"><sup>30</sup></a> The same concept applies to modelling. Transparency in model evaluation — the process of deciding whether the model is appropriate and identifying <em>how good</em> the results are — is vital in spatial microsimulation for similar reasons. Openness of code and method, as demonstrated and advocated throughout this book, is easy using command-line open source software such as R <a href="http://adv-r.had.co.nz/Reproducibility.html">(Wickham 2014)</a>.</p>
+<p>Reproducibility is especially important during model checking and evaluation, allowing you and others not only to <em>believe</em> that the model is working, but to <em>affirm</em> that the results are as expected. This chapter is about specific methods to check and evaluate the outputs of spatial microsimulation. The aims are simple: to ensure that the models 1) make sense given the input data (<em>model checking</em>) and 2) coincide with external reality (<em>model evaluation</em>). These strategies are described below:</p>
+<ol style="list-style-type: decimal">
+<li><em>Model checking</em> — also called <em>internal validation</em> (Edwards et al. 2010) — is comparing model results against a priori knowledge of how they <em>should</em> be. This level of model checking usually takes place only at the aggregate level of the constraint variables (<a href="svalidation.html#Internal"></a>).</li>
+<li><em>Model evaluation</em> — also known as <em>external validation</em> — is the process of comparing model results with external data. This approach to verification relies on good ‘ground-truth data’ and can take place at either the individual level (if geo-coded survey data are available) or (more commonly) at the aggregate level (<a href="svalidation.html#External"></a>).</li>
+</ol>
+<p>The chapter develops these two possible validations and explains the problem of the zero cells (<a href="svalidation.html#empty-cells"></a>).</p>
+<p>Internal validation is the most common form of model evaluation. In some cases this type of validation is the only available test of the model’s output, because datasets for external validation are unavailable. A common motivation for using spatial microsimulation is lack of data on a specific variable (as with the CakeMap example in the previous chapter). In such cases internal validation, combined with proxy variables for which external datasets are available, may be the best approach to model evaluation. This is the case with the CakeMap example explored in the previous chapter. There are no readily available datasets on the geographic distribution of cake consumption, so external validation of the dependent variable (frequency with which cake is eaten) is deemed impossible in this case. However, new sources of data such as number of confectionery shops, consumer surveys and even social media could be explored to provide ‘sanity checks’ on the results. Sometimes you may need to be creative to find data for external validation.</p>
+<p>What is important to note on these two kinds of validation is that they test the model at different levels. <em>Internal validation</em> tests the model quality at the aggregate level, assuming the input data is relevant to the research question, accurate and representative. If this validation fails, you may have a problem with the input microdata (e.g. an excess of ‘empty cells’ or an unrepresentative sample of the population), implementation of the population synthesis algorithm, or contradictory constraints. Internal validation highlights problems of method: if internal validation results are poor, the cause of the problem should be diagnosed (e.g. is it poor data or poor implementation?) and fixed.</p>
+<p>By contrast, <em>external validation</em> compares the model results with data that is <em>external</em> to the model. External validation is more rigorous as it relates simultaneously to the model’s performance and whether the input data are suitable for answering the research questions explored by spatial microsimulation. Poor external validation results can come from everywhere, so are harder to fix (internal validation can rule out faulty methods, however). Thus internal and external validation complement each other.</p>
+<p>This chapter explains how to undertake routine checks on spatial microsimulation procedures, how to identify outlying variables and zones which are simply not performing well (internal validation) and how to undertake external validation. Even in cases where there is a paucity of data on the target variable, as with cake consumption, there is usually at least some tests of the model’s performance against external data that can be undertaken. As we will see with the CakeMap example (where income is used as a proxy variable for external validation purposes) this can involve the creation of new target variables, purely for the purposes of validation.</p>
+<div id="Internal" class="section level2">
+<h2><span class="header-section-number">8.1</span> Internal validation</h2>
+<p>Internal validation is the process of comparing the model’s output against data that is internal to the model itself. In practice this means converting the synthetic spatial microdata into a form that is commensurate with the constraint variables and comparing the two geographically aggregated datasets: the observed vs simulated values. Every spatial microsimulation model will have access to the data needed for this comparison. Internal validation should therefore be seen as <strong>the bare minimum</strong> in terms of model evaluation, to be conducted as a standard procedure on all spatial microsimulation runs. When authors refer to this procedure as “result validation” they are being misleading. Internal validation tells us simply that the results are internally consistent; it should always be conducted. The two main causes of poor model fit in terms of internal validation are:</p>
+<ol style="list-style-type: decimal">
+<li><p>Incorrectly specified constraint variables. For example the total number of people in each zone according to one variable (e.g. age) may be different from that according to another (e.g. employment status). This could be because each variable uses a different <em>population base</em> (see Glossary).</p></li>
+<li><p><em>Empty cells</em>. These represent ‘missing people’ in the input microdata who have a combination of variables that are needed for good model fit. If in the input microdata for SimpleWorld there were no older males, for example, the model would clearly perform much worse.</p></li>
+</ol>
+<p>Other sources of poor fit between simulated and observed frequencies for categories in the linking variables include simple mistakes in the code defining the model, incorrect use of available algorithms for population synthesis and, to a lesser extent, integerisation (Lovelace et al. 2015).</p>
+<p>Because internal validation is so widely used in the literature there are a number of established measures of internal fit that have been used. Yet there is little consistency in the measures that are used. This makes it difficult to assess which models are performing best across different studies, a major problem in spatial microsimulation research. If one study reports only <em>r</em> values, whereas another reports only <em>TAE</em> (each measure will be described shortly), there is no way to assess which is performing better. There is a need for more consistency in reporting internal validation. Hopefully this chapter, which provides descriptions of each of the commonly used and recommended measures of <em>goodness-of-fit</em> as well as guidance on which to use — is a step in the right direction.</p>
+<p>Several metrics of model fit exist. We will look at some commonly used measures and define them mathematically before coding them in R and, in the subsequent section, implementing them to evaluate the CakeMap spatial microsimulation model. The measures developed in the section are:</p>
+<ul>
+<li>Pearson’s correlation (<em>r</em>), a formula to quantify the linear correlation between the observed and final counts in each of the categories for every zone.</li>
+<li>Total absolute error (TAE), also know as the sum of absolute error (SAE), simply the sum of absolute (positive) differences between the observed and final counts in each of the categories for every zone.</li>
+<li>Relative error (RE), the TAE divided by the total concerned population.</li>
+<li>Mean relative error (MRE), the sum of RE calculated per category and per zone.</li>
+<li>Root mean squared error (RMSE), the square root of the mean of all squared errors. This metric emphasises the relative importance of a few large errors over the build-up of many small errors.</li>
+<li>Chi-squared, a statistical hypothesis test that compares two hypotheses and determines which one is more probable. First hypothesis is that the final and the observed counts follow the same distribution. Second hypothesis is the opposite.</li>
+</ul>
+<p>Often, to illustrate the internal quality of the model, we add some representations. Those can be maps or graphs. We will proceed to some representation for the example of CakeMap.</p>
+<div id="pearsons-r" class="section level3">
+<h3><span class="header-section-number">8.1.1</span> Pearson’s <em>r</em></h3>
+<p>Pearson’s coefficient of correlation (<span class="math inline">\(r\)</span>) is the most commonly used measure of aggregate level model fit for internal validation. <em>r</em> is popular because it provides a fast and simple insight into the fit between the simulated data and the constraints at an aggregate level. In most cases <span class="math inline">\(r\)</span> values greater than 0.9 should be sought in spatial microsimulation and in many cases <span class="math inline">\(r\)</span> values exceeding 0.99 are possible, even after integerisation.</p>
+<p><span class="math inline">\(r\)</span> is a measure of the linear correlation between two vectors or matrices. In spatial microsimulation, if the model works, the observed and final counts in each of the categories for every zone are equal. This means that, when plotting, for each category, the observed counts versus the final counts, we have a perfect line where abscissa and ordinates are equal. Thus, the measure of a <em>linear</em> correlation is the one needed. The formula to calculate the Pearson’s correlation between the vectors (or matrices) <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> is:</p>
+<p><span class="math display">\[ r=\frac{s_{XY}}{S_X S_Y}=\frac{\frac{1}{n}\displaystyle\sum_{i=1}^n x_iy_i -\bar{x}\bar{y}}{\sqrt{\frac{1}{n}\displaystyle\sum_{i=1}^n x_i^2-\bar{x}^2}\sqrt{\frac{1}{n}\displaystyle\sum_{i=1}^n y_i^2-\bar{y}^2}}\]</span></p>
+<p>This corresponds to the covariance divided by the product of the standard deviation of each vector. This can sound complicated, but it is just a standardized covariance. If the fit is perfect, both vectors (simulated and constraint) have the same values and the covariance is equal to the product of the standard deviations. Thus, the <span class="math inline">\(r\)</span> is then close to 1.</p>
+<p>Note that this measure is very influenced by outliers in the vectors. This means that if only one category has a bad fit, the <span class="math inline">\(r\)</span> value is very affected.</p>
+</div>
+<div id="absolute-error-measures" class="section level3">
+<h3><span class="header-section-number">8.1.2</span> Absolute error measures</h3>
+<p>TAE and RE are crude yet effective measures of overall model fit. TAE has the additional advantage of being very easily understood as simply the sum of errors:</p>
+<p><span class="math display">\[
+e_{ij} = obs_{ij} - sim_{ij}
+\]</span></p>
+<p><span class="math display">\[
+TAE = \sum\limits_{ij} | e_{ij} |
+\]</span></p>
+<p>where <span class="math inline">\(e\)</span> is error, <span class="math inline">\(obs\)</span> and <span class="math inline">\(sim\)</span> are the observed and simulated values for each constraint category (<span class="math inline">\(j\)</span>) and each area (<span class="math inline">\(i\)</span>), respectively. Note the vertical lines <span class="math inline">\(|\)</span> mean we take the absolute value of the error. This means that an error of -5 has the same impact as an error of +5. This avoids the possibility of having an error of 0 if for one category <code>obs</code>is bigger and for another <code>obs</code>is smaller. It really counts the number of differences.</p>
+<p>RE is the TAE divided by the total population of the study area. This means that if we compare the results for all variables simultaneously, we divide the TAE by the total population multiplied by the number of variables<a href="#fn31" class="footnoteRef" id="fnref31"><sup>31</sup></a>. Thus, TAE is sensitive to the number of people and of categories within the model, while RE is not. RE can be interpreted as the percentage of error and corresponds just to the standardised version of TAE.</p>
+<p><span class="math display">\[
+RE = TAE / (total\_pop * n\_var)
+\]</span></p>
+<p>Mean relative error (MRE) needs first to calculate RE per variable and per zone.</p>
+<p><span class="math display">\[
+MRE = \sum_{i=1}^{n\_var}\sum_{j=1}^{n\_zones}RE(zone=j; var=j)
+\]</span></p>
+<p>Before seeing how these metrics can easily be implemented in code, we will define the other metrics defined in the above bullet points. Of the three ‘absolute error’ measures, we recommend reporting RE or MRE, as it scales with the population of the study area.</p>
+</div>
+<div id="root-mean-squared-error" class="section level3">
+<h3><span class="header-section-number">8.1.3</span> Root mean squared error</h3>
+<p>RMSE is similar to the absolute error metrics, but uses the <em>sum of squares</em> of the error. Recent work suggests that RMSE is preferable to absolute measures of error when the errors approximate a normal distribution <span class="citation">(Chai and Draxler <a href="#ref-Chai2014">2014</a>)</span>. Errors in spatial microsimulation tend to have a ‘normal-ish’ distribution, with many very small errors around the mean of zero and comparatively few larger errors. RMSE is defined as follows:</p>
+<p><span class="math display">\[
+RMSE = \sqrt{\frac{1}{n} \sum_i^n e^2_i}
+\]</span></p>
+<p>RMSE is an interesting measure of the error, since TAE and RE would be the same if the errors are <span class="math inline">\((1,1,1,1)\)</span> or <span class="math inline">\((0,0,0,4)\)</span>. However, we consider the fit as globally better if it contains several few errors than if it is perfect for 3 zones and a higher error for the fourth. In this case, RMSE will detect this difference. For the first case, RMSE is <span class="math inline">\(\sqrt{\frac{4}{4}}\)</span>. For the second case, RMSE equals <span class="math inline">\(\sqrt{\frac{4^2}{4}}=2\)</span>.</p>
+<p>As with TAE, there is also a standardised version of RMSE, normalised root mean error squared (NRMSE). This is calculated by dividing RMSE by the range of the observed values:</p>
+<p><span class="math display">\[
+NRMSE = \frac{RMSE}{max(obs) - min(obs)} 
+\]</span></p>
+</div>
+<div id="chi-squared" class="section level3">
+<h3><span class="header-section-number">8.1.4</span> Chi-squared</h3>
+<p>Chi-squared is a commonly used test of the fit between absolute counts of categorical variables. It has the advantage of providing a <em>p value</em>, which represents the chances of obtaining a fit between observed and simulated values through chance alone. It is primarily used to test for relationships between categorical variables (e.g. socio-economic class and smoking) but has been used frequently in the spatial microsimulation literature (Voas and Williamson 2001; Wu et al. 2008).</p>
+<p>The chi-squared statistic is defined as the sum of the square of the errors divided by the observed values <span class="citation">(Diez, Barr, and Cetinkaya-Rundel <a href="#ref-Diez2012">2012</a>)</span>. Suppose we have a simulated matrix <span class="math inline">\(sim\)</span> (for example, simulated counts) and an observed matrix <span class="math inline">\(obs\)</span>, the chi-squared is calculated by:</p>
+<p><span class="math display">\[
+\chi^2= \sum_{i=1}^{n\_line}\sum_{j=1}^{n\_column}\frac{(sim_{ij} - obs_{ij})^2}{obs_{ij}}
+\]</span></p>
+<p>The <em>chi-squared</em> test is the probability of obtaining the calculated <span class="math inline">\(\chi^2\)</span> value or a worst (in terms of validating models, worst means a bigger difference), given the number of <em>degrees of freedom</em> (representing the number of categories) in the test.</p>
+<p>An advantage of chi-squared is that it can compare vectors as well as matrices. As with all metrics presented in this section, it can also calculate fit for subsets of the data. A disadvantage is that chi-squared does not perform well when expected counts for cells are below 5. If this is the case it is recommended to use a subset of the aggregate level data for the test <span class="citation">(Diez, Barr, and Cetinkaya-Rundel <a href="#ref-Diez2012">2012</a>)</span>.</p>
+</div>
+<div id="which-test-to-use" class="section level3">
+<h3><span class="header-section-number">8.1.5</span> Which test to use?</h3>
+<p>The aforementioned tests are just some of the most commonly used and most useful <em>goodness of fit</em> measures for internal validation in spatial microsimulation. The differences between different measures are quite subtle. <span class="citation">Voas and Williamson (<a href="#ref-Voas2001">2001</a>)</span> investigated the matter and found no consensus on the measures that are appropriate for different situations. Ten years later, we are no nearer consensus.</p>
+<p>Such measures, that compare aggregate count datasets, are <em>not</em> sufficient to ensure that the results of spatial microsimulation are reliable; they are methods of <em>internal validation</em>. They simply show that the individual level dataset has been reweighted to fit with a handful of constraint variables: i.e. that the process has worked under its own terms.</p>
+<p>Our view is that all the measures outlined above are useful and roughly analogous (a perfect fit will mean that measures of error evaluate to zero and that <span class="math inline">\(r = 1\)</span>). However, some are better than others. Following <span class="citation">Chai and Draxler (<a href="#ref-Chai2014">2014</a>)</span>, we recommend using <em>r</em> as a simple test of fit and reporting <em>RMSE</em>, as it is a standard test used across the sciences. <em>RMSE</em> is robust to the number of observations and, using <em>NRMSE</em>, to the average size of zones also. Chi-squared is also a good option as it is very mature, provides <em>p values</em> and is well known. However, chi-squared is a more complex measure of fit and does not perform well when the table contains cells with less than 5 observations, as will be common in spatial microsimulation models of small areas and many constraint categories.</p>
+<p>We recommend reporting more than one metric, while focusing on measures that you and your colleagues understand well. Comparing the results with one or more alternative measures will add robustness. However, a more important issue is external validation: how well our individual level results correspond with the real world.</p>
+</div>
+<div id="internal-validation-of-cakemap" class="section level3">
+<h3><span class="header-section-number">8.1.6</span> Internal validation of CakeMap</h3>
+<p>Following the ‘learning by doing’ ethic, let us now implement what we have learned about internal validation. As a very basic test, we will calculate the correlation between the constraint table cells and the corresponding simulated cell values for the CakeMap example:<a href="#fn32" class="footnoteRef" id="fnref32"><sup>32</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(<span class="kw">as.numeric</span>(cons), <span class="kw">as.numeric</span>(ind_agg))</code></pre></div>
+<pre><code>## [1] 0.9968529</code></pre>
+<p>We have just calculated our first goodness-of-fit measure for a spatial microsimulation model and the results are encouraging. The high correlation suggests that the model is working: it has internal consistency and could be described as ‘internally valid’. Note that we have calculated the correlation before integerisation here. In the perfect fit, we would have a linear correlation of exactly 1.</p>
+<p>In micro-simulation, we have the whole population with all characteristics of each individual, only after the simulation. For this reason, we have to aggregate the simulated population to have a matrix comparable with the constraint. In this sense, there are two ways to proceed. First, we can make the comparison variable per variable and the total number of individuals is the constraint number of people in the area. Secondly, we can take all variables together, meaning having a matrix including the whole population for each variable. This implies that the sum of all cells equals to the multiplication of the number of people in the area by the number of variables. Our choice here is the second alternative. Then, if we need more details on the fit in one zone, we can proceed to an analysis per variable for this specific case.</p>
+<p>We can also calculate the correlation of these two vectors zone per zone. By this way, we will be able to notify for which zones our simulation could be less representative. A vector of the correlation per zone, called <code>CorVec</code>, is calculated:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># initialize the vector of correlations</span>
+CorVec &lt;-<span class="st"> </span><span class="kw">rep</span> (<span class="dv">0</span>, <span class="kw">dim</span>(cons)[<span class="dv">1</span>])
+
+<span class="co"># calculate the correlation for each zone</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(cons)[<span class="dv">1</span>]){
+  num_cons &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(cons[i,])
+  num_ind_agg &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(ind_agg[i,])
+  CorVec[i] &lt;-<span class="st"> </span><span class="kw">cor</span> (num_cons, num_ind_agg)
+}</code></pre></div>
+<p>We can then proceed to a statistical analysis of the correlations and identify the worst zone. In the code below, the summary of the vector of correlation is performed. The minimum value is 0.9451. This is the performance of the zone 84. This value is under the global correlation, but still close to 1. We can also observe that the first quartile is already 1. This means that for more than 75% of the zones, the correlation is perfect (at least with an approximation to 4 decimals). Moreover, by identifying the second worst zone, we can see that its correlation is around 0.9816.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># summary of the correlations per zone </span>
+<span class="kw">summary</span> (CorVec)</code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##  0.9451  1.0000  1.0000  0.9993  1.0000  1.0000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Identify the zone with the worst fit</span>
+<span class="kw">which.min</span>(CorVec)</code></pre></div>
+<pre><code>## [1] 84</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Top 3 worst values</span>
+<span class="kw">head</span>(<span class="kw">order</span>(CorVec), <span class="dt">n =</span> <span class="dv">3</span>)</code></pre></div>
+<pre><code>## [1] 84 82  7</code></pre>
+<p>This ends our analysis of correlation. Next we can calculate total absolute error (TAE), which is easily defined as a function in R:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tae &lt;-<span class="st"> </span><span class="cf">function</span>(observed, simulated){
+  obs_vec &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(observed)
+  sim_vec &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(simulated)
+  <span class="kw">sum</span>(<span class="kw">abs</span>(obs_vec <span class="op">-</span><span class="st"> </span>sim_vec))
+}</code></pre></div>
+<p>By applying this function to CakeMap, we find a TAE of 26445.57, as calculated below. This may sound very big, but remember that this measure is very dependent on the scale of the problem. 26,445 may seem like a large number but it is small compared with the total population multiplied by the number of constraints: 4,871,397. For this reason, the relative error RE (also called the standardised absolute error) is often preferable. We observe a RE of 0.54%. Note that RE is simply TAE divided by the total of all observed cell values (that is, the total population of the study area multiplied by the number of constraints).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate TAE</span>
+<span class="kw">tae</span>(cons, ind_agg)</code></pre></div>
+<pre><code>## [1] 26445.57</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Total population (constraint)</span>
+<span class="kw">sum</span>(cons)</code></pre></div>
+<pre><code>## [1] 4871397</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># RE</span>
+<span class="kw">tae</span>(cons, ind_agg) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(cons) </code></pre></div>
+<pre><code>## [1] 0.005428745</code></pre>
+<p>As with all tests of goodness of fit, we can perform the analyses zone per zone. For the example, we call the vector of TAE and RE per zone, respectively, <code>TAEVec</code> and <code>REVec</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Initialize the vectors</span>
+TAEVec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">nrow</span>(cons))
+REVec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">nrow</span>(cons))
+
+<span class="co"># calculate the correlation for each zone</span>
+<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(cons)){
+  TAEVec[i] &lt;-<span class="st"> </span><span class="kw">tae</span> (cons[i,], ind_agg[i,])
+  REVec[i] &lt;-<span class="st"> </span>TAEVec[i] <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(cons[i,])
+}</code></pre></div>
+<p>The next step is to interpret these results. The summary of each vector will help us. Note that in the best case, the correlation is high, but the RE and TAE are small. The zone with the highest error is also the number 84, which has a TAE of 14710 individuals times variables and a RE of 21.3%. This zone seems to have a simulation a bit distant from the constraint. By watching the second and third worst zone, we can see that its RE is respectively around 12.5% and 7.0%. The third quartile is of order <span class="math inline">\(10^{-5}\)</span> (<span class="math inline">\(10^{-3}\)</span>%). This is pretty close to 0. Thus, 75% of the zones has a RE smaller than the third quartile. The maximum values aside, it appears that for the majority of the zones, the RE is small.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Summary of the TAE per zone </span>
+<span class="kw">summary</span> (TAEVec)</code></pre></div>
+<pre><code>##    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+##     0.0     0.0     2.0   213.3     2.0 14708.0</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Summary of the RE per zone </span>
+<span class="kw">summary</span> (REVec)</code></pre></div>
+<pre><code>##      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+## 0.000e+00 0.000e+00 4.694e-05 3.379e-03 6.200e-05 2.132e-01</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Identify the worst zone</span>
+<span class="kw">which.max</span>(TAEVec)</code></pre></div>
+<pre><code>## [1] 84</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">which.max</span>(REVec)</code></pre></div>
+<pre><code>## [1] 84</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Maximal value</span>
+<span class="kw">tail</span>(<span class="kw">order</span>(TAEVec), <span class="dt">n =</span> <span class="dv">3</span>)</code></pre></div>
+<pre><code>## [1]  7 82 84</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tail</span>(<span class="kw">order</span>(REVec), <span class="dt">n =</span> <span class="dv">3</span>)</code></pre></div>
+<pre><code>## [1]  7 82 84</code></pre>
+<p>Similar analyses can be applied for the other tests of goodness of fit. In all cases, it is very important to have an idea of the internal validation of your model. For example, if we want to analyse the cake consumption by using your synthetic population created here, we have to be aware that for the zone 84, the model does not fit so well the constraints.</p>
+<p>Knowing that zone 84 is problematic, the next stage is to ask “how problematic?”. If a single zone is responsible for the majority of error, this would suggest that action needs to be taken (e.g. by removing the offending zone or by identifying which variable is causing the error).</p>
+<p>To answer the previous question numerically, we can rephrase it in technical terms: “Which proportion of error in the model arises from the worst zone?” This is a question we can answer with a simple R query:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">worst_zone &lt;-<span class="st"> </span><span class="kw">which.max</span>(TAEVec)
+TAEVec[worst_zone] <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(TAEVec)</code></pre></div>
+<pre><code>## [1] 0.5561611</code></pre>
+<p>The result of the above code demonstrates that more than half (56%) of the error originates from a single zone: 84. Therefore zone 84 certainly is anomalous and worthy of further investigation. An early strategy to characterise this zone and compare it to the others is to visualise it.</p>
+<p>To this end, Figure 8.1 places the TAE values calculated previously on a map, with a base-layer supplied by Google for context — see the book’s <a href="https://github.com/Robinlovelace/spatial-microsim-book/blob/master/validation.Rmd">online source code</a> to see how. Zone 84 is clearly visible in this map as a ward just above Leeds city centre. This does not immediately solve the problem, but it confirms that only few zones have bigger errors.</p>
+<div class="figure"><span id="fig:unnamed-chunk-219"></span>
+<img src="_main_files/figure-html/unnamed-chunk-219-1.png" alt="Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population." width="480" />
+<p class="caption">
+Figure 8.1: Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population.
+</p>
+</div>
+<p>Note that the maps presented in Figure 8.1 look identical for TAE and RE values except for the scale; the similitude of these measures of fit can be verified using a simple correlation:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(TAEVec, REVec) <span class="co"># the measures are highly correlated</span></code></pre></div>
+<pre><code>## [1] 0.9963713</code></pre>
+<p>In this case, both are quite well correlated. However, when having very different zones, in terms of total population, it can have more differences between the two maps. Indeed, with the same TAE, if the zone 84 had contained a total population two times bigger, the RE would be very smaller. Thus, RE would be divided by the multiplication of 2 and the number of variables.</p>
+<p>Having identified a zone that is particularly problematic (the 84), we will look at the responsible variables. We focus on the zone 84 and calculate the number of differences between the constraint and the simulation for each category:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">RudeDiff &lt;-<span class="st"> </span>cons[<span class="dv">84</span>,] <span class="op">-</span><span class="st"> </span>ind_agg[<span class="dv">84</span>,] <span class="co"># differences for zone 84</span>
+diff &lt;-<span class="st"> </span><span class="kw">round</span>( <span class="kw">abs</span>(RudeDiff) ) <span class="co"># interesting differences</span>
+
+diff[diff <span class="op">&gt;</span><span class="st"> </span><span class="dv">1000</span>] <span class="co"># printing the differences bigger than 1000</span></code></pre></div>
+<pre><code>## m45_54 m55_64    Car  NoCar 
+##   1274   1120   4960   4960</code></pre>
+<p>The responsible variable seems to be the car ownership. We have made a similar check for the three worst zones and this variable is always the one with the largest difference. To investigate the reasons for this, we print the constraints for this variable inside the three worst zones and the marginals of the observed individuals:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">worst &lt;-<span class="st"> </span><span class="kw">tail</span>(<span class="kw">order</span>(REVec), <span class="dt">n =</span> <span class="dv">3</span>)
+cons[worst, <span class="kw">c</span>(<span class="st">&quot;Car&quot;</span>, <span class="st">&quot;NoCar&quot;</span>)] <span class="co"># constraint for 3 worst zones</span></code></pre></div>
+<pre><code>##        Car NoCar
+## [1,]  6983 10927
+## [2,] 11453  8040
+## [3,]  8796 14204</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>( ind[,<span class="dv">2</span>] ) <span class="co"># individuals to weight (1 = Car ; 2= NoCar)</span></code></pre></div>
+<pre><code>## 
+##   1   2 
+## 738 178</code></pre>
+<p>Only few observed individuals did not own a car. Thus, for zones needing a lot of persons that have no car, the weight of only 178 individuals out of 916 can be adapted. The possibility of having an individual that has the whole range of possible characteristics is then lower. The individuals without a car are saved in the <code>NoCar</code> variable. The contingency table of these people for the number of cakes and the age shows that we have nobody of age 55-64 eating more than 6 cakes.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># individuals not owning a car</span>
+NoCar &lt;-<span class="st"> </span>ind[ind<span class="op">$</span>Car<span class="op">==</span><span class="dv">2</span>,] 
+
+<span class="co"># Cross table</span>
+<span class="kw">table</span>(NoCar<span class="op">$</span>NCakes,NoCar<span class="op">$</span>ageband4) </code></pre></div>
+<pre><code>##         
+##          16-24 25-34 35-44 45-54 55-64 65-74
+##   &lt;1         3     5     3     5     4     6
+##   1-2       10    11     8     5     5     5
+##   3-5        9    13     6    10     3     8
+##   6+         7    10     3     4     0    10
+##   rarely     2     7     2     6     2     6</code></pre>
+<p>The three zones with the worst simulation needed a lot of people without a car. On the contrary, below, we print the constraint of car of the three best zones. They needed less people of this category. This is the risk by generating a population of 1,623,800 of inhabitants and having a survey including only 916 persons.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">best &lt;-<span class="st"> </span><span class="kw">head</span>(<span class="kw">order</span>(REVec), <span class="dt">n =</span> <span class="dv">3</span>)
+ <span class="co"># constraint for 3 best zones</span>
+cons[best, <span class="kw">c</span>(<span class="st">&quot;Car&quot;</span>, <span class="st">&quot;NoCar&quot;</span>)]</code></pre></div>
+<pre><code>##        Car NoCar
+## [1,] 12316  3705
+## [2,]  8182  3952
+## [3,] 10336  2597</code></pre>
+<p>In conclusion, the simulation runs well for all zone excepts few ones. This is due to the individuals present in the sample. This could be explained by a survey that was not uniformly distributed through the different zones or does not include enough persons.</p>
+</div>
+</div>
+<div id="empty-cells" class="section level2">
+<h2><span class="header-section-number">8.2</span> Empty cells</h2>
+
+<p>Roughly speaking, ‘empty cells’ refer to individuals who are absent from the input microdata. More specifically, empty cells represent individuals with a combination of attributes in the constraint variables that are likely to be present in the real spatial microdata but are known not to exist in the individual level data. Empty cells are easiest to envision when the ‘seed’ is represented as a contingency table. Imagine, for example, if the microdata from SimpleWorld contained no young males. The associated individual data could be Table 8.1, leading to the cross table shown in Table 8.2. We can clearly identify that there is no young male. Applying reweighting methods on this kind of input data result in an unrealistic final population, without young male.</p>
+<table>
+<caption>Individual level data from SimpleWorld with empty cells. Note there are no young males.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="left">age</th>
+<th align="left">sex</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="left">a50+</td>
+<td align="left">m</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="left">a50+</td>
+<td align="left">m</td>
+</tr>
+<tr class="odd">
+<td align="left">4</td>
+<td align="left">a50+</td>
+<td align="left">f</td>
+</tr>
+<tr class="even">
+<td align="left">5</td>
+<td align="left">a0_49</td>
+<td align="left">f</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Contingency table of the SimpleWorld microdata with no young males. Note the zero: this is the empty cell.</caption>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">f</th>
+<th align="right">m</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">a0_49</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">a50+</td>
+<td align="right">1</td>
+<td align="right">2</td>
+</tr>
+</tbody>
+</table>
+<p>The importance of empty cells and methods for identifying whether or not they exist in the individual level is explained in a recent paper (<span class="citation">Lovelace et al. (<a href="#ref-Lovelace-ipfinr">2015</a>)</span>). The number of different constraint variable permutations (<span class="math inline">\(Nperm\)</span>) increases rapidly with the number of constraints (see equation  below), where <span class="math inline">\(n.cons\)</span> is the total number of constraints and <span class="math inline">\(n.cat_i\)</span> is the number of categories within constraint <span class="math inline">\(i\)</span>:</p>
+<span class="math display">\[\begin{equation}
+\displaystyle Nperm = \prod_{i = 1}^{n.cons} n.cat_{i}
+\label{eqempty}
+\end{equation}\]</span>
+<p>To exemplify this equation, the number of permutations of constraints in the SimpleWorld microdata example is 4: 2 categories in the sex variables multiplied by 2 categories in the age variable. Clearly, <span class="math inline">\(Nperm\)</span> depends on how continuous variables are binned, the number of constraints and diversity within each constraint. Once we know the number of unique individuals (in terms of the constraint variables) in the survey (<span class="math inline">\(Nuniq\)</span>), the test to check a dataset for empty cells is straightforward, based on equation :</p>
+<span class="math display">\[\begin{equation}
+is.complete =
+\left\{
+    \begin{array}{ll}
+        TRUE  &amp; \mbox{if } Nuniq = Nperm \\
+        FALSE &amp; \mbox{if } Nuniq &lt; Nperm
+    \end{array}
+\right\}
+\end{equation}\]</span>
+<p>Once the presence of empty cells is determined, the next stage is to identify which types of individuals are missing from the individual level input dataset (<span class="math inline">\(Ind\)</span>).</p>
+<p>The `missing’ individuals, needed to be added to make <span class="math inline">\(Ind\)</span> complete, can be defined by the following equation :</p>
+<p><span class="math display">\[
+Ind_{missing} = \{x | x \in complete \cap x \not \in Ind \}
+\]</span></p>
+<p>This means simply that the missing cells are defined as individuals with constraint categories that are present in the complete dataset but absent from the input data.</p>
+</div>
+<div id="External" class="section level2">
+<h2><span class="header-section-number">8.3</span> External validation</h2>
+<p>Beyond mistakes in the code, more fundamental questions should be asked of results based on spatial microsimulation. The validity of the assumptions affect confidence one should have in the results. For this we need external datasets. External validation is therefore a tricky topic which is highly dependent on the available data <span class="citation">(Edwards et al. <a href="#ref-Clarke2010-valid">2010</a>)</span>.</p>
+<p>Geocoded survey data, <em>real</em> spatial microdata, is the ‘gold standard’ when it comes to official data. Small representative samples of the population for small areas can be used as a basis for individual level validation.</p>
+</div>
+<div id="chapter-summary-6" class="section level2">
+<h2><span class="header-section-number">8.4</span> Chapter summary</h2>
+<p>This chapter explored methods for checking the results of spatial microsimulation, building on the CakeMap example presented in the previous chapter. This primarily involved checking that the results are internally consistent: that the output spatial microdata correspond with the geographical constraints. This process, generally referred to as ‘internal validation’, is important because it ensures that the model is internally consistent and contains no obvious errors.</p>
+<p>However, the term ‘validation’ can be misleading as it implies that the model is in some way ‘valid’. A model is only as good as its underlying assumptions, which may involve some degree of subjectivity. We therefore advocate talking about this phase as ‘evaluation’ or simply ‘model checking’, if all we are doing is internal validation.</p>
+<p>In the example of CakeMap, no datasets are available to check if the simulated rate of cake is comparable with that estimated from other sources. In the case of microsimulation, external validation is often difficult because available datasets are usually used for the simulation. This helps explain why internal validation is far more common in spatial microsimulation studies than external validation, although the latter is generally more important.</p>
+
+</div>
+</div>
+<h3> Bibliography</h3>
+<div id="refs" class="references">
+<div id="ref-Chai2014">
+<p>Chai, T., and R. R. RR Draxler. 2014. “Root mean square error (RMSE) or mean absolute error (MAE)? – Arguments against avoiding RMSE in the literature.” <em>Geoscientific Model Development</em> 7 (3): 1247–50. doi:<a href="https://doi.org/10.5194/gmd-7-1247-2014">10.5194/gmd-7-1247-2014</a>.</p>
+</div>
+<div id="ref-Diez2012">
+<p>Diez, David M, Christopher D Barr, and Mine Cetinkaya-Rundel. 2012. <em>OpenIntro statistics</em>. CreateSpace independent publishing platform.</p>
+</div>
+<div id="ref-Voas2001">
+<p>Voas, David, and Paul Williamson. 2001. “Evaluating Goodness-of-Fit Measures for Synthetic Microdata.” <em>Geographical and Environmental Modelling</em> 5 (2). Routledge: 177–200. doi:<a href="https://doi.org/10.1080/13615930120086078">10.1080/13615930120086078</a>.</p>
+</div>
+<div id="ref-Lovelace-ipfinr">
+<p>Lovelace, Robin, Dimitris Ballas, Mark M.H. Birkin, Eveline van Leeuwen, Dimitris Ballas, Eveline van Leeuwen, and Mark M.H. Birkin. 2015. “Evaluating the performance of Iterative Proportional Fitting for spatial microsimulation: new tests for an established technique.” <em>Journal of Artificial Societies and Social Simulation</em> 18 (2): 21.</p>
+</div>
+<div id="ref-Clarke2010-valid">
+<p>Edwards, Kimberley L., Graham P. Clarke, James Thomas, and David Forman. 2010. “Internal and External Validation of Spatial Microsimulation Models: Small Area Estimates of Adult Obesity.” <em>Applied Spatial Analysis and Policy</em> 4 (4): 281–300. doi:<a href="https://doi.org/10.1007/s12061-010-9056-2">10.1007/s12061-010-9056-2</a>.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="30">
+<li id="fn30"><p>This seems to be because hiding or being ashamed of inevitable mistakes allows bad practice to continue unnoticed (Powell et al. 2011).<a href="svalidation.html#fnref30">↩</a></p></li>
+<li id="fn31"><p>This is very intuitive, since by considering all constraint variables together, we have taken the whole population once for each variable.<a href="svalidation.html#fnref31">↩</a></p></li>
+<li id="fn32"><p>Data frames will not work in this function and must be converted to matrices with <code>as.numeric</code>.<a href="svalidation.html#fnref32">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="CakeMap.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="nomicrodata.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

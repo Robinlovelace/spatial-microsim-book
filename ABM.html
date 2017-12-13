@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial Microsimulation with R</title>
+  <meta name="description" content="Spatial Microsimulation with R">
+  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial Microsimulation with R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
+  
+  
+  <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial Microsimulation with R" />
+  
+  
+  
+
+<meta name="author" content="Robin Lovelace and Morgane Dumont">
+
+
+<meta name="date" content="2017-12-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="tresis.html">
+<link rel="next" href="apR.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#a-definition-of-spatial-microsimulation"><i class="fa fa-check"></i><b>1.3</b> A definition of spatial microsimulation</a></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#learning-by-doing"><i class="fa fa-check"></i><b>1.4</b> Learning by doing</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#whyR"><i class="fa fa-check"></i><b>1.5</b> Why spatial microsimulation with R?</a></li>
+<li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#learningR"><i class="fa fa-check"></i><b>1.6</b> Learning the R language</a></li>
+<li class="chapter" data-level="1.7" data-path="intro.html"><a href="intro.html#typographic"><i class="fa fa-check"></i><b>1.7</b> Typographic conventions</a></li>
+<li class="chapter" data-level="1.8" data-path="intro.html"><a href="intro.html#overview"><i class="fa fa-check"></i><b>1.8</b> An overview of the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="SimpleWorld.html"><a href="SimpleWorld.html"><i class="fa fa-check"></i><b>2</b> SimpleWorld: A worked example of spatial microsimulation</a><ul>
+<li class="chapter" data-level="2.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudioUpSpeed"><i class="fa fa-check"></i><b>2.1</b> Getting setup with the RStudio environment</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#installing-r"><i class="fa fa-check"></i><b>2.1.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudio"><i class="fa fa-check"></i><b>2.1.2</b> RStudio</a></li>
+<li class="chapter" data-level="2.1.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#projects"><i class="fa fa-check"></i><b>2.1.3</b> Projects</a></li>
+<li class="chapter" data-level="2.1.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#downloading-data-for-the-book"><i class="fa fa-check"></i><b>2.1.4</b> Downloading data for the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldData"><i class="fa fa-check"></i><b>2.2</b> SimpleWorld data</a></li>
+<li class="chapter" data-level="2.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#weight-matrix"><i class="fa fa-check"></i><b>2.3</b> Generating a weight matrix</a></li>
+<li class="chapter" data-level="2.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#spatial-microdata"><i class="fa fa-check"></i><b>2.4</b> Spatial microdata</a></li>
+<li class="chapter" data-level="2.5" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldContext"><i class="fa fa-check"></i><b>2.5</b> SimpleWorld in context</a></li>
+<li class="chapter" data-level="2.6" data-path="SimpleWorld.html"><a href="SimpleWorld.html#chapter-summary"><i class="fa fa-check"></i><b>2.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="what-is.html"><a href="what-is.html"><i class="fa fa-check"></i><b>3</b> What is spatial microsimulation?</a><ul>
+<li class="chapter" data-level="3.1" data-path="what-is.html"><a href="what-is.html#terminology"><i class="fa fa-check"></i><b>3.1</b> Terminology</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="what-is.html"><a href="what-is.html#SimCity"><i class="fa fa-check"></i><b>3.1.1</b> Spatial microsimulation as SimCity</a></li>
+<li class="chapter" data-level="3.1.2" data-path="what-is.html"><a href="what-is.html#meth-approach"><i class="fa fa-check"></i><b>3.1.2</b> Spatial microsimulation: method or approach?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="what-is.html"><a href="what-is.html#is-not"><i class="fa fa-check"></i><b>3.2</b> What spatial microsimulation is not</a></li>
+<li class="chapter" data-level="3.3" data-path="what-is.html"><a href="what-is.html#applications"><i class="fa fa-check"></i><b>3.3</b> Applications</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="what-is.html"><a href="what-is.html#health-applications"><i class="fa fa-check"></i><b>3.3.1</b> Health applications</a></li>
+<li class="chapter" data-level="3.3.2" data-path="what-is.html"><a href="what-is.html#economic-policy-evaluation"><i class="fa fa-check"></i><b>3.3.2</b> Economic policy evaluation</a></li>
+<li class="chapter" data-level="3.3.3" data-path="what-is.html"><a href="what-is.html#transport"><i class="fa fa-check"></i><b>3.3.3</b> Transport</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="what-is.html"><a href="what-is.html#assumptions"><i class="fa fa-check"></i><b>3.4</b> Assumptions</a></li>
+<li class="chapter" data-level="3.5" data-path="what-is.html"><a href="what-is.html#chapter-summary-1"><i class="fa fa-check"></i><b>3.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="data-prep.html"><a href="data-prep.html"><i class="fa fa-check"></i><b>4</b> Data preparation</a><ul>
+<li class="chapter" data-level="4.1" data-path="data-prep.html"><a href="data-prep.html#accessing"><i class="fa fa-check"></i><b>4.1</b> Accessing the input data</a></li>
+<li class="chapter" data-level="4.2" data-path="data-prep.html"><a href="data-prep.html#Selecting"><i class="fa fa-check"></i><b>4.2</b> Target and constraint variables</a></li>
+<li class="chapter" data-level="4.3" data-path="data-prep.html"><a href="data-prep.html#Loading"><i class="fa fa-check"></i><b>4.3</b> Loading input data</a></li>
+<li class="chapter" data-level="4.4" data-path="data-prep.html"><a href="data-prep.html#subsetting-prep"><i class="fa fa-check"></i><b>4.4</b> Subsetting to remove excess information</a></li>
+<li class="chapter" data-level="4.5" data-path="data-prep.html"><a href="data-prep.html#re-categorise"><i class="fa fa-check"></i><b>4.5</b> Re-categorising individual level variables</a></li>
+<li class="chapter" data-level="4.6" data-path="data-prep.html"><a href="data-prep.html#matching"><i class="fa fa-check"></i><b>4.6</b> Matching individual and aggregate level data names</a></li>
+<li class="chapter" data-level="4.7" data-path="data-prep.html"><a href="data-prep.html#flattening"><i class="fa fa-check"></i><b>4.7</b> ‘Flattening’ the individual level data</a></li>
+<li class="chapter" data-level="4.8" data-path="data-prep.html"><a href="data-prep.html#chapter-summary-2"><i class="fa fa-check"></i><b>4.8</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="smsimr.html"><a href="smsimr.html"><i class="fa fa-check"></i><b>5</b> Population synthesis</a><ul>
+<li class="chapter" data-level="5.1" data-path="smsimr.html"><a href="smsimr.html#weighting"><i class="fa fa-check"></i><b>5.1</b> Weighting algorithms</a></li>
+<li class="chapter" data-level="5.2" data-path="smsimr.html"><a href="smsimr.html#iterative-proportional-fitting"><i class="fa fa-check"></i><b>5.2</b> Iterative Proportional Fitting</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="smsimr.html"><a href="smsimr.html#ipftheory"><i class="fa fa-check"></i><b>5.2.1</b> IPF in theory</a></li>
+<li class="chapter" data-level="5.2.2" data-path="smsimr.html"><a href="smsimr.html#ipfinr"><i class="fa fa-check"></i><b>5.2.2</b> IPF in R</a></li>
+<li class="chapter" data-level="5.2.3" data-path="smsimr.html"><a href="smsimr.html#ipfp"><i class="fa fa-check"></i><b>5.2.3</b> IPF with <strong>ipfp</strong></a></li>
+<li class="chapter" data-level="5.2.4" data-path="smsimr.html"><a href="smsimr.html#mipfp"><i class="fa fa-check"></i><b>5.2.4</b> IPF with <strong>mipfp</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="smsimr.html"><a href="smsimr.html#sintegerisation"><i class="fa fa-check"></i><b>5.3</b> Integerisation</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="smsimr.html"><a href="smsimr.html#concept-of-integerisation"><i class="fa fa-check"></i><b>5.3.1</b> Concept of integerisation</a></li>
+<li class="chapter" data-level="5.3.2" data-path="smsimr.html"><a href="smsimr.html#example-of-integerisation"><i class="fa fa-check"></i><b>5.3.2</b> Example of integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="smsimr.html"><a href="smsimr.html#expansion"><i class="fa fa-check"></i><b>5.4</b> Expansion</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="smsimr.html"><a href="smsimr.html#weights-per-individual"><i class="fa fa-check"></i><b>5.4.1</b> Weights per individual</a></li>
+<li class="chapter" data-level="5.4.2" data-path="smsimr.html"><a href="smsimr.html#weightpc"><i class="fa fa-check"></i><b>5.4.2</b> Weights per category</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="smsimr.html"><a href="smsimr.html#integerisation-and-expansion"><i class="fa fa-check"></i><b>5.5</b> Integerisation and expansion</a></li>
+<li class="chapter" data-level="5.6" data-path="smsimr.html"><a href="smsimr.html#compareipf"><i class="fa fa-check"></i><b>5.6</b> Comparing <strong>ipfp</strong> with <strong>mipfp</strong></a><ul>
+<li class="chapter" data-level="5.6.1" data-path="smsimr.html"><a href="smsimr.html#comparing-the-methods"><i class="fa fa-check"></i><b>5.6.1</b> Comparing the methods</a></li>
+<li class="chapter" data-level="5.6.2" data-path="smsimr.html"><a href="smsimr.html#comparing-the-weights-for-simpleworld"><i class="fa fa-check"></i><b>5.6.2</b> Comparing the weights for SimpleWorld</a></li>
+<li class="chapter" data-level="5.6.3" data-path="smsimr.html"><a href="smsimr.html#comparing-the-results-for-simpleworld"><i class="fa fa-check"></i><b>5.6.3</b> Comparing the results for SimpleWorld</a></li>
+<li class="chapter" data-level="5.6.4" data-path="smsimr.html"><a href="smsimr.html#speed-comparisons"><i class="fa fa-check"></i><b>5.6.4</b> Speed comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="smsimr.html"><a href="smsimr.html#chapter-summary-3"><i class="fa fa-check"></i><b>5.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html"><i class="fa fa-check"></i><b>6</b> Alternative approaches to population synthesis</a><ul>
+<li class="chapter" data-level="6.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#GREGWT"><i class="fa fa-check"></i><b>6.1</b> GREGWT</a></li>
+<li class="chapter" data-level="6.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#asOptim"><i class="fa fa-check"></i><b>6.2</b> Population synthesis as an optimization problem</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#reweighting-with-optim-and-gensa"><i class="fa fa-check"></i><b>6.2.1</b> Reweighting with optim and GenSA</a></li>
+<li class="chapter" data-level="6.2.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#combinatorial-optimisation"><i class="fa fa-check"></i><b>6.2.2</b> Combinatorial optimisation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#SimPop"><i class="fa fa-check"></i><b>6.3</b> simPop</a></li>
+<li class="chapter" data-level="6.4" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#UDST"><i class="fa fa-check"></i><b>6.4</b> The Urban Data Science Toolkit (UDST)</a></li>
+<li class="chapter" data-level="6.5" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#chapter-summary-4"><i class="fa fa-check"></i><b>6.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="CakeMap.html"><a href="CakeMap.html"><i class="fa fa-check"></i><b>7</b> Spatial microsimulation in the wild</a><ul>
+<li class="chapter" data-level="7.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapConVar"><i class="fa fa-check"></i><b>7.1</b> Selection of constraint variables</a></li>
+<li class="chapter" data-level="7.2" data-path="CakeMap.html"><a href="CakeMap.html#CakePrep"><i class="fa fa-check"></i><b>7.2</b> Preparing the input data</a></li>
+<li class="chapter" data-level="7.3" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapIPFP"><i class="fa fa-check"></i><b>7.3</b> Using the <code>ipfp</code> package</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>7.3.1</b> Performing IPF on CakeMap data</a></li>
+<li class="chapter" data-level="7.3.2" data-path="CakeMap.html"><a href="CakeMap.html#CakeINT"><i class="fa fa-check"></i><b>7.3.2</b> Integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="CakeMap.html"><a href="CakeMap.html#CakeMIPF"><i class="fa fa-check"></i><b>7.4</b> Using the <code>mipfp</code> package</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>7.4.1</b> Performing IPF on CakeMap data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="CakeMap.html"><a href="CakeMap.html#CompareMeth"><i class="fa fa-check"></i><b>7.5</b> Comparing methods of reweighting large datasets</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-results"><i class="fa fa-check"></i><b>7.5.1</b> Comparison of results</a></li>
+<li class="chapter" data-level="7.5.2" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-times"><i class="fa fa-check"></i><b>7.5.2</b> Comparison of times</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="CakeMap.html"><a href="CakeMap.html#chapter-summary-5"><i class="fa fa-check"></i><b>7.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="svalidation.html"><a href="svalidation.html"><i class="fa fa-check"></i><b>8</b> Model checking and evaluation</a><ul>
+<li class="chapter" data-level="8.1" data-path="svalidation.html"><a href="svalidation.html#Internal"><i class="fa fa-check"></i><b>8.1</b> Internal validation</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="svalidation.html"><a href="svalidation.html#pearsons-r"><i class="fa fa-check"></i><b>8.1.1</b> Pearson’s <em>r</em></a></li>
+<li class="chapter" data-level="8.1.2" data-path="svalidation.html"><a href="svalidation.html#absolute-error-measures"><i class="fa fa-check"></i><b>8.1.2</b> Absolute error measures</a></li>
+<li class="chapter" data-level="8.1.3" data-path="svalidation.html"><a href="svalidation.html#root-mean-squared-error"><i class="fa fa-check"></i><b>8.1.3</b> Root mean squared error</a></li>
+<li class="chapter" data-level="8.1.4" data-path="svalidation.html"><a href="svalidation.html#chi-squared"><i class="fa fa-check"></i><b>8.1.4</b> Chi-squared</a></li>
+<li class="chapter" data-level="8.1.5" data-path="svalidation.html"><a href="svalidation.html#which-test-to-use"><i class="fa fa-check"></i><b>8.1.5</b> Which test to use?</a></li>
+<li class="chapter" data-level="8.1.6" data-path="svalidation.html"><a href="svalidation.html#internal-validation-of-cakemap"><i class="fa fa-check"></i><b>8.1.6</b> Internal validation of CakeMap</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="svalidation.html"><a href="svalidation.html#empty-cells"><i class="fa fa-check"></i><b>8.2</b> Empty cells</a></li>
+<li class="chapter" data-level="8.3" data-path="svalidation.html"><a href="svalidation.html#External"><i class="fa fa-check"></i><b>8.3</b> External validation</a></li>
+<li class="chapter" data-level="8.4" data-path="svalidation.html"><a href="svalidation.html#chapter-summary-6"><i class="fa fa-check"></i><b>8.4</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="nomicrodata.html"><a href="nomicrodata.html"><i class="fa fa-check"></i><b>9</b> Population synthesis without microdata</a><ul>
+<li class="chapter" data-level="9.1" data-path="nomicrodata.html"><a href="nomicrodata.html#CrossGlobLocalMarg"><i class="fa fa-check"></i><b>9.1</b> Global cross-tables and local marginal distributions</a></li>
+<li class="chapter" data-level="9.2" data-path="nomicrodata.html"><a href="nomicrodata.html#twoLevelData"><i class="fa fa-check"></i><b>9.2</b> Two level aggregated data</a></li>
+<li class="chapter" data-level="9.3" data-path="nomicrodata.html"><a href="nomicrodata.html#chapter-summary-7"><i class="fa fa-check"></i><b>9.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ha.html"><a href="ha.html"><i class="fa fa-check"></i><b>10</b> Household allocation</a><ul>
+<li class="chapter" data-level="10.1" data-path="ha.html"><a href="ha.html#IndData"><i class="fa fa-check"></i><b>10.1</b> Independent data (individuals and households)</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="ha.html"><a href="ha.html#household-type-selection"><i class="fa fa-check"></i><b>10.1.1</b> Household type selection</a></li>
+<li class="chapter" data-level="10.1.2" data-path="ha.html"><a href="ha.html#constituent-members-selection"><i class="fa fa-check"></i><b>10.1.2</b> Constituent members selection</a></li>
+<li class="chapter" data-level="10.1.3" data-path="ha.html"><a href="ha.html#end-of-the-household-generation-process"><i class="fa fa-check"></i><b>10.1.3</b> End of the household generation process</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="ha.html"><a href="ha.html#cross-data-individual-and-household-level-information"><i class="fa fa-check"></i><b>10.2</b> Cross data: individual and household level information</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="ha.html"><a href="ha.html#WithoutHHdata"><i class="fa fa-check"></i><b>10.2.1</b> Without additional household’s data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="ha.html"><a href="ha.html#AddData"><i class="fa fa-check"></i><b>10.2.2</b> With additional household’s data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="ha.html"><a href="ha.html#chapter-summary-8"><i class="fa fa-check"></i><b>10.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="tresis.html"><a href="tresis.html"><i class="fa fa-check"></i><b>11</b> The TRESIS approach to spatial microsimulation</a><ul>
+<li class="chapter" data-level="11.1" data-path="tresis.html"><a href="tresis.html#tresis-over"><i class="fa fa-check"></i><b>11.1</b> Overview of TRESIS modelling system</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="tresis.html"><a href="tresis.html#differences-between-tresis-and-other-microsimulation-systems"><i class="fa fa-check"></i><b>11.1.1</b> Differences between TRESIS and other microsimulation systems</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="tresis.html"><a href="tresis.html#tresis-house"><i class="fa fa-check"></i><b>11.2</b> Synthetic households</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="tresis.html"><a href="tresis.html#what-are-synthetic-households"><i class="fa fa-check"></i><b>11.2.1</b> What are synthetic households?</a></li>
+<li class="chapter" data-level="11.2.2" data-path="tresis.html"><a href="tresis.html#required-data-for-generating-synthetic-households"><i class="fa fa-check"></i><b>11.2.2</b> Required data for generating synthetic households</a></li>
+<li class="chapter" data-level="11.2.3" data-path="tresis.html"><a href="tresis.html#synthetic-households-in-r"><i class="fa fa-check"></i><b>11.2.3</b> Synthetic households in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="tresis.html"><a href="tresis.html#using-demand-models-to-allocate-synthetic-households-to-zones-using-r"><i class="fa fa-check"></i><b>11.3</b> Using demand models to allocate synthetic households to zones using R</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="tresis.html"><a href="tresis.html#simple-discrete-choice-model-for-residential-location"><i class="fa fa-check"></i><b>11.3.1</b> Simple discrete choice model for residential location</a></li>
+<li class="chapter" data-level="11.3.2" data-path="tresis.html"><a href="tresis.html#results"><i class="fa fa-check"></i><b>11.3.2</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="tresis.html"><a href="tresis.html#conclusions"><i class="fa fa-check"></i><b>11.4</b> Conclusions</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="tresis.html"><a href="tresis.html#limitations"><i class="fa fa-check"></i><b>11.4.1</b> Limitations</a></li>
+<li class="chapter" data-level="11.4.2" data-path="tresis.html"><a href="tresis.html#metroscan-ti"><i class="fa fa-check"></i><b>11.4.2</b> MetroScan-TI</a></li>
+<li class="chapter" data-level="11.4.3" data-path="tresis.html"><a href="tresis.html#extending-residential-location-to-transport-models-in-r"><i class="fa fa-check"></i><b>11.4.3</b> Extending residential location to transport models in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="tresis.html"><a href="tresis.html#chapter-summary-9"><i class="fa fa-check"></i><b>11.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="ABM.html"><a href="ABM.html"><i class="fa fa-check"></i><b>12</b> Spatial microsimulation for agent-based models</a><ul>
+<li class="chapter" data-level="12.1" data-path="ABM.html"><a href="ABM.html#note"><i class="fa fa-check"></i><b>12.1</b> Note</a></li>
+<li class="chapter" data-level="12.2" data-path="ABM.html"><a href="ABM.html#abm-software"><i class="fa fa-check"></i><b>12.2</b> ABM software</a></li>
+<li class="chapter" data-level="12.3" data-path="ABM.html"><a href="ABM.html#setting-up-simpleworld-in-netlogo"><i class="fa fa-check"></i><b>12.3</b> Setting up SimpleWorld in NetLogo</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="ABM.html"><a href="ABM.html#graphical-user-interface-in-netlogo"><i class="fa fa-check"></i><b>12.3.1</b> Graphical User Interface in NetLogo</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="ABM.html"><a href="ABM.html#allocating-attributes-to-agents"><i class="fa fa-check"></i><b>12.4</b> Allocating attributes to agents</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="ABM.html"><a href="ABM.html#defining-variables"><i class="fa fa-check"></i><b>12.4.1</b> Defining variables</a></li>
+<li class="chapter" data-level="12.4.2" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-1"><i class="fa fa-check"></i><b>12.4.2</b> Reading agent data - Option 1</a></li>
+<li class="chapter" data-level="12.4.3" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-2"><i class="fa fa-check"></i><b>12.4.3</b> Reading agent data - Option 2</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="ABM.html"><a href="ABM.html#running-simpleworld"><i class="fa fa-check"></i><b>12.5</b> Running SimpleWorld</a><ul>
+<li class="chapter" data-level="12.5.1" data-path="ABM.html"><a href="ABM.html#more-variable-definitions"><i class="fa fa-check"></i><b>12.5.1</b> More variable definitions</a></li>
+<li class="chapter" data-level="12.5.2" data-path="ABM.html"><a href="ABM.html#more-setup-procedures"><i class="fa fa-check"></i><b>12.5.2</b> More setup procedures</a></li>
+<li class="chapter" data-level="12.5.3" data-path="ABM.html"><a href="ABM.html#the-main-go-procedure"><i class="fa fa-check"></i><b>12.5.3</b> The main Go procedure</a></li>
+<li class="chapter" data-level="12.5.4" data-path="ABM.html"><a href="ABM.html#adding-plots-to-the-model"><i class="fa fa-check"></i><b>12.5.4</b> Adding plots to the model</a></li>
+<li class="chapter" data-level="12.5.5" data-path="ABM.html"><a href="ABM.html#stopping-behavior"><i class="fa fa-check"></i><b>12.5.5</b> Stopping behavior</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="ABM.html"><a href="ABM.html#control-the-abm-from-r"><i class="fa fa-check"></i><b>12.6</b> Control the ABM from R</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="ABM.html"><a href="ABM.html#running-a-single-netlogo-simulation"><i class="fa fa-check"></i><b>12.6.1</b> Running a single NetLogo simulation</a></li>
+<li class="chapter" data-level="12.6.2" data-path="ABM.html"><a href="ABM.html#running-multiple-netlogo-simulations"><i class="fa fa-check"></i><b>12.6.2</b> Running multiple NetLogo simulations</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ABM.html"><a href="ABM.html#chapter-summary-10"><i class="fa fa-check"></i><b>12.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="apR.html"><a href="apR.html"><i class="fa fa-check"></i><b>13</b> Appendix: Getting up-to-speed with R</a><ul>
+<li class="chapter" data-level="13.1" data-path="apR.html"><a href="apR.html#vector-alg"><i class="fa fa-check"></i><b>13.1</b> R understands vector algebra</a></li>
+<li class="chapter" data-level="13.2" data-path="apR.html"><a href="apR.html#R-object"><i class="fa fa-check"></i><b>13.2</b> R is object orientated</a></li>
+<li class="chapter" data-level="13.3" data-path="apR.html"><a href="apR.html#subsetting"><i class="fa fa-check"></i><b>13.3</b> Subsetting in R</a></li>
+<li class="chapter" data-level="13.4" data-path="apR.html"><a href="apR.html#further"><i class="fa fa-check"></i><b>13.4</b> Further R resources</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
+<li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial Microsimulation with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="ABM" class="section level1">
+<h1><span class="header-section-number">12</span> Spatial microsimulation for agent-based models</h1>
+<div id="note" class="section level2">
+<h2><span class="header-section-number">12.1</span> Note</h2>
+<p>This is a preview version of a chapter in the book <em>Spatial Microsimulation with R</em> <span class="citation">(Lovelace and Dumont <a href="#ref-lovelace_spatial_2016">2016</a>)</span>, published by <a href="https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/9781498711548">CRC Press</a>.</p>
+<p>This chapter, contributed by Maja Založnik, is the most advanced chapter of the book.<a href="#fn41" class="footnoteRef" id="fnref41"><sup>41</sup></a> It covers one of the most enticing and potentially useful extensions of the methods developed in the book: agent-based modelling (ABM). Agent-based models consist of interacting agents (frequently - but not necessarily - representing people) and an environment that they inhabit. The chapter uses NetLogo, a language designed for ABM. This will be introduced in due course, but prior knowledge of it would be advantageous.</p>
+<p>Agent-based modelling is a powerful and flexible approach for simulating complex systems. Agent-based models (ABMs) allow analysis of problems that are highly non-linear and <em>emergent</em>, in which the dominant processes guiding change can only be seen after the event. This allows ABMs to tackle a very wide range of problems: “agent-based modelling can find new, better solutions to many problems important to our environment, health, and economy” <span class="citation">(Grimm and Railsback <a href="#ref-Grimm2011">2011</a>)</span>.</p>
+<p>ABMs can broadly be divided into two general categories. Discussions in the literature are more nuanced, but a broad categorisation is adequate here. First are descriptive models. These explore a system at an abstract level, in an attempt to better understand the underlying dynamics that drive the system. Second are predictive models. These attempt to represent the system to a certain level of accuracy in order to predict or explore future states of the system. One of the main barriers to the success of predictive models is reliable, high-resolution data. ABMs require information about the individual people, households or other units on which the population of agents can be based. Using spatial microsimulation to generate realistic input populations is one way that predictive ABMs can be made to more closely represent the population under study.</p>
+<p>Although ABMs can be very diverse, all agent-based models involve at least three things <span class="citation">(Castle and Crooks <a href="#ref-Castle2006">2006</a>)</span>:</p>
+<ol style="list-style-type: decimal">
+<li>a number of discrete agents with characteristics</li>
+<li>who exist in an environment</li>
+<li>and who interact with each other and the environment.</li>
+</ol>
+<p>Using the synthetic spatial microdata created in previous chapters we can represent the individuals and their characteristics, and allocate them to zones (the environment). With the right tools spatial microdata can be used as an input into ABM. If your aim is to use spatial microdata as an input into agent based models, you may already be more than half way there!</p>
+</div>
+<div id="abm-software" class="section level2">
+<h2><span class="header-section-number">12.2</span> ABM software</h2>
+<p>A wide range of software is available for ABM. Of these, <strong>NetLogo</strong> is one of the most widely used for model prototyping, development and communication <span class="citation">(Thiele, Kurth, and Grimm <a href="#ref-Thiele2012">2012</a>)</span>. Alternative open source options include <strong>Repast</strong> and <strong>MASON</strong>. Both are written in Java, although Repast also includes optional graphical development and some higher-level language support. Due to its excellent documentation, ease of learning and integration with R, NetLogo is the tool of choice in this book and should be sufficiently powerful for many applications.</p>
+
+<p><a href="https://ccl.northwestern.edu/netlogo/">NetLogo</a> is a mature and widely used tool-kit for agent-based models. It is written in Java, but uses a derivation of the Logo language to develop models. The recently published <strong>RNetLogo</strong> package provides an interface between R and NetLogo, allowing for model runs to be set up and run directly from within R (Theile 2014). This allows the outputs of agent based models to be loaded directly into your R environment. Using R to run a separate programme may seem overly complicated for very simple models. For setting up and testing your model we recommend using NetLogo, with its intuitive graphical interface. However, there are many advantages of using NetLogo from within R, the foremost being R’s analysis capabilities: “It is much more time consuming and complicated to analyse ABMs than to formulate and implement them” (Theile et al. 2012).</p>
+<p>ABMs commonly represent unpredictable behaviour through probabilistic agent rules. This means that two model runs are unlikely to lead to identical results. Therefore we generally want to study many model runs before drawing conclusions about how the overall system operates, let alone real world implications. Much of the time taken for agent based modelling is consumed on this sensitivity/parameter space analysis. Although NetLogo has some inbuilt tools (e.g. the Behaviour Space) that support the running of large numbers of experiments, the capabilities for subsequent analysis are limited. R provides a much more comprehensive suite of data analysis tools, making the integration of R and NetLogo an obvious choice.</p>
+</div>
+<div id="setting-up-simpleworld-in-netlogo" class="section level2">
+<h2><span class="header-section-number">12.3</span> Setting up SimpleWorld in NetLogo</h2>
+<p>The NetLogo programming language is a well-developed and thoroughly documented modelling environment. We advise you familiarise yourself with the language, e.g. through an exploration of the numerous <a href="http://ccl.northwestern.edu/netlogo/docs/tutorial1.html">tutorials</a> and the rich library of pre-written models that come with the programme (File &gt; Model Library) before undertaking the practical elements of this chapter. This chapter is not meant as a NetLogo primer. But following the step-by-step instructions should result in a fully functioning AMB, that can be controlled and alaysed using R. The following sections (12.2 to 12.4) introduce the basics of NetLogo’s functionality to create an ABM of SimpleWorld. <strong>RNetLogo</strong> is introduced in Section 12.5.</p>
+<p>In NetLogo the design of the model’s graphical user interface (GUI) is handled separately from the model procedures. This is analogous to the separation in R’s <a href="http://shiny.rstudio.com/"><strong>shiny</strong></a> package between the user interface and the ‘server side’. The latter are constructed in code using the NetLogo programming language in the Code tab (discussed below). The graphical interface, which includes the environment and the control <em>widgets</em>, is set up using the drop-down menus located in the Interface toolbar.</p>
+<p>The whole model is saved as a .nlogo file. This text file includes code, GUI parameters and the contents of the (optional) Info tab. Although .nlogo files are human readable, most of the information relating to the GUI is difficult to manipulate. We advise against modifying the .nlogo file directly.</p>
+<div id="graphical-user-interface-in-netlogo" class="section level3">
+<h3><span class="header-section-number">12.3.1</span> Graphical User Interface in NetLogo</h3>
+<p>The GUI of your model in NetLogo has three types of elements: controls, settings and views. The minimum requirement for a model to work — and these are the only two default elements when you open a new model — are the Graphics window (a <em>view</em>) and the Command Centre (a <em>control</em>). For most purposes however you will want to add others and adjust the defaults. The Graphics window for example, which defines the ABM <em>world</em>, has a default size of 33 by 33 patches, 13 pixels square. These wrap both horizontally and vertically, settings that can quickly turn out to be inappropriate.</p>
+<p>The main elements of the NetLogo GUI are described below, along with their setup for the SimpleWorld agent-based model.</p>
+<div id="views" class="section level4">
+<h4><span class="header-section-number">12.3.1.1</span> Views</h4>
+<p>As already mentioned, the Graphical window is the most important — mandatory — part of the GUI. We will adjust it to suit SimpleWorld with the Settings button on the right-hand side of the Interface tab toolbar (Figure 12.1). First change the default location of origin from “Center” to “Corner”. Then set the value of max-pxcor to 35 and max-pycor to 17. With [0 0] describing the coordinates of the bottom left patch, this means we now have a 36 by 18 size world. Untick both the world wrapping boxes and click Apply. You may find the size inappropriate for your screen in which case adjust the value of Patch size until you are happy with the interface size. Right-clicking on a patch and selecting the bottom option “inspect patch x y” will open a patch monitor where you can inspect the values of all the patch’s variables, currently only the default ones: its coordinates, colour, label and label colour. These can be changed in the monitor, but we will change them programmatically below.</p>
+<div class="figure"><span id="fig:fig1"></span>
+<img src="_main_files/figure-html/fig1-1.png" alt="Setting the world size and resolution" width="384" />
+<p class="caption">
+Figure 12.1: Setting the world size and resolution
+</p>
+</div>
+<p>In addition to the main view of our agents’ world, the other optional views are monitors, plots and an output window.</p>
+<p>Monitors report the values of variables. Our model currently has no variables. To demonstrate, add a monitor — either by right-clicking somewhere on the empty interface or by clicking the Add button on the toolbar and selecting Monitor from the dropdown menu next to it. In the dialogue box that appears type <code>count patches</code> in the reporter field and click OK.</p>
+<p>Instead of just reporting the current value of a variable, plots report their changing value through time when the model is running, which can be a very useful visual summary of the model’s progress (Figure 12.2). We will set up a plot later on, when we have populated the model with some agents! Finally the output box can be used to output text while the model is running.</p>
+</div>
+<div id="controls" class="section level4">
+<h4><span class="header-section-number">12.3.1.2</span> Controls</h4>
+<p>The command centre can be used to issue commands on the fly, either to a finished model (even while it is running) or when developing one or testing. We can try it out to begin to design SimpleWorld by typing in the following commands:</p>
+<pre><code>observer&gt; ask patches [set pcolor 2]
+observer&gt; ask patches [if pxcor &lt; 24 [set pcolor 4]]
+observer&gt; ask patches [if pxcor &lt; 12 [set pcolor 6]]
+observer&gt; ask patch 6 9 [ set plabel &quot;Zone 1&quot; ]
+observer&gt; ask patch 18 9 [ set plabel &quot;Zone 2&quot; ]
+observer&gt; ask patch 30 9 [ set plabel &quot;Zone 3&quot; ]</code></pre>
+<div class="figure"><span id="fig:fig2"></span>
+<img src="_main_files/figure-html/fig2-1.png" alt="SimpleWorld in NetLogo" width="384" />
+<p class="caption">
+Figure 12.2: SimpleWorld in NetLogo
+</p>
+</div>
+<p>You will probably find the font size a bit small, in which case you can adjust it in the Graphic Window Settings menu. When we now save, close and reopen our model we will however find that our world — although of the right dimensions — is again black without any zone labels. The Command centre is useful for testing out code snippets like this, but we will have to include these lines in the code tab for them to be saved and run every time.</p>
+<p>The second main type of control are the buttons. Although buttons cannot do anything you could not do in the Command centre it is usually convenient to create buttons to call your most used commands and procedures. Most models will therefore have at least a “Setup” button (which is normally run only once at the beginning) and a “Go” button, which continuously executes the commands until it is de-pressed. The commands that are run by the buttons can be simple commands such as the patch colour ones we used above, but more than likely they will be more complex procedures we will define in the code tab. It is good practice therefore to try to keep model procedures in the code tab, so that can be found one place. Alternatively code snippets can go directly inside the button dialogue boxes or run them directly from the Command centre.</p>
+<p>Let’s create a button calling the command “setup”. NetLogo will offer a warning “Nothing named setup has been defined.” Now switch to the Code tab and type in the following:</p>
+<pre><code>to setup
+  clear-all
+  create-zones
+  reset-ticks
+end
+
+to create-zones
+  ask patches [set pcolor 2 ]
+  ask patches [if pxcor &lt; 24 [set pcolor 4 ]]
+  ask patches [if pxcor &lt; 12 [set pcolor 6 ]]
+  ask patch 6 9 [ set plabel &quot;Zone 1&quot; ]
+  ask patch 18 9 [ set plabel &quot;Zone 2&quot; ]
+  ask patch 30 9 [ set plabel &quot;Zone 3&quot; ]
+end   
+  </code></pre>
+<p>The definition of the <code>setup</code> procedure, like all procedures, requires a <code>to</code> opening call and an <code>end</code> to close. All the commands within these two lines will be executed whenever we click on the setup button. The first and last lines are standard in any setup procedure as it will normally be called after a previous model run, so we want to make sure the world is back in starting position and the time or tick counter is set back to zero. The third line calls the <code>create-zones</code> procedure, which is defined underneath. We could have put all the zone-creation commands directly into the setup procedure. But in order to keep the code nicely organized and easier to read, we follow this structure, and separate out logical blocks of code. We can now test the setup button. Note that this procedure is now saved as part of the model.</p>
+</div>
+<div id="settings" class="section level4">
+<h4><span class="header-section-number">12.3.1.3</span> Settings</h4>
+<p>There are four types of settings widgets: sliders, choosers, switches and input text boxes. These can be used by the user to change specific variables’ values. By adding one of the types of settings widgets we define the <em>global variable</em> that the slider or other type of input modifies, and these variables can then be called in the code. We do not really need to define any selectable inputs at the moment, but let us assume we might want to populate the agents with attributes from different files, and create a <em>chooser</em> that can be used to select the .csv data file. In the dialogue that opens when we add the chooser we define the global variable <code>csv</code> and give it (for now only) a single possible value “agents.csv” (see Figure 12.3).</p>
+<div class="figure"><span id="fig:fig3"></span>
+<img src="_main_files/figure-html/fig3-1.png" alt="SimpleWorld in NetLogo" width="384" />
+<p class="caption">
+Figure 12.3: SimpleWorld in NetLogo
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="allocating-attributes-to-agents" class="section level2">
+<h2><span class="header-section-number">12.4</span> Allocating attributes to agents</h2>
+<p>In order to assign the relevant attributes to the agents we first need to create an appropriately formatted file to be read by NetLogo. The list of 33 agents and their attributes is in the data frame <code>ints_df</code>. In order to read it in NetLogo we first need to export it as a .csv file (making sure the row and column names are not also exported) and place it in the same folder as our .nlogo model:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">write.table</span>(ints_df, <span class="st">&quot;NetLogo/agents.csv&quot;</span>, <span class="dt">row.names=</span><span class="ot">FALSE</span>, 
+            <span class="dt">col.names=</span><span class="ot">FALSE</span>, <span class="dt">sep=</span><span class="st">&quot;,&quot;</span>)</code></pre></div>
+<div id="defining-variables" class="section level3">
+<h3><span class="header-section-number">12.4.1</span> Defining variables</h3>
+<p>In NetLogo we can define three types of variables:</p>
+<ul>
+<li><em>Global</em> variables are at the highest level and are accessible to all agents.</li>
+<li><em>Agent</em> variables have a unique value for each agent.</li>
+<li><em>Local</em> variables are defined and accessed only within procedures.</li>
+</ul>
+<p>We have already defined the global <code>csv</code> variable when we created the chooser, the other option is to declare a new global variable in the code using <code>globals [ 'variable-name']</code>. Some agent variables are predefined, for example the patches are a type of agent and we have already encountered the variables <code>pcolor</code> and <code>plabel</code>. A user defined patch variable is declared using the command <code>patches-own</code>. Let’s fix the <code>create-zones</code> procedure so that in addition to colouring the patches with correct zones, we also add a zone variable to each patch and give it the correct value:</p>
+<pre><code>patches-own [zone]
+to create-zones
+  ask patches [set pcolor 2 set zone 3]
+  ask patches [if pxcor &lt; 24 [set pcolor 4 set zone 2]]
+  ask patches [if pxcor &lt; 12 [set pcolor 6 set zone 1]]
+  ask patch 6 9 [ set plabel &quot;Zone 1&quot; ]
+  ask patch 18 9 [ set plabel &quot;Zone 2&quot; ]
+  ask patch 30 9 [ set plabel &quot;Zone 3&quot; ]
+end  </code></pre>
+<p>If we now inspect an individual patch, we will see that it has a new variable <code>zone</code> that holds the correct value for each patch.</p>
+<p>Similarly we can define the variables for the agents. The generic agents in NetLogo are called <code>turtles</code> and hence the <code>turtles-own</code> command is used to add agent variables. We can also create our own <em>breed</em> of turtles and call them for example <code>inhabitants</code>. The definition of the new breed has two inputs: the name of the <em>agentset</em>, that is the set off all the agents in the breed and the name for a single agent of that breed. Once we define the breed we can declare its variables as well:<a href="#fn42" class="footnoteRef" id="fnref42"><sup>42</sup></a></p>
+<pre><code>breed [inhabitants inhabitant]
+inhabitants-own [id zone.original age sex income history]</code></pre>
+<p>These are the variables from the .csv file. Note that we changed the name of the zone variable because we already have a zone variable that belongs to the patches and, for clarity, because the agents will be able to move around SimpleWorld and it might be useful at some later stage to explore their starting zone. We have also added a variable called <code>history</code>, to record each individual agent’s history for future analysis.</p>
+<p>Local variables are defined and accessible only within procedures. For clarity — although this is not necessary — local variable names will commence with <code>%</code>. Reading the code we can then immediately see if a variable is of locally limited scope or if it is a global or agent variable. To keep the code even clearer, we can make sure that we always declare the global, patches-own and other agent variables at the beginning of the code, before we start writing the procedures. Assignments are then made to them using the <code>set</code> command. Local variables are declared on-the-fly (while the model is running) using the <code>let</code> command, and once declared assignments are also made to them using the <code>set</code> command.</p>
+</div>
+<div id="reading-agent-data---option-1" class="section level3">
+<h3><span class="header-section-number">12.4.2</span> Reading agent data - Option 1</h3>
+<p>Now we need to create a procedure to read the agent data. The <code>read-agent-data</code> procedure needs to:</p>
+<ol style="list-style-type: decimal">
+<li>open the file, read a single line of data-</li>
+<li>create an <code>inhabitant</code></li>
+<li>correctly assign the five values to the five inhabitants-own variables</li>
+<li>and place the agent into the correct zone.</li>
+</ol>
+<p>We will also assign the agent a colour based on their gender. Then the procedure must repeat this until all the lines of data are read. The first option for accomplishing this is a simple construction, relying on the fact that our current .csv file has a fixed width file format. We know the exact position of each value, because each variable has a constant number of characters.</p>
+<p>The NetLogo procedure therefore begins and ends with the <code>file-open</code> and <code>file-close</code> commands, thus opening a connection to the file in question and allowing us to read the data from it. We also use this opportunity to set the default shape of the agents as <em>person</em>. The main loop is a <code>while</code> construction, reading through each individual line and saving it into a local variable (only available within the procedure) <code>%line</code>.<a href="#fn43" class="footnoteRef" id="fnref43"><sup>43</sup></a> We then create a single inhabitant and assign the substrings from <code>%line</code>, based on the position of each value, to the appropriate inhabitant’s variables. We also initialize the agent’s history as an empty list: <code>[]</code> and at the end we set the agent’s colour based on their sex and position them on an unoccupied patch in the correct zone.</p>
+<pre><code>to read-agent-data
+  set-default-shape inhabitants &quot;person&quot;
+  file-open csv
+  while [not file-at-end?][
+     let %line file-read-line 
+     create-inhabitants 1 [
+       set id read-from-string substring %line 0 1  
+       set zone.original read-from-string substring %line 2 3
+       set age read-from-string substring  %line 4 6
+       set sex substring %line 8 9
+       set income read-from-string substring %line 11 15
+       ifelse sex = &quot;m&quot; [set color yellow] [set color green]
+       move-to one-of patches with [not any? turtles-here and 
+         zone = [zone.original] of myself ]
+       ]
+  ] 
+  file-close
+end</code></pre>
+<p>Making sure that we add the <code>read-agent-data</code> procedure to the setup procedure, we can now test our code simply by clicking the setup button on the graphic interface tab. We still have the monitor there counting the patches; let’s edit it to change the reporter instead to something more informative: <code>count inhabitants</code> should do it. Hopefully there are 33 (see Figure 12.4)!</p>
+<div class="figure"><span id="fig:fig4"></span>
+<img src="_main_files/figure-html/fig4-1.png" alt="SimpleWorld populated with 33 inhabitants" width="384" />
+<p class="caption">
+Figure 12.4: SimpleWorld populated with 33 inhabitants
+</p>
+</div>
+</div>
+<div id="reading-agent-data---option-2" class="section level3">
+<h3><span class="header-section-number">12.4.3</span> Reading agent data - Option 2</h3>
+<p>The method of reading in the data described above would not work if SimpleWorld inhabitants had, for example, a five-figure income. A more generic way of reading the data would therefore be to extract the substrings based on the positions of the commas rather than their absolute position. This method is similar to that described above, but it has an extra loop within. Having extracted a single <code>%line</code>, we first add an extra comma to the end of it (using the command <code>word</code>), which will allow us to determine the end position of the last value. The inner loop then finds the position of the first comma and saves it in <code>%pos</code>, reads the value between positions 0 and <code>%pos</code> and saves it as <code>%item</code>, and appends <code>%item</code> to an internal list variable called <code>%data.list</code>. It then removes this item from <code>%line</code>, shortening it by one element, and repeats the loop. This <code>while</code> loop runs until all the items have been extracted individually and saved in <code>%data.list</code>. The rest of the code is similar to the first version: each item is assigned to the inhabitant’s variables, their colour is determined and finally they are positioned in their correct zone.</p>
+<pre><code>to read-agent-data-2
+  set-default-shape inhabitants &quot;person&quot;   
+  file-open csv 
+  while [not file-at-end?][ 
+     let %case file-read-line 
+     set %case word %case &quot;,&quot; 
+     let %data.list []  
+     create-inhabitants 1[ 
+       while [not empty? %case] [  
+         let %pos position &quot;,&quot; %case  
+         let %item read-from-string substring %case 0 %pos  
+         set %data.list lput %item %data.list  
+         set %case substring %case (%pos + 1) length %case
+         ]
+       set id item 0 %data.list 
+       set zone.original item 1 %data.list
+       set age item 2 %data.list
+       set sex item 3 %data.list
+       set income item 4 %data.list
+       ifelse sex = &quot;m&quot; [set color yellow] [set color green] 
+       move-to one-of patches with [not any? turtles-here and 
+         zone = [zone.original] of myself ]     
+     ]
+  ] 
+  file-close
+end</code></pre>
+<p>To test this option, we simply add <code>read-agent-data-2</code> to the <code>setup</code> procedure. Make sure you comment out the other read agent procedure - otherwise NetLogo will simply run both of them, populating SimpleWorld with two sets of our 33 inhabitants.</p>
+</div>
+</div>
+<div id="running-simpleworld" class="section level2">
+<h2><span class="header-section-number">12.5</span> Running SimpleWorld</h2>
+<p>We will now create a simple set of rules for the inhabitants of SimpleWorld. At each <em>time tick</em> the inhabitants will:</p>
+<ol style="list-style-type: decimal">
+<li>move to a random location within their zone.</li>
+<li>“look across the fence”: check their field of vision for inhabitants from a neighbouring zone and select the closest one in view.</li>
+<li>try to “convince” them to come over to the other side: the inhabitant with more money (<code>income</code>) will <em>bribe</em> the other with 10% of their money to come over to their zone.</li>
+</ol>
+<p>The model will have the following adjustable parameters:</p>
+<ol style="list-style-type: decimal">
+<li>The field of vision has two parameters: the viewing angle and the distance</li>
+<li>Average level of <em>bribeability</em> of inhabitants: if their level is less than 100%, a random number generator will be used to determine whether the agent accepts the bribe or not. The distribution of bribeability is approximately normal with a mean and a standard deviation.</li>
+</ol>
+<div id="more-variable-definitions" class="section level3">
+<h3><span class="header-section-number">12.5.1</span> More variable definitions</h3>
+<p>We first need to define these four global variables using settings widgets. To do this use the add button to add the following four sliders to the model:</p>
+<table>
+<thead>
+<tr class="header">
+<th>global variable name</th>
+<th>minimum</th>
+<th>increment</th>
+<th>maximum</th>
+<th>value</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>angle-of-vision</code></td>
+<td>0</td>
+<td>10</td>
+<td>360</td>
+<td>100</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>distance-of-vision</code></td>
+<td>0</td>
+<td>1</td>
+<td>10</td>
+<td>4</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>average-bribeability</code></td>
+<td>0</td>
+<td>1</td>
+<td>100</td>
+<td>100</td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>stdev-bribeability</code></td>
+<td>0</td>
+<td>1</td>
+<td>20</td>
+<td>0</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>The graphic interface area with the aforementioned widget settings should now look approximately like Figure 12.5.</p>
+<div class="figure"><span id="fig:fig5"></span>
+<img src="_main_files/figure-html/fig5-1.png" alt="New global variables defined using sliders" width="192" />
+<p class="caption">
+Figure 12.5: New global variables defined using sliders
+</p>
+</div>
+<p>The average bribeability and its standard deviation that we have just defined will translate into an individual value for each inhabitant. We need to define an agent variable for that purpose. Furthermore, during the bribe negotiations, we need each inhabitant to be in communication with a maximum of one other inhabitant. In order to make sure that happens, we will define a boolean variable to keep track of that. We must therefore add these two variables to the <code>inhabitants-own</code> line (now written over several lines only for clarity):</p>
+<pre><code>inhabitants-own [
+  id 
+  zone.original 
+  age 
+  sex 
+  income
+  history
+  bribeability 
+  in-negotiations]</code></pre>
+</div>
+<div id="more-setup-procedures" class="section level3">
+<h3><span class="header-section-number">12.5.2</span> More setup procedures</h3>
+<p>Before we start constructing the <code>Go</code> procedure, we need to add one more setup procedure: one that assigns each agent a random level of bribeability. We will sample from a normal distribution with the mean and standard deviation defined using the sliders. One way of doing that is with the following line:<a href="#fn44" class="footnoteRef" id="fnref44"><sup>44</sup></a></p>
+<pre><code>ask inhabitants [set bribeability random-normal 
+  average-bribeability stdev-bribeability ]</code></pre>
+<p>The problem with this command, is that the normal distribution is unbounded. But bribeability values below 0% or above 100% make no practical sense. We therefore use the following little trick to force the values into the correct interval:</p>
+<pre><code>to determine-bribeability
+  ask inhabitants [
+    set bribeability median (list 0 (random-normal 
+      average-bribeability stdev-bribeability) 100) ]
+end</code></pre>
+<p>Placing the random value in a list with the values 0 and 100 means we can use the <code>median</code> command to extract it when it falls within the interval. But if it falls below 0 the median value of the three will be 0, and similarly if the random normal is over 100, the median will be 100. We can now add the procedure <code>determine-bribeability</code> to the setup procedure, which should be as follows:<a href="#fn45" class="footnoteRef" id="fnref45"><sup>45</sup></a></p>
+<pre><code>to setup
+  clear-all
+  create-zones
+  ;read-agent-data
+  read-agent-data-2 
+  determine-bribeability
+  reset-ticks
+end</code></pre>
+<p>Try it out with different values for the average and standard deviation of bribeability and make sure it never goes outside the bounds of meaningfulness.</p>
+</div>
+<div id="the-main-go-procedure" class="section level3">
+<h3><span class="header-section-number">12.5.3</span> The main Go procedure</h3>
+<p>We are now ready to write the main action procedure, normally labelled the <code>go</code> procedure. To do that we create a button in the same manner as before, this time running the command <code>go</code>, and make sure we tick the <code>Forever</code> tickbox in the dialogue box. This means clicking the ‘go’ button (with a circular arrow on the face) will execute the command <em>repeatedly</em>, until we stop it manually or until an end condition is met. Let’s first set up the bare bones of the go procedure: in each time step we want the inhabitants to <code>reposition</code> themselves, to <code>engage</code> in the bribery negotiations and we want to <code>record</code> their states in their <code>history</code> variables. Finally we want the tick counter to advance by a single time step:</p>
+<pre><code>to go
+  ;reposition
+  ;engage
+  ;record
+  tick
+end</code></pre>
+<p>Because we haven’t defined the first three procedures yet, we are keeping them commented out, as soon as we define them, you should delete the semicolon and test the code.</p>
+<p>For repositioning the inhabitants we can use a very similar line of code used to first position the inhabitants in SimpleWorld. To reposition all agents we can use the <code>ask</code> command. NetLogo implements all <code>ask</code> commands sequentially, going through all agents or patches in <em>random order</em>.</p>
+<pre><code>to reposition
+  ask inhabitants [
+    move-to one-of patches with [not any? turtles-here and 
+      zone = [zone] of myself ]
+  ]
+end</code></pre>
+<p>If we now uncomment <code>reposition</code> in the <code>go</code> procedure, we can test it out. You can adjust the speed of the command execution with the slider on the toolbar at the top of the window.</p>
+<p>The construction of the <code>engage</code> procedure is a bit more complex, so let’s break it down into steps:</p>
+<ol style="list-style-type: decimal">
+<li><p><code>reset:</code> first we must reset everyone’s <code>in-negotiations</code> variable to <code>false</code></p></li>
+<li><code>find-pairs-and-negotiate:</code></li>
+</ol>
+<ul>
+<li><p>2.1 find all viable negotiating pairs: ask each inhabitant (not already in negotiations) if there are any viable candidates in their field of vision that are in a different zone. And if so, define these two inhabitants as <code>party</code> and <code>counter-party</code> respectively.</p></li>
+<li><p>2.2 then such pairs must <code>negotiate</code> i.e. compare incomes, determine the winner, transfer the funds and reposition the losing inhabitant into the winner’s zone.</p></li>
+</ul>
+<p>So we therefore need (keeping the unwritten procedures commented out for now):</p>
+<pre><code>to engage
+  ;reset
+  ;find-pairs-and-negotiate
+end</code></pre>
+<p>The <code>negotiate</code> procedure will be called from <code>find-pairs-and-negotiate</code> and is the last part we will need. For now we will create a place-holder, so we can test the code as we go along. A negotiation will always take place between two inhabitants (labelled the <code>party</code>) and the <code>counter-party</code>and <code>parties</code> for the turtle-set containing both. It will first of all turn their <code>in-negotiation</code> switch to true, so we know they cannot engage in any other negotiations. We will expand the code to include the actual <em>bribed migration</em> further down. We will only turn their colour red, so we can see who (if anyone) is in negotiations.</p>
+<pre><code>to negotiate [ parties ]
+  ask parties [
+    set in-negotiations  true
+    set color red]
+end</code></pre>
+<p>Next, let’s write the reset procedure, which is very straightforward: at the beginning of each new time step, everyone’s <code>in-negotiation</code> switch is turned back off and everyone’s colour is changed back to what it was before:</p>
+<pre><code>to reset
+  ask inhabitants [
+    set in-negotiations false
+    ifelse sex = &quot;m&quot; [set color yellow] [set color green]]
+end</code></pre>
+<p>The final procedure is <code>find-pairs-and-negotiate</code> which relies on several local variables (prefixed by the <code>%</code> symbol). The pseudo code is as follows:</p>
+<ol style="list-style-type: decimal">
+<li>for each inhabitant that is not already in negotiations</li>
+</ol>
+<ul>
+<li>define <code>%field-of-vision</code> as the patches in their sight and also in a neighbouring zone</li>
+<li>define <code>%viable-partners</code> as all the inhabitants on %field-of-vision, who are available for negotiations</li>
+</ul>
+<ol start="2" style="list-style-type: decimal">
+<li>if there is at least one inhabitant in <code>%viable-partners</code>, we have a match!</li>
+</ol>
+<ul>
+<li>define the active inhabitant as <code>%party</code> and the closest one of the the possible viable partners as <code>%counter-party</code></li>
+<li>now that we have both parties to the negotiations, we can run the <code>negotiate</code> procedure on them</li>
+</ul>
+<p>The NetLogo code is as follows:</p>
+<pre><code>to find-pairs-and-negotiate
+  ask inhabitants [
+    if in-negotiations = false [
+      let %field-of-vision patches in-cone distance-of-vision 
+        angle-of-vision  with [zone != [zone] of myself]
+      let %viable-partners ((inhabitants-on %field-of-vision) 
+        with [ in-negotiations = false])
+      if count %viable-partners &gt; 0 [
+          let %party self
+          let %counter-party  min-one-of %viable-partners 
+            [distance myself]          
+          negotiate (turtle-set %party %counter-party)  
+          ]
+      ]
+    ]
+end</code></pre>
+<p>You should now be able to test the code by uncommenting (by removing the semicolon <code>;</code> symbol) the <code>engage</code> and <code>go</code> procedures. To actually observe what is happening at each time step, you can edit the <code>go</code> button and untick the <code>Forever</code> option. This way each time you press <code>go</code>, you will get a single repositioning and a single run of <code>engage</code>. You can now already start using two of the sliders: changing the angle and distance of vision of the inhabitants will change the number of inhabitants that engage in negotiations on average. We still have a little <code>count inhabitants</code> monitor in the graphics window, which is not very informative. Edit it instead to change the code to:</p>
+<p><code>count inhabitants with [ in-negotiations = true ]</code></p>
+<p>as well as changing the display name to something shorter. If you’ve done everything right the monitor should only ever show even numbers!</p>
+<div class="figure"><span id="fig:fig6"></span>
+<img src="_main_files/figure-html/fig6-1.png" alt="SimpleWorld in negotiations" width="576" />
+<p class="caption">
+Figure 12.6: SimpleWorld in negotiations
+</p>
+</div>
+<p>Figure 12.6 is a screenshot of a state of SimpleWorld with 8 inhabitants engaged in active negotiations. Only they are not actually negotiating yet. That is the procedure we left unfinished before and need to rewrite now that we have everything else working. We will break it down into pseudo-code again, in each negotiation we :</p>
+<ol style="list-style-type: decimal">
+<li>first establish who is the winner and who is the loser using <code>sort-on</code> on their incomes (if there is a tie, <code>sort-on</code> selects a random winner)</li>
+<li>using the loser’s <code>bribeability</code> level and a random number generator determine if they will accept the bribe</li>
+<li>if so, then transfer 10% of the winner’s income to the loser, and transport the loser into the winner’s zone.</li>
+</ol>
+<p>Let’s return to the <code>negotiate</code> procedure we created above as a place-holder and add the actual negotiation to it. We will leave the first three lines from before setting both parties <code>in-negotiations</code> switch to true and colouring them red. The next three lines sort them by income and assign them to either <code>loser</code> or <code>winner</code>. This is followed by an <code>if</code> construct, that only executes if the loser’s bribeability is larger than a random number between 0 and 100. In this case the loser takes the bribe, is moved into the winner’s zone and their colour changes to brown. At the same time the bribe must also be subtracted from the winner’s income.</p>
+<pre><code>to negotiate [ parties ]
+  ask parties [
+    set in-negotiations  true
+    set color red]
+  let loser-winner sort-on [income] parties
+  let loser item 0 loser-winner
+  let winner item 1 loser-winner
+  if (random-float 100 &lt; [bribeability] of loser)[ 
+    ask loser[
+      set income income + 0.1 * [income] of winner
+      move-to one-of patches with [not any? turtles-here and 
+        zone = [zone] of winner]
+      set color brown]
+    ask winner[
+      set income income * 0.9]
+    ]
+end</code></pre>
+<p>We should now have a working model. Go ahead and try it out, e.g. by loading <a href="https://github.com/Robinlovelace/spatial-microsim-book/blob/master/NetLogo/SimpleWorldVersion2.nlogo">SimpleWorldNetlogo.netlogo.nlogo</a>. After clicking the setup button, you will probably want to adjust the speed in the toolbar to make the model run a bit slower, then simply press Go!</p>
+<p>Note that we still have an undefined command <code>record</code> in the <code>go</code> procedure. Depending on what type of analysis we anticipate, we might want to have a full history of what happened in each model run to each of our inhabitants. We can therefore make sure that at every tick the inhabitant’s <code>history</code> variable (a list we initialized in the <code>read-agent-data</code> procedure) gets appended with the agent’s income and zone. We can use the command <code>lput</code> to append the current values to the list:</p>
+<pre><code>to record 
+  ask inhabitants [
+     set history lput (list who ticks income zone ) history]
+end</code></pre>
+<p>Add this procedure to the code and make sure you uncomment <code>record</code> in the <code>go</code> procedure. We will return to the history variable in the final section of this chapter.</p>
+</div>
+<div id="adding-plots-to-the-model" class="section level3">
+<h3><span class="header-section-number">12.5.4</span> Adding plots to the model</h3>
+<p>After a few repeated model runs the little icons moving around the zones and changing colours will probably become less interesting. You may want another way of visualising what is happening. To do this we can create a couple of plots to summarise what is going on. We will add a line plot that keeps track of the average income in each zone, and another plot displaying the number of inhabitants in each zone. Using the add button from the toolbar we can add a plot somewhere in the empty space in the graphical interface, while making sure there is enough room for both the plots we are planning. A dialogue box will open, where we can first rename the plot to <em>Average Income</em>. Ticking the show legend box is optional. Change the axis ranges to 0 - 500 for the x axis and 2000 - 3000 for the y (don’t worry, as long as you have the Auto-scale box ticked, the plot will automatically adjust when the lines fall out of range). In the <em>pen update commands</em> add the code to plot the mean income of zone 1 inhabitants, which first makes sure there are actually inhabitants in the zone:</p>
+<pre><code>if any? inhabitants with [zone = 1] [
+plot mean [income] of inhabitants with [zone = 1]]</code></pre>
+<p>It is easier to add the code if you click on the pencil icon on the right, where the dialogue box that opens makes it easier to see. Then click on the colour on the left and select a colour and finally change the <em>Pen name</em> to <code>zone 1</code>. Now simply click on the <code>Add pen</code> button and repeat the process for zones 2 and 3, and click OK. You will probably want to increase the size of the plot, by right-clicking it, choosing select and then manipulating the corners of the plot. Now you can re-run the model while the plot updates!</p>
+<p>The plotting options in NetLogo are not very extensive. It is possible to create more involved plots using the plotting primitives enabling, for example, an area graph. As before let’s create a new plot and name it <em>Population</em>. Change the axis ranges to 0 - 500 and 0 - 33. Now define the pens as before, but only assign them the correct colour and name. Instead of adding individual pen update commands as before, we will write the plotting commands into the box above, the <code>plot update commands</code>. The reason, as you will see, is that we want the three pens to draw successively, not concurrently (Figure 12.7). We will use the following commands:</p>
+<ul>
+<li><code>set-current-plot-pen &quot;name&quot;</code> specifies which pen we are currently using - the options being the names we gave the pens in the previous step</li>
+<li><code>plot-pen-up</code> and <code>plot-pen-down</code> lift or lower the pen from the plotting area - where pen is by default set down</li>
+<li><code>plotxy &quot;value1&quot; &quot;value2&quot;</code> moves the pen to the position determined by the x and y coordinates - depending on whether the pen is down or up, it will either draw or not draw.</li>
+</ul>
+<p>In addition we will use a local variable, <code>%total</code>, to keep track of the cumulative total of inhabitants as we go through the three zones, starting from zone 3:</p>
+<pre><code>let %total 0
+set-current-plot-pen &quot;zone 3&quot;
+plot-pen-up 
+plotxy ticks %total
+set %total %total + count inhabitants with [ zone = 3 ]
+plot-pen-down 
+plotxy ticks %total
+set-current-plot-pen &quot;zone 2&quot;
+plot-pen-up 
+plotxy ticks %total
+set %total %total + count inhabitants with [ zone = 2 ]
+plot-pen-down 
+plotxy ticks %total 
+set-current-plot-pen &quot;zone 1&quot;
+plot-pen-up 
+plotxy ticks %total
+set %total %total + count inhabitants with [ zone = 1 ]
+plot-pen-down 
+plotxy ticks %total</code></pre>
+<div class="figure"><span id="fig:fig7"></span>
+<img src="_main_files/figure-html/fig7-1.png" alt="Plotting SimpleWorld" width="576" />
+<p class="caption">
+Figure 12.7: Plotting SimpleWorld
+</p>
+</div>
+</div>
+<div id="stopping-behavior" class="section level3">
+<h3><span class="header-section-number">12.5.5</span> Stopping behavior</h3>
+<p>The last thing to add, to complete the model, is some sort of stopping condition. As it stands the model will keep on running until we de-press the <em>go</em> button. There are several ways of doing this, using the command <code>stop</code> in the <code>go</code> procedure. We could for example insert as the first line into the <code>go</code> procedure the following code: <code>if ticks &gt;= 1000 [ stop ]</code>, which will simply stop the model after 1000 iterations. Or we can stop it when a certain criteria is met, such as when all inhabitants end up single zone, using the following code:</p>
+<pre><code>if (count inhabitants with [zone = 1] = 33) or
+  (count inhabitants with [zone = 2] = 33) or
+  (count inhabitants with [zone = 3] = 33) or
+  (ticks &gt;= 1000)  [stop]</code></pre>
+<p>You will have noticed by now that the model, if left to run, ends up in one of two ways: either with all inhabitants in one zone, or in an indefinite “tie” between zones 1 and 3. Adding the <code>if ticks &gt;= 1000</code> condition is one way of dealing with the tie issue. But it becomes problematic if we expect the model under some conditions to take longer to reach a single zone winning, so this is not ideal. Another way to avoid the problem of ties is to change the geography of SimpleWorld by <em>wrapping</em> the world horizontally (in the GUI settings menu) which creates a border between zones 1 and 3. SimpleWorld then becomes a vertical cylinder and inhabitants from zones 1 and 3 can bribe each other across their new mutual border.</p>
+<p>But in many situations this is not a satisfactory solution and we want to preserve the geography as we originally intended it and allow a tie to be a legitimate end point of the model. So as a final addition to our SimpleWorld ABM we will add some code to keep track of the distribution of inhabitants across the zones and the number of ticks it has remained stable. Then we need to decide on a (rather arbitrary) cut off point after which we declare a tie and stop the model.</p>
+<p>To do this we must define two global variables at the beginning of the code. The variable <code>inhabitant-distribution</code> will be a list of three values: the current number of inhabitants in each zone and the variable <code>time-stable</code> will be the number of ticks that have passed since the list has changed.</p>
+<pre><code>globals [
+  inhabitant-distribution
+  time-stable
+  ]</code></pre>
+<p>We initialize the two variables from the setup procedure, so we add a new procedure <code>start-distribution-tracking</code> at the end of the setup procedure:</p>
+<pre><code>to start-distribution-tracking
+    set time-stable 0
+  set inhabitant-distribution (list 
+    count inhabitants with [zone = 1]  
+    count inhabitants with [zone = 2] 
+    count inhabitants with [zone = 3])
+end</code></pre>
+<p>Then we have to add a <code>track-distribution</code> procedure that executes at every tick, so we add it to the <code>go</code> procedure - at the end, after <code>record</code>. Each time <code>track-distribution</code> is called we create a local variable <code>new-inhabitant-distribution</code> and compare it to the existing one. If it is the same, we add one tick to the <code>time-stable</code> counter, otherwise we reset the counter back to zero. Finally we replace the old distribution variable with the new one:</p>
+<pre><code>to track-distribution
+  let new-inhabitant-distribution (list 
+    count inhabitants with [zone = 1]  
+    count inhabitants with [zone = 2] 
+    count inhabitants with [zone = 3])
+  ifelse new-inhabitant-distribution = inhabitant-distribution [
+    set time-stable time-stable + 1]
+  [set time-stable 0]
+  set inhabitant-distribution new-inhabitant-distribution
+end</code></pre>
+<p>We now have a running counter tracking how long it has been since the inhabitant distribution has changed. Now all we need is to decide that e.g. 200 ticks with no change indicates a tie and the simulation can safely be stopped:</p>
+<pre><code>if (count inhabitants with [zone = 1] = 33) or
+  (count inhabitants with [zone = 2] = 33) or
+  (count inhabitants with [zone = 3] = 33) or
+  (time-stable &gt;= 100)  [stop]</code></pre>
+<p>Now we have a working model to explore. You can try running it with different parameters to see how they affect the behaviour of the model, and you can also try expanding the model to add more. For example a simple way of doing that is by making the 10 % bribe a parameter of the model that can be adjusted by the user. But to systematically investigate the model, we must explore the <em>parameter space</em> by carefully varying all the parameters and recording the results.</p>
+<p>NetLogo provides a tool for this called <em>Behaviour Space</em>, which can be found in the <em>Tools</em> menu. It allows you to specify how to vary the variables, how many times to repeat each experiment and which measures to report after each run. Additionally, the tool offers the possibility of running many experiments simultaneously, taking advantage of multi-core processors. Unfortunately this way of doing a parameter sweep is not codeable — the commands defining the <em>experiment</em> are entered in a dialogue box, and the outputs are saved as .csv files, which require further handling for analysis. There are other extensions for NetLogo, such as BehaviourSearch, which can search the parameter space using various search algorithms to optimize an objective function. These and other tools may meet your requirements and/or fit with your workflow. But we will return full circle now back to R and use it to run SimpleWorld and analyse the model results using RNetLogo.</p>
+</div>
+</div>
+<div id="control-the-abm-from-r" class="section level2">
+<h2><span class="header-section-number">12.6</span> Control the ABM from R</h2>
+<p>The RNetLogo package <span class="citation">(Thiele <a href="#ref-thiele2014r">2014</a>)</span> allows us to control a NetLogo model directly from R. Now that we have a working model and have explored it in NetLogo to get a feel for what it’s doing (and make sure that it is doing what we want it to do), we can explore the model more systematically. RNetLogo allows us to issue commands, set global values, repeatedly run the model and collect the results directly from R.</p>
+<p>The RNetLogo package is installed in R like any other package using <code>install.packages(&quot;RNetLogo&quot;)</code>. Note that RNetLogo depends on rJava <span class="citation">(Urbanek <a href="#ref-rjava">2013</a>)</span>, which may require some extra configuration of Java, depending on your setup. The basic code for opening and running a model in R is then: </p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(RNetLogo)
+nldir &lt;-<span class="st"> &quot;C:/Program Files (x86)/NetLogo 5.1.0&quot;</span> <span class="co"># program dir</span>
+<span class="co"># nldir &lt;- &quot;/home/robin/programs/netlogo-5.1.0/&quot; # e.g. localtion</span>
+mdir &lt;-<span class="st"> &quot;C:/Users/mz/NetLogo/SimpleWorldVersion2.nlogo&quot;</span> <span class="co"># model dir</span>
+<span class="co"># mdir &lt;- &quot;/book_dir/NetLogo/SimpleWorldVersion2.nlogo&quot; # e.g.</span>
+<span class="kw">NLStart</span>(nldir, <span class="dt">gui =</span> <span class="ot">FALSE</span>)
+<span class="kw">NLLoadModel</span>(mdir)
+
+[...main code here ...]
+
+<span class="kw">NLQuit</span>()</code></pre></div>
+
+<p>In the above code <code>NLStart</code> initiates an instance of NetLogo (in this case in headless mode, since the <code>gui</code> argument is set to <code>FALSE</code> — try with <code>gui = TRUE</code>) and <code>NLLoadModel</code> loads the model. Make sure you have the correct paths to the folders where you have installed NetLogo and where the model is saved. Some example directories are commented out for Linux users. The main commands we will want to run in the main code are <code>NLCommand()</code> which simply sends a command for NetLogo to execute, and <code>NLReport()</code>, which also returns a reporter (value). The commands work the same way as if we were entering them in the command center. This also means that the command <code>go</code> is only executed once i.e. not forever as it can be using the GUI button. For example, now that we have opened the model, we can run the following code from R:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">NLCommand</span>(<span class="st">&quot;setup&quot;</span>)
+<span class="kw">NLReport</span>(<span class="st">&quot;ticks&quot;</span>)
+<span class="kw">NLCommand</span>(<span class="st">&quot;go&quot;</span>)
+<span class="kw">NLReport</span>(<span class="st">&quot;ticks&quot;</span>)</code></pre></div>
+<p>The first reporter should have reported the number of ticks to be 0 and the second one should 1, demonstrating that the tick counter has advanced by one. To repeatedly issue a command or report request we can use the <code>NLDoCommand()</code>, so for example:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">NLDoCommand</span>(<span class="dv">50</span>,<span class="st">&quot;go&quot;</span>)
+<span class="kw">NLReport</span>(<span class="st">&quot;ticks&quot;</span>)</code></pre></div>
+<p>should now show the tick counter to be 51. We can also repeatedly call a reporter, in this case we have to pass both a command to be repeated a certain number of times and a reporter that will be executed each time. Naturally we can also assign the result to an R variable, and instead of the default list data class return it as a data frame instead:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test &lt;-<span class="st"> </span><span class="kw">NLDoReport</span>(<span class="dv">10</span>,<span class="st">&quot;go&quot;</span>, 
+                   <span class="kw">c</span>(<span class="st">&quot; ticks&quot;</span>,
+                     <span class="st">&quot;count inhabitants with [zone = 1]&quot;</span>,
+                     <span class="st">&quot;count inhabitants with [zone = 2]&quot;</span>,
+                     <span class="st">&quot;count inhabitants with [zone = 3]&quot;</span>), 
+                   <span class="dt">as.data.frame =</span> <span class="ot">TRUE</span>)
+test <span class="co"># show the resulting data frame</span>
+
+<span class="co">#    X1 X2 X3 X4</span>
+<span class="co"># 1  52 11  9 13</span>
+<span class="co"># 2  53 11  9 13</span>
+<span class="co"># 3  54 11  9 13</span>
+<span class="co"># 4  55 11  9 13</span>
+<span class="co"># 5  56 12  8 13</span>
+<span class="co"># 6  57 12  8 13</span>
+<span class="co"># 7  58 12  9 12</span>
+<span class="co"># 8  59 12  9 12</span>
+<span class="co"># 9  60 12  9 12</span>
+<span class="co"># 10 61 12  9 12</span></code></pre></div>
+<p>Finally we can also extract the current variable values from an agentset. For example the incomes and current zones of all inhabitants, which we can then visualize using a simple boxplot (Figure 12.8):</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">current.state &lt;-<span class="st"> </span><span class="kw">NLGetAgentSet</span>(<span class="kw">c</span>(<span class="st">&quot;who&quot;</span>,<span class="st">&quot;income&quot;</span>, <span class="st">&quot;zone&quot;</span>), 
+                               <span class="st">&quot;inhabitants&quot;</span>)
+<span class="kw">boxplot</span>(current.state<span class="op">$</span>income <span class="op">~</span><span class="st"> </span>current.state<span class="op">$</span>zone,
+  <span class="dt">xlab=</span><span class="st">&quot;Zone&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Income&quot;</span>,
+  <span class="dt">main=</span><span class="kw">paste</span>(<span class="st">&quot;Income distribution after&quot;</span>,
+    <span class="kw">NLReport</span>(<span class="st">&quot;ticks&quot;</span>), <span class="st">&quot;ticks&quot;</span> ))</code></pre></div>
+<div class="figure"><span id="fig:fig8"></span>
+<img src="_main_files/figure-html/fig8-1.png" alt="NetLogo data plotted in R" width="576" />
+<p class="caption">
+Figure 12.8: NetLogo data plotted in R
+</p>
+</div>
+<p>The <code>NLCommand</code> and <code>NLReport</code> functions can therefore be executed either singly or repeatedly using their “<code>Do</code>” versions. For ultimate control there are also “<code>Do-While</code>” versions of the functions which take as an argument a condition and keep executing until the condition is met.<a href="#fn46" class="footnoteRef" id="fnref46"><sup>46</sup></a></p>
+<p>To continue with our simple example the <code>NLDoCommandWhile</code> function could be used simply end the simulation after a certain number of ticks:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">NLDoCommandWhile</span> (<span class="st">&quot; (ticks &lt;= 100) &quot;</span> , <span class="st">&quot;go&quot;</span>)
+<span class="kw">NLReport</span>(<span class="st">&quot;ticks&quot;</span>)</code></pre></div>
+<div id="running-a-single-netlogo-simulation" class="section level3">
+<h3><span class="header-section-number">12.6.1</span> Running a single NetLogo simulation</h3>
+<p>We now have all the ingredients to run our model from R, and probably do not need to observe the running model in the graphical interface any more. RNetLogo allows us to run the NetLogo silently in the background (in so called <em>headless mode</em>), which runs quite a bit faster than using the GUI. We can also wrap all our NetLogo commands in an R function and make further simulation more modular.</p>
+<p>We will set up a single simulation where we open NetLogo silently, load the model, run the simulation until one zone wins or there is a definite tie, and then collect the <code>history</code> of all inhabitants at the end. There is one thing we need to keep in mind running the simulation from R though: we are repeatedly calling a <em>single</em> <code>go</code> procedure. This means we can still continue to call <code>go</code> even if the stopping conditions in the procedure have been met, it simply means the call does nothing. Because there is no warning (or error - nothing went wrong) we have no way of knowing from R that we are continuing to call <code>go</code> which is not doing anything - unless we check the tick counter every time and make sure it has advanced by one.</p>
+<p>To run the simulation in R as we had designed it in NetLogo we simply use the same stopping conditions we used in the <code>go</code> procedure. In fact, if you plan to only run your model from R it is a good idea to delete the stopping conditions from the NetLogo code completely and make sure you always define them in the call from R. That way you can avoid setting stopping conditions in R that are less strict than the ones in the model, which would again mean R calling a <code>go</code> procedure that is not doing anything. And be careful: in NetLogo they were <em>stopping conditions</em>, but in <code>NLDoCommandWhile</code> they are exactly the inverse, so make sure you rewrite them appropriately!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SimpleWorld &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">time.stable =</span> <span class="dv">100</span>) {
+  <span class="kw">NLCommand</span>(<span class="st">&quot;setup&quot;</span>)
+  <span class="kw">NLDoCommandWhile</span>(<span class="kw">paste</span>(
+    <span class="st">&quot;(count inhabitants with [zone = 1] &lt; 33) and&quot;</span>,
+    <span class="st">&quot;(count inhabitants with [zone = 2] &lt; 33) and&quot;</span>,
+    <span class="st">&quot;(count inhabitants with [zone = 3] &lt; 33) and&quot;</span>,
+    <span class="st">&quot;(time-stable &lt;= &quot;</span>, time.stable, <span class="st">&quot;) &quot;</span>) , <span class="st">&quot;go&quot;</span>)
+  <span class="kw">NLGetAgentSet</span>(<span class="st">&quot;history&quot;</span>, <span class="st">&quot;inhabitants&quot;</span>)
+}</code></pre></div>
+<p>The <code>SimpleWorld</code> function can even take an argument that gets passed on to NetLogo: here we have made the number of ticks before we declare a tie adjustable, in case we decide at some point that 100 is not really an appropriate value. Now we can run the simulation and explore the resulting data. Just like R, NetLogo also uses a pseudo random number generator so we can set the random seed we get the same result each time - this may be useful for testing your code and making sure you have set up the simulation the same way as these instructions.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">NLQuit</span>() <span class="co"># quit any existing NetLogo instances</span>
+<span class="kw">NLStart</span>(nldir, <span class="dt">gui=</span><span class="ot">FALSE</span>)
+<span class="kw">NLLoadModel</span>(mdir)
+<span class="kw">NLCommand</span>(<span class="st">&quot;random-seed 42&quot;</span>)
+inhabitant.histories &lt;-<span class="st"> </span><span class="kw">SimpleWorld</span>(<span class="dv">50</span>)</code></pre></div>
+<p>We now have the complete history of all 33 inhabitants in the simulation to explore! We can, for example, count how many times each inhabitant moved zones during the simulation and see if that number correlates with their starting income (see Figure 12.9). You can perhaps guess inhabitants with low income will have changed more often, simply because they will have lost more negotiations, but how does the number of moves correlate with their final income? Or with their net income gain during the simulation?</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+
+history &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">matrix</span>(<span class="kw">unlist</span>(inhabitant.histories),
+  <span class="dt">ncol =</span> <span class="dv">4</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>))
+<span class="kw">colnames</span>(history) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;tick&quot;</span>,<span class="st">&quot;income&quot;</span>, <span class="st">&quot;zone&quot;</span>)
+
+changes &lt;-<span class="st"> </span><span class="kw">group_by</span>(history, id) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>( <span class="dt">change=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="kw">diff</span>(zone))) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">start.income =</span> income[<span class="dv">1</span>],
+            <span class="dt">end.income =</span> <span class="kw">tail</span>(income,<span class="dv">1</span>),
+            <span class="dt">income.change =</span> end.income <span class="op">-</span><span class="st"> </span>start.income,
+            <span class="dt">zone.changes =</span> <span class="kw">sum</span>(change <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>))
+
+<span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
+<span class="kw">plot</span>(zone.changes <span class="op">~</span><span class="st"> </span>start.income , <span class="dt">data =</span> changes)
+<span class="kw">abline</span>(<span class="kw">lm</span>(zone.changes <span class="op">~</span><span class="st"> </span>start.income , <span class="dt">data=</span>changes))
+<span class="kw">plot</span>(zone.changes <span class="op">~</span><span class="st"> </span>end.income , <span class="dt">data =</span> changes)
+<span class="kw">abline</span>(<span class="kw">lm</span>(zone.changes <span class="op">~</span><span class="st"> </span>end.income , <span class="dt">data=</span>changes))
+<span class="kw">plot</span>(zone.changes <span class="op">~</span><span class="st"> </span>income.change , <span class="dt">data=</span>changes)
+<span class="kw">abline</span>(<span class="kw">lm</span>(zone.changes <span class="op">~</span><span class="st"> </span>income.change , <span class="dt">data=</span>changes))</code></pre></div>
+<div class="figure"><span id="fig:fig9"></span>
+<img src="_main_files/figure-html/fig9-1.png" alt="Number of zone changes correlated with inhabitants' income variables" width="768" />
+<p class="caption">
+Figure 12.9: Number of zone changes correlated with inhabitants’ income variables
+</p>
+</div>
+<p>Naturally there are many other things to explore in the <code>history</code> data frame. The flip side of the collected results being so rich is of course that this is a very large data object and its collection during the simulation and importation into R cost valuable resources. The recommended course of action is therefore to explore the <code>history</code> data on a single simulation to decide on what is really of interest. Then change the NetLogo model to only collect the data we are really interested in. In this case we could change the <code>record</code> procedure to only track the number of zone changes for each inhabitant, which would mean simply recovering 33 values at the end of the simulation instead of the full history table, which in this case (a relatively short run) was over 15,000 values. When running multiple simulations exploring the parameter space of the model, as we will do in the next section, collecting such data would be prohibitive.</p>
+</div>
+<div id="running-multiple-netlogo-simulations" class="section level3">
+<h3><span class="header-section-number">12.6.2</span> Running multiple NetLogo simulations</h3>
+<p>We will focus on a simple outcome variable: the amount of model time (number of ticks) it takes for the simulation to end with clear win for one zone. For simplicity we will treat all simulations that exhibit no changes for over 200 ticks as non-convergent and ignore them. We will explore how this outcome varies depending on the parameters <code>angle-of-vision</code> and <code>distance-of-vision</code>. This is called a <em>full factorial experiment</em> and is only really practical if we have a few parameters to explore, which is why we will stick with only the two variables mentioned.</p>
+<p>First let’s rewrite the simulation function to set the appropriate variables before each run (the bribeability variables will not be changing in this simulation, but it is safer to set them explicitly as they may have been changed manually in NetLogo and we would not even notice, because we are running it without the GUI!). After the variables are set, we of course call the <code>setup</code> procedure. We can omit the conditions for running <code>go</code> by simply stopping after nothing has changed for 200 ticks, regardless of how many zones are still in play. After the simulation is finished, we collect two values: the number of ticks minus the value of time-stable, giving us the actual length of the simulation run before it stabilized, and the number of zones that were occupied at the end.<a href="#fn47" class="footnoteRef" id="fnref47"><sup>47</sup></a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SimpleWorld &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">angle.of.vision=</span><span class="dv">360</span>,
+  <span class="dt">distance.of.vision=</span><span class="dv">10</span>,<span class="dt">time.stable =</span> <span class="dv">200</span>) {
+  <span class="kw">NLCommand</span> (<span class="kw">paste</span>(<span class="st">&quot;set average-bribeability&quot;</span>, <span class="dv">100</span>))
+  <span class="kw">NLCommand</span> (<span class="kw">paste</span>(<span class="st">&quot;set stdev-bribeability&quot;</span>, <span class="dv">0</span>))
+  <span class="kw">NLCommand</span> (<span class="kw">paste</span>(<span class="st">&quot;set angle-of-vision&quot;</span>, angle.of.vision))
+  <span class="kw">NLCommand</span> (<span class="kw">paste</span>(<span class="st">&quot;set distance-of-vision&quot;</span>,
+    distance.of.vision))
+  <span class="kw">NLCommand</span>(<span class="st">&quot;setup&quot;</span>)
+  <span class="kw">NLDoCommandWhile</span>(<span class="kw">paste</span>(<span class="st">&quot;(time-stable &lt;= &quot;</span>, time.stable, <span class="st">&quot;) &quot;</span>)
+    , <span class="st">&quot;go&quot;</span>)
+  <span class="kw">c</span>(<span class="kw">NLReport</span>(<span class="kw">c</span>(<span class="st">&quot;ticks - time-stable&quot;</span>,
+    <span class="kw">nrow</span>(<span class="kw">unique</span>(<span class="kw">NLGetAgentSet</span>( <span class="st">&quot;zone&quot;</span>, <span class="st">&quot;inhabitants&quot;</span>))))))
+}</code></pre></div>
+<p>The next step is to create a function to run multiple simulations where <code>reps</code> determines the number of repetitions of each parameter value combination and <code>a.o.v</code> and <code>d.o.v</code> determine the value sequences of each parameter that the simulation iterates through. Within it we first create a data frame of the parameter space we intend to examine, with a single row for each simulation run. The function then iterates through this data frame, each time running the <code>SimpleWorld</code> function with the appropriate arguments and collecting these, together with the simulation results, as a data frame with a single row. At the end of all the runs, these are simply binded together into a final data frame with all the results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MultipleSimulations &lt;-
+<span class="st">  </span><span class="cf">function</span> (<span class="dt">reps=</span><span class="dv">1</span>, <span class="dt">a.o.v =</span> <span class="dv">360</span>, <span class="dt">d.o.v =</span> <span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">10</span>)){
+  p.s &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">rep =</span> <span class="kw">seq</span>(<span class="dv">1</span>, reps),
+    <span class="dt">a.o.v =</span> a.o.v, <span class="dt">d.o.v =</span> d.o.v) 
+  result.list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">as.list</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(p.s)), <span class="cf">function</span>(i) 
+    <span class="kw">setNames</span>(<span class="kw">cbind</span>(p.s[i,], <span class="kw">SimpleWorld</span>(p.s[i,<span class="dv">2</span>], p.s[i,<span class="dv">3</span>])),
+      <span class="kw">c</span>(<span class="st">&quot;rep&quot;</span>, <span class="st">&quot;a.o.v&quot;</span>, <span class="st">&quot;d.o.v&quot;</span>, <span class="st">&quot;ticks&quot;</span>, <span class="st">&quot;zones&quot;</span>)))
+  <span class="kw">do.call</span>(rbind, result.list)
+}</code></pre></div>
+<p>To be on the safe side, we may want to give this function a little test run with only two sets of parameter values and two repetitions each.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results.df &lt;-
+<span class="st">  </span><span class="kw">MultipleSimulations</span>(<span class="dt">reps =</span> <span class="dv">2</span>, <span class="dt">a.o.v =</span> <span class="dv">360</span>, <span class="dt">d.o.v =</span> <span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">10</span>))
+
+results.df <span class="co"># display the results data frame</span>
+
+<span class="co">#   rep a.o.v d.o.v ticks zones</span>
+<span class="co"># 1   1   360     5    49     2</span>
+<span class="co"># 2   2   360     5    94     1</span>
+<span class="co"># 3   1   360    10    16     2</span>
+<span class="co"># 4   2   360    10    57     1</span></code></pre></div>
+<p>The first three columns in the <code>results.df</code> data frame are simply the simulation parameters: the number of the repetition and the angle-of-vision and distance-of-vision parameters that were passed to NetLogo. The final two columns give the number of ticks the simulation required to stabilize and the number of zones occupied at the end. Assuming we are happy with the functions, we can now try to running a more serious simulation e.g. five repetitions exploring pretty much the whole of the parameter space - this may take a while!</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results.df &lt;-<span class="st"> </span><span class="kw">MultipleSimulations</span>(<span class="dv">5</span>,<span class="kw">seq</span>(<span class="dv">60</span>,<span class="dv">360</span>,<span class="dv">30</span>),<span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">10</span>) )</code></pre></div>
+<p>With the results safely stored in the data frame, we can summarise the data and visualise it.<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a> Using the <code>dplyr</code> package to reorganize our data we can see how the number of zones occupied at the end of the simulation differed across the parameter space.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">zones &lt;-<span class="st"> </span>results.df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(a.o.v, d.o.v, zones) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">prop.sims =</span> <span class="kw">n</span>()<span class="op">/</span>reps) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(a.o.v, d.o.v)
+
+<span class="kw">head</span>(zones) <span class="co"># show the output</span>
+
+<span class="co"># Source: local data frame [6 x 4]</span>
+<span class="co"># Groups: a.o.v, d.o.v</span>
+<span class="co"># </span>
+<span class="co">#   a.o.v d.o.v zones prop.sims</span>
+<span class="co"># 1    60     1     3      1.00</span>
+<span class="co"># 2    60     2     2      0.15</span>
+<span class="co"># 3    60     2     3      0.85</span>
+<span class="co"># 4    60     3     1      0.15</span>
+<span class="co"># 5    60     3     2      0.75</span>
+<span class="co"># 6    60     3     3      0.10</span></code></pre></div>
+<p>We can see that in the first set of simulations with angle of vision being 60 and the distance of vision only 1, all of the simulations ended with a three-way draw. In the next set, where the distance was set to 2, 85 % of the simulations still ended in a three-way draw, while the remaining 15 % were a two-way draw. Figure 12.10 summarises the data for all 2200 simulations. While there is a clear cluster of three-way ties in the bottom left hand corner, which corresponds to the simulations with the smallest field of vision, there is interestingly no observable pattern to distinguish the two-way ties and single zone simulations.</p>
+<div class="figure"><span id="fig:fig10"></span>
+<img src="_main_files/figure-html/fig10-1.png" alt="Number of zones occupied at end of simulation (20 repetitions)" width="768" />
+<p class="caption">
+Figure 12.10: Number of zones occupied at end of simulation (20 repetitions)
+</p>
+</div>
+<p>If we focus on the simulations where a single winning zone emerged, we can find the average number of ticks required across the parameter space:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">av.ticks &lt;-<span class="st"> </span>results.df <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(a.o.v, d.o.v) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(zones <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean.ticks =</span> <span class="kw">mean</span>(ticks, <span class="dt">na.rm=</span><span class="ot">TRUE</span>))
+
+<span class="kw">head</span>(av.ticks) <span class="co"># display the results</span>
+
+<span class="co"># Source: local data frame [6 x 3]</span>
+<span class="co"># Groups: a.o.v</span>
+<span class="co"># </span>
+<span class="co">#   a.o.v d.o.v mean.ticks</span>
+<span class="co"># 1    60     3  1876.6667</span>
+<span class="co"># 2    60     4  1577.1000</span>
+<span class="co"># 3    60     5   973.6667</span>
+<span class="co"># 4    60     6   368.7000</span>
+<span class="co"># 5    60     7   265.6000</span></code></pre></div>
+<p>The average tick counts for all the 2200 simulations (or rather in this case only the 989 that ended with a winning zone) can be plotted as a heatmap (Figure 12.11).</p>
+<div class="figure"><span id="fig:fig11"></span>
+<img src="_main_files/figure-html/fig11-1.png" alt="Average number of ticks in simulations with single zone winning" width="768" />
+<p class="caption">
+Figure 12.11: Average number of ticks in simulations with single zone winning
+</p>
+</div>
+</div>
+</div>
+<div id="chapter-summary-10" class="section level2">
+<h2><span class="header-section-number">12.7</span> Chapter summary</h2>
+<p>This is chapter provides a worked example of the numerous options for agent-based modelling building on microsimulation. You have at your disposal a powerful modelling combination when combining NetLogo with R. For an excellent overview with more practical examples see Thiele et al.(2014), which covers a variety of parameter estimation and optimisation methods as well as a comprehensive set of approaches to sensitivity analysis using the RNetLogo setup described here.</p>
+
+</div>
+</div>
+<h3> Bibliography</h3>
+<div id="refs" class="references">
+<div id="ref-lovelace_spatial_2016">
+<p>Lovelace, Robin, and Morgane Dumont. 2016. <em>Spatial Microsimulation with R</em>. CRC Press.</p>
+</div>
+<div id="ref-Grimm2011">
+<p>Grimm, Volker, and S F Railsback. 2011. <em>Agent-based and individual-based modeling: a practical introduction</em>. Princeton University Press Princeton, NJ.</p>
+</div>
+<div id="ref-Castle2006">
+<p>Castle, CJE, and AT Crooks. 2006. “Principles and Concepts of Agent-Based Modelling for Developing Geospatial Simulations” 44 (0). doi:<a href="https://doi.org/ISSN: 1467-1298">ISSN: 1467-1298</a>.</p>
+</div>
+<div id="ref-Thiele2012">
+<p>Thiele, Jan C, Winfried Kurth, and Volker Grimm. 2012. “Agent-Based Modelling: Tools for Linking NetLogo And R.” <em>Journal of Artificial Societies and Social Simulation</em> 15 (3): 8. <a href="http://jasss.soc.surrey.ac.uk/15/3/8.html" class="uri">http://jasss.soc.surrey.ac.uk/15/3/8.html</a>.</p>
+</div>
+<div id="ref-thiele2014r">
+<p>Thiele, J. 2014. “R Marries NetLogo: Introduction to the RNetLogo Package.” <em>Journal of Statistical</em> 58 (2): 1–41. <a href="http://www.jstatsoft.org/v58/i02/paper" class="uri">http://www.jstatsoft.org/v58/i02/paper</a>.</p>
+</div>
+<div id="ref-rjava">
+<p>Urbanek, Simon. 2013. <em>rJava: Low-level R to Java interface</em>. <a href="http://cran.r-project.org/package=rJava" class="uri">http://cran.r-project.org/package=rJava</a>.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="41">
+<li id="fn41"><p>Maja is based at the Oxford Institute of Population Ageing, University of Oxford.<a href="ABM.html#fnref41">↩</a></p></li>
+<li id="fn42"><p>Although this is not strictly necessary, one recommended structure for your code tab is to break it up into three blocks: 1. Declarations, where you define the global variables, the breeds if any and the agents-own variables; 2. Setup procedures where you define <code>setup</code> and all its sub-procedures and in a similar vein; 3. Go procedures.<a href="ABM.html#fnref42">↩</a></p></li>
+<li id="fn43"><p>Using a percentage sign in front of the names of local variables is a purely stylistic decision and makes the code easier to read. It makes it immediately obvious what the scope of each variable is. In NetLogo local variables are created on-the-fly using the <code>let</code> command, while agent and global variables need to be declared explicitly. The values of all variables are changed using the <code>set</code> command.<a href="ABM.html#fnref43">↩</a></p></li>
+<li id="fn44"><p>You can try it out simply by typing it into the command centre. Seemingly nothing will happen, but if you inspect an inhabitant you will see that their <code>bribeability</code> variable is now 100.<a href="ABM.html#fnref44">↩</a></p></li>
+<li id="fn45"><p>Make sure you keep clear-all as the first and reset-ticks as the last procedures.<a href="ABM.html#fnref45">↩</a></p></li>
+<li id="fn46"><p>To prevent NetLogo from getting stuck in an endless loop if you inadvertently set a condition that is never met,both of these commands have a <code>max.minutes</code> argument, the default value of which is 10. The execution will halt after this time has passed before the condition was met. This may be relevant especially if you are expecting to run a long simulation in which case you should increase the value - of course if you are absolutely certain that the condition will be met, then you can also set <code>max.minutes</code> to 0 and the command will be executed for as long as it takes. In fact for testing your code, when you might be prone to inadvertently writing endless loops, it will make your life easier to change the value to 1 and avoid waiting the 10 minutes it takes for R to stop execution.<a href="ABM.html#fnref46">↩</a></p></li>
+<li id="fn47"><p>Ensure you remove the history recording from the .nlogo file as it is no longer necessary and will simply slow down the simulations.<a href="ABM.html#fnref47">↩</a></p></li>
+<li id="fn48"><p>To smooth out the results the data presented here is based on 20 repetitions.<a href="ABM.html#fnref48">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="tresis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="apR.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

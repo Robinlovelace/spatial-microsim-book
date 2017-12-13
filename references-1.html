@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial Microsimulation with R</title>
+  <meta name="description" content="Spatial Microsimulation with R">
+  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial Microsimulation with R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
+  
+  
+  <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial Microsimulation with R" />
+  
+  
+  
+
+<meta name="author" content="Robin Lovelace and Morgane Dumont">
+
+
+<meta name="date" content="2017-12-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="SimpleWorld.html">
+<link rel="next" href="what-is.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#a-definition-of-spatial-microsimulation"><i class="fa fa-check"></i><b>1.3</b> A definition of spatial microsimulation</a></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#learning-by-doing"><i class="fa fa-check"></i><b>1.4</b> Learning by doing</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#whyR"><i class="fa fa-check"></i><b>1.5</b> Why spatial microsimulation with R?</a></li>
+<li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#learningR"><i class="fa fa-check"></i><b>1.6</b> Learning the R language</a></li>
+<li class="chapter" data-level="1.7" data-path="intro.html"><a href="intro.html#typographic"><i class="fa fa-check"></i><b>1.7</b> Typographic conventions</a></li>
+<li class="chapter" data-level="1.8" data-path="intro.html"><a href="intro.html#overview"><i class="fa fa-check"></i><b>1.8</b> An overview of the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i><b>2</b> References</a></li>
+<li class="chapter" data-level="3" data-path="SimpleWorld.html"><a href="SimpleWorld.html"><i class="fa fa-check"></i><b>3</b> SimpleWorld: A worked example of spatial microsimulation</a><ul>
+<li class="chapter" data-level="3.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudioUpSpeed"><i class="fa fa-check"></i><b>3.1</b> Getting setup with the RStudio environment</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#installing-r"><i class="fa fa-check"></i><b>3.1.1</b> Installing R</a></li>
+<li class="chapter" data-level="3.1.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudio"><i class="fa fa-check"></i><b>3.1.2</b> RStudio</a></li>
+<li class="chapter" data-level="3.1.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#projects"><i class="fa fa-check"></i><b>3.1.3</b> Projects</a></li>
+<li class="chapter" data-level="3.1.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#downloading-data-for-the-book"><i class="fa fa-check"></i><b>3.1.4</b> Downloading data for the book</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldData"><i class="fa fa-check"></i><b>3.2</b> SimpleWorld data</a></li>
+<li class="chapter" data-level="3.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#weight-matrix"><i class="fa fa-check"></i><b>3.3</b> Generating a weight matrix</a></li>
+<li class="chapter" data-level="3.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#spatial-microdata"><i class="fa fa-check"></i><b>3.4</b> Spatial microdata</a></li>
+<li class="chapter" data-level="3.5" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldContext"><i class="fa fa-check"></i><b>3.5</b> SimpleWorld in context</a></li>
+<li class="chapter" data-level="3.6" data-path="SimpleWorld.html"><a href="SimpleWorld.html#chapter-summary"><i class="fa fa-check"></i><b>3.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="references-1.html"><a href="references-1.html"><i class="fa fa-check"></i><b>4</b> References</a></li>
+<li class="chapter" data-level="5" data-path="what-is.html"><a href="what-is.html"><i class="fa fa-check"></i><b>5</b> What is spatial microsimulation?</a><ul>
+<li class="chapter" data-level="5.1" data-path="what-is.html"><a href="what-is.html#terminology"><i class="fa fa-check"></i><b>5.1</b> Terminology</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="what-is.html"><a href="what-is.html#SimCity"><i class="fa fa-check"></i><b>5.1.1</b> Spatial microsimulation as SimCity</a></li>
+<li class="chapter" data-level="5.1.2" data-path="what-is.html"><a href="what-is.html#meth-approach"><i class="fa fa-check"></i><b>5.1.2</b> Spatial microsimulation: method or approach?</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="what-is.html"><a href="what-is.html#is-not"><i class="fa fa-check"></i><b>5.2</b> What spatial microsimulation is not</a></li>
+<li class="chapter" data-level="5.3" data-path="what-is.html"><a href="what-is.html#applications"><i class="fa fa-check"></i><b>5.3</b> Applications</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="what-is.html"><a href="what-is.html#health-applications"><i class="fa fa-check"></i><b>5.3.1</b> Health applications</a></li>
+<li class="chapter" data-level="5.3.2" data-path="what-is.html"><a href="what-is.html#economic-policy-evaluation"><i class="fa fa-check"></i><b>5.3.2</b> Economic policy evaluation</a></li>
+<li class="chapter" data-level="5.3.3" data-path="what-is.html"><a href="what-is.html#transport"><i class="fa fa-check"></i><b>5.3.3</b> Transport</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="what-is.html"><a href="what-is.html#assumptions"><i class="fa fa-check"></i><b>5.4</b> Assumptions</a></li>
+<li class="chapter" data-level="5.5" data-path="what-is.html"><a href="what-is.html#chapter-summary-1"><i class="fa fa-check"></i><b>5.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="references-2.html"><a href="references-2.html"><i class="fa fa-check"></i><b>6</b> References</a></li>
+<li class="chapter" data-level="7" data-path="data-prep.html"><a href="data-prep.html"><i class="fa fa-check"></i><b>7</b> Data preparation</a><ul>
+<li class="chapter" data-level="7.1" data-path="data-prep.html"><a href="data-prep.html#accessing"><i class="fa fa-check"></i><b>7.1</b> Accessing the input data</a></li>
+<li class="chapter" data-level="7.2" data-path="data-prep.html"><a href="data-prep.html#Selecting"><i class="fa fa-check"></i><b>7.2</b> Target and constraint variables</a></li>
+<li class="chapter" data-level="7.3" data-path="data-prep.html"><a href="data-prep.html#Loading"><i class="fa fa-check"></i><b>7.3</b> Loading input data</a></li>
+<li class="chapter" data-level="7.4" data-path="data-prep.html"><a href="data-prep.html#subsetting-prep"><i class="fa fa-check"></i><b>7.4</b> Subsetting to remove excess information</a></li>
+<li class="chapter" data-level="7.5" data-path="data-prep.html"><a href="data-prep.html#re-categorise"><i class="fa fa-check"></i><b>7.5</b> Re-categorising individual level variables</a></li>
+<li class="chapter" data-level="7.6" data-path="data-prep.html"><a href="data-prep.html#matching"><i class="fa fa-check"></i><b>7.6</b> Matching individual and aggregate level data names</a></li>
+<li class="chapter" data-level="7.7" data-path="data-prep.html"><a href="data-prep.html#flattening"><i class="fa fa-check"></i><b>7.7</b> ‘Flattening’ the individual level data</a></li>
+<li class="chapter" data-level="7.8" data-path="data-prep.html"><a href="data-prep.html#chapter-summary-2"><i class="fa fa-check"></i><b>7.8</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="references-3.html"><a href="references-3.html"><i class="fa fa-check"></i><b>8</b> References</a></li>
+<li class="chapter" data-level="9" data-path="smsimr.html"><a href="smsimr.html"><i class="fa fa-check"></i><b>9</b> Population synthesis</a><ul>
+<li class="chapter" data-level="9.1" data-path="smsimr.html"><a href="smsimr.html#weighting"><i class="fa fa-check"></i><b>9.1</b> Weighting algorithms</a></li>
+<li class="chapter" data-level="9.2" data-path="smsimr.html"><a href="smsimr.html#iterative-proportional-fitting"><i class="fa fa-check"></i><b>9.2</b> Iterative Proportional Fitting</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="smsimr.html"><a href="smsimr.html#ipftheory"><i class="fa fa-check"></i><b>9.2.1</b> IPF in theory</a></li>
+<li class="chapter" data-level="9.2.2" data-path="smsimr.html"><a href="smsimr.html#ipfinr"><i class="fa fa-check"></i><b>9.2.2</b> IPF in R</a></li>
+<li class="chapter" data-level="9.2.3" data-path="smsimr.html"><a href="smsimr.html#ipfp"><i class="fa fa-check"></i><b>9.2.3</b> IPF with <strong>ipfp</strong></a></li>
+<li class="chapter" data-level="9.2.4" data-path="smsimr.html"><a href="smsimr.html#mipfp"><i class="fa fa-check"></i><b>9.2.4</b> IPF with <strong>mipfp</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="9.3" data-path="smsimr.html"><a href="smsimr.html#sintegerisation"><i class="fa fa-check"></i><b>9.3</b> Integerisation</a><ul>
+<li class="chapter" data-level="9.3.1" data-path="smsimr.html"><a href="smsimr.html#concept-of-integerisation"><i class="fa fa-check"></i><b>9.3.1</b> Concept of integerisation</a></li>
+<li class="chapter" data-level="9.3.2" data-path="smsimr.html"><a href="smsimr.html#example-of-integerisation"><i class="fa fa-check"></i><b>9.3.2</b> Example of integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="9.4" data-path="smsimr.html"><a href="smsimr.html#expansion"><i class="fa fa-check"></i><b>9.4</b> Expansion</a><ul>
+<li class="chapter" data-level="9.4.1" data-path="smsimr.html"><a href="smsimr.html#weights-per-individual"><i class="fa fa-check"></i><b>9.4.1</b> Weights per individual</a></li>
+<li class="chapter" data-level="9.4.2" data-path="smsimr.html"><a href="smsimr.html#weightpc"><i class="fa fa-check"></i><b>9.4.2</b> Weights per category</a></li>
+</ul></li>
+<li class="chapter" data-level="9.5" data-path="smsimr.html"><a href="smsimr.html#integerisation-and-expansion"><i class="fa fa-check"></i><b>9.5</b> Integerisation and expansion</a></li>
+<li class="chapter" data-level="9.6" data-path="smsimr.html"><a href="smsimr.html#compareipf"><i class="fa fa-check"></i><b>9.6</b> Comparing <strong>ipfp</strong> with <strong>mipfp</strong></a><ul>
+<li class="chapter" data-level="9.6.1" data-path="smsimr.html"><a href="smsimr.html#comparing-the-methods"><i class="fa fa-check"></i><b>9.6.1</b> Comparing the methods</a></li>
+<li class="chapter" data-level="9.6.2" data-path="smsimr.html"><a href="smsimr.html#comparing-the-weights-for-simpleworld"><i class="fa fa-check"></i><b>9.6.2</b> Comparing the weights for SimpleWorld</a></li>
+<li class="chapter" data-level="9.6.3" data-path="smsimr.html"><a href="smsimr.html#comparing-the-results-for-simpleworld"><i class="fa fa-check"></i><b>9.6.3</b> Comparing the results for SimpleWorld</a></li>
+<li class="chapter" data-level="9.6.4" data-path="smsimr.html"><a href="smsimr.html#speed-comparisons"><i class="fa fa-check"></i><b>9.6.4</b> Speed comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="9.7" data-path="smsimr.html"><a href="smsimr.html#chapter-summary-3"><i class="fa fa-check"></i><b>9.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="references-4.html"><a href="references-4.html"><i class="fa fa-check"></i><b>10</b> References</a></li>
+<li class="chapter" data-level="11" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html"><i class="fa fa-check"></i><b>11</b> Alternative approaches to population synthesis</a><ul>
+<li class="chapter" data-level="11.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#GREGWT"><i class="fa fa-check"></i><b>11.1</b> GREGWT</a></li>
+<li class="chapter" data-level="11.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#asOptim"><i class="fa fa-check"></i><b>11.2</b> Population synthesis as an optimization problem</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#reweighting-with-optim-and-gensa"><i class="fa fa-check"></i><b>11.2.1</b> Reweighting with optim and GenSA</a></li>
+<li class="chapter" data-level="11.2.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#combinatorial-optimisation"><i class="fa fa-check"></i><b>11.2.2</b> Combinatorial optimisation</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#SimPop"><i class="fa fa-check"></i><b>11.3</b> simPop</a></li>
+<li class="chapter" data-level="11.4" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#UDST"><i class="fa fa-check"></i><b>11.4</b> The Urban Data Science Toolkit (UDST)</a></li>
+<li class="chapter" data-level="11.5" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#chapter-summary-4"><i class="fa fa-check"></i><b>11.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="CakeMap.html"><a href="CakeMap.html"><i class="fa fa-check"></i><b>12</b> Spatial microsimulation in the wild</a><ul>
+<li class="chapter" data-level="12.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapConVar"><i class="fa fa-check"></i><b>12.1</b> Selection of constraint variables</a></li>
+<li class="chapter" data-level="12.2" data-path="CakeMap.html"><a href="CakeMap.html#CakePrep"><i class="fa fa-check"></i><b>12.2</b> Preparing the input data</a></li>
+<li class="chapter" data-level="12.3" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapIPFP"><i class="fa fa-check"></i><b>12.3</b> Using the <code>ipfp</code> package</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>12.3.1</b> Performing IPF on CakeMap data</a></li>
+<li class="chapter" data-level="12.3.2" data-path="CakeMap.html"><a href="CakeMap.html#CakeINT"><i class="fa fa-check"></i><b>12.3.2</b> Integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="CakeMap.html"><a href="CakeMap.html#CakeMIPF"><i class="fa fa-check"></i><b>12.4</b> Using the <code>mipfp</code> package</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>12.4.1</b> Performing IPF on CakeMap data</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="CakeMap.html"><a href="CakeMap.html#CompareMeth"><i class="fa fa-check"></i><b>12.5</b> Comparing methods of reweighting large datasets</a><ul>
+<li class="chapter" data-level="12.5.1" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-results"><i class="fa fa-check"></i><b>12.5.1</b> Comparison of results</a></li>
+<li class="chapter" data-level="12.5.2" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-times"><i class="fa fa-check"></i><b>12.5.2</b> Comparison of times</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="CakeMap.html"><a href="CakeMap.html#chapter-summary-5"><i class="fa fa-check"></i><b>12.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="svalidation.html"><a href="svalidation.html"><i class="fa fa-check"></i><b>13</b> Model checking and evaluation</a><ul>
+<li class="chapter" data-level="13.1" data-path="svalidation.html"><a href="svalidation.html#Internal"><i class="fa fa-check"></i><b>13.1</b> Internal validation</a><ul>
+<li class="chapter" data-level="13.1.1" data-path="svalidation.html"><a href="svalidation.html#pearsons-r"><i class="fa fa-check"></i><b>13.1.1</b> Pearson’s <em>r</em></a></li>
+<li class="chapter" data-level="13.1.2" data-path="svalidation.html"><a href="svalidation.html#absolute-error-measures"><i class="fa fa-check"></i><b>13.1.2</b> Absolute error measures</a></li>
+<li class="chapter" data-level="13.1.3" data-path="svalidation.html"><a href="svalidation.html#root-mean-squared-error"><i class="fa fa-check"></i><b>13.1.3</b> Root mean squared error</a></li>
+<li class="chapter" data-level="13.1.4" data-path="svalidation.html"><a href="svalidation.html#chi-squared"><i class="fa fa-check"></i><b>13.1.4</b> Chi-squared</a></li>
+<li class="chapter" data-level="13.1.5" data-path="svalidation.html"><a href="svalidation.html#which-test-to-use"><i class="fa fa-check"></i><b>13.1.5</b> Which test to use?</a></li>
+<li class="chapter" data-level="13.1.6" data-path="svalidation.html"><a href="svalidation.html#internal-validation-of-cakemap"><i class="fa fa-check"></i><b>13.1.6</b> Internal validation of CakeMap</a></li>
+</ul></li>
+<li class="chapter" data-level="13.2" data-path="svalidation.html"><a href="svalidation.html#empty-cells"><i class="fa fa-check"></i><b>13.2</b> Empty cells</a></li>
+<li class="chapter" data-level="13.3" data-path="svalidation.html"><a href="svalidation.html#External"><i class="fa fa-check"></i><b>13.3</b> External validation</a></li>
+<li class="chapter" data-level="13.4" data-path="svalidation.html"><a href="svalidation.html#chapter-summary-6"><i class="fa fa-check"></i><b>13.4</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="references-5.html"><a href="references-5.html"><i class="fa fa-check"></i><b>14</b> References</a></li>
+<li class="chapter" data-level="15" data-path="nomicrodata.html"><a href="nomicrodata.html"><i class="fa fa-check"></i><b>15</b> Population synthesis without microdata</a><ul>
+<li class="chapter" data-level="15.1" data-path="nomicrodata.html"><a href="nomicrodata.html#CrossGlobLocalMarg"><i class="fa fa-check"></i><b>15.1</b> Global cross-tables and local marginal distributions</a></li>
+<li class="chapter" data-level="15.2" data-path="nomicrodata.html"><a href="nomicrodata.html#twoLevelData"><i class="fa fa-check"></i><b>15.2</b> Two level aggregated data</a></li>
+<li class="chapter" data-level="15.3" data-path="nomicrodata.html"><a href="nomicrodata.html#chapter-summary-7"><i class="fa fa-check"></i><b>15.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="ha.html"><a href="ha.html"><i class="fa fa-check"></i><b>16</b> Household allocation</a><ul>
+<li class="chapter" data-level="16.1" data-path="ha.html"><a href="ha.html#IndData"><i class="fa fa-check"></i><b>16.1</b> Independent data (individuals and households)</a><ul>
+<li class="chapter" data-level="16.1.1" data-path="ha.html"><a href="ha.html#household-type-selection"><i class="fa fa-check"></i><b>16.1.1</b> Household type selection</a></li>
+<li class="chapter" data-level="16.1.2" data-path="ha.html"><a href="ha.html#constituent-members-selection"><i class="fa fa-check"></i><b>16.1.2</b> Constituent members selection</a></li>
+<li class="chapter" data-level="16.1.3" data-path="ha.html"><a href="ha.html#end-of-the-household-generation-process"><i class="fa fa-check"></i><b>16.1.3</b> End of the household generation process</a></li>
+</ul></li>
+<li class="chapter" data-level="16.2" data-path="ha.html"><a href="ha.html#cross-data-individual-and-household-level-information"><i class="fa fa-check"></i><b>16.2</b> Cross data: individual and household level information</a><ul>
+<li class="chapter" data-level="16.2.1" data-path="ha.html"><a href="ha.html#WithoutHHdata"><i class="fa fa-check"></i><b>16.2.1</b> Without additional household’s data</a></li>
+<li class="chapter" data-level="16.2.2" data-path="ha.html"><a href="ha.html#AddData"><i class="fa fa-check"></i><b>16.2.2</b> With additional household’s data</a></li>
+</ul></li>
+<li class="chapter" data-level="16.3" data-path="ha.html"><a href="ha.html#chapter-summary-8"><i class="fa fa-check"></i><b>16.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="references-6.html"><a href="references-6.html"><i class="fa fa-check"></i><b>17</b> References</a></li>
+<li class="chapter" data-level="18" data-path="tresis.html"><a href="tresis.html"><i class="fa fa-check"></i><b>18</b> The TRESIS approach to spatial microsimulation</a><ul>
+<li class="chapter" data-level="18.1" data-path="tresis.html"><a href="tresis.html#tresis-over"><i class="fa fa-check"></i><b>18.1</b> Overview of TRESIS modelling system</a><ul>
+<li class="chapter" data-level="18.1.1" data-path="tresis.html"><a href="tresis.html#differences-between-tresis-and-other-microsimulation-systems"><i class="fa fa-check"></i><b>18.1.1</b> Differences between TRESIS and other microsimulation systems</a></li>
+</ul></li>
+<li class="chapter" data-level="18.2" data-path="tresis.html"><a href="tresis.html#tresis-house"><i class="fa fa-check"></i><b>18.2</b> Synthetic households</a><ul>
+<li class="chapter" data-level="18.2.1" data-path="tresis.html"><a href="tresis.html#what-are-synthetic-households"><i class="fa fa-check"></i><b>18.2.1</b> What are synthetic households?</a></li>
+<li class="chapter" data-level="18.2.2" data-path="tresis.html"><a href="tresis.html#required-data-for-generating-synthetic-households"><i class="fa fa-check"></i><b>18.2.2</b> Required data for generating synthetic households</a></li>
+<li class="chapter" data-level="18.2.3" data-path="tresis.html"><a href="tresis.html#synthetic-households-in-r"><i class="fa fa-check"></i><b>18.2.3</b> Synthetic households in R</a></li>
+</ul></li>
+<li class="chapter" data-level="18.3" data-path="tresis.html"><a href="tresis.html#using-demand-models-to-allocate-synthetic-households-to-zones-using-r"><i class="fa fa-check"></i><b>18.3</b> Using demand models to allocate synthetic households to zones using R</a><ul>
+<li class="chapter" data-level="18.3.1" data-path="tresis.html"><a href="tresis.html#simple-discrete-choice-model-for-residential-location"><i class="fa fa-check"></i><b>18.3.1</b> Simple discrete choice model for residential location</a></li>
+<li class="chapter" data-level="18.3.2" data-path="tresis.html"><a href="tresis.html#results"><i class="fa fa-check"></i><b>18.3.2</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="18.4" data-path="tresis.html"><a href="tresis.html#conclusions"><i class="fa fa-check"></i><b>18.4</b> Conclusions</a><ul>
+<li class="chapter" data-level="18.4.1" data-path="tresis.html"><a href="tresis.html#limitations"><i class="fa fa-check"></i><b>18.4.1</b> Limitations</a></li>
+<li class="chapter" data-level="18.4.2" data-path="tresis.html"><a href="tresis.html#metroscan-ti"><i class="fa fa-check"></i><b>18.4.2</b> MetroScan-TI</a></li>
+<li class="chapter" data-level="18.4.3" data-path="tresis.html"><a href="tresis.html#extending-residential-location-to-transport-models-in-r"><i class="fa fa-check"></i><b>18.4.3</b> Extending residential location to transport models in R</a></li>
+</ul></li>
+<li class="chapter" data-level="18.5" data-path="tresis.html"><a href="tresis.html#chapter-summary-9"><i class="fa fa-check"></i><b>18.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="references-7.html"><a href="references-7.html"><i class="fa fa-check"></i><b>19</b> References</a></li>
+<li class="chapter" data-level="20" data-path="ABM.html"><a href="ABM.html"><i class="fa fa-check"></i><b>20</b> Spatial microsimulation for agent-based models</a><ul>
+<li class="chapter" data-level="20.1" data-path="ABM.html"><a href="ABM.html#note"><i class="fa fa-check"></i><b>20.1</b> Note</a></li>
+<li class="chapter" data-level="20.2" data-path="ABM.html"><a href="ABM.html#abm-software"><i class="fa fa-check"></i><b>20.2</b> ABM software</a></li>
+<li class="chapter" data-level="20.3" data-path="ABM.html"><a href="ABM.html#setting-up-simpleworld-in-netlogo"><i class="fa fa-check"></i><b>20.3</b> Setting up SimpleWorld in NetLogo</a><ul>
+<li class="chapter" data-level="20.3.1" data-path="ABM.html"><a href="ABM.html#graphical-user-interface-in-netlogo"><i class="fa fa-check"></i><b>20.3.1</b> Graphical User Interface in NetLogo</a></li>
+</ul></li>
+<li class="chapter" data-level="20.4" data-path="ABM.html"><a href="ABM.html#allocating-attributes-to-agents"><i class="fa fa-check"></i><b>20.4</b> Allocating attributes to agents</a><ul>
+<li class="chapter" data-level="20.4.1" data-path="ABM.html"><a href="ABM.html#defining-variables"><i class="fa fa-check"></i><b>20.4.1</b> Defining variables</a></li>
+<li class="chapter" data-level="20.4.2" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-1"><i class="fa fa-check"></i><b>20.4.2</b> Reading agent data - Option 1</a></li>
+<li class="chapter" data-level="20.4.3" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-2"><i class="fa fa-check"></i><b>20.4.3</b> Reading agent data - Option 2</a></li>
+</ul></li>
+<li class="chapter" data-level="20.5" data-path="ABM.html"><a href="ABM.html#running-simpleworld"><i class="fa fa-check"></i><b>20.5</b> Running SimpleWorld</a><ul>
+<li class="chapter" data-level="20.5.1" data-path="ABM.html"><a href="ABM.html#more-variable-definitions"><i class="fa fa-check"></i><b>20.5.1</b> More variable definitions</a></li>
+<li class="chapter" data-level="20.5.2" data-path="ABM.html"><a href="ABM.html#more-setup-procedures"><i class="fa fa-check"></i><b>20.5.2</b> More setup procedures</a></li>
+<li class="chapter" data-level="20.5.3" data-path="ABM.html"><a href="ABM.html#the-main-go-procedure"><i class="fa fa-check"></i><b>20.5.3</b> The main Go procedure</a></li>
+<li class="chapter" data-level="20.5.4" data-path="ABM.html"><a href="ABM.html#adding-plots-to-the-model"><i class="fa fa-check"></i><b>20.5.4</b> Adding plots to the model</a></li>
+<li class="chapter" data-level="20.5.5" data-path="ABM.html"><a href="ABM.html#stopping-behavior"><i class="fa fa-check"></i><b>20.5.5</b> Stopping behavior</a></li>
+</ul></li>
+<li class="chapter" data-level="20.6" data-path="ABM.html"><a href="ABM.html#control-the-abm-from-r"><i class="fa fa-check"></i><b>20.6</b> Control the ABM from R</a><ul>
+<li class="chapter" data-level="20.6.1" data-path="ABM.html"><a href="ABM.html#running-a-single-netlogo-simulation"><i class="fa fa-check"></i><b>20.6.1</b> Running a single NetLogo simulation</a></li>
+<li class="chapter" data-level="20.6.2" data-path="ABM.html"><a href="ABM.html#running-multiple-netlogo-simulations"><i class="fa fa-check"></i><b>20.6.2</b> Running multiple NetLogo simulations</a></li>
+</ul></li>
+<li class="chapter" data-level="20.7" data-path="ABM.html"><a href="ABM.html#chapter-summary-10"><i class="fa fa-check"></i><b>20.7</b> Chapter summary</a></li>
+<li class="chapter" data-level="20.8" data-path="ABM.html"><a href="ABM.html#references-8"><i class="fa fa-check"></i><b>20.8</b> References</a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="apR.html"><a href="apR.html"><i class="fa fa-check"></i><b>21</b> Appendix: Getting up-to-speed with R</a><ul>
+<li class="chapter" data-level="21.1" data-path="apR.html"><a href="apR.html#vector-alg"><i class="fa fa-check"></i><b>21.1</b> R understands vector algebra</a></li>
+<li class="chapter" data-level="21.2" data-path="apR.html"><a href="apR.html#R-object"><i class="fa fa-check"></i><b>21.2</b> R is object orientated</a></li>
+<li class="chapter" data-level="21.3" data-path="apR.html"><a href="apR.html#subsetting"><i class="fa fa-check"></i><b>21.3</b> Subsetting in R</a></li>
+<li class="chapter" data-level="21.4" data-path="apR.html"><a href="apR.html#further"><i class="fa fa-check"></i><b>21.4</b> Further R resources</a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>22</b> Glossary</a></li>
+<li class="chapter" data-level="23" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>23</b> Bibliography</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial Microsimulation with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="references-1" class="section level1">
+<h1><span class="header-section-number">4</span> References</h1>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="SimpleWorld.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="what-is.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

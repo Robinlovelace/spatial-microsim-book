@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial Microsimulation with R</title>
+  <meta name="description" content="Spatial Microsimulation with R">
+  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial Microsimulation with R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
+  
+  
+  <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial Microsimulation with R" />
+  
+  
+  
+
+<meta name="author" content="Robin Lovelace and Morgane Dumont">
+
+
+<meta name="date" content="2017-12-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="SimpleWorld.html">
+<link rel="next" href="data-prep.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#a-definition-of-spatial-microsimulation"><i class="fa fa-check"></i><b>1.3</b> A definition of spatial microsimulation</a></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#learning-by-doing"><i class="fa fa-check"></i><b>1.4</b> Learning by doing</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#whyR"><i class="fa fa-check"></i><b>1.5</b> Why spatial microsimulation with R?</a></li>
+<li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#learningR"><i class="fa fa-check"></i><b>1.6</b> Learning the R language</a></li>
+<li class="chapter" data-level="1.7" data-path="intro.html"><a href="intro.html#typographic"><i class="fa fa-check"></i><b>1.7</b> Typographic conventions</a></li>
+<li class="chapter" data-level="1.8" data-path="intro.html"><a href="intro.html#overview"><i class="fa fa-check"></i><b>1.8</b> An overview of the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="SimpleWorld.html"><a href="SimpleWorld.html"><i class="fa fa-check"></i><b>2</b> SimpleWorld: A worked example of spatial microsimulation</a><ul>
+<li class="chapter" data-level="2.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudioUpSpeed"><i class="fa fa-check"></i><b>2.1</b> Getting setup with the RStudio environment</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#installing-r"><i class="fa fa-check"></i><b>2.1.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudio"><i class="fa fa-check"></i><b>2.1.2</b> RStudio</a></li>
+<li class="chapter" data-level="2.1.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#projects"><i class="fa fa-check"></i><b>2.1.3</b> Projects</a></li>
+<li class="chapter" data-level="2.1.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#downloading-data-for-the-book"><i class="fa fa-check"></i><b>2.1.4</b> Downloading data for the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldData"><i class="fa fa-check"></i><b>2.2</b> SimpleWorld data</a></li>
+<li class="chapter" data-level="2.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#weight-matrix"><i class="fa fa-check"></i><b>2.3</b> Generating a weight matrix</a></li>
+<li class="chapter" data-level="2.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#spatial-microdata"><i class="fa fa-check"></i><b>2.4</b> Spatial microdata</a></li>
+<li class="chapter" data-level="2.5" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldContext"><i class="fa fa-check"></i><b>2.5</b> SimpleWorld in context</a></li>
+<li class="chapter" data-level="2.6" data-path="SimpleWorld.html"><a href="SimpleWorld.html#chapter-summary"><i class="fa fa-check"></i><b>2.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="what-is.html"><a href="what-is.html"><i class="fa fa-check"></i><b>3</b> What is spatial microsimulation?</a><ul>
+<li class="chapter" data-level="3.1" data-path="what-is.html"><a href="what-is.html#terminology"><i class="fa fa-check"></i><b>3.1</b> Terminology</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="what-is.html"><a href="what-is.html#SimCity"><i class="fa fa-check"></i><b>3.1.1</b> Spatial microsimulation as SimCity</a></li>
+<li class="chapter" data-level="3.1.2" data-path="what-is.html"><a href="what-is.html#meth-approach"><i class="fa fa-check"></i><b>3.1.2</b> Spatial microsimulation: method or approach?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="what-is.html"><a href="what-is.html#is-not"><i class="fa fa-check"></i><b>3.2</b> What spatial microsimulation is not</a></li>
+<li class="chapter" data-level="3.3" data-path="what-is.html"><a href="what-is.html#applications"><i class="fa fa-check"></i><b>3.3</b> Applications</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="what-is.html"><a href="what-is.html#health-applications"><i class="fa fa-check"></i><b>3.3.1</b> Health applications</a></li>
+<li class="chapter" data-level="3.3.2" data-path="what-is.html"><a href="what-is.html#economic-policy-evaluation"><i class="fa fa-check"></i><b>3.3.2</b> Economic policy evaluation</a></li>
+<li class="chapter" data-level="3.3.3" data-path="what-is.html"><a href="what-is.html#transport"><i class="fa fa-check"></i><b>3.3.3</b> Transport</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="what-is.html"><a href="what-is.html#assumptions"><i class="fa fa-check"></i><b>3.4</b> Assumptions</a></li>
+<li class="chapter" data-level="3.5" data-path="what-is.html"><a href="what-is.html#chapter-summary-1"><i class="fa fa-check"></i><b>3.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="data-prep.html"><a href="data-prep.html"><i class="fa fa-check"></i><b>4</b> Data preparation</a><ul>
+<li class="chapter" data-level="4.1" data-path="data-prep.html"><a href="data-prep.html#accessing"><i class="fa fa-check"></i><b>4.1</b> Accessing the input data</a></li>
+<li class="chapter" data-level="4.2" data-path="data-prep.html"><a href="data-prep.html#Selecting"><i class="fa fa-check"></i><b>4.2</b> Target and constraint variables</a></li>
+<li class="chapter" data-level="4.3" data-path="data-prep.html"><a href="data-prep.html#Loading"><i class="fa fa-check"></i><b>4.3</b> Loading input data</a></li>
+<li class="chapter" data-level="4.4" data-path="data-prep.html"><a href="data-prep.html#subsetting-prep"><i class="fa fa-check"></i><b>4.4</b> Subsetting to remove excess information</a></li>
+<li class="chapter" data-level="4.5" data-path="data-prep.html"><a href="data-prep.html#re-categorise"><i class="fa fa-check"></i><b>4.5</b> Re-categorising individual level variables</a></li>
+<li class="chapter" data-level="4.6" data-path="data-prep.html"><a href="data-prep.html#matching"><i class="fa fa-check"></i><b>4.6</b> Matching individual and aggregate level data names</a></li>
+<li class="chapter" data-level="4.7" data-path="data-prep.html"><a href="data-prep.html#flattening"><i class="fa fa-check"></i><b>4.7</b> ‘Flattening’ the individual level data</a></li>
+<li class="chapter" data-level="4.8" data-path="data-prep.html"><a href="data-prep.html#chapter-summary-2"><i class="fa fa-check"></i><b>4.8</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="smsimr.html"><a href="smsimr.html"><i class="fa fa-check"></i><b>5</b> Population synthesis</a><ul>
+<li class="chapter" data-level="5.1" data-path="smsimr.html"><a href="smsimr.html#weighting"><i class="fa fa-check"></i><b>5.1</b> Weighting algorithms</a></li>
+<li class="chapter" data-level="5.2" data-path="smsimr.html"><a href="smsimr.html#iterative-proportional-fitting"><i class="fa fa-check"></i><b>5.2</b> Iterative Proportional Fitting</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="smsimr.html"><a href="smsimr.html#ipftheory"><i class="fa fa-check"></i><b>5.2.1</b> IPF in theory</a></li>
+<li class="chapter" data-level="5.2.2" data-path="smsimr.html"><a href="smsimr.html#ipfinr"><i class="fa fa-check"></i><b>5.2.2</b> IPF in R</a></li>
+<li class="chapter" data-level="5.2.3" data-path="smsimr.html"><a href="smsimr.html#ipfp"><i class="fa fa-check"></i><b>5.2.3</b> IPF with <strong>ipfp</strong></a></li>
+<li class="chapter" data-level="5.2.4" data-path="smsimr.html"><a href="smsimr.html#mipfp"><i class="fa fa-check"></i><b>5.2.4</b> IPF with <strong>mipfp</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="smsimr.html"><a href="smsimr.html#sintegerisation"><i class="fa fa-check"></i><b>5.3</b> Integerisation</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="smsimr.html"><a href="smsimr.html#concept-of-integerisation"><i class="fa fa-check"></i><b>5.3.1</b> Concept of integerisation</a></li>
+<li class="chapter" data-level="5.3.2" data-path="smsimr.html"><a href="smsimr.html#example-of-integerisation"><i class="fa fa-check"></i><b>5.3.2</b> Example of integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="smsimr.html"><a href="smsimr.html#expansion"><i class="fa fa-check"></i><b>5.4</b> Expansion</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="smsimr.html"><a href="smsimr.html#weights-per-individual"><i class="fa fa-check"></i><b>5.4.1</b> Weights per individual</a></li>
+<li class="chapter" data-level="5.4.2" data-path="smsimr.html"><a href="smsimr.html#weightpc"><i class="fa fa-check"></i><b>5.4.2</b> Weights per category</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="smsimr.html"><a href="smsimr.html#integerisation-and-expansion"><i class="fa fa-check"></i><b>5.5</b> Integerisation and expansion</a></li>
+<li class="chapter" data-level="5.6" data-path="smsimr.html"><a href="smsimr.html#compareipf"><i class="fa fa-check"></i><b>5.6</b> Comparing <strong>ipfp</strong> with <strong>mipfp</strong></a><ul>
+<li class="chapter" data-level="5.6.1" data-path="smsimr.html"><a href="smsimr.html#comparing-the-methods"><i class="fa fa-check"></i><b>5.6.1</b> Comparing the methods</a></li>
+<li class="chapter" data-level="5.6.2" data-path="smsimr.html"><a href="smsimr.html#comparing-the-weights-for-simpleworld"><i class="fa fa-check"></i><b>5.6.2</b> Comparing the weights for SimpleWorld</a></li>
+<li class="chapter" data-level="5.6.3" data-path="smsimr.html"><a href="smsimr.html#comparing-the-results-for-simpleworld"><i class="fa fa-check"></i><b>5.6.3</b> Comparing the results for SimpleWorld</a></li>
+<li class="chapter" data-level="5.6.4" data-path="smsimr.html"><a href="smsimr.html#speed-comparisons"><i class="fa fa-check"></i><b>5.6.4</b> Speed comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="smsimr.html"><a href="smsimr.html#chapter-summary-3"><i class="fa fa-check"></i><b>5.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html"><i class="fa fa-check"></i><b>6</b> Alternative approaches to population synthesis</a><ul>
+<li class="chapter" data-level="6.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#GREGWT"><i class="fa fa-check"></i><b>6.1</b> GREGWT</a></li>
+<li class="chapter" data-level="6.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#asOptim"><i class="fa fa-check"></i><b>6.2</b> Population synthesis as an optimization problem</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#reweighting-with-optim-and-gensa"><i class="fa fa-check"></i><b>6.2.1</b> Reweighting with optim and GenSA</a></li>
+<li class="chapter" data-level="6.2.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#combinatorial-optimisation"><i class="fa fa-check"></i><b>6.2.2</b> Combinatorial optimisation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#SimPop"><i class="fa fa-check"></i><b>6.3</b> simPop</a></li>
+<li class="chapter" data-level="6.4" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#UDST"><i class="fa fa-check"></i><b>6.4</b> The Urban Data Science Toolkit (UDST)</a></li>
+<li class="chapter" data-level="6.5" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#chapter-summary-4"><i class="fa fa-check"></i><b>6.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="CakeMap.html"><a href="CakeMap.html"><i class="fa fa-check"></i><b>7</b> Spatial microsimulation in the wild</a><ul>
+<li class="chapter" data-level="7.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapConVar"><i class="fa fa-check"></i><b>7.1</b> Selection of constraint variables</a></li>
+<li class="chapter" data-level="7.2" data-path="CakeMap.html"><a href="CakeMap.html#CakePrep"><i class="fa fa-check"></i><b>7.2</b> Preparing the input data</a></li>
+<li class="chapter" data-level="7.3" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapIPFP"><i class="fa fa-check"></i><b>7.3</b> Using the <code>ipfp</code> package</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>7.3.1</b> Performing IPF on CakeMap data</a></li>
+<li class="chapter" data-level="7.3.2" data-path="CakeMap.html"><a href="CakeMap.html#CakeINT"><i class="fa fa-check"></i><b>7.3.2</b> Integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="CakeMap.html"><a href="CakeMap.html#CakeMIPF"><i class="fa fa-check"></i><b>7.4</b> Using the <code>mipfp</code> package</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>7.4.1</b> Performing IPF on CakeMap data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="CakeMap.html"><a href="CakeMap.html#CompareMeth"><i class="fa fa-check"></i><b>7.5</b> Comparing methods of reweighting large datasets</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-results"><i class="fa fa-check"></i><b>7.5.1</b> Comparison of results</a></li>
+<li class="chapter" data-level="7.5.2" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-times"><i class="fa fa-check"></i><b>7.5.2</b> Comparison of times</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="CakeMap.html"><a href="CakeMap.html#chapter-summary-5"><i class="fa fa-check"></i><b>7.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="svalidation.html"><a href="svalidation.html"><i class="fa fa-check"></i><b>8</b> Model checking and evaluation</a><ul>
+<li class="chapter" data-level="8.1" data-path="svalidation.html"><a href="svalidation.html#Internal"><i class="fa fa-check"></i><b>8.1</b> Internal validation</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="svalidation.html"><a href="svalidation.html#pearsons-r"><i class="fa fa-check"></i><b>8.1.1</b> Pearson’s <em>r</em></a></li>
+<li class="chapter" data-level="8.1.2" data-path="svalidation.html"><a href="svalidation.html#absolute-error-measures"><i class="fa fa-check"></i><b>8.1.2</b> Absolute error measures</a></li>
+<li class="chapter" data-level="8.1.3" data-path="svalidation.html"><a href="svalidation.html#root-mean-squared-error"><i class="fa fa-check"></i><b>8.1.3</b> Root mean squared error</a></li>
+<li class="chapter" data-level="8.1.4" data-path="svalidation.html"><a href="svalidation.html#chi-squared"><i class="fa fa-check"></i><b>8.1.4</b> Chi-squared</a></li>
+<li class="chapter" data-level="8.1.5" data-path="svalidation.html"><a href="svalidation.html#which-test-to-use"><i class="fa fa-check"></i><b>8.1.5</b> Which test to use?</a></li>
+<li class="chapter" data-level="8.1.6" data-path="svalidation.html"><a href="svalidation.html#internal-validation-of-cakemap"><i class="fa fa-check"></i><b>8.1.6</b> Internal validation of CakeMap</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="svalidation.html"><a href="svalidation.html#empty-cells"><i class="fa fa-check"></i><b>8.2</b> Empty cells</a></li>
+<li class="chapter" data-level="8.3" data-path="svalidation.html"><a href="svalidation.html#External"><i class="fa fa-check"></i><b>8.3</b> External validation</a></li>
+<li class="chapter" data-level="8.4" data-path="svalidation.html"><a href="svalidation.html#chapter-summary-6"><i class="fa fa-check"></i><b>8.4</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="nomicrodata.html"><a href="nomicrodata.html"><i class="fa fa-check"></i><b>9</b> Population synthesis without microdata</a><ul>
+<li class="chapter" data-level="9.1" data-path="nomicrodata.html"><a href="nomicrodata.html#CrossGlobLocalMarg"><i class="fa fa-check"></i><b>9.1</b> Global cross-tables and local marginal distributions</a></li>
+<li class="chapter" data-level="9.2" data-path="nomicrodata.html"><a href="nomicrodata.html#twoLevelData"><i class="fa fa-check"></i><b>9.2</b> Two level aggregated data</a></li>
+<li class="chapter" data-level="9.3" data-path="nomicrodata.html"><a href="nomicrodata.html#chapter-summary-7"><i class="fa fa-check"></i><b>9.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ha.html"><a href="ha.html"><i class="fa fa-check"></i><b>10</b> Household allocation</a><ul>
+<li class="chapter" data-level="10.1" data-path="ha.html"><a href="ha.html#IndData"><i class="fa fa-check"></i><b>10.1</b> Independent data (individuals and households)</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="ha.html"><a href="ha.html#household-type-selection"><i class="fa fa-check"></i><b>10.1.1</b> Household type selection</a></li>
+<li class="chapter" data-level="10.1.2" data-path="ha.html"><a href="ha.html#constituent-members-selection"><i class="fa fa-check"></i><b>10.1.2</b> Constituent members selection</a></li>
+<li class="chapter" data-level="10.1.3" data-path="ha.html"><a href="ha.html#end-of-the-household-generation-process"><i class="fa fa-check"></i><b>10.1.3</b> End of the household generation process</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="ha.html"><a href="ha.html#cross-data-individual-and-household-level-information"><i class="fa fa-check"></i><b>10.2</b> Cross data: individual and household level information</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="ha.html"><a href="ha.html#WithoutHHdata"><i class="fa fa-check"></i><b>10.2.1</b> Without additional household’s data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="ha.html"><a href="ha.html#AddData"><i class="fa fa-check"></i><b>10.2.2</b> With additional household’s data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="ha.html"><a href="ha.html#chapter-summary-8"><i class="fa fa-check"></i><b>10.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="tresis.html"><a href="tresis.html"><i class="fa fa-check"></i><b>11</b> The TRESIS approach to spatial microsimulation</a><ul>
+<li class="chapter" data-level="11.1" data-path="tresis.html"><a href="tresis.html#tresis-over"><i class="fa fa-check"></i><b>11.1</b> Overview of TRESIS modelling system</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="tresis.html"><a href="tresis.html#differences-between-tresis-and-other-microsimulation-systems"><i class="fa fa-check"></i><b>11.1.1</b> Differences between TRESIS and other microsimulation systems</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="tresis.html"><a href="tresis.html#tresis-house"><i class="fa fa-check"></i><b>11.2</b> Synthetic households</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="tresis.html"><a href="tresis.html#what-are-synthetic-households"><i class="fa fa-check"></i><b>11.2.1</b> What are synthetic households?</a></li>
+<li class="chapter" data-level="11.2.2" data-path="tresis.html"><a href="tresis.html#required-data-for-generating-synthetic-households"><i class="fa fa-check"></i><b>11.2.2</b> Required data for generating synthetic households</a></li>
+<li class="chapter" data-level="11.2.3" data-path="tresis.html"><a href="tresis.html#synthetic-households-in-r"><i class="fa fa-check"></i><b>11.2.3</b> Synthetic households in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="tresis.html"><a href="tresis.html#using-demand-models-to-allocate-synthetic-households-to-zones-using-r"><i class="fa fa-check"></i><b>11.3</b> Using demand models to allocate synthetic households to zones using R</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="tresis.html"><a href="tresis.html#simple-discrete-choice-model-for-residential-location"><i class="fa fa-check"></i><b>11.3.1</b> Simple discrete choice model for residential location</a></li>
+<li class="chapter" data-level="11.3.2" data-path="tresis.html"><a href="tresis.html#results"><i class="fa fa-check"></i><b>11.3.2</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="tresis.html"><a href="tresis.html#conclusions"><i class="fa fa-check"></i><b>11.4</b> Conclusions</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="tresis.html"><a href="tresis.html#limitations"><i class="fa fa-check"></i><b>11.4.1</b> Limitations</a></li>
+<li class="chapter" data-level="11.4.2" data-path="tresis.html"><a href="tresis.html#metroscan-ti"><i class="fa fa-check"></i><b>11.4.2</b> MetroScan-TI</a></li>
+<li class="chapter" data-level="11.4.3" data-path="tresis.html"><a href="tresis.html#extending-residential-location-to-transport-models-in-r"><i class="fa fa-check"></i><b>11.4.3</b> Extending residential location to transport models in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="tresis.html"><a href="tresis.html#chapter-summary-9"><i class="fa fa-check"></i><b>11.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="ABM.html"><a href="ABM.html"><i class="fa fa-check"></i><b>12</b> Spatial microsimulation for agent-based models</a><ul>
+<li class="chapter" data-level="12.1" data-path="ABM.html"><a href="ABM.html#note"><i class="fa fa-check"></i><b>12.1</b> Note</a></li>
+<li class="chapter" data-level="12.2" data-path="ABM.html"><a href="ABM.html#abm-software"><i class="fa fa-check"></i><b>12.2</b> ABM software</a></li>
+<li class="chapter" data-level="12.3" data-path="ABM.html"><a href="ABM.html#setting-up-simpleworld-in-netlogo"><i class="fa fa-check"></i><b>12.3</b> Setting up SimpleWorld in NetLogo</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="ABM.html"><a href="ABM.html#graphical-user-interface-in-netlogo"><i class="fa fa-check"></i><b>12.3.1</b> Graphical User Interface in NetLogo</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="ABM.html"><a href="ABM.html#allocating-attributes-to-agents"><i class="fa fa-check"></i><b>12.4</b> Allocating attributes to agents</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="ABM.html"><a href="ABM.html#defining-variables"><i class="fa fa-check"></i><b>12.4.1</b> Defining variables</a></li>
+<li class="chapter" data-level="12.4.2" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-1"><i class="fa fa-check"></i><b>12.4.2</b> Reading agent data - Option 1</a></li>
+<li class="chapter" data-level="12.4.3" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-2"><i class="fa fa-check"></i><b>12.4.3</b> Reading agent data - Option 2</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="ABM.html"><a href="ABM.html#running-simpleworld"><i class="fa fa-check"></i><b>12.5</b> Running SimpleWorld</a><ul>
+<li class="chapter" data-level="12.5.1" data-path="ABM.html"><a href="ABM.html#more-variable-definitions"><i class="fa fa-check"></i><b>12.5.1</b> More variable definitions</a></li>
+<li class="chapter" data-level="12.5.2" data-path="ABM.html"><a href="ABM.html#more-setup-procedures"><i class="fa fa-check"></i><b>12.5.2</b> More setup procedures</a></li>
+<li class="chapter" data-level="12.5.3" data-path="ABM.html"><a href="ABM.html#the-main-go-procedure"><i class="fa fa-check"></i><b>12.5.3</b> The main Go procedure</a></li>
+<li class="chapter" data-level="12.5.4" data-path="ABM.html"><a href="ABM.html#adding-plots-to-the-model"><i class="fa fa-check"></i><b>12.5.4</b> Adding plots to the model</a></li>
+<li class="chapter" data-level="12.5.5" data-path="ABM.html"><a href="ABM.html#stopping-behavior"><i class="fa fa-check"></i><b>12.5.5</b> Stopping behavior</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="ABM.html"><a href="ABM.html#control-the-abm-from-r"><i class="fa fa-check"></i><b>12.6</b> Control the ABM from R</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="ABM.html"><a href="ABM.html#running-a-single-netlogo-simulation"><i class="fa fa-check"></i><b>12.6.1</b> Running a single NetLogo simulation</a></li>
+<li class="chapter" data-level="12.6.2" data-path="ABM.html"><a href="ABM.html#running-multiple-netlogo-simulations"><i class="fa fa-check"></i><b>12.6.2</b> Running multiple NetLogo simulations</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ABM.html"><a href="ABM.html#chapter-summary-10"><i class="fa fa-check"></i><b>12.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="apR.html"><a href="apR.html"><i class="fa fa-check"></i><b>13</b> Appendix: Getting up-to-speed with R</a><ul>
+<li class="chapter" data-level="13.1" data-path="apR.html"><a href="apR.html#vector-alg"><i class="fa fa-check"></i><b>13.1</b> R understands vector algebra</a></li>
+<li class="chapter" data-level="13.2" data-path="apR.html"><a href="apR.html#R-object"><i class="fa fa-check"></i><b>13.2</b> R is object orientated</a></li>
+<li class="chapter" data-level="13.3" data-path="apR.html"><a href="apR.html#subsetting"><i class="fa fa-check"></i><b>13.3</b> Subsetting in R</a></li>
+<li class="chapter" data-level="13.4" data-path="apR.html"><a href="apR.html#further"><i class="fa fa-check"></i><b>13.4</b> Further R resources</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
+<li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial Microsimulation with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="what-is" class="section level1">
+<h1><span class="header-section-number">3</span> What is spatial microsimulation?</h1>
+<p>The purpose of this chapter is to demystify the various interpretations and uses of the term ‘spatial microsimulation’ and to define clearly what we mean by it in this book. Following the brief introduction to the field in this first section, the chapter is ordered as follows:</p>
+<ul>
+<li><em>Terminology</em> (Section ) explains the basis of the concept (<a href="what-is.html#SimCity"></a>) and shows how spatial microsimulation can be understood as either a method or an approach (<a href="what-is.html#meth-approach"></a>).</li>
+<li><em>What spatial microsimulation is not</em> (<a href="what-is.html#is-not"></a>) describes the differences between spatial microsimulation and other fields that could seem similar.</li>
+<li><em>Applications</em> (<a href="what-is.html#applications"></a>) explores various academic and real-world applications.</li>
+<li><em>Assumptions</em> (<a href="what-is.html#assumptions"></a>) addresses the often unspoken assumptions underlying spatial microsimulation results.</li>
+</ul>
+<p>For the purposes of this book spatial microsimulation was defined in Chapter 1 as:</p>
+<blockquote>
+<p><strong>The creation, analysis and modelling of individual level data allocated to geographic zones.</strong></p>
+</blockquote>
+<p>Spatial microsimulation is well-suited to the analysis of complex phenomena which happen over geographical space, such as transport systems and housing markets. Because it includes the creation of synthetic data, the method is well-suited to situations in which available data are limited. Figure 3.1 illustrates how the process of <em>population synthesis</em> can be used to impute missing data, by approximating the original geo-referenced individual level data <span class="citation">(Lovelace et al. <a href="#ref-Lovelace-ipfinr">2015</a>)</span>. It is important to note that the process does not stop with the generation of spatial microdata: it involves <em>doing stuff</em> with the spatial microdata to better understand the world.</p>
+<div class="figure"><span id="fig:unnamed-chunk-26"></span>
+<img src="_main_files/figure-html/unnamed-chunk-26-1.png" alt="Schematic of population synthesis, a critical element in spatial microsimulation" width="672" />
+<p class="caption">
+Figure 3.1: Schematic of population synthesis, a critical element in spatial microsimulation
+</p>
+</div>
+<p>Spatial microsimulation is a way to combine the advantages of individual level data with the geographical specificity of geographical data. If used correctly, it can be used to provide ‘the best of both worlds’ of available data by combining them into a single analysis. Spatial microsimulation should therefore be used in situations where you have access to individual and area level data but no means of combining them. Spatial microsimulation can also be used in contexts where no individual level data is available, as described in Chapter 9.</p>
+<p>Typical use cases include modelling the spatial distribution of population growth and changes in demographics; high level transport-modelling; scenario-based modelling of behavioural change; and as an input into agent-based models. Because large individual and area level datasets have only recently become available and because computers have only recently become sufficiently powerful to run large-scale models on thousands of individuals and zones, spatial microsimulation is still a field in its infancy. There are many areas of application where the method has considerable benefits but where the method has not yet been used. It is hoped that this book provides sufficient guidance to enable the reader to use spatial microsimulation on new problems.</p>
+<div id="terminology" class="section level2">
+<h2><span class="header-section-number">3.1</span> Terminology</h2>
+<p>Like many phrases, the meaning of <em>spatial microsimulation</em> varies depending on context. The term is more ambiguous than most, however, because it is a relatively new method and because different people have used the term in different ways. Of course, the label attributed to the method is less important than the method itself. As eminent physicist Richard Feynman put it, “the difference between knowing the name of something and knowing something” is vital to understand the world. The methods used in this book could equally be “multi level modelling” or “real-world SimCity”, but this would not change how its methods work or what they do. However, it is important that the terminology we use is at least <em>internally consistent</em> to avoid confusion. Furthermore, it is important to understanding something about how others have used ‘spatial microsimulation’ to avoid misinterpretation of literature that employs the term.</p>
+<p>There are some issues with term <em>spatial microsimulation</em>, as described below (see <a href="what-is.html#is-not"></a>). However, <em>spatial microsimulation</em> is an appropriate label for the material covered in this book because it is already widely used and because it succinctly conveys the main elements of the approach:</p>
+<ul>
+<li><strong>Spatial</strong> microsimulation is inherently concerned with how things vary over space, not just between individuals, groups or periods of time: this is what distinguishes <em>spatial</em> microsimulation from the wider field of microsimulation.</li>
+<li>Spatial <strong>micro</strong>simulation explores issues at the individual level, as implied by the word <em>micro</em>.</li>
+<li>Spatial micro<strong>simulation</strong> involves the creation of fictitious data for modelling purposes, captured by the word <em>simulation</em>.</li>
+</ul>
+<p>From this breakdown of spatial microsimulation into its component parts its meaning may seem obvious. However, it is important to define the term precisely at an early stage and understand how other people have used the term to avoid confusion.</p>
+<div id="SimCity" class="section level3">
+<h3><span class="header-section-number">3.1.1</span> Spatial microsimulation as SimCity</h3>
+<p>SimCity is a popular computer game series in which the player constructs urban infrastructure and observes his God-like influence on the virtual citizens. The analogy of SimCity helps to describe spatial microsimulation. In practice, however, the underlying aims of SimCity (entertainment, education and profit for its publisher) are quite different from those of spatial microsimulation research. But, in some ways the comparison is appropriate: SimCity creates virtual individuals allocated to geographic space and provides a framework for <em>model experiments</em> in the same way that spatial microsimulation does. SimCity can be used for teaching urban planning <span class="citation">(Gaber <a href="#ref-Gaber2007">2007</a>)</span> and illustrates how complex computer simulations of urban systems can become. A number of open-source versions of the SimCity concept are now available (e.g. LinCity-NG, Micropolis and Simutrans).</p>
+</div>
+<div id="meth-approach" class="section level3">
+<h3><span class="header-section-number">3.1.2</span> Spatial microsimulation: method or approach?</h3>
+<p>The most common confusion about what spatial microsimulation is arises because the term has been used to refer to both a narrow methodology and a broader research approach. From Feynman’s distinction between a thing’s label and what it actually is, it is clear that both interpretations are acceptable. The critical step is to use the term in a way that others can understand, remembering that the audience may not have heard of spatial microsimulation before. As stated in the introduction, we acknowledge both uses of the term in the literature but advocate that ‘spatial microsimulation’ is used to describe the overall modelling approach. The term <em>population synthesis</em>, used in transport modelling, is used to describe the methods for generating the spatial microdata on which the spatial microsimulation approach depends.</p>
+<p>A subsequent section (<a href="what-is.html#applications"></a>) outlines some real-world problems spatial microsimulation has been used to tackle. First, we consider how spatial microsimulation is understood in the literature and how this relates to the definitions used in this book.</p>
+<p><strong>Population synthesis</strong> is a set of techniques for generating individual level data allocated to geographical zones. Population synthesis is an important (and often crucial) component of the spatial microsimulation approach, the aim of which is to generate a realistic sample for each area that is as similar as possible to aggregate level constraints. Population synthesis usually involves the allocation of individuals from a survey dataset to administrative zones, based on shared variables between the areal (where each unit is a zone) and individual level data. When additional <em>target variables</em> exist in the microdata inputs for population synthesis (which are not present in the aggregate level data), the process can be used to simulate information that is not otherwise available at the local level. Population synthesis in this context can be seen as part of the long-established field of <em>small area estimation</em> <span class="citation">(Rao <a href="#ref-Rao2003">2003</a>)</span>.</p>
+<p><strong>Microsimulation</strong> (of which spatial microsimulation is a subset) is an approach that was first conceived by Guy Orcutt. This can be defined in general terms as “a methodology … to simulate the states and behaviours of different units — e.g. individuals, households, firms — as they evolve in a given environment” <span class="citation">(Baroni and Richiardi <a href="#ref-Baroni2007">2007</a>)</span>. The defining feature of <em>spatial microsimulation</em> is that the ‘environment’ is defined in predominantly geographical terms: the individuals are allocated to small parcels of land which affect their characteristics and inferred behaviour. This wider perspective helps explain why, despite not using the term ‘spatial microsimulation’, <span class="citation">Orcutt (<a href="#ref-Orcutt1957-new-type">1957</a>)</span> is frequently cited as one of the founding fathers of the field.</p>
+<p>As with many new and infrequently used words, the term spatial microsimulation is a source of confusion, and its meaning can vary depending on context and who you ask. To an economist, spatial microsimulation is likely to imply modelling a temporal process such as how individual agents in different areas respond to changes in prices or policies. To a transport planner, the term may imply simulating the precise movements of vehicles on the transport network. To your next door neighbour it may mean you have started speaking gobbledygook! Hence the need to consider what spatial microsimulation is, and what it is not, at the outset. However, in every case, the term involves the creation of individual level data that is grouped by geographic zone via some kind of approximation method.</p>
+<p>To avoid confusion regarding the terminology used in this book, a glossary defining much of the jargon relating to spatial microsimulation is provided at the end. For now, to help answer what spatial microsimulation is we will look at its applications and then at what it is not.</p>
+</div>
+</div>
+<div id="is-not" class="section level2">
+<h2><span class="header-section-number">3.2</span> What spatial microsimulation is not</h2>
+<p>Having seen contemporary definitions of spatial microsimulation and what it <em>is</em>, it is also useful to define spatial microsimulation negatively, in terms of what it is not. This is partly due to the close association between spatial microsimulation and other methods, but also because there is a tendency for people to think that spatial microsimulation is more complicated than it is.</p>
+<p><strong>Spatial microsimulation is not small area estimation</strong></p>
+<p>Small area estimation consists in estimating aggregate counts for a small area. For example, in this field, we can forecast the total population of a zone for a future year. However, we have no information about each individual, it is restricted to statistics on the area. On the other hand, spatial microsimulation really focuses on the <em>micro</em> level. Thus, we estimate the population individual per individual.</p>
+<p>Note that, thanks to spatial microsimulation, we are able to aggregate counts and deduce the <em>macro</em> level per municipality, which corresponds to small area estimation.</p>
+<p><strong>Spatial microsimulation is not (quite) agent-based modelling</strong></p>
+<p>Spatial microsimulation does involve the creation and analysis of individuals and their allocation to families and zone. But it does not necessarily imply interaction between these individuals. For this, agent-based model (ABM) is needed. One could assume that because the method contains the word ‘simulation’, it includes detailed modelling of individual behaviours in which individuals interact with each other and the environment over time and space. This is not always the case: spatial microsimulation is generally a more ‘top down’ approach to modelling, in which the results can be broadly predicted. ABM, by contrast, is bottom-up and can result in highly non-linear and chaotic states <span class="citation">(Batty <a href="#ref-Batty2005">2005</a>)</span>.</p>
+<p>There is, however, no clearly defined boundary stating where spatial microsimulation ends and ABM begins and the two approaches are closely linked. The synthetic populations produced as part of spatial microsimulation can form an excellent starting point for ABM. ABM can be seen as an extension of spatial microsimulation. While spatial microsimulation <em>produces</em> individuals and assigns their characteristics over space (and en masse via various ‘what-if’ scenarios), ABMs tend to have higher spatial and temporal resolution, allowing individuals to interact through space and time, with each other and with their environment. This increased level of detail and complexity means that ABM tends to have higher computational needs per individual. As a result, spatial microsimulation models tend to be much larger, encapsulating up to millions of individuals. As computing power continues to increase the potential for adding ABM capabilities to such models is only set to grow <span class="citation">(Wegener <a href="#ref-Wegener2011">2011</a>)</span>.</p>
+<p>The above discussion illustrates that microsimulation can be seen as a subset of advanced ABM. The results of spatial microsimulation models tend to apply to only specific snapshots in time and individuals tend to be fixed to a single area. ABM can thus add great additional value to spatial microsimulation models, by providing a framework for more complex interactions. Chapter 12 illustrates how the outputs of spatial microsimulation can form an empirical basis for ABM.</p>
+<p>In summary, ABM and spatial microsimulation are closely related, overlapping and complementary approaches to the analysis of individual level processes operating over geographical space and time. A main conceptual difference is that the spans of space and time tend to be larger in spatial microsimulation work, for reasons relating to computing power and model complexity.</p>
+<p><strong>Spatial microsimulation does not really generate new data</strong></p>
+<p>During spatial microsimulation, apparently new individuals are created and placed into zones. It would be tempting to think that new information about the world is somehow being created. This is not the case: the ‘new’ individuals are simply repeats of individuals we already knew about from the individual level data, albeit in a different order and in different combinations. Thus we are not increasing the diversity of the dataset, simply changing its aggregate level characteristics. Spatial microsimulation creates a complete data that take into accounts all other data you included in the process. It is just a way to put all information together to approximate the whole real population, but it does not really generate new data.</p>
+<p><strong>Spatial microsimulation is often not strictly spatial</strong></p>
+<p>The most surprising feature of spatial microsimulation is that the method is not strictly <em>spatial</em>. The only reason why the method has developed this name (as opposed to ‘small area population synthesis’, for example) is that practitioners tend to use administrative zones, which represent geographical areas, as the grouping variable. However, any mutually exclusive grouping variable, such as age band or number of bedrooms in your house, could be used. Likewise, geographical location can be used as a <em>constraint variable</em>. In most spatial microsimulation models, the spatial variable is a mutually exclusive grouping, interchangeable with any such group. Of course, the spatial microdata, maps and analysis that result from spatial microsimulation are spatial; it’s just that there is nothing inherently spatial about the method used to generate the spatial microdata.</p>
+<p>To be more precise, spatial microsimulation is not <em>inherently spatial</em>. Spatial attributes such as the geographic coordinates of the zones to which individuals have been allocated and home and work locations can easily be added to the spatial microdata after they have been generated. It is the use of geographical variables as the grouping variable that is critical here and which distinguishes spatial microsimulation from other types of microsimulation.</p>
+<p>A common use of spatial microsimulation (at least the population synthesis aspect) is simply to create model estimates of data which does not exist. This usage case is represented in Figure 3.1, whereby individual level data from a survey is ‘scaled down’ to the local level using population synthesis algorithms. As illustrated in Figure 3.1, the process of population synthesis can be seen as an attempt to reproduce the real spatial microdata collected during the census but which is unavailable for confidentiality reasons.</p>
+<p>Input <em>microdata</em> and <em>constraints</em> ensure the simulated results match reality (at least at the aggregate level for the constraint variables — see <a href="what-is.html#assumptions"></a>). The resulting synthetic spatial microdata is extremely useful for estimating missing data at the local level. If <em>target variables</em> contained in the output were not present in the constraints (income is a common example), estimates of income variability over space can be extracted from the spatial microdata. In addition, the estimated spatial microdata represented in Figure 3.1 will contain estimates of <em>cross-tabulations</em> (contingency tables) between different variables and estimates of the distribution of continuous variables such as age and income. These estimates are useful in many applications (<a href="what-is.html#applications"></a>).</p>
+</div>
+<div id="applications" class="section level2">
+<h2><span class="header-section-number">3.3</span> Applications</h2>
+<p>Spatial microsimulation has a wide variety of applications and there are many areas where the technique has been used. The main areas of application have been health, economic policy evaluation and transport. Rather than attempt to provide a comprehensive account of the range of current and possible applications, this section describes a single study in each area to exemplify how spatial microsimulation is used.</p>
+<div id="health-applications" class="section level3">
+<h3><span class="header-section-number">3.3.1</span> Health applications</h3>
+<p>A classic example of the potential practical utility of spatial microsimulation is a study which estimated the rate of smoking at the small area level in the city of Leeds UK <span class="citation">(Tomintz, Clarke, and Rigby <a href="#ref-Tomintz2008">2008</a>)</span>. Smoking is a classic ‘target variable’ in spatial microsimulation: it is reported in a number of individual level surveys but there is surprisingly little information about how smoking rates vary from place to place. Thus it is difficult to determine where to locate services that depend on the rate of smoking. The synthetic spatial microdata could thus be used to help identify new clinics to help people stop smoking. (Alternatively, the spatial microdata could be used by a tobacco chain to help decide where to invest in a new shop, highlighting the potential misuse of the technique by unscrupulous analysts.) The authors found that actual anti-smoking clinics were not located optimally. Furthermore, the results pointed to optimal locations for new clinics, potentially improving the cost-effectiveness of public health campaigns.</p>
+<p>This research has since been ‘scaled-up’ to estimate smoking rates across the whole of Austria. The <a href="http://www.simsalud.org/">simSALUD</a> portal provides users with access to the resulting spatial microdata and an on-line interface to allow for the selection of constraint variables and other options to customise the model for the specific purposes. This portal-based system and the provision of synthetic spatial microdata to researchers illustrates one possible direction that spatial microsimulation research could go in, where the synthetic data produced from a large model is the main output of the research, to be used by others for a variety of applications.</p>
+<p>The example of smoking demonstrates the increase of spatial resolution that spatial microsimulation can bring to bear on under-studied areas in public health. Where the prevalence of unhealthy activities is closely related to socio-demographic variables, a synthetic microdataset can lead to decision making tools that would be difficult to implement with non-spatial surveys alone. <strong>Simobesity</strong> is another research project and spatial microsimulation software tool that estimates the prevalence of obesity at the local levels depending on demographic constraint variables <span class="citation">(Edwards and Clarke <a href="#ref-Edwards2013">2013</a>)</span>. Recent evidence has emerged on the impact of car-dependent urban environments on inactive lifestyles and resulting poor health (these areas have been labelled ‘obesogenic’). In this context, there is great potential for combining socio-demographic and environmental-geographic variables in a spatial microsimulation model. Using the same principles described by Tomintz, Clarke and Rigby (2008), the outputs of such a model could help target local interventions to tackle physical inactivity, maximising the benefits of public health initiatives.</p>
+</div>
+<div id="economic-policy-evaluation" class="section level3">
+<h3><span class="header-section-number">3.3.2</span> Economic policy evaluation</h3>
+<p>The social-demographic distribution of impacts arising from economic policy evaluation is one of the most common applications of microsimulation (although the analysis in this area is often non-spatial). ‘Social impact evaluation’, where the impact of policy changes on different income and socio-demographic groups is explored, is a classic example of applied microsimulation research. Frequently these simulations are undertaken by government departments and focus on overall shifts in the population rather than spatial variability in the impacts. The EU–funded EUROMOD project, and software package of the same name, is the largest of these initiatives. The EUROMOD software is used by government analysts and research agencies in many countries to estimate the distributional impacts of policy reforms (Figure 3.2). The resulting research demonstrates that modelling work based on microsimulation can provide important new lines of evidence to inform national level policies <span class="citation">(Avram et al. <a href="#ref-avram2012distributional">2012</a>)</span>.</p>
+<div class="figure"><span id="fig:unnamed-chunk-34"></span>
+<img src="_main_files/figure-html/unnamed-chunk-34-1.png" alt="Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK." width="480" />
+<p class="caption">
+Figure 3.2: Output from the EUROMOD economic microsimulation model (Avram et al. 2014). Along the x axes is income group rising to the right. This means, for example, that Latvia (LV) has implemented progressive policies whereas Portugal (PT) has implemented regressive policies. Country acronyms from left to right stand for Estonia (EE), Greece (EL), Spain (ES), Italy (IT), Latvia (LV), Lithuania (LT), Portugal (PT), Romania (RO) and the UK.
+</p>
+</div>
+<p>Spatial microsimulation uses very similar techniques as those employed by EUROMOD and other economic microsimulation models, including probability-weighted random sampling of individual level data and aggregate level scenario development <span class="citation">(Sutherland and Figari <a href="#ref-sutherland2013euromod">2013</a>)</span>.</p>
+<p>The majority of microsimulation research for economic policy evaluation does not disaggregate the impacts over space, however. The estimation of variability at the <em>local level</em> is what differentiates spatial microsimulation models from economic microsimulation models, although the underlying methods are very similar. This book does not cover EUROMOD, focussing instead on spatially disaggregated microdata. However, there is great potential for future work to make EUROMOD more spatially enabled and to bring elements of EUROMOD into the methods outlined in the following chapters.</p>
+</div>
+<div id="transport" class="section level3">
+<h3><span class="header-section-number">3.3.3</span> Transport</h3>
+<p>Transport modelling is a mature field that increasingly uses individual level data as the basis of analysis. Large scale models such as <a href="http://www.matsim.org/">MATSim</a> rely on spatial microdata to provide demand for travel and individual characteristics for origins and destinations. The same techniques are used in spatial microsimulation and transport modelling generating spatial microdata although in the transport literature, the process is referred to as <em>population synthesis</em> <span class="citation">(Axhausen, Müller, and Axhausen <a href="#ref-Muller2010">2011</a>)</span>.</p>
+<p>Generally, little attention is paid to this process of synthetic population generation in transport modelling because the focus is on movement of individuals rather than their characteristics. Distributional impacts are often overlooked in transport models <span class="citation">(Lucas <a href="#ref-Lucas2012">2012</a>)</span> and there is much potential to integrate spatial microsimulation with existing transport modelling methods.</p>
+<p>An example of the potential uses of spatial microsimulation in transport models is illustrated in Figure 3.3. This shows the simulated commuting behaviour of 20 randomly selected individuals from a large scale spatial microdataset of Sheffield. Because the constraints used in this model included socio-demographic variables, each individual represented in the figure has a rich profile of characteristics associated with them. This analysis can provide new evidence about the likely winners and losers from very specific interventions such as a new bicycle path or bus route <span class="citation">(Lovelace, Ballas, and Watson <a href="#ref-Lovelace2014-jtg">2014</a>)</span>. As a result of the increased detail allowed by such methods there is much interest in spatial microsimulation for transport applications. Figure 3.3 also illustrates the potential for the output of spatial microsimulation to be used as an input into agent-based models (ABM).</p>
+<div class="figure"><span id="fig:unnamed-chunk-35"></span>
+<img src="_main_files/figure-html/unnamed-chunk-35-1.png" alt="An illustration of spatial microdata in transport modelling. 20 people are illustrated on the map as travelling to a range of destinations, specified based on probability-weighted sampling from origin-destination tables (Lovelace et al. 2014)." width="384" />
+<p class="caption">
+Figure 3.3: An illustration of spatial microdata in transport modelling. 20 people are illustrated on the map as travelling to a range of destinations, specified based on probability-weighted sampling from origin-destination tables (Lovelace et al. 2014).
+</p>
+</div>
+<p>A larger and more advanced illustration of the potential for spatial microsimulation in transport modelling work is described by <span class="citation">Barthelemy and Toint (<a href="#ref-Barthelemy2015a">2015</a>)</span>. This paper describes a stochastic model to allocate travel behaviours to a geo-located synthetic population of 10 million people, representing the entirety of the transport system in Belgium. By combining the synthetic microdata with an agent–based modelling approach (described in Chapter 12), <span class="citation">Barthelemy and Toint (<a href="#ref-Barthelemy2015a">2015</a>)</span> are able to characterise a very large transport system in great detail.</p>
+</div>
+</div>
+<div id="assumptions" class="section level2">
+<h2><span class="header-section-number">3.4</span> Assumptions</h2>
+<p>As with any simulation technique, spatial microsimulation is based on assumptions, some of which are unlikely to hold in all cases. This does not preclude spatial microsimulation in cases where the assumptions do not hold: “It is far better to foresee even without certainty than not to foresee at all”, as Henri Poincaré put it <span class="citation">(Barthélemy <a href="#ref-barthelemy2014parallelized">2014</a>)</span>.</p>
+<p>It is vital, however, that users of spatial microsimulation and ‘consumers’ of the resulting research understand that the results of spatial microsimulation are not <em>real</em> but a best estimate of the population in a given area. The danger is that if the assumptions are not understood, incorrect conclusions will result. It is therefore the duty of researchers using spatial microsimulation (and other techniques) to clearly state the assumptions on which the results depend on and the extent to which these assumptions can be expected to hold in practice. Roughly speaking there are four main assumptions underlying all spatial microsimulation models:</p>
+<ol style="list-style-type: decimal">
+<li>The individual level microdata are representative of the study area.</li>
+<li>The target variable is dependent on the constraint variables and their interactions in a way that is relatively constant over space and time.</li>
+<li>The relationships between the constraint variables are not spatially dependent.</li>
+<li>The input microdataset and constraints are sufficiently rich and detailed to reproduce the full diversity of individuals and areas in the study region.</li>
+</ol>
+<p>Obviously the real world is complex and many processes are spatially dependent, invalidating assumptions 2 and 3. The extent to which the relationships between variables can be deemed to be constant over space is often unknown. However, there are ways of checking the spatial dependency of relationships between multiply variables, not least Geographically Weighted Regression (GWR).</p>
+<p>These limitations should be discussed at the outset of spatial microsimulation research, with reference to the input data. To see how spatial microsimulation simplifies the real world, the next chapter describes a hypothetical scenario where 33 inhabitants of an imaginary land are simulated and allocated to three zones based on a microdataset of only five individuals and two constraint variables.</p>
+</div>
+<div id="chapter-summary-1" class="section level2">
+<h2><span class="header-section-number">3.5</span> Chapter summary</h2>
+<p>In this chapter we have defined what spatial microsimulation is and what it is not. Some research and real-world applications were described, with comments on areas for further work. The final section on assumptions underlying spatial microsimulation is in some ways the most important: It shows the importance of understanding the limitations associated with the method and the dangers of drawing conclusions from simulated data.</p>
+
+</div>
+</div>
+<h3> Bibliography</h3>
+<div id="refs" class="references">
+<div id="ref-Lovelace-ipfinr">
+<p>Lovelace, Robin, Dimitris Ballas, Mark M.H. Birkin, Eveline van Leeuwen, Dimitris Ballas, Eveline van Leeuwen, and Mark M.H. Birkin. 2015. “Evaluating the performance of Iterative Proportional Fitting for spatial microsimulation: new tests for an established technique.” <em>Journal of Artificial Societies and Social Simulation</em> 18 (2): 21.</p>
+</div>
+<div id="ref-Gaber2007">
+<p>Gaber, J. 2007. “Simulating Planning: SimCity as a Pedagogical Tool.” <em>Journal of Planning Education and Research</em> 27 (2): 113–21. doi:<a href="https://doi.org/10.1177/0739456X07305791">10.1177/0739456X07305791</a>.</p>
+</div>
+<div id="ref-Rao2003">
+<p>Rao, Jonathan N K. 2003. <em>Small area estimation</em>. Vol. 331. John Wiley &amp; Sons.</p>
+</div>
+<div id="ref-Baroni2007">
+<p>Baroni, Elisa, and Matteo Richiardi. 2007. “Orcutt’s Vision, 50 years on.” <em>October</em>, no. 65. <a href="http://ideas.repec.org/p/cca/wplabo/65.html" class="uri">http://ideas.repec.org/p/cca/wplabo/65.html</a>.</p>
+</div>
+<div id="ref-Orcutt1957-new-type">
+<p>Orcutt, Guy H GH. 1957. “A new type of socio-economic system.” <em>The Review of Economics and Statistics</em> 39 (2): 116–23. <a href="http://www.jstor.org/stable/10.2307/1928528" class="uri">http://www.jstor.org/stable/10.2307/1928528</a>.</p>
+</div>
+<div id="ref-Batty2005">
+<p>Batty, Michael. 2005. <em>Cities and Complexity</em>. Vol. 14. 1967.</p>
+</div>
+<div id="ref-Wegener2011">
+<p>Wegener, M. 2011. “From Macro to Micro—How Much Micro Is Too Much?” <em>Transport Reviews</em> 31 (October 2009): 161–77.</p>
+</div>
+<div id="ref-Tomintz2008">
+<p>Tomintz, Melanie N M.N., Graham P Clarke, and Janette E J.E. Rigby. 2008. “The geography of smoking in Leeds: estimating individual smoking rates and the implications for the location of stop smoking services.” <em>Area</em> 40 (3). Wiley Online Library: 341–53.</p>
+</div>
+<div id="ref-Edwards2013">
+<p>Edwards, KL, and Graham Clarke. 2013. “SimObesity: Combinatorial Optimisation (Deterministic) Model.” <em>Spatial Microsimulation: A Reference Guide for Users</em>, 69–85. doi:<a href="https://doi.org/10.1007/978-94-007-4623-7">10.1007/978-94-007-4623-7</a>.</p>
+</div>
+<div id="ref-avram2012distributional">
+<p>Avram, Silvia, Francesco Figari, Chrysa Leventi, Horacio Levy, Jekaterina Navicke, Manos Matsaganis, Eva Militaru, Alari Paulus, Olga Rastrigina, and Holly Sutherland. 2012. “The distributional effects of fiscal consolidation in 9 EU countries.” Social Situation Observatory Research Note 01.</p>
+</div>
+<div id="ref-sutherland2013euromod">
+<p>Sutherland, Holly, and Francesco Figari. 2013. “EUROMOD: the European Union tax-benefit microsimulation model.” <em>International Journal of Microsimulation</em> 6 (1). Interational Microsimulation Association: 4–26.</p>
+</div>
+<div id="ref-Muller2010">
+<p>Axhausen, KW Kay W, Kirill Müller, and KW Kay W Axhausen. 2011. “Population synthesis for microsimulation: State of the art.” In <em>Annual Meeting of the Transportation Research Board</em>. IVT Working Paper. Swiss Federal Institute of Technology Zurich.</p>
+</div>
+<div id="ref-Lucas2012">
+<p>Lucas, Karen. 2012. “Transport and social exclusion: Where are we now?” <em>Transport Policy</em> 20 (March). Elsevier: 105–13. doi:<a href="https://doi.org/10.1016/j.tranpol.2012.01.013">10.1016/j.tranpol.2012.01.013</a>.</p>
+</div>
+<div id="ref-Lovelace2014-jtg">
+<p>Lovelace, Robin, Dimitris Ballas, and Matt Watson. 2014. “A spatial microsimulation approach for the analysis of commuter patterns: from individual to regional levels.” <em>Journal of Transport Geography</em> 34 (0): 282–96. doi:<a href="https://doi.org/http://dx.doi.org/10.1016/j.jtrangeo.2013.07.008">http://dx.doi.org/10.1016/j.jtrangeo.2013.07.008</a>.</p>
+</div>
+<div id="ref-Barthelemy2015a">
+<p>Barthelemy, Johan, and Philippe Toint. 2015. “A Stochastic and Flexible Activity Based Model for Large Population. Application to Belgium.” <em>Journal of Artificial Societies and Social Simulation</em> 18 (3): 15. <a href="http://jasss.soc.surrey.ac.uk/18/3/15.html" class="uri">http://jasss.soc.surrey.ac.uk/18/3/15.html</a>.</p>
+</div>
+<div id="ref-barthelemy2014parallelized">
+<p>Barthélemy, Johan. 2014. “A parallelized micro-simulation platform for population and mobility behaviour-Application to Belgium.” PhD thesis, University de Namur.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="SimpleWorld.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="data-prep.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

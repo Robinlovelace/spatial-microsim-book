@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial Microsimulation with R</title>
+  <meta name="description" content="Spatial Microsimulation with R">
+  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial Microsimulation with R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
+  
+  
+  <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial Microsimulation with R" />
+  
+  
+  
+
+<meta name="author" content="Robin Lovelace and Morgane Dumont">
+
+
+<meta name="date" content="2017-12-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="smsimr.html">
+<link rel="next" href="CakeMap.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#a-definition-of-spatial-microsimulation"><i class="fa fa-check"></i><b>1.3</b> A definition of spatial microsimulation</a></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#learning-by-doing"><i class="fa fa-check"></i><b>1.4</b> Learning by doing</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#whyR"><i class="fa fa-check"></i><b>1.5</b> Why spatial microsimulation with R?</a></li>
+<li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#learningR"><i class="fa fa-check"></i><b>1.6</b> Learning the R language</a></li>
+<li class="chapter" data-level="1.7" data-path="intro.html"><a href="intro.html#typographic"><i class="fa fa-check"></i><b>1.7</b> Typographic conventions</a></li>
+<li class="chapter" data-level="1.8" data-path="intro.html"><a href="intro.html#overview"><i class="fa fa-check"></i><b>1.8</b> An overview of the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="SimpleWorld.html"><a href="SimpleWorld.html"><i class="fa fa-check"></i><b>2</b> SimpleWorld: A worked example of spatial microsimulation</a><ul>
+<li class="chapter" data-level="2.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudioUpSpeed"><i class="fa fa-check"></i><b>2.1</b> Getting setup with the RStudio environment</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#installing-r"><i class="fa fa-check"></i><b>2.1.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudio"><i class="fa fa-check"></i><b>2.1.2</b> RStudio</a></li>
+<li class="chapter" data-level="2.1.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#projects"><i class="fa fa-check"></i><b>2.1.3</b> Projects</a></li>
+<li class="chapter" data-level="2.1.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#downloading-data-for-the-book"><i class="fa fa-check"></i><b>2.1.4</b> Downloading data for the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldData"><i class="fa fa-check"></i><b>2.2</b> SimpleWorld data</a></li>
+<li class="chapter" data-level="2.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#weight-matrix"><i class="fa fa-check"></i><b>2.3</b> Generating a weight matrix</a></li>
+<li class="chapter" data-level="2.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#spatial-microdata"><i class="fa fa-check"></i><b>2.4</b> Spatial microdata</a></li>
+<li class="chapter" data-level="2.5" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldContext"><i class="fa fa-check"></i><b>2.5</b> SimpleWorld in context</a></li>
+<li class="chapter" data-level="2.6" data-path="SimpleWorld.html"><a href="SimpleWorld.html#chapter-summary"><i class="fa fa-check"></i><b>2.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="what-is.html"><a href="what-is.html"><i class="fa fa-check"></i><b>3</b> What is spatial microsimulation?</a><ul>
+<li class="chapter" data-level="3.1" data-path="what-is.html"><a href="what-is.html#terminology"><i class="fa fa-check"></i><b>3.1</b> Terminology</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="what-is.html"><a href="what-is.html#SimCity"><i class="fa fa-check"></i><b>3.1.1</b> Spatial microsimulation as SimCity</a></li>
+<li class="chapter" data-level="3.1.2" data-path="what-is.html"><a href="what-is.html#meth-approach"><i class="fa fa-check"></i><b>3.1.2</b> Spatial microsimulation: method or approach?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="what-is.html"><a href="what-is.html#is-not"><i class="fa fa-check"></i><b>3.2</b> What spatial microsimulation is not</a></li>
+<li class="chapter" data-level="3.3" data-path="what-is.html"><a href="what-is.html#applications"><i class="fa fa-check"></i><b>3.3</b> Applications</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="what-is.html"><a href="what-is.html#health-applications"><i class="fa fa-check"></i><b>3.3.1</b> Health applications</a></li>
+<li class="chapter" data-level="3.3.2" data-path="what-is.html"><a href="what-is.html#economic-policy-evaluation"><i class="fa fa-check"></i><b>3.3.2</b> Economic policy evaluation</a></li>
+<li class="chapter" data-level="3.3.3" data-path="what-is.html"><a href="what-is.html#transport"><i class="fa fa-check"></i><b>3.3.3</b> Transport</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="what-is.html"><a href="what-is.html#assumptions"><i class="fa fa-check"></i><b>3.4</b> Assumptions</a></li>
+<li class="chapter" data-level="3.5" data-path="what-is.html"><a href="what-is.html#chapter-summary-1"><i class="fa fa-check"></i><b>3.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="data-prep.html"><a href="data-prep.html"><i class="fa fa-check"></i><b>4</b> Data preparation</a><ul>
+<li class="chapter" data-level="4.1" data-path="data-prep.html"><a href="data-prep.html#accessing"><i class="fa fa-check"></i><b>4.1</b> Accessing the input data</a></li>
+<li class="chapter" data-level="4.2" data-path="data-prep.html"><a href="data-prep.html#Selecting"><i class="fa fa-check"></i><b>4.2</b> Target and constraint variables</a></li>
+<li class="chapter" data-level="4.3" data-path="data-prep.html"><a href="data-prep.html#Loading"><i class="fa fa-check"></i><b>4.3</b> Loading input data</a></li>
+<li class="chapter" data-level="4.4" data-path="data-prep.html"><a href="data-prep.html#subsetting-prep"><i class="fa fa-check"></i><b>4.4</b> Subsetting to remove excess information</a></li>
+<li class="chapter" data-level="4.5" data-path="data-prep.html"><a href="data-prep.html#re-categorise"><i class="fa fa-check"></i><b>4.5</b> Re-categorising individual level variables</a></li>
+<li class="chapter" data-level="4.6" data-path="data-prep.html"><a href="data-prep.html#matching"><i class="fa fa-check"></i><b>4.6</b> Matching individual and aggregate level data names</a></li>
+<li class="chapter" data-level="4.7" data-path="data-prep.html"><a href="data-prep.html#flattening"><i class="fa fa-check"></i><b>4.7</b> ‘Flattening’ the individual level data</a></li>
+<li class="chapter" data-level="4.8" data-path="data-prep.html"><a href="data-prep.html#chapter-summary-2"><i class="fa fa-check"></i><b>4.8</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="smsimr.html"><a href="smsimr.html"><i class="fa fa-check"></i><b>5</b> Population synthesis</a><ul>
+<li class="chapter" data-level="5.1" data-path="smsimr.html"><a href="smsimr.html#weighting"><i class="fa fa-check"></i><b>5.1</b> Weighting algorithms</a></li>
+<li class="chapter" data-level="5.2" data-path="smsimr.html"><a href="smsimr.html#iterative-proportional-fitting"><i class="fa fa-check"></i><b>5.2</b> Iterative Proportional Fitting</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="smsimr.html"><a href="smsimr.html#ipftheory"><i class="fa fa-check"></i><b>5.2.1</b> IPF in theory</a></li>
+<li class="chapter" data-level="5.2.2" data-path="smsimr.html"><a href="smsimr.html#ipfinr"><i class="fa fa-check"></i><b>5.2.2</b> IPF in R</a></li>
+<li class="chapter" data-level="5.2.3" data-path="smsimr.html"><a href="smsimr.html#ipfp"><i class="fa fa-check"></i><b>5.2.3</b> IPF with <strong>ipfp</strong></a></li>
+<li class="chapter" data-level="5.2.4" data-path="smsimr.html"><a href="smsimr.html#mipfp"><i class="fa fa-check"></i><b>5.2.4</b> IPF with <strong>mipfp</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="smsimr.html"><a href="smsimr.html#sintegerisation"><i class="fa fa-check"></i><b>5.3</b> Integerisation</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="smsimr.html"><a href="smsimr.html#concept-of-integerisation"><i class="fa fa-check"></i><b>5.3.1</b> Concept of integerisation</a></li>
+<li class="chapter" data-level="5.3.2" data-path="smsimr.html"><a href="smsimr.html#example-of-integerisation"><i class="fa fa-check"></i><b>5.3.2</b> Example of integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="smsimr.html"><a href="smsimr.html#expansion"><i class="fa fa-check"></i><b>5.4</b> Expansion</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="smsimr.html"><a href="smsimr.html#weights-per-individual"><i class="fa fa-check"></i><b>5.4.1</b> Weights per individual</a></li>
+<li class="chapter" data-level="5.4.2" data-path="smsimr.html"><a href="smsimr.html#weightpc"><i class="fa fa-check"></i><b>5.4.2</b> Weights per category</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="smsimr.html"><a href="smsimr.html#integerisation-and-expansion"><i class="fa fa-check"></i><b>5.5</b> Integerisation and expansion</a></li>
+<li class="chapter" data-level="5.6" data-path="smsimr.html"><a href="smsimr.html#compareipf"><i class="fa fa-check"></i><b>5.6</b> Comparing <strong>ipfp</strong> with <strong>mipfp</strong></a><ul>
+<li class="chapter" data-level="5.6.1" data-path="smsimr.html"><a href="smsimr.html#comparing-the-methods"><i class="fa fa-check"></i><b>5.6.1</b> Comparing the methods</a></li>
+<li class="chapter" data-level="5.6.2" data-path="smsimr.html"><a href="smsimr.html#comparing-the-weights-for-simpleworld"><i class="fa fa-check"></i><b>5.6.2</b> Comparing the weights for SimpleWorld</a></li>
+<li class="chapter" data-level="5.6.3" data-path="smsimr.html"><a href="smsimr.html#comparing-the-results-for-simpleworld"><i class="fa fa-check"></i><b>5.6.3</b> Comparing the results for SimpleWorld</a></li>
+<li class="chapter" data-level="5.6.4" data-path="smsimr.html"><a href="smsimr.html#speed-comparisons"><i class="fa fa-check"></i><b>5.6.4</b> Speed comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="smsimr.html"><a href="smsimr.html#chapter-summary-3"><i class="fa fa-check"></i><b>5.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html"><i class="fa fa-check"></i><b>6</b> Alternative approaches to population synthesis</a><ul>
+<li class="chapter" data-level="6.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#GREGWT"><i class="fa fa-check"></i><b>6.1</b> GREGWT</a></li>
+<li class="chapter" data-level="6.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#asOptim"><i class="fa fa-check"></i><b>6.2</b> Population synthesis as an optimization problem</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#reweighting-with-optim-and-gensa"><i class="fa fa-check"></i><b>6.2.1</b> Reweighting with optim and GenSA</a></li>
+<li class="chapter" data-level="6.2.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#combinatorial-optimisation"><i class="fa fa-check"></i><b>6.2.2</b> Combinatorial optimisation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#SimPop"><i class="fa fa-check"></i><b>6.3</b> simPop</a></li>
+<li class="chapter" data-level="6.4" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#UDST"><i class="fa fa-check"></i><b>6.4</b> The Urban Data Science Toolkit (UDST)</a></li>
+<li class="chapter" data-level="6.5" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#chapter-summary-4"><i class="fa fa-check"></i><b>6.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="CakeMap.html"><a href="CakeMap.html"><i class="fa fa-check"></i><b>7</b> Spatial microsimulation in the wild</a><ul>
+<li class="chapter" data-level="7.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapConVar"><i class="fa fa-check"></i><b>7.1</b> Selection of constraint variables</a></li>
+<li class="chapter" data-level="7.2" data-path="CakeMap.html"><a href="CakeMap.html#CakePrep"><i class="fa fa-check"></i><b>7.2</b> Preparing the input data</a></li>
+<li class="chapter" data-level="7.3" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapIPFP"><i class="fa fa-check"></i><b>7.3</b> Using the <code>ipfp</code> package</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>7.3.1</b> Performing IPF on CakeMap data</a></li>
+<li class="chapter" data-level="7.3.2" data-path="CakeMap.html"><a href="CakeMap.html#CakeINT"><i class="fa fa-check"></i><b>7.3.2</b> Integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="CakeMap.html"><a href="CakeMap.html#CakeMIPF"><i class="fa fa-check"></i><b>7.4</b> Using the <code>mipfp</code> package</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>7.4.1</b> Performing IPF on CakeMap data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="CakeMap.html"><a href="CakeMap.html#CompareMeth"><i class="fa fa-check"></i><b>7.5</b> Comparing methods of reweighting large datasets</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-results"><i class="fa fa-check"></i><b>7.5.1</b> Comparison of results</a></li>
+<li class="chapter" data-level="7.5.2" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-times"><i class="fa fa-check"></i><b>7.5.2</b> Comparison of times</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="CakeMap.html"><a href="CakeMap.html#chapter-summary-5"><i class="fa fa-check"></i><b>7.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="svalidation.html"><a href="svalidation.html"><i class="fa fa-check"></i><b>8</b> Model checking and evaluation</a><ul>
+<li class="chapter" data-level="8.1" data-path="svalidation.html"><a href="svalidation.html#Internal"><i class="fa fa-check"></i><b>8.1</b> Internal validation</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="svalidation.html"><a href="svalidation.html#pearsons-r"><i class="fa fa-check"></i><b>8.1.1</b> Pearson’s <em>r</em></a></li>
+<li class="chapter" data-level="8.1.2" data-path="svalidation.html"><a href="svalidation.html#absolute-error-measures"><i class="fa fa-check"></i><b>8.1.2</b> Absolute error measures</a></li>
+<li class="chapter" data-level="8.1.3" data-path="svalidation.html"><a href="svalidation.html#root-mean-squared-error"><i class="fa fa-check"></i><b>8.1.3</b> Root mean squared error</a></li>
+<li class="chapter" data-level="8.1.4" data-path="svalidation.html"><a href="svalidation.html#chi-squared"><i class="fa fa-check"></i><b>8.1.4</b> Chi-squared</a></li>
+<li class="chapter" data-level="8.1.5" data-path="svalidation.html"><a href="svalidation.html#which-test-to-use"><i class="fa fa-check"></i><b>8.1.5</b> Which test to use?</a></li>
+<li class="chapter" data-level="8.1.6" data-path="svalidation.html"><a href="svalidation.html#internal-validation-of-cakemap"><i class="fa fa-check"></i><b>8.1.6</b> Internal validation of CakeMap</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="svalidation.html"><a href="svalidation.html#empty-cells"><i class="fa fa-check"></i><b>8.2</b> Empty cells</a></li>
+<li class="chapter" data-level="8.3" data-path="svalidation.html"><a href="svalidation.html#External"><i class="fa fa-check"></i><b>8.3</b> External validation</a></li>
+<li class="chapter" data-level="8.4" data-path="svalidation.html"><a href="svalidation.html#chapter-summary-6"><i class="fa fa-check"></i><b>8.4</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="nomicrodata.html"><a href="nomicrodata.html"><i class="fa fa-check"></i><b>9</b> Population synthesis without microdata</a><ul>
+<li class="chapter" data-level="9.1" data-path="nomicrodata.html"><a href="nomicrodata.html#CrossGlobLocalMarg"><i class="fa fa-check"></i><b>9.1</b> Global cross-tables and local marginal distributions</a></li>
+<li class="chapter" data-level="9.2" data-path="nomicrodata.html"><a href="nomicrodata.html#twoLevelData"><i class="fa fa-check"></i><b>9.2</b> Two level aggregated data</a></li>
+<li class="chapter" data-level="9.3" data-path="nomicrodata.html"><a href="nomicrodata.html#chapter-summary-7"><i class="fa fa-check"></i><b>9.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ha.html"><a href="ha.html"><i class="fa fa-check"></i><b>10</b> Household allocation</a><ul>
+<li class="chapter" data-level="10.1" data-path="ha.html"><a href="ha.html#IndData"><i class="fa fa-check"></i><b>10.1</b> Independent data (individuals and households)</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="ha.html"><a href="ha.html#household-type-selection"><i class="fa fa-check"></i><b>10.1.1</b> Household type selection</a></li>
+<li class="chapter" data-level="10.1.2" data-path="ha.html"><a href="ha.html#constituent-members-selection"><i class="fa fa-check"></i><b>10.1.2</b> Constituent members selection</a></li>
+<li class="chapter" data-level="10.1.3" data-path="ha.html"><a href="ha.html#end-of-the-household-generation-process"><i class="fa fa-check"></i><b>10.1.3</b> End of the household generation process</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="ha.html"><a href="ha.html#cross-data-individual-and-household-level-information"><i class="fa fa-check"></i><b>10.2</b> Cross data: individual and household level information</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="ha.html"><a href="ha.html#WithoutHHdata"><i class="fa fa-check"></i><b>10.2.1</b> Without additional household’s data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="ha.html"><a href="ha.html#AddData"><i class="fa fa-check"></i><b>10.2.2</b> With additional household’s data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="ha.html"><a href="ha.html#chapter-summary-8"><i class="fa fa-check"></i><b>10.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="tresis.html"><a href="tresis.html"><i class="fa fa-check"></i><b>11</b> The TRESIS approach to spatial microsimulation</a><ul>
+<li class="chapter" data-level="11.1" data-path="tresis.html"><a href="tresis.html#tresis-over"><i class="fa fa-check"></i><b>11.1</b> Overview of TRESIS modelling system</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="tresis.html"><a href="tresis.html#differences-between-tresis-and-other-microsimulation-systems"><i class="fa fa-check"></i><b>11.1.1</b> Differences between TRESIS and other microsimulation systems</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="tresis.html"><a href="tresis.html#tresis-house"><i class="fa fa-check"></i><b>11.2</b> Synthetic households</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="tresis.html"><a href="tresis.html#what-are-synthetic-households"><i class="fa fa-check"></i><b>11.2.1</b> What are synthetic households?</a></li>
+<li class="chapter" data-level="11.2.2" data-path="tresis.html"><a href="tresis.html#required-data-for-generating-synthetic-households"><i class="fa fa-check"></i><b>11.2.2</b> Required data for generating synthetic households</a></li>
+<li class="chapter" data-level="11.2.3" data-path="tresis.html"><a href="tresis.html#synthetic-households-in-r"><i class="fa fa-check"></i><b>11.2.3</b> Synthetic households in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="tresis.html"><a href="tresis.html#using-demand-models-to-allocate-synthetic-households-to-zones-using-r"><i class="fa fa-check"></i><b>11.3</b> Using demand models to allocate synthetic households to zones using R</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="tresis.html"><a href="tresis.html#simple-discrete-choice-model-for-residential-location"><i class="fa fa-check"></i><b>11.3.1</b> Simple discrete choice model for residential location</a></li>
+<li class="chapter" data-level="11.3.2" data-path="tresis.html"><a href="tresis.html#results"><i class="fa fa-check"></i><b>11.3.2</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="tresis.html"><a href="tresis.html#conclusions"><i class="fa fa-check"></i><b>11.4</b> Conclusions</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="tresis.html"><a href="tresis.html#limitations"><i class="fa fa-check"></i><b>11.4.1</b> Limitations</a></li>
+<li class="chapter" data-level="11.4.2" data-path="tresis.html"><a href="tresis.html#metroscan-ti"><i class="fa fa-check"></i><b>11.4.2</b> MetroScan-TI</a></li>
+<li class="chapter" data-level="11.4.3" data-path="tresis.html"><a href="tresis.html#extending-residential-location-to-transport-models-in-r"><i class="fa fa-check"></i><b>11.4.3</b> Extending residential location to transport models in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="tresis.html"><a href="tresis.html#chapter-summary-9"><i class="fa fa-check"></i><b>11.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="ABM.html"><a href="ABM.html"><i class="fa fa-check"></i><b>12</b> Spatial microsimulation for agent-based models</a><ul>
+<li class="chapter" data-level="12.1" data-path="ABM.html"><a href="ABM.html#note"><i class="fa fa-check"></i><b>12.1</b> Note</a></li>
+<li class="chapter" data-level="12.2" data-path="ABM.html"><a href="ABM.html#abm-software"><i class="fa fa-check"></i><b>12.2</b> ABM software</a></li>
+<li class="chapter" data-level="12.3" data-path="ABM.html"><a href="ABM.html#setting-up-simpleworld-in-netlogo"><i class="fa fa-check"></i><b>12.3</b> Setting up SimpleWorld in NetLogo</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="ABM.html"><a href="ABM.html#graphical-user-interface-in-netlogo"><i class="fa fa-check"></i><b>12.3.1</b> Graphical User Interface in NetLogo</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="ABM.html"><a href="ABM.html#allocating-attributes-to-agents"><i class="fa fa-check"></i><b>12.4</b> Allocating attributes to agents</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="ABM.html"><a href="ABM.html#defining-variables"><i class="fa fa-check"></i><b>12.4.1</b> Defining variables</a></li>
+<li class="chapter" data-level="12.4.2" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-1"><i class="fa fa-check"></i><b>12.4.2</b> Reading agent data - Option 1</a></li>
+<li class="chapter" data-level="12.4.3" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-2"><i class="fa fa-check"></i><b>12.4.3</b> Reading agent data - Option 2</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="ABM.html"><a href="ABM.html#running-simpleworld"><i class="fa fa-check"></i><b>12.5</b> Running SimpleWorld</a><ul>
+<li class="chapter" data-level="12.5.1" data-path="ABM.html"><a href="ABM.html#more-variable-definitions"><i class="fa fa-check"></i><b>12.5.1</b> More variable definitions</a></li>
+<li class="chapter" data-level="12.5.2" data-path="ABM.html"><a href="ABM.html#more-setup-procedures"><i class="fa fa-check"></i><b>12.5.2</b> More setup procedures</a></li>
+<li class="chapter" data-level="12.5.3" data-path="ABM.html"><a href="ABM.html#the-main-go-procedure"><i class="fa fa-check"></i><b>12.5.3</b> The main Go procedure</a></li>
+<li class="chapter" data-level="12.5.4" data-path="ABM.html"><a href="ABM.html#adding-plots-to-the-model"><i class="fa fa-check"></i><b>12.5.4</b> Adding plots to the model</a></li>
+<li class="chapter" data-level="12.5.5" data-path="ABM.html"><a href="ABM.html#stopping-behavior"><i class="fa fa-check"></i><b>12.5.5</b> Stopping behavior</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="ABM.html"><a href="ABM.html#control-the-abm-from-r"><i class="fa fa-check"></i><b>12.6</b> Control the ABM from R</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="ABM.html"><a href="ABM.html#running-a-single-netlogo-simulation"><i class="fa fa-check"></i><b>12.6.1</b> Running a single NetLogo simulation</a></li>
+<li class="chapter" data-level="12.6.2" data-path="ABM.html"><a href="ABM.html#running-multiple-netlogo-simulations"><i class="fa fa-check"></i><b>12.6.2</b> Running multiple NetLogo simulations</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ABM.html"><a href="ABM.html#chapter-summary-10"><i class="fa fa-check"></i><b>12.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="apR.html"><a href="apR.html"><i class="fa fa-check"></i><b>13</b> Appendix: Getting up-to-speed with R</a><ul>
+<li class="chapter" data-level="13.1" data-path="apR.html"><a href="apR.html#vector-alg"><i class="fa fa-check"></i><b>13.1</b> R understands vector algebra</a></li>
+<li class="chapter" data-level="13.2" data-path="apR.html"><a href="apR.html#R-object"><i class="fa fa-check"></i><b>13.2</b> R is object orientated</a></li>
+<li class="chapter" data-level="13.3" data-path="apR.html"><a href="apR.html#subsetting"><i class="fa fa-check"></i><b>13.3</b> Subsetting in R</a></li>
+<li class="chapter" data-level="13.4" data-path="apR.html"><a href="apR.html#further"><i class="fa fa-check"></i><b>13.4</b> Further R resources</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
+<li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial Microsimulation with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="alternative-reweighting" class="section level1">
+<h1><span class="header-section-number">6</span> Alternative approaches to population synthesis</h1>
+<p>This chapter briefly describes other techniques for spatial microsimulation. We have different methods, each corresponding to a section:</p>
+<ul>
+<li><em>GREGWT</em> (<a href="alternative-reweighting.html#GREGWT"></a>) contains a method based on a Generalized Regression Weighting procedure.</li>
+<li><em>Population synthesis as an optimization problem</em> (<a href="alternative-reweighting.html#asOptim"></a>) explains how we can make spatial microsimulation thanks to optimization algorithms.</li>
+<li><em>simPop</em> (<a href="alternative-reweighting.html#SimPop"></a>) mentions another package to make spatial microsimulation.</li>
+<li><em>The Urban Data Science Toolkit (UDST)</em> (<a href="alternative-reweighting.html#UDST"></a>) shortly describes another technique, coded in python.</li>
+</ul>
+<div id="GREGWT" class="section level2">
+<h2><span class="header-section-number">6.1</span> GREGWT</h2>
+<p>As described in the Introduction, IPF is just one strategy for obtaining a spatial microdataset. However, researchers tend to select one method that they are comfortable with and stick with that for their models. This is understandable because setting up the method is usually time consuming: most researchers rightly focus on applying the methods to the real world rather than fretting about the details. On the other hand, if alternative methods work better for a particular application, resistance to change can result in poor model fit. In the case of very large datasets, spatial microsimulation may not be possible unless certain methods, optimised to deal with large datasets, are used. Above all, there is no consensus about which methods are ‘best’ for different applications, so it is worth experimenting to identify which method is most suitable for each application.</p>
+<p>An interesting alternative to IPF method is the GREGWT algorithm. First implemented in the SAS language by the Statistical Service area of the Australian Bureau of Statistics (ABS), the algorithm reweighs a set of initial weights using a Generalized Regression Weighting procedure (hence the name GREGWT). The resulting weights ensure that, when aggregated, the individuals selected for each small area fit the constraint variables. Like IPF, the GREGWT results in non-integer weights, meaning some kind of integerisation algorithm will be needed to obtain individual level microdata. For example, if the output is to be used in ABM, the macro developed by ABS adds a weight restriction in their GREGWT macros to ensure positive weights. The ABS uses the Linear Truncated Method described in Singh and Mohl (1996) to enforce these restrictions. </p>
+<p>A simplified version of this algorithm (and other algorithms) is provided by <span class="citation">Rahman (<a href="#ref-Rahman2009">2009</a>)</span>. The algorithm is described in more detail in <span class="citation">Tanton et al. (<a href="#ref-Tanton2011">2011</a>)</span>. An R implementation of GREGWT can be found in the GitHub repository <a href="https://github.com/emunozh/GREGWT">GREGWT</a> and installed using the function <code>install_github()</code> from the <strong>devtools</strong> package.</p>
+<p>The code below uses this implementation of the GREGWT algorithm, with the data from Chapter 3.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install GREGWT (uncomment/alter as appropriate)</span>
+<span class="co"># devtools::install_github(&quot;emunozh/GREGWT&quot;)</span>
+<span class="co"># load the library (0.7.3)</span>
+<span class="kw">library</span>(<span class="st">&#39;GREGWT&#39;</span>)
+
+<span class="co"># Load the data from csv files stored under data</span>
+age =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/SimpleWorld/age.csv&quot;</span>)
+sex =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/SimpleWorld/sex.csv&quot;</span>)
+ind =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/SimpleWorld/ind-full.csv&quot;</span>)
+<span class="co"># Make categories for age</span>
+ind<span class="op">$</span>age &lt;-<span class="st"> </span><span class="kw">cut</span>(ind<span class="op">$</span>age, <span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">49</span>, <span class="ot">Inf</span>),
+               <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;a0.49&quot;</span>, <span class="st">&quot;a.50.&quot;</span>))
+<span class="co"># Add initial weights to survey</span>
+ind<span class="op">$</span>w &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="dt">mode =</span> <span class="st">&quot;numeric&quot;</span>, <span class="dt">length=</span><span class="kw">dim</span>(ind)[<span class="dv">1</span>]) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+
+<span class="co"># prepare simulation data using GREGWT::prepareData</span>
+data_in &lt;-<span class="st"> </span><span class="kw">prepareData</span>(<span class="kw">cbind</span>(age, sex),
+                  ind, <span class="dt">census_area_id =</span> F, <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">2</span>))
+
+<span class="co"># prepare a data.frame to store the result</span>
+fweights &lt;-<span class="st"> </span><span class="ot">NULL</span>
+Result &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">matrix</span>(<span class="ot">NA</span>, <span class="dt">ncol=</span><span class="dv">3</span>, <span class="dt">nrow=</span><span class="kw">dim</span>(age)[<span class="dv">1</span>]))
+<span class="kw">names</span>(Result) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;area&quot;</span>, <span class="st">&quot;income&quot;</span>, <span class="st">&quot;cap.income&quot;</span>)</code></pre></div>
+<p>The code presented above loads the SimpleWorld data and creates a new data.frame with this data. Version 1.4 of the R library requires the data to be in binary form. The require input for the R function is <code>X</code> representing the individual level survey, <code>dx</code> representing the initial weights of the survey and <code>Tx</code> representing the small area benchmarks.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Warning: test code</span>
+<span class="co"># loop through simlaton areas</span>
+<span class="cf">for</span>(area <span class="cf">in</span> <span class="kw">seq</span>(<span class="kw">dim</span>(age)[<span class="dv">1</span>])){
+    gregwt =<span class="st"> </span><span class="kw">GREGWT</span>(<span class="dt">data_in =</span> data_in, <span class="dt">area_code =</span> area)
+    fw &lt;-<span class="st"> </span>gregwt<span class="op">$</span>final_weights
+    fweights &lt;-<span class="st"> </span><span class="kw">c</span>(fweights, fw)
+    ## Estimate income
+    sum.income &lt;-<span class="st"> </span><span class="kw">sum</span>(fw <span class="op">*</span><span class="st"> </span>ind<span class="op">$</span>income)
+    cap.income &lt;-<span class="st"> </span><span class="kw">sum</span>(fw <span class="op">*</span><span class="st"> </span>ind<span class="op">$</span>income <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(fw))
+    Result[area,] &lt;-<span class="st"> </span><span class="kw">c</span>(area, sum.income, cap.income)
+}</code></pre></div>
+<p>In the last step we transform the vector into a matrix and see the results from the reweighing process.</p>
+</div>
+<div id="asOptim" class="section level2">
+<h2><span class="header-section-number">6.2</span> Population synthesis as an optimization problem</h2>
+<p> In general terms, an <em>optimization problem</em> consists of a function, the result of which must be minimised or maximised, called an <em>objective function</em>. This function is not necessarily defined for the entire domain of possible inputs. The domain where this function is defined is called the <em>solution space</em> (or the <em>feasible space</em> in formal mathematics). Moreover, optimization problems can be <em>unconstrained</em> or <em>constrained</em>, by limits on the values that arguments (or that a function of the arguments) of the function can take (<a href="http://stanford.edu/~boyd/cvxbook/">Boyd 2004</a>). If there are constraints, the solution space could include only a part of the image of the objective function. The objective function and the constraints are both necessary to define the solution space. Under this framework, population synthesis can be seen as a <em>constrained optimisation</em> problem. Suppose <span class="math inline">\(x\)</span> is a vector of length <span class="math inline">\(n\)</span> <span class="math inline">\((x_1,x_2,..,x_n)\)</span> whose values are to be adjusted. In this case the value of the objective function is <span class="math inline">\(f_0(x)\)</span>, depends on <span class="math inline">\(x\)</span>. The possible values of <span class="math inline">\(x\)</span> are defined thanks to <em>par</em>, a vector of predefined arguments or parameters of length <span class="math inline">\(m\)</span> (<span class="math inline">\(m\)</span> is the number of constraints) (<span class="math inline">\(par_1,par_2,..,par_m\)</span>). This kind of problem can be expressed as:</p>
+<p><span class="math display">\[\left\{
+\begin{array}{l}
+  min \hspace{0.2cm}f_0(x_1,x_2,..,x_n) \\
+  \\
+  s.c. \hspace{0.2cm} f_i(x) \geq par_i,\  i = 1, ..., m
+\end{array}
+\right.\]</span></p>
+<p>Applying this to the problem of population synthesis, the parameters <span class="math inline">\(par_i\)</span> represent 0 and <span class="math inline">\(f_i(x)=x\)</span>, since all cells have to be positive. The <span class="math inline">\(f_0(x)\)</span> to be minimised is the distance between the actual weight matrix and the aggregate constraint variable <code>cons</code>. <span class="math inline">\(x\)</span> represents the weights which will be calculated to minimise <span class="math inline">\(f_0(x)\)</span>.</p>
+<p>To illustrate the concept further, consider the case of aircraft design. Imagine that the aim (the objective function) is to minimise weight by changing its shape and materials. But these modifications must proceed subject to some constraints, because the airplane must be safe and sufficiently voluminous to transport people. Constrained optimisation in this case would involve searching combinations of shape and material (to include in <span class="math inline">\(x\)</span>) that minimise the weight (the result of <span class="math inline">\(f_0\)</span>, is a single value depending on <span class="math inline">\(x\)</span>). This search must take place under constraints relating to volume (depending on the shape) and safety (<span class="math inline">\(par_1\)</span> and <span class="math inline">\(par_2\)</span> in the above notation). Thus <span class="math inline">\(par\)</span> values define the domain of the <em>solution space</em>. We search inside this domain for the combination of <span class="math inline">\(x_i\)</span> that minimises weight.</p>
+<p>The case of spatial microsimulation has relatively simple constraints: all weights must be positive or zero:</p>
+<p><span class="math display">\[
+\left\{ weight_{ij} \in \mathbb{R}^+  \cup \{0\} \hspace{0.5cm} \forall i,j \right\}
+\]</span></p>
+<p> Seeing spatial microsimulation as an optimisation problem allows solutions to be found using established techniques of <em>constrained optimisation</em>. The main advantage of this reframing is that it allows any optimisation algorithm to perform the reweighting.</p>
+<p>To see population synthesis as a constrained optimization problem analogous to aircraft design, we must define the problem to optimise the variable <span class="math inline">\(x\)</span> and then set the constraints.</p>
+<p>Intuitively, the weight (or number of occurrences) for each individual should be the one that best fits the constraints. We could take the weight matrix as <span class="math inline">\(x\)</span> and as the objective function the difference between the population with this weight matrix and the constraint. However, we want to include the information of the distribution of the sample. We must find a vector <code>w</code> with which to multiply the <code>indu</code> matrix. <code>indu</code> is similar to <code>ind_cat</code>, but each row of <code>ind_cat</code> represents an individual of the sample, whereas each row of <code>indu</code> concerns a type of individual. This means that if 2 people in the sample have the same characteristics, the corresponding line in <code>indu</code> will appear only once. The cells of <code>indu</code> contain the number of times that this kind of individual appears in the sample. The result of this multiplication should be as close as possible to the constraints.</p>
+<p>When running the IPF procedure zone-by-zone using this method, the optimization problem for the first zone can be written as follows:</p>
+<p><span class="math display">\[\left\{
+\begin{array}{l}
+  min \hspace{0.2cm} f(w_1,..,w_m) = DIST(sim, cons[1,]) \\
+  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(indu * w)\\
+  \\
+  s.c. \hspace{0.2cm} w_i \geq 0,\  i = 1, ..., m
+\end{array}
+\right.\]</span></p>
+<p>Key to this is interpreting individual weights as parameters (the vector <span class="math inline">\(w=(w_1,...,w_m)\)</span>, of length <span class="math inline">\(m\)</span> above) that are iteratively modified to optimise the fit between individual and aggregate level data. Note that in comparison with the theoretical definition of an optimisation problem, our parameters to determine (<code>par</code>) are the theoretical <span class="math inline">\(x\)</span>. The measure of fit, so the distance, we use in this context is Total Absolute Error (TAE).</p>
+<p><span class="math display">\[\left\{
+\begin{array}{l}
+  min \hspace{0.2cm} f(w_1,..,w_m) = TAE(sim, cons[1,]) \\
+  \hspace{0.8cm} where  \hspace{0.2cm} sim=colSums(ind\_cat * w)\\
+  \\
+  s.c. \hspace{0.2cm} w_i \geq 0,\  i = 1, ..., m
+\end{array}
+\right.\]</span></p>
+<p>Note that although the “TAE” goodness-of-fit measure was used in this example, any could be used.</p>
+<p>Note that in the above, <span class="math inline">\(w\)</span> is equivalent to the <code>weights</code> object we have created in previous sections to represent how representative each individual is of each zone.</p>
+<p>The main issue with this definition of reweighting is therefore the large number of free parameters: equal to the number of individual level dataset. Clearly this can be very very large. To overcome this issue, we must ‘compress’ the individual level dataset to its essence, to contain only unique individuals with respect to the constraint variables (<em>constraint-unique</em> individuals).</p>
+<p>The challenge is to convert the binary ‘model matrix’ form of the individual level data (<code>ind_cat</code> in the previous examples) into a new matrix (<code>indu</code>) that has fewer rows of data. Information about the frequency of each constraint-unique individual is kept by increasing the value of the ‘1’ entries for each column for the replicated individuals by the number of other individuals who share the same combination of attributes. This may sound quite simple, so let’s use the example of SimpleWorld to illustrate the point.</p>
+<div id="reweighting-with-optim-and-gensa" class="section level3">
+<h3><span class="header-section-number">6.2.1</span> Reweighting with optim and GenSA</h3>
+<p>The base R function <code>optim</code> provides a general purpose optimization framework for numerically solving objective functions. Based on the objective function for spatial microsimulation described above, we can use any general optimization algorithm for reweighting the individual level dataset. But which to use?</p>
+<p>Different reweighting strategies are suitable in different contexts and there is no clear winner for every occasion. However, testing a range of strategy makes it clear that certain algorithms are more efficient than others for spatial microsimulation. Figure 6.1 demonstrates this variability by plotting total absolute error as a function of number of iterations for various optimization algorithms available from the base function <code>optim</code> and the <strong>GenSA</strong> package. Note that the comparisons are performed only for zone 1.  </p>
+<div class="figure"><span id="fig:unnamed-chunk-160"></span>
+<img src="_main_files/figure-html/unnamed-chunk-160-1.png" alt="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms." width="403.2" />
+<p class="caption">
+Figure 6.1: Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.
+</p>
+</div>
+<p>Figure 6.1 shows that all algorithms improve fit during the first iteration. The reason for using IPF becomes clear after only one iteration. On the other end of the spectrum is R’s default optimization algorithm, the Nelder-Mead method, which requires many more iterations to converge to a value approximating zero than does IPF.<a href="#fn22" class="footnoteRef" id="fnref22"><sup>22</sup></a> Next best in terms of iterations is <code>GenSA</code>, the Generalized Simulated Annealing Function from the <strong>GenSA</strong> package. <code>GenSA</code> attained a near-perfect fit after only two full iterations.</p>
+
+<p>The remaining algorithms shown are, like Nelder-Mead, available from within R’s default optimisation function <code>optim</code>. The implementations with <code>method =</code> set to <code>&quot;BFGS&quot;</code> (short for the Broyden–Fletcher–Goldfarb–Shanno algorithm), <code>&quot;CG&quot;</code> (‘conjugate gradients’) performed roughly the same, steadily approaching zero error and fitting to <code>&quot;IPF&quot;</code> and <code>&quot;GenSA&quot;</code> after 10 iterations. Finally, the <code>SANN</code> method (a variant of a Simulated ANNealing), also available in <code>optim</code>, performed most erratically of the methods tested. This is another implementation of simulated annealing which demonstrates that optimisation functions that depend on random numbers do not always lead to improved fit from one iteration to the next. If we look until 200 iterations, the fit will continue to oscillate and not be improved at all.</p>
+<p>The code used to test these alternative methods for reweighting are provided in the script ‘R/optim-tests-SimpleWorld.R’. The results should be reproducible on any computer, provided the book’s supplementary materials have been downloaded. There are many other optimisation algorithms available in R through a wide range of packages and new and improved functions are being made available all the time. Enthusiastic readers are encouraged to experiment with the methods presented here: it is possible that an algorithm exists which outperforms all of those tested for this book. Also, it should be noted that the algorithms were tested on the extremely simple and rather contrived example dataset of SimpleWorld. Some algorithms may perform better with larger datasets than others and may be sensitive to changes to the initial conditions such as the problem of ‘empty cells’.</p>
+<p>Therefore these results, as with any modelling exercise, should be interpreted with a healthy dose of skepticism: just because an algorithm converges after few ‘iterations’ this does not mean it is inherently faster or more useful than another. The results are context specific, so it is recommended that the tested framework in ‘R/optim-tests-SimpleWorld.R’ is used as a basis for further tests on algorithm performance on the datasets you are using. IPF has performed well in the situations I have tested it in (especially via the <code>ipfp</code> function, which performs disproportionately faster than the pure R implementation on large datasets) but this does not mean that it is always the best approach.</p>
+<p>To overcome the caveat that the meaning of an ‘iteration’ changes dramatically from one algorithm to the next, further tests measured the time taken for each reweighting algorithm to run. To have a readable graph, we do not represent the error as a function of the time, but the time per algorithm in function of the number of iterations (Figure 6.2). This figure demonstrates that an iteration of GenSA take a long time in comparison with the other algorithm. Moreover, <code>&quot;BFGS&quot;</code> and <code>&quot;CG&quot;</code> are still following a similar curve under GenSA. Nelder-Mead, SANN and IPF contains iterations that take less time. By observing Figures 6.1 and 6.2 simultaneously , it appears that IPF is the best in terms of convergence (little TAE after few iterations) and the time needed for few iterations is good.</p>
+
+
+<p>Nelder-Mead is fast at reaching a good approximation of the constraint data, despite taking many iterations. <code>GenSA</code>, on the other hand, is shown to be much slower than the others, despite only requiring 2 iterations to arrive at a good level of fit.</p>
+<p>Note that these results are biased by the example that is pretty small and runs only for the first zone.</p>
+</div>
+<div id="combinatorial-optimisation" class="section level3">
+<h3><span class="header-section-number">6.2.2</span> Combinatorial optimisation</h3>
+<p> Combinatorial optimisation (CO) is a set of methods for solving optimisation problems from a discrete range of options. Instead of allocating weights to individuals per zone, combinatorial optimisation identifies a set of feasible candidates to ‘fill’ the zone and then swaps in new individuals. The objective function to be minimised is used to decide if the swap was beneficial or not. There are many combinatorial optimisation methods available. Which is suitable depends on how we choose the combination of candidates and how we determine what happened after evaluation.</p>
+<p>CO is an alternative to IPF for allocating individuals to zones. This strategy is probabilistic and results in integer weights (since it is a combination of individuals). Combinatorial optimisation may be more appropriate for applications where input individual microdatasets are very large: the speed benefits of using the deterministic IPF algorithm shrink as the size of the survey dataset increases. As seen before, IPF creates non integer weights, but we have proposed two solutions to transform them into the final individual level population. So, the proportionality of IPF is more intuitive, but need to calculate the whole weight matrix at each iteration, where CO just proposes candidates. If the objective function takes a long time to be calculated CO can be computationally intensive because the goodness-of-fit must be evaluated each time a new population is proposed with one or several swapped individuals.</p>
+<p> Genetic algorithms are included in this field and become popular in some domains, such as industry, for the moment. This kind of algorithm can be very effective when the objective function has several local minima and we want to find the global one (Hermes and Poulsen, 2012).</p>
+<p>To illustrate how the integer-based approach works in general terms, we can use the <code>data.type.int</code> argument of the <code>genoud</code> function in the <strong>rgenoud</strong> package. This ensures only integers result from the optimisation process:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Set min and maximum values of constraints with &#39;Domains&#39;</span>
+m &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">100</span>), <span class="dt">ncol =</span> <span class="dv">2</span>)[<span class="kw">rep</span>(<span class="dv">1</span>, <span class="kw">nrow</span>(ind)),]
+<span class="kw">set.seed</span>(<span class="dv">2014</span>)
+<span class="kw">genoud</span>(<span class="kw">nrow</span>(ind), <span class="dt">fn =</span> fun, <span class="dt">ind_num =</span> ind, <span class="dt">con =</span> cons[<span class="dv">1</span>,],
+  <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1000</span>), <span class="dt">data.type.int =</span> <span class="ot">TRUE</span>, <span class="dt">D =</span> m)</code></pre></div>
+<p>This command, implemented in the file ‘R/optim-tests-SimpleWorld.R’, results in weights for the unique individuals 1 to 4 of 1, 4, 2 and 4 respectively. This means a final population with aggregated data equal to the target (as seen in the previous section):</p>
+<pre><code>## ind$agea0_49  ind$agea50+     ind$sexm     ind$sexf 
+##            8            4            6            6</code></pre>
+<p>Note that we performed the test only for zone 1 and the aggregated results are correct for the first constraint. Moreover, thanks to the fact that the algorithm only considers integer weights, we do not have the issue of fractional weights associated with IPF. Combinatorial optimisation algorithms for population synthesis do not rely on integerisation, which can damage model fit. The fact that the gradient contains “NA”<a href="#fn23" class="footnoteRef" id="fnref23"><sup>23</sup></a> in the end of the algorithm is not a problem, because it just means that this cell has not been calculated.</p>
+<p>Note that there can be several solutions which attain a perfect fit. This result depends on the random seed chosen for the random draw. Indeed, if we chose a seed of 0 (by writing <code>set.seed(0)</code>), as before, we obtain the weights <code>(0, 6, 4, 2)</code> which results also in a perfect fit for zone 1. These two potential synthetic populations reach a perfect fit, but are quite different. Indeed, we can observe the two populations.</p>
+<p>An example of comparison is that the second proposition contains no male being more than 50 years old, but the first one has 2. With this method, there cannot be a population with 1 male of over 50, because we take integer weights and there are two men in this category in the sample. This is the disadvantage of algorithms reaching directly integer weights. With IPF, if the weights of this individual are between 0 and 1, there is a possibility of a person belonging to this category.</p>
+<p><code>genoud</code> is used here only to provide a practical demonstration of the possibilities of combinatorial optimisation using existing R packages.</p>
+<p>For combinatorial optimisation algorithms designed for spatial microsimulation we must, for now, look for programs outside the R ‘ecosystem’. Harland (2013) provides a practical tutorial introducing the subject using the Java-based Flexible Modelling Framework (FMF).  </p>
+</div>
+</div>
+<div id="SimPop" class="section level2">
+<h2><span class="header-section-number">6.3</span> simPop</h2>
+<p> The <strong>simPop</strong> package provides alternative methods for generating and modelling synthetic microdata. A useful feature of the package is its inclusion of example data. Datasets from the ‘EU-SILC’ database (EU statistics on income and living conditions) and the developing world are included to demonstrate the methods.</p>
+<p>An example of the individual level data provided by the package, and the function <code>contingencyWt</code>, is demonstrated below.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;simPop&quot;)</span>
+<span class="kw">library</span>(simPop)
+
+<span class="co"># Load individual level data</span>
+<span class="kw">data</span>(<span class="st">&quot;eusilcS&quot;</span>)
+<span class="kw">head</span>(eusilcS)[<span class="dv">2</span><span class="op">:</span><span class="dv">8</span>]</code></pre></div>
+<pre><code>##      hsize         db040 age  rb090 pl030 pb220a netIncome
+## 9292     2      Salzburg  72   male     5     AT  22675.48
+## 9293     2      Salzburg  66 female     5     AT  16999.29
+## 7227     1 Upper Austria  56 female     2     AT  19274.21
+## 5275     1        Styria  67 female     5     AT  13319.13
+## 7866     3 Upper Austria  70 female     5     AT  14365.57
+## 7867     3 Upper Austria  46   male     3     AT      0.00</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute contingency coefficient between two variables</span>
+<span class="kw">contingencyWt</span>(eusilcS<span class="op">$</span>pl030, eusilcS<span class="op">$</span>pb220a,
+  <span class="dt">weights =</span> eusilcS<span class="op">$</span>rb050)</code></pre></div>
+<pre><code>## [1] 0.1749834</code></pre>
+
+<p>The above code shows the first 8 (of 18) variables in the <code>eusilcS</code> dataset provided by <strong>simPop</strong> and an example of one of <strong>simPop</strong>’s functions. This function is useful, as it calculates the level of association between two categorical variables: economic status (<code>pl030</code>) and citizenship status (<code>pb220a</code>). The result of 0.175 shows that there is a weak association between the two variables. <strong>simPop</strong> is a new package so we have not covered it in detail. However, it is worth considering for its provision of example datasets alone.</p>
+<p>Note that this package provides several alternative methods for population synthesis, including “model-based methods, calibration and combinatorial optimization algorithms” <span class="citation">(Meindl et al. <a href="#ref-simPop">2015</a>)</span>.</p>
+</div>
+<div id="UDST" class="section level2">
+<h2><span class="header-section-number">6.4</span> The Urban Data Science Toolkit (UDST)</h2>
+<p>The UDST provides an even more ambitious approach to modelling cities that contains a population synthesis component. An online overview of the project - <a href="http://www.udst.org/" class="uri">http://www.udst.org/</a> - shows that the developers of the UDST are interested in visualisation and modelling, not just population synthesis. The project is an evolving open source project hosted on GitHub. It is outside the scope of this book to comment on the performance of the tools within the UDST (which is written in Python). Suffice to flag the project and suggest readers investigate the <a href="https://github.com/UDST/synthpop">Synthpop</a> software as an alternative synthetic population generator.</p>
+<p> </p>
+</div>
+<div id="chapter-summary-4" class="section level2">
+<h2><span class="header-section-number">6.5</span> Chapter summary</h2>
+<p>In summary, this chapter presented several alternatives to IPF to generate spatial microdata. We explored a regression method (GREGWT), combinatorial optimization and the R package <em>simPop</em>. Finally we looked at the Python-based Urban Data Science Toolkit.</p>
+
+</div>
+</div>
+<h3> Bibliography</h3>
+<div id="refs" class="references">
+<div id="ref-Rahman2009">
+<p>Rahman, Azizurr. 2009. “Small Area Estimation Through Spatial Microsimulation Models.” In <em>2nd International Microsimulation Association Conference</em>. Ottawa; Canada.</p>
+</div>
+<div id="ref-Tanton2011">
+<p>Tanton, Robert, Yogi Vidyattama, Binod Nepal, and Justine McNamara. 2011. “Small area estimation using a reweighting algorithm.” <em>Journal of the Royal Statistical Society. Series A</em> 174 (4): 931–51. doi:<a href="https://doi.org/10.1111/j.1467-985X.2011.00690.x">10.1111/j.1467-985X.2011.00690.x</a>.</p>
+</div>
+<div id="ref-simPop">
+<p>Meindl, Bernhard, Matthias Templ, Andreas Alfons, Alexander Kowarik, and with contributions from Mathieu Ribatet. 2015. <em>SimPop: Simulation of Synthetic Populations for Survey Data Considering Auxiliary Information</em>. <a href="http://CRAN.R-project.org/package=simPop" class="uri">http://CRAN.R-project.org/package=simPop</a>.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="22">
+<li id="fn22"><p>Although the graph shows no improvement from one iteration to the next for the Nelder-Mead algorithm, it should be stated that it is just ‘warming up’ at this stage and than each iteration is very fast, as we shall see. After 400 iterations (which happen in the same time that other algorithms take for a single iteration!), the Nelder-Mead begins to converge: it works effectively.<a href="alternative-reweighting.html#fnref22">↩</a></p></li>
+<li id="fn23"><p>We mean that instead of having a numerical value in each cells, some cells contain the value ‘NA’(Non Applicable). This value appears when this cell has not been defined.<a href="alternative-reweighting.html#fnref23">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="smsimr.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="CakeMap.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

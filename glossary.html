@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-
-<link rel="next" href="intro.html">
+<link rel="prev" href="apR.html">
+<link rel="next" href="bibliography.html">
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -297,23 +297,42 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="header">
-<h1 class="title">Spatial Microsimulation with R</h1>
-<h4 class="author"><em>Robin Lovelace and Morgane Dumont</em></h4>
-<h4 class="date"><em>2017-12-13</em></h4>
-</div>
-<div id="welcome" class="section level1 unnumbered">
-<h1>Welcome</h1>
-<p>Welcome to Spatial Microsimulation with R!</p>
+<div id="glossary" class="section level1">
+<h1><span class="header-section-number">14</span> Glossary</h1>
+<ul>
+<li><p><strong>Algorithm</strong>: a series of computer commands executed in a specific order for a pre-defined purpose. Algorithms process input data and produce outputs.</p></li>
+<li><p><strong>Constraints</strong> are variables used to estimate the number (or weight) of individuals in each zone. Also referred to by the longer name of <strong>constraint variable</strong>. We tend to use the term <strong>linking variable</strong> in this book because they <em>link</em> aggregate and individual level datasets.</p></li>
+<li><p><strong>Combinatorial optimisation</strong> is an approach to spatial microsimulation that generates spatial microdata by randomly selecting individuals from a survey dataset and measuring the fit between the simulated output and the constraint variables. If the fit improves after any particular change, the change is kept. Williamson (2007) provides a practical user manual. <span class="citation">Harland (<a href="#ref-Harland2013">2013</a>)</span> provides a practical demonstration of the method implemented in the Java-based Flexible Modelling Framework (FMF).</p></li>
+<li><p><strong>Data frame</strong>: a type of object (formally referred to as a class) in R, data frames are square tables composed of rows and columns of information. As with many things in R, the best way to understand data frames is to create them and experiment. The following creates a data frame with two variables: name and height:</p>
+<p>Note that each new variable is entered using the command <code>c()</code> this is how R creates objects with the <em>vector</em> data class, a one dimensional matrix — and that text data must be entered in quote marks.</p></li>
+<li><p><strong>Deterministic reweighting</strong> is an approach to generating spatial microdata that allocates fractional weights to individuals based on how representative they are of the target area. It differs from combinatorial optimisation approaches in that it requires no random numbers. The most frequently used method of deterministic reweighting is IPF.</p></li>
+<li><p><strong>For loops</strong> are instructions that tell the computer to run a certain set of command repeatedly. <code>for(i in 1:9) print(i)</code>, for example will print the value of i 9 times. The best way to further understand for loops is to try them out.</p></li>
+<li><p><strong>Iteration</strong>: one instance of a process that is repeated many times until a predefined end point, often within an <em>algorithm</em>.</p></li>
+<li><p><strong>Iterative proportional fitting</strong> (IPF): an iterative process implemented in mathematics and algorithms to find the maximum likelihood of cells that are constrained by multiple sets of marginal totals. To make this abstract definition even more confusing, there are multiple terms which refer to the process, including ‘biproportional fitting’ and ‘matrix raking’. In plain English, IPF in the context of spatial microsimulation can be defined as <em>a statistical technique for allocating weights to individuals depending on how representative they are of different zones</em>. IPF is a type of deterministic reweighting, meaning that random numbers are not needed to generate the result and that the output weights are real (not integer) numbers.</p></li>
+<li><p>A <strong>linking variable</strong> is a variable that is shared between individual and aggregate level data. Common examples include age and sex (the linking variables used in the SimpleWorld example): questions that are commonly asked in all kinds of survey. Linking variables are also referred to as <strong>constraint variables</strong> because they <em>constrain</em> the weights for individuals in each zone.</p></li>
+<li><p><strong>Microdata</strong> is the non-geographical individual level dataset from which synthetic <strong>spatial microdata</strong> are usually derived. This sample of the target population has also been labelled as the ‘seed’ (e.g. Barthelemy and Toint, 2012) and simply the ‘survey data’ in the academic literature. The term microdata is used in this book for its brevity and semantic link to spatial microdata.</p></li>
+<li><p>The <strong>population base</strong> roughly equivalent to the ‘target population’, used by statisticians to describe the population about whom they wish to draw conclusions based on a ‘sample population’. The sample population, is the group of individuals who we have individual level data for. In aggregate level data, the <strong>population base</strong> is the complete set of individuals represented by the counts. A common example is the variable “Hours worked”: only people aged 16 to 74 are generally thought of as working, so, if there is no <code>NA</code> (no answer) category, the population base is not the same as the total population of an area. A common problem faced by people using spatial microsimulation methods is incompatibility between aggregate constraints that use different<br />
+population bases.</p></li>
+<li><p><strong>Population synthesis</strong> is the process of converting input data (generally non-geographical <strong>microda</strong> and geographically aggregated <strong>constraint variables</strong>) into <strong>spatial microdata</strong>.</p></li>
+<li><p><strong>Spatial microdata</strong> is the name given to individual level data allocated to mutually exclusive geographical zones (see Figure 5.1 above). Spatial microdata is useful because it provides multi level information, about the relationships between individuals and where they live. However, due to the high costs of large surveys and restrictions on the release of geocoded individual level data, spatial microdata is rarely available to researchers. To overcome this issue, most spatial microsimulation research employs methods of <strong>population synthesis</strong> to generate representative spatial microdata.</p></li>
+<li><p><strong>Spatial microsimulation</strong> is the name given to an approach to modelling that comprises a series of techniques that generate, analyse and model individual level data allocated to small administrative zones. Spatial microsimulation is an approach for understanding processes that operate on individual and geographical levels.</p></li>
+<li><p>A <strong>weight matrix</strong> is a 2 dimensional array that links non-spatial <em>microdata</em> to geographical zones. Each row in the weight matrix represents an individual and each column represents a zone. Thus, in R notation, the weight matrix <code>w</code> has dimensions of <code>nrow(ind)</code> rows by <code>nrow(cons)</code> where <code>ind</code> and <code>cons</code> are the microdata and constraints respectively. The value of <code>w[i,j]</code> represents the extent to which individual <code>i</code> is representative of zone <code>j</code>. <code>sum(w)</code> is the total population of the study area. The weight matrix is an efficient way of storing spatial microdata because it does not require a new row for every additional individual in the study area. For a weight matrix to be converted into spatial microdata, all the values of the wieghts must be integers. The conversion of an integer weight matrix into an integer weight matrix is known as <em>integerisation</em>.</p></li>
+</ul>
 
+</div>
+<h3> Bibliography</h3>
+<div id="refs" class="references">
+<div id="ref-Harland2013">
+<p>Harland, Kirk. 2013. “Microsimulation model user guide: flexible modelling framework.” NCRM Working Papers. Leeds: University of Leeds; NCRM. doi:<a href="https://doi.org/http://eprints.ncrm.ac.uk/3177/2/microsimulation\_model.pdf">http://eprints.ncrm.ac.uk/3177/2/microsimulation\_model.pdf</a>.</p>
+</div>
 </div>
             </section>
 
           </div>
         </div>
       </div>
-
-<a href="intro.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="apR.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="bibliography.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>

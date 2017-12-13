@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html >
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Spatial Microsimulation with R</title>
+  <meta name="description" content="Spatial Microsimulation with R">
+  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+
+  <meta property="og:title" content="Spatial Microsimulation with R" />
+  <meta property="og:type" content="book" />
+  <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
+  
+  
+  <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Spatial Microsimulation with R" />
+  
+  
+  
+
+<meta name="author" content="Robin Lovelace and Morgane Dumont">
+
+
+<meta name="date" content="2017-12-13">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  
+  
+<link rel="prev" href="intro.html">
+<link rel="next" href="what-is.html">
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
+<li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
+<li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
+<li class="chapter" data-level="1.3" data-path="intro.html"><a href="intro.html#a-definition-of-spatial-microsimulation"><i class="fa fa-check"></i><b>1.3</b> A definition of spatial microsimulation</a></li>
+<li class="chapter" data-level="1.4" data-path="intro.html"><a href="intro.html#learning-by-doing"><i class="fa fa-check"></i><b>1.4</b> Learning by doing</a></li>
+<li class="chapter" data-level="1.5" data-path="intro.html"><a href="intro.html#whyR"><i class="fa fa-check"></i><b>1.5</b> Why spatial microsimulation with R?</a></li>
+<li class="chapter" data-level="1.6" data-path="intro.html"><a href="intro.html#learningR"><i class="fa fa-check"></i><b>1.6</b> Learning the R language</a></li>
+<li class="chapter" data-level="1.7" data-path="intro.html"><a href="intro.html#typographic"><i class="fa fa-check"></i><b>1.7</b> Typographic conventions</a></li>
+<li class="chapter" data-level="1.8" data-path="intro.html"><a href="intro.html#overview"><i class="fa fa-check"></i><b>1.8</b> An overview of the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="SimpleWorld.html"><a href="SimpleWorld.html"><i class="fa fa-check"></i><b>2</b> SimpleWorld: A worked example of spatial microsimulation</a><ul>
+<li class="chapter" data-level="2.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudioUpSpeed"><i class="fa fa-check"></i><b>2.1</b> Getting setup with the RStudio environment</a><ul>
+<li class="chapter" data-level="2.1.1" data-path="SimpleWorld.html"><a href="SimpleWorld.html#installing-r"><i class="fa fa-check"></i><b>2.1.1</b> Installing R</a></li>
+<li class="chapter" data-level="2.1.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#rstudio"><i class="fa fa-check"></i><b>2.1.2</b> RStudio</a></li>
+<li class="chapter" data-level="2.1.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#projects"><i class="fa fa-check"></i><b>2.1.3</b> Projects</a></li>
+<li class="chapter" data-level="2.1.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#downloading-data-for-the-book"><i class="fa fa-check"></i><b>2.1.4</b> Downloading data for the book</a></li>
+</ul></li>
+<li class="chapter" data-level="2.2" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldData"><i class="fa fa-check"></i><b>2.2</b> SimpleWorld data</a></li>
+<li class="chapter" data-level="2.3" data-path="SimpleWorld.html"><a href="SimpleWorld.html#weight-matrix"><i class="fa fa-check"></i><b>2.3</b> Generating a weight matrix</a></li>
+<li class="chapter" data-level="2.4" data-path="SimpleWorld.html"><a href="SimpleWorld.html#spatial-microdata"><i class="fa fa-check"></i><b>2.4</b> Spatial microdata</a></li>
+<li class="chapter" data-level="2.5" data-path="SimpleWorld.html"><a href="SimpleWorld.html#SimpleWorldContext"><i class="fa fa-check"></i><b>2.5</b> SimpleWorld in context</a></li>
+<li class="chapter" data-level="2.6" data-path="SimpleWorld.html"><a href="SimpleWorld.html#chapter-summary"><i class="fa fa-check"></i><b>2.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="what-is.html"><a href="what-is.html"><i class="fa fa-check"></i><b>3</b> What is spatial microsimulation?</a><ul>
+<li class="chapter" data-level="3.1" data-path="what-is.html"><a href="what-is.html#terminology"><i class="fa fa-check"></i><b>3.1</b> Terminology</a><ul>
+<li class="chapter" data-level="3.1.1" data-path="what-is.html"><a href="what-is.html#SimCity"><i class="fa fa-check"></i><b>3.1.1</b> Spatial microsimulation as SimCity</a></li>
+<li class="chapter" data-level="3.1.2" data-path="what-is.html"><a href="what-is.html#meth-approach"><i class="fa fa-check"></i><b>3.1.2</b> Spatial microsimulation: method or approach?</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="what-is.html"><a href="what-is.html#is-not"><i class="fa fa-check"></i><b>3.2</b> What spatial microsimulation is not</a></li>
+<li class="chapter" data-level="3.3" data-path="what-is.html"><a href="what-is.html#applications"><i class="fa fa-check"></i><b>3.3</b> Applications</a><ul>
+<li class="chapter" data-level="3.3.1" data-path="what-is.html"><a href="what-is.html#health-applications"><i class="fa fa-check"></i><b>3.3.1</b> Health applications</a></li>
+<li class="chapter" data-level="3.3.2" data-path="what-is.html"><a href="what-is.html#economic-policy-evaluation"><i class="fa fa-check"></i><b>3.3.2</b> Economic policy evaluation</a></li>
+<li class="chapter" data-level="3.3.3" data-path="what-is.html"><a href="what-is.html#transport"><i class="fa fa-check"></i><b>3.3.3</b> Transport</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="what-is.html"><a href="what-is.html#assumptions"><i class="fa fa-check"></i><b>3.4</b> Assumptions</a></li>
+<li class="chapter" data-level="3.5" data-path="what-is.html"><a href="what-is.html#chapter-summary-1"><i class="fa fa-check"></i><b>3.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="data-prep.html"><a href="data-prep.html"><i class="fa fa-check"></i><b>4</b> Data preparation</a><ul>
+<li class="chapter" data-level="4.1" data-path="data-prep.html"><a href="data-prep.html#accessing"><i class="fa fa-check"></i><b>4.1</b> Accessing the input data</a></li>
+<li class="chapter" data-level="4.2" data-path="data-prep.html"><a href="data-prep.html#Selecting"><i class="fa fa-check"></i><b>4.2</b> Target and constraint variables</a></li>
+<li class="chapter" data-level="4.3" data-path="data-prep.html"><a href="data-prep.html#Loading"><i class="fa fa-check"></i><b>4.3</b> Loading input data</a></li>
+<li class="chapter" data-level="4.4" data-path="data-prep.html"><a href="data-prep.html#subsetting-prep"><i class="fa fa-check"></i><b>4.4</b> Subsetting to remove excess information</a></li>
+<li class="chapter" data-level="4.5" data-path="data-prep.html"><a href="data-prep.html#re-categorise"><i class="fa fa-check"></i><b>4.5</b> Re-categorising individual level variables</a></li>
+<li class="chapter" data-level="4.6" data-path="data-prep.html"><a href="data-prep.html#matching"><i class="fa fa-check"></i><b>4.6</b> Matching individual and aggregate level data names</a></li>
+<li class="chapter" data-level="4.7" data-path="data-prep.html"><a href="data-prep.html#flattening"><i class="fa fa-check"></i><b>4.7</b> ‘Flattening’ the individual level data</a></li>
+<li class="chapter" data-level="4.8" data-path="data-prep.html"><a href="data-prep.html#chapter-summary-2"><i class="fa fa-check"></i><b>4.8</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="smsimr.html"><a href="smsimr.html"><i class="fa fa-check"></i><b>5</b> Population synthesis</a><ul>
+<li class="chapter" data-level="5.1" data-path="smsimr.html"><a href="smsimr.html#weighting"><i class="fa fa-check"></i><b>5.1</b> Weighting algorithms</a></li>
+<li class="chapter" data-level="5.2" data-path="smsimr.html"><a href="smsimr.html#iterative-proportional-fitting"><i class="fa fa-check"></i><b>5.2</b> Iterative Proportional Fitting</a><ul>
+<li class="chapter" data-level="5.2.1" data-path="smsimr.html"><a href="smsimr.html#ipftheory"><i class="fa fa-check"></i><b>5.2.1</b> IPF in theory</a></li>
+<li class="chapter" data-level="5.2.2" data-path="smsimr.html"><a href="smsimr.html#ipfinr"><i class="fa fa-check"></i><b>5.2.2</b> IPF in R</a></li>
+<li class="chapter" data-level="5.2.3" data-path="smsimr.html"><a href="smsimr.html#ipfp"><i class="fa fa-check"></i><b>5.2.3</b> IPF with <strong>ipfp</strong></a></li>
+<li class="chapter" data-level="5.2.4" data-path="smsimr.html"><a href="smsimr.html#mipfp"><i class="fa fa-check"></i><b>5.2.4</b> IPF with <strong>mipfp</strong></a></li>
+</ul></li>
+<li class="chapter" data-level="5.3" data-path="smsimr.html"><a href="smsimr.html#sintegerisation"><i class="fa fa-check"></i><b>5.3</b> Integerisation</a><ul>
+<li class="chapter" data-level="5.3.1" data-path="smsimr.html"><a href="smsimr.html#concept-of-integerisation"><i class="fa fa-check"></i><b>5.3.1</b> Concept of integerisation</a></li>
+<li class="chapter" data-level="5.3.2" data-path="smsimr.html"><a href="smsimr.html#example-of-integerisation"><i class="fa fa-check"></i><b>5.3.2</b> Example of integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="5.4" data-path="smsimr.html"><a href="smsimr.html#expansion"><i class="fa fa-check"></i><b>5.4</b> Expansion</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="smsimr.html"><a href="smsimr.html#weights-per-individual"><i class="fa fa-check"></i><b>5.4.1</b> Weights per individual</a></li>
+<li class="chapter" data-level="5.4.2" data-path="smsimr.html"><a href="smsimr.html#weightpc"><i class="fa fa-check"></i><b>5.4.2</b> Weights per category</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="smsimr.html"><a href="smsimr.html#integerisation-and-expansion"><i class="fa fa-check"></i><b>5.5</b> Integerisation and expansion</a></li>
+<li class="chapter" data-level="5.6" data-path="smsimr.html"><a href="smsimr.html#compareipf"><i class="fa fa-check"></i><b>5.6</b> Comparing <strong>ipfp</strong> with <strong>mipfp</strong></a><ul>
+<li class="chapter" data-level="5.6.1" data-path="smsimr.html"><a href="smsimr.html#comparing-the-methods"><i class="fa fa-check"></i><b>5.6.1</b> Comparing the methods</a></li>
+<li class="chapter" data-level="5.6.2" data-path="smsimr.html"><a href="smsimr.html#comparing-the-weights-for-simpleworld"><i class="fa fa-check"></i><b>5.6.2</b> Comparing the weights for SimpleWorld</a></li>
+<li class="chapter" data-level="5.6.3" data-path="smsimr.html"><a href="smsimr.html#comparing-the-results-for-simpleworld"><i class="fa fa-check"></i><b>5.6.3</b> Comparing the results for SimpleWorld</a></li>
+<li class="chapter" data-level="5.6.4" data-path="smsimr.html"><a href="smsimr.html#speed-comparisons"><i class="fa fa-check"></i><b>5.6.4</b> Speed comparisons</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="smsimr.html"><a href="smsimr.html#chapter-summary-3"><i class="fa fa-check"></i><b>5.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html"><i class="fa fa-check"></i><b>6</b> Alternative approaches to population synthesis</a><ul>
+<li class="chapter" data-level="6.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#GREGWT"><i class="fa fa-check"></i><b>6.1</b> GREGWT</a></li>
+<li class="chapter" data-level="6.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#asOptim"><i class="fa fa-check"></i><b>6.2</b> Population synthesis as an optimization problem</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#reweighting-with-optim-and-gensa"><i class="fa fa-check"></i><b>6.2.1</b> Reweighting with optim and GenSA</a></li>
+<li class="chapter" data-level="6.2.2" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#combinatorial-optimisation"><i class="fa fa-check"></i><b>6.2.2</b> Combinatorial optimisation</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#SimPop"><i class="fa fa-check"></i><b>6.3</b> simPop</a></li>
+<li class="chapter" data-level="6.4" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#UDST"><i class="fa fa-check"></i><b>6.4</b> The Urban Data Science Toolkit (UDST)</a></li>
+<li class="chapter" data-level="6.5" data-path="alternative-reweighting.html"><a href="alternative-reweighting.html#chapter-summary-4"><i class="fa fa-check"></i><b>6.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="CakeMap.html"><a href="CakeMap.html"><i class="fa fa-check"></i><b>7</b> Spatial microsimulation in the wild</a><ul>
+<li class="chapter" data-level="7.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapConVar"><i class="fa fa-check"></i><b>7.1</b> Selection of constraint variables</a></li>
+<li class="chapter" data-level="7.2" data-path="CakeMap.html"><a href="CakeMap.html#CakePrep"><i class="fa fa-check"></i><b>7.2</b> Preparing the input data</a></li>
+<li class="chapter" data-level="7.3" data-path="CakeMap.html"><a href="CakeMap.html#CakeMapIPFP"><i class="fa fa-check"></i><b>7.3</b> Using the <code>ipfp</code> package</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>7.3.1</b> Performing IPF on CakeMap data</a></li>
+<li class="chapter" data-level="7.3.2" data-path="CakeMap.html"><a href="CakeMap.html#CakeINT"><i class="fa fa-check"></i><b>7.3.2</b> Integerisation</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="CakeMap.html"><a href="CakeMap.html#CakeMIPF"><i class="fa fa-check"></i><b>7.4</b> Using the <code>mipfp</code> package</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="CakeMap.html"><a href="CakeMap.html#CakeIPF"><i class="fa fa-check"></i><b>7.4.1</b> Performing IPF on CakeMap data</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="CakeMap.html"><a href="CakeMap.html#CompareMeth"><i class="fa fa-check"></i><b>7.5</b> Comparing methods of reweighting large datasets</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-results"><i class="fa fa-check"></i><b>7.5.1</b> Comparison of results</a></li>
+<li class="chapter" data-level="7.5.2" data-path="CakeMap.html"><a href="CakeMap.html#comparison-of-times"><i class="fa fa-check"></i><b>7.5.2</b> Comparison of times</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="CakeMap.html"><a href="CakeMap.html#chapter-summary-5"><i class="fa fa-check"></i><b>7.6</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="svalidation.html"><a href="svalidation.html"><i class="fa fa-check"></i><b>8</b> Model checking and evaluation</a><ul>
+<li class="chapter" data-level="8.1" data-path="svalidation.html"><a href="svalidation.html#Internal"><i class="fa fa-check"></i><b>8.1</b> Internal validation</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="svalidation.html"><a href="svalidation.html#pearsons-r"><i class="fa fa-check"></i><b>8.1.1</b> Pearson’s <em>r</em></a></li>
+<li class="chapter" data-level="8.1.2" data-path="svalidation.html"><a href="svalidation.html#absolute-error-measures"><i class="fa fa-check"></i><b>8.1.2</b> Absolute error measures</a></li>
+<li class="chapter" data-level="8.1.3" data-path="svalidation.html"><a href="svalidation.html#root-mean-squared-error"><i class="fa fa-check"></i><b>8.1.3</b> Root mean squared error</a></li>
+<li class="chapter" data-level="8.1.4" data-path="svalidation.html"><a href="svalidation.html#chi-squared"><i class="fa fa-check"></i><b>8.1.4</b> Chi-squared</a></li>
+<li class="chapter" data-level="8.1.5" data-path="svalidation.html"><a href="svalidation.html#which-test-to-use"><i class="fa fa-check"></i><b>8.1.5</b> Which test to use?</a></li>
+<li class="chapter" data-level="8.1.6" data-path="svalidation.html"><a href="svalidation.html#internal-validation-of-cakemap"><i class="fa fa-check"></i><b>8.1.6</b> Internal validation of CakeMap</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="svalidation.html"><a href="svalidation.html#empty-cells"><i class="fa fa-check"></i><b>8.2</b> Empty cells</a></li>
+<li class="chapter" data-level="8.3" data-path="svalidation.html"><a href="svalidation.html#External"><i class="fa fa-check"></i><b>8.3</b> External validation</a></li>
+<li class="chapter" data-level="8.4" data-path="svalidation.html"><a href="svalidation.html#chapter-summary-6"><i class="fa fa-check"></i><b>8.4</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="nomicrodata.html"><a href="nomicrodata.html"><i class="fa fa-check"></i><b>9</b> Population synthesis without microdata</a><ul>
+<li class="chapter" data-level="9.1" data-path="nomicrodata.html"><a href="nomicrodata.html#CrossGlobLocalMarg"><i class="fa fa-check"></i><b>9.1</b> Global cross-tables and local marginal distributions</a></li>
+<li class="chapter" data-level="9.2" data-path="nomicrodata.html"><a href="nomicrodata.html#twoLevelData"><i class="fa fa-check"></i><b>9.2</b> Two level aggregated data</a></li>
+<li class="chapter" data-level="9.3" data-path="nomicrodata.html"><a href="nomicrodata.html#chapter-summary-7"><i class="fa fa-check"></i><b>9.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="ha.html"><a href="ha.html"><i class="fa fa-check"></i><b>10</b> Household allocation</a><ul>
+<li class="chapter" data-level="10.1" data-path="ha.html"><a href="ha.html#IndData"><i class="fa fa-check"></i><b>10.1</b> Independent data (individuals and households)</a><ul>
+<li class="chapter" data-level="10.1.1" data-path="ha.html"><a href="ha.html#household-type-selection"><i class="fa fa-check"></i><b>10.1.1</b> Household type selection</a></li>
+<li class="chapter" data-level="10.1.2" data-path="ha.html"><a href="ha.html#constituent-members-selection"><i class="fa fa-check"></i><b>10.1.2</b> Constituent members selection</a></li>
+<li class="chapter" data-level="10.1.3" data-path="ha.html"><a href="ha.html#end-of-the-household-generation-process"><i class="fa fa-check"></i><b>10.1.3</b> End of the household generation process</a></li>
+</ul></li>
+<li class="chapter" data-level="10.2" data-path="ha.html"><a href="ha.html#cross-data-individual-and-household-level-information"><i class="fa fa-check"></i><b>10.2</b> Cross data: individual and household level information</a><ul>
+<li class="chapter" data-level="10.2.1" data-path="ha.html"><a href="ha.html#WithoutHHdata"><i class="fa fa-check"></i><b>10.2.1</b> Without additional household’s data</a></li>
+<li class="chapter" data-level="10.2.2" data-path="ha.html"><a href="ha.html#AddData"><i class="fa fa-check"></i><b>10.2.2</b> With additional household’s data</a></li>
+</ul></li>
+<li class="chapter" data-level="10.3" data-path="ha.html"><a href="ha.html#chapter-summary-8"><i class="fa fa-check"></i><b>10.3</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="tresis.html"><a href="tresis.html"><i class="fa fa-check"></i><b>11</b> The TRESIS approach to spatial microsimulation</a><ul>
+<li class="chapter" data-level="11.1" data-path="tresis.html"><a href="tresis.html#tresis-over"><i class="fa fa-check"></i><b>11.1</b> Overview of TRESIS modelling system</a><ul>
+<li class="chapter" data-level="11.1.1" data-path="tresis.html"><a href="tresis.html#differences-between-tresis-and-other-microsimulation-systems"><i class="fa fa-check"></i><b>11.1.1</b> Differences between TRESIS and other microsimulation systems</a></li>
+</ul></li>
+<li class="chapter" data-level="11.2" data-path="tresis.html"><a href="tresis.html#tresis-house"><i class="fa fa-check"></i><b>11.2</b> Synthetic households</a><ul>
+<li class="chapter" data-level="11.2.1" data-path="tresis.html"><a href="tresis.html#what-are-synthetic-households"><i class="fa fa-check"></i><b>11.2.1</b> What are synthetic households?</a></li>
+<li class="chapter" data-level="11.2.2" data-path="tresis.html"><a href="tresis.html#required-data-for-generating-synthetic-households"><i class="fa fa-check"></i><b>11.2.2</b> Required data for generating synthetic households</a></li>
+<li class="chapter" data-level="11.2.3" data-path="tresis.html"><a href="tresis.html#synthetic-households-in-r"><i class="fa fa-check"></i><b>11.2.3</b> Synthetic households in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.3" data-path="tresis.html"><a href="tresis.html#using-demand-models-to-allocate-synthetic-households-to-zones-using-r"><i class="fa fa-check"></i><b>11.3</b> Using demand models to allocate synthetic households to zones using R</a><ul>
+<li class="chapter" data-level="11.3.1" data-path="tresis.html"><a href="tresis.html#simple-discrete-choice-model-for-residential-location"><i class="fa fa-check"></i><b>11.3.1</b> Simple discrete choice model for residential location</a></li>
+<li class="chapter" data-level="11.3.2" data-path="tresis.html"><a href="tresis.html#results"><i class="fa fa-check"></i><b>11.3.2</b> Results</a></li>
+</ul></li>
+<li class="chapter" data-level="11.4" data-path="tresis.html"><a href="tresis.html#conclusions"><i class="fa fa-check"></i><b>11.4</b> Conclusions</a><ul>
+<li class="chapter" data-level="11.4.1" data-path="tresis.html"><a href="tresis.html#limitations"><i class="fa fa-check"></i><b>11.4.1</b> Limitations</a></li>
+<li class="chapter" data-level="11.4.2" data-path="tresis.html"><a href="tresis.html#metroscan-ti"><i class="fa fa-check"></i><b>11.4.2</b> MetroScan-TI</a></li>
+<li class="chapter" data-level="11.4.3" data-path="tresis.html"><a href="tresis.html#extending-residential-location-to-transport-models-in-r"><i class="fa fa-check"></i><b>11.4.3</b> Extending residential location to transport models in R</a></li>
+</ul></li>
+<li class="chapter" data-level="11.5" data-path="tresis.html"><a href="tresis.html#chapter-summary-9"><i class="fa fa-check"></i><b>11.5</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="ABM.html"><a href="ABM.html"><i class="fa fa-check"></i><b>12</b> Spatial microsimulation for agent-based models</a><ul>
+<li class="chapter" data-level="12.1" data-path="ABM.html"><a href="ABM.html#note"><i class="fa fa-check"></i><b>12.1</b> Note</a></li>
+<li class="chapter" data-level="12.2" data-path="ABM.html"><a href="ABM.html#abm-software"><i class="fa fa-check"></i><b>12.2</b> ABM software</a></li>
+<li class="chapter" data-level="12.3" data-path="ABM.html"><a href="ABM.html#setting-up-simpleworld-in-netlogo"><i class="fa fa-check"></i><b>12.3</b> Setting up SimpleWorld in NetLogo</a><ul>
+<li class="chapter" data-level="12.3.1" data-path="ABM.html"><a href="ABM.html#graphical-user-interface-in-netlogo"><i class="fa fa-check"></i><b>12.3.1</b> Graphical User Interface in NetLogo</a></li>
+</ul></li>
+<li class="chapter" data-level="12.4" data-path="ABM.html"><a href="ABM.html#allocating-attributes-to-agents"><i class="fa fa-check"></i><b>12.4</b> Allocating attributes to agents</a><ul>
+<li class="chapter" data-level="12.4.1" data-path="ABM.html"><a href="ABM.html#defining-variables"><i class="fa fa-check"></i><b>12.4.1</b> Defining variables</a></li>
+<li class="chapter" data-level="12.4.2" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-1"><i class="fa fa-check"></i><b>12.4.2</b> Reading agent data - Option 1</a></li>
+<li class="chapter" data-level="12.4.3" data-path="ABM.html"><a href="ABM.html#reading-agent-data---option-2"><i class="fa fa-check"></i><b>12.4.3</b> Reading agent data - Option 2</a></li>
+</ul></li>
+<li class="chapter" data-level="12.5" data-path="ABM.html"><a href="ABM.html#running-simpleworld"><i class="fa fa-check"></i><b>12.5</b> Running SimpleWorld</a><ul>
+<li class="chapter" data-level="12.5.1" data-path="ABM.html"><a href="ABM.html#more-variable-definitions"><i class="fa fa-check"></i><b>12.5.1</b> More variable definitions</a></li>
+<li class="chapter" data-level="12.5.2" data-path="ABM.html"><a href="ABM.html#more-setup-procedures"><i class="fa fa-check"></i><b>12.5.2</b> More setup procedures</a></li>
+<li class="chapter" data-level="12.5.3" data-path="ABM.html"><a href="ABM.html#the-main-go-procedure"><i class="fa fa-check"></i><b>12.5.3</b> The main Go procedure</a></li>
+<li class="chapter" data-level="12.5.4" data-path="ABM.html"><a href="ABM.html#adding-plots-to-the-model"><i class="fa fa-check"></i><b>12.5.4</b> Adding plots to the model</a></li>
+<li class="chapter" data-level="12.5.5" data-path="ABM.html"><a href="ABM.html#stopping-behavior"><i class="fa fa-check"></i><b>12.5.5</b> Stopping behavior</a></li>
+</ul></li>
+<li class="chapter" data-level="12.6" data-path="ABM.html"><a href="ABM.html#control-the-abm-from-r"><i class="fa fa-check"></i><b>12.6</b> Control the ABM from R</a><ul>
+<li class="chapter" data-level="12.6.1" data-path="ABM.html"><a href="ABM.html#running-a-single-netlogo-simulation"><i class="fa fa-check"></i><b>12.6.1</b> Running a single NetLogo simulation</a></li>
+<li class="chapter" data-level="12.6.2" data-path="ABM.html"><a href="ABM.html#running-multiple-netlogo-simulations"><i class="fa fa-check"></i><b>12.6.2</b> Running multiple NetLogo simulations</a></li>
+</ul></li>
+<li class="chapter" data-level="12.7" data-path="ABM.html"><a href="ABM.html#chapter-summary-10"><i class="fa fa-check"></i><b>12.7</b> Chapter summary</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="apR.html"><a href="apR.html"><i class="fa fa-check"></i><b>13</b> Appendix: Getting up-to-speed with R</a><ul>
+<li class="chapter" data-level="13.1" data-path="apR.html"><a href="apR.html#vector-alg"><i class="fa fa-check"></i><b>13.1</b> R understands vector algebra</a></li>
+<li class="chapter" data-level="13.2" data-path="apR.html"><a href="apR.html#R-object"><i class="fa fa-check"></i><b>13.2</b> R is object orientated</a></li>
+<li class="chapter" data-level="13.3" data-path="apR.html"><a href="apR.html#subsetting"><i class="fa fa-check"></i><b>13.3</b> Subsetting in R</a></li>
+<li class="chapter" data-level="13.4" data-path="apR.html"><a href="apR.html#further"><i class="fa fa-check"></i><b>13.4</b> Further R resources</a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
+<li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Spatial Microsimulation with R</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="SimpleWorld" class="section level1">
+<h1><span class="header-section-number">2</span> SimpleWorld: A worked example of spatial microsimulation</h1>
+<p>This chapter focuses on the minimum input datasets needed for the classical type of microsimulation. We will use input data on the inhabitants of an imaginary world (geographical individual level) called SimpleWorld to demonstrate the basic concepts and techniques to perform spatial microsimulation with R.</p>
+<p>This is the first practical chapter and it aims to acquaint you with language R and the R development program RStudio. Fluency with R and RStudio, in combination with well-organised project management and clear, commented code, will enable fast and efficient work. In short, this chapter aims to teach good ‘workflow’ in preparation for navigating the subsequent chapters. A secondary aim is to illustrate key concepts in spatial microsimulation with reference to a practical example, called ‘SimpleWorld’ for its simplicity.</p>
+<p>The chapter also serves to highlight the links between the methodology presented in-depth later in the book (see Chapter 5) and the various real-world applications presented in Chapter 4. For R ‘newbies’ it also provides a chance for the reader to do some basic programming in R: the unwritten subtitle of this book is “a <em>practical</em> introduction” for a reason!</p>
+
+<p>This chapter is ordered as follows:</p>
+<ul>
+<li><em>Getting setup with the RStudio environment</em> (<a href="SimpleWorld.html#rstudioUpSpeed"></a>) contains the basic explanation of RStudio to enable you to code the examples of this book on your own computer.</li>
+<li><em>SimpleWorld data</em> (<a href="SimpleWorld.html#SimpleWorldData"></a>) describes the context and the data of this little illustrative example.</li>
+<li><em>Generating a weight matrix</em> (<a href="SimpleWorld.html#weight-matrix"></a>) contains the code and the description of the role of a weight matrix in a spatial microsimulation. -<em>Spatial microdata</em> (<a href="SimpleWorld.html#spatial-microdata"></a>) shows the typically useful output of a spatial microsimulation. -<em>SimpleWorld in context</em> (<a href="SimpleWorld.html#SimpleWorldContext"></a>) mentions the kind of context where the output could be used.</li>
+</ul>
+<div id="rstudioUpSpeed" class="section level2">
+<h2><span class="header-section-number">2.1</span> Getting setup with the RStudio environment</h2>
+<p>Before progressing further, it is important to ensure that R is setup correctly and working on your computer, so you can follow the practical examples. This section will not go into much detail. Further resources are provided in the Appendix at the end of the book to provide insight into how R works as a programming language.</p>
+<p>The majority of the help that you need to install and setup R on your computer can be found online, so it is recommended that you consult this section with reference to online searches and help pages. As with all open source software projects R evolves over time so it is important to keep up-to-date with any changes, which may not be accounted for in this book.</p>
+<div id="installing-r" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> Installing R</h3>
+<p>The practical examples in this book require a recent version of R to be installed on your computer. This will allow you to type test the code as you learn the methods. To install R, we recommend you refer to documentation provided online, on the Comprehensive R Archive Network (CRAN):</p>
+<ul>
+<li>For Windows, see <a href="https://cran.r-project.org/bin/windows/base/" class="uri">https://cran.r-project.org/bin/windows/base/</a></li>
+<li>For Mac, see <a href="https://cran.r-project.org/bin/macosx/" class="uri">https://cran.r-project.org/bin/macosx/</a></li>
+<li>For Linux, see <a href="https://cran.r-project.org/doc/manuals/r-release/R-admin.html" class="uri">https://cran.r-project.org/doc/manuals/r-release/R-admin.html</a></li>
+</ul>
+<p>On Debian-based systems such as Ubuntu, the following bash command should be sufficient to install R.</p>
+<pre><code>sudo apt-get install r-base</code></pre>
+<p>Once R is installed, new packages are easy to install from within R using <code>install.packages(&quot;package_name&quot;)</code>. To install the <strong>mipfp</strong> package, for example, we would use:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">&quot;mipfp&quot;</span>)</code></pre></div>
+</div>
+<div id="rstudio" class="section level3">
+<h3><span class="header-section-number">2.1.2</span> RStudio</h3>
+<p>RStudio is an Integrated Development Environment (IDE) for R. It provides an advance Graphical User Interface (GUI) that makes it easier not only to write R code, but to install packages, manage R’s graphical outputs and organise complex projects. All R code presented in this book will run in other environments, such as Linux’s bash shell, in which R can be initiated by the following command:</p>
+<div class="sourceCode"><pre class="sourceCode bash"><code class="sourceCode bash">$ <span class="ex">R</span> <span class="co"># enter the R command line</span></code></pre></div>
+<p>It is highly recommended that you use RStudio for the work presented in this book, however, especially if you an R beginner. RStudio will enable you to spend less time worrying about how to write R code correctly and more time focussed on spatial microsimulation. One example of how RStudio saves time is its tab autocompletion functionality. To test this functionality, type the beginning of any R object or function stored in R’s environment (such as <code>plo</code>, short for <code>plot</code>) and hit the <code>Tab</code> button. The full name of various options should auto-complete, as illustrated in Figure 2.1. Pressing the down arrow allows the user to select the correct input. Auto-completion allows fast typing, easy recollection of function/object names. It also prevents errors cause by typos in your code.</p>
+<div class="figure"><span id="fig:rstudio"></span>
+<img src="_main_files/figure-html/rstudio-1.png" alt="Autocompletion in RStudio" width="672" />
+<p class="caption">
+Figure 2.1: Autocompletion in RStudio
+</p>
+</div>
+<p>To test this functionality, download and install RStudio if you have not already. The installation process is simple on Linux, Mac and Windows platforms: simply follow the instructions provided here at rstudio.com/products/rstudio/download/.</p>
+<p>There are many other advantages of using RStudio.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> The next section focuses on one particular advantage that we recommend you make use of whilst working through the book: RStudio projects.</p>
+</div>
+<div id="projects" class="section level3">
+<h3><span class="header-section-number">2.1.3</span> Projects</h3>
+<p>RStudio provides a neat system for creating, managing and even sharing your projects. This functionality merits a section of its own, because spatial microsimulation projects are likely to be large and complex, requiring collaboration with other people. If you are not careful the projects can become over-complex and unmanageable. RStudio projects can prevent this from happening and lead to improved workflow.</p>
+<p>To setup a new project click on the drop-down menu in the top-right section of RStudio. If you are working on a project, the name of the project will appear in this dropdown menu (see Figure 2.2). When a project is loaded, the following things happen:</p>
+<ul>
+<li>The files open in the script panel (top left) last time you worked on the project will appear.</li>
+<li>R’s working directory (set and checked with <code>setwd()</code> and <code>getwd()</code>, respectively) will change.</li>
+<li>Any R objects saved in the <code>.RData</code> file in the project will be automatically loaded, saving your work.</li>
+<li>If you are using <code>git</code> to manage your project’s development and sharing, you’ll have options to commit code and ‘push’ new work, e.g. to GitHub.</li>
+</ul>
+<p>In fact, this entire book was written as an RStudio project. This allowed us to work from the same system and share code easily, by pushing our code frequently to the book’s online repository: <a href="https://github.com/Robinlovelace/spatial-microsim-book" class="uri">https://github.com/Robinlovelace/spatial-microsim-book</a> . This online repository will allow you to access all of the example code and data for the book. It will also allow you to contribute to the book as an evolving project.</p>
+<p>The next section explains how to download and use the data stored in the <code>spatial-microsim-book</code> GitHub repository to access the code and data resources associated with the book.</p>
+</div>
+<div id="downloading-data-for-the-book" class="section level3">
+<h3><span class="header-section-number">2.1.4</span> Downloading data for the book</h3>
+<p>To simply download the code and data, associated with this book, first navigate to <a href="https://github.com/Robinlovelace/spatial-microsim-book" class="uri">https://github.com/Robinlovelace/spatial-microsim-book</a> in your browser. From this page, click on the ‘Download ZIP’ button to the right and extract the folder into a sensible place on your computer, such as the Desktop.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a></p>
+<p>With the files safely stored on the computer, the next step is to open the folder as an RStudio project. To do this, open the folder in a file browser and double click on <code>spatial-microsim-book.Rproj</code>. Alternatively, start RStudio and open the file by clicking on ‘Open Project’ from the dropdown menu above the top-right panel, or by clicking with File &gt; Open. This will cause RStudio to open the project. All the input data files should now be easily accessible to R through <em>relative file paths</em>. The files should also be visible in the Files tab in bottom right panel.</p>
+
+<div class="figure"><span id="fig:studio"></span>
+<img src="_main_files/figure-html/studio-1.png" alt="The RStudio interface with the spatial-microsim-book project loaded and objects loaded in the Environment after running SimpleWorld.R" width="672" />
+<p class="caption">
+Figure 2.2: The RStudio interface with the spatial-microsim-book project loaded and objects loaded in the Environment after running SimpleWorld.R
+</p>
+</div>
+<p>To check if the project has been downloaded and opened correctly, try running the following code, by typing it and hitting <code>Ctl-Enter</code>:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;R/SimpleWorld.R&quot;</span>)</code></pre></div>
+<p>You should see some output in red, beginning <code>Attaching package: ‘dplyr’</code>. Some new objects should also appear in the Environment tab in the top-right panel (Figure 2.2). This is the result of running the code located in a script file called <code>SimpleWorld.R</code>, using the <code>source()</code> function.</p>
+<p>Now that you have an understanding of RStudio and how to load the book project, it’s time to ‘get your hands dirty’ and run some code! In the subsequent section we will type and run some of the contents of the <code>SimpleWorld.R</code> script line by line.</p>
+</div>
+</div>
+<div id="SimpleWorldData" class="section level2">
+<h2><span class="header-section-number">2.2</span> SimpleWorld data</h2>
+<p>SimpleWorld is a small world, consisting of 33 persons split across 3 zones, as illustrated in Figure 2.3. We have two sources of information about these people available to us:</p>
+<ol style="list-style-type: decimal">
+<li>aggregate counts of persons by age and sex in each zone (from the SimpleWorld Census)</li>
+<li>survey microdata recording more detailed information (age, sex and income), for five of the world’s residents.</li>
+</ol>
+<div class="figure"><span id="fig:simpleworld"></span>
+<img src="_main_files/figure-html/simpleworld-1.png" alt="The SimpleWorld environment, consisting of individuals living in 3 zones." width="384" />
+<p class="caption">
+Figure 2.3: The SimpleWorld environment, consisting of individuals living in 3 zones.
+</p>
+</div>
+<p>Unfortunately the survey data lack geographical information, and include only a small subset of the population (5 out of 33). To infer further information about SimpleWorld — and more importantly to be able to model its inhabitants — we need a methodology. This is precisely the kind of situation where spatial microsimulation is useful. After an explanation of this ‘starting simple’ approach, we describe the input data in detail, demonstrate what spatial microdata look like and, finally, place the example in its wider context.</p>
+<p>This SimpleWorld example is analogous to the ‘cartoon world’ used by professor <span class="citation">MacKay (<a href="#ref-mackay2008sustainable">2008</a>)</span> to simplify the complexities of sustainable energy. The same principle works here: we will generate a synthetic population for the imaginary SimpleWorld to illustrate how spatial microsimulation works and how it can be useful.</p>
+<p>The SimpleWorld planet, a 2 dimensional plane split into 3 zones, is illustrated in Figure 2.3. SimpleWorld is inhabited by 12, 10 and 11 individuals of its alien inhabitants in zones 1 to 3, respectively: a planetary population of 33. From the SimpleWorld Census, we know how many young (strictly under 50 space years old) and old (50 and over) residents live in each zone, as well their genders: male and female. This information is displayed in the tables below.</p>
+<table>
+<caption>Aggregate level age counts for SimpleWorld.</caption>
+<thead>
+<tr class="header">
+<th align="left">zone</th>
+<th align="right">0-49 yrs</th>
+<th align="right">50 + yrs</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="right">8</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">2</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="right">7</td>
+<td align="right">4</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption>Aggregate sex counts for SimpleWorld.</caption>
+<thead>
+<tr class="header">
+<th align="left">Zone</th>
+<th align="right">m</th>
+<th align="right">f</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1</td>
+<td align="right">6</td>
+<td align="right">6</td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">4</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">3</td>
+<td align="right">3</td>
+<td align="right">8</td>
+</tr>
+</tbody>
+</table>
+<p>The following commands load-in this data.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the constraint data</span>
+con_age &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/SimpleWorld/age.csv&quot;</span>)
+con_sex &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/SimpleWorld/sex.csv&quot;</span>)
+cons &lt;-<span class="st"> </span><span class="kw">cbind</span>(con_age, con_sex)</code></pre></div>
+<p>We recommend R beginners interact with the R objects just loaded: try printing them to screen, plotting them and even-subsetting them. If you cannot, it may be worth consulting the Appendix on using R, or referring to R’s copious online documentation. The data contained in the <code>cons</code> object presented below refer to the characteristics of inhabitants in different SimpleWorld zones.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cons <span class="co"># print the constraint data to screen</span></code></pre></div>
+<pre><code>##   a0.49 a.50. m f
+## 1     8     4 6 6
+## 2     2     8 4 6
+## 3     7     4 3 8</code></pre>
+<p>Each row represents a new zone (see also Tables 2.1 and 2.1). The planet’s entire population is represented in the counts in these tables. From these <em>constraint tables</em> we know the marginal distributions of the two categorical variables, age and sex. The data does not tell us about the contingency table (or cross-tabulation) that links age and sex. This means that we have per-zone information on the number of young and old people and the number of males and females. But we currently lack information about the number of young females, young males, and so on. Also note that we have no information about other important variables such as income.</p>
+<p>Spatial microsimulation can be used to better understand the population of SimpleWorld. To do this, we need some additional information: an individual level <em>microdataset</em>.</p>
+<p>This is provided in an individuals level dataset on 5 of SimpleWorld’s inhabitants (Table 2.3). Note that the individual level data has different dimensions than the aggregate data presented above.</p>
+<table>
+<caption>Individual level survey data from SimpleWorld.</caption>
+<thead>
+<tr class="header">
+<th align="right">id</th>
+<th align="right">age</th>
+<th align="left">sex</th>
+<th align="right">income</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">59</td>
+<td align="left">m</td>
+<td align="right">2868</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">54</td>
+<td align="left">m</td>
+<td align="right">2474</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">35</td>
+<td align="left">m</td>
+<td align="right">2231</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">73</td>
+<td align="left">f</td>
+<td align="right">3152</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">49</td>
+<td align="left">f</td>
+<td align="right">2473</td>
+</tr>
+</tbody>
+</table>
+<p>The individual level <em>microdata</em> survey has one row per individual whereas the <em>constraints</em> have one row per zone. This individual level data includes two variables that <em>link</em> it to the aggregate level data described above: age and sex. The individual level data also provides information about a <em>target variable</em> not included in the geographical constraints: income. To load the individual level data, enter the following:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ind &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/SimpleWorld/ind-full.csv&quot;</span>)</code></pre></div>
+<p>Note that although the microdataset contains additional information about the inhabitants of SimpleWorld, it lacks geographical information about where each inhabitant lives or even which zone they are from. This is typical of individual level survey data. Spatial microsimulation tackles this issue by allocating individuals from a non-geographical dataset to geographical zones in another.</p>
+</div>
+<div id="weight-matrix" class="section level2">
+<h2><span class="header-section-number">2.3</span> Generating a weight matrix</h2>
+<p>The process to generate spatial microdata is allocating <em>weights</em> to each individual for each zone. The higher the weight for a particular individual-zone combination, the more representative the individual is of that zone. This information can be represented as a <em>weight matrix</em>.</p>
+<p>The subsequent code block uses the <strong>mipfp</strong> package to convert these inputs into a matrix of weights. Just type it in and observe the result. If it works, congratulations! You have generated your first weight matrix using Iterative Proportional Fitting (IPF) (see code output). The details of this process are described in subsequent chapters.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">target &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">as.matrix</span>(con_age[<span class="dv">1</span>,]), <span class="kw">as.matrix</span>(con_sex[<span class="dv">1</span>,]))
+descript &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">1</span>, <span class="dv">2</span>)
+ind<span class="op">$</span>age_cat &lt;-<span class="st"> </span><span class="kw">cut</span>(ind<span class="op">$</span>age, <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">50</span>, <span class="dv">100</span>))
+seed &lt;-<span class="st"> </span><span class="kw">table</span>(ind[<span class="kw">c</span>(<span class="st">&quot;age_cat&quot;</span>, <span class="st">&quot;sex&quot;</span>)])
+
+<span class="kw">library</span>(mipfp) <span class="co"># install.packages(&quot;mipfp&quot;) is a prerequisite</span>
+res &lt;-<span class="st"> </span><span class="kw">Ipfp</span>(seed, descript, target)
+res<span class="op">$</span>x.hat <span class="co"># the result for the first zone</span></code></pre></div>
+<pre><code>##           sex
+## age_cat           f        m
+##   (0,50]   4.455996 3.544004
+##   (50,100] 1.544004 2.455996</code></pre>
+<p>Note that the output of the above command is only for the first zone. It suggests that in zone 1, younger females are far more (nearly 4.5 times more) numerous than would be expected based on the individual level data alone. This makes sense because <code>con_age[1,]</code> contains many young people and <code>ind</code> contains only one young female. At this stage you may be wondering: what just happened? This is explained in detail in the subsequent chapters.</p>
+<p>An alternative approach to arriving at a similar result, for all zones, is demonstrated in the code chunk below using another package: <strong>ipfp</strong>. The result of this code is illustated in Table 2.4. Again, the reader is not expected to understand what has just happened. This will be explained in subsequent chapters.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">A &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">cbind</span>(<span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>ind<span class="op">$</span>age_cat <span class="op">-</span><span class="st"> </span><span class="dv">1</span>),
+           <span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>ind<span class="op">$</span>sex <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)[, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>)]))
+
+cons &lt;-<span class="st"> </span><span class="kw">apply</span>(cons, <span class="dv">2</span>, as.numeric) <span class="co"># convert to numeric data</span>
+
+<span class="kw">library</span>(ipfp) <span class="co"># install.packages(&quot;ipfp&quot;) is a prerequisite</span>
+weights &lt;-<span class="st"> </span><span class="kw">apply</span>(cons, <span class="dv">1</span>, <span class="cf">function</span>(x) <span class="kw">ipfp</span>(x, A, <span class="dt">x0 =</span> <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">5</span>)))
+weights[,<span class="dv">1</span>] <span class="co"># result for the first zone</span></code></pre></div>
+<pre><code>## [1] 1.227998 1.227998 3.544004 1.544004 4.455996</code></pre>
+<table>
+<caption>A ‘weight matrix’ linking the microdata (rows) to the zones (columns) of SimpleWorld.</caption>
+<thead>
+<tr class="header">
+<th align="right">Individual</th>
+<th align="right">Zone 1</th>
+<th align="right">Zone 2</th>
+<th align="right">Zone 3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">1.23</td>
+<td align="right">1.73</td>
+<td align="right">0.725</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">1.23</td>
+<td align="right">1.73</td>
+<td align="right">0.725</td>
+</tr>
+<tr class="odd">
+<td align="right">3</td>
+<td align="right">3.54</td>
+<td align="right">0.55</td>
+<td align="right">1.550</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">1.54</td>
+<td align="right">4.55</td>
+<td align="right">2.550</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">4.46</td>
+<td align="right">1.45</td>
+<td align="right">5.450</td>
+</tr>
+</tbody>
+</table>
+<p>The highest value (5.450) is located, to use R’s notation, in cell <code>weights[5,3]</code>, the 5th row and 3rd column in the matrix <code>weights</code>. This means that individual number 5 is considered to be highly representative of Zone 3, given the input data in SimpleWorld. This makes sense because there are many (7) young people and many (8) females in Zone 3, relative to the input microdataset (which contains only 1 young female). The lowest value (0.55) is found in cell <code>[3,2]</code>. Again this makes sense: individual 3 from the microdataset is a young male yet there are only 2 young people and 4 males in zone 2. A special feature of the weight matrix above is that each of the column sums is equal to the total population in each zone.</p>
+<p>Note that the first method gives weights to categories (for example young female), whereas the second method gives weights to each individual. This is normal and equivalent, we can easily transform one type of output in the other type. The details are explained further.</p>
+<p>We will discover different ways of generating such weight matrices in subsequent chapters. For now it is sufficient to know that the matrices link individual level data to geographically aggregated data and that there are multiple techniques to generate them. The techniques are sometimes referred to as <em>reweighting algorithms</em> in the literature (Tanton et al. 2011). These include deterministic methods such as Iterative Proportional Fitting (IPF) and probabilistic methods that rely on a pseudo-random number generator such as simulated annealing (SA). These and other reweighting algorithms are described in detail in Chapter 5.</p>
+</div>
+<div id="spatial-microdata" class="section level2">
+<h2><span class="header-section-number">2.4</span> Spatial microdata</h2>
+<p>A useful output from spatial microsimulation is what we refer to as <em>spatial microdata</em>. This is a dataset that contains a single row per individual (as with the input microdata) but also an additional variable on geographical location.</p>
+<p>The ideal spatial microdataset selects individuals representative of the aggregate constraints for each zone, while containing the diversity of information present in the individual level non-spatial input population. In Chapter 4 we will explore all the steps needed to produce a spatial microdataset for SimpleWorld. A subset of such spatial microdataset is presented in Table 2.5, where each row represents an individual taken from the individual level sample and the ‘zone’ column represents the geographical zone in which they reside.</p>
+<table>
+<caption>Spatial microdata generated for SimpleWorld zone 2.</caption>
+<thead>
+<tr class="header">
+<th align="right">id</th>
+<th align="right">zone</th>
+<th align="right">age</th>
+<th align="left">sex</th>
+<th align="right">income</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">1</td>
+<td align="right">2</td>
+<td align="right">59</td>
+<td align="left">m</td>
+<td align="right">2868</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">54</td>
+<td align="left">m</td>
+<td align="right">2474</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">73</td>
+<td align="left">f</td>
+<td align="right">3152</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">73</td>
+<td align="left">f</td>
+<td align="right">3152</td>
+</tr>
+<tr class="odd">
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">73</td>
+<td align="left">f</td>
+<td align="right">3152</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">73</td>
+<td align="left">f</td>
+<td align="right">3152</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">49</td>
+<td align="left">f</td>
+<td align="right">2473</td>
+</tr>
+<tr class="even">
+<td align="right">4</td>
+<td align="right">2</td>
+<td align="right">73</td>
+<td align="left">f</td>
+<td align="right">3152</td>
+</tr>
+<tr class="odd">
+<td align="right">5</td>
+<td align="right">2</td>
+<td align="right">49</td>
+<td align="left">f</td>
+<td align="right">2473</td>
+</tr>
+<tr class="even">
+<td align="right">2</td>
+<td align="right">2</td>
+<td align="right">54</td>
+<td align="left">m</td>
+<td align="right">2474</td>
+</tr>
+</tbody>
+</table>
+<p>Table 2.5 is a reasonable approximation of the inhabitants of zone 2: older females dominate in both the aggregate (which contains 8 older people and 6 females) and the simulated spatial microdata (which contains 8 older people and 6 females). Note that in addition to the constraint variables, we also have an estimate of the income distribution in SimpleWorld’s second zone.</p>
+<p>By the end of Chapter 5, you should learn how to generate this table and understand each of the steps involved. The remainder of this section considers how the outputs of spatial microsimulation, in the context of SimpleWorld, can be useful before progressing to the practicalities.</p>
+</div>
+<div id="SimpleWorldContext" class="section level2">
+<h2><span class="header-section-number">2.5</span> SimpleWorld in context</h2>
+<p>Even though the datasets are tiny in SimpleWorld, we have already generated some useful output. We can estimate, for example, the average income in each zone. Furthermore, we could create an estimate of the <em>distribution</em> of income in each area. Although these estimates are unlikely to be very accurate due to the paucity of data, the methods could be very useful if performed on larger datasets from ‘RealWorld’ (planet Earth). The spatial microdata presented in the above table could be used as an input into an agent-based model (ABM). Assuming the inhabitants of SimpleWorld are more predictable than those of RealWorld, the outputs from such a model could be very useful indeed, for example for predicting future outcomes of current patterns of behaviour.</p>
+<p>In addition to clarifying the advantages of spatial microsimulation, the above example also flags some limitations of the methodology. Spatial microsimulation will only yield useful results if the input datasets are representative of the population as a whole, and for each region. If the relationship between age and sex is markedly different in one zone compared with what we assume to be the global averages of the input data, for example, our estimates could be way off Using such a small sample, one could rightly argue, how could the diversity of 33 inhabitants of SimpleWorld be represented by our simulated spatial microdata? This question is equally applicable to larger simulations. These issues are important and will be tackled in <a href="svalidation.html#svalidation"></a>.</p>
+</div>
+<div id="chapter-summary" class="section level2">
+<h2><span class="header-section-number">2.6</span> Chapter summary</h2>
+<p>In this chapter we have learned how to setup the R/RStudio environment for running the example code provided in this book. This involved installing the software, understanding projects in RStudio and setting up the <code>spatial-microsim-book</code> project so that data can be accessed easily. This was the first practical chapter and it involved basic commands for loading data and creating a weight matrix. The process of running and playing with the code should have helped get acquainted with the ‘workflow’ associated with developing and running spatial microsimulation models in R. Discussion of the results, which represent the inhabitants of the imaginary system <em>SimpleWorld</em>, create the backdrop for the rest of the book, which we will return to in Chapter 12.</p>
+
+</div>
+</div>
+<h3> Bibliography</h3>
+<div id="refs" class="references">
+<div id="ref-mackay2008sustainable">
+<p>MacKay, David. 2008. <em>Sustainable Energy-Without the Hot Air</em>. UIT Cambridge.</p>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol start="5">
+<li id="fn5"><p>For more information about RStudio, please see the RStudio website: <a href="https://www.rstudio.com/products/rstudio/features/" class="uri">https://www.rstudio.com/products/rstudio/features/</a> and search for other on-line resources. There is even an entire book dedicated to the subject <span class="citation">(Verzani <a href="#ref-verzani2011getting">2011</a>)</span>.<a href="SimpleWorld.html#fnref5">↩</a></p></li>
+<li id="fn6"><p>An alternative way to get the project files onto your computer is to ‘clone’ the repository. For further details on how to fork, clone and potentially contribute to the book project, see the GitHub website, or refer to the growing literature how GitHub can be used in research <span class="citation">(Lima, Rossi, and Musolesi <a href="#ref-lima_coding_2014">2014</a>)</span>.<a href="SimpleWorld.html#fnref6">↩</a></p></li>
+</ol>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="intro.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="what-is.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"weibo": false,
+"instapper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"download": null,
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
