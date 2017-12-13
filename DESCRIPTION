@@ -9,6 +9,7 @@ Imports:
     rmarkdown,
     png,
     ggmap,
+    GREGWT,
     dplyr,
     ipfp,
     rgeos,
