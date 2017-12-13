@@ -4,19 +4,19 @@ Version: 0.0.42
 Authors@R: c(person("Robin", "Lovelace", role = c("aut")), 
     person("Morgane", "Dumont", role = c("aut")))
 Imports:
-    knitr
-    rmarkdown
-    png
-    ggmap
-    dplyr
-    ipfp
-    rgeos
-    mipfp
-    rgdal
-    gridExtra
-    maptools
-    jpeg
-    tmap
-    tidyr
-    mlogit
+    knitr,
+    rmarkdown,
+    png,
+    ggmap,
+    dplyr,
+    ipfp,
+    rgeos,
+    mipfp,
+    rgdal,
+    gridExtra,
+    maptools,
+    jpeg,
+    tmap,
+    tidyr,
+    mlogit,
     simPop
