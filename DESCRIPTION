@@ -4,6 +4,7 @@ Version: 0.0.1
 Authors@R: c(person("Robin", "Lovelace", role = c("aut", "cre"), email = "rob00x@gmail.com"), 
     person("Morgane", "Dumont", role = c("aut")))
 Imports:
+    bookdown,
     knitr,
     rmarkdown,
     png,
