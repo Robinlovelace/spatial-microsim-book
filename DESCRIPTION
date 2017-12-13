@@ -1,7 +1,7 @@
 Package: geocompr
 Title: Geocomputation with R: a book
 Version: 0.0.42
-Authors@R: c(person("Robin", "Lovelace", role = c("aut")), 
+Authors@R: c(person("Robin", "Lovelace", role = c("aut", "cre"), email = "rob00x@gmail.com"), 
     person("Morgane", "Dumont", role = c("aut")))
 Imports:
     knitr,
