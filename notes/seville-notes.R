@@ -164,7 +164,7 @@ truncated$COUNT = floor(expa$COUNT)
 p = expa$COUNT - truncated$COUNT
 n_missing = sum(p)
 index = sample(1:nrow(truncated), size = n_missing, prob = p,replace=FALSE)
-truncated$COUNT[index] = truncated$COUNT[index]+1
+truncated$COUNT[index] = truncated$COUNT[index] + 1
 
 # see simPop-notes.R for notes on simPop
 
@@ -207,3 +207,38 @@ values(r_highes) = 1:ncell(r_highes)
 plot(r_highes)
 
 # further resources: http://geostat-course.org/node
+
+# Generate spatial microdata
+source("notes/mipfp-notes.R")
+
+# Getting spatial data for Belgium
+u_bel = "http://biogeo.ucdavis.edu/data/gadm2.8/rds/BEL_adm4.rds"
+download.file(u_bel, "BEL_adm4.rds")
+bel = readRDS("BEL_adm4.rds")
+plot(bel)
+d = bel@data
+nam = bel[bel$NAME_2 == "Namur",]
+nam = nam[sample(length(nam), length(uz)),]
+plot(nam)
+d = nam@data
+# str(nam) # show structure
+uz = unique(synth_namur$id)
+nam$id = uz[sample(length(uz), length(uz))]
+# check the ids match
+summary(nam$id %in% pmale$id)
+nam@data = inner_join(nam@data, pmale)
+head(nam@data)
+tmap::qtm(nam, "pmale")
+
+library(tmap)
+tmap_mode("view")
+qtm(nam, "pmale", n = 3)
+tm_shape(nam) +
+  tm_fill(col = "pmale",
+          breaks = c(0, 0.5, 1))
+
+# Challenges:
+# 1: Write a for loop to create a spatial microdataset
+# for all zones in namur (don't just copy my code!)
+# 2: Create a map of a different variable (not % male)
+# 3: Implement the methods on your own data
