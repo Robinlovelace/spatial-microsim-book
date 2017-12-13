@@ -18,9 +18,6 @@ script:
   - R CMD INSTALL ../spatial-microsim-book/
   - make html
 
-after_success:
-  - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash deploy.sh
-
 notifications:
   email:
     on_success: change
