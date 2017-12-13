@@ -435,5 +435,3 @@ Depending on the precision of the available data, the process can result in
 synthetic households that are more or less representative of the real population.
 The more pertinent information available, the more realistic will be the resulting
 households.
-
-# References

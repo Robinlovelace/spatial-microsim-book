@@ -965,5 +965,3 @@ grid.raster(img)
 ## Chapter summary
 
 This is chapter provides a worked example of the numerous options for agent-based modelling building on microsimulation. You have at your disposal a powerful modelling combination when combining NetLogo with R. For an excellent overview with more practical examples see Thiele et al.(2014), which covers a variety of parameter estimation and optimisation methods as well as a comprehensive set of approaches to sensitivity analysis using the RNetLogo setup described here. 
-
-## References

@@ -2139,6 +2139,3 @@ Finally, we compared two packages for IPF and found
 **mipfp** to be more generalisable and powerful.
 The choice of approach should be influenced
 by the size and nature of the input data.
-
-
-# References

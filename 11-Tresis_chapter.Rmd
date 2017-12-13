@@ -786,5 +786,3 @@ its ability to model a wide range of phenomena and behaviours in
 the synthetic households, makes TRESIS well suited to implementation in R
 (subject to data requirements). 
 It can also be applied to a variety of other applications not limited to those involving transport models.
-
-# References

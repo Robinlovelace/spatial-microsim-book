@@ -870,6 +870,3 @@ with the example of SimpleWorld.
 ```{r, echo=FALSE}
 # save.image("cache-data-prep.RData") # save data for next chapter
 ```
-
-
-# References

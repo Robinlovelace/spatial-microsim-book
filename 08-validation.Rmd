@@ -793,5 +793,3 @@ available datasets are usually used for the simulation.
 This helps explain why internal validation is far more common in spatial
 microsimulation studies than external validation, although the latter is
 generally more important.
-
-# References

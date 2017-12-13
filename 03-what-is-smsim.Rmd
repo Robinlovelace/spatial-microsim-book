@@ -675,5 +675,3 @@ The final section on assumptions underlying spatial microsimulation
 is in some ways the most important: It
 shows the importance of understanding the limitations associated with the method and
 the dangers of drawing conclusions from simulated data.
-
-# References
