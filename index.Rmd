@@ -21,7 +21,7 @@ bibliography: bibliography.bib
 
 Welcome to the online home *Spatial Microsimulation with R*.
 
-This is a book by [Robin Lovelace](http://robinlovelace.net/) and [Morgane Dumont](https://directory.unamur.be/staff/modumont) (with chapters [10](http://spatial-microsim-book.robinlovelace.net/ha.html) contributed by [Johan Barthélemy](https://smart.uow.edu.au/people/UOW192467.html), chapter [11](http://spatial-microsim-book.robinlovelace.net/tresis.html) contributed by [Richard Ellison](http://sydney.edu.au/business/staff/richard.ellison) and [David Hensher](http://sydney.edu.au/business/staff/david.hensher)  and chapter [12](http://spatial-microsim-book.robinlovelace.net/abm) contributed by [Maja Založnik](https://www.oxfordmartin.ox.ac.uk/people/565)).
+This is a book by [Robin Lovelace](http://robinlovelace.net/) and [Morgane Dumont](https://directory.unamur.be/staff/modumont) (with chapter [10](http://spatial-microsim-book.robinlovelace.net/ha.html) contributed by [Johan Barthélemy](https://smart.uow.edu.au/people/UOW192467.html), chapter [11](http://spatial-microsim-book.robinlovelace.net/tresis.html) contributed by [Richard Ellison](http://sydney.edu.au/business/staff/richard.ellison) and [David Hensher](http://sydney.edu.au/business/staff/david.hensher)  and chapter [12](http://spatial-microsim-book.robinlovelace.net/abm) contributed by [Maja Založnik](https://www.oxfordmartin.ox.ac.uk/people/565)).
 
 [![](https://images.tandf.co.uk/common/jackets/amazon/978149871/9781498711548.jpg)](https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/p/book/9781498711548)
 
