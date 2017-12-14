@@ -2,8 +2,8 @@
 # packages to allow 'knitting' the chapter to html
 library(png)
 library(grid)
-source("R/functions.R")
-source("R/SimpleWorld.R")
+source("code/functions.R")
+source("code/SimpleWorld.R")
 
 ## ---- echo=FALSE---------------------------------------------------------
 # TODO:

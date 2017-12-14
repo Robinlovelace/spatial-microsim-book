@@ -28,7 +28,7 @@ expa = as.data.frame.table(res$x.hat)
 
 # Integerisation, see here for code:
 # https://github.com/Robinlovelace/spatial-microsim-book/blob/master/R/functions.R
-source("R/functions.R") # loads functions into memory
+source("code/functions.R") # loads functions into memory
 expa$int = int_trs(expa$Freq)
 exp_indices = int_expand_vector(expa$int)
 synth = expa[exp_indices,]

@@ -1,0 +1,44 @@
+--- 
+title: 'Spatial Microsimulation with R'
+author: 'Robin Lovelace and Morgane Dumont'
+date: '`r Sys.Date()`'
+site: "bookdown::bookdown_site"
+# rmd_files: ["index.Rmd", "01-introduction.Rmd"]
+output:
+  bookdown::gitbook: default
+documentclass: book
+link-citations: yes
+biblio-style: apalike
+github-repo: "Robinlovelace/spatial-microsim-book"
+url: 'https\://spatial-microsim-book.robinlovelace.net'
+bibliography: bibliography.bib
+---
+  
+# Welcome {-}
+
+Welcome to the online home *Spatial Microsimulation with R*.
+
+This is a book by [Robin Lovelace](http://robinlovelace.net/) and [Morgane Dumont](https://directory.unamur.be/staff/modumont), (with chapters [11](http://spatial-microsim-book.robinlovelace.net/tresis.html) and [12](http://spatial-microsim-book.robinlovelace.net/abm) contributed by [Richard Ellison](http://sydney.edu.au/business/staff/richard.ellison) and [Maja Založnik](https://www.oxfordmartin.ox.ac.uk/people/565) respectively).
+
+[![](https://images.tandf.co.uk/common/jackets/amazon/978149871/9781498711548.jpg)](https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/p/book/9781498711548)
+
+It is published by CRC Press. See their [online store](https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/p/book/9781498711548) if you'd like to buy a copy.
+If you'd like to crack on and use the content, feel free to browse the chapters via the drop-down menu on the left.
+Depending on your interests and level of experience we particularly recommend:
+
+- Chapter [1](http://spatial-microsim-book.robinlovelace.net/intro.html): what is spatial microsimulation and what is it good for?
+- Chapter [2](http://spatial-microsim-book.robinlovelace.net/simpleworld): if you'd like to see a very simple worked-example of the process in action.
+- Chapter [11](http://spatial-microsim-book.robinlovelace.net/tresis.html): if you're interested in more advanced applications applicable to transport modelling
+- Chapter [12](http://spatial-microsim-book.robinlovelace.net/abm): for the links between spatial microsimulation and agent-based modelling.
+
+Furthermore, if you're completely new to R and programming in general, check-out the [appendix](http://spatial-microsim-book.robinlovelace.net/apr), which will get you up-to-speed in no time.
+There's also a [glossary](http://spatial-microsim-book.robinlovelace.net/glossary.html) that explains some of the jargon used in this field of research.
+
+We've put *Spatial Microsimulation with R* on-line because we want to reduce barriers to learning.
+We've made it open source via a [GitHub repository](https://github.com/Robinlovelace/spatial-microsim-book) because we believe in reproducibility and collaboration.
+Comments and suggests are most welcome [there](https://github.com/Robinlovelace/spatial-microsim-book/issues).
+If the content of the book helps your research, please cite it ([Lovelace and Dumont, 2016](https://github.com/Robinlovelace/spatial-microsim-book/blob/master/sms-book-citation.bib)).
+
+## Reference {-}
+
+Lovelace, R., Dumont, M., 2016. Spatial microsimulation with R. CRC Press.

@@ -1,6 +1,6 @@
 # Script 'integerising' CakeMap weights, generating, exploring spatial microdata
 
-source("R/functions.R") # functions for spatial microsimulation, inc. int_trs
+source("code/functions.R") # functions for spatial microsimulation, inc. int_trs
 
 ints <- unlist(apply(weights, 2, function(x) int_expand_vector(int_trs(x)))) # generate integerised result
 ints_df <- data.frame(id = ints, zone = rep(1:nrow(cons), round(colSums(weights))))

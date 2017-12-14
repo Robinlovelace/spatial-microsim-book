@@ -30,7 +30,7 @@ ind_catt <- t(ind_cat) # save transposed version of ind_cat
 x0 <- rep(1, nrow(ind)) # save the initial vector
 weights <- apply(cons, 1, function(x) ipfp(x, ind_catt, x0, maxit = 20))
 
-source("R/functions.R")
+source("code/functions.R")
 
 set.seed(0)
 int_pp(x = c(0.333, 0.667, 3))
