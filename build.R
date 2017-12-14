@@ -14,7 +14,7 @@ install.packages(pkgs[!wpacks])
 
 # file.copy(from = "~/Documents/smr.bib", to = "bibliography.bib", overwrite = T)
 
-# # View the order chapters will be knitted (see R/book-functions.R)
+# # View the order chapters will be knitted (see code/book-functions.R)
 # # chap_ord <- c(7,16,10,5,12,2,8,4,13,14,15,11,1,3,6,9)
 # cfiles <- list.files(pattern = "*.Rmd$")
 # # cfiles <- cfiles[chap_ord] # chapter order
@@ -36,7 +36,7 @@ install.packages(pkgs[!wpacks])
 # layout: default
 # ---'))
 # 
-# source("R/book-functions.R")
+# source("code/book-functions.R")
 # # file.remove("book.Rmd")
 # # Rmd_bind(book_header = book_header) 
 # Rmd_bind_mod(book_header = book_header)
@@ -52,7 +52,7 @@ install.packages(pkgs[!wpacks])
 
 # Build the CRC-formated version - requires local files
 # need to build the .tex manually for references to compile
-# source("R/build-CRC-version.R")
+# source("code/build-CRC-version.R")
 # # Make latex-specific changes automated
 # booktex <- readLines("spatial-microsim-book.tex")
 # booktex[grep("\\{Glossary\\}", booktex)]

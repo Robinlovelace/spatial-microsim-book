@@ -51,12 +51,12 @@ are independent of the zone in question.
 
 To illustrate, we will develop the SimpleWorld example
 (which can be loaded from the book's data directory by entering
-`source("R/SimpleWorld.R")` or was previously loaded if you as followed ([](#data-prep))) with 
+`source("code/SimpleWorld.R")` or was previously loaded if you as followed ([](#data-prep))) with 
 adapted constraints. When watching the available data in an aggregated level, 
 we have for the moment:
 
 ```{r,echo=FALSE, message=FALSE}
-source("R/SimpleWorld.R")
+source("code/SimpleWorld.R")
 ```
 
 ```{r}
@@ -186,7 +186,7 @@ in Chapter 5.
 # Integerisation with trs
 set.seed(17)
 res_trs <- res_pp <- array(dim = dim(res))
-# Apply trs (see R/functions.R to see how int_trs works)
+# Apply trs (see code/functions.R to see how int_trs works)
 res_trs[] <- int_trs(res)
 
 # Print the errors

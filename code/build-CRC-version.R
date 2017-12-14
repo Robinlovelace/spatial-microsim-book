@@ -1,5 +1,5 @@
 # Build the CRC-formatted version of the book
-source("R/bbuild.R")
+source("code/bbuild.R")
 system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
 system("pdflatex --interaction=nonstopmode  spatial-microsim-book.tex")
 

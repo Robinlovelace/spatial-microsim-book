@@ -1,5 +1,5 @@
 # Optimisation experiments
-source("R/SimpleWorld.R")
+source("code/SimpleWorld.R")
 library(microbenchmark)
 library(ggplot2)
 

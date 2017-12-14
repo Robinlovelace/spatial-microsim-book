@@ -1,6 +1,6 @@
 # optim test CakeMap
 
-source("R/CakeMap.R") # load cakemap data
+source("code/CakeMap.R") # load cakemap data
 indu <- unique(ind_cat)
 rns <- as.integer(row.names(indu))
 

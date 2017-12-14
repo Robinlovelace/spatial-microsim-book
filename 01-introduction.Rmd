@@ -588,7 +588,7 @@ sqrt(x) # find the square root of x
  - Comments are preceded by a single `#` symbol to explain specific lines.
  - Often, reference will be made to files contained within the book's project
  folder. The notation used to refer to the location of these files follows
- the way we refer to files and folders on Linux computers. Thus 'R/CakeMap.R'
+ the way we refer to files and folders on Linux computers. Thus 'code/CakeMap.R'
  refers to a file titled 'CakeMap.R', within the 'R' directory of the project's
  folder. 
  

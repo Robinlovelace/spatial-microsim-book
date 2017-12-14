@@ -46,8 +46,8 @@ ind_agg <- t(apply(weights, 2, function(x) colSums(x * ind_cat)))
 ind_agg[1,1:15] - cons[1,1:15] # should be zero or close to zero
 cor(as.numeric(ind_agg), as.numeric(cons)) # fit between contraints and estimate
 
-# Integerise if integer results are required - open R/CakeMapInt.R to see how
-# source("R/CakeMapInts.R")
+# Integerise if integer results are required - open code/CakeMapInt.R to see how
+# source("code/CakeMapInts.R")
 
 # Benchmarking
 # library(microbenchmark)

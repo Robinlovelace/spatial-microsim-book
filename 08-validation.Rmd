@@ -654,7 +654,7 @@ on this kind of input data result in an unrealistic final population, without
 young male.
 
 ```{r, include=FALSE}
-# source("R/SimpleWorld.R")
+# source("code/SimpleWorld.R")
 indsw <- 
   structure(list(id = 1:5, age = structure(c(2L, 2L, 1L, 2L, 1L
 ), .Label = c("a0_49", "a50+"), class = "factor"), sex = structure(c(2L, 

@@ -1,7 +1,7 @@
 library(mipfp)
 
 
-source("R/CakeMapMipfpData.R")
+source("code/CakeMapMipfpData.R")
 
 
 # Initial weight matrix
@@ -44,7 +44,7 @@ sum(con3)
 # convert the constraint 1 to be readable for mipfp
 ########################################
 
-source("R/CakeMapMipfpCon1Convert.R")
+source("code/CakeMapMipfpCon1Convert.R")
 
 ########################################
 # To correctly perform the Ipfp process, 

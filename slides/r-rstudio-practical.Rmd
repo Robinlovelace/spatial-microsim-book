@@ -27,7 +27,7 @@ We'll use up-to-date materials:
 - Using the simpleworld data
 
 ```{r}
-source("R/SimpleWorld.R")
+source("code/SimpleWorld.R")
 ```
 
 ## Loading data

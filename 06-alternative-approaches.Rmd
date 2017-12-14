@@ -282,7 +282,7 @@ grid.raster(img)
 
 
 ```{r, eval=FALSE, echo=FALSE}
-source("R/optim-tests-SimpleWorld.R", echo = FALSE, print.eval = FALSE )
+source("code/optim-tests-SimpleWorld.R", echo = FALSE, print.eval = FALSE )
 qplot(data = opt_res, time, fit, color = algorithm, geom="line") +
   ylab("Total Absolute Error") + xlab("Time (microseconds)") + scale_color_brewer(palette = 2, type = "qual") + theme_classic() + xlim(c(0, 15000))
 ```
@@ -322,7 +322,7 @@ improved fit from one iteration to the next. If we look until 200 iterations,
 the fit will continue to oscillate and not be improved at all.
 
 The code used to test these alternative methods for reweighting are provided
-in the script 'R/optim-tests-SimpleWorld.R'. The results
+in the script 'code/optim-tests-SimpleWorld.R'. The results
 should be reproducible on
 any computer, provided the book's supplementary materials have been downloaded.
 There are many other optimisation algorithms available in R through a wide
@@ -344,7 +344,7 @@ should be interpreted with a healthy dose of skepticism: just because an
 algorithm converges after few 'iterations' this does not mean it is
 inherently faster or more useful than another. The results are context
 specific, so it is recommended that the tested framework
-in 'R/optim-tests-SimpleWorld.R' is used as a basis for further tests
+in 'code/optim-tests-SimpleWorld.R' is used as a basis for further tests
 on algorithm performance on the datasets you are using.
 IPF has performed well in the situations I have tested it in (especially
 via the `ipfp` function, which performs disproportionately faster
@@ -450,7 +450,7 @@ genoud(nrow(ind), fn = fun, ind_num = ind, con = cons[1,],
   control = list(maxit = 1000), data.type.int = TRUE, D = m)
 ```
 
-This command, implemented in the file 'R/optim-tests-SimpleWorld.R',
+This command, implemented in the file 'code/optim-tests-SimpleWorld.R',
 results in weights for the unique individuals 1 to 4 of 1, 4, 2 and 4 respectively.
 This means a final population with aggregated data equal to the target
 (as seen in the previous section):

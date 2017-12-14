@@ -200,7 +200,7 @@ To check if the project has been downloaded and opened correctly,
 try running the following code, by typing it and hitting `Ctl-Enter`:
 
 ```{r, message=FALSE}
-source("R/SimpleWorld.R")
+source("code/SimpleWorld.R")
 ```
 
 You should see some output in red, beginning `Attaching package: ‘dplyr’`.
