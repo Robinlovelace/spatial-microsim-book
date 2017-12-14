@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
   <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -300,12 +303,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="header">
 <h1 class="title">Spatial Microsimulation with R</h1>
 <h4 class="author"><em>Robin Lovelace and Morgane Dumont</em></h4>
-<h4 class="date"><em>2017-12-13</em></h4>
+<h4 class="date"><em>2017-12-14</em></h4>
 </div>
 <div id="welcome" class="section level1 unnumbered">
 <h1>Welcome</h1>
-<p>Welcome to Spatial Microsimulation with R!</p>
+<p>Welcome to the online home <em>Spatial Microsimulation with R</em>.</p>
+<p>This is a book by <a href="http://robinlovelace.net/">Robin Lovelace</a> and <a href="https://directory.unamur.be/staff/modumont">Morgane Dumont</a>, (with chapters <a href="http://spatial-microsim-book.robinlovelace.net/tresis.html">11</a> and <a href="http://spatial-microsim-book.robinlovelace.net/abm">12</a> contributed by <a href="http://sydney.edu.au/business/staff/richard.ellison">Richard Ellison</a> and <a href="https://www.oxfordmartin.ox.ac.uk/people/565">Maja Založnik</a> respectively).</p>
+<p><a href="https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/p/book/9781498711548"><img src="https://images.tandf.co.uk/common/jackets/amazon/978149871/9781498711548.jpg" alt="" /></a></p>
+<p>It is published by CRC Press. See their <a href="https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/p/book/9781498711548">online store</a> if you’d like to buy a copy. If you’d like to crack on and use the content, feel free to browse the chapters via the drop-down menu on the left. Depending on your interests and level of experience we particularly recommend:</p>
+<ul>
+<li>Chapter <a href="http://spatial-microsim-book.robinlovelace.net/intro.html">1</a>: what is spatial microsimulation and what is it good for?</li>
+<li>Chapter <a href="http://spatial-microsim-book.robinlovelace.net/simpleworld">2</a>: if you’d like to see a very simple worked-example of the process in action.</li>
+<li>Chapter <a href="http://spatial-microsim-book.robinlovelace.net/tresis.html">11</a>: if you’re interested in more advanced applications applicable to transport modelling</li>
+<li>Chapter <a href="http://spatial-microsim-book.robinlovelace.net/abm">12</a>: for the links between spatial microsimulation and agent-based modelling.</li>
+</ul>
+<p>Furthermore, if you’re completely new to R and programming in general, check-out the <a href="http://spatial-microsim-book.robinlovelace.net/apr">appendix</a>, which will get you up-to-speed in no time. There’s also a <a href="http://spatial-microsim-book.robinlovelace.net/glossary.html">glossary</a> that explains some of the jargon used in this field of research.</p>
+<p>We’ve put <em>Spatial Microsimulation with R</em> on-line because we want to reduce barriers to learning. We’ve made it open source via a <a href="https://github.com/Robinlovelace/spatial-microsim-book">GitHub repository</a> because we believe in reproducibility and collaboration. Comments and suggests are most welcome <a href="https://github.com/Robinlovelace/spatial-microsim-book/issues">there</a>. If the content of the book helps your research, please cite it (<a href="https://github.com/Robinlovelace/spatial-microsim-book/blob/master/sms-book-citation.bib">Lovelace and Dumont, 2016</a>).</p>
+<div id="reference" class="section level2 unnumbered">
+<h2>Reference</h2>
+<p>Lovelace, R., Dumont, M., 2016. Spatial microsimulation with R. CRC Press.</p>
 
+</div>
 </div>
             </section>
 
@@ -358,11 +376,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

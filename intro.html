@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
   <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -311,7 +314,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The book has a definite progression from easier content to more advanced topics, especially those in Chapters 11 and 12, which deal with spatial microsimulation for transport modelling and agent-based modelling (ABM), respectively. The book can be read in order from front to back for a detailed overview of the field, its applications and its concepts (Part I); the practicalities and software decisions involved in generating spatial microdata (Part II); and issues around the modelling of spatial microdata (Part III).</p>
 <p>Equally, the book can be used as a reference volume, to be dipped into as and when particular topics arise. There is a path dependency in the book however: Part II assumes that the reader is familiar with the concepts introduced in Part I, and the two chapters in Part III assume that the reader is competent with generating and handling spatial microdata, as introduced in Chapters 4 and 5. These are the central chapters in the book, in terms of generating spatial microdata with R. Chapters 4 and 5 are also the most important for people who simply want to generate spatial microdata rapidly. Chapter 6 provides insight into more experimental approaches for generating spatial microdata, while Chapter 7 provides a comprehensive worked example of the methods used ‘in the wild’. A more detailed overview is provided in <a href="intro.html#overview"></a>.</p>
 <p>If you can’t wait to get your hands dirty with code and example data for doing spatial microsimulation, please skip to Chapter 3. For other readers who want a little more background on this book and spatial microsimulation, bear with us. The remainder of this chapter explains the thinking behind the book, including the reasons for focussing on spatial microsimulation in R rather than in another language and the motivations for doing spatial microsimulation in the first place. The next chapter is practical. Chapter 3, by contrast, brings the reader up-to-date on what spatial microsimulation is and how it is currently used.</p>
-
+<p></p>
 <p>For the structure, each chapter begins with an introduction and ends with a summary of what has been done in the chapter. The last section of this chapter contains an overview of the book.</p>
 </div>
 <div id="motivations" class="section level2">
@@ -326,7 +329,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Despite its utility, spatial microsimulation is little known outside the fields of human geography and regional science. The methods taught in this book have the potential to be useful in a wide range of applications. Spatial microsimulation has great potential to be applied to new areas for informing public policy. Work of great potential social benefit is already being done using spatial microsimulation in housing, transport and sustainable urban planning. Detailed modelling will clearly be of use for planning for a <em>post-carbon future</em>, one in which we stop burning fossil fuels.</p>
 <p>For these reasons there is growing interest in spatial microsimulation. This is due largely to its practical utility in an era of ‘evidence-based policy’ but is also driven by changes in the wider research environment inside and outside of academia. Continued improvements in computers, software and data availability mean the methods are more accessible than ever. It is now possible to simulate the populations of small administrative areas at the individual level almost anywhere in the world. This opens new possibilities for a range of applications, not least policy evaluation.</p>
 <p>Still, the meaning of spatial microsimulation is ambiguous for many. This book also aims to clarify what the method entails in practice. Ambiguity surrounding the term seems to arise partly because the methods are inherently complex, operating at multiple levels, and partly due to researchers themselves. Some uses of the term ‘spatial microsimulation’ in the academic literature are unclear as to its meaning; there is much inconsistency about what it means. Worse is work that treats spatial microsimulation as a magical black box that just ‘works’ without any need to describe, or more importantly make reproducible, the methods underlying the black box. This book is therefore also about demystifying spatial microsimulation.</p>
-
+<p></p>
 </div>
 <div id="a-definition-of-spatial-microsimulation" class="section level2">
 <h2><span class="header-section-number">1.3</span> A definition of spatial microsimulation</h2>
@@ -402,7 +405,7 @@ ind &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="
 <ul>
 <li>Output from the <em>R console</em> is preceded by the <code>##</code> symbol, as illustrated above.</li>
 <li>Comments are preceded by a single <code>#</code> symbol to explain specific lines.</li>
-<li>Often, reference will be made to files contained within the book’s project folder. The notation used to refer to the location of these files follows the way we refer to files and folders on Linux computers. Thus ‘R/CakeMap.R’ refers to a file titled ‘CakeMap.R’, within the ‘R’ directory of the project’s folder.</li>
+<li>Often, reference will be made to files contained within the book’s project folder. The notation used to refer to the location of these files follows the way we refer to files and folders on Linux computers. Thus ‘code/CakeMap.R’ refers to a file titled ‘CakeMap.R’, within the ‘R’ directory of the project’s folder.</li>
 </ul>
 <p>There are many ways to write R code that will generate the same results. However, to ensure clarity and consistency, a single style, advocated in a <a href="http://r-pkgs.had.co.nz/style.html">chapter</a> in Hadley Wickham’s <em>Advanced R</em>, is followed throughout <span class="citation">(Wickham <a href="#ref-wickham2014adv">2014</a><a href="#ref-wickham2014adv">a</a>)</span>. Consistent style and plentiful comments will make your code readable by yourself and others for decades to come.</p>
 </div>
@@ -428,7 +431,7 @@ ind &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="
 
 </div>
 </div>
-<h3> Bibliography</h3>
+<h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-Lovelace2014-vul">
 <p>Lovelace, Robin, and Ian Philips. 2014. “The ‘oil vulnerability’ of commuter patterns: A case study from Yorkshire and the Humber, UK.” <em>Geoforum</em> 51 (0): 169–82. doi:<a href="https://doi.org/http://dx.doi.org/10.1016/j.geoforum.2013.11.005">http://dx.doi.org/10.1016/j.geoforum.2013.11.005</a>.</p>
@@ -539,11 +542,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

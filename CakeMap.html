@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
   <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -326,7 +329,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ol>
 <p>So, we always need to reach an equilibrium between these principles. Indeed, we have to take into account <em>enough</em> and <em>pertinent</em> variables, without making the population synthesis process too complex (see <a href="data-prep.html#Selecting"></a>).</p>
 <p>To exemplify these principles, let us consider the constraint variables available in the CakeMap datasets. Clearly only variables available both in the individual level and aggregate level datasets can be chosen. Suppose our aim is to analyse the consumption of cakes depending on socio-demographic variables. Five interesting variables assigned to each of the 916 individuals are available from the individual level data:</p>
-
+<p></p>
 <ul>
 <li>‘Car’: The number of working cars in the person’s household.</li>
 <li>‘Sex’ and ‘ageband4’: Gender and age group, in two separate variables. Age is divided into 6 groups ranging from ‘16–24’ to ‘65–74.’<a href="#fn24" class="footnoteRef" id="fnref24"><sup>24</sup></a></li>
@@ -350,7 +353,7 @@ Figure 7.1: Example of raw aggregate level input data for CakeMap aggregate data
 <p>The end result of ‘process-age.R’ is a ‘clean’ .csv file, ready to be loaded and used as the input of our spatial microsimulation model. Note that the last line of ‘process-age.R’ is <code>write.csv(con1, &quot;con1.csv&quot;, row.names = F)</code>. This is the first constraint that we load into R to reweight the individual level data in the next section. The outputs from these data preparation steps are named ‘con1.csv’ to ‘con3.csv’. For simplicity, all these were merged (by ‘load-all.R’) into a single dataset called ‘cons.csv’. All the input data for this section are thus loaded with only two lines of code:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ind &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/CakeMap/ind.csv&quot;</span>)
 cons &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/CakeMap/cons.csv&quot;</span>)</code></pre></div>
-
+<p></p>
 <p>Take a look at these input data using the techniques learned in the previous section. To test your understanding, try to answer the following questions:</p>
 <ul>
 <li>What are the constraint variables?</li>
@@ -368,7 +371,7 @@ cons &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class=
 <h3><span class="header-section-number">7.3.1</span> Performing IPF on CakeMap data</h3>
 <p>The <code>ipfp</code> reweighting strategy is concise, generalisable and computationally efficient. On a modern laptop, the <code>ipfp</code> method was found to be <em>almost 40 times faster</em> than the ‘IPFinR’ method (section 4.1; Lovelace, 2014) over 20 iterations on the CakeMap data, completing in 2 seconds instead of over 1 minute. This is a huge time saving!<a href="#fn25" class="footnoteRef" id="fnref25"><sup>25</sup></a></p>
 <p>Thanks to the preparatory steps described above, the IPF stage can be run on a single line. After the datasets are loaded in the first half of ‘CakeMap.R’, the following code creates the weight matrix:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">apply</span>(cons, <span class="dv">1</span>, <span class="cf">function</span>(x)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">apply</span>(cons, <span class="dv">1</span>, function(x)
   <span class="kw">ipfp</span>(x, ind_catt, x0, <span class="dt">maxit =</span> <span class="dv">20</span>))</code></pre></div>
 <p>As with the SimpleWorld example, the correlation<a href="#fn26" class="footnoteRef" id="fnref26"><sup>26</sup></a> between the constraint table and the aggregated results of the spatial microsimulation can be checked to ensure that the reweighting process has worked correctly. This demonstrates that the process has worked with an <em>r</em> value above 0.99:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">cor</span>(<span class="kw">as.numeric</span>(cons), <span class="kw">as.numeric</span>(ind_agg))</code></pre></div>
@@ -383,10 +386,10 @@ Figure 7.2: Scatter plot of the relationship between observed cell counts for al
 <p>With the best fit, we would have all constraints equal to the simulation, so a perfect line (this is why we consider a <code>linear</code> correlation). Only few points are outside the area of the line. Note that we have 1,623,797 inhabitants<a href="#fn27" class="footnoteRef" id="fnref27"><sup>27</sup></a> in the simulation and in the constraints, <code>con1</code> and <code>con2</code> have 1,623,800, while <code>con3</code> contains 1,623,797. As seen before, with IPF, the result depends on the order of the constraints. Thus, it is logical to put as last constraint one really reliable, also in terms of total number of people. An alternative is to rescale all constraints to be consistent. This will be done in the next section, with <code>mipfp</code> and in the comparison for <code>ipfp</code>.</p>
 <p>For the comparison category per category, we can take the absolute value of the differences of the two tables. This gives a table of differences. The worst category and zone will be the maximum of this matrix.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Maximum error</span>
-<span class="kw">max</span>(<span class="kw">abs</span>(ind_agg<span class="op">-</span>cons))</code></pre></div>
+<span class="kw">max</span>(<span class="kw">abs</span>(ind_agg-cons))</code></pre></div>
 <pre><code>## [1] 4960.299</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Index of the maximum error</span>
-<span class="kw">which</span>(<span class="kw">abs</span>(ind_agg<span class="op">-</span>cons) <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(<span class="kw">abs</span>(ind_agg<span class="op">-</span>cons)), 
+<span class="kw">which</span>(<span class="kw">abs</span>(ind_agg-cons) ==<span class="st"> </span><span class="kw">max</span>(<span class="kw">abs</span>(ind_agg-cons)), 
       <span class="dt">arr.ind =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>##      row col
 ## [1,]  84  13</code></pre>
@@ -395,17 +398,17 @@ Figure 7.2: Scatter plot of the relationship between observed cell counts for al
 </div>
 <div id="CakeINT" class="section level3">
 <h3><span class="header-section-number">7.3.2</span> Integerisation</h3>
-<p>As before, weights of the IPF procedure are fractional, so must be <em>integerised</em> to create whole individuals. The code presented in Chapter 4 requires little modification to do this: it is your task to convert the weight matrix generated by the above lines of code into a spatial microdataset called, as before, <code>ints_df</code> (hint: the <code>int_trs</code> function in ‘R/functions.R’ file will help). The spatial microdata generated in ‘R/CakeMapInts.R’ contains the same information as the individual level dataset, but with the addition of the ‘zone’ variable, which specifies which zone each individual inhabits.</p>
+<p>As before, weights of the IPF procedure are fractional, so must be <em>integerised</em> to create whole individuals. The code presented in Chapter 4 requires little modification to do this: it is your task to convert the weight matrix generated by the above lines of code into a spatial microdataset called, as before, <code>ints_df</code> (hint: the <code>int_trs</code> function in ‘code/functions.R’ file will help). The spatial microdata generated in ‘code/CakeMapInts.R’ contains the same information as the individual level dataset, but with the addition of the ‘zone’ variable, which specifies which zone each individual inhabits.</p>
 <p>The spatial microdata is thus <em>multilevel</em> data, operating at one level on the level of individuals and at another on the level of zones. To generate summary statistics about the individuals in each zone, functions must be run on the data, one zone (group) at a time. <code>aggregate</code> provides one way of doing this. After converting the ‘NSSEC’ socio-economic class variable into a suitable numeric variable, <code>aggregate</code> can be used to identify the variability in social class in each zone. The <code>by =</code> argument is used to specify how the results are grouped depending on the zone each individual inhabits:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;R/CakeMapInts.R&quot;</span>)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(ints_df<span class="op">$</span>NSSEC, <span class="dt">by =</span> <span class="kw">list</span>(ints_df<span class="op">$</span>zone), sd,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;code/CakeMapInts.R&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">aggregate</span>(ints_df$NSSEC, <span class="dt">by =</span> <span class="kw">list</span>(ints_df$zone), sd,
   <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>##    Group.1        x
 ## 1         1 1.970570
 ## 2         2 2.027638
 ## 3         3 2.019839</code></pre>
 <p>In the above code the third argument refers to the function to be applied to the input data. The fourth argument is simply an argument of this function, in this case instructing the standard deviation function (<code>sd</code>) to ignore all <code>NA</code> values. An alternative way to perform this operation, which is faster and more concise, is using <code>tapply</code>:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tapply</span>(ints_df<span class="op">$</span>NSSEC, ints_df<span class="op">$</span>zone, sd, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tapply</span>(ints_df$NSSEC, ints_df$zone, sd, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>Note that operations on <code>ints_df</code> can take a few seconds to complete. This is because the object is large, taking up much RAM on the computer. This can be seen by asking <code>object.size(ints_df)</code> or <code>nrow(ints_df)</code>. The latter shows we have created a spatial microdataset of 1.6 million individuals! Try comparing this result with the size of the original survey dataset ‘ind’. Keeping an eye on such parameters will ensure that the model does not generate datasets too large to handle.</p>
 <p>Next chapter, we move on to a vital consideration in spatial microsimulation models such as CakeMap: model checking and validation. First, we develop the spatial microsimulation using <code>mipfp</code>.</p>
 </div>
@@ -415,8 +418,8 @@ Figure 7.2: Scatter plot of the relationship between observed cell counts for al
 <div id="CakeIPF" class="section level3">
 <h3><span class="header-section-number">7.4.1</span> Performing IPF on CakeMap data</h3>
 <p>As in the previous section, the first stage is to load the data. An additional step required by the <code>Ipfp</code> function is ensuring the categories of <code>cons</code> and <code>ind</code> correspond. In the variable associated with car ownership, <code>ind</code> contains “1” and “2”, but <code>cons</code> contains “Car” and “NoCar”.</p>
-<p>To undertake this operation, we convert the category labels in the individual level variable <code>ind</code> so that they conform to the variable names of the count data contained in constraint data <code>cons</code>. Continuing with the car ownership example, every “1” in <code>ind$Car</code> should be converted to “Car” and every “2” to “NoCar”. Likewise, the correct labels of “f” and “m” must be created for the Sex variable and likewise for the other variables in <code>ind</code>. The code that performs this operation is included in the R file <code>CakeMapMipfpData.R</code> file. Take a look at this file (e.g. by typing <code>file.edit(&quot;R/CakeMapMipfpData.R&quot;)</code> from RStudio) and note the use of the <code>switch</code> function in combination with the recursive function <code>sapply</code> to <em>switch</em> the values of the individual level variables. The entire script is run below using the <code>source</code> command.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;R/CakeMapMipfpData.R&quot;</span>)</code></pre></div>
+<p>To undertake this operation, we convert the category labels in the individual level variable <code>ind</code> so that they conform to the variable names of the count data contained in constraint data <code>cons</code>. Continuing with the car ownership example, every “1” in <code>ind$Car</code> should be converted to “Car” and every “2” to “NoCar”. Likewise, the correct labels of “f” and “m” must be created for the Sex variable and likewise for the other variables in <code>ind</code>. The code that performs this operation is included in the R file <code>CakeMapMipfpData.R</code> file. Take a look at this file (e.g. by typing <code>file.edit(&quot;code/CakeMapMipfpData.R&quot;)</code> from RStudio) and note the use of the <code>switch</code> function in combination with the recursive function <code>sapply</code> to <em>switch</em> the values of the individual level variables. The entire script is run below using the <code>source</code> command.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;code/CakeMapMipfpData.R&quot;</span>)</code></pre></div>
 <p>The data are now loaded correctly. This can be verified by printing the first lines of the individual level data and comparing this with <code>colnames(con1)</code>. Note that this step was not necessary for the <strong>ipfp</strong> package. To use <strong>ipfp</strong> the user must encode the constraints in the right order and only the order counts. In practice this is a good idea. Ensuring same variable names match category labels will help subsequent steps of validation and interpretation. Moreover, the structure of some constraints will have to change (<strong>mipfp</strong> takes as input a table of <span class="math inline">\(n_var\)</span> dimensions, whereas <strong>ipfp</strong> takes as input a 2-dimensional dimension, whose columns describe variables) and this process will be easier if the names are the same. To reaffirm our starting point, a sample of the new individual level data is displayed below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(ind)</code></pre></div>
 <pre><code>##   NCakes   Car Sex NSSEC8 ageband4
@@ -463,36 +466,36 @@ weight_init &lt;-<span class="st"> </span><span class="kw">array</span>(init_cel
 <p>An advantage of <strong>mipfp</strong> over <strong>ipfp</strong> is that the algorithm first checks the consistency of the constraints before reweighting. If the total number of individuals in a zone is not exactly the same from one constraint to another, <code>mipfp</code> will return the following warning: ‘Target not consistent - shifting to probabilities!’. In this case, the cells of the resulting table become probabilities, such as the sum of all cells is 1. This means that the algorithm does not know how many people per zone you want. This is a very useful feature of <strong>mipfp</strong>: creating weights corresponding to the correct total population is as simple as multiplying the probabilities by this number.</p>
 <p>An alternative to this is to verify by your own the totals per zone and re-scale the constraints that are different from your purpose population. In our case, for each constraint, we calculate the number of persons in the zone. For each zone, we compare the totals of the different constraints. The result is <code>TRUE</code> if the totals are the same and <code>FALSE</code> otherwise. It gives <code>nrow(cons)</code> boolean values (TRUE or FALSE), of which we print the table.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the constraint&#39;s totals per zone</span>
-<span class="kw">table</span>(<span class="kw">rowSums</span>(con2) <span class="op">==</span><span class="st"> </span><span class="kw">rowSums</span>(con1))</code></pre></div>
+<span class="kw">table</span>(<span class="kw">rowSums</span>(con2) ==<span class="st"> </span><span class="kw">rowSums</span>(con1))</code></pre></div>
 <pre><code>## 
 ## TRUE 
 ##  124</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">rowSums</span>(con3) <span class="op">==</span><span class="st"> </span><span class="kw">rowSums</span>(con1))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">rowSums</span>(con3) ==<span class="st"> </span><span class="kw">rowSums</span>(con1))</code></pre></div>
 <pre><code>## 
 ## FALSE  TRUE 
 ##    72    52</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">rowSums</span>(con2) <span class="op">==</span><span class="st"> </span><span class="kw">rowSums</span>(con3))</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">table</span>(<span class="kw">rowSums</span>(con2) ==<span class="st"> </span><span class="kw">rowSums</span>(con3))</code></pre></div>
 <pre><code>## 
 ## FALSE  TRUE 
 ##    72    52</code></pre>
 <p>Constraints 1 and 2 have exactly the same marginals per zone. Constraint 3 has 72 zones with different totals. Since NSSEC (<code>con3</code>) is anomalous in this respect we consider the totals of the two first constraints to be valid. It is always important to find the reason of the differences in totals. For <code>con3</code>, the individual could give no answer. This explains why we have a smaller population in this variable. To perform (non-probabilistic) reweighting with <strong>mipfp</strong>, we must first rescale <code>con3</code> to keep its proportions but with updated totals per zone.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Re-scale the constraint 3</span>
-con3_prop &lt;-<span class="st"> </span>con3 <span class="op">*</span><span class="st"> </span><span class="kw">rowSums</span>(con2) <span class="op">/</span><span class="st"> </span><span class="kw">rowSums</span>(con3)
+con3_prop &lt;-<span class="st"> </span>con3 *<span class="st"> </span><span class="kw">rowSums</span>(con2) /<span class="st"> </span><span class="kw">rowSums</span>(con3)
 
 <span class="co"># Check the new totals</span>
-<span class="kw">table</span>(<span class="kw">rowSums</span>(con2) <span class="op">==</span><span class="st"> </span><span class="kw">rowSums</span>(con3_prop))</code></pre></div>
+<span class="kw">table</span>(<span class="kw">rowSums</span>(con2) ==<span class="st"> </span><span class="kw">rowSums</span>(con3_prop))</code></pre></div>
 <pre><code>## 
 ## TRUE 
 ##  124</code></pre>
 <p>The rescaling operation above solved one problem, but there is another, more difficult-to-solve issue with the input data. The second and third constraints are simple marginals per zone with a single, clearly-defined variable each. The first constraint (<code>con1</code>), by contrast, is cross-tabulated, a combination of two variables (sex and age<a href="#fn28" class="footnoteRef" id="fnref28"><sup>28</sup></a>). We must change the structure of the first constraint to execute <code>mipfp</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># View the content of the first constraint</span>
-con1[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]</code></pre></div>
+con1[<span class="dv">1</span>:<span class="dv">3</span>, <span class="dv">1</span>:<span class="dv">8</span>]</code></pre></div>
 <pre><code>##   m16_24 m25_34 m35_44 m45_54 m55_64 m65_74 f16_24 f25_34
 ## 1    671    771   1033   1160   1165    772    679    760
 ## 2    887   1254   1217   1344   1229    752    832   1169
 ## 3    883    864   1195   1382   1170    878    811    962</code></pre>
-<p>The results of the above command show that <code>con1</code> is, like the other constraints, a two–dimensional table. Because it actually contains 2 constraints per zone, the information contained within needs to be represented as a three–dimensional array (a cube), the dimensions of which are zone, sex and age. This conversion is done by taking the cells of <code>con1</code> and putting them to a three–dimensional array in the correct order (corresponding to the order of the 2–dimensional table). The code to do this is included into the file <code>R/CakeMapMipfpCon1Convert.R</code> and the resulting array is called <code>con1_convert</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;R/CakeMapMipfpCon1Convert.R&quot;</span>)</code></pre></div>
+<p>The results of the above command show that <code>con1</code> is, like the other constraints, a two–dimensional table. Because it actually contains 2 constraints per zone, the information contained within needs to be represented as a three–dimensional array (a cube), the dimensions of which are zone, sex and age. This conversion is done by taking the cells of <code>con1</code> and putting them to a three–dimensional array in the correct order (corresponding to the order of the 2–dimensional table). The code to do this is included into the file <code>code/CakeMapMipfpCon1Convert.R</code> and the resulting array is called <code>con1_convert</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;code/CakeMapMipfpCon1Convert.R&quot;</span>)</code></pre></div>
 <p>All constraints being converted and all the margins being rescaled, the target and its ‘description’ are ready to be used in <code>Ipfp()</code>. The target is the set of constraints and the description is the figures of the corresponding dimensions into the weight matrix. The order of the weight’s variables is here important. Remember this order is (Zone, NCakes, Car, Sex, NSSEC8, ageband4). For this reason, the constraint 1, containing (zone, Sex, ageband4) has the description <code>c(1,4,6)</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Definition of the target and descript</span>
 <span class="co"># For the execution of the mipfp</span>
@@ -519,20 +522,20 @@ Figure 7.3: Scatter plot of the relationship between observed cell counts for al
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Re-running ipfp with the rescaled constraints</span>
 cons_prop &lt;-<span class="st"> </span><span class="kw">cbind</span>(con1, con2, con3_prop)
 weights &lt;-<span class="st"> </span><span class="kw">apply</span>(cons_prop, <span class="dv">1</span>,
-                 <span class="cf">function</span>(x) <span class="kw">ipfp</span>(x, ind_catt, x0, <span class="dt">tol =</span> <span class="fl">1e-10</span>))
+                 function(x) <span class="kw">ipfp</span>(x, ind_catt, x0, <span class="dt">tol =</span> <span class="fl">1e-10</span>))
 
 <span class="co"># Convert back to aggregates</span>
-ind_agg &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(weights, <span class="dv">2</span>, <span class="cf">function</span>(x) <span class="kw">colSums</span>(x <span class="op">*</span><span class="st"> </span>ind_cat)))</code></pre></div>
+ind_agg &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">apply</span>(weights, <span class="dv">2</span>, function(x) <span class="kw">colSums</span>(x *<span class="st"> </span>ind_cat)))</code></pre></div>
 <p>This section is divided in two parts, one that analyses the distance between the results generated by the two packages and the other that focus on the time differences.</p>
 <div id="comparison-of-results" class="section level3">
 <h3><span class="header-section-number">7.5.1</span> Comparison of results</h3>
 <p>Both results being based on the rescaled data, we can compare them. The structure of both resulting tables are different, however. To compare them easily, we transform the <code>ipfp</code> final matrix into an array with the same structure as the one of the result of <code>mipfp</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;R/ConvertIpfpWeights.R&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">source</span>(<span class="st">&quot;code/ConvertIpfpWeights.R&quot;</span>)</code></pre></div>
 <p>The total number of people per zone is exactly the same in both weights matrices (maximum of differences being of order <span class="math inline">\(10^{-10}\)</span>). The size of the population is in both cases the one desired<a href="#fn29" class="footnoteRef" id="fnref29"><sup>29</sup></a>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Comparison of the totals per zone</span>
-<span class="kw">max</span>( <span class="kw">apply</span>(weight_mipfp<span class="op">$</span>x.hat, <span class="dv">1</span>, sum) 
-       <span class="op">-</span><span class="st"> </span><span class="kw">apply</span>(weight_ipfp, <span class="dv">1</span>, sum) )</code></pre></div>
-<pre><code>## [1] 3.637979e-12</code></pre>
+<span class="kw">max</span>( <span class="kw">apply</span>(weight_mipfp$x.hat, <span class="dv">1</span>, sum) 
+       -<span class="st"> </span><span class="kw">apply</span>(weight_ipfp, <span class="dv">1</span>, sum) )</code></pre></div>
+<pre><code>## [1] 7.275958e-12</code></pre>
 <p>To visualize all the weights, we plot the different counts per constraint at Figure 7.4. We observe that the constraint 3 is very well fitted with both methods. For the two other constraints, some categories in some zones are more apart. However, both methods seems to return very similar weights, since the crosses are included inside the circles.</p>
 <div class="figure"><span id="fig:unnamed-chunk-204"></span>
 <img src="_main_files/figure-html/unnamed-chunk-204-1.png" alt="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis) (ipfp vs mipfp)." width="672" />
@@ -546,7 +549,7 @@ Figure 7.4: Scatter plot of the relationship between observed cell counts for al
 <div id="comparison-of-times" class="section level3">
 <h3><span class="header-section-number">7.5.2</span> Comparison of times</h3>
 <p>The weights produced by <strong>ipfp</strong> and <strong>mipfp</strong> packages are the same. Thus, we must use other criteria to assess which is more appropriate in different settings. For applications involving very large microdatasets and numbers of zones, the speed of execution may be an important criterion. For this reason, the time is an important characteristic to compare the packages. However, other considerations such as flexibility and user-friendliness should also be taken into account. The question of ‘scalability’ (how large can the simulation be before the software crashes) is also important.</p>
-<p>When reweighting individuals for the case of CakeMap example, <code>mipfp</code> was slower than <code>ipfp</code>. However, when accounting for wider considerations (for example if we replicate the zones two times) the speed advantage of <code>ipfp</code> is reduced. Tests show that as the size of input microdata increases, any performance advantage of <code>ipfp</code> declines. This phenomenon should not appear in the <code>mipfp</code> package. To demonstrate this we will run the CakeMap example with variable numbers of individuals in the microdata. To do this, <code>ind</code> objects with more than 916 persons in the data are created, by copying the database a second time. The code used to create new <code>ind</code> objects can be seen by entering <code>file.edit(&quot;R/CakeMapTimeAnalysis.R&quot;)</code> in RStudio from inside the ‘spatial-microsimulation-book’ project.</p>
+<p>When reweighting individuals for the case of CakeMap example, <code>mipfp</code> was slower than <code>ipfp</code>. However, when accounting for wider considerations (for example if we replicate the zones two times) the speed advantage of <code>ipfp</code> is reduced. Tests show that as the size of input microdata increases, any performance advantage of <code>ipfp</code> declines. This phenomenon should not appear in the <code>mipfp</code> package. To demonstrate this we will run the CakeMap example with variable numbers of individuals in the microdata. To do this, <code>ind</code> objects with more than 916 persons in the data are created, by copying the database a second time. The code used to create new <code>ind</code> objects can be seen by entering <code>file.edit(&quot;code/CakeMapTimeAnalysis.R&quot;)</code> in RStudio from inside the ‘spatial-microsimulation-book’ project.</p>
 <div class="figure"><span id="fig:unnamed-chunk-205"></span>
 <img src="_main_files/figure-html/unnamed-chunk-205-1.png" alt="Time necessary to perform the generation of the weight matrix depending on the number of individuals inside the microdata." width="672" />
 <p class="caption">
@@ -555,7 +558,7 @@ Figure 7.5: Time necessary to perform the generation of the weight matrix depend
 </div>
 <p>Figure 7.5 confirms that for problems with few individuals in the microdata, <code>ipfp</code> is better. However, having few people means the increase of the probability to have non–represented categories. Of course, we can optimise <code>ipfp</code> to take only one time the individuals that appear several times and add a count in the <code>ind_cat</code> instead of a “1” (as made in the <code>indu</code> variable of SimpleWorld). However, this process is possible only if the added persons are with the same characteristics as a previous one.</p>
 <p>In conclusion, <code>mipfp</code> is more flexible and could be used without microdata, but <code>ipfp</code> is faster for problems with less individuals in the microdata.</p>
-
+<p></p>
 <p>These results suggest that to perform population synthesis for spatial microsimulation in contexts where the input microdataset is large, one should use <code>mipfp</code>. Note that when having very few microdata, it may be advantageous to consider a method without microdata. This way avoids biasing the results with the (non-random) categories included in the microdata.</p>
 <p>The extent to which the input microdata represent the study area is critical to obtaining valid results: the results of spatial microsimulation that use input microdata are highly dependent on the extent to which the microdata are representative of the study area <span class="citation">(Lenormand and Deffuant <a href="#ref-Lenormand2012">2012</a>)</span>.</p>
 <p>If the used sample is too small, or if the sample, for example, contains 90% female, whereas the whole population has only 51%, the microdata will not be representative. Usually, to consider a sample as representative, each individual should have exactly the same probability of being in the sample. For example, if you make your survey in a university, older people have less chance to be inside than younger. In this case, the sample is not representative.</p>
@@ -573,10 +576,10 @@ Figure 7.5: Time necessary to perform the generation of the weight matrix depend
 
 </div>
 </div>
-<h3> Bibliography</h3>
+<h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-Lenormand2012">
-<p>Lenormand, Maxime, and Guillaume Deffuant. 2012. “Generating a synthetic population of individuals in households: Sample-free vs sample-based methods.” <em>arXiv Preprint arXiv:1208.6403</em>.</p>
+<p>Lenormand, Maxime, and Guillaume Deffuant. 2012. “Generating a synthetic population of individuals in households: Sample-free vs sample-based methods.” <em>ArXiv Preprint ArXiv:1208.6403</em>.</p>
 </div>
 </div>
 <div class="footnotes">
@@ -641,11 +644,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
   <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -315,7 +318,7 @@ b <span class="op">=</span> [<span class="dv">9</span>,<span class="dv">8</span>
 <p>In R, the operation <em>just works</em>, intuitively:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">a &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)
 b &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">8</span>, <span class="dv">6</span>)
-a <span class="op">+</span><span class="st"> </span>b</code></pre></div>
+a +<span class="st"> </span>b</code></pre></div>
 <pre><code>## [1] 10 10  9</code></pre>
 <p>This conciseness is clearly very useful in spatial microsimulation, as numeric variables of the same length are common (e.g. the attributes of individuals in a zone) and can be acted on with a minimum of effort.</p>
 </div>
@@ -352,7 +355,7 @@ fac_obj &lt;-<span class="st"> </span><span class="kw">factor</span>(char_obj)
 ## 3  3  35   m</code></pre>
 <p>The above example takes a subset of <code>ind</code> all elements present on the 3rd row: for a 2 dimensional table, anything to the left of the comma refers to rows and anything to the right refers to columns. Note that <code>ind[2:3,]</code> and <code>ind[c(3,5),]</code> also take subsets of the <code>ind</code> object: the square brackets can take <em>vector</em> inputs as well as single numbers.</p>
 <p>We can also subset by columns: the second dimension. Confusingly, this can be done in four ways, because <code>ind</code> is an R <code>data.frame</code><a href="#fn50" class="footnoteRef" id="fnref50"><sup>50</sup></a> and a data frame can behave simultaneously as a list, a matrix and a data frame (only the results of the first are shown):</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ind<span class="op">$</span>age <span class="co"># data.frame column name notation I</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ind$age <span class="co"># data.frame column name notation I</span></code></pre></div>
 <pre><code>## [1] 59 54 35 73 49</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># ind[, 2] # matrix notation</span>
 <span class="co"># ind[&quot;age&quot;] # column name notation II</span>
@@ -363,11 +366,11 @@ fac_obj &lt;-<span class="st"> </span><span class="kw">factor</span>(char_obj)
 <pre><code>## [1] f
 ## Levels: f m</code></pre>
 <p>A commonly used trick in R that helps with the analysis of individual level data is to subset a data frame based on one or more of its variables. Let’s subset first all females in our dataset and then all females over 50:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ind[ind<span class="op">$</span>sex <span class="op">==</span><span class="st"> &quot;f&quot;</span>, ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ind[ind$sex ==<span class="st"> &quot;f&quot;</span>, ]</code></pre></div>
 <pre><code>##   id age sex
 ## 4  4  73   f
 ## 5  5  49   f</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ind[ind<span class="op">$</span>sex <span class="op">==</span><span class="st"> &quot;f&quot;</span> <span class="op">&amp;</span><span class="st"> </span>ind<span class="op">$</span>age <span class="op">&gt;</span><span class="st"> </span><span class="dv">50</span>, ]</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ind[ind$sex ==<span class="st"> &quot;f&quot;</span> &amp;<span class="st"> </span>ind$age &gt;<span class="st"> </span><span class="dv">50</span>, ]</code></pre></div>
 <pre><code>##   id age sex
 ## 4  4  73   f</code></pre>
 <p>In the above code, R uses relational operators of equality (<code>==</code>) and inequality (<code>&gt;</code>) which can be used in combination using the <code>&amp;</code> symbol. This works because, as well as integer numbers, one can also place <em>boolean</em> variables into square brackets: <code>ind$sex == &quot;f&quot;</code> returns a binary vector consisting solely of <code>TRUE</code> and <code>FALSE</code> values.<a href="#fn51" class="footnoteRef" id="fnref51"><sup>51</sup></a></p>
@@ -384,7 +387,7 @@ fac_obj &lt;-<span class="st"> </span><span class="kw">factor</span>(char_obj)
 
 </div>
 </div>
-<h3> Bibliography</h3>
+<h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-Matloff2011">
 <p>Matloff, N. 2011. <em>The Art of R Programming</em>. No Starch Press.</p>
@@ -449,11 +452,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

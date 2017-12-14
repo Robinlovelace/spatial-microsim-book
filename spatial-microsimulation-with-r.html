@@ -32,8 +32,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   
   
-<link rel="prev" href="svalidation.html">
-<link rel="next" href="ha.html">
+<link rel="prev" href="bibliography.html">
+
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -300,215 +300,280 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="nomicrodata" class="section level1">
-<h1><span class="header-section-number">9</span> Population synthesis without microdata</h1>
-<p>Sometimes no representative individual level dataset is available as an input for population synthesis. In this case, the methods described in the previous chapters must be adapted accordingly. The challenge is still to generate spatial microdata that fits all the constraint tables, but based on a purely synthetic ‘seed’ input cross-tabulated contingency table. Many combinations of individual level data could correspond to these distributions. Depending on the aim of the spatial microsimulation model, simply finding one reasonable fit can be sufficient.</p>
-<p></p>
-<p>In other cases a fit based on <em>entropy maximisation</em> may be required. This concept involves finding the population that is most likely to represent the micro level populations (Bierlaire, 1991) <span class="citation">(M. <a href="#ref-Bierlaire">1991</a>)</span>.  This chapter demonstrates two options for population synthesis when real individual level data is unavailable:</p>
+<div id="spatial-microsimulation-with-r" class="section level1">
+<h1><span class="header-section-number">16</span> Spatial Microsimulation with R</h1>
+<p><a href="https://zenodo.org/badge/latestdoi/20914/Robinlovelace/spatial-microsim-book"><img src="https://zenodo.org/badge/20914/Robinlovelace/spatial-microsim-book.svg" alt="DOI" /></a> <a href="https://travis-ci.org/Robinlovelace/spatial-microsim-book"><img src="https://travis-ci.org/Robinlovelace/spatial-microsim-book.svg?branch=master" alt="Build Status" /></a></p>
+<p>This repository hosts the code and data used in <em>Spatial Microsimulation with R</em>, a book by <a href="http://robinlovelace.net/">Robin Lovelace</a> and <a href="https://directory.unamur.be/staff/modumont">Morgane Dumont</a>, (with chapters <a href="http://spatial-microsim-book.robinlovelace.net/tresis.html">11</a> and <a href="http://spatial-microsim-book.robinlovelace.net/abm">12</a> contributed by <a href="http://sydney.edu.au/business/staff/richard.ellison">Richard Ellison</a> and <a href="https://www.oxfordmartin.ox.ac.uk/people/565">Maja Založnik</a> respectively).</p>
+<p>The book is now published and is available from <a href="https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/p/book/9781498711548">CRC Press</a>.</p>
+<p>We hope to continue to update the book as methods evolve and we encourage contributions on any part of the book, including:</p>
 <ul>
-<li><em>Global cross-tables and local marginal distributions</em> (<a href="nomicrodata.html#CrossGlobLocalMarg"></a>) explains a method for cases where the constraints consist in cross-tables not spatially located and local marginal distributions.</li>
-<li><em>Two level aggregated data</em> (<a href="nomicrodata.html#twoLevelData"></a>) contains a procedure to make a spatial microsimulation when having data at different aggregated levels, for example, one for the provinces and one for the districts.</li>
+<li>Improvements to the text, e.g. clarifying unclear sentences, fixing typos (see guidance from <a href="https://yihui.name/en/2013/06/fix-typo-in-documentation/">Yihui Xie</a>).</li>
+<li>Changes to the code, e.g. to do things in a more efficient way.</li>
+<li>Suggestions on content (see the project’s <a href="https://github.com/Robinlovelace/spatial-microsim-book/issues">issue tracker</a>).</li>
 </ul>
-<div id="CrossGlobLocalMarg" class="section level2">
-<h2><span class="header-section-number">9.1</span> Global cross-tables and local marginal distributions</h2>
-<p>Assume we have a contingency table of constraint variables for the entire study area (but not at the local level) in the aggregate level data. This multi-dimensional cross-table (the seed) could be the result of a previous step such as the implementation of IPF re-weight individual level data to fit the case-study area of interest.</p>
-<p>If the marginal distributions for small areas are known, we can use the <strong>mipfp</strong> function as previously shown. If, however, the only information about the zones is the total population living there, the function is usable only when considering the zone as a variable. In this specific case, having no additional data, the only option corresponds to re-scale the global cross-table for each zone. Note that this implies that the correlations between the variables are independent of the zone in question.</p>
-<p>To illustrate, we will develop the SimpleWorld example (which can be loaded from the book’s data directory by entering <code>source(&quot;code/SimpleWorld.R&quot;)</code> or was previously loaded if you as followed (<a href="data-prep.html#data-prep"></a>)) with adapted constraints. When watching the available data in an aggregated level, we have for the moment:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Cross-tabulation of individual level dataset</span>
-<span class="kw">table</span>(ind$age, ind$sex)</code></pre></div>
-<pre><code>##        
-##         f m
-##   a0_49 1 1
-##   a50+  1 2</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(total_pop &lt;-<span class="st"> </span><span class="kw">rowSums</span>(con_sex)) <span class="co"># total population of each zone</span></code></pre></div>
-<pre><code>## [1] 12 10 11</code></pre>
-<p>To illustrate this section, the local constraint will be the total number of people in each zone (last column of <code>consTot</code>). The global constraint is a matrix of the form of the cross-table between age and sex, but including the total population (33 people for SimpleWorld). The new constraints could be:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Global Constraint possible for SimpleWorld</span>
-global_cons &lt;-<span class="st"> </span><span class="kw">table</span>(ind$age, ind$sex)
-global_cons[<span class="dv">1</span>,] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">9</span>)
-global_cons[<span class="dv">2</span>,] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">7</span>,<span class="dv">11</span>)
+<p>The latest version of the book can be viewed at <a href="http://spatial-microsim-book.robinlovelace.net/">the book’s homepage at spatial-microsim-book.robinlovelace.net</a>. Anyone can contribute to this book <a href="https://github.com/Robinlovelace/spatial-microsim-book">here</a>.</p>
 
-<span class="co"># Local Constraint for SimpleWorld</span>
-local_cons &lt;-<span class="st"> </span>total_pop</code></pre></div>
-<p>When only the total population is known for each zone, the best way to create a synthetic population is to simply re-scale the cross-table. For each zone, a table proportional to the global one is created. The results are stored in a three dimensional array, which first dimension represents the zone. The initialisation of the resulting matrix is the first step. We here fill in the table with “0”.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># initialise result&#39;s array and its names</span>
-resNames &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">1</span>:<span class="kw">nrow</span>(cons), <span class="kw">rownames</span>(global_cons), 
-            <span class="kw">colnames</span>(global_cons))
-res &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">0</span>, <span class="dt">dim=</span><span class="kw">c</span>(<span class="kw">nrow</span>(cons), <span class="kw">dim</span>(global_cons)), 
-             <span class="dt">dimnames=</span>resNames)</code></pre></div>
-<p>Now the final weight table is calculated, simply by taking the global matrix and re-scaling it to fit the the desired marginals. In this way we keep the global proportions, but with the correct total per zone. Note that making this process is exactly the same as running <code>mipfp</code> on the seed table with as constraints only the zone marginals.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Re-scale the cross-table to fit the zone&#39;s constraints</span>
-for (zone in <span class="dv">1</span>:<span class="kw">length</span>(total_pop)){ <span class="co"># loop over the zones</span>
-  res[zone,,] &lt;-<span class="st"> </span>global_cons *<span class="st"> </span>total_pop[zone] /<span class="st"> </span><span class="kw">sum</span>(global_cons)
-}
-
-<span class="co"># Print the cross-table for zone 1</span>
-res[<span class="dv">1</span>,,]</code></pre></div>
-<pre><code>##          f    m
-## a0_49 2.18 3.27
-## a50+  2.55 4.00</code></pre>
-<p>We can verify that the total population per zone is of the desired size. We can also check the global table of age and sex. This means that we have now weights fitting well all available data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the local constraints for each zone (should be TRUE)</span>
-for (zone in <span class="dv">1</span>:<span class="kw">length</span>(total_pop)){
- <span class="kw">print</span>( <span class="kw">sum</span>(<span class="kw">round</span>(res[zone,,])) ==<span class="st"> </span>total_pop[zone] )
-}</code></pre></div>
-<pre><code>## [1] TRUE
-## [1] TRUE
-## [1] TRUE</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Save the global final table</span>
-SimTot &lt;-<span class="st"> </span><span class="kw">apply</span>(res,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>),sum)
-
-<span class="co"># Check the global constraint (should be 0)</span>
-<span class="kw">sum</span>(SimTot -<span class="st"> </span>global_cons)</code></pre></div>
-<pre><code>## [1] 0</code></pre>
-<p>As with IPF, the fractional result needs to be integerised to create spatial microdata. The <code>round()</code> function generally provides a reasonable approximation, in terms of fitting the constraints. However, the aforementioned integerisation algorithms such as <em>truncate, replicate, sample</em> (TRS) can also be used. This method cannot be followed exactly, because we want to perfectly fit the few constraints we have. In our example, a satisfactory result is achieved by using the round function, as shown in the code below.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Integerisation by simply using round</span>
-resRound &lt;-<span class="st"> </span><span class="kw">round</span>(res)
-resTruncate &lt;-<span class="st"> </span><span class="kw">floor</span>(res) <span class="co"># take the minimum integer value</span>
-
-<span class="co"># Zero error achieved by rounding for global constraint</span>
-<span class="kw">apply</span>(resRound, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), sum) -<span class="st"> </span>global_cons</code></pre></div>
-<pre><code>##       f m
-## a0_49 0 0
-## a50+  0 0</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Zero error achieved by rounding for local constraint</span>
-<span class="kw">apply</span>(resRound,<span class="kw">c</span>(<span class="dv">1</span>),sum) -<span class="st"> </span>local_cons</code></pre></div>
-<pre><code>## 1 2 3 
-## 0 0 0</code></pre>
-<p>It is due to luck (and the small size of the SimpleWorld example) that the <code>round</code> method works in this case: in most cases there will be errors due to rounding. If a zone had 4 individuals and three categories, for example, the resulting weights could be <span class="math inline">\((\frac{4}{3},\frac{4}{3},\frac{4}{3})\)</span>. Then, the rounding gives <span class="math inline">\((1,1,1)\)</span> and there would be too few individuals in the synthetic population (3 not 4). We can try the algorithms proposed in (<a href="smsimr.html#sintegerisation"></a>). However, as illustrated by the following code chunks, these integerisation methods lead to errors in relation to the constraints.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Integerisation with pp</span>
-res_pp &lt;-<span class="st"> </span><span class="kw">int_pp</span>(res)
-
-<span class="kw">apply</span>(res_pp, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), sum) -<span class="st"> </span>global_cons</code></pre></div>
-<pre><code>##        
-##          f  m
-##   a0_49  0  3
-##   a50+   1 -4</code></pre>
-<p>These errors are often very small and if you model a whole country, the relative error is small. Note that this little error comes from the random draw at last stage of the algorithm. Here, TRS is better than PP, as explained in Chapter 5.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Integerisation with trs</span>
-<span class="kw">set.seed</span>(<span class="dv">17</span>)
-res_trs &lt;-<span class="st"> </span>res_pp &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dt">dim =</span> <span class="kw">dim</span>(res))
-<span class="co"># Apply trs (see code/functions.R to see how int_trs works)</span>
-res_trs[] &lt;-<span class="st"> </span><span class="kw">int_trs</span>(res)
-
-<span class="co"># Print the errors</span>
-<span class="kw">apply</span>(res_trs, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), sum) -<span class="st"> </span>global_cons</code></pre></div>
-<pre><code>##        
-##          f  m
-##   a0_49  0 -1
-##   a50+   1  0</code></pre>
-<p>If desired, we can adapt TRS to ensure it fits fit the constraints at the end of the process. To adapt the method to use TRS, we first truncate<a href="#fn33" class="footnoteRef" id="fnref33"><sup>33</sup></a> the data and identify the missing individuals, in terms of constraints.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Truncate</span>
-resTruncate &lt;-<span class="st"> </span><span class="kw">floor</span>(res)
-
-<span class="co"># number of missing individuals</span>
-<span class="kw">sum</span>(total_pop) -<span class="st"> </span><span class="kw">sum</span>(resTruncate)</code></pre></div>
-<pre><code>## [1] 4</code></pre>
-<p>This means that, in total, 4 individuals are missing after we have truncated. We will have to chose which categories will be incremented. For this, the basic TRS take the decimal parts of the weights (that were forgotten when truncate) and make a random draw inside this distribution. This is in this step that we can add an error in terms of the constraints. To make a better fit after integerisation, we need to observe in which category and in which zone we have to add individuals.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the total simulated cross-table</span>
-<span class="co"># After truncate</span>
-SimTotTruncate &lt;-<span class="st"> </span><span class="kw">apply</span>(resTruncate,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>),sum)
-
-<span class="co"># Number of missing individuals per category</span>
-<span class="co"># After truncate</span>
-ToAdd &lt;-<span class="st"> </span>global_cons -<span class="st"> </span>SimTotTruncate
-ToAdd</code></pre></div>
-<pre><code>##        
-##         f m
-##   a0_49 1 1
-##   a50+  1 1</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Number of missing individuals per zone</span>
-<span class="co"># After truncate</span>
-ToComplete &lt;-<span class="st"> </span>local_cons -<span class="st"> </span><span class="kw">apply</span>(resTruncate,<span class="kw">c</span>(<span class="dv">1</span>),sum)
-ToComplete</code></pre></div>
-<pre><code>## 1 2 3 
-## 1 2 1</code></pre>
-<p>We observe that the individuals to add are one per category of age and sex. In terms of zones, one individual is missing in zone one and three, whereas two persons will have to be added in zone 2.</p>
-<p>The principle now is to add people in the not completed zones and categories. The cells to be incremented are always chosen as the one with the bigger decimal parts (whereas in TRS, these decimals act as probabilities). Note that we chose to adapt the <code>resTruncate</code> instead of defining another tabular.</p>
-<p>The code works as followed: As long as there are missing individuals in the matrix, we look at next biggest decimal and add an individual in the corresponding cell if someone is missing in this category and in this zone.</p>
-<p></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the decimals left by truncate</span>
-decimals &lt;-<span class="st"> </span>res -<span class="st"> </span>resTruncate
-
-<span class="co"># Adapting resTruncate to fit all constraints</span>
-while (<span class="kw">sum</span>(total_pop) -<span class="st"> </span><span class="kw">sum</span>(resTruncate) &gt;<span class="st"> </span><span class="dv">0</span>){
-  <span class="co"># find the biggest decimals</span>
-  i &lt;-<span class="st"> </span><span class="kw">which</span>( decimals ==<span class="st"> </span><span class="kw">max</span>(decimals), <span class="dt">arr.ind =</span> <span class="ot">TRUE</span>)
-
-  <span class="co"># remember we already considered this cell</span>
-  decimals[i] &lt;-<span class="st"> </span><span class="dv">0</span>
-
-  <span class="co"># if this zone still miss individuals</span>
-  if (ToComplete[i[<span class="dv">1</span>]] &gt;<span class="st"> </span><span class="dv">0</span>){
-    <span class="co"># if this category still miss individuals</span>
-    if (ToAdd[i[<span class="dv">2</span>],i[<span class="dv">3</span>]] &gt;<span class="st"> </span><span class="dv">0</span>){
-      resTruncate[i] &lt;-<span class="st"> </span>resTruncate[i] +<span class="st"> </span><span class="dv">1</span>
-      ToComplete[i[<span class="dv">1</span>]] &lt;-<span class="st"> </span>ToComplete[i[<span class="dv">1</span>]] -<span class="st"> </span><span class="dv">1</span>
-      ToAdd[i[<span class="dv">2</span>],i[<span class="dv">3</span>]] &lt;-<span class="st"> </span>ToAdd[i[<span class="dv">2</span>],i[<span class="dv">3</span>]] -<span class="st"> </span><span class="dv">1</span>
-    }
-  }
-}</code></pre></div>
-<p>The new values in <code>resTruncate</code> follow all constraints. The adaptation of TRS could be avoided by using combinatorial optimization to integerise. Indeed, this process could choose for each cell to take the integer just under or just above the weight by optimising the fit to the constraints. We use TRS here because it is faster and requires fewer lines of code <span class="citation">(see Lovelace and Ballas <a href="#ref-Lovelace2013-trs">2013</a> for more detail)</span>.</p>
-<p>After the integerisation, the last step to get the final individual dataset is the expansion. This stage is intuitive, since we have now a table containing the number of individuals in each category. Thus, we simply need to replicate the combination of categories the right number of times.</p>
-<p>We can first flatten the 3–dimensional matrix. Then, the final individual micro dataset <code>ind_data</code> is created.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">countData &lt;-<span class="st"> </span><span class="kw">as.data.frame.table</span>(resTruncate)
-indices &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>:<span class="kw">nrow</span>(countData), countData$Freq)
-ind_data &lt;-<span class="st"> </span>countData[indices,]</code></pre></div>
-</div>
-<div id="twoLevelData" class="section level2">
-<h2><span class="header-section-number">9.2</span> Two level aggregated data</h2>
-<p>We present here how to find a possible distribution per zone when having only aggregated data, but in two different levels of aggregation. For example, we have some data for the municipalities and other for the districts. A first proposition can be to use a genetic algorithm that minimises the distance between the constraint and the simulation. This can give very good solutions, but need a high level understand of optimisation and is rare in the literature for the moment. For classical problems, a simpler method is available. The basis of this method is explained here. The solution proposed by Barthélemy and Toint (2013), and used in this book, is to generate a ‘seed’ before executing IPF.</p>
-<p>This paper demonstrates the simulation of a population with four characteristics per individual: the gender, the age class, the diploma level and the activity status and at the municipality level. Their available data was:</p>
-<ol style="list-style-type: decimal">
-<li>At municipality level: the cross table gender x age and the marginals of diploma level and activity status;</li>
-<li>At district level: the cross tables gender x activity status, gender x diploma level, age x activity status and age x diploma level.</li>
-</ol>
-<p>Note that a district contains several municipalities, but each municipality is associated to only one district. We consider the marginals of the tables being consistent. If not, a preliminary step is necessary to re-scale the data to avoid shifting to probabilities. We chose to do this to have the best chance to fit the data well. When shifting to probabilities, it is more difficult to adapt the distributions during the iteration. Indeed, when considering the theoretical counts, if you create a young women, you just need to take the cell ‘young’ and ‘women’ and make minus one. When considering probabilities, when you create a young woman, you have to recalculate all probabilities, because you still need less women and proportionally, more men than before. This is the reason why we prefer to adapt the distributions to the one we are the more confident.</p>
-<p>The global idea of their method is to proceed in two steps. First, they simulate the cross table of the four variables per district. Then, this table is considered as the seed of the IPF algorithm to simulate the distributions per municipality. During this second stage, the data concerning the municipality are used as constraints. How to execute the second part has been explained in the first section of this chapter. The point here is to develop the process, per district, to simulate the four–dimensional cross table, with the available data. This is also done in two steps :</p>
-<ol style="list-style-type: decimal">
-<li>Generate age x gender x diploma level and age x gender x professional status;</li>
-<li>Generate age x gender x diploma level x professional status.</li>
-</ol>
-<p>For the first step, we will explain only the creation of the first cross table, since the second reasoning is similar. The idea is simply to proceed proportionally to respect both available tables. The pseudo-code below corresponds to the code provided by Barthélemy and Toint (2013).</p>
-<p>For the clarity of the formal formula, we rename gender (A), age (B) and diploma level (C). To create the cross table of these three variables, we have at the district level the cross tables gender x diploma level (renamed AC) and age x diploma level (renamed BC). Then, the cells of the three–dimensional table is defined for each gender <span class="math inline">\(g\)</span>, age <span class="math inline">\(a\)</span> and diploma level <span class="math inline">\(d\)</span> as followed :</p>
-<p><span class="math display">\[ABC(g,a,d)=\frac{AC(g,d)}{margin(d)}BC(a,d)\]</span></p>
-<p>The formula is intuitive. The fraction gives the proportion of each gender inside the considered category of diploma level. Then, this proportion splits the number of persons having characteristics a and d into the category of g. For example, in the specific case of defining (Male, Young, Academics), we will have :</p>
-<p><span class="math display">\[ABC(Male, Young, Aca)=\frac{AC(Male,Aca)}{\#Aca}BC(Young,Aca)\]</span></p>
-<p>Suppose we have 50 young academics out of 150 academics (90 female and 60 male). We would have:</p>
-<p><span class="math display">\[ABC(Male, Young, Aca)=\frac{60}{150}*50=20\]</span> <span class="math display">\[ABC(Female, Young, Aca)=\frac{90}{150}*50=30\]</span></p>
-<p>Thus, the tables age x gender x diploma level and age x gender x professional status are simulated. The seed for the IPF function can now be established, with help of the two contingencies. These initial weights will be the distribution of the four variables inside the whole district.</p>
-<p>This seed is generated by several iterations. The initialisation of the cross table is simply a matrix with the right number of dimensions, with “0” in impossible cells and “1” in potentially non empty cases. For example, individuals of less than 10 years cannot hold a diploma from university.</p>
-<p>With this initial point, an IPF can be performed to fit the two previously determined three–dimensional tables. The result is a table with the four variables per district.</p>
-<p>The final step is explained in the previous section. Indeed, we have a contingency table at the district level and the zone margins. Note that you can imagine a lot of combinations of IPF to perform a population synthesis adapted to your own data.</p>
-</div>
-<div id="chapter-summary-7" class="section level2">
-<h2><span class="header-section-number">9.3</span> Chapter summary</h2>
-<p>In summary spatial microsimulation can be used in situations where no sample data is available. The techniques can be adapted to work with a synthetic population. This chapter presented two methods for creating synthetic populations in R, the selection of which should depend on the type of input constraint data available. The first method assumed access to global cross tables and local marginals. The second assumed having aggregate data at different levels.</p>
-
-</div>
-</div>
-<h3>References</h3>
 <div id="refs" class="references">
-<div id="ref-Bierlaire">
-<p>M., Bierlaire. 1991. “Evaluation de la demande en trafic : quelques méthodes de distribution.” <em>Annales de La Société Scientifique de Bruxelles</em> 105. University of Namur: 17–66.</p>
+<div>
+<p>Avram, Silvia, Francesco Figari, Chrysa Leventi, Horacio Levy, Jekaterina Navicke, Manos Matsaganis, Eva Militaru, Alari Paulus, Olga Rastrigina, and Holly Sutherland. 2012. “The distributional effects of fiscal consolidation in 9 EU countries.” Social Situation Observatory Research Note 01.</p>
 </div>
-<div id="ref-Lovelace2013-trs">
+<div>
+<p>Axhausen, KW Kay W, Kirill Müller, and KW Kay W Axhausen. 2011. “Population synthesis for microsimulation: State of the art.” In <em>Annual Meeting of the Transportation Research Board</em>. IVT Working Paper. Swiss Federal Institute of Technology Zurich.</p>
+</div>
+<div>
+<p>Baroni, Elisa, and Matteo Richiardi. 2007. “Orcutt’s Vision, 50 years on.” <em>October</em>, no. 65. <a href="http://ideas.repec.org/p/cca/wplabo/65.html" class="uri">http://ideas.repec.org/p/cca/wplabo/65.html</a>.</p>
+</div>
+<div>
+<p>Barthelemy, Johan, and Thomas Suesse. 2016. <em>Mipfp: Multidimensional Iterative Proportional Fitting and Alternative Models</em>. <a href="https://CRAN.R-project.org/package=mipfp" class="uri">https://CRAN.R-project.org/package=mipfp</a>.</p>
+</div>
+<div>
+<p>Barthelemy, Johan, and Philippe Toint. 2015. “A Stochastic and Flexible Activity Based Model for Large Population. Application to Belgium.” <em>Journal of Artificial Societies and Social Simulation</em> 18 (3): 15. <a href="http://jasss.soc.surrey.ac.uk/18/3/15.html" class="uri">http://jasss.soc.surrey.ac.uk/18/3/15.html</a>.</p>
+</div>
+<div>
+<p>Barthelemy, Johan, and Philippe L Toint. 2013. “Synthetic Population Generation Without a Sample.” <em>Transportation Science</em> 47 (2). INFORMS: 266–79. doi:<a href="https://doi.org/10.1287/trsc.1120.0408">10.1287/trsc.1120.0408</a>.</p>
+</div>
+<div>
+<p>Barthélemy, Johan. 2014. “A parallelized micro-simulation platform for population and mobility behaviour-Application to Belgium.” PhD thesis, University de Namur.</p>
+</div>
+<div>
+<p>Batty, Michael. 2005. <em>Cities and Complexity</em>. Vol. 14. 1967.</p>
+</div>
+<div>
+<p>Castle, CJE, and AT Crooks. 2006. “Principles and Concepts of Agent-Based Modelling for Developing Geospatial Simulations” 44 (0). doi:<a href="https://doi.org/ISSN: 1467-1298">ISSN: 1467-1298</a>.</p>
+</div>
+<div>
+<p>Chai, T., and R. R. RR Draxler. 2014. “Root mean square error (RMSE) or mean absolute error (MAE)? – Arguments against avoiding RMSE in the literature.” <em>Geoscientific Model Development</em> 7 (3): 1247–50. doi:<a href="https://doi.org/10.5194/gmd-7-1247-2014">10.5194/gmd-7-1247-2014</a>.</p>
+</div>
+<div>
+<p>Clarke, Martin, and Einar Holm. 1987. “Microsimulation methods in spatial analysis and planning.” <em>Geografiska Annaler. Series B. Human Geography</em> 69 (2): 145–64. <a href="http://www.jstor.org/stable/10.2307/490448 http://www.jstor.org/stable/490448" class="uri">http://www.jstor.org/stable/10.2307/490448 http://www.jstor.org/stable/490448</a>.</p>
+</div>
+<div>
+<p>Deming, WE, and Frederick F Stephan. 1940. “On a least squares adjustment of a sampled frequency table when the expected marginal totals are known.” <em>The Annals of Mathematical Statistics</em>. <a href="http://www.jstor.org/stable/10.2307/2235722" class="uri">http://www.jstor.org/stable/10.2307/2235722</a>.</p>
+</div>
+<div>
+<p>Diez, David M, Christopher D Barr, and Mine Cetinkaya-Rundel. 2012. <em>OpenIntro statistics</em>. CreateSpace independent publishing platform.</p>
+</div>
+<div>
+<p>Edwards, Kimberley L., Graham P. Clarke, James Thomas, and David Forman. 2010. “Internal and External Validation of Spatial Microsimulation Models: Small Area Estimates of Adult Obesity.” <em>Applied Spatial Analysis and Policy</em> 4 (4): 281–300. doi:<a href="https://doi.org/10.1007/s12061-010-9056-2">10.1007/s12061-010-9056-2</a>.</p>
+</div>
+<div>
+<p>Edwards, KL, and Graham Clarke. 2013. “SimObesity: Combinatorial Optimisation (Deterministic) Model.” <em>Spatial Microsimulation: A Reference Guide for Users</em>, 69–85. doi:<a href="https://doi.org/10.1007/978-94-007-4623-7">10.1007/978-94-007-4623-7</a>.</p>
+</div>
+<div>
+<p>Gaber, J. 2007. “Simulating Planning: SimCity as a Pedagogical Tool.” <em>Journal of Planning Education and Research</em> 27 (2): 113–21. doi:<a href="https://doi.org/10.1177/0739456X07305791">10.1177/0739456X07305791</a>.</p>
+</div>
+<div>
+<p>Grimm, Volker, and S F Railsback. 2011. <em>Agent-based and individual-based modeling: a practical introduction</em>. Princeton University Press Princeton, NJ.</p>
+</div>
+<div>
+<p>Harland, Kirk. 2013. “Microsimulation model user guide: flexible modelling framework.” NCRM Working Papers. Leeds: University of Leeds; NCRM. doi:<a href="https://doi.org/http://eprints.ncrm.ac.uk/3177/2/microsimulation\_model.pdf">http://eprints.ncrm.ac.uk/3177/2/microsimulation\_model.pdf</a>.</p>
+</div>
+<div>
+<p>Harland, Kirk, Alison Heppenstall, Dianna Smith, and Mark Birkin. 2012. “Creating Realistic Synthetic Populations at Varying Spatial Scales: A Comparative Critique of Population Synthesis Techniques.” <em>Journal of Artificial Societies and Social Simulation</em> 15 (1): 1. <a href="http://jasss.soc.surrey.ac.uk/15/1/1.html" class="uri">http://jasss.soc.surrey.ac.uk/15/1/1.html</a>.</p>
+</div>
+<div>
+<p>Hensher, David A. 2002. “A Systematic Assessment of the Environmental Impacts of Transport Policy.” <em>Environmental and Resource Economics</em> 22 (1). Springer: 185–217. <a href="http://www.springerlink.com/index/FJHH830P34VQBANM.pdf" class="uri">http://www.springerlink.com/index/FJHH830P34VQBANM.pdf</a>.</p>
+</div>
+<div>
+<p>———. 2008. “Climate change, enhanced greenhouse gas emissions and passenger transport - What can we do to make a difference?” <em>Transportation Research Part D: Transport and Environment</em> 13 (2): 95–111. doi:<a href="https://doi.org/10.1016/j.trd.2007.12.003">10.1016/j.trd.2007.12.003</a>.</p>
+</div>
+<div>
+<p>Hensher, David A, and Tu Ton. 2002. “TRESIS: A transportation, land use and environmental strategy impact simulator for urban areas.” <em>Transportation</em> 29 (4). Springer: 439–57.</p>
+</div>
+<div>
+<p>Hensher, David A, John M Rose, and William H Greene. 2015. <em>Applied Choice Analysis</em>. Second Edi. Cambridge: Cambridge University Press.</p>
+</div>
+<div>
+<p>Hidas, Peter. 2005. “A functional evaluation of the AIMSUN, PARAMICS and VISSIM microsimulation models.” <em>Road &amp; Transport Research</em> 14 (4): 45–59.</p>
+</div>
+<div>
+<p>Hongbin Zhang, Guangyu Sun. 2002 35: 701–11.</p>
+</div>
+<div>
+<p>Hornik, Kurt. 2012. “Are There Too Many R Packages?” <em>Austrian Journal of Statistics</em> 41 (1): 59–66.</p>
+</div>
+<div>
+<p>Ince, Darrel C, Leslie Hatton, and John Graham-Cumming. 2012. “The case for open computer programs.” <em>Nature</em> 482 (7386). Nature Publishing Group: 485–8. doi:<a href="https://doi.org/10.1038/nature10836">10.1038/nature10836</a>.</p>
+</div>
+<div>
+<p>Kabacoff, Robert. 2011. <em>R in Action</em>. Manning Publications Co.</p>
+</div>
+<div>
+<p>Knoblauch, Kenneth, and Laurence T Maloney. 2012. <em>Modeling psychophysical data in R</em>. Vol. 32. Springer. <a href="http://mpdir.r-forge.r-project.org/book/Front.pdf" class="uri">http://mpdir.r-forge.r-project.org/book/Front.pdf</a>.</p>
+</div>
+<div>
+<p>Lenormand, Maxime, and Guillaume Deffuant. 2012. “Generating a synthetic population of individuals in households: Sample-free vs sample-based methods.” <em>ArXiv Preprint ArXiv:1208.6403</em>.</p>
+</div>
+<div>
+<p>Lima, Antonio, Luca Rossi, and Mirco Musolesi. 2014. “Coding Together at Scale: GitHub as a Collaborative Social Network.” <em>ArXiv Preprint ArXiv:1407.2535</em>.</p>
+</div>
+<div>
 <p>Lovelace, Robin, and Dimitris Ballas. 2013. “‘Truncate, replicate, sample’: A method for creating integer weights for spatial microsimulation.” <em>Computers, Environment and Urban Systems</em> 41 (September). Elsevier Ltd: 1–11. doi:<a href="https://doi.org/10.1016/j.compenvurbsys.2013.03.004">10.1016/j.compenvurbsys.2013.03.004</a>.</p>
 </div>
+<div>
+<p>Lovelace, Robin, and Morgane Dumont. 2016. <em>Spatial Microsimulation with R</em>. CRC Press.</p>
 </div>
-<div class="footnotes">
-<hr />
-<ol start="33">
-<li id="fn33"><p>Note that truncate means round each weight to the first integer under the weight. This implies that we underestimated the population.<a href="nomicrodata.html#fnref33">↩</a></p></li>
-</ol>
+<div>
+<p>Lovelace, Robin, and Ian Philips. 2014. “The ‘oil vulnerability’ of commuter patterns: A case study from Yorkshire and the Humber, UK.” <em>Geoforum</em> 51 (0): 169–82. doi:<a href="https://doi.org/http://dx.doi.org/10.1016/j.geoforum.2013.11.005">http://dx.doi.org/10.1016/j.geoforum.2013.11.005</a>.</p>
 </div>
+<div>
+<p>Lovelace, Robin, Dimitris Ballas, and Matt Watson. 2014. “A spatial microsimulation approach for the analysis of commuter patterns: from individual to regional levels.” <em>Journal of Transport Geography</em> 34 (0): 282–96. doi:<a href="https://doi.org/http://dx.doi.org/10.1016/j.jtrangeo.2013.07.008">http://dx.doi.org/10.1016/j.jtrangeo.2013.07.008</a>.</p>
+</div>
+<div>
+<p>Lovelace, Robin, Dimitris Ballas, Mark M.H. Birkin, Eveline van Leeuwen, Dimitris Ballas, Eveline van Leeuwen, and Mark M.H. Birkin. 2015. “Evaluating the performance of Iterative Proportional Fitting for spatial microsimulation: new tests for an established technique.” <em>Journal of Artificial Societies and Social Simulation</em> 18 (2): 21.</p>
+</div>
+<div>
+<p>Lucas, Karen. 2012. “Transport and social exclusion: Where are we now?” <em>Transport Policy</em> 20 (March). Elsevier: 105–13. doi:<a href="https://doi.org/10.1016/j.tranpol.2012.01.013">10.1016/j.tranpol.2012.01.013</a>.</p>
+</div>
+<div>
+<p>M., Bierlaire. 1991. “Evaluation de la demande en trafic : quelques méthodes de distribution.” <em>Annales de La Société Scientifique de Bruxelles</em> 105. University of Namur: 17–66.</p>
+</div>
+<div>
+<p>MacKay, David. 2008. <em>Sustainable Energy-Without the Hot Air</em>. UIT Cambridge.</p>
+</div>
+<div>
+<p>Mannion, Oliver, Roy Lay-Yee, Wendy Wrapson, Peter Davis, and Janet Pearson. 2012. “JAMSIM: A microsimulation modelling policy tool.” <em>Journal of Artificial Societies and Social Simulation</em> 15 (1): 8.</p>
+</div>
+<div>
+<p>Matloff, N. 2011. <em>The Art of R Programming</em>. No Starch Press.</p>
+</div>
+<div>
+<p>McNutt, Marcia. 2014. “Journals unite for reproducibility.” <em>Science</em> 346 (6210): 679. doi:<a href="https://doi.org/10.1126/science.aaa1724">10.1126/science.aaa1724</a>.</p>
+</div>
+<div>
+<p>Meindl, Bernhard, Matthias Templ, Andreas Alfons, Alexander Kowarik, and with contributions from Mathieu Ribatet. 2015. <em>SimPop: Simulation of Synthetic Populations for Survey Data Considering Auxiliary Information</em>. <a href="http://CRAN.R-project.org/package=simPop" class="uri">http://CRAN.R-project.org/package=simPop</a>.</p>
+</div>
+<div>
+<p>Norman, Paul. 1999. “Putting Iterative Proportional Fitting (IPF) on the Researcher’s Desk.” October. School of Geography, University of Leeds. <a href="http://eprints.whiterose.ac.uk/5029/1/99-3.pdf" class="uri">http://eprints.whiterose.ac.uk/5029/1/99-3.pdf</a>.</p>
+</div>
+<div>
+<p>Orcutt, Guy H GH. 1957. “A new type of socio-economic system.” <em>The Review of Economics and Statistics</em> 39 (2): 116–23. <a href="http://www.jstor.org/stable/10.2307/1928528" class="uri">http://www.jstor.org/stable/10.2307/1928528</a>.</p>
+</div>
+<div>
+<p>Owen, WJ. 2006. “The R Guide.” <em>Comprehensive R Archive Network</em>.</p>
+</div>
+<div>
+<p>Peng, Roger D., Francesca Dominici, and Scott L. Zeger. 2006. “Reproducible epidemiologic research.” <em>American Journal of Epidemiology</em> 163 (9): 783–9. doi:<a href="https://doi.org/10.1093/aje/kwj093">10.1093/aje/kwj093</a>.</p>
+</div>
+<div>
+<p>Popper, Karl. 1959. <em>The Logic of scientific discovery</em>. Hutchinson.</p>
+</div>
+<div>
+<p>Pritchard, David R., and Eric J. Miller. 2012. “Advances in population synthesis: fitting many attributes per agent and fitting to household and person margins simultaneously.” <em>Transportation</em> 39 (3): 685–704. doi:<a href="https://doi.org/10.1007/s11116-011-9367-4">10.1007/s11116-011-9367-4</a>.</p>
+</div>
+<div>
+<p>Rahman, Azizurr. 2009. “Small Area Estimation Through Spatial Microsimulation Models.” In <em>2nd International Microsimulation Association Conference</em>. Ottawa; Canada.</p>
+</div>
+<div>
+<p>Rao, Jonathan N K. 2003. <em>Small area estimation</em>. Vol. 331. John Wiley &amp; Sons.</p>
+</div>
+<div>
+<p>Rey, Sergio J. 2014. “Open regional science.” <em>The Annals of Regional Science</em> 52 (3): 825–37. doi:<a href="https://doi.org/10.1007/s00168-014-0611-7">10.1007/s00168-014-0611-7</a>.</p>
+</div>
+<div>
+<p>Sutherland, Holly, and Francesco Figari. 2013. “EUROMOD: the European Union tax-benefit microsimulation model.” <em>International Journal of Microsimulation</em> 6 (1). Interational Microsimulation Association: 4–26.</p>
+</div>
+<div>
+<p>Tanton, Robert, Yogi Vidyattama, Binod Nepal, and Justine McNamara. 2011. “Small area estimation using a reweighting algorithm.” <em>Journal of the Royal Statistical Society. Series A</em> 174 (4): 931–51. doi:<a href="https://doi.org/10.1111/j.1467-985X.2011.00690.x">10.1111/j.1467-985X.2011.00690.x</a>.</p>
+</div>
+<div>
+<p>Thiele, J. 2014. “R Marries NetLogo: Introduction to the RNetLogo Package.” <em>Journal of Statistical</em> 58 (2): 1–41. <a href="http://www.jstatsoft.org/v58/i02/paper" class="uri">http://www.jstatsoft.org/v58/i02/paper</a>.</p>
+</div>
+<div>
+<p>Thiele, Jan C, Winfried Kurth, and Volker Grimm. 2012. “Agent-Based Modelling: Tools for Linking NetLogo And R.” <em>Journal of Artificial Societies and Social Simulation</em> 15 (3): 8. <a href="http://jasss.soc.surrey.ac.uk/15/3/8.html" class="uri">http://jasss.soc.surrey.ac.uk/15/3/8.html</a>.</p>
+</div>
+<div>
+<p>Thiele, JC, W Kurth, and V Grimm. 2014. “Facilitating Parameter Estimation and Sensitivity Analysis of Agent-Based Models: A Cookbook Using NetLogo and’R’.” <em>Journal of Artificial Societies and …</em> 17 (11).</p>
+</div>
+<div>
+<p>Tomintz, Melanie N M.N., Graham P Clarke, and Janette E J.E. Rigby. 2008. “The geography of smoking in Leeds: estimating individual smoking rates and the implications for the location of stop smoking services.” <em>Area</em> 40 (3). Wiley Online Library: 341–53.</p>
+</div>
+<div>
+<p>Urbanek, Simon. 2013. <em>rJava: Low-level R to Java interface</em>. <a href="http://cran.r-project.org/package=rJava" class="uri">http://cran.r-project.org/package=rJava</a>.</p>
+</div>
+<div>
+<p>Verzani, John. 2011. <em>Getting Started with RStudio</em>. “ O’Reilly Media, Inc.”</p>
+</div>
+<div>
+<p>Voas, David, and Paul Williamson. 2001. “Evaluating Goodness-of-Fit Measures for Synthetic Microdata.” <em>Geographical and Environmental Modelling</em> 5 (2). Routledge: 177–200. doi:<a href="https://doi.org/10.1080/13615930120086078">10.1080/13615930120086078</a>.</p>
+</div>
+<div>
+<p>Wegener, M. 2011. “From Macro to Micro—How Much Micro Is Too Much?” <em>Transport Reviews</em> 31 (October 2009): 161–77.</p>
+</div>
+<div>
+<p>Wickham, Hadley. 2014a. <em>Advanced R</em>. CRC Press.</p>
+</div>
+<div>
+<p>———. 2014b. “Tidy data.” <em>The Journal of Statistical Software</em> 14 (5).</p>
+</div>
+<div>
+<p>Williamson, Paul. 2007. “CO Instruction Manual: Working Paper 2007/1 (v. 07.06.25).” Vol. 1. University of Liverpool.</p>
+</div>
+</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </section>
 
           </div>
         </div>
       </div>
-<a href="svalidation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="ha.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="bibliography.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
