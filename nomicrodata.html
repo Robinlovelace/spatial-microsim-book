@@ -6,26 +6,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
-  <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
-  
-  
+  <meta property="og:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
+  <meta property="og:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
   <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Spatial Microsimulation with R" />
-  
-  
-  
+  <meta name="twitter:site" content="@robinlovelace" />
+  <meta name="twitter:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
+  <meta name="twitter:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
 
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -300,7 +303,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="nomicrodata" class="section level1">
 <h1><span class="header-section-number">9</span> Population synthesis without microdata</h1>
 <p>Sometimes no representative individual level dataset is available as an input for population synthesis. In this case, the methods described in the previous chapters must be adapted accordingly. The challenge is still to generate spatial microdata that fits all the constraint tables, but based on a purely synthetic ‘seed’ input cross-tabulated contingency table. Many combinations of individual level data could correspond to these distributions. Depending on the aim of the spatial microsimulation model, simply finding one reasonable fit can be sufficient.</p>
-
+<p></p>
 <p>In other cases a fit based on <em>entropy maximisation</em> may be required. This concept involves finding the population that is most likely to represent the micro level populations (Bierlaire, 1991) <span class="citation">(M. <a href="#ref-Bierlaire">1991</a>)</span>.  This chapter demonstrates two options for population synthesis when real individual level data is unavailable:</p>
 <ul>
 <li><em>Global cross-tables and local marginal distributions</em> (<a href="nomicrodata.html#CrossGlobLocalMarg"></a>) explains a method for cases where the constraints consist in cross-tables not spatially located and local marginal distributions.</li>
@@ -310,9 +313,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2><span class="header-section-number">9.1</span> Global cross-tables and local marginal distributions</h2>
 <p>Assume we have a contingency table of constraint variables for the entire study area (but not at the local level) in the aggregate level data. This multi-dimensional cross-table (the seed) could be the result of a previous step such as the implementation of IPF re-weight individual level data to fit the case-study area of interest.</p>
 <p>If the marginal distributions for small areas are known, we can use the <strong>mipfp</strong> function as previously shown. If, however, the only information about the zones is the total population living there, the function is usable only when considering the zone as a variable. In this specific case, having no additional data, the only option corresponds to re-scale the global cross-table for each zone. Note that this implies that the correlations between the variables are independent of the zone in question.</p>
-<p>To illustrate, we will develop the SimpleWorld example (which can be loaded from the book’s data directory by entering <code>source(&quot;R/SimpleWorld.R&quot;)</code> or was previously loaded if you as followed (<a href="data-prep.html#data-prep"></a>)) with adapted constraints. When watching the available data in an aggregated level, we have for the moment:</p>
+<p>To illustrate, we will develop the SimpleWorld example (which can be loaded from the book’s data directory by entering <code>source(&quot;code/SimpleWorld.R&quot;)</code> or was previously loaded if you as followed (<a href="data-prep.html#data-prep"></a>)) with adapted constraints. When watching the available data in an aggregated level, we have for the moment:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Cross-tabulation of individual level dataset</span>
-<span class="kw">table</span>(ind<span class="op">$</span>age, ind<span class="op">$</span>sex)</code></pre></div>
+<span class="kw">table</span>(ind$age, ind$sex)</code></pre></div>
 <pre><code>##        
 ##         f m
 ##   a0_49 1 1
@@ -321,7 +324,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <pre><code>## [1] 12 10 11</code></pre>
 <p>To illustrate this section, the local constraint will be the total number of people in each zone (last column of <code>consTot</code>). The global constraint is a matrix of the form of the cross-table between age and sex, but including the total population (33 people for SimpleWorld). The new constraints could be:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Global Constraint possible for SimpleWorld</span>
-global_cons &lt;-<span class="st"> </span><span class="kw">table</span>(ind<span class="op">$</span>age, ind<span class="op">$</span>sex)
+global_cons &lt;-<span class="st"> </span><span class="kw">table</span>(ind$age, ind$sex)
 global_cons[<span class="dv">1</span>,] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">6</span>,<span class="dv">9</span>)
 global_cons[<span class="dv">2</span>,] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">7</span>,<span class="dv">11</span>)
 
@@ -329,14 +332,14 @@ global_cons[<span class="dv">2</span>,] &lt;-<span class="st"> </span><span clas
 local_cons &lt;-<span class="st"> </span>total_pop</code></pre></div>
 <p>When only the total population is known for each zone, the best way to create a synthetic population is to simply re-scale the cross-table. For each zone, a table proportional to the global one is created. The results are stored in a three dimensional array, which first dimension represents the zone. The initialisation of the resulting matrix is the first step. We here fill in the table with “0”.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># initialise result&#39;s array and its names</span>
-resNames &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(cons), <span class="kw">rownames</span>(global_cons), 
+resNames &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dv">1</span>:<span class="kw">nrow</span>(cons), <span class="kw">rownames</span>(global_cons), 
             <span class="kw">colnames</span>(global_cons))
 res &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dv">0</span>, <span class="dt">dim=</span><span class="kw">c</span>(<span class="kw">nrow</span>(cons), <span class="kw">dim</span>(global_cons)), 
              <span class="dt">dimnames=</span>resNames)</code></pre></div>
 <p>Now the final weight table is calculated, simply by taking the global matrix and re-scaling it to fit the the desired marginals. In this way we keep the global proportions, but with the correct total per zone. Note that making this process is exactly the same as running <code>mipfp</code> on the seed table with as constraints only the zone marginals.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Re-scale the cross-table to fit the zone&#39;s constraints</span>
-<span class="cf">for</span> (zone <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(total_pop)){ <span class="co"># loop over the zones</span>
-  res[zone,,] &lt;-<span class="st"> </span>global_cons <span class="op">*</span><span class="st"> </span>total_pop[zone] <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(global_cons)
+for (zone in <span class="dv">1</span>:<span class="kw">length</span>(total_pop)){ <span class="co"># loop over the zones</span>
+  res[zone,,] &lt;-<span class="st"> </span>global_cons *<span class="st"> </span>total_pop[zone] /<span class="st"> </span><span class="kw">sum</span>(global_cons)
 }
 
 <span class="co"># Print the cross-table for zone 1</span>
@@ -346,8 +349,8 @@ res[<span class="dv">1</span>,,]</code></pre></div>
 ## a50+  2.55 4.00</code></pre>
 <p>We can verify that the total population per zone is of the desired size. We can also check the global table of age and sex. This means that we have now weights fitting well all available data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Check the local constraints for each zone (should be TRUE)</span>
-<span class="cf">for</span> (zone <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(total_pop)){
- <span class="kw">print</span>( <span class="kw">sum</span>(<span class="kw">round</span>(res[zone,,])) <span class="op">==</span><span class="st"> </span>total_pop[zone] )
+for (zone in <span class="dv">1</span>:<span class="kw">length</span>(total_pop)){
+ <span class="kw">print</span>( <span class="kw">sum</span>(<span class="kw">round</span>(res[zone,,])) ==<span class="st"> </span>total_pop[zone] )
 }</code></pre></div>
 <pre><code>## [1] TRUE
 ## [1] TRUE
@@ -356,7 +359,7 @@ res[<span class="dv">1</span>,,]</code></pre></div>
 SimTot &lt;-<span class="st"> </span><span class="kw">apply</span>(res,<span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>),sum)
 
 <span class="co"># Check the global constraint (should be 0)</span>
-<span class="kw">sum</span>(SimTot <span class="op">-</span><span class="st"> </span>global_cons)</code></pre></div>
+<span class="kw">sum</span>(SimTot -<span class="st"> </span>global_cons)</code></pre></div>
 <pre><code>## [1] 0</code></pre>
 <p>As with IPF, the fractional result needs to be integerised to create spatial microdata. The <code>round()</code> function generally provides a reasonable approximation, in terms of fitting the constraints. However, the aforementioned integerisation algorithms such as <em>truncate, replicate, sample</em> (TRS) can also be used. This method cannot be followed exactly, because we want to perfectly fit the few constraints we have. In our example, a satisfactory result is achieved by using the round function, as shown in the code below.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Integerisation by simply using round</span>
@@ -364,19 +367,19 @@ resRound &lt;-<span class="st"> </span><span class="kw">round</span>(res)
 resTruncate &lt;-<span class="st"> </span><span class="kw">floor</span>(res) <span class="co"># take the minimum integer value</span>
 
 <span class="co"># Zero error achieved by rounding for global constraint</span>
-<span class="kw">apply</span>(resRound, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), sum) <span class="op">-</span><span class="st"> </span>global_cons</code></pre></div>
+<span class="kw">apply</span>(resRound, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), sum) -<span class="st"> </span>global_cons</code></pre></div>
 <pre><code>##       f m
 ## a0_49 0 0
 ## a50+  0 0</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Zero error achieved by rounding for local constraint</span>
-<span class="kw">apply</span>(resRound,<span class="kw">c</span>(<span class="dv">1</span>),sum) <span class="op">-</span><span class="st"> </span>local_cons</code></pre></div>
+<span class="kw">apply</span>(resRound,<span class="kw">c</span>(<span class="dv">1</span>),sum) -<span class="st"> </span>local_cons</code></pre></div>
 <pre><code>## 1 2 3 
 ## 0 0 0</code></pre>
 <p>It is due to luck (and the small size of the SimpleWorld example) that the <code>round</code> method works in this case: in most cases there will be errors due to rounding. If a zone had 4 individuals and three categories, for example, the resulting weights could be <span class="math inline">\((\frac{4}{3},\frac{4}{3},\frac{4}{3})\)</span>. Then, the rounding gives <span class="math inline">\((1,1,1)\)</span> and there would be too few individuals in the synthetic population (3 not 4). We can try the algorithms proposed in (<a href="smsimr.html#sintegerisation"></a>). However, as illustrated by the following code chunks, these integerisation methods lead to errors in relation to the constraints.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Integerisation with pp</span>
 res_pp &lt;-<span class="st"> </span><span class="kw">int_pp</span>(res)
 
-<span class="kw">apply</span>(res_pp, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), sum) <span class="op">-</span><span class="st"> </span>global_cons</code></pre></div>
+<span class="kw">apply</span>(res_pp, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), sum) -<span class="st"> </span>global_cons</code></pre></div>
 <pre><code>##        
 ##          f  m
 ##   a0_49  0  3
@@ -385,11 +388,11 @@ res_pp &lt;-<span class="st"> </span><span class="kw">int_pp</span>(res)
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Integerisation with trs</span>
 <span class="kw">set.seed</span>(<span class="dv">17</span>)
 res_trs &lt;-<span class="st"> </span>res_pp &lt;-<span class="st"> </span><span class="kw">array</span>(<span class="dt">dim =</span> <span class="kw">dim</span>(res))
-<span class="co"># Apply trs (see R/functions.R to see how int_trs works)</span>
+<span class="co"># Apply trs (see code/functions.R to see how int_trs works)</span>
 res_trs[] &lt;-<span class="st"> </span><span class="kw">int_trs</span>(res)
 
 <span class="co"># Print the errors</span>
-<span class="kw">apply</span>(res_trs, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), sum) <span class="op">-</span><span class="st"> </span>global_cons</code></pre></div>
+<span class="kw">apply</span>(res_trs, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">3</span>), sum) -<span class="st"> </span>global_cons</code></pre></div>
 <pre><code>##        
 ##          f  m
 ##   a0_49  0 -1
@@ -399,7 +402,7 @@ res_trs[] &lt;-<span class="st"> </span><span class="kw">int_trs</span>(res)
 resTruncate &lt;-<span class="st"> </span><span class="kw">floor</span>(res)
 
 <span class="co"># number of missing individuals</span>
-<span class="kw">sum</span>(total_pop) <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(resTruncate)</code></pre></div>
+<span class="kw">sum</span>(total_pop) -<span class="st"> </span><span class="kw">sum</span>(resTruncate)</code></pre></div>
 <pre><code>## [1] 4</code></pre>
 <p>This means that, in total, 4 individuals are missing after we have truncated. We will have to chose which categories will be incremented. For this, the basic TRS take the decimal parts of the weights (that were forgotten when truncate) and make a random draw inside this distribution. This is in this step that we can add an error in terms of the constraints. To make a better fit after integerisation, we need to observe in which category and in which zone we have to add individuals.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the total simulated cross-table</span>
@@ -408,7 +411,7 @@ SimTotTruncate &lt;-<span class="st"> </span><span class="kw">apply</span>(resTr
 
 <span class="co"># Number of missing individuals per category</span>
 <span class="co"># After truncate</span>
-ToAdd &lt;-<span class="st"> </span>global_cons <span class="op">-</span><span class="st"> </span>SimTotTruncate
+ToAdd &lt;-<span class="st"> </span>global_cons -<span class="st"> </span>SimTotTruncate
 ToAdd</code></pre></div>
 <pre><code>##        
 ##         f m
@@ -416,32 +419,32 @@ ToAdd</code></pre></div>
 ##   a50+  1 1</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Number of missing individuals per zone</span>
 <span class="co"># After truncate</span>
-ToComplete &lt;-<span class="st"> </span>local_cons <span class="op">-</span><span class="st"> </span><span class="kw">apply</span>(resTruncate,<span class="kw">c</span>(<span class="dv">1</span>),sum)
+ToComplete &lt;-<span class="st"> </span>local_cons -<span class="st"> </span><span class="kw">apply</span>(resTruncate,<span class="kw">c</span>(<span class="dv">1</span>),sum)
 ToComplete</code></pre></div>
 <pre><code>## 1 2 3 
 ## 1 2 1</code></pre>
 <p>We observe that the individuals to add are one per category of age and sex. In terms of zones, one individual is missing in zone one and three, whereas two persons will have to be added in zone 2.</p>
 <p>The principle now is to add people in the not completed zones and categories. The cells to be incremented are always chosen as the one with the bigger decimal parts (whereas in TRS, these decimals act as probabilities). Note that we chose to adapt the <code>resTruncate</code> instead of defining another tabular.</p>
 <p>The code works as followed: As long as there are missing individuals in the matrix, we look at next biggest decimal and add an individual in the corresponding cell if someone is missing in this category and in this zone.</p>
-
+<p></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate the decimals left by truncate</span>
-decimals &lt;-<span class="st"> </span>res <span class="op">-</span><span class="st"> </span>resTruncate
+decimals &lt;-<span class="st"> </span>res -<span class="st"> </span>resTruncate
 
 <span class="co"># Adapting resTruncate to fit all constraints</span>
-<span class="cf">while</span> (<span class="kw">sum</span>(total_pop) <span class="op">-</span><span class="st"> </span><span class="kw">sum</span>(resTruncate) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){
+while (<span class="kw">sum</span>(total_pop) -<span class="st"> </span><span class="kw">sum</span>(resTruncate) &gt;<span class="st"> </span><span class="dv">0</span>){
   <span class="co"># find the biggest decimals</span>
-  i &lt;-<span class="st"> </span><span class="kw">which</span>( decimals <span class="op">==</span><span class="st"> </span><span class="kw">max</span>(decimals), <span class="dt">arr.ind =</span> <span class="ot">TRUE</span>)
+  i &lt;-<span class="st"> </span><span class="kw">which</span>( decimals ==<span class="st"> </span><span class="kw">max</span>(decimals), <span class="dt">arr.ind =</span> <span class="ot">TRUE</span>)
 
   <span class="co"># remember we already considered this cell</span>
   decimals[i] &lt;-<span class="st"> </span><span class="dv">0</span>
 
   <span class="co"># if this zone still miss individuals</span>
-  <span class="cf">if</span> (ToComplete[i[<span class="dv">1</span>]] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){
+  if (ToComplete[i[<span class="dv">1</span>]] &gt;<span class="st"> </span><span class="dv">0</span>){
     <span class="co"># if this category still miss individuals</span>
-    <span class="cf">if</span> (ToAdd[i[<span class="dv">2</span>],i[<span class="dv">3</span>]] <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>){
-      resTruncate[i] &lt;-<span class="st"> </span>resTruncate[i] <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
-      ToComplete[i[<span class="dv">1</span>]] &lt;-<span class="st"> </span>ToComplete[i[<span class="dv">1</span>]] <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
-      ToAdd[i[<span class="dv">2</span>],i[<span class="dv">3</span>]] &lt;-<span class="st"> </span>ToAdd[i[<span class="dv">2</span>],i[<span class="dv">3</span>]] <span class="op">-</span><span class="st"> </span><span class="dv">1</span>
+    if (ToAdd[i[<span class="dv">2</span>],i[<span class="dv">3</span>]] &gt;<span class="st"> </span><span class="dv">0</span>){
+      resTruncate[i] &lt;-<span class="st"> </span>resTruncate[i] +<span class="st"> </span><span class="dv">1</span>
+      ToComplete[i[<span class="dv">1</span>]] &lt;-<span class="st"> </span>ToComplete[i[<span class="dv">1</span>]] -<span class="st"> </span><span class="dv">1</span>
+      ToAdd[i[<span class="dv">2</span>],i[<span class="dv">3</span>]] &lt;-<span class="st"> </span>ToAdd[i[<span class="dv">2</span>],i[<span class="dv">3</span>]] -<span class="st"> </span><span class="dv">1</span>
     }
   }
 }</code></pre></div>
@@ -449,7 +452,7 @@ decimals &lt;-<span class="st"> </span>res <span class="op">-</span><span class=
 <p>After the integerisation, the last step to get the final individual dataset is the expansion. This stage is intuitive, since we have now a table containing the number of individuals in each category. Thus, we simply need to replicate the combination of categories the right number of times.</p>
 <p>We can first flatten the 3–dimensional matrix. Then, the final individual micro dataset <code>ind_data</code> is created.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">countData &lt;-<span class="st"> </span><span class="kw">as.data.frame.table</span>(resTruncate)
-indices &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(countData), countData<span class="op">$</span>Freq)
+indices &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>:<span class="kw">nrow</span>(countData), countData$Freq)
 ind_data &lt;-<span class="st"> </span>countData[indices,]</code></pre></div>
 </div>
 <div id="twoLevelData" class="section level2">
@@ -484,7 +487,7 @@ ind_data &lt;-<span class="st"> </span>countData[indices,]</code></pre></div>
 
 </div>
 </div>
-<h3> Bibliography</h3>
+<h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-Bierlaire">
 <p>M., Bierlaire. 1991. “Evaluation de la demande en trafic : quelques méthodes de distribution.” <em>Annales de La Société Scientifique de Bruxelles</em> 105. University of Namur: 17–66.</p>
@@ -550,11 +553,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

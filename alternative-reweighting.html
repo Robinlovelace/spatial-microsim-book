@@ -6,26 +6,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
-  <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
-  
-  
+  <meta property="og:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
+  <meta property="og:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
   <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Spatial Microsimulation with R" />
-  
-  
-  
+  <meta name="twitter:site" content="@robinlovelace" />
+  <meta name="twitter:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
+  <meta name="twitter:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
 
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -322,10 +325,10 @@ age =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">
 sex =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/SimpleWorld/sex.csv&quot;</span>)
 ind =<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;data/SimpleWorld/ind-full.csv&quot;</span>)
 <span class="co"># Make categories for age</span>
-ind<span class="op">$</span>age &lt;-<span class="st"> </span><span class="kw">cut</span>(ind<span class="op">$</span>age, <span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">49</span>, <span class="ot">Inf</span>),
+ind$age &lt;-<span class="st"> </span><span class="kw">cut</span>(ind$age, <span class="dt">breaks=</span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">49</span>, <span class="ot">Inf</span>),
                <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;a0.49&quot;</span>, <span class="st">&quot;a.50.&quot;</span>))
 <span class="co"># Add initial weights to survey</span>
-ind<span class="op">$</span>w &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="dt">mode =</span> <span class="st">&quot;numeric&quot;</span>, <span class="dt">length=</span><span class="kw">dim</span>(ind)[<span class="dv">1</span>]) <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+ind$w &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="dt">mode =</span> <span class="st">&quot;numeric&quot;</span>, <span class="dt">length=</span><span class="kw">dim</span>(ind)[<span class="dv">1</span>]) +<span class="st"> </span><span class="dv">1</span>
 
 <span class="co"># prepare simulation data using GREGWT::prepareData</span>
 data_in &lt;-<span class="st"> </span><span class="kw">prepareData</span>(<span class="kw">cbind</span>(age, sex),
@@ -338,13 +341,13 @@ Result &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span
 <p>The code presented above loads the SimpleWorld data and creates a new data.frame with this data. Version 1.4 of the R library requires the data to be in binary form. The require input for the R function is <code>X</code> representing the individual level survey, <code>dx</code> representing the initial weights of the survey and <code>Tx</code> representing the small area benchmarks.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Warning: test code</span>
 <span class="co"># loop through simlaton areas</span>
-<span class="cf">for</span>(area <span class="cf">in</span> <span class="kw">seq</span>(<span class="kw">dim</span>(age)[<span class="dv">1</span>])){
+for(area in <span class="kw">seq</span>(<span class="kw">dim</span>(age)[<span class="dv">1</span>])){
     gregwt =<span class="st"> </span><span class="kw">GREGWT</span>(<span class="dt">data_in =</span> data_in, <span class="dt">area_code =</span> area)
-    fw &lt;-<span class="st"> </span>gregwt<span class="op">$</span>final_weights
+    fw &lt;-<span class="st"> </span>gregwt$final_weights
     fweights &lt;-<span class="st"> </span><span class="kw">c</span>(fweights, fw)
     ## Estimate income
-    sum.income &lt;-<span class="st"> </span><span class="kw">sum</span>(fw <span class="op">*</span><span class="st"> </span>ind<span class="op">$</span>income)
-    cap.income &lt;-<span class="st"> </span><span class="kw">sum</span>(fw <span class="op">*</span><span class="st"> </span>ind<span class="op">$</span>income <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(fw))
+    sum.income &lt;-<span class="st"> </span><span class="kw">sum</span>(fw *<span class="st"> </span>ind$income)
+    cap.income &lt;-<span class="st"> </span><span class="kw">sum</span>(fw *<span class="st"> </span>ind$income /<span class="st"> </span><span class="kw">sum</span>(fw))
     Result[area,] &lt;-<span class="st"> </span><span class="kw">c</span>(area, sum.income, cap.income)
 }</code></pre></div>
 <p>In the last step we transform the vector into a matrix and see the results from the reweighing process.</p>
@@ -401,13 +404,17 @@ Figure 6.1: Relationship between number of iterations and goodness-of-fit betwee
 </p>
 </div>
 <p>Figure 6.1 shows that all algorithms improve fit during the first iteration. The reason for using IPF becomes clear after only one iteration. On the other end of the spectrum is R’s default optimization algorithm, the Nelder-Mead method, which requires many more iterations to converge to a value approximating zero than does IPF.<a href="#fn22" class="footnoteRef" id="fnref22"><sup>22</sup></a> Next best in terms of iterations is <code>GenSA</code>, the Generalized Simulated Annealing Function from the <strong>GenSA</strong> package. <code>GenSA</code> attained a near-perfect fit after only two full iterations.</p>
-
+<p></p>
 <p>The remaining algorithms shown are, like Nelder-Mead, available from within R’s default optimisation function <code>optim</code>. The implementations with <code>method =</code> set to <code>&quot;BFGS&quot;</code> (short for the Broyden–Fletcher–Goldfarb–Shanno algorithm), <code>&quot;CG&quot;</code> (‘conjugate gradients’) performed roughly the same, steadily approaching zero error and fitting to <code>&quot;IPF&quot;</code> and <code>&quot;GenSA&quot;</code> after 10 iterations. Finally, the <code>SANN</code> method (a variant of a Simulated ANNealing), also available in <code>optim</code>, performed most erratically of the methods tested. This is another implementation of simulated annealing which demonstrates that optimisation functions that depend on random numbers do not always lead to improved fit from one iteration to the next. If we look until 200 iterations, the fit will continue to oscillate and not be improved at all.</p>
-<p>The code used to test these alternative methods for reweighting are provided in the script ‘R/optim-tests-SimpleWorld.R’. The results should be reproducible on any computer, provided the book’s supplementary materials have been downloaded. There are many other optimisation algorithms available in R through a wide range of packages and new and improved functions are being made available all the time. Enthusiastic readers are encouraged to experiment with the methods presented here: it is possible that an algorithm exists which outperforms all of those tested for this book. Also, it should be noted that the algorithms were tested on the extremely simple and rather contrived example dataset of SimpleWorld. Some algorithms may perform better with larger datasets than others and may be sensitive to changes to the initial conditions such as the problem of ‘empty cells’.</p>
-<p>Therefore these results, as with any modelling exercise, should be interpreted with a healthy dose of skepticism: just because an algorithm converges after few ‘iterations’ this does not mean it is inherently faster or more useful than another. The results are context specific, so it is recommended that the tested framework in ‘R/optim-tests-SimpleWorld.R’ is used as a basis for further tests on algorithm performance on the datasets you are using. IPF has performed well in the situations I have tested it in (especially via the <code>ipfp</code> function, which performs disproportionately faster than the pure R implementation on large datasets) but this does not mean that it is always the best approach.</p>
+<p>The code used to test these alternative methods for reweighting are provided in the script ‘code/optim-tests-SimpleWorld.R’. The results should be reproducible on any computer, provided the book’s supplementary materials have been downloaded. There are many other optimisation algorithms available in R through a wide range of packages and new and improved functions are being made available all the time. Enthusiastic readers are encouraged to experiment with the methods presented here: it is possible that an algorithm exists which outperforms all of those tested for this book. Also, it should be noted that the algorithms were tested on the extremely simple and rather contrived example dataset of SimpleWorld. Some algorithms may perform better with larger datasets than others and may be sensitive to changes to the initial conditions such as the problem of ‘empty cells’.</p>
+<p>Therefore these results, as with any modelling exercise, should be interpreted with a healthy dose of skepticism: just because an algorithm converges after few ‘iterations’ this does not mean it is inherently faster or more useful than another. The results are context specific, so it is recommended that the tested framework in ‘code/optim-tests-SimpleWorld.R’ is used as a basis for further tests on algorithm performance on the datasets you are using. IPF has performed well in the situations I have tested it in (especially via the <code>ipfp</code> function, which performs disproportionately faster than the pure R implementation on large datasets) but this does not mean that it is always the best approach.</p>
 <p>To overcome the caveat that the meaning of an ‘iteration’ changes dramatically from one algorithm to the next, further tests measured the time taken for each reweighting algorithm to run. To have a readable graph, we do not represent the error as a function of the time, but the time per algorithm in function of the number of iterations (Figure 6.2). This figure demonstrates that an iteration of GenSA take a long time in comparison with the other algorithm. Moreover, <code>&quot;BFGS&quot;</code> and <code>&quot;CG&quot;</code> are still following a similar curve under GenSA. Nelder-Mead, SANN and IPF contains iterations that take less time. By observing Figures 6.1 and 6.2 simultaneously , it appears that IPF is the best in terms of convergence (little TAE after few iterations) and the time needed for few iterations is good.</p>
-
-
+\begin{figure}
+\includegraphics{figures/TimeOptim_GenSA_Mo.pdf}
+\caption{Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
+\label{TimeOptim_GenSA}
+\end{figure}
+<p></p>
 <p>Nelder-Mead is fast at reaching a good approximation of the constraint data, despite taking many iterations. <code>GenSA</code>, on the other hand, is shown to be much slower than the others, despite only requiring 2 iterations to arrive at a good level of fit.</p>
 <p>Note that these results are biased by the example that is pretty small and runs only for the first zone.</p>
 </div>
@@ -422,7 +429,7 @@ m &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">
 <span class="kw">set.seed</span>(<span class="dv">2014</span>)
 <span class="kw">genoud</span>(<span class="kw">nrow</span>(ind), <span class="dt">fn =</span> fun, <span class="dt">ind_num =</span> ind, <span class="dt">con =</span> cons[<span class="dv">1</span>,],
   <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">maxit =</span> <span class="dv">1000</span>), <span class="dt">data.type.int =</span> <span class="ot">TRUE</span>, <span class="dt">D =</span> m)</code></pre></div>
-<p>This command, implemented in the file ‘R/optim-tests-SimpleWorld.R’, results in weights for the unique individuals 1 to 4 of 1, 4, 2 and 4 respectively. This means a final population with aggregated data equal to the target (as seen in the previous section):</p>
+<p>This command, implemented in the file ‘code/optim-tests-SimpleWorld.R’, results in weights for the unique individuals 1 to 4 of 1, 4, 2 and 4 respectively. This means a final population with aggregated data equal to the target (as seen in the previous section):</p>
 <pre><code>## ind$agea0_49  ind$agea50+     ind$sexm     ind$sexf 
 ##            8            4            6            6</code></pre>
 <p>Note that we performed the test only for zone 1 and the aggregated results are correct for the first constraint. Moreover, thanks to the fact that the algorithm only considers integer weights, we do not have the issue of fractional weights associated with IPF. Combinatorial optimisation algorithms for population synthesis do not rely on integerisation, which can damage model fit. The fact that the gradient contains “NA”<a href="#fn23" class="footnoteRef" id="fnref23"><sup>23</sup></a> in the end of the algorithm is not a problem, because it just means that this cell has not been calculated.</p>
@@ -441,7 +448,7 @@ m &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">
 
 <span class="co"># Load individual level data</span>
 <span class="kw">data</span>(<span class="st">&quot;eusilcS&quot;</span>)
-<span class="kw">head</span>(eusilcS)[<span class="dv">2</span><span class="op">:</span><span class="dv">8</span>]</code></pre></div>
+<span class="kw">head</span>(eusilcS)[<span class="dv">2</span>:<span class="dv">8</span>]</code></pre></div>
 <pre><code>##      hsize         db040 age  rb090 pl030 pb220a netIncome
 ## 9292     2      Salzburg  72   male     5     AT  22675.48
 ## 9293     2      Salzburg  66 female     5     AT  16999.29
@@ -450,10 +457,10 @@ m &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">
 ## 7866     3 Upper Austria  70 female     5     AT  14365.57
 ## 7867     3 Upper Austria  46   male     3     AT      0.00</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Compute contingency coefficient between two variables</span>
-<span class="kw">contingencyWt</span>(eusilcS<span class="op">$</span>pl030, eusilcS<span class="op">$</span>pb220a,
-  <span class="dt">weights =</span> eusilcS<span class="op">$</span>rb050)</code></pre></div>
+<span class="kw">contingencyWt</span>(eusilcS$pl030, eusilcS$pb220a,
+  <span class="dt">weights =</span> eusilcS$rb050)</code></pre></div>
 <pre><code>## [1] 0.1749834</code></pre>
-
+<p></p>
 <p>The above code shows the first 8 (of 18) variables in the <code>eusilcS</code> dataset provided by <strong>simPop</strong> and an example of one of <strong>simPop</strong>’s functions. This function is useful, as it calculates the level of association between two categorical variables: economic status (<code>pl030</code>) and citizenship status (<code>pb220a</code>). The result of 0.175 shows that there is a weak association between the two variables. <strong>simPop</strong> is a new package so we have not covered it in detail. However, it is worth considering for its provision of example datasets alone.</p>
 <p>Note that this package provides several alternative methods for population synthesis, including “model-based methods, calibration and combinatorial optimization algorithms” <span class="citation">(Meindl et al. <a href="#ref-simPop">2015</a>)</span>.</p>
 </div>
@@ -468,7 +475,7 @@ m &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">
 
 </div>
 </div>
-<h3> Bibliography</h3>
+<h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-Rahman2009">
 <p>Rahman, Azizurr. 2009. “Small Area Estimation Through Spatial Microsimulation Models.” In <em>2nd International Microsimulation Association Conference</em>. Ottawa; Canada.</p>
@@ -538,11 +545,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

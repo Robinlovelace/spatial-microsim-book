@@ -6,26 +6,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
-  <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
-  
-  
+  <meta property="og:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
+  <meta property="og:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
   <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Spatial Microsimulation with R" />
-  
-  
-  
+  <meta name="twitter:site" content="@robinlovelace" />
+  <meta name="twitter:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
+  <meta name="twitter:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
 
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -316,7 +319,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="abm-software" class="section level2">
 <h2><span class="header-section-number">12.2</span> ABM software</h2>
 <p>A wide range of software is available for ABM. Of these, <strong>NetLogo</strong> is one of the most widely used for model prototyping, development and communication <span class="citation">(Thiele, Kurth, and Grimm <a href="#ref-Thiele2012">2012</a>)</span>. Alternative open source options include <strong>Repast</strong> and <strong>MASON</strong>. Both are written in Java, although Repast also includes optional graphical development and some higher-level language support. Due to its excellent documentation, ease of learning and integration with R, NetLogo is the tool of choice in this book and should be sufficiently powerful for many applications.</p>
-
+<p></p>
 <p><a href="https://ccl.northwestern.edu/netlogo/">NetLogo</a> is a mature and widely used tool-kit for agent-based models. It is written in Java, but uses a derivation of the Logo language to develop models. The recently published <strong>RNetLogo</strong> package provides an interface between R and NetLogo, allowing for model runs to be set up and run directly from within R (Theile 2014). This allows the outputs of agent based models to be loaded directly into your R environment. Using R to run a separate programme may seem overly complicated for very simple models. For setting up and testing your model we recommend using NetLogo, with its intuitive graphical interface. However, there are many advantages of using NetLogo from within R, the foremost being R’s analysis capabilities: “It is much more time consuming and complicated to analyse ABMs than to formulate and implement them” (Theile et al. 2012).</p>
 <p>ABMs commonly represent unpredictable behaviour through probabilistic agent rules. This means that two model runs are unlikely to lead to identical results. Therefore we generally want to study many model runs before drawing conclusions about how the overall system operates, let alone real world implications. Much of the time taken for agent based modelling is consumed on this sensitivity/parameter space analysis. Although NetLogo has some inbuilt tools (e.g. the Behaviour Space) that support the running of large numbers of experiments, the capabilities for subsequent analysis are limited. R provides a much more comprehensive suite of data analysis tools, making the integration of R and NetLogo an obvious choice.</p>
 </div>
@@ -507,46 +510,42 @@ end</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th>global variable name</th>
-<th>minimum</th>
-<th>increment</th>
-<th>maximum</th>
-<th>value</th>
-<th>meaning</th>
+<th align="left">global variable name</th>
+<th align="left">minimum</th>
+<th align="left">increment</th>
+<th align="left">maximum</th>
+<th align="left">value</th>
+<th align="left">meaning</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td><code>angle-of-vision</code></td>
-<td>0</td>
-<td>10</td>
-<td>360</td>
-<td>100</td>
-<td></td>
+<td align="left"><code>angle-of-vision</code></td>
+<td align="left">0</td>
+<td align="left">10</td>
+<td align="left">360</td>
+<td align="left">100</td>
 </tr>
 <tr class="even">
-<td><code>distance-of-vision</code></td>
-<td>0</td>
-<td>1</td>
-<td>10</td>
-<td>4</td>
-<td></td>
+<td align="left"><code>distance-of-vision</code></td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">10</td>
+<td align="left">4</td>
 </tr>
 <tr class="odd">
-<td><code>average-bribeability</code></td>
-<td>0</td>
-<td>1</td>
-<td>100</td>
-<td>100</td>
-<td></td>
+<td align="left"><code>average-bribeability</code></td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">100</td>
+<td align="left">100</td>
 </tr>
 <tr class="even">
-<td><code>stdev-bribeability</code></td>
-<td>0</td>
-<td>1</td>
-<td>20</td>
-<td>0</td>
-<td></td>
+<td align="left"><code>stdev-bribeability</code></td>
+<td align="left">0</td>
+<td align="left">1</td>
+<td align="left">20</td>
+<td align="left">0</td>
 </tr>
 </tbody>
 </table>
@@ -803,7 +802,7 @@ mdir &lt;-<span class="st"> &quot;C:/Users/mz/NetLogo/SimpleWorldVersion2.nlogo&
 [...main code here ...]
 
 <span class="kw">NLQuit</span>()</code></pre></div>
-
+<p></p>
 <p>In the above code <code>NLStart</code> initiates an instance of NetLogo (in this case in headless mode, since the <code>gui</code> argument is set to <code>FALSE</code> — try with <code>gui = TRUE</code>) and <code>NLLoadModel</code> loads the model. Make sure you have the correct paths to the folders where you have installed NetLogo and where the model is saved. Some example directories are commented out for Linux users. The main commands we will want to run in the main code are <code>NLCommand()</code> which simply sends a command for NetLogo to execute, and <code>NLReport()</code>, which also returns a reporter (value). The commands work the same way as if we were entering them in the command center. This also means that the command <code>go</code> is only executed once i.e. not forever as it can be using the GUI button. For example, now that we have opened the model, we can run the following code from R:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">NLCommand</span>(<span class="st">&quot;setup&quot;</span>)
 <span class="kw">NLReport</span>(<span class="st">&quot;ticks&quot;</span>)
@@ -835,7 +834,7 @@ test <span class="co"># show the resulting data frame</span>
 <p>Finally we can also extract the current variable values from an agentset. For example the incomes and current zones of all inhabitants, which we can then visualize using a simple boxplot (Figure 12.8):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">current.state &lt;-<span class="st"> </span><span class="kw">NLGetAgentSet</span>(<span class="kw">c</span>(<span class="st">&quot;who&quot;</span>,<span class="st">&quot;income&quot;</span>, <span class="st">&quot;zone&quot;</span>), 
                                <span class="st">&quot;inhabitants&quot;</span>)
-<span class="kw">boxplot</span>(current.state<span class="op">$</span>income <span class="op">~</span><span class="st"> </span>current.state<span class="op">$</span>zone,
+<span class="kw">boxplot</span>(current.state$income ~<span class="st"> </span>current.state$zone,
   <span class="dt">xlab=</span><span class="st">&quot;Zone&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Income&quot;</span>,
   <span class="dt">main=</span><span class="kw">paste</span>(<span class="st">&quot;Income distribution after&quot;</span>,
     <span class="kw">NLReport</span>(<span class="st">&quot;ticks&quot;</span>), <span class="st">&quot;ticks&quot;</span> ))</code></pre></div>
@@ -854,7 +853,7 @@ Figure 12.8: NetLogo data plotted in R
 <p>We now have all the ingredients to run our model from R, and probably do not need to observe the running model in the graphical interface any more. RNetLogo allows us to run the NetLogo silently in the background (in so called <em>headless mode</em>), which runs quite a bit faster than using the GUI. We can also wrap all our NetLogo commands in an R function and make further simulation more modular.</p>
 <p>We will set up a single simulation where we open NetLogo silently, load the model, run the simulation until one zone wins or there is a definite tie, and then collect the <code>history</code> of all inhabitants at the end. There is one thing we need to keep in mind running the simulation from R though: we are repeatedly calling a <em>single</em> <code>go</code> procedure. This means we can still continue to call <code>go</code> even if the stopping conditions in the procedure have been met, it simply means the call does nothing. Because there is no warning (or error - nothing went wrong) we have no way of knowing from R that we are continuing to call <code>go</code> which is not doing anything - unless we check the tick counter every time and make sure it has advanced by one.</p>
 <p>To run the simulation in R as we had designed it in NetLogo we simply use the same stopping conditions we used in the <code>go</code> procedure. In fact, if you plan to only run your model from R it is a good idea to delete the stopping conditions from the NetLogo code completely and make sure you always define them in the call from R. That way you can avoid setting stopping conditions in R that are less strict than the ones in the model, which would again mean R calling a <code>go</code> procedure that is not doing anything. And be careful: in NetLogo they were <em>stopping conditions</em>, but in <code>NLDoCommandWhile</code> they are exactly the inverse, so make sure you rewrite them appropriately!</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SimpleWorld &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">time.stable =</span> <span class="dv">100</span>) {
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SimpleWorld &lt;-<span class="st"> </span>function(<span class="dt">time.stable =</span> <span class="dv">100</span>) {
   <span class="kw">NLCommand</span>(<span class="st">&quot;setup&quot;</span>)
   <span class="kw">NLDoCommandWhile</span>(<span class="kw">paste</span>(
     <span class="st">&quot;(count inhabitants with [zone = 1] &lt; 33) and&quot;</span>,
@@ -876,20 +875,20 @@ history &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<spa
   <span class="dt">ncol =</span> <span class="dv">4</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>))
 <span class="kw">colnames</span>(history) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;tick&quot;</span>,<span class="st">&quot;income&quot;</span>, <span class="st">&quot;zone&quot;</span>)
 
-changes &lt;-<span class="st"> </span><span class="kw">group_by</span>(history, id) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">mutate</span>( <span class="dt">change=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="kw">diff</span>(zone))) <span class="op">%&gt;%</span>
+changes &lt;-<span class="st"> </span><span class="kw">group_by</span>(history, id) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>( <span class="dt">change=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="kw">diff</span>(zone))) %&gt;%
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">start.income =</span> income[<span class="dv">1</span>],
             <span class="dt">end.income =</span> <span class="kw">tail</span>(income,<span class="dv">1</span>),
-            <span class="dt">income.change =</span> end.income <span class="op">-</span><span class="st"> </span>start.income,
-            <span class="dt">zone.changes =</span> <span class="kw">sum</span>(change <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>))
+            <span class="dt">income.change =</span> end.income -<span class="st"> </span>start.income,
+            <span class="dt">zone.changes =</span> <span class="kw">sum</span>(change !=<span class="st"> </span><span class="dv">0</span>))
 
 <span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>))
-<span class="kw">plot</span>(zone.changes <span class="op">~</span><span class="st"> </span>start.income , <span class="dt">data =</span> changes)
-<span class="kw">abline</span>(<span class="kw">lm</span>(zone.changes <span class="op">~</span><span class="st"> </span>start.income , <span class="dt">data=</span>changes))
-<span class="kw">plot</span>(zone.changes <span class="op">~</span><span class="st"> </span>end.income , <span class="dt">data =</span> changes)
-<span class="kw">abline</span>(<span class="kw">lm</span>(zone.changes <span class="op">~</span><span class="st"> </span>end.income , <span class="dt">data=</span>changes))
-<span class="kw">plot</span>(zone.changes <span class="op">~</span><span class="st"> </span>income.change , <span class="dt">data=</span>changes)
-<span class="kw">abline</span>(<span class="kw">lm</span>(zone.changes <span class="op">~</span><span class="st"> </span>income.change , <span class="dt">data=</span>changes))</code></pre></div>
+<span class="kw">plot</span>(zone.changes ~<span class="st"> </span>start.income , <span class="dt">data =</span> changes)
+<span class="kw">abline</span>(<span class="kw">lm</span>(zone.changes ~<span class="st"> </span>start.income , <span class="dt">data=</span>changes))
+<span class="kw">plot</span>(zone.changes ~<span class="st"> </span>end.income , <span class="dt">data =</span> changes)
+<span class="kw">abline</span>(<span class="kw">lm</span>(zone.changes ~<span class="st"> </span>end.income , <span class="dt">data=</span>changes))
+<span class="kw">plot</span>(zone.changes ~<span class="st"> </span>income.change , <span class="dt">data=</span>changes)
+<span class="kw">abline</span>(<span class="kw">lm</span>(zone.changes ~<span class="st"> </span>income.change , <span class="dt">data=</span>changes))</code></pre></div>
 <div class="figure"><span id="fig:fig9"></span>
 <img src="_main_files/figure-html/fig9-1.png" alt="Number of zone changes correlated with inhabitants' income variables" width="768" />
 <p class="caption">
@@ -902,7 +901,7 @@ Figure 12.9: Number of zone changes correlated with inhabitants’ income variab
 <h3><span class="header-section-number">12.6.2</span> Running multiple NetLogo simulations</h3>
 <p>We will focus on a simple outcome variable: the amount of model time (number of ticks) it takes for the simulation to end with clear win for one zone. For simplicity we will treat all simulations that exhibit no changes for over 200 ticks as non-convergent and ignore them. We will explore how this outcome varies depending on the parameters <code>angle-of-vision</code> and <code>distance-of-vision</code>. This is called a <em>full factorial experiment</em> and is only really practical if we have a few parameters to explore, which is why we will stick with only the two variables mentioned.</p>
 <p>First let’s rewrite the simulation function to set the appropriate variables before each run (the bribeability variables will not be changing in this simulation, but it is safer to set them explicitly as they may have been changed manually in NetLogo and we would not even notice, because we are running it without the GUI!). After the variables are set, we of course call the <code>setup</code> procedure. We can omit the conditions for running <code>go</code> by simply stopping after nothing has changed for 200 ticks, regardless of how many zones are still in play. After the simulation is finished, we collect two values: the number of ticks minus the value of time-stable, giving us the actual length of the simulation run before it stabilized, and the number of zones that were occupied at the end.<a href="#fn47" class="footnoteRef" id="fnref47"><sup>47</sup></a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SimpleWorld &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">angle.of.vision=</span><span class="dv">360</span>,
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">SimpleWorld &lt;-<span class="st"> </span>function(<span class="dt">angle.of.vision=</span><span class="dv">360</span>,
   <span class="dt">distance.of.vision=</span><span class="dv">10</span>,<span class="dt">time.stable =</span> <span class="dv">200</span>) {
   <span class="kw">NLCommand</span> (<span class="kw">paste</span>(<span class="st">&quot;set average-bribeability&quot;</span>, <span class="dv">100</span>))
   <span class="kw">NLCommand</span> (<span class="kw">paste</span>(<span class="st">&quot;set stdev-bribeability&quot;</span>, <span class="dv">0</span>))
@@ -917,10 +916,10 @@ Figure 12.9: Number of zone changes correlated with inhabitants’ income variab
 }</code></pre></div>
 <p>The next step is to create a function to run multiple simulations where <code>reps</code> determines the number of repetitions of each parameter value combination and <code>a.o.v</code> and <code>d.o.v</code> determine the value sequences of each parameter that the simulation iterates through. Within it we first create a data frame of the parameter space we intend to examine, with a single row for each simulation run. The function then iterates through this data frame, each time running the <code>SimpleWorld</code> function with the appropriate arguments and collecting these, together with the simulation results, as a data frame with a single row. At the end of all the runs, these are simply binded together into a final data frame with all the results.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">MultipleSimulations &lt;-
-<span class="st">  </span><span class="cf">function</span> (<span class="dt">reps=</span><span class="dv">1</span>, <span class="dt">a.o.v =</span> <span class="dv">360</span>, <span class="dt">d.o.v =</span> <span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">10</span>)){
+<span class="st">  </span>function (<span class="dt">reps=</span><span class="dv">1</span>, <span class="dt">a.o.v =</span> <span class="dv">360</span>, <span class="dt">d.o.v =</span> <span class="kw">c</span>(<span class="dv">5</span>,<span class="dv">10</span>)){
   p.s &lt;-<span class="st"> </span><span class="kw">expand.grid</span>(<span class="dt">rep =</span> <span class="kw">seq</span>(<span class="dv">1</span>, reps),
     <span class="dt">a.o.v =</span> a.o.v, <span class="dt">d.o.v =</span> d.o.v) 
-  result.list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">as.list</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(p.s)), <span class="cf">function</span>(i) 
+  result.list &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="kw">as.list</span>(<span class="dv">1</span>:<span class="kw">nrow</span>(p.s)), function(i) 
     <span class="kw">setNames</span>(<span class="kw">cbind</span>(p.s[i,], <span class="kw">SimpleWorld</span>(p.s[i,<span class="dv">2</span>], p.s[i,<span class="dv">3</span>])),
       <span class="kw">c</span>(<span class="st">&quot;rep&quot;</span>, <span class="st">&quot;a.o.v&quot;</span>, <span class="st">&quot;d.o.v&quot;</span>, <span class="st">&quot;ticks&quot;</span>, <span class="st">&quot;zones&quot;</span>)))
   <span class="kw">do.call</span>(rbind, result.list)
@@ -939,9 +938,9 @@ results.df <span class="co"># display the results data frame</span>
 <p>The first three columns in the <code>results.df</code> data frame are simply the simulation parameters: the number of the repetition and the angle-of-vision and distance-of-vision parameters that were passed to NetLogo. The final two columns give the number of ticks the simulation required to stabilize and the number of zones occupied at the end. Assuming we are happy with the functions, we can now try to running a more serious simulation e.g. five repetitions exploring pretty much the whole of the parameter space - this may take a while!</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">results.df &lt;-<span class="st"> </span><span class="kw">MultipleSimulations</span>(<span class="dv">5</span>,<span class="kw">seq</span>(<span class="dv">60</span>,<span class="dv">360</span>,<span class="dv">30</span>),<span class="kw">seq</span>(<span class="dv">1</span>,<span class="dv">10</span>) )</code></pre></div>
 <p>With the results safely stored in the data frame, we can summarise the data and visualise it.<a href="#fn48" class="footnoteRef" id="fnref48"><sup>48</sup></a> Using the <code>dplyr</code> package to reorganize our data we can see how the number of zones occupied at the end of the simulation differed across the parameter space.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">zones &lt;-<span class="st"> </span>results.df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(a.o.v, d.o.v, zones) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">prop.sims =</span> <span class="kw">n</span>()<span class="op">/</span>reps) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">zones &lt;-<span class="st"> </span>results.df %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(a.o.v, d.o.v, zones) %&gt;%
+<span class="st">  </span><span class="kw">summarize</span>(<span class="dt">prop.sims =</span> <span class="kw">n</span>()/reps) %&gt;%
 <span class="st">  </span><span class="kw">group_by</span>(a.o.v, d.o.v)
 
 <span class="kw">head</span>(zones) <span class="co"># show the output</span>
@@ -964,9 +963,9 @@ Figure 12.10: Number of zones occupied at end of simulation (20 repetitions)
 </p>
 </div>
 <p>If we focus on the simulations where a single winning zone emerged, we can find the average number of ticks required across the parameter space:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">av.ticks &lt;-<span class="st"> </span>results.df <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(a.o.v, d.o.v) <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">filter</span>(zones <span class="op">==</span><span class="st"> </span><span class="dv">1</span>) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">av.ticks &lt;-<span class="st"> </span>results.df %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(a.o.v, d.o.v) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(zones ==<span class="st"> </span><span class="dv">1</span>) %&gt;%
 <span class="st">  </span><span class="kw">summarize</span>(<span class="dt">mean.ticks =</span> <span class="kw">mean</span>(ticks, <span class="dt">na.rm=</span><span class="ot">TRUE</span>))
 
 <span class="kw">head</span>(av.ticks) <span class="co"># display the results</span>
@@ -995,7 +994,7 @@ Figure 12.11: Average number of ticks in simulations with single zone winning
 
 </div>
 </div>
-<h3> Bibliography</h3>
+<h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-lovelace_spatial_2016">
 <p>Lovelace, Robin, and Morgane Dumont. 2016. <em>Spatial Microsimulation with R</em>. CRC Press.</p>
@@ -1080,11 +1079,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

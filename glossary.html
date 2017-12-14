@@ -6,26 +6,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
-  <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
-  
-  
+  <meta property="og:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
+  <meta property="og:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
   <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Spatial Microsimulation with R" />
-  
-  
-  
+  <meta name="twitter:site" content="@robinlovelace" />
+  <meta name="twitter:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
+  <meta name="twitter:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
 
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -320,7 +323,7 @@ population bases.</p></li>
 </ul>
 
 </div>
-<h3> Bibliography</h3>
+<h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-Harland2013">
 <p>Harland, Kirk. 2013. “Microsimulation model user guide: flexible modelling framework.” NCRM Working Papers. Leeds: University of Leeds; NCRM. doi:<a href="https://doi.org/http://eprints.ncrm.ac.uk/3177/2/microsimulation\_model.pdf">http://eprints.ncrm.ac.uk/3177/2/microsimulation\_model.pdf</a>.</p>
@@ -377,11 +380,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

@@ -6,26 +6,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
-  <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
-  
-  
+  <meta property="og:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
+  <meta property="og:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
   <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Spatial Microsimulation with R" />
-  
-  
-  
+  <meta name="twitter:site" content="@robinlovelace" />
+  <meta name="twitter:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
+  <meta name="twitter:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
 
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -352,24 +355,24 @@ cons &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class=
 <span class="co"># Randomly select the sizes of the households and then assign </span>
 <span class="co"># the unique IDs of each household to sequential individuals </span>
 <span class="co"># in the dataset.</span>
-ind<span class="op">$</span>hhld &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>, <span class="dt">times=</span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>), <span class="dv">1000</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>)
-                )[<span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(ind)]
+ind$hhld &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span>:<span class="dv">1000</span>, <span class="dt">times=</span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">1</span>:<span class="dv">6</span>), <span class="dv">1000</span>, <span class="dt">replace=</span><span class="ot">TRUE</span>)
+                )[<span class="dv">1</span>:<span class="kw">nrow</span>(ind)]
 
 <span class="co"># Check how many households we have in our dataset:</span>
-<span class="kw">length</span>(<span class="kw">unique</span>(ind<span class="op">$</span>hhld))</code></pre></div>
+<span class="kw">length</span>(<span class="kw">unique</span>(ind$hhld))</code></pre></div>
 <pre><code>## [1] 260</code></pre>
 <p>Keep in mind that the sample() function randomly selects numbers so you will likely have a different number of households in your dataset unless you set the seed using <em>set.seed(99)</em> as above. Once we have assigned each individual to a dataset we can generate the household level data. For this example we can simply calculate some of these household variables including the number of individuals in the household, the number of workers and the age of the oldest person living in the household. Ensure you have loaded the <strong>dplyr</strong> and <strong>stringr</strong> packages and then run:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
 <span class="kw">library</span>(stringr)</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hhlds &lt;-<span class="st"> </span><span class="kw">group_by</span>(ind, hhld) <span class="op">%&gt;%</span><span class="st"> </span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">hhlds &lt;-<span class="st"> </span><span class="kw">group_by</span>(ind, hhld) %&gt;%<span class="st"> </span>
 <span class="st">  </span><span class="kw">summarise</span>(
     <span class="dt">numres =</span> <span class="kw">n</span>(),
     <span class="co"># Values of 8 and 97 mean &quot;long-term unemployed&quot; and </span>
     <span class="co"># &quot;not answered&quot; respectively</span>
-    <span class="dt">numworkers =</span> <span class="kw">length</span>(NSSEC8[NSSEC8 <span class="op">&lt;</span><span class="st"> </span><span class="dv">8</span>]),
-    <span class="dt">nummanager =</span> <span class="kw">length</span>(NSSEC8[NSSEC8 <span class="op">==</span><span class="st"> </span><span class="fl">1.1</span>]),
-    <span class="dt">numprof =</span> <span class="kw">length</span>(NSSEC8[NSSEC8 <span class="op">==</span><span class="st"> </span><span class="fl">1.2</span>]),
-    <span class="dt">numrout =</span> <span class="kw">length</span>(NSSEC8[NSSEC8 <span class="op">==</span><span class="st"> </span><span class="dv">7</span>]),
+    <span class="dt">numworkers =</span> <span class="kw">length</span>(NSSEC8[NSSEC8 &lt;<span class="st"> </span><span class="dv">8</span>]),
+    <span class="dt">nummanager =</span> <span class="kw">length</span>(NSSEC8[NSSEC8 ==<span class="st"> </span><span class="fl">1.1</span>]),
+    <span class="dt">numprof =</span> <span class="kw">length</span>(NSSEC8[NSSEC8 ==<span class="st"> </span><span class="fl">1.2</span>]),
+    <span class="dt">numrout =</span> <span class="kw">length</span>(NSSEC8[NSSEC8 ==<span class="st"> </span><span class="dv">7</span>]),
     <span class="co"># Take the midpoint of the age ranges then take the maximum</span>
     <span class="co"># for that household</span>
     <span class="dt">maxage =</span> <span class="kw">max</span>(
@@ -382,7 +385,7 @@ ind<span class="op">$</span>hhld &lt;-<span class="st"> </span><span class="kw">
     <span class="co"># Value of 1 means they have a car, 2 means they do not.</span>
     <span class="co"># Divide the number of cars by 1.5 to get a more realistic</span>
     <span class="co"># number since more than 1 person can use the same car.</span>
-    <span class="dt">numcars =</span> <span class="kw">floor</span>(<span class="kw">sum</span>((Car<span class="op">-</span><span class="dv">2</span>)<span class="op">*-</span><span class="dv">1</span>)<span class="op">/</span><span class="fl">1.5</span>)
+    <span class="dt">numcars =</span> <span class="kw">floor</span>(<span class="kw">sum</span>((Car<span class="dv">-2</span>)*-<span class="dv">1</span>)/<span class="fl">1.5</span>)
   )
 
 hhlds[,<span class="kw">c</span>(<span class="st">&quot;hhld&quot;</span>,<span class="st">&quot;numres&quot;</span>,<span class="st">&quot;numworkers&quot;</span>,<span class="st">&quot;nummanager&quot;</span>,
@@ -414,7 +417,7 @@ hhlds[,<span class="kw">c</span>(<span class="st">&quot;hhld&quot;</span>,<span 
 <span class="kw">prop.table</span>(<span class="kw">c</span>(<span class="dt">Professionals=</span>totcons[<span class="st">&#39;X1.2&#39;</span>], 
              <span class="dt">OtherOcc=</span><span class="kw">sum</span>(
                totcons[<span class="kw">c</span>(<span class="kw">match</span>(<span class="st">&#39;X1.1&#39;</span>, <span class="kw">names</span>(totcons)), 
-                         <span class="kw">match</span>(<span class="st">&#39;X2&#39;</span>, <span class="kw">names</span>(totcons))<span class="op">:</span><span class="kw">match</span>(
+                         <span class="kw">match</span>(<span class="st">&#39;X2&#39;</span>, <span class="kw">names</span>(totcons)):<span class="kw">match</span>(
                            <span class="st">&#39;Other&#39;</span>, <span class="kw">names</span>(totcons)
                            )
                          )])))</code></pre></div>
@@ -427,7 +430,7 @@ hhlds[,<span class="kw">c</span>(<span class="st">&quot;hhld&quot;</span>,<span 
              <span class="dt">OtherOcc=</span><span class="kw">sum</span>(
                totcons[<span class="kw">c</span>(
                  <span class="kw">match</span>(<span class="st">&#39;X1.1&#39;</span>, <span class="kw">names</span>(totcons)), 
-                 <span class="kw">match</span>(<span class="st">&#39;X2&#39;</span>, <span class="kw">names</span>(totcons))<span class="op">:</span><span class="kw">match</span>(
+                 <span class="kw">match</span>(<span class="st">&#39;X2&#39;</span>, <span class="kw">names</span>(totcons)):<span class="kw">match</span>(
                    <span class="st">&#39;Other&#39;</span>, <span class="kw">names</span>(totcons)
                    )
                )])))
@@ -440,26 +443,26 @@ popdistprop</code></pre></div>
 ## NoCar        0.0178 0.281</code></pre>
 <p>This code uses the <em>tcrossprod()</em> function to take the two pairs of proportions we used earlier and multiplies all values in the first matrix by each value in the second. In this case this results in a 2x2 matrix that shows the distribution for the combination of the two variables. Keep in mind that this would not need to be a square matrix if the variables used have more than two values. From this we can calculate the actual number of households in each combination. Since the CakeMap dataset includes only the number of people rather than the number of households, we will need to make the assumption that each household has a certain number of people. If we assume that each household has an average of three people living there then we would use the code below to calculate the total number of households in each group in the population as a whole. Note that if you have the actual number of households in each group, this should be used instead.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">popdisttot &lt;-<span class="st"> </span><span class="kw">round</span>(
-    popdistprop<span class="op">*</span>(totcons[<span class="st">&#39;Car&#39;</span>]<span class="op">+</span>totcons[<span class="st">&#39;NoCar&#39;</span>])<span class="op">/</span><span class="dv">3</span>
+    popdistprop*(totcons[<span class="st">&#39;Car&#39;</span>]+totcons[<span class="st">&#39;NoCar&#39;</span>])/<span class="dv">3</span>
   )
 popdisttot</code></pre></div>
 <pre><code>##       Professionals  Other
 ## Car           22577 356923
 ## NoCar          9624 152143</code></pre>
 <p>If we choose to generate 100 synthetic households, we simply need to multiply the matrix by 100 and then round to see how many households we need to sample from each of the for combinations of variables:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">popdist &lt;-<span class="st"> </span><span class="kw">round</span>(popdistprop<span class="op">*</span><span class="dv">100</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">popdist &lt;-<span class="st"> </span><span class="kw">round</span>(popdistprop*<span class="dv">100</span>)
 popdist</code></pre></div>
 <pre><code>##       Professionals Other
 ## Car               4    66
 ## NoCar             2    28</code></pre>
 <p>In this case, each group has at least one household in the sample. However, when more variables are used (or variables with more values), it is common for several groups to be too small to have a sufficient proportion in the population to be represented in the synthetic households (particularly with only 100 households). When this occurs, these small groups are combined into a single larger group such that together they are represented by at least one household.</p>
 <p>The last step before we sample the synthetic households is to generate the weights. Similar to other other methods of population synthesis discussed earlier in this book, the weights tell us how many real households each of our synthetic households represent in the population. This is calculated by simply dividing the total number of households in each group by the number in our set of synthetic households:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">popweights &lt;-<span class="st"> </span>popdisttot<span class="op">/</span>popdist</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">popweights &lt;-<span class="st"> </span>popdisttot/popdist</code></pre></div>
 <p>You may choose to round the weights to ensure that each synthetic household represents only whole households but this is not absolutely necessary.</p>
 <p>We can now sample the households with which to generate the synthetic households. Although it is possible to automate this process provided the variable names are mapped to each other, we will do this manually to illustrate the process. Taking the first group (professionals with a car) we can select the required number of households by using the following code:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">synhhlds &lt;-<span class="st"> </span><span class="kw">sample</span>(
   <span class="kw">filter</span>(
-    hhlds,numprof <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>, numcars <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>)<span class="op">$</span>hhld, 
+    hhlds,numprof &gt;<span class="st"> </span><span class="dv">0</span>, numcars &gt;<span class="st"> </span><span class="dv">0</span>)$hhld, 
   popdist[<span class="st">&#39;Car&#39;</span>,<span class="st">&#39;Professionals&#39;</span>]
   )
 synhhldweights &lt;-<span class="st"> </span><span class="kw">rep</span>(
@@ -478,8 +481,8 @@ synhhldtypes &lt;-<span class="st"> </span><span class="kw">rep</span>(
                        )</code></pre></div>
 <p>Once this has been done generating the synthetic household dataset is relatively straightforward requiring us to merge the individual and household level data for our desired households. In TRESIS itself, this is followed by some additional work to ensure that any variables not required for the models are removed as well as making any necessary changes to ensure confidentiality of the micro-data is retained.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">synhhlddata &lt;-<span class="st"> </span><span class="kw">merge</span>(
-  <span class="kw">filter</span>(hhlds, hhld <span class="op">%in%</span><span class="st"> </span>synhhlds),
-  <span class="kw">filter</span>(ind, hhld <span class="op">%in%</span><span class="st"> </span>synhhlds),
+  <span class="kw">filter</span>(hhlds, hhld %in%<span class="st"> </span>synhhlds),
+  <span class="kw">filter</span>(ind, hhld %in%<span class="st"> </span>synhhlds),
   <span class="dt">by=</span><span class="st">&#39;hhld&#39;</span>,
   <span class="dt">all.x=</span><span class="ot">TRUE</span>,
   <span class="dt">all.y=</span><span class="ot">TRUE</span>
@@ -495,9 +498,9 @@ synhhlddata &lt;-<span class="st"> </span><span class="kw">merge</span>(
 
 <span class="co"># Add an ID for each individual in the household </span>
 <span class="co"># (starting from 1 for each household)</span>
-synhhlddata &lt;-<span class="st"> </span><span class="kw">group_by</span>(synhhlddata, hhld) <span class="op">%&gt;%</span>
+synhhlddata &lt;-<span class="st"> </span><span class="kw">group_by</span>(synhhlddata, hhld) %&gt;%
 <span class="st">  </span><span class="kw">mutate</span>(
-    <span class="dt">indid =</span> <span class="dv">1</span><span class="op">:</span><span class="kw">n</span>()
+    <span class="dt">indid =</span> <span class="dv">1</span>:<span class="kw">n</span>()
   )</code></pre></div>
 <p>The <em>synhhlddata</em> data frame now contains all the data we need to use within the residential location model for assigning households to zones. So we can avoid regenerating synthetic households every time we change our residential location model, it is useful to save our data frame to an RData file:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">save</span>(synhhlddata,<span class="dt">file=</span><span class="st">&quot;output/synhhlddata.RData&quot;</span>)</code></pre></div>
@@ -535,15 +538,15 @@ synrun &lt;-<span class="st"> </span><span class="kw">rename</span>(synrun,
                  <span class="dt">rout =</span> numrout
                  )</code></pre></div>
 <p>We then create variables for each of the four utility expressions. The while loop iterates through each of the utility expressions to calculate the relevant utilities.<a href="#fn40" class="footnoteRef" id="fnref40"><sup>40</sup></a> The <em>eval()</em> and <em>parse()</em> functions are used together to take text input and evaluate the expressions as if R code had been typed into the console or a standard R script file. The <em>with()</em> function allows the variable names in the utility expressions to be used as-is, without pre-pending the data frame name and a $ to them and not attaching the data frame to the global environment.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">synrun &lt;-<span class="st"> </span>synrun <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">synrun &lt;-<span class="st"> </span>synrun %&gt;%<span class="st"> </span><span class="kw">mutate</span>(
   <span class="dt">u1 =</span> <span class="ot">NA</span>,
   <span class="dt">u2 =</span> <span class="ot">NA</span>,
   <span class="dt">u3 =</span> <span class="ot">NA</span>,
   <span class="dt">u4 =</span> <span class="ot">NA</span>
 )
 i &lt;-<span class="st"> </span><span class="dv">1</span>;
-<span class="cf">while</span> (i <span class="op">&lt;=</span><span class="st"> </span><span class="dv">4</span>) {
-  synrun[,<span class="dv">7</span><span class="op">+</span>i] &lt;-<span class="st"> </span><span class="kw">with</span>(synrun,
+while (i &lt;=<span class="st"> </span><span class="dv">4</span>) {
+  synrun[,<span class="dv">7</span>+i] &lt;-<span class="st"> </span><span class="kw">with</span>(synrun,
        <span class="kw">eval</span>(<span class="kw">parse</span>(<span class="dt">text=</span><span class="kw">c</span>(
          <span class="st">&quot;3.2989*mgmt + 1.8519*rout + </span>
 <span class="st">         1.733*numCars&quot;</span>,  
@@ -554,14 +557,14 @@ i &lt;-<span class="st"> </span><span class="dv">1</span>;
          <span class="st">&quot;3.7052 - 8.0874*prof + 33.2434*mgmt + 1.8073*rout - </span>
 <span class="st">         1.291*numCars&quot;</span>
        )[i])))
-  i &lt;-<span class="st"> </span>i <span class="op">+</span><span class="st"> </span><span class="dv">1</span>
+  i &lt;-<span class="st"> </span>i +<span class="st"> </span><span class="dv">1</span>
 }</code></pre></div>
 <p>We can then calculate the probabilities of each synthetic household living in each zone. The equation to estimate the probabilities depend on the exact model specification that is used in the model. In this case, where the model includes alternative-specific variables (and values), we can use the equations below. These probabilities can then be used to help identify where households sharing the characteristics of each synthetic household are likely to live:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">synrun &lt;-<span class="st"> </span>synrun <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(
-  <span class="dt">p1 =</span> <span class="kw">exp</span>(u1)<span class="op">/</span>(<span class="kw">exp</span>(u1)<span class="op">+</span><span class="kw">exp</span>(u2)<span class="op">+</span><span class="kw">exp</span>(u3)<span class="op">+</span><span class="kw">exp</span>(u4)),
-  <span class="dt">p2 =</span> <span class="kw">exp</span>(u2)<span class="op">/</span>(<span class="kw">exp</span>(u1)<span class="op">+</span><span class="kw">exp</span>(u2)<span class="op">+</span><span class="kw">exp</span>(u3)<span class="op">+</span><span class="kw">exp</span>(u4)),
-  <span class="dt">p3 =</span> <span class="kw">exp</span>(u3)<span class="op">/</span>(<span class="kw">exp</span>(u1)<span class="op">+</span><span class="kw">exp</span>(u2)<span class="op">+</span><span class="kw">exp</span>(u3)<span class="op">+</span><span class="kw">exp</span>(u4)),
-  <span class="dt">p4 =</span> <span class="kw">exp</span>(u4)<span class="op">/</span>(<span class="kw">exp</span>(u1)<span class="op">+</span><span class="kw">exp</span>(u2)<span class="op">+</span><span class="kw">exp</span>(u3)<span class="op">+</span><span class="kw">exp</span>(u4))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">synrun &lt;-<span class="st"> </span>synrun %&gt;%<span class="st"> </span><span class="kw">mutate</span>(
+  <span class="dt">p1 =</span> <span class="kw">exp</span>(u1)/(<span class="kw">exp</span>(u1)+<span class="kw">exp</span>(u2)+<span class="kw">exp</span>(u3)+<span class="kw">exp</span>(u4)),
+  <span class="dt">p2 =</span> <span class="kw">exp</span>(u2)/(<span class="kw">exp</span>(u1)+<span class="kw">exp</span>(u2)+<span class="kw">exp</span>(u3)+<span class="kw">exp</span>(u4)),
+  <span class="dt">p3 =</span> <span class="kw">exp</span>(u3)/(<span class="kw">exp</span>(u1)+<span class="kw">exp</span>(u2)+<span class="kw">exp</span>(u3)+<span class="kw">exp</span>(u4)),
+  <span class="dt">p4 =</span> <span class="kw">exp</span>(u4)/(<span class="kw">exp</span>(u1)+<span class="kw">exp</span>(u2)+<span class="kw">exp</span>(u3)+<span class="kw">exp</span>(u4))
 )</code></pre></div>
 <p>The final probabilities for 10 households are shown in the table below. In this very simple example, you will see that there are some households with the same probabilities. Given a fully developed residential location model as the one used in TRESIS, with more explanatory variables as well as a wider range of grouping variables for the synthetic households, the number of households with the same probabilities would be very low. However, even from this relatively simplistic example, it is apparent that even within the same groups, the probabilities of living in a particular zone vary (sometimes substantially).</p>
 <table>
@@ -673,13 +676,13 @@ i &lt;-<span class="st"> </span><span class="dv">1</span>;
 <div id="results" class="section level3">
 <h3><span class="header-section-number">11.3.2</span> Results</h3>
 <p>The final step is to assign the number of households in each zone using the probabilities and the household weights. Although in some applications the highest probability is assumed to be the chosen zone, in the TRESIS approach, the probabilities are used in combination with the weights to identify how many real households with the same characteristics as the synthetic households would live in each zone.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">synresults &lt;-<span class="st"> </span>synrun <span class="op">%&gt;%</span>
-<span class="st">  </span><span class="kw">group_by</span>(hhldtype) <span class="op">%&gt;%</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">synresults &lt;-<span class="st"> </span>synrun %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(hhldtype) %&gt;%
 <span class="st">  </span><span class="kw">summarise</span>(
-    <span class="dt">zone1 =</span> <span class="kw">round</span>(<span class="kw">sum</span>(p1<span class="op">*</span>hhldweight)),
-    <span class="dt">zone2 =</span> <span class="kw">round</span>(<span class="kw">sum</span>(p2<span class="op">*</span>hhldweight)),
-    <span class="dt">zone3 =</span> <span class="kw">round</span>(<span class="kw">sum</span>(p3<span class="op">*</span>hhldweight)),
-    <span class="dt">zone4 =</span> <span class="kw">round</span>(<span class="kw">sum</span>(p4<span class="op">*</span>hhldweight))
+    <span class="dt">zone1 =</span> <span class="kw">round</span>(<span class="kw">sum</span>(p1*hhldweight)),
+    <span class="dt">zone2 =</span> <span class="kw">round</span>(<span class="kw">sum</span>(p2*hhldweight)),
+    <span class="dt">zone3 =</span> <span class="kw">round</span>(<span class="kw">sum</span>(p3*hhldweight)),
+    <span class="dt">zone4 =</span> <span class="kw">round</span>(<span class="kw">sum</span>(p4*hhldweight))
   )</code></pre></div>
 <p>The results of this (very basic) model are shown in the table below. These initial results do not accurately reflect the shares in the population in each zone. This is for a number of reasons. The primary reason is that the example model we used here was by many measures a poor model with very low goodness of fit, including a very low <span class="math inline">\(R^2\)</span> value and a highly insignificant <span class="math inline">\(\chi^2\)</span> p-value. If a better model had been estimated using disaggregate data, the results would be much closer to the actual population shares.</p>
 <table>
@@ -861,7 +864,7 @@ U_4 &amp;= \\
 
 </div>
 </div>
-<h3> Bibliography</h3>
+<h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-HensherD2002">
 <p>Hensher, David A. 2002. “A Systematic Assessment of the Environmental Impacts of Transport Policy.” <em>Environmental and Resource Economics</em> 22 (1). Springer: 185–217. <a href="http://www.springerlink.com/index/FJHH830P34VQBANM.pdf" class="uri">http://www.springerlink.com/index/FJHH830P34VQBANM.pdf</a>.</p>
@@ -940,11 +943,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

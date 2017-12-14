@@ -6,26 +6,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
-  <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
-  
-  
+  <meta property="og:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
+  <meta property="og:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
   <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Spatial Microsimulation with R" />
-  
-  
-  
+  <meta name="twitter:site" content="@robinlovelace" />
+  <meta name="twitter:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
+  <meta name="twitter:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
 
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -398,7 +401,7 @@ NRMSE = \frac{RMSE}{max(obs) - min(obs)}
 CorVec &lt;-<span class="st"> </span><span class="kw">rep</span> (<span class="dv">0</span>, <span class="kw">dim</span>(cons)[<span class="dv">1</span>])
 
 <span class="co"># calculate the correlation for each zone</span>
-<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">dim</span>(cons)[<span class="dv">1</span>]){
+for (i in <span class="dv">1</span>:<span class="kw">dim</span>(cons)[<span class="dv">1</span>]){
   num_cons &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(cons[i,])
   num_ind_agg &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(ind_agg[i,])
   CorVec[i] &lt;-<span class="st"> </span><span class="kw">cor</span> (num_cons, num_ind_agg)
@@ -415,10 +418,10 @@ CorVec &lt;-<span class="st"> </span><span class="kw">rep</span> (<span class="d
 <span class="kw">head</span>(<span class="kw">order</span>(CorVec), <span class="dt">n =</span> <span class="dv">3</span>)</code></pre></div>
 <pre><code>## [1] 84 82  7</code></pre>
 <p>This ends our analysis of correlation. Next we can calculate total absolute error (TAE), which is easily defined as a function in R:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tae &lt;-<span class="st"> </span><span class="cf">function</span>(observed, simulated){
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">tae &lt;-<span class="st"> </span>function(observed, simulated){
   obs_vec &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(observed)
   sim_vec &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(simulated)
-  <span class="kw">sum</span>(<span class="kw">abs</span>(obs_vec <span class="op">-</span><span class="st"> </span>sim_vec))
+  <span class="kw">sum</span>(<span class="kw">abs</span>(obs_vec -<span class="st"> </span>sim_vec))
 }</code></pre></div>
 <p>By applying this function to CakeMap, we find a TAE of 26445.57, as calculated below. This may sound very big, but remember that this measure is very dependent on the scale of the problem. 26,445 may seem like a large number but it is small compared with the total population multiplied by the number of constraints: 4,871,397. For this reason, the relative error RE (also called the standardised absolute error) is often preferable. We observe a RE of 0.54%. Note that RE is simply TAE divided by the total of all observed cell values (that is, the total population of the study area multiplied by the number of constraints).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate TAE</span>
@@ -428,7 +431,7 @@ CorVec &lt;-<span class="st"> </span><span class="kw">rep</span> (<span class="d
 <span class="kw">sum</span>(cons)</code></pre></div>
 <pre><code>## [1] 4871397</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># RE</span>
-<span class="kw">tae</span>(cons, ind_agg) <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(cons) </code></pre></div>
+<span class="kw">tae</span>(cons, ind_agg) /<span class="st"> </span><span class="kw">sum</span>(cons) </code></pre></div>
 <pre><code>## [1] 0.005428745</code></pre>
 <p>As with all tests of goodness of fit, we can perform the analyses zone per zone. For the example, we call the vector of TAE and RE per zone, respectively, <code>TAEVec</code> and <code>REVec</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Initialize the vectors</span>
@@ -436,9 +439,9 @@ TAEVec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv
 REVec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">0</span>, <span class="kw">nrow</span>(cons))
 
 <span class="co"># calculate the correlation for each zone</span>
-<span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">nrow</span>(cons)){
+for (i in <span class="dv">1</span>:<span class="kw">nrow</span>(cons)){
   TAEVec[i] &lt;-<span class="st"> </span><span class="kw">tae</span> (cons[i,], ind_agg[i,])
-  REVec[i] &lt;-<span class="st"> </span>TAEVec[i] <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(cons[i,])
+  REVec[i] &lt;-<span class="st"> </span>TAEVec[i] /<span class="st"> </span><span class="kw">sum</span>(cons[i,])
 }</code></pre></div>
 <p>The next step is to interpret these results. The summary of each vector will help us. Note that in the best case, the correlation is high, but the RE and TAE are small. The zone with the highest error is also the number 84, which has a TAE of 14710 individuals times variables and a RE of 21.3%. This zone seems to have a simulation a bit distant from the constraint. By watching the second and third worst zone, we can see that its RE is respectively around 12.5% and 7.0%. The third quartile is of order <span class="math inline">\(10^{-5}\)</span> (<span class="math inline">\(10^{-3}\)</span>%). This is pretty close to 0. Thus, 75% of the zones has a RE smaller than the third quartile. The maximum values aside, it appears that for the majority of the zones, the RE is small.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Summary of the TAE per zone </span>
@@ -463,7 +466,7 @@ REVec &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv"
 <p>Knowing that zone 84 is problematic, the next stage is to ask “how problematic?”. If a single zone is responsible for the majority of error, this would suggest that action needs to be taken (e.g. by removing the offending zone or by identifying which variable is causing the error).</p>
 <p>To answer the previous question numerically, we can rephrase it in technical terms: “Which proportion of error in the model arises from the worst zone?” This is a question we can answer with a simple R query:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">worst_zone &lt;-<span class="st"> </span><span class="kw">which.max</span>(TAEVec)
-TAEVec[worst_zone] <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(TAEVec)</code></pre></div>
+TAEVec[worst_zone] /<span class="st"> </span><span class="kw">sum</span>(TAEVec)</code></pre></div>
 <pre><code>## [1] 0.5561611</code></pre>
 <p>The result of the above code demonstrates that more than half (56%) of the error originates from a single zone: 84. Therefore zone 84 certainly is anomalous and worthy of further investigation. An early strategy to characterise this zone and compare it to the others is to visualise it.</p>
 <p>To this end, Figure 8.1 places the TAE values calculated previously on a map, with a base-layer supplied by Google for context — see the book’s <a href="https://github.com/Robinlovelace/spatial-microsim-book/blob/master/validation.Rmd">online source code</a> to see how. Zone 84 is clearly visible in this map as a ward just above Leeds city centre. This does not immediately solve the problem, but it confirms that only few zones have bigger errors.</p>
@@ -478,10 +481,10 @@ Figure 8.1: Geographical distribution of Total Absolute Error (TAE) and Relative
 <pre><code>## [1] 0.9963713</code></pre>
 <p>In this case, both are quite well correlated. However, when having very different zones, in terms of total population, it can have more differences between the two maps. Indeed, with the same TAE, if the zone 84 had contained a total population two times bigger, the RE would be very smaller. Thus, RE would be divided by the multiplication of 2 and the number of variables.</p>
 <p>Having identified a zone that is particularly problematic (the 84), we will look at the responsible variables. We focus on the zone 84 and calculate the number of differences between the constraint and the simulation for each category:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">RudeDiff &lt;-<span class="st"> </span>cons[<span class="dv">84</span>,] <span class="op">-</span><span class="st"> </span>ind_agg[<span class="dv">84</span>,] <span class="co"># differences for zone 84</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">RudeDiff &lt;-<span class="st"> </span>cons[<span class="dv">84</span>,] -<span class="st"> </span>ind_agg[<span class="dv">84</span>,] <span class="co"># differences for zone 84</span>
 diff &lt;-<span class="st"> </span><span class="kw">round</span>( <span class="kw">abs</span>(RudeDiff) ) <span class="co"># interesting differences</span>
 
-diff[diff <span class="op">&gt;</span><span class="st"> </span><span class="dv">1000</span>] <span class="co"># printing the differences bigger than 1000</span></code></pre></div>
+diff[diff &gt;<span class="st"> </span><span class="dv">1000</span>] <span class="co"># printing the differences bigger than 1000</span></code></pre></div>
 <pre><code>## m45_54 m55_64    Car  NoCar 
 ##   1274   1120   4960   4960</code></pre>
 <p>The responsible variable seems to be the car ownership. We have made a similar check for the three worst zones and this variable is always the one with the largest difference. To investigate the reasons for this, we print the constraints for this variable inside the three worst zones and the marginals of the observed individuals:</p>
@@ -497,10 +500,10 @@ cons[worst, <span class="kw">c</span>(<span class="st">&quot;Car&quot;</span>, <
 ## 738 178</code></pre>
 <p>Only few observed individuals did not own a car. Thus, for zones needing a lot of persons that have no car, the weight of only 178 individuals out of 916 can be adapted. The possibility of having an individual that has the whole range of possible characteristics is then lower. The individuals without a car are saved in the <code>NoCar</code> variable. The contingency table of these people for the number of cakes and the age shows that we have nobody of age 55-64 eating more than 6 cakes.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># individuals not owning a car</span>
-NoCar &lt;-<span class="st"> </span>ind[ind<span class="op">$</span>Car<span class="op">==</span><span class="dv">2</span>,] 
+NoCar &lt;-<span class="st"> </span>ind[ind$Car==<span class="dv">2</span>,] 
 
 <span class="co"># Cross table</span>
-<span class="kw">table</span>(NoCar<span class="op">$</span>NCakes,NoCar<span class="op">$</span>ageband4) </code></pre></div>
+<span class="kw">table</span>(NoCar$NCakes,NoCar$ageband4) </code></pre></div>
 <pre><code>##         
 ##          16-24 25-34 35-44 45-54 55-64 65-74
 ##   &lt;1         3     5     3     5     4     6
@@ -521,7 +524,7 @@ cons[best, <span class="kw">c</span>(<span class="st">&quot;Car&quot;</span>, <s
 </div>
 <div id="empty-cells" class="section level2">
 <h2><span class="header-section-number">8.2</span> Empty cells</h2>
-
+<p></p>
 <p>Roughly speaking, ‘empty cells’ refer to individuals who are absent from the input microdata. More specifically, empty cells represent individuals with a combination of attributes in the constraint variables that are likely to be present in the real spatial microdata but are known not to exist in the individual level data. Empty cells are easiest to envision when the ‘seed’ is represented as a contingency table. Imagine, for example, if the microdata from SimpleWorld contained no young males. The associated individual data could be Table 8.1, leading to the cross table shown in Table 8.2. We can clearly identify that there is no young male. Applying reweighting methods on this kind of input data result in an unrealistic final population, without young male.</p>
 <table>
 <caption>Individual level data from SimpleWorld with empty cells. Note there are no young males.</caption>
@@ -578,12 +581,12 @@ cons[best, <span class="kw">c</span>(<span class="st">&quot;Car&quot;</span>, <s
 </tbody>
 </table>
 <p>The importance of empty cells and methods for identifying whether or not they exist in the individual level is explained in a recent paper (<span class="citation">Lovelace et al. (<a href="#ref-Lovelace-ipfinr">2015</a>)</span>). The number of different constraint variable permutations (<span class="math inline">\(Nperm\)</span>) increases rapidly with the number of constraints (see equation  below), where <span class="math inline">\(n.cons\)</span> is the total number of constraints and <span class="math inline">\(n.cat_i\)</span> is the number of categories within constraint <span class="math inline">\(i\)</span>:</p>
-<span class="math display">\[\begin{equation}
+\begin{equation}
 \displaystyle Nperm = \prod_{i = 1}^{n.cons} n.cat_{i}
 \label{eqempty}
-\end{equation}\]</span>
+\end{equation}
 <p>To exemplify this equation, the number of permutations of constraints in the SimpleWorld microdata example is 4: 2 categories in the sex variables multiplied by 2 categories in the age variable. Clearly, <span class="math inline">\(Nperm\)</span> depends on how continuous variables are binned, the number of constraints and diversity within each constraint. Once we know the number of unique individuals (in terms of the constraint variables) in the survey (<span class="math inline">\(Nuniq\)</span>), the test to check a dataset for empty cells is straightforward, based on equation :</p>
-<span class="math display">\[\begin{equation}
+\begin{equation}
 is.complete =
 \left\{
     \begin{array}{ll}
@@ -591,7 +594,7 @@ is.complete =
         FALSE &amp; \mbox{if } Nuniq &lt; Nperm
     \end{array}
 \right\}
-\end{equation}\]</span>
+\end{equation}
 <p>Once the presence of empty cells is determined, the next stage is to identify which types of individuals are missing from the individual level input dataset (<span class="math inline">\(Ind\)</span>).</p>
 <p>The `missing’ individuals, needed to be added to make <span class="math inline">\(Ind\)</span> complete, can be defined by the following equation :</p>
 <p><span class="math display">\[
@@ -612,7 +615,7 @@ Ind_{missing} = \{x | x \in complete \cap x \not \in Ind \}
 
 </div>
 </div>
-<h3> Bibliography</h3>
+<h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-Chai2014">
 <p>Chai, T., and R. R. RR Draxler. 2014. “Root mean square error (RMSE) or mean absolute error (MAE)? – Arguments against avoiding RMSE in the literature.” <em>Geoscientific Model Development</em> 7 (3): 1247–50. doi:<a href="https://doi.org/10.5194/gmd-7-1247-2014">10.5194/gmd-7-1247-2014</a>.</p>
@@ -689,11 +692,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

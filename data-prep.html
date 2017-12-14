@@ -6,26 +6,26 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
-  <meta name="description" content="Spatial Microsimulation with R">
-  <meta name="generator" content="bookdown 0.5.10 and GitBook 2.6.7">
+  <meta name="description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software.">
+  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
   <meta property="og:url" content="https://spatial-microsim-book.robinlovelace.net" />
-  
-  
+  <meta property="og:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
+  <meta property="og:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
   <meta name="github-repo" content="Robinlovelace/spatial-microsim-book" />
 
   <meta name="twitter:card" content="summary" />
   <meta name="twitter:title" content="Spatial Microsimulation with R" />
-  
-  
-  
+  <meta name="twitter:site" content="@robinlovelace" />
+  <meta name="twitter:description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software." />
+  <meta name="twitter:image" content="https://spatial-microsim-book.robinlovelace.netfigures/cover-image.jpg" />
 
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-13">
+<meta name="date" content="2017-12-14">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -99,7 +99,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
       <nav role="navigation">
 
 <ul class="summary">
-<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a></li>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i>Welcome</a><ul>
+<li class="chapter" data-level="" data-path="index.html"><a href="index.html#reference"><i class="fa fa-check"></i>Reference</a></li>
+</ul></li>
 <li class="chapter" data-level="1" data-path="intro.html"><a href="intro.html"><i class="fa fa-check"></i><b>1</b> Introduction</a><ul>
 <li class="chapter" data-level="1.1" data-path="intro.html"><a href="intro.html#who-this-book-is-for-and-how-to-use-it"><i class="fa fa-check"></i><b>1.1</b> Who this book is for and how to use it</a></li>
 <li class="chapter" data-level="1.2" data-path="intro.html"><a href="intro.html#motivations"><i class="fa fa-check"></i><b>1.2</b> Motivations</a></li>
@@ -280,6 +282,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul></li>
 <li class="chapter" data-level="14" data-path="glossary.html"><a href="glossary.html"><i class="fa fa-check"></i><b>14</b> Glossary</a></li>
 <li class="chapter" data-level="15" data-path="bibliography.html"><a href="bibliography.html"><i class="fa fa-check"></i><b>15</b> Bibliography</a></li>
+<li class="chapter" data-level="16" data-path="spatial-microsimulation-with-r.html"><a href="spatial-microsimulation-with-r.html"><i class="fa fa-check"></i><b>16</b> Spatial Microsimulation with R</a></li>
 </ul>
 
       </nav>
@@ -314,19 +317,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </ul>
 <div id="accessing" class="section level2">
 <h2><span class="header-section-number">4.1</span> Accessing the input data</h2>
-
+<p></p>
 <p>Before loading the spatial microdata, you must decide on the data needed for your research. Focus on “target variables” related to the research question will help decide on the constraint variables, as we will see below (<a href="data-prep.html#Selecting"></a>). Selecting only on variables of interest will ensure you do not waste time thinking about and processing additional variables that will be of little use in the future. Regardless of the research question it is clear that the methodology depends on the availability of data. If the problem relates to variables that are simply unavailable at any level (e.g. hair length, if your research question related to the hairdressing industry), spatial microsimulation may be unsuitable. If, on the other hand, all the data is available at the geographical level of interest, spatial microsimulation may not be necessary.<a href="#fn7" class="footnoteRef" id="fnref7"><sup>7</sup></a> Spatial microsimulation is useful when you have an intermediary amount of data available: geographically aggregated count and a non-spatial survey. In any case, you should have a clear idea about the range of available data on the topic of interest before embarking on spatial microsimulation.</p>
 <p> </p>
 <p>As with most spatial microsimulation models, the input data in SimpleWorld consists of microdata — a non-geographical individual level dataset — and a constraint table which represents aggregate counts for a series of geographical zones. In some cases, you may have geographical information in your microdata, but not at the required level of detail. For example, you may have a variable on the province of each individual but need its municipality, a lower geographical level. The input data can be accessed from the RStudio book project, as described in <a href="SimpleWorld.html#SimpleWorld"></a>.</p>
 <p> To ease reproducibility of the analysis when working with real data, it is recommended that the process begins with a copy of the <em>raw</em> dataset on your hard disc. Rather than modifying this file, modified (‘cleaned’) versions should be saved as separate files. This ensures that after any mistakes, one can always recover information that otherwise could have been lost and makes the project fully reproducible. In this chapter, a relatively clean and very tiny dataset from SimpleWorld is used, but we still create a backup of the original dataset. We will see in chapter  how to deal with larger and messier data, where being able to refer to the original dataset is more important. Here the focus is on the principles.</p>
-
+<p></p>
 <p>‘Stripping down’ the datasets so that they only contain the bare essential information will enable focus on the information that really matters. The input datasets in the example used for this chapter are already bare, but in real world surveys there may be literally hundreds of variables clogging up the analysis and your mind. It is good practice to remove excess data at the outset. Provided you have a good workflow, keeping all original data files unmodified for future reference, it will be easy to go back and add extra variables at a later stage. Following Occam’s razor which favours simple solutions (Blumer et al. 1987), it is often best to start with a minimum of data and add complexity subsequently rather than vice versa.</p>
 <p> Spatial microsimulation involves combining individual and aggregate level data. Each level should be given equal consideration when preparing the inputs for the modelling process. In many cases, the limiting factor for model fit will be the number of <em>linking variables</em>, variables shared between the individual and aggregate level datasets which are used to calculate the weights allocated to the individuals for each zone (see Glossary). These are also referred to as <em>constraint variables</em>, as they <em>constrain</em> the individual weights per zone (Ballas et al. 2005).</p>
 <p>If there are no shared variables between the aggregate and individual level data, generating an accurate synthetic population is impossible. In this case, your only alternative is to consider only the marginal distribution of the variable and make a random selection with the distribution used as a probability. However, this implicitly assumes that there are no correlations between the available variables. If there are only a few shared variables (e.g. age, sex, employment status), your options are limited. Increasingly, however, there are many linking variables to choose from as questionnaires become broader and more available. In this case the choice of constraints becomes important: which and how many to use, their order and their relationship to the target variable should all be considered at the outset when choosing the input data and constraints.</p>
 </div>
 <div id="Selecting" class="section level2">
 <h2><span class="header-section-number">4.2</span> Target and constraint variables</h2>
-
+<p></p>
 <p>The geographically aggregated data should be the first consideration when deciding on the input data. This is because the geographical data is essential for making the model spatial: without good geographical data, there is no way to allocate the individuals to different geographical zones.</p>
 <p>The first consideration for the constraint data is coverage: ideally close to 100% of each zone’s total population should be included in the counts. Also, the survey must have been completed by a number of residents proportional to the total number of inhabitants in every geographical zone under consideration. It is important to recognise that many geographically aggregated datasets may be unsuitable for spatial microsimulation due to sample size: geographical information based on a small sample of a zone’s population is not a good basis for spatial microsimulation.</p>
 <p>To take one example, estimates of the <em>proportion</em> of people who do not get sufficient sleep in the Australian state of Victoria, from the 2011 VicHealth Indicators <a href="http://data.aurin.org.au/dataset?q=sleep">Survey</a>, is not a suitable constraint variable.</p>
@@ -393,7 +396,7 @@ con_sex &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span cla
 <pre><code>## [1] 12 10 11</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rowSums</span>(con_sex)</code></pre></div>
 <pre><code>## [1] 12 10 11</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rowSums</span>(con_age) <span class="op">==</span><span class="st"> </span><span class="kw">rowSums</span>(con_sex)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">rowSums</span>(con_age) ==<span class="st"> </span><span class="kw">rowSums</span>(con_sex)</code></pre></div>
 <pre><code>## [1] TRUE TRUE TRUE</code></pre>
 <p>The results of the previous operations are encouraging. The total population is the same for each constraint overall and for each area (row) for both constraints. If the total populations between constraint variables do not match (e.g. because the <em>population bases</em><a href="#fn10" class="footnoteRef" id="fnref10"><sup>10</sup></a> are different) this is problematic. Appropriate steps to normalise the errant constraint variables are described in the CakeMap chapter (). This involves scaling the category totals so the totals are equal across all categories.</p>
 </div>
@@ -403,7 +406,7 @@ con_sex &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span cla
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ind &lt;-<span class="st"> </span>ind[, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">19</span>)]</code></pre></div>
 <p>In the SimpleWorld dataset, only the <code>age</code> and <code>sex</code> variables are useful for reweighting: we can remove the others for the purposes of allocating individuals to zone. Note that it is important to keep track of individual Id’s, to ensure individuals do not get mixed-up by a function that changes their order (<code>merge()</code>, for example, is a function that can cause havoc by changing the order of rows). Before removing the superfluous <code>income</code> variable, we will create a backup of <code>ind</code> that can be referred back to if necessary<a href="#fn12" class="footnoteRef" id="fnref12"><sup>12</sup></a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ind_orig &lt;-<span class="st"> </span>ind <span class="co"># store the original ind dataset</span>
-ind &lt;-<span class="st"> </span>ind[, <span class="op">-</span><span class="dv">4</span>] <span class="co"># remove income variable</span></code></pre></div>
+ind &lt;-<span class="st"> </span>ind[, -<span class="dv">4</span>] <span class="co"># remove income variable</span></code></pre></div>
 <p>Although <code>ind</code> in this case is small, it will behave in the same way as larger datasets. Starting small is sensible, providing opportunities for testing subsetting syntax in R. It is common, for example, to take a subset of the working <em>population base</em>: those aged between 16 and 74 in full-time employment. Methods for doing this are provided in the Appendix (<a href="apR.html#subsetting"></a>).</p>
 </div>
 <div id="re-categorise" class="section level2">
@@ -411,32 +414,32 @@ ind &lt;-<span class="st"> </span>ind[, <span class="op">-</span><span class="dv
 <p> Before transforming the individual level dataset <code>ind</code> into a form that can be compared with the aggregate level constraints, we must ensure that each dataset contains the same information. It can be more challenging to re-categorise individual level variables than to re-name or combine aggregate level variables, so the former should usually be set first. An obvious difference between the individual and aggregate versions of the <code>age</code> variable is that the former is of type <code>integer</code> whereas the latter is composed of discrete bins: 0 to 49 and 50+. We can categorise the variable into these bins using <code>cut()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Test binning the age variable</span>
 brks &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">49</span>, <span class="dv">120</span>) <span class="co"># set break points from 0 to 120 years</span>
-<span class="kw">cut</span>(ind<span class="op">$</span>age, <span class="dt">breaks =</span> brks) <span class="co"># bin the age variable</span></code></pre></div>
+<span class="kw">cut</span>(ind$age, <span class="dt">breaks =</span> brks) <span class="co"># bin the age variable</span></code></pre></div>
 <pre><code>## [1] (49,120] (49,120] (0,49]   (49,120] (0,49]  
 ## Levels: (0,49] (49,120]</code></pre>
 <p>Note that the output of the above <code>cut()</code> command is correct, with individuals binned into one of two bins, but that the labels are rather strange. To change these category labels to something more readable for people who do not read ISO standards for mathematical notation (most people!), we add another argument, <code>labels</code> to the <code>cut()</code> function:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert age into a categorical variable</span>
 labs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a0_49&quot;</span>, <span class="st">&quot;a50+&quot;</span>) <span class="co"># create the labels</span>
-<span class="kw">cut</span>(ind<span class="op">$</span>age, <span class="dt">breaks =</span> brks, <span class="dt">labels =</span> labs)</code></pre></div>
+<span class="kw">cut</span>(ind$age, <span class="dt">breaks =</span> brks, <span class="dt">labels =</span> labs)</code></pre></div>
 <pre><code>## [1] a50+  a50+  a0_49 a50+  a0_49
 ## Levels: a0_49 a50+</code></pre>
 <p>The factor generated now has satisfactory labels: they match the column headings of the age constraint, so we will save the result. (Note, we are not losing any information at this stage because we have saved the original <code>ind</code> object as <code>ind_orig</code> for future reference.)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Overwrite the age variable with categorical age bands</span>
-ind<span class="op">$</span>age &lt;-<span class="st"> </span><span class="kw">cut</span>(ind<span class="op">$</span>age, <span class="dt">breaks =</span> brks, <span class="dt">labels =</span> labs)</code></pre></div>
+ind$age &lt;-<span class="st"> </span><span class="kw">cut</span>(ind$age, <span class="dt">breaks =</span> brks, <span class="dt">labels =</span> labs)</code></pre></div>
 <p>Users should beware that <code>cut</code> results in a vector of class <em>factor</em>. This can cause problems in subsequent steps if the order of constraint column headings is different from the order of the factor labels, as we will see in the next section.</p>
 </div>
 <div id="matching" class="section level2">
 <h2><span class="header-section-number">4.6</span> Matching individual and aggregate level data names</h2>
 <p> Before combining the newly re-categorised individual level data with the aggregate constraints, it is useful for the category labels to match up. This may seem trivial, but will save time in the long run. Here is the problem:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(ind<span class="op">$</span>age)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(ind$age)</code></pre></div>
 <pre><code>## [1] &quot;a0_49&quot; &quot;a50+&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(con_age)</code></pre></div>
 <pre><code>## [1] &quot;a0.49&quot; &quot;a.50.&quot;</code></pre>
 <p>Note that the names are subtly different. To solve this issue, we can simply change the names of the constraint variable, after verifying they are in the correct order:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(con_age) &lt;-<span class="st"> </span><span class="kw">levels</span>(ind<span class="op">$</span>age) <span class="co"># rename aggregate variables</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">names</span>(con_age) &lt;-<span class="st"> </span><span class="kw">levels</span>(ind$age) <span class="co"># rename aggregate variables</span></code></pre></div>
 <p>With both the age and sex constraint variable names now matching the category labels of the individual level data, we can proceed to create a single constraint object we label <code>cons</code>. We do this with <code>cbind()</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cons &lt;-<span class="st"> </span><span class="kw">cbind</span>(con_age, con_sex)
-cons[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, ] <span class="co"># display the constraints for the first two zones</span></code></pre></div>
+cons[<span class="dv">1</span>:<span class="dv">2</span>, ] <span class="co"># display the constraints for the first two zones</span></code></pre></div>
 <pre><code>##   a0_49 a50+ m f
 ## 1     8    4 6 6
 ## 2     2    8 4 6</code></pre>
@@ -452,8 +455,8 @@ cons[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>
 <p>The dimensions of at least one of these objects must change before they can be correctly easily compared. To do this we ‘flatten’ the individual level dataset. This means increasing its width so each column becomes a category name. This allows the individual data to be matched to the geographical constraint data. In this new dataset (which we label <code>ind_cat</code>, short for ‘categorical’), each variable becomes a column containing Boolean numbers (either 1 or 0, representing whether the individual belongs to each category or not). Note that each row in <code>ind_cat</code> must contain a one for each constraint variable; the sum of every row in <code>ind_cat</code> should be equal to the number of constraints (this can be verified with <code>rowSums(ind_cat)</code>).</p>
 <p>To undertake this ‘flattening’ process the <code>model.matrix()</code> function is used to expand each variable in turn. The result for each variable is a new matrix with the same number of columns as there are categories in the variable. Note that the order of columns is usually alphabetical: this can cause problems if the columns in the constraint tables are not ordered in this way. <span class="citation">Knoblauch and Maloney (<a href="#ref-knoblauch2012modeling">2012</a>)</span> provide a lengthier description of this flattening process.</p>
 <p>The second stage is to use the <code>colSums()</code> function to take the sum of each column.<a href="#fn13" class="footnoteRef" id="fnref13"><sup>13</sup></a></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cat_age &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>ind<span class="op">$</span>age <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)
-cat_sex &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span class="op">~</span><span class="st"> </span>ind<span class="op">$</span>sex <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)[, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>)]
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cat_age &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~<span class="st"> </span>ind$age -<span class="st"> </span><span class="dv">1</span>)
+cat_sex &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(~<span class="st"> </span>ind$sex -<span class="st"> </span><span class="dv">1</span>)[, <span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>)]
 
  <span class="co"># Combine age and sex category columns into single data frame</span>
 (ind_cat &lt;-<span class="st"> </span><span class="kw">cbind</span>(cat_age, cat_sex)) <span class="co"># brackets -&gt; print result</span></code></pre></div>
@@ -490,7 +493,7 @@ cat_sex &lt;-<span class="st"> </span><span class="kw">model.matrix</span>(<span
 
 </div>
 </div>
-<h3> Bibliography</h3>
+<h3>References</h3>
 <div id="refs" class="references">
 <div id="ref-tidy-data">
 <p>Wickham, Hadley. 2014b. “Tidy data.” <em>The Journal of Statistical Software</em> 14 (5).</p>
@@ -568,11 +571,9 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    var src = "";
-    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(src))
-      src = src.replace(/^https?:/, '');
-    script.src = src;
+    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(script.src))
+      script.src  = script.src.replace(/^https?:/, '');
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
