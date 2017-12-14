@@ -5,7 +5,7 @@ the level of administrative zones. The household is another
 fundamental building block of human organisation around which key decision-making,
 economic and data-collecting activities are centred. We will here develop results 
 for Belgium in a specific study. Note that this
-chapter is based on a research made by Dumont Morgane (UNamur) and funded by the 
+chapter is written by Johan Barthélemy^[This is a contributed chapter by Johan Barthélemy, SMART Infrastructure Facility, University of Wollongong.] and Morgane Dumont. The second part of the chapter is based on a research made by Dumont Morgane (UNamur) and funded by the 
 Wallonia Region of Belgium. Timoteo Carletti (UNamur),
 Eric Cornélis (UNamur), Philippe Toint (UNamur) and Thierry
 Eggericks (UCL Louvain-La-Neuve) were involved in the research.
@@ -61,7 +61,7 @@ Data coming from different sources,
 sometimes implying different total populations,
 can cause this inconsistency.
 This section describes the method
-proposed by Johan Barthélemy^[This is a contributed chapter by Johan Barthélemy, SMART Infrastructure Facility, University of Wollongong.]
+proposed by Johan Barthélemy
 for dealing with such situations.
 
 The method is to proceed in three steps. 
