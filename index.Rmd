@@ -9,8 +9,11 @@ output:
 documentclass: book
 link-citations: yes
 biblio-style: apalike
-github-repo: "Robinlovelace/spatial-microsim-book"
+github-repo: Robinlovelace/spatial-microsim-book
 url: 'https\://spatial-microsim-book.robinlovelace.net'
+twitter-handle: robinlovelace
+cover-image: figures/cover-image.jpg
+description: "Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software."
 bibliography: bibliography.bib
 ---
   
