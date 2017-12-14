@@ -4,7 +4,7 @@ Spatial Microsimulation with R
 
 [![DOI](https://zenodo.org/badge/20914/Robinlovelace/spatial-microsim-book.svg)](https://zenodo.org/badge/latestdoi/20914/Robinlovelace/spatial-microsim-book) [![Build Status](https://travis-ci.org/Robinlovelace/spatial-microsim-book.svg?branch=master)](https://travis-ci.org/Robinlovelace/spatial-microsim-book)
 
-This repository hosts the code and data used in *Spatial Microsimulation with R*, a book by [Robin Lovelace](http://robinlovelace.net/) and [Morgane Dumont](https://directory.unamur.be/staff/modumont), (with chapters contributed by [Maja Založnik](https://www.oxfordmartin.ox.ac.uk/people/565) and [Richard Ellison](http://sydney.edu.au/business/staff/richard.ellison).
+This repository hosts the code and data used in *Spatial Microsimulation with R*, a book by [Robin Lovelace](http://robinlovelace.net/) and [Morgane Dumont](https://directory.unamur.be/staff/modumont), (with chapters [11](http://spatial-microsim-book.robinlovelace.net/tresis.html) and [12](http://spatial-microsim-book.robinlovelace.net/abm) contributed by [Richard Ellison](http://sydney.edu.au/business/staff/richard.ellison) and [Maja Založnik](https://www.oxfordmartin.ox.ac.uk/people/565) respectively).
 
 The book is now published and is available from [CRC Press](https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/p/book/9781498711548).
 
