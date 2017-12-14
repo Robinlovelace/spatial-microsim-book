@@ -1,6 +1,21 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
 <!-- README.md is generated from README.Rmd. Please edit that file - rmarkdown::render('README.Rmd', output_format = 'md_document', output_file = 'README.md') -->
-Spatial Microsimulation with R
-==============================
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "figures/"
+)
+is_online = curl::has_internet()
+```
+
+# Spatial Microsimulation with R
 
 [![DOI](https://zenodo.org/badge/20914/Robinlovelace/spatial-microsim-book.svg)](https://zenodo.org/badge/latestdoi/20914/Robinlovelace/spatial-microsim-book) [![Build Status](https://travis-ci.org/Robinlovelace/spatial-microsim-book.svg?branch=master)](https://travis-ci.org/Robinlovelace/spatial-microsim-book)
 
@@ -10,8 +25,11 @@ The book is now published and is available from [CRC Press](https://www.crcpress
 
 We hope to continue to update the book as methods evolve and we encourage contributions on any part of the book, including:
 
--   Improvements to the text, e.g. clarifying unclear sentences, fixing typos (see guidance from [Yihui Xie](https://yihui.name/en/2013/06/fix-typo-in-documentation/)).
--   Changes to the code, e.g. to do things in a more efficient way.
--   Suggestions on content (see the project's [issue tracker](https://github.com/Robinlovelace/spatial-microsim-book/issues)).
+- Improvements to the text, e.g. clarifying unclear sentences, fixing typos (see guidance from [Yihui Xie](https://yihui.name/en/2013/06/fix-typo-in-documentation/)).
+- Changes to the code, e.g. to do things in a more efficient way.
+- Suggestions on content (see the project's [issue tracker](https://github.com/Robinlovelace/spatial-microsim-book/issues)).
 
-The latest version of the book can be viewed at [the book's homepage at spatial-microsim-book.robinlovelace.net](http://spatial-microsim-book.robinlovelace.net/). Anyone can contribute to this book [here](https://github.com/Robinlovelace/spatial-microsim-book).
+The latest version of the book can be viewed at
+[the book's homepage at spatial-microsim-book.robinlovelace.net](http://spatial-microsim-book.robinlovelace.net/).
+Anyone can contribute to this book [here](https://github.com/Robinlovelace/spatial-microsim-book).
+
