@@ -34,6 +34,8 @@ Depending on your interests and level of experience we particularly recommend:
 - Chapter [11](http://spatial-microsim-book.robinlovelace.net/tresis.html): if you're interested in more advanced applications applicable to transport modelling
 - Chapter [12](http://spatial-microsim-book.robinlovelace.net/abm): for the links between spatial microsimulation and agent-based modelling.
 
+Chapters 3 to 9 contain all explanations and codes to allow you to generate microdata with or without a sample. Chapter 10 includes techniques to add the household level information.
+
 Furthermore, if you're completely new to R and programming in general, check-out the [appendix](http://spatial-microsim-book.robinlovelace.net/apr), which will get you up-to-speed in no time.
 There's also a [glossary](http://spatial-microsim-book.robinlovelace.net/glossary.html) that explains some of the jargon used in this field of research.
 
