@@ -1,16 +1,10 @@
----
-title: "Introduction"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
----
+# Introduction {#intro}
 
 ```{r, echo=FALSE}
 library(png)
 library(grid)
 ```
 
-# Introduction {#intro}
 
 ## Who this book is for and how to use it
 
@@ -594,7 +588,7 @@ sqrt(x) # find the square root of x
  - Comments are preceded by a single `#` symbol to explain specific lines.
  - Often, reference will be made to files contained within the book's project
  folder. The notation used to refer to the location of these files follows
- the way we refer to files and folders on Linux computers. Thus 'R/CakeMap.R'
+ the way we refer to files and folders on Linux computers. Thus 'code/CakeMap.R'
  refers to a file titled 'CakeMap.R', within the 'R' directory of the project's
  folder. 
  
@@ -723,6 +717,3 @@ clarity of explanation will therefore be gratefully
 received.^[Feedback can be left via email to
 r.lovelace@leeds.ac.uk or via the project's GitHub page
 (http://github.com/Robinlovelace/spatial-microsim-book).]
-
-# References
-

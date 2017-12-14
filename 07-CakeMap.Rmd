@@ -1,18 +1,3 @@
----
-title: "CakeMap"
-layout: default
-output:
-  pdf_document:
-    fig_caption: yes
-  word_document: default
-bibliography: bibliography.bib
----
-
-```{r, echo=FALSE}
-library(png)
-library(grid)
-```
-
 # Spatial microsimulation in the wild {#CakeMap}
 
 So far the book has explained what spatial microsimulation
@@ -284,7 +269,7 @@ the IPF stage can be run on a single line. After the datasets are loaded in
 the first half of 'CakeMap.R', the following code creates the weight matrix:
 
 ```{r, echo=FALSE}
-source("R/CakeMap.R")
+source("code/CakeMap.R")
 ```
 
 ```{r, eval=FALSE}
@@ -352,8 +337,8 @@ As before, weights of the IPF procedure are fractional, so must be *integerised*
 to create whole individuals. The code presented in Chapter 4 requires little
 modification to do this: it is your task to convert the weight matrix generated
 by the above lines of code into a spatial microdataset called, as before,
-`ints_df` (hint: the `int_trs` function in 'R/functions.R' file will help).
-The spatial microdata generated in 'R/CakeMapInts.R' contains the same information
+`ints_df` (hint: the `int_trs` function in 'code/functions.R' file will help).
+The spatial microdata generated in 'code/CakeMapInts.R' contains the same information
 as the individual level dataset, but with the addition of the 'zone' variable,
 which specifies which zone each individual inhabits.
 
@@ -367,7 +352,7 @@ variability in social class in each zone. The `by =` argument is used to
 specify how the results are grouped depending on the zone each individual inhabits:
 
 ```{r, echo=TRUE, message=FALSE}
-source("R/CakeMapInts.R")
+source("code/CakeMapInts.R")
 ```
 
 ```{r, eval=FALSE}
@@ -438,13 +423,13 @@ Likewise, the correct labels of "f" and "m" must be created for the
 Sex variable and likewise for the other variables in `ind`.
 The code that performs this operation is included in the R file
 `CakeMapMipfpData.R` file. Take a look at this file (e.g. by typing
-`file.edit("R/CakeMapMipfpData.R")` from RStudio) and note the use of the
+`file.edit("code/CakeMapMipfpData.R")` from RStudio) and note the use of the
 `switch` function in combination with the recursive function
 `sapply` to *switch* the values of the individual level variables.
 The entire script is run below using the `source` command.
 
 ```{r}
-source("R/CakeMapMipfpData.R")
+source("code/CakeMapMipfpData.R")
 ```
 
 The data are now loaded correctly. This can be verified by
@@ -581,7 +566,7 @@ taking the cells of `con1` and putting them
 to a three–dimensional array in the correct order
 (corresponding to the order of the 2–dimensional table). The code to
 do this is included into the 
-file `R/CakeMapMipfpCon1Convert.R` and the resulting array is called
+file `code/CakeMapMipfpCon1Convert.R` and the resulting array is called
 `con1_convert`.
 
 ```{r, echo=FALSE}
@@ -589,7 +574,7 @@ file `R/CakeMapMipfpCon1Convert.R` and the resulting array is called
 ```
 
 ```{r}
-source("R/CakeMapMipfpCon1Convert.R")
+source("code/CakeMapMipfpCon1Convert.R")
 ```
 
 All constraints being converted and all the margins being
@@ -686,7 +671,7 @@ matrix into an array with the same structure
 as the one of the result of `mipfp`.
 
 ```{r}
-source("R/ConvertIpfpWeights.R")
+source("code/ConvertIpfpWeights.R")
 ```
 
 The total number of people per zone is exactly the same in both 
@@ -764,7 +749,7 @@ we will run the CakeMap example with variable numbers of individuals
 in the microdata. To do this, `ind` objects with more than 916
 persons in the data are created, by copying  the database a second time.
 The code used to create new `ind` objects can be seen
-by entering `file.edit("R/CakeMapTimeAnalysis.R")` in RStudio
+by entering `file.edit("code/CakeMapTimeAnalysis.R")` in RStudio
 from inside the 'spatial-microsimulation-book' project. 
 
 ```{r, fig.cap="Time necessary to perform the generation of the weight matrix depending on the number of individuals inside the microdata.", echo=FALSE}

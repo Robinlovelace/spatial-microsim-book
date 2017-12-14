@@ -1,9 +1,4 @@
----
-title: "Validation"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
----
+# Model checking and evaluation {#svalidation}
 
 ```{r, echo=FALSE, results='hide', message=FALSE, warning=FALSE}
 load("cache-CakeMap.RData")
@@ -11,8 +6,6 @@ map_pack <- c("rgdal", "maptools", "rgeos", "dplyr", "tidyr", "gridExtra", "knit
 lapply(map_pack, library, character.only = T)
 # Todo: add figure comparing various goodness-of-fit measures from JASSS paper
 ```
-
-# Model checking and evaluation {#svalidation}
 
 In food safety, openness about mistakes is
 a vital ingredient for high standards.^[This seems to be
@@ -469,9 +462,10 @@ the problem, but it confirms that only few zones have bigger errors.
 
 
 ```{r, echo=FALSE, fig.cap="Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population.", message=FALSE, warning=FALSE, results=F, fig.pos='!h',fig.height=6, fig.width=5}
-cons_codes <- read.csv("data/CakeMap/cars-raw.csv")
+cons_codes <- read.csv("data/CakeMap/cars-raw.csv", stringsAsFactors = FALSE)
 cons_codes <- as.character(cons_codes$GEO_CODE)[3:126]
 cons_codes <- data.frame(CODE = cons_codes, TAEVec)
+cons_codes$CODE = as.character(cons_codes$CODE)
 # head(cons_codes)
 
 # load the geographic data
@@ -488,10 +482,11 @@ wards$CODE <- as.character(wards$CODE)
 # Merge the two
 # head(cons_codes)
 # head(wards@data[1:3])
-cons_codes <- inner_join(wards@data[1:3], cons_codes)
+cons_codes <- inner_join(wards@data[1:3], cons_codes, by = "CODE")
 wards@data <- cons_codes
 
 library(tmap)
+library(tmaptools)
 wards$`Sqrt(TAE)` <- sqrt(wards$TAEVec)
 # p1 <- tm_shape(wards) +
 #   tm_fill("Sqrt(TAE)", breaks = c(0, 50, 100, 150)) +
@@ -500,18 +495,18 @@ wards$`Sqrt(TAE)` <- sqrt(wards$TAEVec)
 cons_codes <- read.csv("data/CakeMap/cars-raw.csv")
 cons_codes <- as.character(cons_codes$GEO_CODE)[3:126]
 cons_codes <- data.frame(CODE = cons_codes, REVec)
+cons_codes$CODE = as.character(cons_codes$CODE)
 
-cons_codes <- inner_join(wards@data[1:3], cons_codes)
+cons_codes <- inner_join(wards@data[1:3], cons_codes, by = "CODE")
 wards@data <- cbind(wards@data, cons_codes)
 
 wards$`Sqrt(RE)` <- sqrt(wards$REVec)
 # p2 <- tm_shape(wards) +
 #   tm_fill("Sqrt(RE)", n = 3) +
 #   tm_borders()
-osm_tiles <- read_osm(bbox(wards))
-
-tm_shape(osm_tiles) +
-  tm_raster() +
+# osm_tiles <- read_osm(bbox(wards))
+# tm_shape(osm_tiles) +
+#   tm_raster() +
 tm_shape(wards) +
   tm_fill(c("Sqrt(TAE)", "Sqrt(RE)"), n = 3, alpha = 0.5) +
   tm_borders()
@@ -659,7 +654,7 @@ on this kind of input data result in an unrealistic final population, without
 young male.
 
 ```{r, include=FALSE}
-# source("R/SimpleWorld.R")
+# source("code/SimpleWorld.R")
 indsw <- 
   structure(list(id = 1:5, age = structure(c(2L, 2L, 1L, 2L, 1L
 ), .Label = c("a0_49", "a50+"), class = "factor"), sex = structure(c(2L, 
@@ -800,5 +795,3 @@ available datasets are usually used for the simulation.
 This helps explain why internal validation is far more common in spatial
 microsimulation studies than external validation, although the latter is
 generally more important.
-
-# References

@@ -1,19 +1,12 @@
----
-title: "Population synthesis"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
----
+# Population synthesis {#smsimr}
 
 ```{r, include=FALSE}
 # packages to allow 'knitting' the chapter to html
 library(png)
 library(grid)
-source("R/functions.R")
-source("R/SimpleWorld.R")
+source("code/functions.R")
+source("code/SimpleWorld.R")
 ```
-
-# Population synthesis {#smsimr}
 
 In this chapter we progress from loading and preparing the input data to
 running a spatial microsimulation model. The focus is on
@@ -1484,7 +1477,7 @@ for all zones. This section demonstrates two ways
 to generate spatial
 microdata.^[Note that if you skipped the
 detailed previous sections, you will need 
-to load the functions by executing `source("R/functions.R")`.] 
+to load the functions by executing `source("code/functions.R")`.] 
 
 
 ```{r, warning=FALSE}
@@ -2146,6 +2139,3 @@ Finally, we compared two packages for IPF and found
 **mipfp** to be more generalisable and powerful.
 The choice of approach should be influenced
 by the size and nature of the input data.
-
-
-# References

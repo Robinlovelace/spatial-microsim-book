@@ -1,17 +1,3 @@
----
-title: "SimpleWorld"
-layout: default
-output: pdf_document
-bibliography: bibliography.bib
-graphics: yes
----
-
-```{r, echo=FALSE, message=FALSE}
-library(raster)
-library(grid)
-library(png)
-```
-
 # SimpleWorld: A worked example of spatial microsimulation {#SimpleWorld}
 
 This chapter focuses on the minimum input datasets needed for the classical type
@@ -214,7 +200,7 @@ To check if the project has been downloaded and opened correctly,
 try running the following code, by typing it and hitting `Ctl-Enter`:
 
 ```{r, message=FALSE}
-source("R/SimpleWorld.R")
+source("code/SimpleWorld.R")
 ```
 
 You should see some output in red, beginning `Attaching package: ‘dplyr’`.
@@ -621,5 +607,3 @@ developing and running spatial microsimulation models in R.
 Discussion of the results, which represent the inhabitants of the imaginary
 system *SimpleWorld*, create the backdrop for the rest of the book, which
 we will return to in Chapter&nbsp;12.
-
-# References

@@ -1,12 +1,8 @@
----
-title: "References"
-layout: default
----
+# Bibliography {#bibliography}
 
 ```{r, echo=FALSE}
 # How to create: %s/\n/\r\r/gc in vim
 ```
 
 
-# Bibliography {#bibliography}
 
