@@ -21,7 +21,7 @@ bibliography: bibliography.bib
 
 Welcome to the online home *Spatial Microsimulation with R*.
 
-This is a book by [Robin Lovelace](http://robinlovelace.net/) and [Morgane Dumont](https://directory.unamur.be/staff/modumont) (with chapters [11](http://spatial-microsim-book.robinlovelace.net/tresis.html) and [12](http://spatial-microsim-book.robinlovelace.net/abm) contributed by [Richard Ellison](http://sydney.edu.au/business/staff/richard.ellison) and [Maja Založnik](https://www.oxfordmartin.ox.ac.uk/people/565) respectively).
+This is a book by [Robin Lovelace](http://robinlovelace.net/) and [Morgane Dumont](https://directory.unamur.be/staff/modumont) (with chapter [10](http://spatial-microsim-book.robinlovelace.net/ha.html) contributed by [Johan Barthélemy](https://smart.uow.edu.au/people/UOW192467.html), chapter [11](http://spatial-microsim-book.robinlovelace.net/tresis.html) contributed by [Richard Ellison](http://sydney.edu.au/business/staff/richard.ellison) and [David Hensher](http://sydney.edu.au/business/staff/david.hensher)  and chapter [12](http://spatial-microsim-book.robinlovelace.net/abm) contributed by [Maja Založnik](https://www.oxfordmartin.ox.ac.uk/people/565)).
 
 [![](https://images.tandf.co.uk/common/jackets/amazon/978149871/9781498711548.jpg)](https://www.crcpress.com/Spatial-Microsimulation-with-R/Lovelace-Dumont/p/book/9781498711548)
 
@@ -33,6 +33,8 @@ Depending on your interests and level of experience we particularly recommend:
 - Chapter [2](http://spatial-microsim-book.robinlovelace.net/simpleworld): if you'd like to see a very simple worked-example of the process in action.
 - Chapter [11](http://spatial-microsim-book.robinlovelace.net/tresis.html): if you're interested in more advanced applications applicable to transport modelling
 - Chapter [12](http://spatial-microsim-book.robinlovelace.net/abm): for the links between spatial microsimulation and agent-based modelling.
+
+Chapters 3 to 9 contain all explanations and codes to allow you to generate microdata with or without a sample. Chapter 10 includes techniques to add the household level information.
 
 Furthermore, if you're completely new to R and programming in general, check-out the [appendix](http://spatial-microsim-book.robinlovelace.net/apr), which will get you up-to-speed in no time.
 There's also a [glossary](http://spatial-microsim-book.robinlovelace.net/glossary.html) that explains some of the jargon used in this field of research.
