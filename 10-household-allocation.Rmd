@@ -234,12 +234,11 @@ perfect. Indeed, it can happen, for example, that there are an odd number
 of people who need to live in couple, making it impossible
 to find a perfect coupling.
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{figures/HH-CO.png}
-\caption{Illustration of the problem of grouping members of married couples with children.}
-\end{center}
-\end{figure}
+
+```{r, fig.cap="Illustration of the problem of grouping members of married couples with children.", fig.height=6, echo=FALSE}
+img <- readPNG("figures/HH-CO.png")
+grid.raster(img)
+```
 
 As illustrated
 in Figure 10.2, the individuals can be categorised first by
@@ -337,13 +336,12 @@ These proportions will be useful in next step of the global process.
 The methodology for the couples with male heads is illustrated in Figure 10.3. For
 female heads, the process is totally similar. 
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=\textwidth]{figures/IllustrationCouples.png}
-\caption{Illustration of the algorithm to form the couples}
-\label{AlgoCouple}
-\end{center}
-\end{figure}
+
+
+```{r, fig.cap="Illustration of the algorithm to form the couples", fig.height=6, echo=FALSE}
+img <- readPNG("figures/IllustrationCouples.png")
+grid.raster(img)
+```
 
 First, we split the set of 
 individuals depending on their role and gender. 
@@ -378,13 +376,10 @@ synthetic population. Since the dots are on the line
 formed by the points having both coordinates equal, we can argue that our
 simulation worked well.
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=\textwidth]{figures/Belgium/Couples.png}
-\caption{Illustration of the results for the couples in Belgium}
-\label{ResultBE}
-\end{center}
-\end{figure}
+```{r, fig.cap="Illustration of the results for the couples in Belgium", fig.height=6, echo=FALSE}
+img <- readPNG("figures/Belgium/Couples.png")
+grid.raster(img)
+```
 
 The assembling of children to the head has been made by a similar process
 and gives as good results in terms of distribution of ages. However, 
@@ -400,13 +395,10 @@ worst municipality has only 0.5% of non-assigned individuals. The vast majority
 of the Belgian municipalities has less than 0.1% of these individuals.
 
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=\textwidth]{figures/Belgium/NonAssigne.png}
-\caption{Illustration of the non-assigned individuals in Belgium}
-\label{NonAssigne}
-\end{center}
-\end{figure}
+```{r, fig.cap="Illustration of the non-assigned individuals in Belgium", fig.height=6, echo=FALSE}
+img <- readPNG("figures/Belgium/NonAssigne.png")
+grid.raster(img)
+```
 
 Figure 10.6 illustrates the proportion of individuals living 
 with a wrong number of cohabitants. In the different municipalities, 
@@ -425,13 +417,10 @@ are statistically very similar to the real Belgian population.
 Since these individuals are 'synthetic', the resulting population doesn't
 suffer of privacy law problems.
 
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[width=\textwidth]{figures/Belgium/BadSize.png}
-\caption{Illustration of the individuals in a household of a different size for Belgium}
-\label{BadSize}
-\end{center}
-\end{figure}
+```{r, fig.cap="Illustration of the individuals in a household of a different size for Belgium", fig.height=6, echo=FALSE}
+img <- readPNG("figures/Belgium/BadSize.png")
+grid.raster(img)
+```
 
 \pagebreak
 
