@@ -37,15 +37,15 @@ subtitle of this book is "a *practical* introduction" for a reason!
 
 This chapter is ordered as follows:
 
-- *Getting setup with the RStudio environment* ([](#rstudioUpSpeed)) contains
+- *Getting setup with the RStudio environment* (\@ref(rstudioUpSpeed)) contains
 the basic explanation of RStudio to enable you to code the examples of this 
 book on your own computer.
-- *SimpleWorld data* ([](#SimpleWorldData)) describes the context and the
+- *SimpleWorld data* (\@ref(SimpleWorldData)) describes the context and the
 data of this little illustrative example.
-- *Generating a weight matrix* ([](#weight-matrix)) contains the code and the description of the role of a weight matrix in a spatial microsimulation.
--*Spatial microdata* ([](#spatial-microdata)) shows the typically useful output 
+- *Generating a weight matrix* (\@ref(weight-matrix)) contains the code and the description of the role of a weight matrix in a spatial microsimulation.
+-*Spatial microdata* (\@ref(spatial-microdata)) shows the typically useful output 
 of a spatial microsimulation.
--*SimpleWorld in context* ([](#SimpleWorldContext)) mentions the kind of
+-*SimpleWorld in context* (\@ref(SimpleWorldContext)) mentions the kind of
 context where the output could be used.
 
 ## Getting setup with the RStudio environment {#rstudioUpSpeed}
