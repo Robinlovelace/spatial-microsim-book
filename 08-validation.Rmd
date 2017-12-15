@@ -33,15 +33,15 @@ These strategies are described below:
 (Edwards et al. 2010) ---
 is comparing model results against a priori knowledge of how they *should*
 be. This level of model checking usually takes place only at the aggregate 
-level of the constraint variables ([](#Internal)).
+level of the constraint variables (\@ref(Internal)).
 2. *Model evaluation* --- also known as *external validation* --- is the
 process of comparing model results with external data. This approach to
 verification relies on good 'ground-truth data' and can take place at either
 the individual level (if geo-coded survey data are available) or (more
-commonly) at the aggregate level ([](#External)).
+commonly) at the aggregate level (\@ref(External)).
 
 The chapter develops these two possible validations and
-explains the problem of the zero cells ([](#empty-cells)).
+explains the problem of the zero cells (\@ref(empty-cells)).
 
 Internal validation is the most common form of model evaluation. In some cases
 this type of validation is the only available test of the model's output,
