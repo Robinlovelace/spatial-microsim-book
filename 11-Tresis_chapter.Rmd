@@ -17,8 +17,8 @@ Therefore, if you understand the R language well, this chapter can also be seen 
 to the TRESIS method, from a technical standpoint.
 
 The chapter is divided into four sections: an overview of the method with, reference to academic
-research ([](#tresis-over)); a demonstration of the generation of realistic households used in
-TRESIS, building on CakeMap input data ([](#tresis-house)); and an illustration of how demand
+research (\@ref(tresis-over)); a demonstration of the generation of realistic households used in
+TRESIS, building on CakeMap input data (\@ref(tresis-house)); and an illustration of how demand
 models can be used to allocate these synthetic households to geographic zones (Section 11.3).
 The work concludes with a brief discussion of the merits of the approach and directions that one
 could develop the methods highlighted.
