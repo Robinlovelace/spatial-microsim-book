@@ -15,13 +15,13 @@ procedure (IPF), a simple, fast and widely-used method to allocate
 individuals to zones. Other methods can achieve the same result,
 as discussed in the first section of this chapter and as
 demonstrated in
-[](#alternative-reweighting).
+\@ref(#alternative-reweighting).
 
 This chapter moves from theory to practice. It describes the
-process underlying the method of population synthesis (Section \ref{ipftheory}) before implementing
-the IPF algorithm in base R (Section \ref{ipfinr}). In the following sections two packages that automate
+process underlying the method of population synthesis (Section \@ref(ipftheory)) before implementing
+the IPF algorithm in base R (Section\@ref(ipfinr)). In the following sections two packages that automate
 IPF, **ipfp** and **mipfp**, are introduced
-([](#ipfp) and [](#mipfp) respectively).
+(\@ref(#ipfp) and \@ref(#mipfp) respectively).
 The chapter also introduces the important concepts of 
 *integerisation* and *expansion*. These methods are introduced
 towards the end of each package-specific section. The final
@@ -463,7 +463,7 @@ is young and has a comparatively low weight of 1 for zone two. Intuitively
 this makes sense because zone 2 has only 2 young adult inhabitants (see
 the result of `cons[2,]`) but 8 older inhabitants. The reweighting stage is
 making sense. Note also that the weights generated are fractional;
-see [](#sintegerisation) for methods of converting fractional weights into
+see \@ref(sintegerisation) for methods of converting fractional weights into
 integer weights to generate a synthetic small-area population ready for
 agent-based modelling applications. 
 
@@ -872,7 +872,7 @@ More sophisticated ways of evaluating model fit are
 presented in Section \ref{svalidation}.
 As mentioned at the beginning of this chapter there are alternative methods
 for allocating individuals to zones. These are discussed in a subsequent section in
-[](#alternative-reweighting).
+\@ref(alternative-reweighting).
 
 Note that the weights generated in this section are fractional.
 For agent-based modelling
@@ -882,7 +882,7 @@ Two methods of integerisation are explored:
 The first randomly chooses the individuals, with a probability proportional
 to the weights.
 The second is to define a rounding method. A good method is 
-'Truncate Replicate Sample' [@Lovelace2013-trs], described in ([](#sintegerisation)).
+'Truncate Replicate Sample' [@Lovelace2013-trs], described in (\@ref(sintegerisation)).
 
 
 ### IPF with **mipfp** {#mipfp}
@@ -1960,7 +1960,7 @@ algorithms do not consider the same form of input. For **ipfp**
 you need constraints and an initial individual level data, coming for example from 
 a survey. For **mipfp** the constraints and a contingency table of 
 a survey is enough. Thus, in the absence of microdata, 
-**mipfp** must be used (described in [](#nomicrodata)). Moreover, 
+**mipfp** must be used (described in \@ref(nomicrodata)). Moreover, 
 their results are in different structures. Weights are created for each 
 individual with **ipfp** and weights for the contingency table with **mipfp**.
 The results can be transformed from one to the other form if needs be.
