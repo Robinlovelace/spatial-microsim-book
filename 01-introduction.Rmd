@@ -634,8 +634,7 @@ descriptions of their contents are as follows:
 # Idea: the book could be easily split into 3 parts. Worth it?
 ```
 
-- *SimpleWorld* 
-([](#SimpleWorld))
+- [*SimpleWorld*](http://spatial-microsim-book.robinlovelace.net/simpleworld)
 is a simple and reproducible
 explanation of spatial microsimulation with reference to an imaginary planet.
 It's also a chance to set up your system and RStudio settings to
