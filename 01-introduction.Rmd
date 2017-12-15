@@ -640,19 +640,16 @@ explanation of spatial microsimulation with reference to an imaginary planet.
 It's also a chance to set up your system and RStudio settings to
 get the most out of the subsequent chapters.
 
-- *What is spatial microsimulation?*
-([](#what-is))
+- [*What is spatial microsimulation?*](http://spatial-microsim-book.robinlovelace.net/what-is.html)
 introduces the concepts and applications of spatial 
 microsimulation not only as a narrow methodology
 but as an *approach* to understanding real-world phenomena.
 
-- *Data preparation*
-([](#data-prep))
+- [*Data preparation*](http://spatial-microsim-book.robinlovelace.net/data-prep.html)
 is dedicated to the boring but vital task
 of loading and 'cleaning' the input data, ready for spatial microsimulation.
 
-- *Population synthesis*
-([](#smsimr))
+- [*Population synthesis*](http://spatial-microsim-book.robinlovelace.net/smsimr.html)
 uses the input data created in the previous chapter to perform population
 synthesis, the process of creating synthetic spatial microdata. 
 The chapter describes the main functions
@@ -661,8 +658,7 @@ microsimulation, with a focus
 on the **ipfp** and **mipfp** packages, which perform Iterative Proportion
 Fitting (IPF). 
 
-- *Alternative approaches to population synthesis*
-([](#alternative-reweighting)) describes some alternative methods, beyond IPF, for population
+- [*Alternative approaches to population synthesis*](http://spatial-microsim-book.robinlovelace.net/alternative-reweighting.html) describes some alternative methods, beyond IPF, for population
 synthesis. These include an R implementation the
 Generalized Regression Weighting procedure (GREGWT), a description
 of 'simulated annealing'
@@ -673,36 +669,30 @@ perform the 'heavy lifting' of population synthesis. A few of these,
 including R's `optim` and `GenSA` functions, are tested, illustrating the
 importance of performance testing.
 
-- *Spatial microsimulation in the wild*
-([](#CakeMap))
+- [*Spatial microsimulation in the wild*](http://spatial-microsim-book.robinlovelace.net/cakemap)
 is based on a larger
 and more complex example than SimpleWorld called CakeMap, that uses real data.
 This chapter combines geographic constraints with non-geographical survey
 data to
 estimate the geographical variation in cake consumption.
 
-- *Model checking and evaluation*
-([](#svalidation))
+- [*Model checking and evaluation*](spatial-microsim-book.robinlovelace.net/svalidation.html)
 tackles the understudied but important questions of 'is the model working?' and 'do the results coincide with reality?'. Here you will learn appropriate tests and checks to verify spatial microsimulation outputs and think about its underlying assumptions.
 
-- *Population synthesis without microdata*
-([](#nomicrodata))
+- [*Population synthesis without microdata*](http://spatial-microsim-book.robinlovelace.net/nomicrodata.html)
 gives a way to produce a spatial microsimulation without having individual level data.
 
-- *Household allocation*
-([](#ha))
+- [*Household allocation*](http://spatial-microsim-book.robinlovelace.net/ha.html)
 explains techniques to group the synthetic individuals into households.
 
-- *The TRESIS approach to spatial microsimulation*
-([](#tresis))
+- [*The TRESIS approach to spatial microsimulation*](http://spatial-microsim-book.robinlovelace.net/tresis.html)
 describes an alternative approach to spatial microsimulation
 that operates at the household level. This contributed chapter, by
 Richard Ellison and David Hensher, demonstrates the population synthesis
 stage of the wider Transport and Environment Strategy Impact Simulator
 (TRESIS) modelling system. 
 
-- *Spatial microdata in agent-based models*
-(Chapter 12)
+- [*Spatial microdata in agent-based models*](http://spatial-microsim-book.robinlovelace.net/abm)
 describes how the output
 from spatial microsimulation can be used as an input into more complex models.
 
