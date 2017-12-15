@@ -6,15 +6,15 @@ and to define clearly what we mean by it in this book.
 Following the brief introduction to the field in this first section,
 the chapter is ordered as follows:
 
-- *Terminology* (Section \ref{terminology}) explains the basis of the concept ([](#SimCity))
+- *Terminology* (\@ref(terminology)) explains the basis of the concept (\@ref(SimCity))
 and shows how spatial microsimulation
 can be understood as either a method or an approach
-([](#meth-approach)).
-- *What spatial microsimulation is not* ([](#is-not)) describes the differences between 
+(\@ref(meth-approach)).
+- *What spatial microsimulation is not* (\@ref(is-not)) describes the differences between 
 spatial microsimulation and other fields that could seem similar.
-- *Applications* ([](#applications)) explores various academic and real-world
+- *Applications* (\@ref(applications)) explores various academic and real-world
 applications.
-- *Assumptions* ([](#assumptions)) addresses
+- *Assumptions* (\@ref(assumptions)) addresses
 the often unspoken assumptions underlying spatial microsimulation results.
 
 For the purposes of this book spatial microsimulation was defined in Chapter&nbsp;1 as:
@@ -75,7 +75,7 @@ misinterpretation of literature that employs the term.
 
 There are some issues with term *spatial microsimulation*, as
 described below
-(see [](#is-not)).
+(see \@ref(is-not)).
 However, *spatial microsimulation* is an appropriate label for the material covered in this
 book because it is
 already widely used and because it
@@ -133,7 +133,7 @@ transport modelling, is used to describe the methods for generating
 the spatial microdata on which the spatial microsimulation approach depends.
 
 A subsequent section
-([](#applications))
+(\@ref(applications))
 outlines some real-world problems spatial microsimulation has
 been used to tackle. First, we consider how spatial
 microsimulation is understood in the literature and how this relates to
@@ -435,14 +435,14 @@ census but which is unavailable for confidentiality reasons.
 
 Input *microdata* and *constraints* ensure the simulated results match reality
 (at least at the aggregate level for the constraint variables --- see
-[](#assumptions)). The resulting synthetic spatial microdata is extremely useful
+\@ref(assumptions)). The resulting synthetic spatial microdata is extremely useful
 for estimating missing data at the local level. If *target variables* contained
 in the output were not present in the constraints (income is a common example),
 estimates of income variability over space can be extracted from the spatial microdata.
 In addition, the estimated spatial microdata represented in Figure 3.1 will contain
 estimates of *cross-tabulations* (contingency tables) between different variables
 and estimates of the distribution of continuous variables such as age and income.
-These estimates are useful in many applications ([](#applications)).
+These estimates are useful in many applications (\@ref(applications)).
 
 ## Applications {#applications}
 
