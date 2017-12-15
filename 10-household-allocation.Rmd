@@ -44,9 +44,9 @@ where you have no microdata for the households
 
 The chapter is structured as followed:
 
--*Independent data (individuals and households)* ([](#IndData)) considers the
+-*Independent data (individuals and households)* (\@ref(IndData)) considers the
 case in which data on households and individuals remain completely separate.
--*With additional household's data* ([](#AddData)) presents a strategy when
+-*With additional household's data* (\@ref(AddData)) presents a strategy when
 having additional data to the individual data.
 
 Note that the first section explains a method of the literature only 
@@ -168,7 +168,7 @@ household level information (such as household type and household's size).
 To form the households with this resulting data, we have two possible alternatives.
 The first is to aggregate the information concerning the individuals and 
 the households independently. By this way, we build two independent 
-tables and we can use an algorithm similar to the one in [](#IndData).
+tables and we can use an algorithm similar to the one in \@ref(IndData).
 The second possibility aims to preserve the full potential of the data.
 This means that individuals are joined with the constraints to follow
 as well as possible their characteristics. For example, two people
@@ -254,7 +254,7 @@ of its characteristics.
 ### With additional household's data {#AddData}
 
 Without additional data on household structure, the only
-possible method is the one described in [](#WithoutHHdata). 
+possible method is the one described in \@ref(WithoutHHdata). 
 However, this allows improbable households, such as 
 a couple formed by an individual of 18 years old and
 another of 81 years. For this reason, when we create households,
