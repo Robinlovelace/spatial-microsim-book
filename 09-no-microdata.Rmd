@@ -22,10 +22,10 @@ This chapter demonstrates
 two options for population synthesis when
 real individual level data is unavailable:
 
-- *Global cross-tables and local marginal distributions* ([](#CrossGlobLocalMarg)) 
+- *Global cross-tables and local marginal distributions* (\@ref(CrossGlobLocalMarg)) 
 explains a method for cases where the constraints consist in cross-tables not spatially located
 and local marginal distributions.
-- *Two level aggregated data* ([](#twoLevelData)) contains a procedure to 
+- *Two level aggregated data* (\@ref(twoLevelData)) contains a procedure to 
 make a spatial microsimulation when having data at different aggregated levels, 
 for example, one for the provinces and one for the districts.
 
@@ -51,7 +51,7 @@ are independent of the zone in question.
 
 To illustrate, we will develop the SimpleWorld example
 (which can be loaded from the book's data directory by entering
-`source("code/SimpleWorld.R")` or was previously loaded if you as followed ([](#data-prep))) with 
+`source("code/SimpleWorld.R")` or was previously loaded if you as followed (\@ref(data-prep))) with 
 adapted constraints. When watching the available data in an aggregated level, 
 we have for the moment:
 
@@ -164,7 +164,7 @@ the resulting weights could be
 $(\frac{4}{3},\frac{4}{3},\frac{4}{3})$. Then, 
 the rounding gives $(1,1,1)$ and there would be too
 few individuals in the synthetic population (3 not 4). We can try the algorithms proposed
-in ([](#sintegerisation)). However, as illustrated
+in (\@ref(sintegerisation)). However, as illustrated
 by the following code chunks, these integerisation methods lead to
 errors in relation to the constraints.
 
