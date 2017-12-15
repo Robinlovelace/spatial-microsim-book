@@ -12,10 +12,10 @@ We have different methods, each corresponding to a section:
 
 - *GREGWT* (\@ref(GREGWT)) contains a method based on a Generalized Regression Weighting 
 procedure.
-- *Population synthesis as an optimization problem* ([](#asOptim)) explains
+- *Population synthesis as an optimization problem* (\@ref(asOptim)) explains
 how we can make spatial microsimulation thanks to optimization algorithms.
-- *simPop* ([](#SimPop)) mentions another package to make spatial microsimulation.
-- *The Urban Data Science Toolkit (UDST)* ([](#UDST)) shortly describes another
+- *simPop* (\@ref(SimPop)) mentions another package to make spatial microsimulation.
+- *The Urban Data Science Toolkit (UDST)* (\@ref(UDST)) shortly describes another
 technique, coded in python.
 
 ## GREGWT {#GREGWT}
