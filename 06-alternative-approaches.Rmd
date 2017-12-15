@@ -10,7 +10,7 @@ load("cache-smsim-in-R.RData")
 This chapter briefly describes other techniques for spatial microsimulation.
 We have different methods, each corresponding to a section: 
 
-- *GREGWT* ([](#GREGWT)) contains a method based on a Generalized Regression Weighting 
+- *GREGWT* (\@ref(GREGWT)) contains a method based on a Generalized Regression Weighting 
 procedure.
 - *Population synthesis as an optimization problem* ([](#asOptim)) explains
 how we can make spatial microsimulation thanks to optimization algorithms.
