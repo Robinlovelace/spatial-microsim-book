@@ -34,9 +34,11 @@ Depending on your interests and level of experience we particularly recommend:
 - Chapter [11](http://spatial-microsim-book.robinlovelace.net/tresis.html): if you're interested in more advanced applications applicable to transport modelling
 - Chapter [12](http://spatial-microsim-book.robinlovelace.net/abm): for the links between spatial microsimulation and agent-based modelling.
 
-Chapters 3 to 9 contain all explanations and codes to allow you to generate microdata with or without a sample. Chapter 10 includes techniques to add the household level information.
+Chapters [3](http://spatial-microsim-book.robinlovelace.net/what-is.html) to [9](http://spatial-microsim-book.robinlovelace.net/nomicrodata.html) explain, with reference to reproducible code 'chunks' embedded in the text, how to generate spatial microdata, with or without a sample population.
+Chapter [10](http://spatial-microsim-book.robinlovelace.net/ha.html) demontrates how to add household-level variables.
 
-Furthermore, if you're completely new to R and programming in general, check-out the [appendix](http://spatial-microsim-book.robinlovelace.net/apr), which will get you up-to-speed in no time.
+Furthermore, there are add-on chapters for beginners to R or the discipline.
+If you're completely new to R and programming in general, check-out the [appendix](http://spatial-microsim-book.robinlovelace.net/apr), which will get you up-to-speed quickly.
 There's also a [glossary](http://spatial-microsim-book.robinlovelace.net/glossary.html) that explains some of the jargon used in this field of research.
 
 We've put *Spatial Microsimulation with R* on-line because we want to reduce barriers to learning.
