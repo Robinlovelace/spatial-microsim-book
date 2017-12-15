@@ -57,21 +57,21 @@ The process of loading, checking and preparing the input datasets for spatial
 microsimulation is generally a linear process, encapsulating the following
 stages, corresponding to the sections of this chapter:
 
-- *Accessing the input data* ([](#accessing)) provides advice on
+- *Accessing the input data* (\@ref(accessing)) provides advice on
 ways to collect and chose data.
-- *Target and constraint variables* ([](#Selecting)) explains the
+- *Target and constraint variables* (\@ref(Selecting)) explains the
 different types of data you can have and how to define the targets
 and the constraints.
-- *Loading input data* ([](#Loading)) contains the R code to load
+- *Loading input data* (\@ref(Loading)) contains the R code to load
 the input data.
-- *Subsetting to remove excess information* ([](#subsetting-prep)) 
+- *Subsetting to remove excess information* (\@ref(subsetting-prep)) 
 gives the R code to not consider all variables.
-- *Re-categorising individual level variables* ([](#re-categorise))
+- *Re-categorising individual level variables* (\@ref(re-categorise))
 develops the R code to have pertinent categories in all variables.
-- *Matching individual and aggregate level data names* ([](#matching))
+- *Matching individual and aggregate level data names* (\@ref(matching))
 makes the data names correspond to avoid problems when executing the 
 spatial microsimulation.
-- *'Flattening' the individual level data* ([](#flattening)) explains
+- *'Flattening' the individual level data* (\@ref(flattening)) explains
 a way to transform the data into a boolean matrices.
 
 
@@ -85,7 +85,7 @@ a way to transform the data into a boolean matrices.
 Before loading the spatial microdata, you must decide on the data 
 needed for your research. Focus on "target variables" related to the research
 question will help decide on the constraint variables, as we will see
-below ([](#Selecting)).
+below (\@ref(Selecting)).
 Selecting only on variables of interest will ensure you do not
 waste time thinking about and processing 
 additional variables that will be of little use in the future.
@@ -117,7 +117,7 @@ required level of detail.
 For example, you may have a variable on the province of each individual
 but need its municipality, a lower geographical level.
 The input data can be accessed from the RStudio book project, as described
-in [](#SimpleWorld).
+in \@ref(SimpleWorld).
 
 
 \index{reproducibility}
