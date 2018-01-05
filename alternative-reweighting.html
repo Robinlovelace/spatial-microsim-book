@@ -25,7 +25,7 @@
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-15">
+<meta name="date" content="2018-01-05">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -398,7 +398,7 @@ for(area in <span class="kw">seq</span>(<span class="kw">dim</span>(age)[<span c
 <p>The base R function <code>optim</code> provides a general purpose optimization framework for numerically solving objective functions. Based on the objective function for spatial microsimulation described above, we can use any general optimization algorithm for reweighting the individual level dataset. But which to use?</p>
 <p>Different reweighting strategies are suitable in different contexts and there is no clear winner for every occasion. However, testing a range of strategy makes it clear that certain algorithms are more efficient than others for spatial microsimulation. Figure 6.1 demonstrates this variability by plotting total absolute error as a function of number of iterations for various optimization algorithms available from the base function <code>optim</code> and the <strong>GenSA</strong> package. Note that the comparisons are performed only for zone 1.  </p>
 <div class="figure"><span id="fig:unnamed-chunk-160"></span>
-<img src="_main_files/figure-html/unnamed-chunk-160-1.png" alt="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms." width="403.2" />
+<img src="_main_files/figure-html/unnamed-chunk-160-1.png" alt="Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms." width="768" />
 <p class="caption">
 Figure 6.1: Relationship between number of iterations and goodness-of-fit between observed and simulated results for different optimisation algorithms.
 </p>
@@ -409,11 +409,12 @@ Figure 6.1: Relationship between number of iterations and goodness-of-fit betwee
 <p>The code used to test these alternative methods for reweighting are provided in the script ‘code/optim-tests-SimpleWorld.R’. The results should be reproducible on any computer, provided the book’s supplementary materials have been downloaded. There are many other optimisation algorithms available in R through a wide range of packages and new and improved functions are being made available all the time. Enthusiastic readers are encouraged to experiment with the methods presented here: it is possible that an algorithm exists which outperforms all of those tested for this book. Also, it should be noted that the algorithms were tested on the extremely simple and rather contrived example dataset of SimpleWorld. Some algorithms may perform better with larger datasets than others and may be sensitive to changes to the initial conditions such as the problem of ‘empty cells’.</p>
 <p>Therefore these results, as with any modelling exercise, should be interpreted with a healthy dose of skepticism: just because an algorithm converges after few ‘iterations’ this does not mean it is inherently faster or more useful than another. The results are context specific, so it is recommended that the tested framework in ‘code/optim-tests-SimpleWorld.R’ is used as a basis for further tests on algorithm performance on the datasets you are using. IPF has performed well in the situations I have tested it in (especially via the <code>ipfp</code> function, which performs disproportionately faster than the pure R implementation on large datasets) but this does not mean that it is always the best approach.</p>
 <p>To overcome the caveat that the meaning of an ‘iteration’ changes dramatically from one algorithm to the next, further tests measured the time taken for each reweighting algorithm to run. To have a readable graph, we do not represent the error as a function of the time, but the time per algorithm in function of the number of iterations (Figure 6.2). This figure demonstrates that an iteration of GenSA take a long time in comparison with the other algorithm. Moreover, <code>&quot;BFGS&quot;</code> and <code>&quot;CG&quot;</code> are still following a similar curve under GenSA. Nelder-Mead, SANN and IPF contains iterations that take less time. By observing Figures 6.1 and 6.2 simultaneously , it appears that IPF is the best in terms of convergence (little TAE after few iterations) and the time needed for few iterations is good.</p>
-\begin{figure}
-\includegraphics{figures/TimeOptim_GenSA_Mo.pdf}
-\caption{Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms.}
-\label{TimeOptim_GenSA}
-\end{figure}
+<div class="figure"><span id="fig:unnamed-chunk-164"></span>
+<img src="_main_files/figure-html/unnamed-chunk-164-1.png" alt="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms." width="768" />
+<p class="caption">
+Figure 6.2: Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms.
+</p>
+</div>
 <p></p>
 <p>Nelder-Mead is fast at reaching a good approximation of the constraint data, despite taking many iterations. <code>GenSA</code>, on the other hand, is shown to be much slower than the others, despite only requiring 2 iterations to arrive at a good level of fit.</p>
 <p>Note that these results are biased by the example that is pretty small and runs only for the first zone.</p>

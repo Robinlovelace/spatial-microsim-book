@@ -25,7 +25,7 @@
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2017-12-15">
+<meta name="date" content="2018-01-05">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -329,8 +329,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <div id="constituent-members-selection" class="section level3">
 <h3><span class="header-section-number">10.1.2</span> Constituent members selection</h3>
 <p>Now that a household type has been determined, we can detail the members selection process. First a household head is drawn from the pool of individuals <code>IndPool</code> defined by the estimated individuals distribution <code>Ind</code>. Then, depending on the household types, a partner, children and additional adults are also drawn if necessary. This process is illustrated in Figure 10.1.</p>
-<div class="figure"><span id="fig:unnamed-chunk-244"></span>
-<img src="_main_files/figure-html/unnamed-chunk-244-1.png" alt="Constituent members selection process" width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-245"></span>
+<img src="_main_files/figure-html/unnamed-chunk-245-1.png" alt="Constituent members selection process" width="672" />
 <p class="caption">
 Figure 10.1: Constituent members selection process
 </p>
@@ -363,8 +363,8 @@ Figure 10.1: Constituent members selection process
 <h3><span class="header-section-number">10.2.1</span> Without additional household’s data</h3>
 <p>When household level constraints are only contained in the individual’s characteristics, they are often several possible groupings.</p>
 <p>Consider the case of our Belgium study where the individual level variables are age, gender, municipality, education level, professional status, size and type of households and link with the household head (e.g. wife, child). A good grouping is one that maximises the number of well-fitted constraints. The perfect grouping would be one in which each individual respects its household size and its type of household, as well as his link with the head. In general, it is impossible to reach a perfect grouping, since the data are not perfect. Indeed, it can happen, for example, that there are an odd number of people who need to live in couple, making it impossible to find a perfect coupling.</p>
-<div class="figure"><span id="fig:unnamed-chunk-245"></span>
-<img src="_main_files/figure-html/unnamed-chunk-245-1.png" alt="Illustration of the problem of grouping members of married couples with children." width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-246"></span>
+<img src="_main_files/figure-html/unnamed-chunk-246-1.png" alt="Illustration of the problem of grouping members of married couples with children." width="672" />
 <p class="caption">
 Figure 10.2: Illustration of the problem of grouping members of married couples with children.
 </p>
@@ -486,32 +486,32 @@ Figure 10.2: Illustration of the problem of grouping members of married couples 
 </tbody>
 </table>
 <p>These proportions will be useful in next step of the global process. The methodology for the couples with male heads is illustrated in Figure 10.3. For female heads, the process is totally similar.</p>
-<div class="figure"><span id="fig:unnamed-chunk-246"></span>
-<img src="_main_files/figure-html/unnamed-chunk-246-1.png" alt="Illustration of the algorithm to form the couples" width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-247"></span>
+<img src="_main_files/figure-html/unnamed-chunk-247-1.png" alt="Illustration of the algorithm to form the couples" width="672" />
 <p class="caption">
 Figure 10.3: Illustration of the algorithm to form the couples
 </p>
 </div>
 <p>First, we split the set of individuals depending on their role and gender. This forms male heads and female partners to join on one hand, and female heads with male partners on the other hand. We consider each male head turn by turn. For each head, we determine the theoretical distributions of each women ages, depending on the age of the head (thanks to the additional age distribution table). Out of this distribution, we remove the ages that are no more available in the set of possible partners. Indeed, at the end of the process, only a few partners remain to be assigned. Thus, all ages will not be represented any more. Out of this distribution of ages, we calculate the proportions, whose will be used as probabilities in the random draw. Then, thanks to this, we draw an age. Finally, knowing the age of his partner, we choose a wife randomly. This process is repeated until the set of remaining individuals is empty, or there are no remaining partners in the possible ages for the remaining heads.</p>
 <p>In our research, this algorithm has been applied to all municipalities in Belgium. The final result is illustrated in Figure 10.4. On this graph, each point corresponds to a combination of (age woman x age man) for a municipality. Its abscissa is the theoretical count for this category, included in the database of the age distributions inside couples. Its ordinate is the number of couples in this category in our synthetic population. Since the dots are on the line formed by the points having both coordinates equal, we can argue that our simulation worked well.</p>
-<div class="figure"><span id="fig:unnamed-chunk-247"></span>
-<img src="_main_files/figure-html/unnamed-chunk-247-1.png" alt="Illustration of the results for the couples in Belgium" width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-248"></span>
+<img src="_main_files/figure-html/unnamed-chunk-248-1.png" alt="Illustration of the results for the couples in Belgium" width="672" />
 <p class="caption">
 Figure 10.4: Illustration of the results for the couples in Belgium
 </p>
 </div>
 <p>The assembling of children to the head has been made by a similar process and gives as good results in terms of distribution of ages. However, when no new combination is still possible, some individuals could remain without an assigned household. To improve the spatial microsimulation here, we have chosen to join remaining individuals without regarding at their size of household if this improves the age distribution. This implies less people without an household, but some individuals are in a household not corresponding to its size.</p>
 <p>Figure 10.5 indicates that the worst municipality has only 0.5% of non-assigned individuals. The vast majority of the Belgian municipalities has less than 0.1% of these individuals.</p>
-<div class="figure"><span id="fig:unnamed-chunk-248"></span>
-<img src="_main_files/figure-html/unnamed-chunk-248-1.png" alt="Illustration of the non-assigned individuals in Belgium" width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-249"></span>
+<img src="_main_files/figure-html/unnamed-chunk-249-1.png" alt="Illustration of the non-assigned individuals in Belgium" width="672" />
 <p class="caption">
 Figure 10.5: Illustration of the non-assigned individuals in Belgium
 </p>
 </div>
 <p>Figure 10.6 illustrates the proportion of individuals living with a wrong number of cohabitants. In the different municipalities, the proportion varies from 0.7 to 1.05%. These errors affect only a small proportion of each municipality and concern only the size of household (the type of household is always respected).</p>
 <p>In conclusion, the simulation fits well the strong contraints (age distributions inside couples and between head and children). The individuals assigned to a household have the right link with the head and most of them live with the right number of cohabitants. Only few individuals has not been chosen to form an household. Thus, we can consider the synthetic population acceptable. Thanks to spatial microsimulation, these new synthetic data are statistically very similar to the real Belgian population. Since these individuals are ‘synthetic’, the resulting population doesn’t suffer of privacy law problems.</p>
-<div class="figure"><span id="fig:unnamed-chunk-249"></span>
-<img src="_main_files/figure-html/unnamed-chunk-249-1.png" alt="Illustration of the individuals in a household of a different size for Belgium" width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-250"></span>
+<img src="_main_files/figure-html/unnamed-chunk-250-1.png" alt="Illustration of the individuals in a household of a different size for Belgium" width="672" />
 <p class="caption">
 Figure 10.6: Illustration of the individuals in a household of a different size for Belgium
 </p>
