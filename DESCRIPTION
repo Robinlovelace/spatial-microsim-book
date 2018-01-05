@@ -21,6 +21,7 @@ Imports:
     tmap,
     tidyr,
     mlogit,
-    simPop
+    simPop,
+    reticulate
 Remotes: 
     emunozh/GREGWT
