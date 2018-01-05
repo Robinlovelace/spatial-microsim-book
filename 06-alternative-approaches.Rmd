@@ -370,7 +370,7 @@ and the time needed for few iterations is good.
 ```
 
 ```{r, fig.cap="Relationship between processing time and goodness-of-fit between observed and simulated results for different optimisation algorithms.", fig.width=8, fig.pos='!h', echo=FALSE}
-img <- readPNG("figures/TimeOptim_GenSA_Mo.pdf")
+img <- readPNG("figures/TimeOptim_GenSA_Mo.png")
 grid.raster(img)
 ```
 
