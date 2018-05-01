@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
   <meta name="description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software.">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2018-01-05">
+<meta name="date" content="2018-05-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -310,8 +310,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>TRESIS is a Transport and Environment Strategy Impact Simulator originally developed by Professor David Hensher and others at the Institute of Transport and Logistics Studies (ITLS). TRESIS evolved from an earlier project for the Bureau of Transport and Communications Economics <span class="citation">(Hensher <a href="#ref-HensherD2002">2002</a>; Hensher and Ton <a href="#ref-Hensher2002a">2002</a>)</span>. The TRESIS software provides users with the ability to assess the impacts of a large number of transport and land-use policies on various systems linked to travel behaviour. These include the environment, user expenditure and government revenue. TRESIS incorporates an extensive model system including discrete and continuous choice models. These are combined with a process of population (or more accurately, household) synthesis and a set of equilibration criteria. TRESIS provides a powerful alternative to some more widely used microsimulation implementations for evaluating strategic projects <span class="citation">(Hidas <a href="#ref-Hidas2005">2005</a>)</span>.</p>
 <p>Building on the practical focus of the book, the bulk of the substantive material focusses on the generation of synthetic households, which is described in detail. The methods and code blocks outlined below are not provided as ‘production ready’ methods but stepping stones towards further transport modelling work in R. Notwithstanding recent efforts such as the <strong>stplanr</strong> package,<a href="#fn37" class="footnoteRef" id="fnref37"><sup>37</sup></a> R is currently little-used in transport research, despite its power and flexibility. The chapter demonstrates how the synthetic populations generated through TRESIS can be used to identify where different types of households live using a residential location model. The chapter concludes with discussion of other important aspects of transport modelling that could be integrated into R, building on this work.</p>
 <p>Overall, the TRESIS model system was designed to cover many of the long and short-term decisions made by individuals and households that affect how they travel. These range from the very long-term (e.g., where to live and where to work) to the very short-term (e.g., departure time and travel mode). When used together, the TRESIS models predict households’ long-term decisions and how these decisions then affect how individuals within that household travel given user-specified transport and land-use policies. Although in this chapter we discuss how to implement a stand-alone residential location model, the full power of the TRESIS system is only available when the whole set of demand models is estimated and run together. The figure below shows an overview of the high level TRESIS model structure <span class="citation">(Hensher <a href="#ref-Hensher2008">2008</a>)</span>.</p>
-<div class="figure"><span id="fig:unnamed-chunk-251"></span>
-<img src="_main_files/figure-html/unnamed-chunk-251-1.png" alt="Overview of TRESIS model structure" width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-253"></span>
+<img src="_main_files/figure-html/unnamed-chunk-253-1.png" alt="Overview of TRESIS model structure" width="672" />
 <p class="caption">
 Figure 11.1: Overview of TRESIS model structure
 </p>
@@ -916,10 +916,11 @@ gitbook.start({
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -943,9 +944,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
   <meta name="description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software.">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2018-01-05">
+<meta name="date" content="2018-05-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -371,6 +371,7 @@ cons &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class=
 <h3><span class="header-section-number">7.3.1</span> Performing IPF on CakeMap data</h3>
 <p>The <code>ipfp</code> reweighting strategy is concise, generalisable and computationally efficient. On a modern laptop, the <code>ipfp</code> method was found to be <em>almost 40 times faster</em> than the ‘IPFinR’ method (section 4.1; Lovelace, 2014) over 20 iterations on the CakeMap data, completing in 2 seconds instead of over 1 minute. This is a huge time saving!<a href="#fn25" class="footnoteRef" id="fnref25"><sup>25</sup></a></p>
 <p>Thanks to the preparatory steps described above, the IPF stage can be run on a single line. After the datasets are loaded in the first half of ‘CakeMap.R’, the following code creates the weight matrix:</p>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weights &lt;-<span class="st"> </span><span class="kw">apply</span>(cons, <span class="dv">1</span>, function(x)
   <span class="kw">ipfp</span>(x, ind_catt, x0, <span class="dt">maxit =</span> <span class="dv">20</span>))</code></pre></div>
 <p>As with the SimpleWorld example, the correlation<a href="#fn26" class="footnoteRef" id="fnref26"><sup>26</sup></a> between the constraint table and the aggregated results of the spatial microsimulation can be checked to ensure that the reweighting process has worked correctly. This demonstrates that the process has worked with an <em>r</em> value above 0.99:</p>
@@ -406,10 +407,29 @@ Figure 7.2: Scatter plot of the relationship between observed cell counts for al
 <pre><code>##    Group.1        x
 ## 1         1 1.970570
 ## 2         2 2.027638
-## 3         3 2.019839</code></pre>
+## 3         3 2.019839
+## ...</code></pre>
 <p>In the above code the third argument refers to the function to be applied to the input data. The fourth argument is simply an argument of this function, in this case instructing the standard deviation function (<code>sd</code>) to ignore all <code>NA</code> values. An alternative way to perform this operation, which is faster and more concise, is using <code>tapply</code>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">tapply</span>(ints_df$NSSEC, ints_df$zone, sd, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>Note that operations on <code>ints_df</code> can take a few seconds to complete. This is because the object is large, taking up much RAM on the computer. This can be seen by asking <code>object.size(ints_df)</code> or <code>nrow(ints_df)</code>. The latter shows we have created a spatial microdataset of 1.6 million individuals! Try comparing this result with the size of the original survey dataset ‘ind’. Keeping an eye on such parameters will ensure that the model does not generate datasets too large to handle.</p>
+<p>To estimate average cake consumption per zone from the demographic variables we must first create a numeric variable that can be averaged. Given the levels we can create a new variable as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">levels</span>(ints_df$NCakes)</code></pre></div>
+<pre><code>## [1] &quot;&lt;1&quot;     &quot;1-2&quot;    &quot;3-5&quot;    &quot;6+&quot;     &quot;rarely&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">cake_levels &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">1.5</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="fl">0.1</span>)
+ints_df$NCakes_num &lt;-<span class="st"> </span>cake_levels[<span class="kw">as.numeric</span>(ints_df$NCakes)]</code></pre></div>
+<p>From here the average levels of cake consumption can be calculated as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(tmap)
+ints_agg &lt;-<span class="st"> </span><span class="kw">group_by</span>(ints_df, zone) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">av_cakes =</span> <span class="kw">mean</span>(NCakes_num))
+<span class="kw">load</span>(<span class="st">&quot;data/CakeMap/wards.RData&quot;</span>)
+wards@data &lt;-<span class="st"> </span><span class="kw">cbind</span>(wards@data, ints_agg)
+<span class="kw">qtm</span>(wards, <span class="st">&quot;av_cakes&quot;</span>)</code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-188"></span>
+<img src="_main_files/figure-html/unnamed-chunk-188-1.png" alt="Average cake consumption per zone inferred from microsimulation model." width="672" />
+<p class="caption">
+Figure 7.3: Average cake consumption per zone inferred from microsimulation model.
+</p>
+</div>
 <p>Next chapter, we move on to a vital consideration in spatial microsimulation models such as CakeMap: model checking and validation. First, we develop the spatial microsimulation using <code>mipfp</code>.</p>
 </div>
 </div>
@@ -507,10 +527,10 @@ descript &lt;-<span class="st"> </span><span class="kw">list</span>(<span class=
 <p>The remaining step involves executing the <code>Ipfp</code> function on these data.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">weight_mipfp &lt;-<span class="st"> </span><span class="kw">Ipfp</span>(weight_init, descript, target)</code></pre></div>
 <p>Note that <code>Ipfp</code> does not print the <code>tol</code> result by default. This was a wise decision by the developer of <strong>mipfp</strong> in this case: more than 100 iterations were needed for the weights to converge.</p>
-<div class="figure"><span id="fig:unnamed-chunk-201"></span>
-<img src="_main_files/figure-html/unnamed-chunk-201-1.png" alt="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis)." width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-203"></span>
+<img src="_main_files/figure-html/unnamed-chunk-203-1.png" alt="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis)." width="672" />
 <p class="caption">
-Figure 7.3: Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis).
+Figure 7.4: Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis).
 </p>
 </div>
 <p>We can see on Figure 7.3 that the third constraint is perfectly fitted. The first and second constraints are globally well fitted, but some points, representing a specific category in the specific zone, are not so good. Analysis of quality of fit is provided in the next chapter. In the next section we focus on comparing <strong>ipfp</strong> and <strong>mipfp</strong> for real-world microsimulation applications involving large datasets, such as CakeMap.</p>
@@ -537,10 +557,10 @@ ind_agg &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw"
        -<span class="st"> </span><span class="kw">apply</span>(weight_ipfp, <span class="dv">1</span>, sum) )</code></pre></div>
 <pre><code>## [1] 7.275958e-12</code></pre>
 <p>To visualize all the weights, we plot the different counts per constraint at Figure 7.4. We observe that the constraint 3 is very well fitted with both methods. For the two other constraints, some categories in some zones are more apart. However, both methods seems to return very similar weights, since the crosses are included inside the circles.</p>
-<div class="figure"><span id="fig:unnamed-chunk-205"></span>
-<img src="_main_files/figure-html/unnamed-chunk-205-1.png" alt="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis) (ipfp vs mipfp)." width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-207"></span>
+<img src="_main_files/figure-html/unnamed-chunk-207-1.png" alt="Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis) (ipfp vs mipfp)." width="672" />
 <p class="caption">
-Figure 7.4: Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis) (ipfp vs mipfp).
+Figure 7.5: Scatter plot of the relationship between observed cell counts for all categories and all zones from the census (x axis) and the simulated cell counts after IPF (y axis) (ipfp vs mipfp).
 </p>
 </div>
 <p>By analysing the absolute differences between the two resulting weights, we discover that the largest absolute distance is 3.45608e-11.</p>
@@ -550,15 +570,14 @@ Figure 7.4: Scatter plot of the relationship between observed cell counts for al
 <h3><span class="header-section-number">7.5.2</span> Comparison of times</h3>
 <p>The weights produced by <strong>ipfp</strong> and <strong>mipfp</strong> packages are the same. Thus, we must use other criteria to assess which is more appropriate in different settings. For applications involving very large microdatasets and numbers of zones, the speed of execution may be an important criterion. For this reason, the time is an important characteristic to compare the packages. However, other considerations such as flexibility and user-friendliness should also be taken into account. The question of ‘scalability’ (how large can the simulation be before the software crashes) is also important.</p>
 <p>When reweighting individuals for the case of CakeMap example, <code>mipfp</code> was slower than <code>ipfp</code>. However, when accounting for wider considerations (for example if we replicate the zones two times) the speed advantage of <code>ipfp</code> is reduced. Tests show that as the size of input microdata increases, any performance advantage of <code>ipfp</code> declines. This phenomenon should not appear in the <code>mipfp</code> package. To demonstrate this we will run the CakeMap example with variable numbers of individuals in the microdata. To do this, <code>ind</code> objects with more than 916 persons in the data are created, by copying the database a second time. The code used to create new <code>ind</code> objects can be seen by entering <code>file.edit(&quot;code/CakeMapTimeAnalysis.R&quot;)</code> in RStudio from inside the ‘spatial-microsimulation-book’ project.</p>
-<div class="figure"><span id="fig:unnamed-chunk-206"></span>
-<img src="_main_files/figure-html/unnamed-chunk-206-1.png" alt="Time necessary to perform the generation of the weight matrix depending on the number of individuals inside the microdata." width="672" />
+<div class="figure"><span id="fig:unnamed-chunk-208"></span>
+<img src="_main_files/figure-html/unnamed-chunk-208-1.png" alt="Time necessary to perform the generation of the weight matrix depending on the number of individuals inside the microdata." width="672" />
 <p class="caption">
-Figure 7.5: Time necessary to perform the generation of the weight matrix depending on the number of individuals inside the microdata.
+Figure 7.6: Time necessary to perform the generation of the weight matrix depending on the number of individuals inside the microdata.
 </p>
 </div>
 <p>Figure 7.5 confirms that for problems with few individuals in the microdata, <code>ipfp</code> is better. However, having few people means the increase of the probability to have non–represented categories. Of course, we can optimise <code>ipfp</code> to take only one time the individuals that appear several times and add a count in the <code>ind_cat</code> instead of a “1” (as made in the <code>indu</code> variable of SimpleWorld). However, this process is possible only if the added persons are with the same characteristics as a previous one.</p>
 <p>In conclusion, <code>mipfp</code> is more flexible and could be used without microdata, but <code>ipfp</code> is faster for problems with less individuals in the microdata.</p>
-<p></p>
 <p>These results suggest that to perform population synthesis for spatial microsimulation in contexts where the input microdataset is large, one should use <code>mipfp</code>. Note that when having very few microdata, it may be advantageous to consider a method without microdata. This way avoids biasing the results with the (non-random) categories included in the microdata.</p>
 <p>The extent to which the input microdata represent the study area is critical to obtaining valid results: the results of spatial microsimulation that use input microdata are highly dependent on the extent to which the microdata are representative of the study area <span class="citation">(Lenormand and Deffuant <a href="#ref-Lenormand2012">2012</a>)</span>.</p>
 <p>If the used sample is too small, or if the sample, for example, contains 90% female, whereas the whole population has only 51%, the microdata will not be representative. Usually, to consider a sample as representative, each individual should have exactly the same probability of being in the sample. For example, if you make your survey in a university, older people have less chance to be inside than younger. In this case, the sample is not representative.</p>
@@ -617,10 +636,11 @@ gitbook.start({
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -644,9 +664,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

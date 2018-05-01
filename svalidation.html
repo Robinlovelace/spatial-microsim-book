@@ -7,7 +7,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Spatial Microsimulation with R</title>
   <meta name="description" content="Learn what how to model systems at individual to areal levels and discover how to do spatial microsimulation at in a reproducible manner using high performance, open source software.">
-  <meta name="generator" content="bookdown 0.5 and GitBook 2.6.7">
+  <meta name="generator" content="bookdown 0.7 and GitBook 2.6.7">
 
   <meta property="og:title" content="Spatial Microsimulation with R" />
   <meta property="og:type" content="book" />
@@ -25,7 +25,7 @@
 <meta name="author" content="Robin Lovelace and Morgane Dumont">
 
 
-<meta name="date" content="2018-01-05">
+<meta name="date" content="2018-05-01">
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -470,8 +470,8 @@ TAEVec[worst_zone] /<span class="st"> </span><span class="kw">sum</span>(TAEVec)
 <pre><code>## [1] 0.5561611</code></pre>
 <p>The result of the above code demonstrates that more than half (56%) of the error originates from a single zone: 84. Therefore zone 84 certainly is anomalous and worthy of further investigation. An early strategy to characterise this zone and compare it to the others is to visualise it.</p>
 <p>To this end, Figure 8.1 places the TAE values calculated previously on a map, with a base-layer supplied by Google for context — see the book’s <a href="https://github.com/Robinlovelace/spatial-microsim-book/blob/master/validation.Rmd">online source code</a> to see how. Zone 84 is clearly visible in this map as a ward just above Leeds city centre. This does not immediately solve the problem, but it confirms that only few zones have bigger errors.</p>
-<div class="figure"><span id="fig:unnamed-chunk-220"></span>
-<img src="_main_files/figure-html/unnamed-chunk-220-1.png" alt="Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population." width="480" />
+<div class="figure"><span id="fig:unnamed-chunk-222"></span>
+<img src="_main_files/figure-html/unnamed-chunk-222-1.png" alt="Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population." width="480" />
 <p class="caption">
 Figure 8.1: Geographical distribution of Total Absolute Error (TAE) and Relative Error (RE). Note the zones of high error are clustered in university areas such as near the University of Leeds, where there is a high non-resident population.
 </p>
@@ -665,10 +665,11 @@ gitbook.start({
 "facebook": true,
 "twitter": true,
 "google": false,
+"linkedin": false,
 "weibo": false,
 "instapper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "weibo", "instapaper"]
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -692,9 +693,11 @@ gitbook.start({
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
-    if (location.protocol !== "file:" && /^https?:/.test(script.src))
-      script.src  = script.src.replace(/^https?:/, '');
+    var src = "";
+    if (src === "" || src === "true") src = "https://cdn.bootcss.com/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:" && /^https?:/.test(src))
+      src = src.replace(/^https?:/, '');
+    script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
