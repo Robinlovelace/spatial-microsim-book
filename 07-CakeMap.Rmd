@@ -177,6 +177,8 @@ require pre-processing. The resulting 'clean' constraints are saved in files suc
 
 ```{r, fig.cap="Example of raw aggregate level input data for CakeMap aggregate data, downloaded from http://infuse.mimas.ac.uk/.", fig.scap="Example of raw aggregate level input data", fig.pos='!h' , echo=FALSE}
 library(jpeg)
+library(grid)
+library(png)
 img <- readJPEG("figures/raw-data-screenshot.jpeg")
 grid.raster(img)
 # ![Example of raw aggregate level input data for CakeMap aggregate data, downloaded from
@@ -365,6 +367,7 @@ aggregate(ints_df$NSSEC, by = list(ints_df$zone), sd,
 ## 1         1 1.970570
 ## 2         2 2.027638
 ## 3         3 2.019839
+## ...
 ```
 
 ```{r, echo=FALSE}
@@ -390,6 +393,27 @@ of 1.6 million individuals! Try comparing
 this result with the size of the original survey dataset 'ind'. Keeping an eye
 on such parameters will ensure that the model does not generate datasets too
 large to handle.
+
+To estimate average cake consumption per zone from the demographic variables we must first create a numeric variable that can be averaged.
+Given the levels we can create a new variable as follows:
+
+```{r}
+levels(ints_df$NCakes)
+cake_levels <- c(0.5, 1.5, 4, 8, 0.1)
+ints_df$NCakes_num <- cake_levels[as.numeric(ints_df$NCakes)]
+```
+
+From here the average levels of cake consumption can be calculated as follows:
+
+```{r, fig.cap="Average cake consumption per zone inferred from microsimulation model."}
+library(tmap)
+ints_agg <- group_by(ints_df, zone) %>% 
+  summarise(av_cakes = mean(NCakes_num))
+load("data/CakeMap/wards.RData")
+wards@data <- cbind(wards@data, ints_agg)
+qtm(wards, "av_cakes")
+```
+
 
 Next chapter, we move on to a vital
 consideration in spatial microsimulation models such as CakeMap: model checking and validation.
@@ -770,8 +794,6 @@ as a previous one.
 In conclusion, `mipfp` is more flexible and could be used
 without microdata, but `ipfp` is faster for problems with
 less individuals in the microdata.
-
-\pagebreak
 
 These results suggest that to perform population synthesis for spatial
 microsimulation in contexts where the input microdataset is large,

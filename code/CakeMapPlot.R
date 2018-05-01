@@ -11,8 +11,9 @@ geonames <- read.csv("data/CakeMap/cars-raw.csv")
 head(geonames)
 geonames <- as.character(geonames[3:126,2])
 # NB: cakes.R must be run first
-source("cakes.R")
-geocakes <- cbind(geonames, cakes)
+source("code/CakeMap.R")
+cakes = as_data_frame(ind_agg)
+geocakes <- bind_cols(id = geonames, cakes)
 head(geocakes)
 
 # load the geographic data
@@ -24,7 +25,7 @@ names(wards)
 names(geocakes)[1] <- names(wards)[1] <- "id" # rename geocakes' geonames for join
 head(geocakes)
 head(wards@data)
-head( left_join(wards@data, geocakes))
+head(left_join(wards@data, geocakes))
 wards@data <- left_join(wards@data, geocakes)
 
 # fortify the data for ggplot2
